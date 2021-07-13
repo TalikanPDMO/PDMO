@@ -389,32 +389,32 @@ namespace Intersect.Client.Interface.Game.Chat
                 mChatboxArea.Hide();
                 mReduceChatButton.SetImage(
                     GameContentManager.Current.GetTexture(
-                        GameContentManager.TextureType.Gui, "uparrownormal.png"),
-                    "uparrownormal.png", Button.ControlState.Normal);
+                        GameContentManager.TextureType.Gui, "extendchatnormal.png"),
+                    "extendchatnormal.png", Button.ControlState.Normal);
                 mReduceChatButton.SetImage(
                     GameContentManager.Current.GetTexture(
-                        GameContentManager.TextureType.Gui, "uparrowhover.png"),
-                    "uparrowhover.png", Button.ControlState.Hovered);
+                        GameContentManager.TextureType.Gui, "extendchathover.png"),
+                    "extendchathover.png", Button.ControlState.Hovered);
                 mReduceChatButton.SetImage(
                     GameContentManager.Current.GetTexture(
-                        GameContentManager.TextureType.Gui, "uparrowclicked.png"),
-                    "uparrowclicked.png", Button.ControlState.Clicked);
+                        GameContentManager.TextureType.Gui, "extendchatclicked.png"),
+                    "extendchatclicked.png", Button.ControlState.Clicked);
             }
             else
             {
                 mChatboxArea.Show();
                 mReduceChatButton.SetImage(
                     GameContentManager.Current.GetTexture(
-                        GameContentManager.TextureType.Gui, "downarrownormal.png"),
-                    "downarrownormal.png", Button.ControlState.Normal);
+                        GameContentManager.TextureType.Gui, "reducechatnormal.png"),
+                    "reducechatnormal.png", Button.ControlState.Normal);
                 mReduceChatButton.SetImage(
                     GameContentManager.Current.GetTexture(
-                        GameContentManager.TextureType.Gui, "downarrowhover.png"),
-                    "downarrowhover.png", Button.ControlState.Hovered);
+                        GameContentManager.TextureType.Gui, "reducechathover.png"),
+                    "reducechathover.png", Button.ControlState.Hovered);
                 mReduceChatButton.SetImage(
                     GameContentManager.Current.GetTexture(
-                        GameContentManager.TextureType.Gui, "downarrowclicked.png"),
-                    "downarrowclicked.png", Button.ControlState.Clicked);
+                        GameContentManager.TextureType.Gui, "reducechatclicked.png"),
+                    "reducechatclicked.png", Button.ControlState.Clicked);
             }
         }
 
