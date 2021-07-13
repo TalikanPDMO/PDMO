@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("Intersect Editor")]
+[assembly: AssemblyTitle("PDMO Editor")]
 [assembly: AssemblyDescription("Game Content Editor - Part of the Intersect 2D Game Creation Suite")]
 [assembly: AssemblyProduct("Intersect Game Engine")]
 [assembly: AssemblyCompany("Ascension Game Development")]

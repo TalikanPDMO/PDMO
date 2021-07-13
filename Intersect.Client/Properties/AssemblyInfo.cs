@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Intersect Client")]
+[assembly: AssemblyTitle("PDMO Client")]
 [assembly: AssemblyDescription("Game Client - Part of the Intersect 2D Game Creation Suite")]
 [assembly: AssemblyProduct("Intersect Game Engine")]
 [assembly: AssemblyCompany("Ascension Game Development")]
