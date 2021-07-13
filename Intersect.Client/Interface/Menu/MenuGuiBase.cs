@@ -25,6 +25,8 @@ namespace Intersect.Client.Interface.Menu
 
         private readonly Button mWebsiteButton;
 
+        private readonly Button mDiscordButton;
+
         public MainMenu MainMenu { get; }
 
         private bool mShouldReset;
@@ -45,7 +47,8 @@ namespace Intersect.Client.Interface.Menu
             mLinksArea = new ImagePanel(mMenuCanvas, "LinksArea");
             mWebsiteButton = new Button(mLinksArea, "WebsiteButton");
             mWebsiteButton.Clicked += WebsiteButton_Clicked;
-
+            mDiscordButton = new Button(mLinksArea, "DiscordButton");
+            mDiscordButton.Clicked += DiscordButton_Clicked;
             mLinksArea.LoadJsonUi(GameContentManager.UI.Menu, Graphics.Renderer.GetResolutionString());
         }
 
@@ -64,6 +67,10 @@ namespace Intersect.Client.Interface.Menu
         private void WebsiteButton_Clicked(Base sender, ClickedEventArgs arguments)
         {
             System.Diagnostics.Process.Start("https://pdmo.fr/");
+        }
+        private void DiscordButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            System.Diagnostics.Process.Start("https://discord.com/invite/xYJQ82K");
         }
 
         public void Draw()
