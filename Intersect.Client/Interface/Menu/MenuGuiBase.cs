@@ -20,6 +20,8 @@ namespace Intersect.Client.Interface.Menu
 
         private readonly Label mServerStatusLabel;
 
+        private readonly ImagePanel mLinksArea;
+
         public MainMenu MainMenu { get; }
 
         private bool mShouldReset;
@@ -36,6 +38,9 @@ namespace Intersect.Client.Interface.Menu
 
             mServerStatusArea.LoadJsonUi(GameContentManager.UI.Menu, Graphics.Renderer.GetResolutionString());
             MainMenu.NetworkStatusChanged += HandleNetworkStatusChanged;
+
+            mLinksArea = new ImagePanel(mMenuCanvas, "LinksArea");
+            mLinksArea.LoadJsonUi(GameContentManager.UI.Menu, Graphics.Renderer.GetResolutionString());
         }
 
         ~MenuGuiBase()
