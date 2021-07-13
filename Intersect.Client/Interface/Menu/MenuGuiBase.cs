@@ -3,6 +3,7 @@
 using Intersect.Client.Core;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Gwen.Control;
+using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 
@@ -22,6 +23,8 @@ namespace Intersect.Client.Interface.Menu
 
         private readonly ImagePanel mLinksArea;
 
+        private readonly Button mWebsiteButton;
+
         public MainMenu MainMenu { get; }
 
         private bool mShouldReset;
@@ -40,6 +43,9 @@ namespace Intersect.Client.Interface.Menu
             MainMenu.NetworkStatusChanged += HandleNetworkStatusChanged;
 
             mLinksArea = new ImagePanel(mMenuCanvas, "LinksArea");
+            mWebsiteButton = new Button(mLinksArea, "WebsiteButton");
+            mWebsiteButton.Clicked += WebsiteButton_Clicked;
+
             mLinksArea.LoadJsonUi(GameContentManager.UI.Menu, Graphics.Renderer.GetResolutionString());
         }
 
@@ -53,6 +59,11 @@ namespace Intersect.Client.Interface.Menu
         {
             mServerStatusLabel.Text =
                 Strings.Server.StatusLabel.ToString(MainMenu.ActiveNetworkStatus.ToLocalizedString());
+        }
+
+        private void WebsiteButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            System.Diagnostics.Process.Start("https://pdmo.fr/");
         }
 
         public void Draw()
