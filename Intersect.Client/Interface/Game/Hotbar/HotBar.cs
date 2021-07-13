@@ -21,9 +21,6 @@ namespace Intersect.Client.Interface.Game.Hotbar
         //Item List
         public List<HotbarItem> Items = new List<HotbarItem>();
 
-        //Quantities for each slot
-        public List<Label> mQuantities = new List<Label>();
-
         //Init
         public HotBarWindow(Canvas gameCanvas)
         {
@@ -50,14 +47,13 @@ namespace Intersect.Client.Interface.Game.Hotbar
                 Items[i].Pnl = new ImagePanel(HotbarWindow, "HotbarContainer" + i);
                 Items[i].Setup();
                 Items[i].KeyLabel = new Label(Items[i].Pnl, "HotbarLabel" + i);
+                Items[i].QuantityLabel = new Label(Items[i].Pnl, "HotbarQuantity" + i);
                 Items[i]
                     .KeyLabel.SetText(
                         Strings.Keys.keydict[
                             Enum.GetName(typeof(Keys), Controls.ActiveControls.ControlMapping[Control.Hotkey1 + i].Key1)
                                 .ToLower()]
                     );
-                // Label for the quantity to display
-                mQuantities.Add(new Label(Items[i].Pnl, "HotbarQuantity" + i));
             }
             
         }
