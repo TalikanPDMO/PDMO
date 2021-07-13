@@ -536,14 +536,13 @@ namespace Intersect.Client.Interface.Game.Hotbar
                     if (mDragIcon.Update())
                     {
                         mContentPanel.IsHidden = false;
-                        QuantityLabel.IsHidden = false; // inspect here
+                        QuantityLabel.IsHidden = false;
                         //Drug the item and now we stopped
                         IsDragging = false;
                         var dragRect = new FloatRect(
                             mDragIcon.X - sItemXPadding / 2, mDragIcon.Y - sItemYPadding / 2, sItemXPadding / 2 + 32,
                             sItemYPadding / 2 + 32
                         );
-
                         float bestIntersect = 0;
                         var bestIntersectIndex = -1;
 
@@ -577,6 +576,8 @@ namespace Intersect.Client.Interface.Game.Hotbar
                             if (bestIntersectIndex > -1 && bestIntersectIndex != mYindex)
                             {
                                 Globals.Me.HotbarSwap(mYindex, (byte) bestIntersectIndex);
+                                QuantityLabel.IsHidden = true;
+                                mContentPanel.IsHidden = true;
                             }
                         }
 
