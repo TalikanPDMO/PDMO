@@ -3,6 +3,7 @@
 using Intersect.Client.Core;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Gwen.Control;
+using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 
@@ -20,6 +21,12 @@ namespace Intersect.Client.Interface.Menu
 
         private readonly Label mServerStatusLabel;
 
+        private readonly ImagePanel mLinksArea;
+
+        private readonly Button mWebsiteButton;
+
+        private readonly Button mDiscordButton;
+
         public MainMenu MainMenu { get; }
 
         private bool mShouldReset;
@@ -36,6 +43,13 @@ namespace Intersect.Client.Interface.Menu
 
             mServerStatusArea.LoadJsonUi(GameContentManager.UI.Menu, Graphics.Renderer.GetResolutionString());
             MainMenu.NetworkStatusChanged += HandleNetworkStatusChanged;
+
+            mLinksArea = new ImagePanel(mMenuCanvas, "LinksArea");
+            mWebsiteButton = new Button(mLinksArea, "WebsiteButton");
+            mWebsiteButton.Clicked += WebsiteButton_Clicked;
+            mDiscordButton = new Button(mLinksArea, "DiscordButton");
+            mDiscordButton.Clicked += DiscordButton_Clicked;
+            mLinksArea.LoadJsonUi(GameContentManager.UI.Menu, Graphics.Renderer.GetResolutionString());
         }
 
         ~MenuGuiBase()
@@ -48,6 +62,15 @@ namespace Intersect.Client.Interface.Menu
         {
             mServerStatusLabel.Text =
                 Strings.Server.StatusLabel.ToString(MainMenu.ActiveNetworkStatus.ToLocalizedString());
+        }
+
+        private void WebsiteButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            System.Diagnostics.Process.Start("https://pdmo.fr/");
+        }
+        private void DiscordButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            System.Diagnostics.Process.Start("https://discord.com/invite/xYJQ82K");
         }
 
         public void Draw()
