@@ -39,6 +39,10 @@ namespace Intersect.Client.Interface.Game.Chat
 
         private Label mChatboxTitle;
 
+        // Add a button to reduce the tchat
+        private Button mReduceChatButton;
+        private bool mChatReduced = false;
+
         /// <summary>
         /// A dictionary of all chat tab buttons based on the <see cref="ChatboxTab"/> enum.
         /// </summary>
@@ -46,6 +50,7 @@ namespace Intersect.Client.Interface.Game.Chat
 
         //Window Controls
         private ImagePanel mChatboxWindow;
+        private ImagePanel mChatboxArea;
 
         private GameInterface mGameUi;
 
@@ -80,18 +85,22 @@ namespace Intersect.Client.Interface.Game.Chat
 
             //Chatbox Window
             mChatboxWindow = new ImagePanel(gameCanvas, "ChatboxWindow");
-            mChatboxMessages = new ListBox(mChatboxWindow, "MessageList");
-            mChatboxMessages.EnableScroll(false, true);
-            mChatboxWindow.ShouldCacheToTexture = true;
 
-            mChatboxTitle = new Label(mChatboxWindow, "ChatboxTitle");
+            // Chatbox area separated from the reduce button
+            mChatboxArea = new ImagePanel(mChatboxWindow, "ChatboxArea");
+
+            mChatboxMessages = new ListBox(mChatboxArea, "MessageList");
+            mChatboxMessages.EnableScroll(false, true);
+            mChatboxArea.ShouldCacheToTexture = true;
+
+            mChatboxTitle = new Label(mChatboxArea, "ChatboxTitle");
             mChatboxTitle.Text = Strings.Chatbox.title;
             mChatboxTitle.IsHidden = true;
 
             // Generate tab butons.
             for (var btn = 0; btn < (int)ChatboxTab.Count; btn++)
             {
-                mTabButtons.Add((ChatboxTab)btn, new Button(mChatboxWindow, $"{(ChatboxTab)btn}TabButton"));
+                mTabButtons.Add((ChatboxTab)btn, new Button(mChatboxArea, $"{(ChatboxTab)btn}TabButton"));
                 // Do we have a localized string for this chat tab? If not assign none as the text.
                 LocalizedString name;
                 mTabButtons[(ChatboxTab)btn].Text = Strings.Chatbox.ChatTabButtons.TryGetValue((ChatboxTab)btn, out name) ? name : Strings.General.none;
@@ -100,10 +109,10 @@ namespace Intersect.Client.Interface.Game.Chat
                 mTabButtons[(ChatboxTab)btn].UserData = (ChatboxTab)btn;
             }
 
-            mChatbar = new ImagePanel(mChatboxWindow, "Chatbar");
+            mChatbar = new ImagePanel(mChatboxArea, "Chatbar");
             mChatbar.IsHidden = true;
 
-            mChatboxInput = new TextBox(mChatboxWindow, "ChatboxInputField");
+            mChatboxInput = new TextBox(mChatboxArea, "ChatboxInputField");
             mChatboxInput.SubmitPressed += ChatBoxInput_SubmitPressed;
             mChatboxInput.Text = GetDefaultInputText();
             mChatboxInput.Clicked += ChatBoxInput_Clicked;
@@ -111,11 +120,11 @@ namespace Intersect.Client.Interface.Game.Chat
             mChatboxInput.SetMaxLength(Options.MaxChatLength);
             Interface.FocusElements.Add(mChatboxInput);
 
-            mChannelLabel = new Label(mChatboxWindow, "ChannelLabel");
+            mChannelLabel = new Label(mChatboxArea, "ChannelLabel");
             mChannelLabel.Text = Strings.Chatbox.channel;
             mChannelLabel.IsHidden = true;
 
-            mChannelCombobox = new ComboBox(mChatboxWindow, "ChatChannelCombobox");
+            mChannelCombobox = new ComboBox(mChatboxArea, "ChatChannelCombobox");
             for (var i = 0; i < 4; i++)
             {
                 var menuItem = mChannelCombobox.AddItem(Strings.Chatbox.channels[i]);
@@ -131,13 +140,15 @@ namespace Intersect.Client.Interface.Game.Chat
                 menuItem.Selected += MenuItem_Selected;
             }
 
-            mChatboxText = new Label(mChatboxWindow);
+            mChatboxText = new Label(mChatboxArea);
             mChatboxText.Name = "ChatboxText";
-            mChatboxText.Font = mChatboxWindow.Parent.Skin.DefaultFont;
+            mChatboxText.Font = mChatboxArea.Parent.Skin.DefaultFont;
 
-            mChatboxSendButton = new Button(mChatboxWindow, "ChatboxSendButton");
+            mChatboxSendButton = new Button(mChatboxArea, "ChatboxSendButton");
             mChatboxSendButton.Text = Strings.Chatbox.send;
             mChatboxSendButton.Clicked += ChatBoxSendBtn_Clicked;
+
+            mReduceChatButton = new Button(mChatboxWindow, "ReduceChatButton");
 
             mChatboxWindow.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
