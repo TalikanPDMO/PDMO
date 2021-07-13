@@ -266,7 +266,6 @@
     <EmbeddedResource Include="$(NetworkHandshakePublicKey)" />
     <None Include="app.config" />
     <None Include="app.manifest" />
-    <None Include="assets\resources\client_strings.json" />
     <None Include="packages.config" />
     <None Include="FodyWeavers.xml">
       <SubType>Designer</SubType>
