@@ -57,7 +57,9 @@ namespace Intersect.Editor.Forms.Editors
             this.lblMag = new System.Windows.Forms.Label();
             this.lblAttack = new System.Windows.Forms.Label();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
+            this.lblDesc = new System.Windows.Forms.Label();
             this.btnAddFolder = new DarkUI.Controls.DarkButton();
+            this.txtDesc = new DarkUI.Controls.DarkTextBox();
             this.lblFolder = new System.Windows.Forms.Label();
             this.cmbFolder = new DarkUI.Controls.DarkComboBox();
             this.chkLocked = new DarkUI.Controls.DarkCheckBox();
@@ -561,7 +563,9 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpGeneral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpGeneral.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpGeneral.Controls.Add(this.lblDesc);
             this.grpGeneral.Controls.Add(this.btnAddFolder);
+            this.grpGeneral.Controls.Add(this.txtDesc);
             this.grpGeneral.Controls.Add(this.lblFolder);
             this.grpGeneral.Controls.Add(this.cmbFolder);
             this.grpGeneral.Controls.Add(this.chkLocked);
@@ -572,10 +576,19 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.Margin = new System.Windows.Forms.Padding(2);
             this.grpGeneral.Name = "grpGeneral";
             this.grpGeneral.Padding = new System.Windows.Forms.Padding(2);
-            this.grpGeneral.Size = new System.Drawing.Size(250, 63);
+            this.grpGeneral.Size = new System.Drawing.Size(250, 163);
             this.grpGeneral.TabIndex = 19;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
+            // 
+            // lblDesc
+            // 
+            this.lblDesc.AutoSize = true;
+            this.lblDesc.Location = new System.Drawing.Point(5, 65);
+            this.lblDesc.Name = "lblDesc";
+            this.lblDesc.Size = new System.Drawing.Size(35, 13);
+            this.lblDesc.TabIndex = 25;
+            this.lblDesc.Text = "Desc:";
             // 
             // btnAddFolder
             // 
@@ -586,6 +599,18 @@ namespace Intersect.Editor.Forms.Editors
             this.btnAddFolder.TabIndex = 20;
             this.btnAddFolder.Text = "+";
             this.btnAddFolder.Click += new System.EventHandler(this.btnAddFolder_Click);
+            // 
+            // txtDesc
+            // 
+            this.txtDesc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDesc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtDesc.Location = new System.Drawing.Point(7, 81);
+            this.txtDesc.Multiline = true;
+            this.txtDesc.Name = "txtDesc";
+            this.txtDesc.Size = new System.Drawing.Size(238, 67);
+            this.txtDesc.TabIndex = 24;
+            this.txtDesc.TextChanged += new System.EventHandler(this.txtDesc_TextChanged);
             // 
             // lblFolder
             // 
@@ -878,7 +903,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpawnPoint.Controls.Add(this.lblX);
             this.grpSpawnPoint.Controls.Add(this.lblMap);
             this.grpSpawnPoint.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpSpawnPoint.Location = new System.Drawing.Point(2, 67);
+            this.grpSpawnPoint.Location = new System.Drawing.Point(233, 526);
             this.grpSpawnPoint.Margin = new System.Windows.Forms.Padding(2);
             this.grpSpawnPoint.Name = "grpSpawnPoint";
             this.grpSpawnPoint.Padding = new System.Windows.Forms.Padding(2);
@@ -2472,5 +2497,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkComboBox cmbAttackSpeedModifier;
         private System.Windows.Forms.Label lblAttackSpeedModifier;
         private Controls.GameObjectList lstGameObjects;
+        private System.Windows.Forms.Label lblDesc;
+        private DarkTextBox txtDesc;
     }
 }
