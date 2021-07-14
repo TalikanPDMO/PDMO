@@ -100,6 +100,12 @@
     <Compile Include="Forms\Controls\GameObjectList.Designer.cs">
       <DependentUpon>GameObjectList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_UseSpell.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_UseSpell.Designer.cs">
+      <DependentUpon>EventCommand_UseSpell.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_SetGuildBankSlots.cs">
       <SubType>UserControl</SubType>
     </Compile>

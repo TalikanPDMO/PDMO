@@ -229,6 +229,8 @@
 
         //Reset Stats
         ResetStatPointAllocations,
+
+        UseSpell,
     }
 
 }
