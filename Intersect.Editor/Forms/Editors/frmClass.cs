@@ -151,6 +151,7 @@ namespace Intersect.Editor.Forms.Editors
             {
                 pnlContainer.Show();
                 txtName.Text = mEditorItem.Name;
+                txtDesc.Text = mEditorItem.Description;
                 nudAttack.Value = mEditorItem.BaseStat[(int) Stats.Attack];
                 nudMag.Value = mEditorItem.BaseStat[(int) Stats.AbilityPower];
                 nudDef.Value = mEditorItem.BaseStat[(int) Stats.Defense];
@@ -1525,6 +1526,10 @@ namespace Intersect.Editor.Forms.Editors
 
         #endregion
 
+        private void txtDesc_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Description = txtDesc.Text;
+        }
     }
 
 }
