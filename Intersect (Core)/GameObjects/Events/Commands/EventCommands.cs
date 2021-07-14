@@ -732,6 +732,9 @@ namespace Intersect.GameObjects.Events.Commands
         public override EventCommandType Type { get; } = EventCommandType.UseSpell;
 
         public Guid SpellId { get; set; }
+        public Guid SourceId { get; set; }
+
+        public Guid TargetId { get; set; }
 
     }
 
