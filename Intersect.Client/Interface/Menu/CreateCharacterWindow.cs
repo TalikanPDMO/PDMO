@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using Intersect.Client.Core;
 using Intersect.Client.Framework.File_Management;
+using Intersect.Client.Framework.Gwen;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
@@ -59,6 +60,8 @@ namespace Intersect.Client.Interface.Menu
         private Label mHint2Label;
 
         private Label mHintLabel;
+
+        private RichLabel mClassDescriptionLabel;
 
         //Parent
         private MainMenu mMainMenu;
@@ -125,6 +128,9 @@ namespace Intersect.Client.Interface.Menu
             mHint2Label = new Label(mCharCreationPanel, "Hint2Label");
             mHint2Label.SetText(Strings.CharacterCreation.hint2);
             mHint2Label.IsHidden = true;
+
+            //Description label
+            mClassDescriptionLabel = new RichLabel(mCharCreationPanel, "ClassDescriptionLabel");
 
             //Character Container
             mCharacterContainer = new ImagePanel(mCharCreationPanel, "CharacterContainer");
@@ -341,6 +347,10 @@ namespace Intersect.Client.Interface.Menu
             mDisplaySpriteIndex = -1;
             if (cls != null)
             {
+                //Change class description
+                mClassDescriptionLabel.ClearText();
+                mClassDescriptionLabel.AddText(cls.Description, Color.White, mClassDescriptionLabel.CurAlignments.Count > 0 ? mClassDescriptionLabel.CurAlignments[0] : Alignments.Left);
+                mClassDescriptionLabel.SizeToChildren(false, true);
                 for (var i = 0; i < cls.Sprites.Count; i++)
                 {
                     if (cls.Sprites[i].Gender == 0)

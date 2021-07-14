@@ -1,5 +1,5 @@
 {
-  "Bounds": "286,293,452,198",
+  "Bounds": "286,275,452,234",
   "Padding": "0,0,0,0",
   "AlignmentEdgeDistances": "0,0,0,0",
   "AlignmentTransform": "0,32",
@@ -611,6 +611,27 @@
       "Font": "sourcesansproblack,10",
       "TextScale": 1.0
     },
+    "ClassDescriptionLabel": {
+      "Bounds": "230,125,216,50",
+      "Padding": "0,0,0,0",
+      "AlignmentEdgeDistances": "0,0,0,0",
+      "AlignmentTransform": "0,0",
+      "Margin": "0,0,0,0",
+      "RenderColor": "255,255,255,255",
+      "Alignments": "",
+      "DrawBackground": true,
+      "MinimumSize": "1,1",
+      "MaximumSize": "4096,4096",
+      "Disabled": false,
+      "Hidden": false,
+      "RestrictToParent": false,
+      "MouseInputEnabled": false,
+      "HideToolTip": false,
+      "ToolTipBackground": null,
+      "ToolTipFont": null,
+      "ToolTipTextColor": "",
+      "Font": "sourcesansproblack,10"
+    },
     "CharacterContainer": {
       "Bounds": "16,100,178,79",
       "Padding": "0,0,0,0",
@@ -738,7 +759,7 @@
       }
     },
     "GenderPanel": {
-      "Bounds": "228,124,459,30",
+      "Bounds": "16,185,459,30",
       "Padding": "0,0,0,0",
       "AlignmentEdgeDistances": "0,0,0,0",
       "AlignmentTransform": "0,0",
@@ -792,7 +813,7 @@
           "TextScale": 1.0
         },
         "MaleCheckbox": {
-          "Bounds": "74,0,80,24",
+          "Bounds": "55,0,80,24",
           "Padding": "0,0,0,0",
           "AlignmentEdgeDistances": "0,0,0,0",
           "AlignmentTransform": "0,0",
@@ -882,7 +903,7 @@
           }
         },
         "FemaleCheckbox": {
-          "Bounds": "146,0,100,24",
+          "Bounds": "115,0,100,24",
           "Padding": "0,0,0,0",
           "AlignmentEdgeDistances": "0,0,0,0",
           "AlignmentTransform": "0,0",
@@ -901,7 +922,7 @@
           "ToolTipFont": null,
           "ToolTipTextColor": "",
           "Label": {
-            "Bounds": "0,6,47,16",
+            "Bounds": "0,6,43,16",
             "Padding": "0,0,0,0",
             "AlignmentEdgeDistances": "0,0,0,0",
             "AlignmentTransform": "0,0",
@@ -974,7 +995,7 @@
       }
     },
     "CreateButton": {
-      "Bounds": "223,158,96,35",
+      "Bounds": "223,190,96,35",
       "Padding": "3,3,3,3",
       "AlignmentEdgeDistances": "0,0,0,0",
       "AlignmentTransform": "0,0",
@@ -1012,7 +1033,7 @@
       "ClickSound": ""
     },
     "BackButton": {
-      "Bounds": "353,158,96,35",
+      "Bounds": "353,190,96,35",
       "Padding": "3,3,3,3",
       "AlignmentEdgeDistances": "0,0,0,0",
       "AlignmentTransform": "0,0",
