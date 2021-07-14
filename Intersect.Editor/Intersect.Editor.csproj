@@ -100,12 +100,6 @@
     <Compile Include="Forms\Controls\GameObjectList.Designer.cs">
       <DependentUpon>GameObjectList.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_UseSpell.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_UseSpell.Designer.cs">
-      <DependentUpon>EventCommand_UseSpell.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_SetGuildBankSlots.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -129,6 +123,12 @@
     </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_CreateGuild.Designer.cs">
       <DependentUpon>EventCommand_CreateGuild.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_UseSpell.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_UseSpell.Designer.cs">
+      <DependentUpon>EventCommand_UseSpell.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmUpdate.cs">
       <SubType>Form</SubType>
@@ -669,6 +669,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ConditionalBranch.resx">
       <DependentUpon>EventCommand_ConditionalBranch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_UseSpell.resx">
+      <DependentUpon>EventCommand_UseSpell.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Shaders\radialgradient_editor.xnb" />
   </ItemGroup>

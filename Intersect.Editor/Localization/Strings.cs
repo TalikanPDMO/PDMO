@@ -1535,6 +1535,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString changespells = @"Change Player Spells [{00}]";
 
+            public static LocalizedString usespell = @"Use Spell [{00}]";
+
             public static LocalizedString chatboxtext = @"Show Chatbox Text [Channel: {00}, Color: {01}] - {02}";
 
             public static LocalizedString chatglobal = @"Global";
@@ -1899,6 +1901,7 @@ Tick timer saved in server config.json.";
                 {"showpicture", @"Show Picture"},
                 {"showtext", @"Show Text"},
                 {"spawnnpc", @"Spawn NPC"},
+                {"usespell",@"Use Spell" },
                 {"specialeffects", @"Special Effects"},
                 {"startcommonevent", @"Start Common Event"},
                 {"startquest", @"Start Quest"},
@@ -4849,6 +4852,29 @@ Negative values for time to flow backwards.";
             public static LocalizedString okay = @"Ok";
 
             public static LocalizedString title = @"Warp Tile Selection";
+
+        }
+
+        public struct EventUseSpell
+        {
+
+            public static LocalizedString source = @"Source: ";
+
+            public static Dictionary<int, LocalizedString> sources = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Player"},
+                {1, @"Event"}
+            };
+
+            public static LocalizedString cancel = @"Cancel";
+
+            public static LocalizedString okay = @"Ok";
+
+            public static LocalizedString spell = @"Spell: ";
+
+            public static LocalizedString target = @"Target: ";
+
+            public static LocalizedString title = @"Use Spell";
 
         }
 
