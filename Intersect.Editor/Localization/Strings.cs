@@ -4876,6 +4876,12 @@ Negative values for time to flow backwards.";
 
             public static LocalizedString title = @"Use Spell";
 
+            public static LocalizedString player = @"Player";
+
+            public static LocalizedString thisevent = @"[THIS EVENT]";
+
+
+
         }
 
     }

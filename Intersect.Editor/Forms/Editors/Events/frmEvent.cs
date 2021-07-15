@@ -1272,7 +1272,7 @@ namespace Intersect.Editor.Forms.Editors.Events
                 case EventCommandType.DespawnNpc:
                     break;
                 case EventCommandType.UseSpell:
-                    cmdWindow = new EventCommandUseSpell((UseSpellCommand)command, CurrentPage, this);
+                    cmdWindow = new EventCommandUseSpell((UseSpellCommand)command, MyEvent, mCurrentMap, this);
                     break;
                 case EventCommandType.PlayAnimation:
                     cmdWindow = new EventCommandPlayAnimation(
