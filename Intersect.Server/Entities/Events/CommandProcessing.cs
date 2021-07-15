@@ -854,6 +854,73 @@ namespace Intersect.Server.Entities.Events
             player.SpawnedNpcs.Clear();
         }
 
+        //Change Spells Command
+        private static void ProcessCommand(
+            UseSpellCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            // Boolean to search after in the list of event in the map
+            bool searchSource = false;
+            bool searchTarget = false;
+            var targetEntity = (Entity)player;
+            var sourceEntity = (Entity)player;
+            if (command.TargetId != Guid.Empty)
+            {
+                searchTarget = true; // If target is empty, target is the player
+            }
+            if (command.SourceId != Guid.Empty)
+            {
+                searchSource = true; // If source is empty, source is the player
+            }
+            if (searchSource || searchTarget)
+            {
+                foreach (var evt in player.EventLookup)
+                {
+                    if (evt.Value.MapId != instance.MapId)
+                    {
+                        continue;
+                    }
+                    if (searchTarget && evt.Value.BaseEvent.Id == command.TargetId)
+                    {
+                        targetEntity = evt.Value.PageInstance;
+                        searchTarget = false;
+                        if(!searchSource)
+                        {
+                            //Source and Target found, we exit the loop
+                            break;
+                        }
+                        
+                    }
+                    if (searchSource && evt.Value.BaseEvent.Id == command.SourceId)
+                    {
+                        sourceEntity = evt.Value.PageInstance;
+                        searchSource = false;
+                        if (!searchTarget)
+                        {
+                            //Source and Target found, we exit the loop
+                            break;
+                        }
+
+                    }
+                }
+            }
+
+            if (targetEntity != null && sourceEntity != null)
+            {
+                sourceEntity.CastTarget = targetEntity;
+                sourceEntity.CastSpell(command.SpellId);
+                sourceEntity.CastTarget = null;
+            }
+            else
+            {
+                return;
+            }
+        }
+
         //Play Animation Command
         private static void ProcessCommand(
             PlayAnimationCommand command,

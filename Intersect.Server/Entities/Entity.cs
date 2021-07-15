@@ -1286,7 +1286,10 @@ namespace Intersect.Server.Entities
             var stats = new int[(int) Stats.StatCount];
             for (var i = 0; i < (int) Stats.StatCount; i++)
             {
-                stats[i] = Stat[i].Value();
+                if (Stat[i] != null) // Prevent error in some cases
+                {
+                    stats[i] = Stat[i].Value();
+                }
             }
 
             return stats;
@@ -1505,26 +1508,30 @@ namespace Intersect.Server.Entities
 
             var statBuffTime = -1;
             var expireTime = Globals.Timing.Milliseconds + spellBase.Combat.Duration;
-            for (var i = 0; i < (int) Stats.StatCount; i++)
+            if (!(target is EventPageInstance)) // No buff on events
             {
-                target.Stat[i]
-                    .AddBuff(
-                        new Buff(spellBase, spellBase.Combat.StatDiff[i], spellBase.Combat.PercentageStatDiff[i], expireTime)
-                    );
-
-                if (spellBase.Combat.StatDiff[i] != 0 || spellBase.Combat.PercentageStatDiff[i] != 0)
+                for (var i = 0; i < (int)Stats.StatCount; i++)
                 {
-                    statBuffTime = spellBase.Combat.Duration;
+                    target.Stat[i]
+                        .AddBuff(
+                            new Buff(spellBase, spellBase.Combat.StatDiff[i], spellBase.Combat.PercentageStatDiff[i], expireTime)
+                        );
+
+                    if (spellBase.Combat.StatDiff[i] != 0 || spellBase.Combat.PercentageStatDiff[i] != 0)
+                    {
+                        statBuffTime = spellBase.Combat.Duration;
+                    }
+                }
+
+                if (statBuffTime == -1)
+                {
+                    if (spellBase.Combat.HoTDoT && spellBase.Combat.HotDotInterval > 0)
+                    {
+                        statBuffTime = spellBase.Combat.Duration;
+                    }
                 }
             }
-
-            if (statBuffTime == -1)
-            {
-                if (spellBase.Combat.HoTDoT && spellBase.Combat.HotDotInterval > 0)
-                {
-                    statBuffTime = spellBase.Combat.Duration;
-                }
-            }
+            
 
             var damageHealth = spellBase.Combat.VitalDiff[(int)Vitals.Health];
             var damageMana = spellBase.Combat.VitalDiff[(int)Vitals.Mana];
@@ -1717,12 +1724,24 @@ namespace Intersect.Server.Entities
             {
                 isCrit = true;
             }
-
+            bool isFixedDamage = false;
+            //If spell from event or for ressources, fixed damage
+            if (this is EventPageInstance)
+            {
+                if (this.Stat == null || this.Stat.Contains(null))
+                {
+                    isFixedDamage = true;
+                } 
+            }
+            else if (enemy is Resource)
+            {
+                isFixedDamage = true;
+            }
             //Calculate Damages
             if (baseDamage != 0)
             {
 
-                if (enemy is Resource)
+                if (isFixedDamage)
                 {
                     baseDamage = originalBaseDamage;
                 }
@@ -1804,10 +1823,11 @@ namespace Intersect.Server.Entities
 
             if (secondaryDamage != 0)
             {
-                secondaryDamage = Formulas.CalculateDamage(
-                    secondaryDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy
-                );
-
+                if (!isFixedDamage) // Scale if not fixed damage
+                {
+                    secondaryDamage = Formulas.CalculateDamage(
+                        secondaryDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy);
+                }
                 if (secondaryDamage < 0 && damagingAttack)
                 {
                     secondaryDamage = 0;
