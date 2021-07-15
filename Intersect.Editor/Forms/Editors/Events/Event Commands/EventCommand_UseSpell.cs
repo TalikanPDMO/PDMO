@@ -1,4 +1,5 @@
 ﻿using Intersect.Editor.Localization;
+using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
@@ -66,12 +67,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitLocalization()
         {
             grpUseSpell.Text = Strings.EventUseSpell.title;
-            cmbSource.Items.Clear();
-            for (var i = 0; i < Strings.EventUseSpell.sources.Count; i++)
-            {
-                cmbSource.Items.Add(Strings.EventUseSpell.sources[i]);
-            }
-
             lblSource.Text = Strings.EventUseSpell.source;
             lblSpell.Text = Strings.EventUseSpell.spell;
             lblTarget.Text = Strings.EventUseSpell.target;
@@ -105,6 +100,34 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void btnCancel_Click(object sender, EventArgs e)
         {
             mEventEditor.CancelCommandEdit();
+        }
+
+        private void cmbSpell_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SpellBase spell = SpellBase.FromList(cmbSpell.SelectedIndex);
+            switch (spell.SpellType)
+            {
+                case SpellTypes.CombatSpell:
+                    switch (spell.Combat.TargetType)
+                    {
+                        case SpellTargetTypes.AoE:
+                        case SpellTargetTypes.Projectile:
+                        case SpellTargetTypes.Self:
+                            cmbTarget.SelectedIndex = 0;
+                            cmbTarget.Items[0] = Strings.EventUseSpell.notargetrequired;
+                            cmbTarget.Enabled = false;
+                            break;
+                        default:
+                            cmbTarget.Items[0] = Strings.EventUseSpell.player;
+                            cmbTarget.Enabled = true;
+                            break;
+                    }
+                    break;
+                default:
+                    cmbTarget.Items[0] = Strings.EventUseSpell.player;
+                    cmbTarget.Enabled = true;
+                    break;
+            }
         }
     }
 }

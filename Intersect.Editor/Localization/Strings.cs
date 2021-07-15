@@ -4880,7 +4880,7 @@ Negative values for time to flow backwards.";
 
             public static LocalizedString thisevent = @"[THIS EVENT]";
 
-
+            public static LocalizedString notargetrequired = @"[No target required]";
 
         }
 
