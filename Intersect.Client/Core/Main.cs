@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 using Intersect.Client.Framework.File_Management;
@@ -26,9 +27,29 @@ namespace Intersect.Client.Core
         private static bool _createdMapTextures;
 
         private static bool _loadedTilesets;
+        public static Discord.Discord discord;
+        public static Discord.Activity activity;
 
         internal static void Start(IClientContext context)
         {
+            //Init discord link for RichPresence
+            discord = new Discord.Discord(864507833672269854, (System.UInt64)Discord.CreateFlags.Default);
+            var activityManager = discord.GetActivityManager();
+            activity = new Discord.Activity
+            {
+                State = "Pokemon Donjon Mystère Online",
+            };
+            activityManager.UpdateActivity(activity, (res) =>
+            {
+                if (res == Discord.Result.Ok)
+                {
+                    Console.WriteLine("Everything is fine!");
+                }
+                else
+                {
+                    Console.WriteLine("Fail discord!");
+                }
+            });
             //Load Graphics
             Graphics.InitGraphics();
 
@@ -68,6 +89,7 @@ namespace Intersect.Client.Core
         {
             lock (Globals.GameLock)
             {
+                discord.RunCallbacks();
                 Networking.Network.Update();
                 Globals.System.Update();
                 Fade.Update();
@@ -82,7 +104,6 @@ namespace Intersect.Client.Core
 
                     case GameStates.Menu:
                         ProcessMenu();
-
                         break;
 
                     case GameStates.Loading:
@@ -92,7 +113,6 @@ namespace Intersect.Client.Core
 
                     case GameStates.InGame:
                         ProcessGame();
-
                         break;
 
                     case GameStates.Error:
