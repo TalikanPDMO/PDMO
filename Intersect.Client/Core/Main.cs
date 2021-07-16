@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-
+using Discord;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
@@ -30,10 +30,18 @@ namespace Intersect.Client.Core
 
         internal static void Start(IClientContext context)
         {
-            //Init discord link for RichPresence
-            DiscordHandler.discord = new Discord.Discord(864507833672269854, (System.UInt64)Discord.CreateFlags.Default);
-            // Base configuration of the activity
-            DiscordHandler.InitActivity();
+            //Trycatch to ensure discord is running
+            try
+            {
+                //Init discord link for RichPresence
+                DiscordHandler.discord = new Discord.Discord(864507833672269854, (System.UInt64)Discord.CreateFlags.NoRequireDiscord);
+                DiscordHandler.InitActivity();
+            }
+            catch (ResultException ex)
+            {
+                //Discord is not running
+                DiscordHandler.discord = null;
+            }
 
             //Load Graphics
             Graphics.InitGraphics();
@@ -74,7 +82,19 @@ namespace Intersect.Client.Core
         {
             lock (Globals.GameLock)
             {
-                DiscordHandler.discord.RunCallbacks();
+                if (DiscordHandler.discord != null)
+                {
+                    //trycatch because discord can be shutdown when playing PDMO
+                    try
+                    {
+                        DiscordHandler.discord.RunCallbacks();
+                    }
+                    catch(ResultException ex)
+                    {
+                        // Discord was shutting down when playing PDMO
+                        DiscordHandler.discord = null;
+                    }
+                }
                 Networking.Network.Update();
                 Globals.System.Update();
                 Fade.Update();
