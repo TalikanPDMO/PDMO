@@ -659,6 +659,8 @@
     <Content Include="assets\resources\gui\volume_slider.png" />
     <Content Include="assets\resources\gui\volume_slider_hovered.png" />
     <Content Include="assets\resources\gui\website.png" />
+    <Content Include="assets\x64\discord_game_sdk.dll" />
+    <Content Include="assets\x86\discord_game_sdk.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

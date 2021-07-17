@@ -847,8 +847,11 @@ namespace Discord
             internal UInt32 AchievementVersion;
         }
 
-        [DllImport(Constants.DllName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern Result DiscordCreate(UInt32 version, ref FFICreateParams createParams, out IntPtr manager);
+        //Two same functions but load the 32 or 64 bits dll, the calling function must be careful
+        [DllImport(Constants.DllName32bits, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, EntryPoint = "DiscordCreate")]
+        private static extern Result DiscordCreate_32bits(UInt32 version, ref FFICreateParams createParams, out IntPtr manager);
+        [DllImport(Constants.DllName64bits, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, EntryPoint = "DiscordCreate")]
+        private static extern Result DiscordCreate_64bits(UInt32 version, ref FFICreateParams createParams, out IntPtr manager);
 
         public delegate void SetLogHookHandler(LogLevel level, string message);
 
@@ -1008,7 +1011,9 @@ namespace Discord
             createParams.AchievementEvents = AchievementEventsPtr;
             createParams.AchievementVersion = 1;
             InitEvents(EventsPtr, ref Events);
-            var result = DiscordCreate(2, ref createParams, out MethodsPtr);
+            // Add management of the OS architecture to call the good function depending on 32/64bits
+            var result = Environment.Is64BitOperatingSystem ?
+                DiscordCreate_64bits(2, ref createParams, out MethodsPtr) :DiscordCreate_32bits(2, ref createParams, out MethodsPtr);
             if (result != Result.Ok)
             {
                 Dispose();
