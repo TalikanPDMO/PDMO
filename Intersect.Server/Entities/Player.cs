@@ -1068,8 +1068,10 @@ namespace Intersect.Server.Entities
                         // If in party, split the exp.
                         if (Party != null && Party.Count > 0)
                         {
-                            var partyMembersInXpRange = Party.Where(partyMember => partyMember.InRangeOf(this, Options.Party.SharedXpRange));
-                            var partyExperience = descriptor.Experience / partyMembersInXpRange.Count();
+                            var partyMembersInXpRange = Party.Where(partyMember => partyMember.InRangeOf(this, Options.Party.SharedXpRange)).ToArray();
+                            float bonusExp = Options.Instance.PartyOpts.BonusExperiencePercentPerMember / 100;
+                            var multiplier = 1.0f + (partyMembersInXpRange.Length * bonusExp);
+                            var partyExperience = (int)(descriptor.Experience * multiplier) / partyMembersInXpRange.Length;
                             foreach (var partyMember in partyMembersInXpRange)
                             {
                                 partyMember.GiveExperience(partyExperience);
@@ -1189,7 +1191,14 @@ namespace Intersect.Server.Entities
                 //Check Dynamic Requirements
                 if (!Conditions.MeetsConditionLists(descriptor.HarvestingRequirements, this, null))
                 {
-                    PacketSender.SendChatMsg(this, Strings.Combat.resourcereqs, ChatMessageType.Error);
+                    if (!string.IsNullOrWhiteSpace(descriptor.CannotHarvestMessage))
+                    {
+                        PacketSender.SendChatMsg(this, descriptor.CannotHarvestMessage, ChatMessageType.Error);
+                    }
+                    else
+                    {
+                        PacketSender.SendChatMsg(this, Strings.Combat.resourcereqs, ChatMessageType.Error);
+                    }
 
                     return;
                 }
@@ -1259,7 +1268,14 @@ namespace Intersect.Server.Entities
                 //Check Dynamic Requirements
                 if (!Conditions.MeetsConditionLists(descriptor.HarvestingRequirements, this, null))
                 {
-                    PacketSender.SendChatMsg(this, Strings.Combat.resourcereqs, ChatMessageType.Error);
+                    if (!string.IsNullOrWhiteSpace(descriptor.CannotHarvestMessage))
+                    {
+                        PacketSender.SendChatMsg(this, descriptor.CannotHarvestMessage, ChatMessageType.Error);
+                    }
+                    else
+                    {
+                        PacketSender.SendChatMsg(this, Strings.Combat.resourcereqs, ChatMessageType.Error);
+                    }
 
                     return;
                 }
@@ -1414,15 +1430,17 @@ namespace Intersect.Server.Entities
             //Add up player equipment values
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
-                if (Equipment[i] >= 0 && Equipment[i] < Options.MaxInvItems)
+                var equipment = Equipment[i];
+                if (equipment >= 0 && equipment < Items.Count)
                 {
-                    if (Items[Equipment[i]].ItemId != Guid.Empty)
+                    var item = Items[equipment];
+                    if (item.ItemId != Guid.Empty)
                     {
-                        var item = Items[Equipment[i]].Descriptor;
-                        if (item != null)
+                        var descriptor = ItemBase.Get(item.ItemId);
+                        if (descriptor != null)
                         {
-                            flatStats += item.StatsGiven[(int)statType] + Items[Equipment[i]].StatBuffs[(int)statType];
-                            percentageStats += item.PercentageStatsGiven[(int)statType];
+                            flatStats += descriptor.StatsGiven[(int)statType] + item.StatBuffs[(int)statType];
+                            percentageStats += descriptor.PercentageStatsGiven[(int)statType];
                         }
                     }
                 }
@@ -1750,13 +1768,20 @@ namespace Intersect.Server.Entities
         /// <param name="handler">The way to handle handing out this item.</param>
         /// <param name="bankOverflow">Should we allow the items to overflow into the player's bank when their inventory is full.</param>
         /// <param name="sendUpdate">Should we send an inventory update when we are done changing the player's items.</param>
+        /// <param name="overflowTileX">The x coordinate of the tile in which overflow should spawn on, if the player cannot hold the full amount.</param>
+        /// <param name="overflowTileY">The y coordinate of the tile in which overflow should spawn on, if the player cannot hold the full amount.</param>
         /// <returns>Whether the player received the item or not.</returns>
-        public bool TryGiveItem(Item item, ItemHandling handler = ItemHandling.Normal, bool bankOverflow = false, bool sendUpdate = true)
+        public bool TryGiveItem(Item item, ItemHandling handler = ItemHandling.Normal, bool bankOverflow = false, bool sendUpdate = true, int overflowTileX = -1, int overflowTileY = -1)
         {
             // Is this a valid item?
             if (item.Descriptor == null)
             {
                 return false;
+            }
+
+            if (item.Quantity <= 0)
+            {
+                return true;
             }
 
             // Get this information so we can use it later.
@@ -1798,8 +1823,8 @@ namespace Intersect.Server.Entities
                     // Do we have any items to spawn to the map?
                     if (spawnAmount > 0)
                     {
-                        Map.SpawnItem(X, Y, item, spawnAmount, Id);
-                        return true;
+                        Map.SpawnItem(overflowTileX > -1 ? overflowTileX : X, overflowTileY > -1 ? overflowTileY : Y, item, spawnAmount, Id);
+                        return spawnAmount != item.Quantity;
                     }
 
                     break;
@@ -2107,7 +2132,14 @@ namespace Intersect.Server.Entities
 
                 if (!Conditions.MeetsConditionLists(itemBase.UsageRequirements, this, null))
                 {
-                    PacketSender.SendChatMsg(this, Strings.Items.dynamicreq, ChatMessageType.Error);
+                    if (!string.IsNullOrWhiteSpace(itemBase.CannotUseMessage))
+                    {
+                        PacketSender.SendChatMsg(this, itemBase.CannotUseMessage, ChatMessageType.Error);
+                    }
+                    else
+                    {
+                        PacketSender.SendChatMsg(this, Strings.Items.dynamicreq, ChatMessageType.Error);
+                    }
 
                     return;
                 }
@@ -2845,6 +2877,11 @@ namespace Intersect.Server.Entities
                     if (canSellItem)
                     {
                         TryGiveItem(rewardItemId, rewardItemVal * amount);
+
+                        if (!TextUtils.IsNone(shop.SellSound))
+                        {
+                            PacketSender.SendPlaySound(this, shop.SellSound);
+                        }
                     }
 
                     PacketSender.SendInventoryItemUpdate(this, slot);
@@ -2891,6 +2928,11 @@ namespace Intersect.Server.Entities
                                 }
 
                                 TryGiveItem(buyItemNum, buyItemAmt);
+
+                                if (!TextUtils.IsNone(shop.BuySound))
+                                {
+                                    PacketSender.SendPlaySound(this, shop.BuySound);
+                                }
                             }
                             else
                             {
@@ -2910,6 +2952,11 @@ namespace Intersect.Server.Entities
                                     );
 
                                     TryGiveItem(buyItemNum, buyItemAmt);
+
+                                    if (!TextUtils.IsNone(shop.BuySound))
+                                    {
+                                        PacketSender.SendPlaySound(this, shop.BuySound);
+                                    }
                                 }
                                 else
                                 {
@@ -3037,6 +3084,8 @@ namespace Intersect.Server.Entities
                         this, Strings.Crafting.crafted.ToString(ItemBase.GetName(CraftBase.Get(id).ItemId)), ChatMessageType.Crafting,
                         CustomColors.Alerts.Success
                     );
+                    if (CraftBase.Get(id).Event != null)
+                        StartCommonEvent(CraftBase.Get(id).Event);
                 }
                 else
                 {
@@ -4143,7 +4192,14 @@ namespace Intersect.Server.Entities
         {
             if (!Conditions.MeetsConditionLists(spell.CastingRequirements, this, null))
             {
-                PacketSender.SendChatMsg(this, Strings.Combat.dynamicreq, ChatMessageType.Spells);
+                if (!string.IsNullOrWhiteSpace(spell.CannotCastMessage))
+                {
+                    PacketSender.SendChatMsg(this, spell.CannotCastMessage, ChatMessageType.Error);
+                }
+                else
+                {
+                    PacketSender.SendChatMsg(this, Strings.Combat.dynamicreq, ChatMessageType.Spells);
+                }
 
                 return false;
             }

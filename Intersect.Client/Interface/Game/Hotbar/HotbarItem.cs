@@ -521,7 +521,7 @@ namespace Intersect.Client.Interface.Game.Hotbar
                                         QuantityLabel.IsHidden = true;
                                         mDragIcon = new Draggable(
                                             Pnl.LocalPosToCanvas(new Point(0, 0)).X + mMouseX,
-                                            Pnl.LocalPosToCanvas(new Point(0, 0)).X + mMouseY, mContentPanel.Texture
+                                            Pnl.LocalPosToCanvas(new Point(0, 0)).X + mMouseY, mContentPanel.Texture, mContentPanel.RenderColor
                                         );
 
                                         //SOMETHING SHOULD BE RENDERED HERE, RIGHT?
