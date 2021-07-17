@@ -32,14 +32,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             InitLocalization();
             cmbSpell.Items.Clear();
             cmbSpell.Items.AddRange(SpellBase.Names);
-            cmbSpell.SelectedIndex = SpellBase.ListIndex(mMyCommand.SpellId);
             cmbSource.Items.Clear();
             cmbSource.Items.Add(Strings.EventUseSpell.player);
-            cmbSource.SelectedIndex = 0;
+            cmbSource.SelectedIndex = 0; // default but will chane with cmbspell
 
             cmbTarget.Items.Clear();
             cmbTarget.Items.Add(Strings.EventUseSpell.player);
-            cmbTarget.SelectedIndex = 0;
+            cmbTarget.SelectedIndex = 0; // default but will chane with cmbspell
+
+            cmbSpell.SelectedIndex = SpellBase.ListIndex(mMyCommand.SpellId);
 
             if (mEditingEvent != null && !mEditingEvent.CommonEvent)
             {
@@ -104,29 +105,33 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
         private void cmbSpell_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SpellBase spell = SpellBase.FromList(cmbSpell.SelectedIndex);
-            switch (spell.SpellType)
+            //Check length to avoid error when cmbTarget is not loaded yet
+            if (cmbTarget.Items.Count > 0)
             {
-                case SpellTypes.CombatSpell:
-                    switch (spell.Combat.TargetType)
-                    {
-                        case SpellTargetTypes.AoE:
-                        case SpellTargetTypes.Projectile:
-                        case SpellTargetTypes.Self:
-                            cmbTarget.SelectedIndex = 0;
-                            cmbTarget.Items[0] = Strings.EventUseSpell.notargetrequired;
-                            cmbTarget.Enabled = false;
-                            break;
-                        default:
-                            cmbTarget.Items[0] = Strings.EventUseSpell.player;
-                            cmbTarget.Enabled = true;
-                            break;
-                    }
-                    break;
-                default:
-                    cmbTarget.Items[0] = Strings.EventUseSpell.player;
-                    cmbTarget.Enabled = true;
-                    break;
+                SpellBase spell = SpellBase.FromList(cmbSpell.SelectedIndex);
+                switch (spell.SpellType)
+                {
+                    case SpellTypes.CombatSpell:
+                        switch (spell.Combat.TargetType)
+                        {
+                            case SpellTargetTypes.AoE:
+                            case SpellTargetTypes.Projectile:
+                            case SpellTargetTypes.Self:
+                                cmbTarget.SelectedIndex = 0;
+                                cmbTarget.Items[0] = Strings.EventUseSpell.notargetrequired;
+                                cmbTarget.Enabled = false;
+                                break;
+                            default:
+                                cmbTarget.Items[0] = Strings.EventUseSpell.player;
+                                cmbTarget.Enabled = true;
+                                break;
+                        }
+                        break;
+                    default:
+                        cmbTarget.Items[0] = Strings.EventUseSpell.player;
+                        cmbTarget.Enabled = true;
+                        break;
+                }
             }
         }
     }
