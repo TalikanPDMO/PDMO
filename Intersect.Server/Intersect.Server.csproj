@@ -205,9 +205,6 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <ExternalConsole>false</ExternalConsole>
   </PropertyGroup>
-  <PropertyGroup>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommandLine, Version=2.7.82.0, Culture=neutral, PublicKeyToken=5a870481e358d379, processorArchitecture=MSIL">
       <HintPath>..\packages\CommandLineParser.2.7.82\lib\net461\CommandLine.dll</HintPath>
@@ -594,6 +591,18 @@
     <Compile Include="Migrations\Game\20210714084833_AddingDescriptionToClass.cs" />
     <Compile Include="Migrations\Game\20210714084833_AddingDescriptionToClass.designer.cs">
       <DependentUpon>20210714084833_AddingDescriptionToClass.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20210630114724_CraftingCommonEvents.cs" />
+    <Compile Include="Migrations\Game\20210630114724_CraftingCommonEvents.designer.cs">
+      <DependentUpon>20210630114724_CraftingCommonEvents.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20210622051409_AddingRequirementNotMetMessages.cs" />
+    <Compile Include="Migrations\Game\20210622051409_AddingRequirementNotMetMessages.designer.cs">
+      <DependentUpon>20210622051409_AddingRequirementNotMetMessages.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20210703145618_AddingShopSoundEffects.cs" />
+    <Compile Include="Migrations\Game\20210703145618_AddingShopSoundEffects.designer.cs">
+      <DependentUpon>20210703145618_AddingShopSoundEffects.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

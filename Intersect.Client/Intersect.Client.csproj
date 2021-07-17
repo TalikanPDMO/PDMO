@@ -107,6 +107,13 @@
     <Compile Include="Core\Main.cs" />
     <Compile Include="Core\Sounds\MapSound.cs" />
     <Compile Include="Core\Sounds\Sound.cs" />
+    <Compile Include="DiscordGameSDK\ActivityManager.cs" />
+    <Compile Include="DiscordGameSDK\Constants.cs" />
+    <Compile Include="DiscordGameSDK\Core.cs" />
+    <Compile Include="DiscordGameSDK\ImageManager.cs" />
+    <Compile Include="DiscordGameSDK\LobbyManager.cs" />
+    <Compile Include="DiscordGameSDK\StorageManager.cs" />
+    <Compile Include="DiscordGameSDK\StoreManager.cs" />
     <Compile Include="Entities\Animation.cs" />
     <Compile Include="Entities\ChatBubble.cs" />
     <Compile Include="Entities\Critter.cs" />
@@ -123,6 +130,7 @@
     <Compile Include="Entities\Resource.cs" />
     <Compile Include="Entities\SpriteAnimations.cs" />
     <Compile Include="Entities\Status.cs" />
+    <Compile Include="General\DiscordHandler.cs" />
     <Compile Include="General\Time.cs" />
     <Compile Include="General\Globals.cs" />
     <Compile Include="Interface\Game\AnnouncementWindow.cs" />
@@ -651,6 +659,8 @@
     <Content Include="assets\resources\gui\volume_slider.png" />
     <Content Include="assets\resources\gui\volume_slider_hovered.png" />
     <Content Include="assets\resources\gui\website.png" />
+    <Content Include="assets\x64\discord_game_sdk.dll" />
+    <Content Include="assets\x86\discord_game_sdk.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
