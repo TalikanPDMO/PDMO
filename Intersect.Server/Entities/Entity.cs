@@ -1484,19 +1484,36 @@ namespace Intersect.Server.Entities
             }
             else
             {
-                // Friendly Spell! Do not attack other players/npcs around us.
-                switch (target)
+                // For an event source, we use the initial target of the spell for friendly spells
+                if (this is EventPageInstance)
                 {
-                    case Player targetPlayer
-                        when this is Player player && !IsAllyOf(targetPlayer) && this != target:
-                    case Npc _ when this is Npc npc && !npc.CanNpcCombat(target, spellBase.Combat.Friendly):
+                    if (CastTarget is Player && !(target is Player))
+                    {
+                        // Event is on the side of the players, do not aoe heal other entities
                         return;
+                    }
+                    else if (!(CastTarget is Player) && target is Player)
+                    {
+                        // Event is not on the side of the players, do not aoe heal players
+                        return;
+                    }
                 }
-
-                if (target?.GetType() != GetType())
+                else // Friendly Spell! Do not attack other players/npcs around us.
                 {
-                    return; // Don't let players aoe heal npcs. Don't let npcs aoe heal players.
+                    switch (target)
+                    {
+                        case Player targetPlayer
+                        when this is Player player && !IsAllyOf(targetPlayer) && this != target:
+                        case Npc _ when this is Npc npc && !npc.CanNpcCombat(target, spellBase.Combat.Friendly):
+                            return;
+                    }
+
+                    if (target?.GetType() != GetType())
+                    {
+                        return; // Don't let players aoe heal npcs. Don't let npcs aoe heal players.
+                    }
                 }
+                
             }
 
             if (spellBase.HitAnimationId != Guid.Empty &&
