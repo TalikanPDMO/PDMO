@@ -1,10 +1,12 @@
-﻿using Intersect.GameObjects;
+﻿using Discord;
+using Intersect.GameObjects;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace Intersect.Client.General
 {
@@ -15,7 +17,10 @@ namespace Intersect.Client.General
         public static Discord.Activity activity;
         public static DiscordPresenceState presenceActivityMenu = DiscordPresenceState.Initial;
         public static DiscordPresenceState presenceInGame = DiscordPresenceState.Initial;
-        public static String SMALL_IMAGE_PREFIX = "sprite_";
+        public static string SMALL_IMAGE_PREFIX = "sprite_";
+        private static long APPLICATION_ID = 864507833672269854;
+        private static System.Timers.Timer discordTimer;
+        private static int DISCORD_TIMER_INTERVAL = 900000; // 15 minutes
         public enum DiscordPresenceState
         {
 
@@ -26,17 +31,37 @@ namespace Intersect.Client.General
             Done,
         }
 
+        public static void InitDiscord()
+        {
+            discordTimer = new Timer(DISCORD_TIMER_INTERVAL);
+            discordTimer.AutoReset = true;
+            discordTimer.Enabled = false;
+            discordTimer.Elapsed += OnElapsedTimeDiscord;
+            //Trycatch to ensure discord is running
+            try
+            {
+                discord = new Discord.Discord(APPLICATION_ID, (UInt64)Discord.CreateFlags.NoRequireDiscord);
+            }
+            catch (ResultException ex)
+            {
+                //Discord is not running
+                discord = null;
+            }
+            InitActivity();
+            discordTimer.Start();
+        }
 
-        public static void InitActivity()
+
+        private static void InitActivity()
         {
             activity = new Discord.Activity
             {
-                Details = "Pokemon Donjon Mystere Online",
-                State = "Demarrage",
+                Details = ConvertForDiscordUTF8("Pokemon Donjon Mystère Online"),
+                State = "Lancement",
                 Assets =
                 {
                     LargeImage = "pdmo_main_icon",
-                    LargeText = "PDMO : La breche des mondes",
+                    LargeText = ConvertForDiscordUTF8("PDMO : La brèche des mondes"),
                     SmallImage = "pdmo_icone",
                     SmallText = ""
                 }
@@ -99,6 +124,28 @@ namespace Intersect.Client.General
         {
             Byte[] encodedBytes = Encoding.UTF8.GetBytes(baseString);
             return new string(encodedBytes.Select((byte b, int ind) => (char)b).ToArray());
+        }
+
+        private static void OnElapsedTimeDiscord(Object source, ElapsedEventArgs e)
+        {
+            Console.WriteLine("THE ELAPSED EVENT WAS RAISED AT {0:HH:mm:ss.fff}",
+                             e.SignalTime);
+            if (discord == null)
+            {
+                try
+                {
+                    //Reset discord link for RichPresence
+                    discord = new Discord.Discord(APPLICATION_ID, (UInt64)Discord.CreateFlags.NoRequireDiscord);
+                    //Reset presence state
+                    presenceActivityMenu = DiscordPresenceState.Initial;
+                    presenceInGame = DiscordPresenceState.Initial;
+                }
+                catch (ResultException ex)
+                {
+                    //Discord is not running
+                    discord = null;
+                }
+            }
         }
     }
 }

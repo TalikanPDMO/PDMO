@@ -30,19 +30,8 @@ namespace Intersect.Client.Core
 
         internal static void Start(IClientContext context)
         {
-            //Trycatch to ensure discord is running
-            try
-            {
-                //Init discord link for RichPresence
-                DiscordHandler.discord = new Discord.Discord(864507833672269854, (System.UInt64)Discord.CreateFlags.NoRequireDiscord);
-                DiscordHandler.InitActivity();
-            }
-            catch (ResultException ex)
-            {
-                //Discord is not running
-                DiscordHandler.discord = null;
-            }
-
+            //Init discord link for RichPresence
+            DiscordHandler.InitDiscord();
             //Load Graphics
             Graphics.InitGraphics();
 
