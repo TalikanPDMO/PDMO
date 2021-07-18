@@ -4974,6 +4974,12 @@ Negative values for time to flow backwards.";
 
             public static LocalizedString player = @"Player";
 
+            public static LocalizedString players = @"Players";
+
+            public static LocalizedString friendly = @"Friendly";
+
+            public static LocalizedString entities = @"Entities";
+
             public static LocalizedString thisevent = @"[THIS EVENT]";
 
             public static LocalizedString notargetrequired = @"[No target required]";
