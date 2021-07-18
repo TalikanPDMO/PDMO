@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.ComboBox;
 
 namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 {
@@ -22,6 +23,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private EventBase mEditingEvent;
         private MapBase mCurrentMap;
         private UseSpellCommand mMyCommand;
+        private bool isShowingFriendly = false;
+        private bool targetEventsLoaded = false;
         public EventCommandUseSpell(UseSpellCommand refCommand, EventBase currentEvent, MapBase currentMap, FrmEvent editor)
         {
             InitializeComponent();
@@ -34,13 +37,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbSpell.Items.AddRange(SpellBase.Names);
             cmbSource.Items.Clear();
             cmbSource.Items.Add(Strings.EventUseSpell.player);
-            cmbSource.SelectedIndex = 0; // default but will chane with cmbspell
+            cmbSource.SelectedIndex = 0; // default but will change with cmbspell update
 
             cmbTarget.Items.Clear();
             cmbTarget.Items.Add(Strings.EventUseSpell.player);
-            cmbTarget.SelectedIndex = 0; // default but will chane with cmbspell
-
-            cmbSpell.SelectedIndex = SpellBase.ListIndex(mMyCommand.SpellId);
+            cmbTarget.SelectedIndex = 0; // default but will change with cmbspell update
 
             if (mEditingEvent != null && !mEditingEvent.CommonEvent)
             {
@@ -62,7 +63,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                         cmbTarget.SelectedIndex = cmbTarget.Items.Count - 1;
                     }
                 }
+                targetEventsLoaded = true;
             }
+            cmbSpell.SelectedIndex = SpellBase.ListIndex(mMyCommand.SpellId); // will update target combobox
         }
 
         private void InitLocalization()
@@ -91,6 +94,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             {
                 mMyCommand.TargetId = Guid.Empty;
             }
+            else if (isShowingFriendly)
+            {
+                mMyCommand.TargetId = mEditingEvent.Id; // Put this event as target when friendly spell is not on Players
+            }
             else
             {
                 mMyCommand.TargetId = mCurrentMap.LocalEvents.Keys.ToList()[cmbTarget.SelectedIndex - 1];
@@ -108,6 +115,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             //Check length to avoid error when cmbTarget is not loaded yet
             if (cmbTarget.Items.Count > 0)
             {
+                isShowingFriendly = false;
                 SpellBase spell = SpellBase.FromList(cmbSpell.SelectedIndex);
                 switch (spell.SpellType)
                 {
@@ -116,21 +124,82 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                         {
                             case SpellTargetTypes.AoE:
                             case SpellTargetTypes.Projectile:
+                                if (spell.Combat.Friendly)
+                                {
+                                    lblTarget.Text = Strings.EventUseSpell.friendly;
+                                    cmbTarget.Items.Clear();
+                                    cmbTarget.Items.Add(Strings.EventUseSpell.players);
+                                    cmbTarget.Items.Add(Strings.EventUseSpell.entities);
+                                    cmbTarget.SelectedIndex = mMyCommand.TargetId == Guid.Empty ? 0 : 1;
+                                    cmbTarget.Enabled = true;
+                                    isShowingFriendly = true;
+                                    targetEventsLoaded = false;
+                                }
+                                else
+                                {
+                                    lblTarget.Text = Strings.EventUseSpell.target;
+                                    cmbTarget.SelectedIndex = 0;
+                                    cmbTarget.Items[0] = Strings.EventUseSpell.notargetrequired;
+                                    cmbTarget.Enabled = false;
+                                }
+                                break;
                             case SpellTargetTypes.Self:
+                                lblTarget.Text = Strings.EventUseSpell.target;
                                 cmbTarget.SelectedIndex = 0;
                                 cmbTarget.Items[0] = Strings.EventUseSpell.notargetrequired;
                                 cmbTarget.Enabled = false;
                                 break;
                             default:
-                                cmbTarget.Items[0] = Strings.EventUseSpell.player;
+                                lblTarget.Text = Strings.EventUseSpell.target;
+                                if (!targetEventsLoaded)
+                                {
+                                    // Need to reload the event list
+                                    cmbTarget.Items.Clear();
+                                    cmbTarget.Items.Add(Strings.EventUseSpell.player);
+                                    ReloadTargetEvents();
+                                    cmbTarget.SelectedIndex = 0;
+                                    targetEventsLoaded = true;
+                                }
+                                else
+                                {
+                                    // Just need to rename the first element
+                                    cmbTarget.Items[0] = Strings.EventUseSpell.player;
+                                }
                                 cmbTarget.Enabled = true;
                                 break;
                         }
                         break;
                     default:
-                        cmbTarget.Items[0] = Strings.EventUseSpell.player;
+                        lblTarget.Text = Strings.EventUseSpell.target;
+                        if (!targetEventsLoaded)
+                        {
+                            // Need to reload the event list
+                            cmbTarget.Items.Clear();
+                            cmbTarget.Items.Add(Strings.EventUseSpell.player);
+                            ReloadTargetEvents();
+                            cmbTarget.SelectedIndex = 0;
+                            targetEventsLoaded = true;
+                        }
+                        else
+                        {
+                            // Just need to rename the first element
+                            cmbTarget.Items[0] = Strings.EventUseSpell.player;
+                        }
                         cmbTarget.Enabled = true;
                         break;
+                }
+            }
+        }
+
+        private void ReloadTargetEvents()
+        {
+            if (mEditingEvent != null && !mEditingEvent.CommonEvent)
+            {
+                foreach (var evt in mCurrentMap.LocalEvents)
+                {
+                    cmbTarget.Items.Add(
+                       evt.Key == mEditingEvent.Id ? Strings.EventUseSpell.thisevent + " " : "" + evt.Value.Name
+                    );
                 }
             }
         }
