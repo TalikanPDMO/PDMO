@@ -10,10 +10,10 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 
 [assembly: AssemblyTitle("PDMO Editor")]
-[assembly: AssemblyDescription("Game Content Editor - Part of the Intersect 2D Game Creation Suite")]
-[assembly: AssemblyProduct("Intersect Game Engine")]
-[assembly: AssemblyCompany("Ascension Game Development")]
-[assembly: AssemblyCopyright("Copyright © Ascension Game Dev 2020")]
+[assembly: AssemblyDescription("Editeur de contenu du jeu PDMO")]
+[assembly: AssemblyProduct("Pokemon Donjon Mystère Online")]
+[assembly: AssemblyCompany("PDMO Team")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyTrademark("")]
@@ -36,6 +36,6 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.7.0.0")]
-[assembly: AssemblyFileVersion("0.7.0.0")]
+[assembly: AssemblyVersion("0.2.1.0")]
+[assembly: AssemblyFileVersion("0.2.1.0")]
 [assembly: NeutralResourcesLanguage("en-US")]
