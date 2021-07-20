@@ -394,7 +394,9 @@
     <Content Include="assets\resources\gui\craftitem.png" />
     <Content Include="assets\resources\gui\credits_window.png" />
     <Content Include="assets\resources\gui\defaultskin.png" />
-    <Content Include="assets\resources\gui\discord.png" />
+    <Content Include="assets\resources\gui\discord_button_clicked.png" />
+    <Content Include="assets\resources\gui\discord_button_hovered.png" />
+    <Content Include="assets\resources\gui\discord_button_normal.png" />
     <Content Include="assets\resources\gui\downarrowclicked.png" />
     <Content Include="assets\resources\gui\downarrowhover.png" />
     <Content Include="assets\resources\gui\downarrownormal.png" />
@@ -531,7 +533,6 @@
     <Content Include="assets\resources\gui\layouts\menu\CharacterCreationWindow.json" />
     <Content Include="assets\resources\gui\layouts\menu\CharacterSelectionWindow.json" />
     <Content Include="assets\resources\gui\layouts\menu\CreditsWindow.json" />
-    <Content Include="assets\resources\gui\layouts\menu\DiscordButton.json" />
     <Content Include="assets\resources\gui\layouts\menu\ForgotPasswordWindow.json" />
     <Content Include="assets\resources\gui\layouts\menu\InputBox.json" />
     <Content Include="assets\resources\gui\layouts\menu\LinksArea.json" />
@@ -658,7 +659,9 @@
     <Content Include="assets\resources\gui\volume_bar.png" />
     <Content Include="assets\resources\gui\volume_slider.png" />
     <Content Include="assets\resources\gui\volume_slider_hovered.png" />
-    <Content Include="assets\resources\gui\website.png" />
+    <Content Include="assets\resources\gui\website_button_clicked.png" />
+    <Content Include="assets\resources\gui\website_button_hovered.png" />
+    <Content Include="assets\resources\gui\website_button_normal.png" />
     <Content Include="assets\x64\discord_game_sdk.dll" />
     <Content Include="assets\x86\discord_game_sdk.dll" />
   </ItemGroup>
