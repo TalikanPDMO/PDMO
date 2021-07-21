@@ -17,6 +17,7 @@
         //Combat
         public int RegenTime = 3000; //3 seconds
 
+        //A été mis à true par Moussmous pour décrire les actions de combats dans le chat
         public bool EnableCombatChatMessages = false; // Enables or disables combat chat messages.
 
         //Spells

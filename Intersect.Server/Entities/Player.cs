@@ -1064,6 +1064,8 @@ namespace Intersect.Server.Entities
                         var descriptor = npc.Base;
                         var playerEvent = descriptor.OnDeathEvent;
                         var partyEvent = descriptor.OnDeathPartyEvent;
+                        //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+                        PacketSender.SendChatMsg(this, entity.Name+" a été vaincu.", ChatMessageType.Combat);
 
                         // If in party, split the exp.
                         if (Party != null && Party.Count > 0)
@@ -1168,6 +1170,8 @@ namespace Intersect.Server.Entities
         {
             if (!CanAttack(target, parentSpell))
             {
+                //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+                PacketSender.SendChatMsg(this, target.Name+" impossible à attaquer avec "+parentSpell.Name, ChatMessageType.Combat);
                 return;
             }
 

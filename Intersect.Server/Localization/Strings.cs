@@ -225,6 +225,7 @@ namespace Intersect.Server.Localization
 
         }
 
+        //A été traduit par Moussmous pour décrire les actions de combats dans le chat
         public sealed class CombatNamespace : LocaleNamespace
         {
 
@@ -232,20 +233,20 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString addsymbol = @"+";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString blocked = @"BLOCKED!";
+            public readonly LocalizedString blocked = @"BLOQUE!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString channeling = @"You are currently channeling another skill.";
+            public readonly LocalizedString channeling = @"Tu es en train de charger une autre attaque.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString channelingnoattack =
-                @"You are currently channeling a spell, you cannot attack.";
+                @"Tu es en train de charger une attaque, tu ne peux pas agir.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString cooldown = @"This skill is on cooldown.";
+            public readonly LocalizedString cooldown = @"Cette attaque est en cooldown.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString critical = @"CRITICAL HIT!";
+            public readonly LocalizedString critical = @"COUP CRITIQUE!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocaleDictionary<int, LocalizedString> damagetypes =
@@ -262,7 +263,7 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString dash = @"DASH!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString dynamicreq = @"You do not meet the requirements to cast the spell!";
+            public readonly LocalizedString dynamicreq = @"Pas assez de PM pour lancer cette attaque !";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString exp = @"Experience";
@@ -271,45 +272,45 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString invulnerable = @"INVULNERABLE!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString levelreq = @"You are not a high enough level to use this ability.";
+            public readonly LocalizedString levelreq = @"Tu n'es pas assez haut niveau pour utiliser cette abilité.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString levelup = @"LEVEL UP!";
+            public readonly LocalizedString levelup = @"NIVEAU SUPERIEUR!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString lowhealth = @"Not enough health.";
+            public readonly LocalizedString lowhealth = @"Pas assez de points de vie.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString lowmana = @"Not enough mana.";
+            public readonly LocalizedString lowmana = @"Pas assez de PM.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString miss = @"MISS!";
+            public readonly LocalizedString miss = @"RATE!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString notarget = @"No Target!";
+            public readonly LocalizedString notarget = @"Pas de cible!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString removesymbol = @"-";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString
-                resourcereqs = @"You do not meet the requirements to harvest this resource!";
+                resourcereqs = @"Tu n'as pas ce qu'il faut pour recolter cette ressource!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString silenced = @"You cannot cast this ability whilst silenced.";
+            public readonly LocalizedString silenced = @"Tu ne peux pas lancer d'attaque quand tu es mis au silence.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString sleep = @"You cannot cast this ability whilst asleep";
+            public readonly LocalizedString sleep = @"Tu ne peux pas utiliser cette attaque en étant endormi";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString sleepattacking = @"You are asleep and can't attack.";
+            public readonly LocalizedString sleepattacking = @"Tu es endormi et ne peux pas attaquer.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString sleepblocking = @"You are asleep and can't block.";
+            public readonly LocalizedString sleepblocking = @"Tu es endormi et ne peux pas bloquer.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString statreq =
-                @"You do not possess the correct combat stats to use this ability.";
+                @"Tu ne possèdes pas les stats nécessaires pour utiliser cette abilité.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocaleDictionary<int, LocalizedString> stats = new LocaleDictionary<int, LocalizedString>(
@@ -344,22 +345,22 @@ namespace Intersect.Server.Localization
             );
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString stunattacking = @"You are stunned and can't attack.";
+            public readonly LocalizedString stunattacking = @"Tu es assomé et ne peux pas attaquer.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString stunblocking = @"You are stunned and can't block.";
+            public readonly LocalizedString stunblocking = @"Tu es assomé et ne peux pas bloquer.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString stunned = @"You cannot cast this ability whilst stunned.";
+            public readonly LocalizedString stunned = @"Tu ne peux pas utiliser cette attaque en étant assomé.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString targetoutsiderange = @"Target is out of range!";
+            public readonly LocalizedString targetoutsiderange = @"Cible hors de portée!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString toolrequired = @"You require a {00} to interact with this resource!";
+            public readonly LocalizedString toolrequired = @"Tu as besoin de {00} pour intéragir avec cette ressource!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString tryforgetboundspell = @"You cannot forget this spell.";
+            public readonly LocalizedString tryforgetboundspell = @"Tu ne peux pas oublier cette attaque.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocaleDictionary<int, LocalizedString> vitals = new LocaleDictionary<int, LocalizedString>(
