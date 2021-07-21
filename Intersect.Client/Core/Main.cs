@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-
+using Discord;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
@@ -29,6 +30,8 @@ namespace Intersect.Client.Core
 
         internal static void Start(IClientContext context)
         {
+            //Init discord link for RichPresence
+            DiscordHandler.InitDiscord();
             //Load Graphics
             Graphics.InitGraphics();
 
@@ -68,6 +71,19 @@ namespace Intersect.Client.Core
         {
             lock (Globals.GameLock)
             {
+                if (DiscordHandler.discord != null)
+                {
+                    //trycatch because discord can be shutdown when playing PDMO
+                    try
+                    {
+                        DiscordHandler.discord.RunCallbacks();
+                    }
+                    catch(ResultException ex)
+                    {
+                        // Discord was shutting down when playing PDMO
+                        DiscordHandler.discord = null;
+                    }
+                }
                 Networking.Network.Update();
                 Globals.System.Update();
                 Fade.Update();
@@ -82,7 +98,8 @@ namespace Intersect.Client.Core
 
                     case GameStates.Menu:
                         ProcessMenu();
-
+                        DiscordHandler.SwitchToActivityMenu();
+                        
                         break;
 
                     case GameStates.Loading:
@@ -92,6 +109,7 @@ namespace Intersect.Client.Core
 
                     case GameStates.InGame:
                         ProcessGame();
+                        DiscordHandler.SwitchToActivityInGame();
 
                         break;
 
@@ -106,6 +124,8 @@ namespace Intersect.Client.Core
 
                 Globals.InputManager.Update();
                 Audio.Update();
+
+                Globals.OnGameUpdate();
             }
         }
 

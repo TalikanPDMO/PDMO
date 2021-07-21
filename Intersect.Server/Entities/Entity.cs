@@ -1286,7 +1286,10 @@ namespace Intersect.Server.Entities
             var stats = new int[(int) Stats.StatCount];
             for (var i = 0; i < (int) Stats.StatCount; i++)
             {
-                stats[i] = Stat[i].Value();
+                if (Stat[i] != null) // Prevent error in some cases
+                {
+                    stats[i] = Stat[i].Value();
+                }
             }
 
             return stats;
@@ -1481,19 +1484,36 @@ namespace Intersect.Server.Entities
             }
             else
             {
-                // Friendly Spell! Do not attack other players/npcs around us.
-                switch (target)
+                // For an event source, we use the initial target of the spell for friendly spells
+                if (this is EventPageInstance)
                 {
-                    case Player targetPlayer
-                        when this is Player player && !IsAllyOf(targetPlayer) && this != target:
-                    case Npc _ when this is Npc npc && !npc.CanNpcCombat(target, spellBase.Combat.Friendly):
+                    if (CastTarget is Player && !(target is Player))
+                    {
+                        // Event is on the side of the players, do not aoe heal other entities
                         return;
+                    }
+                    else if (!(CastTarget is Player) && target is Player)
+                    {
+                        // Event is not on the side of the players, do not aoe heal players
+                        return;
+                    }
                 }
-
-                if (target?.GetType() != GetType())
+                else // Friendly Spell! Do not attack other players/npcs around us.
                 {
-                    return; // Don't let players aoe heal npcs. Don't let npcs aoe heal players.
+                    switch (target)
+                    {
+                        case Player targetPlayer
+                        when this is Player player && !IsAllyOf(targetPlayer) && this != target:
+                        case Npc _ when this is Npc npc && !npc.CanNpcCombat(target, spellBase.Combat.Friendly):
+                            return;
+                    }
+
+                    if (target?.GetType() != GetType())
+                    {
+                        return; // Don't let players aoe heal npcs. Don't let npcs aoe heal players.
+                    }
                 }
+                
             }
 
             if (spellBase.HitAnimationId != Guid.Empty &&
@@ -1505,26 +1525,30 @@ namespace Intersect.Server.Entities
 
             var statBuffTime = -1;
             var expireTime = Globals.Timing.Milliseconds + spellBase.Combat.Duration;
-            for (var i = 0; i < (int) Stats.StatCount; i++)
+            if (!(target is EventPageInstance)) // No buff on events
             {
-                target.Stat[i]
-                    .AddBuff(
-                        new Buff(spellBase, spellBase.Combat.StatDiff[i], spellBase.Combat.PercentageStatDiff[i], expireTime)
-                    );
-
-                if (spellBase.Combat.StatDiff[i] != 0 || spellBase.Combat.PercentageStatDiff[i] != 0)
+                for (var i = 0; i < (int)Stats.StatCount; i++)
                 {
-                    statBuffTime = spellBase.Combat.Duration;
+                    target.Stat[i]
+                        .AddBuff(
+                            new Buff(spellBase, spellBase.Combat.StatDiff[i], spellBase.Combat.PercentageStatDiff[i], expireTime)
+                        );
+
+                    if (spellBase.Combat.StatDiff[i] != 0 || spellBase.Combat.PercentageStatDiff[i] != 0)
+                    {
+                        statBuffTime = spellBase.Combat.Duration;
+                    }
+                }
+
+                if (statBuffTime == -1)
+                {
+                    if (spellBase.Combat.HoTDoT && spellBase.Combat.HotDotInterval > 0)
+                    {
+                        statBuffTime = spellBase.Combat.Duration;
+                    }
                 }
             }
-
-            if (statBuffTime == -1)
-            {
-                if (spellBase.Combat.HoTDoT && spellBase.Combat.HotDotInterval > 0)
-                {
-                    statBuffTime = spellBase.Combat.Duration;
-                }
-            }
+            
 
             var damageHealth = spellBase.Combat.VitalDiff[(int)Vitals.Health];
             var damageMana = spellBase.Combat.VitalDiff[(int)Vitals.Mana];
@@ -1717,12 +1741,24 @@ namespace Intersect.Server.Entities
             {
                 isCrit = true;
             }
-
+            bool isFixedDamage = false;
+            //If spell from event or for ressources, fixed damage
+            if (this is EventPageInstance)
+            {
+                if (this.Stat == null || this.Stat.Contains(null))
+                {
+                    isFixedDamage = true;
+                } 
+            }
+            else if (enemy is Resource)
+            {
+                isFixedDamage = true;
+            }
             //Calculate Damages
             if (baseDamage != 0)
             {
 
-                if (enemy is Resource)
+                if (isFixedDamage)
                 {
                     baseDamage = originalBaseDamage;
                 }
@@ -1804,10 +1840,11 @@ namespace Intersect.Server.Entities
 
             if (secondaryDamage != 0)
             {
-                secondaryDamage = Formulas.CalculateDamage(
-                    secondaryDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy
-                );
-
+                if (!isFixedDamage) // Scale if not fixed damage
+                {
+                    secondaryDamage = Formulas.CalculateDamage(
+                        secondaryDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy);
+                }
                 if (secondaryDamage < 0 && damagingAttack)
                 {
                     secondaryDamage = 0;
@@ -2320,19 +2357,23 @@ namespace Intersect.Server.Entities
 
         public int GetDistanceTo(MapInstance targetMap, int targetX, int targetY)
         {
-            var myMap = MapInstance.Get(MapId);
-            if (myMap != null && targetMap != null && myMap.MapGrid == targetMap.MapGrid
+            return GetDistanceBetween(Map, targetMap, X, targetX, Y, targetY);
+        }
+
+        public int GetDistanceBetween(MapInstance mapA, MapInstance mapB, int xTileA, int xTileB, int yTileA, int yTileB)
+        {
+            if (mapA != null && mapB != null && mapA.MapGrid == mapB.MapGrid
             ) //Make sure both maps exist and that they are in the same dimension
             {
                 //Calculate World Tile of Me
-                var x1 = X + myMap.MapGridX * Options.MapWidth;
-                var y1 = Y + myMap.MapGridY * Options.MapHeight;
+                var x1 = xTileA + mapA.MapGridX * Options.MapWidth;
+                var y1 = yTileA + mapA.MapGridY * Options.MapHeight;
 
                 //Calculate world tile of target
-                var x2 = targetX + targetMap.MapGridX * Options.MapWidth;
-                var y2 = targetY + targetMap.MapGridY * Options.MapHeight;
+                var x2 = xTileB + mapB.MapGridX * Options.MapWidth;
+                var y2 = yTileB + mapB.MapGridY * Options.MapHeight;
 
-                return (int) Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
+                return (int)Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
             }
 
             //Something is null.. return a value that is out of range :) 

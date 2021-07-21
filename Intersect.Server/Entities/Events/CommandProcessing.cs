@@ -83,20 +83,33 @@ namespace Intersect.Server.Entities.Events
         {
             var title = ParseEventText(command.Title, player, instance);
             var txt = ParseEventText(command.Text, player, instance);
-            var type = VariableDataTypes.Integer;
+            var type = -1;
 
             if (command.VariableType == VariableTypes.PlayerVariable)
             {
                 var variable = PlayerVariableBase.Get(command.VariableId);
-                type = variable.Type;
+                if (variable != null)
+                {
+                    type = (int)variable.Type;
+                }
             }
             else
             {
                 var variable = ServerVariableBase.Get(command.VariableId);
-                type = variable.Type;
+                if (variable != null)
+                {
+                    type = (int)variable.Type;
+                }
             }
 
-            PacketSender.SendInputVariableDialog(player, title, txt, type, instance.PageInstance.Id);
+            if (type == -1)
+            {
+                var tmpStack = new CommandInstance(stackInfo.Page, command.BranchIds[1]);
+                callStack.Push(tmpStack);
+                return;
+            }
+
+            PacketSender.SendInputVariableDialog(player, title, txt, (VariableDataTypes)type, instance.PageInstance.Id);
             stackInfo.WaitingForResponse = CommandInstance.EventResponse.Dialogue;
             stackInfo.WaitingOnCommand = command;
             stackInfo.BranchIds = command.BranchIds;
@@ -178,10 +191,6 @@ namespace Intersect.Server.Entities.Events
         )
         {
             var success = Conditions.MeetsCondition(command.Condition, player, instance, null);
-            if (command.Condition.Negated)
-            {
-                success = !success;
-            }
 
             List<EventCommand> newCommandList = null;
             if (success && stackInfo.Page.CommandLists.ContainsKey(command.BranchIds[0]))
@@ -852,6 +861,73 @@ namespace Intersect.Server.Entities.Events
             }
 
             player.SpawnedNpcs.Clear();
+        }
+
+        //Change Spells Command
+        private static void ProcessCommand(
+            UseSpellCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            // Boolean to search after in the list of event in the map
+            bool searchSource = false;
+            bool searchTarget = false;
+            var targetEntity = (Entity)player;
+            var sourceEntity = (Entity)player;
+            if (command.TargetId != Guid.Empty)
+            {
+                searchTarget = true; // If target is empty, target is the player
+            }
+            if (command.SourceId != Guid.Empty)
+            {
+                searchSource = true; // If source is empty, source is the player
+            }
+            if (searchSource || searchTarget)
+            {
+                foreach (var evt in player.EventLookup)
+                {
+                    if (evt.Value.MapId != instance.MapId)
+                    {
+                        continue;
+                    }
+                    if (searchTarget && evt.Value.BaseEvent.Id == command.TargetId)
+                    {
+                        targetEntity = evt.Value.PageInstance;
+                        searchTarget = false;
+                        if(!searchSource)
+                        {
+                            //Source and Target found, we exit the loop
+                            break;
+                        }
+                        
+                    }
+                    if (searchSource && evt.Value.BaseEvent.Id == command.SourceId)
+                    {
+                        sourceEntity = evt.Value.PageInstance;
+                        searchSource = false;
+                        if (!searchTarget)
+                        {
+                            //Source and Target found, we exit the loop
+                            break;
+                        }
+
+                    }
+                }
+            }
+
+            if (targetEntity != null && sourceEntity != null)
+            {
+                sourceEntity.CastTarget = targetEntity;
+                sourceEntity.CastSpell(command.SpellId);
+                sourceEntity.CastTarget = null;
+            }
+            else
+            {
+                return;
+            }
         }
 
         //Play Animation Command

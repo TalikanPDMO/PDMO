@@ -60,6 +60,8 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<int>("DamageType");
 
+                    b.Property<string>("Description");
+
                     b.Property<long>("ExpIncrease");
 
                     b.Property<string>("ExpOverridesJson")
@@ -123,6 +125,9 @@ namespace Intersect.Server.Migrations.Game
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnName("Event");
 
                     b.Property<string>("Folder");
 
@@ -219,6 +224,8 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<bool>("CanSell");
 
                     b.Property<bool>("CanTrade");
+
+                    b.Property<string>("CannotUseMessage");
 
                     b.Property<int>("Cooldown");
 
@@ -571,6 +578,8 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<Guid>("AnimationId")
                         .HasColumnName("Animation");
 
+                    b.Property<string>("CannotHarvestMessage");
+
                     b.Property<Guid>("EventId")
                         .HasColumnName("Event");
 
@@ -633,6 +642,8 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("BuySound");
+
                     b.Property<bool>("BuyingWhitelist");
 
                     b.Property<Guid>("DefaultCurrencyId")
@@ -648,6 +659,8 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<string>("Name");
 
+                    b.Property<string>("SellSound");
+
                     b.Property<long>("TimeCreated");
 
                     b.HasKey("Id");
@@ -661,6 +674,8 @@ namespace Intersect.Server.Migrations.Game
                         .ValueGeneratedOnAdd();
 
                     b.Property<bool>("Bound");
+
+                    b.Property<string>("CannotCastMessage");
 
                     b.Property<Guid>("CastAnimationId")
                         .HasColumnName("CastAnimation");

@@ -16,7 +16,7 @@
     <ProjectGuid>{9FFC7331-87BE-403B-82A0-B86D3CCE7C53}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Intersect.Server</RootNamespace>
-    <AssemblyName>Intersect Server</AssemblyName>
+    <AssemblyName>PDMO Server</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
@@ -100,7 +100,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
     <Optimize>false</Optimize>
-    <DocumentationFile>..\build\debug\server\Intersect Server.xml</DocumentationFile>
+    <DocumentationFile>..\build\debug\server\PDMO Server.xml</DocumentationFile>
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NoFody|AnyCPU'">
@@ -587,6 +587,22 @@
     <Compile Include="Migrations\Game\20210607115442_AddedCanGuildBankOptionToItems.cs" />
     <Compile Include="Migrations\Game\20210607115442_AddedCanGuildBankOptionToItems.designer.cs">
       <DependentUpon>20210607115442_AddedCanGuildBankOptionToItems.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20210714084833_AddingDescriptionToClass.cs" />
+    <Compile Include="Migrations\Game\20210714084833_AddingDescriptionToClass.designer.cs">
+      <DependentUpon>20210714084833_AddingDescriptionToClass.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20210630114724_CraftingCommonEvents.cs" />
+    <Compile Include="Migrations\Game\20210630114724_CraftingCommonEvents.designer.cs">
+      <DependentUpon>20210630114724_CraftingCommonEvents.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20210622051409_AddingRequirementNotMetMessages.cs" />
+    <Compile Include="Migrations\Game\20210622051409_AddingRequirementNotMetMessages.designer.cs">
+      <DependentUpon>20210622051409_AddingRequirementNotMetMessages.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20210703145618_AddingShopSoundEffects.cs" />
+    <Compile Include="Migrations\Game\20210703145618_AddingShopSoundEffects.designer.cs">
+      <DependentUpon>20210703145618_AddingShopSoundEffects.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

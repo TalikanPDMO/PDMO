@@ -76,6 +76,8 @@ namespace Intersect.GameObjects
             set => AttackAnimationId = value?.Id ?? Guid.Empty;
         }
 
+        public string Description { get; set; } = "";
+
         public int BasePoints { get; set; }
 
         public int CritChance { get; set; }

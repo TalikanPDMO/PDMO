@@ -17,13 +17,28 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Intersect.Client</RootNamespace>
-    <AssemblyName>Intersect Client</AssemblyName>
+    <AssemblyName>PDMO</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -92,6 +107,13 @@
     <Compile Include="Core\Main.cs" />
     <Compile Include="Core\Sounds\MapSound.cs" />
     <Compile Include="Core\Sounds\Sound.cs" />
+    <Compile Include="DiscordGameSDK\ActivityManager.cs" />
+    <Compile Include="DiscordGameSDK\Constants.cs" />
+    <Compile Include="DiscordGameSDK\Core.cs" />
+    <Compile Include="DiscordGameSDK\ImageManager.cs" />
+    <Compile Include="DiscordGameSDK\LobbyManager.cs" />
+    <Compile Include="DiscordGameSDK\StorageManager.cs" />
+    <Compile Include="DiscordGameSDK\StoreManager.cs" />
     <Compile Include="Entities\Animation.cs" />
     <Compile Include="Entities\ChatBubble.cs" />
     <Compile Include="Entities\Critter.cs" />
@@ -108,6 +130,7 @@
     <Compile Include="Entities\Resource.cs" />
     <Compile Include="Entities\SpriteAnimations.cs" />
     <Compile Include="Entities\Status.cs" />
+    <Compile Include="General\DiscordHandler.cs" />
     <Compile Include="General\Time.cs" />
     <Compile Include="General\Globals.cs" />
     <Compile Include="Interface\Game\AnnouncementWindow.cs" />
@@ -147,6 +170,7 @@
     <Compile Include="Interface\Menu\ForgotPasswordWindow.cs" />
     <Compile Include="Plugins\Contexts\ClientPluginContext.cs" />
     <Compile Include="Plugins\Helpers\ClientLifecycleHelper.cs" />
+    <Compile Include="Plugins\Helpers\ClientNetworkHelper.cs" />
     <Compile Include="Utilities\MathHelper.cs" />
     <Compile Include="MonoGame\Audio\MonoMusicInstance.cs" />
     <Compile Include="MonoGame\Audio\MonoMusicSource.cs" />
@@ -251,6 +275,7 @@
     <EmbeddedResource Include="$(NetworkHandshakePublicKey)" />
     <None Include="app.config" />
     <None Include="app.manifest" />
+    <None Include="assets\resources\gui\layouts\menu\LinksArea.json" />
     <None Include="packages.config" />
     <None Include="FodyWeavers.xml">
       <SubType>Designer</SubType>
@@ -313,10 +338,337 @@
     <Analyzer Include="..\packages\Microsoft.NetFramework.Analyzers.3.0.0\analyzers\dotnet\cs\Microsoft.NetFramework.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.NetFramework.Analyzers.3.0.0\analyzers\dotnet\cs\Microsoft.NetFramework.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.2 %28x86 et x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="assets\resources\client_strings.json" />
+    <Content Include="assets\resources\gui\addstatclicked.png" />
+    <Content Include="assets\resources\gui\addstathover.png" />
+    <Content Include="assets\resources\gui\addstatnormal.png" />
+    <Content Include="assets\resources\gui\AnnouncementWindow.png" />
+    <Content Include="assets\resources\gui\background.png" />
+    <Content Include="assets\resources\gui\bag.png" />
+    <Content Include="assets\resources\gui\bagactive.png" />
+    <Content Include="assets\resources\gui\bagitem.png" />
+    <Content Include="assets\resources\gui\bank.png" />
+    <Content Include="assets\resources\gui\bankactive.png" />
+    <Content Include="assets\resources\gui\bankitem.png" />
+    <Content Include="assets\resources\gui\buttonclicked.png" />
+    <Content Include="assets\resources\gui\buttonhover.png" />
+    <Content Include="assets\resources\gui\buttonnormal.png" />
+    <Content Include="assets\resources\gui\character.png" />
+    <Content Include="assets\resources\gui\characteractive.png" />
+    <Content Include="assets\resources\gui\charactericon.png" />
+    <Content Include="assets\resources\gui\charactericon2.png" />
+    <Content Include="assets\resources\gui\charview.png" />
+    <Content Include="assets\resources\gui\char_selection.png" />
+    <Content Include="assets\resources\gui\chatbar.png" />
+    <Content Include="assets\resources\gui\chatbox.png" />
+    <Content Include="assets\resources\gui\checkboxempty.png" />
+    <Content Include="assets\resources\gui\checkboxfull.png" />
+    <Content Include="assets\resources\gui\closeclicked.png" />
+    <Content Include="assets\resources\gui\closehover.png" />
+    <Content Include="assets\resources\gui\closelargeclicked.png" />
+    <Content Include="assets\resources\gui\closelargehover.png" />
+    <Content Include="assets\resources\gui\closelargenormal.png" />
+    <Content Include="assets\resources\gui\closenormal.png" />
+    <Content Include="assets\resources\gui\controlclicked.png" />
+    <Content Include="assets\resources\gui\controlhover.png" />
+    <Content Include="assets\resources\gui\controlnormal.png" />
+    <Content Include="assets\resources\gui\control_button.png" />
+    <Content Include="assets\resources\gui\control_button_clicked.png" />
+    <Content Include="assets\resources\gui\control_button_hovered.png" />
+    <Content Include="assets\resources\gui\craftbar.png" />
+    <Content Include="assets\resources\gui\craftbenchactive.png" />
+    <Content Include="assets\resources\gui\crafting.png" />
+    <Content Include="assets\resources\gui\craftitem.png" />
+    <Content Include="assets\resources\gui\credits_window.png" />
+    <Content Include="assets\resources\gui\defaultskin.png" />
+    <Content Include="assets\resources\gui\discord_button_clicked.png" />
+    <Content Include="assets\resources\gui\discord_button_hovered.png" />
+    <Content Include="assets\resources\gui\discord_button_normal.png" />
+    <Content Include="assets\resources\gui\downarrowclicked.png" />
+    <Content Include="assets\resources\gui\downarrowhover.png" />
+    <Content Include="assets\resources\gui\downarrownormal.png" />
+    <Content Include="assets\resources\gui\draggerv.png" />
+    <Content Include="assets\resources\gui\draggervclick.png" />
+    <Content Include="assets\resources\gui\draggervhover.png" />
+    <Content Include="assets\resources\gui\dropdownbg.png" />
+    <Content Include="assets\resources\gui\dropsellfield.png" />
+    <Content Include="assets\resources\gui\editcontrolsclicked.png" />
+    <Content Include="assets\resources\gui\editcontrolshover.png" />
+    <Content Include="assets\resources\gui\editcontrolsnormal.png" />
+    <Content Include="assets\resources\gui\edit_controls_clicked.png" />
+    <Content Include="assets\resources\gui\edit_controls_hovered.png" />
+    <Content Include="assets\resources\gui\edit_controls_normal.png" />
+    <Content Include="assets\resources\gui\emptybar.png" />
+    <Content Include="assets\resources\gui\entitybox.png" />
+    <Content Include="assets\resources\gui\entitybox_smtop.png" />
+    <Content Include="assets\resources\gui\equipmentitem.png" />
+    <Content Include="assets\resources\gui\equipped.png" />
+    <Content Include="assets\resources\gui\erroractive.png" />
+    <Content Include="assets\resources\gui\error_window.png" />
+    <Content Include="assets\resources\gui\escapemenu.png" />
+    <Content Include="assets\resources\gui\event1.png" />
+    <Content Include="assets\resources\gui\event2.png" />
+    <Content Include="assets\resources\gui\event2responses.png" />
+    <Content Include="assets\resources\gui\event3.png" />
+    <Content Include="assets\resources\gui\event3responses.png" />
+    <Content Include="assets\resources\gui\event4.png" />
+    <Content Include="assets\resources\gui\event4responses.png" />
+    <Content Include="assets\resources\gui\eventdefault.png" />
+    <Content Include="assets\resources\gui\eventresponsecdisabled.png" />
+    <Content Include="assets\resources\gui\eventresponseclicked.png" />
+    <Content Include="assets\resources\gui\eventresponsehover.png" />
+    <Content Include="assets\resources\gui\eventresponsenormal.png" />
+    <Content Include="assets\resources\gui\exiticon.png" />
+    <Content Include="assets\resources\gui\expbar.png" />
+    <Content Include="assets\resources\gui\extendchatclicked.png" />
+    <Content Include="assets\resources\gui\extendchathover.png" />
+    <Content Include="assets\resources\gui\extendchatnormal.png" />
+    <Content Include="assets\resources\gui\forgotpass_window.png" />
+    <Content Include="assets\resources\gui\friends.png" />
+    <Content Include="assets\resources\gui\friendsactive.png" />
+    <Content Include="assets\resources\gui\friendsfield.png" />
+    <Content Include="assets\resources\gui\friendsicon.png" />
+    <Content Include="assets\resources\gui\gamemenu.png" />
+    <Content Include="assets\resources\gui\guild.png" />
+    <Content Include="assets\resources\gui\guildicon.png" />
+    <Content Include="assets\resources\gui\hotbar.png" />
+    <Content Include="assets\resources\gui\hotbaritem.png" />
+    <Content Include="assets\resources\gui\hotbar_label.png" />
+    <Content Include="assets\resources\gui\hpbar.png" />
+    <Content Include="assets\resources\gui\ingame_charselect.png" />
+    <Content Include="assets\resources\gui\ingame_charselect_clicked.png" />
+    <Content Include="assets\resources\gui\ingame_charselect_disabled.png" />
+    <Content Include="assets\resources\gui\ingame_charselect_hovered.png" />
+    <Content Include="assets\resources\gui\ingame_closemenu.png" />
+    <Content Include="assets\resources\gui\ingame_closemenu_clicked.png" />
+    <Content Include="assets\resources\gui\ingame_closemenu_disabled.png" />
+    <Content Include="assets\resources\gui\ingame_closemenu_hovered.png" />
+    <Content Include="assets\resources\gui\ingame_exitdesktop.png" />
+    <Content Include="assets\resources\gui\ingame_exitdesktop_clicked.png" />
+    <Content Include="assets\resources\gui\ingame_exitdesktop_disabled.png" />
+    <Content Include="assets\resources\gui\ingame_exitdesktop_hovered.png" />
+    <Content Include="assets\resources\gui\ingame_logout.png" />
+    <Content Include="assets\resources\gui\ingame_logout_clicked.png" />
+    <Content Include="assets\resources\gui\ingame_logout_disabled.png" />
+    <Content Include="assets\resources\gui\ingame_logout_hovered.png" />
+    <Content Include="assets\resources\gui\ingame_menu.png" />
+    <Content Include="assets\resources\gui\ingame_settings.png" />
+    <Content Include="assets\resources\gui\ingame_settings_clicked.png" />
+    <Content Include="assets\resources\gui\ingame_settings_disabled.png" />
+    <Content Include="assets\resources\gui\ingame_settings_hovered.png" />
+    <Content Include="assets\resources\gui\inputactive.png" />
+    <Content Include="assets\resources\gui\inputfield.png" />
+    <Content Include="assets\resources\gui\inputfieldshort.png" />
+    <Content Include="assets\resources\gui\inputfield_newchar.png" />
+    <Content Include="assets\resources\gui\inputfield_slim.png" />
+    <Content Include="assets\resources\gui\inventory.png" />
+    <Content Include="assets\resources\gui\inventoryactive.png" />
+    <Content Include="assets\resources\gui\inventoryicon.png" />
+    <Content Include="assets\resources\gui\inventoryicon2.png" />
+    <Content Include="assets\resources\gui\inventoryitem.png" />
+    <Content Include="assets\resources\gui\itemdesc.png" />
+    <Content Include="assets\resources\gui\itemdescexpanded.png" />
+    <Content Include="assets\resources\gui\itemdescpanel.png" />
+    <Content Include="assets\resources\gui\createchar_window.png" />
+    <Content Include="assets\resources\gui\layouts\game\AnnouncementWindow.json" />
+    <Content Include="assets\resources\gui\layouts\game\BagItem.json" />
+    <Content Include="assets\resources\gui\layouts\game\BagWindow.json" />
+    <Content Include="assets\resources\gui\layouts\game\BankItem.json" />
+    <Content Include="assets\resources\gui\layouts\game\BankWindow.json" />
+    <Content Include="assets\resources\gui\layouts\game\CharacterWindow.json" />
+    <Content Include="assets\resources\gui\layouts\game\ChatboxWindow.json" />
+    <Content Include="assets\resources\gui\layouts\game\CraftedItem.json" />
+    <Content Include="assets\resources\gui\layouts\game\CraftingIngredient.json" />
+    <Content Include="assets\resources\gui\layouts\game\CraftingWindow.json" />
+    <Content Include="assets\resources\gui\layouts\game\Draggable.json" />
+    <Content Include="assets\resources\gui\layouts\game\EquipmentItem.json" />
+    <Content Include="assets\resources\gui\layouts\game\EscapeMenu.json" />
+    <Content Include="assets\resources\gui\layouts\game\EventDialogWindow_1Response.json" />
+    <Content Include="assets\resources\gui\layouts\game\EventDialogWindow_2Responses.json" />
+    <Content Include="assets\resources\gui\layouts\game\EventDialogWindow_3Responses.json" />
+    <Content Include="assets\resources\gui\layouts\game\EventDialogWindow_4Responses.json" />
+    <Content Include="assets\resources\gui\layouts\game\FriendsWindow.json" />
+    <Content Include="assets\resources\gui\layouts\game\GuildContextMenu.json" />
+    <Content Include="assets\resources\gui\layouts\game\GuildWindow.json" />
+    <Content Include="assets\resources\gui\layouts\game\HotbarWindow.json" />
+    <Content Include="assets\resources\gui\layouts\game\InputBox.json" />
+    <Content Include="assets\resources\gui\layouts\game\InventoryItem.json" />
+    <Content Include="assets\resources\gui\layouts\game\InventoryWindow.json" />
+    <Content Include="assets\resources\gui\layouts\game\ItemDescWindow.json" />
+    <Content Include="assets\resources\gui\layouts\game\ItemDescWindowExpanded.json" />
+    <Content Include="assets\resources\gui\layouts\game\MapItemIcon.json" />
+    <Content Include="assets\resources\gui\layouts\game\MapItemWindow.json" />
+    <Content Include="assets\resources\gui\layouts\game\MenuContainer.json" />
+    <Content Include="assets\resources\gui\layouts\game\OptionsWindow.json" />
+    <Content Include="assets\resources\gui\layouts\game\PartyWindow.json" />
+    <Content Include="assets\resources\gui\layouts\game\PlayerBox.json" />
+    <Content Include="assets\resources\gui\layouts\game\PlayerStatusIcon.json" />
+    <Content Include="assets\resources\gui\layouts\game\QuestOfferWindow.json" />
+    <Content Include="assets\resources\gui\layouts\game\QuestsWindow.json" />
+    <Content Include="assets\resources\gui\layouts\game\ShopItem.json" />
+    <Content Include="assets\resources\gui\layouts\game\ShopWindow.json" />
+    <Content Include="assets\resources\gui\layouts\game\Spell.json" />
+    <Content Include="assets\resources\gui\layouts\game\SpellDescWindow.json" />
+    <Content Include="assets\resources\gui\layouts\game\SpellDescWindowExpanded.json" />
+    <Content Include="assets\resources\gui\layouts\game\SpellsWindow.json" />
+    <Content Include="assets\resources\gui\layouts\game\TargetBox.json" />
+    <Content Include="assets\resources\gui\layouts\game\TargetStatusIcon.json" />
+    <Content Include="assets\resources\gui\layouts\game\TheirTradeItem.json" />
+    <Content Include="assets\resources\gui\layouts\game\TradeItem.json" />
+    <Content Include="assets\resources\gui\layouts\game\TradeWindow.json" />
+    <Content Include="assets\resources\gui\layouts\game\YourTradeItem.json" />
+    <Content Include="assets\resources\gui\layouts\menu\CharacterCreationWindow.json" />
+    <Content Include="assets\resources\gui\layouts\menu\CharacterSelectionWindow.json" />
+    <Content Include="assets\resources\gui\layouts\menu\CreditsWindow.json" />
+    <Content Include="assets\resources\gui\layouts\menu\ForgotPasswordWindow.json" />
+    <Content Include="assets\resources\gui\layouts\menu\InputBox.json" />
+    <Content Include="assets\resources\gui\layouts\menu\LinksArea.json" />
+    <Content Include="assets\resources\gui\layouts\menu\LoginWindow.json" />
+    <Content Include="assets\resources\gui\layouts\menu\Logo.json" />
+    <Content Include="assets\resources\gui\layouts\menu\MenuWindow.json" />
+    <Content Include="assets\resources\gui\layouts\menu\OptionsWindow.json" />
+    <Content Include="assets\resources\gui\layouts\menu\RegistrationWindow.json" />
+    <Content Include="assets\resources\gui\layouts\menu\ResetPasswordWindow.json" />
+    <Content Include="assets\resources\gui\layouts\menu\ServerStatusArea.json" />
+    <Content Include="assets\resources\gui\leftarrow.png" />
+    <Content Include="assets\resources\gui\leftarrowclicked.png" />
+    <Content Include="assets\resources\gui\leftarrowhover.png" />
+    <Content Include="assets\resources\gui\leftarrownormal.png" />
+    <Content Include="assets\resources\gui\lifebar.png" />
+    <Content Include="assets\resources\gui\login_window.png" />
+    <Content Include="assets\resources\gui\logo.png" />
+    <Content Include="assets\resources\gui\lootwindow.png" />
+    <Content Include="assets\resources\gui\mainmenu.png" />
+    <Content Include="assets\resources\gui\mainmenu_credits.png" />
+    <Content Include="assets\resources\gui\mainmenu_credits_clicked.png" />
+    <Content Include="assets\resources\gui\mainmenu_credits_disabled.png" />
+    <Content Include="assets\resources\gui\mainmenu_credits_hovered.png" />
+    <Content Include="assets\resources\gui\mainmenu_exit.png" />
+    <Content Include="assets\resources\gui\mainmenu_exit_clicked.png" />
+    <Content Include="assets\resources\gui\mainmenu_exit_disabled.png" />
+    <Content Include="assets\resources\gui\mainmenu_exit_hovered.png" />
+    <Content Include="assets\resources\gui\mainmenu_login.png" />
+    <Content Include="assets\resources\gui\mainmenu_login_clicked.png" />
+    <Content Include="assets\resources\gui\mainmenu_login_disabled.png" />
+    <Content Include="assets\resources\gui\mainmenu_login_hovered.png" />
+    <Content Include="assets\resources\gui\mainmenu_settings.png" />
+    <Content Include="assets\resources\gui\mainmenu_settings_clicked.png" />
+    <Content Include="assets\resources\gui\mainmenu_settings_disabled.png" />
+    <Content Include="assets\resources\gui\mainmenu_settings_hovered.png" />
+    <Content Include="assets\resources\gui\mainmenu_signup.png" />
+    <Content Include="assets\resources\gui\mainmenu_signup_clicked.png" />
+    <Content Include="assets\resources\gui\mainmenu_signup_disabled.png" />
+    <Content Include="assets\resources\gui\mainmenu_signup_hovered.png" />
+    <Content Include="assets\resources\gui\manabar.png" />
+    <Content Include="assets\resources\gui\menubuttonclicked.png" />
+    <Content Include="assets\resources\gui\menubuttonhover.png" />
+    <Content Include="assets\resources\gui\menubuttonnormal.png" />
+    <Content Include="assets\resources\gui\menuicon.png" />
+    <Content Include="assets\resources\gui\menuicon2.png" />
+    <Content Include="assets\resources\gui\menuitem.png" />
+    <Content Include="assets\resources\gui\optionsicon.png" />
+    <Content Include="assets\resources\gui\optionsicon2.png" />
+    <Content Include="assets\resources\gui\options_dropdown.png" />
+    <Content Include="assets\resources\gui\options_horizontal.png" />
+    <Content Include="assets\resources\gui\party.png" />
+    <Content Include="assets\resources\gui\partyactive.png" />
+    <Content Include="assets\resources\gui\partyicon.png" />
+    <Content Include="assets\resources\gui\partyicon2.png" />
+    <Content Include="assets\resources\gui\partykick.png" />
+    <Content Include="assets\resources\gui\partyleader.png" />
+    <Content Include="assets\resources\gui\partyleave.png" />
+    <Content Include="assets\resources\gui\quantity.png" />
+    <Content Include="assets\resources\gui\questoffer.png" />
+    <Content Include="assets\resources\gui\quests.png" />
+    <Content Include="assets\resources\gui\questsactive.png" />
+    <Content Include="assets\resources\gui\questsicon.png" />
+    <Content Include="assets\resources\gui\questsicon2.png" />
+    <Content Include="assets\resources\gui\questwindow.png" />
+    <Content Include="assets\resources\gui\quitclicked.png" />
+    <Content Include="assets\resources\gui\quithover.png" />
+    <Content Include="assets\resources\gui\quitnormal.png" />
+    <Content Include="assets\resources\gui\reducechatclicked.png" />
+    <Content Include="assets\resources\gui\reducechathover.png" />
+    <Content Include="assets\resources\gui\reducechatnormal.png" />
+    <Content Include="assets\resources\gui\registration_window.png" />
+    <Content Include="assets\resources\gui\resetpass_window.png" />
+    <Content Include="assets\resources\gui\rightarrow.png" />
+    <Content Include="assets\resources\gui\rightarrowclicked.png" />
+    <Content Include="assets\resources\gui\rightarrowhover.png" />
+    <Content Include="assets\resources\gui\rightarrownormal.png" />
+    <Content Include="assets\resources\gui\scrollbarbg.png" />
+    <Content Include="assets\resources\gui\scrollbarclicked.png" />
+    <Content Include="assets\resources\gui\scrollbarhover.png" />
+    <Content Include="assets\resources\gui\scrollbarnormal.png" />
+    <Content Include="assets\resources\gui\selectchar_window.png" />
+    <Content Include="assets\resources\gui\sendclicked.png" />
+    <Content Include="assets\resources\gui\sendhover.png" />
+    <Content Include="assets\resources\gui\sendnormal.png" />
+    <Content Include="assets\resources\gui\settingclicked.png" />
+    <Content Include="assets\resources\gui\settingshover.png" />
+    <Content Include="assets\resources\gui\settingsnormal.png" />
+    <Content Include="assets\resources\gui\shieldbar.png" />
+    <Content Include="assets\resources\gui\shop.png" />
+    <Content Include="assets\resources\gui\shopactive.png" />
+    <Content Include="assets\resources\gui\shopitem.png" />
+    <Content Include="assets\resources\gui\skillitem.png" />
+    <Content Include="assets\resources\gui\sliderbar.png" />
+    <Content Include="assets\resources\gui\smallbutton.png" />
+    <Content Include="assets\resources\gui\smallbuttonclicked.png" />
+    <Content Include="assets\resources\gui\smallbuttonhover.png" />
+    <Content Include="assets\resources\gui\smallbuttonnormal.png" />
+    <Content Include="assets\resources\gui\smallbutton_clicked.png" />
+    <Content Include="assets\resources\gui\smallbutton_disabled.png" />
+    <Content Include="assets\resources\gui\smallbutton_hovered.png" />
+    <Content Include="assets\resources\gui\smalltab.png" />
+    <Content Include="assets\resources\gui\smalltab_clicked.png" />
+    <Content Include="assets\resources\gui\smalltab_disabled.png" />
+    <Content Include="assets\resources\gui\smalltab_hovered.png" />
+    <Content Include="assets\resources\gui\spelldesc.png" />
+    <Content Include="assets\resources\gui\spelldescexpanded.png" />
+    <Content Include="assets\resources\gui\spelldescpanel.png" />
+    <Content Include="assets\resources\gui\spellicon.png" />
+    <Content Include="assets\resources\gui\spellicon2.png" />
+    <Content Include="assets\resources\gui\spellitem.png" />
+    <Content Include="assets\resources\gui\spells.png" />
+    <Content Include="assets\resources\gui\spellsactive.png" />
+    <Content Include="assets\resources\gui\status.png" />
+    <Content Include="assets\resources\gui\statusbg.png" />
+    <Content Include="assets\resources\gui\tooltip.png" />
+    <Content Include="assets\resources\gui\trade.png" />
+    <Content Include="assets\resources\gui\tradeactive.png" />
+    <Content Include="assets\resources\gui\tradeitem.png" />
+    <Content Include="assets\resources\gui\uibody.png" />
+    <Content Include="assets\resources\gui\uparrowclicked.png" />
+    <Content Include="assets\resources\gui\uparrowhover.png" />
+    <Content Include="assets\resources\gui\uparrownormal.png" />
+    <Content Include="assets\resources\gui\uparrownormal_medium.png" />
+    <Content Include="assets\resources\gui\volume_bar.png" />
+    <Content Include="assets\resources\gui\volume_slider.png" />
+    <Content Include="assets\resources\gui\volume_slider_hovered.png" />
+    <Content Include="assets\resources\gui\website_button_clicked.png" />
+    <Content Include="assets\resources\gui\website_button_hovered.png" />
+    <Content Include="assets\resources\gui\website_button_normal.png" />
+    <Content Include="assets\x64\discord_game_sdk.dll" />
+    <Content Include="assets\x86\discord_game_sdk.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>xcopy /S /Y "$(ProjectDir)assets" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

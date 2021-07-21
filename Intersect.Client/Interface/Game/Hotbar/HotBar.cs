@@ -47,6 +47,7 @@ namespace Intersect.Client.Interface.Game.Hotbar
                 Items[i].Pnl = new ImagePanel(HotbarWindow, "HotbarContainer" + i);
                 Items[i].Setup();
                 Items[i].KeyLabel = new Label(Items[i].Pnl, "HotbarLabel" + i);
+                Items[i].QuantityLabel = new Label(Items[i].Pnl, "HotbarQuantity" + i);
                 Items[i]
                     .KeyLabel.SetText(
                         Strings.Keys.keydict[
@@ -54,6 +55,7 @@ namespace Intersect.Client.Interface.Game.Hotbar
                                 .ToLower()]
                     );
             }
+            
         }
 
         public void Update()

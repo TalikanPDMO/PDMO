@@ -8,11 +8,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Intersect Server")]
-[assembly: AssemblyDescription("Game Server - Part of the Intersect 2D Game Creation Suite")]
-[assembly: AssemblyProduct("Intersect Game Engine")]
-[assembly: AssemblyCompany("Ascension Game Development")]
-[assembly: AssemblyCopyright("Copyright © Ascension Game Dev 2020")]
+[assembly: AssemblyTitle("PDMO Server")]
+[assembly: AssemblyDescription("Serveur du jeu PDMO")]
+[assembly: AssemblyProduct("Pokemon Donjon Mystère Online")]
+[assembly: AssemblyCompany("PDMO Team")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyTrademark("")]
@@ -32,6 +32,6 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("0.7.0.0")]
-[assembly: AssemblyFileVersion("0.7.0.0")]
+[assembly: AssemblyVersion("0.2.1.0")]
+[assembly: AssemblyFileVersion("0.2.1.0")]
 [assembly: NeutralResourcesLanguage("en-US")]

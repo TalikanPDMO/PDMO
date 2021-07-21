@@ -606,7 +606,8 @@ namespace Intersect.Editor.Localization
 
             public static LocalizedString searchplaceholder = @"Search...";
 
-            public static LocalizedString sortchronologically = @"Order Chronologically";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString sortalphabetically = @"Order Alphabetically";
 
             public static LocalizedString simulatedarkness = @"Simulate Darkness: {00}";
 
@@ -892,7 +893,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString searchplaceholder = @"Search...";
 
-            public static LocalizedString sortchronologically = @"Order Chronologically";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString sortalphabetically = @"Order Alphabetically";
 
             public static LocalizedString spawnitems = @"Spawn Items";
 
@@ -1017,7 +1019,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString searchplaceholder = @"Search...";
 
-            public static LocalizedString sortchronologically = @"Order Chronologically";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString sortalphabetically = @"Order Alphabetically";
 
             public static LocalizedString title = @"Common Event Editor";
 
@@ -1026,48 +1029,76 @@ Tick timer saved in server config.json.";
         public struct CraftingTableEditor
         {
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString cancel = @"Cancel";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString copy = @"Copy Table";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString crafts = @"Available Crafts";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString delete = @"Delete Table";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString deleteprompt =
                 @"Are you sure you want to delete this table? This action cannot be reverted!";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString folderlabel = @"Folder:";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString foldertitle = @"Add Folder";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString folderprompt = @"Enter a name for the folder you'd like to add:";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString general = @"General";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString name = @"Name:";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString New = @"New Table";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString paste = @"Paste Table";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString save = @"Save";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString searchplaceholder = @"Search...";
 
-            public static LocalizedString sortchronologically = @"Order Chronologically";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString sortalphabetically = @"Order Alphabetically";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString tables = @"Tables";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString title = @"Crafting Tables Editor";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString undo = @"Undo Changes";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString undoprompt =
                 @"Are you sure you want to undo changes made to this table? This action cannot be reverted!";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString undotitle = @"Undo Changes";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString addcraftlabel = @"Add Item To Be Crafted:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString add = @"Add Selected";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString remove = @"Remove Selected";
         }
 
         public struct CraftsEditor
@@ -1128,7 +1159,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString searchplaceholder = @"Search...";
 
-            public static LocalizedString sortchronologically = @"Order Chronologically";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString sortalphabetically = @"Order Alphabetically";
 
             public static LocalizedString time = @"Time (ms):";
 
@@ -1140,6 +1172,9 @@ Tick timer saved in server config.json.";
                 @"Are you sure you want to undo changes made to this craft? This action cannot be reverted!";
 
             public static LocalizedString undotitle = @"Undo Changes";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString commonevent = @"Common Event:";
 
         }
 
@@ -1535,6 +1570,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString changespells = @"Change Player Spells [{00}]";
 
+            public static LocalizedString usespell = @"Use Spell [{00}]";
+
             public static LocalizedString chatboxtext = @"Show Chatbox Text [Channel: {00}, Color: {01}] - {02}";
 
             public static LocalizedString chatglobal = @"Global";
@@ -1899,6 +1936,7 @@ Tick timer saved in server config.json.";
                 {"showpicture", @"Show Picture"},
                 {"showtext", @"Show Text"},
                 {"spawnnpc", @"Spawn NPC"},
+                {"usespell",@"Use Spell" },
                 {"specialeffects", @"Special Effects"},
                 {"startcommonevent", @"Start Common Event"},
                 {"startquest", @"Start Quest"},
@@ -3201,6 +3239,10 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString projectile = @"Projectile:";
 
+            public static LocalizedString requirementsgroup = @"Requirements";
+
+            public static LocalizedString cannotuse = @"Cannot Use Message:";
+
             public static LocalizedString requirements = @"Edit Usage Requirements";
 
             public static LocalizedString save = @"Save";
@@ -3211,7 +3253,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString searchplaceholder = @"Search...";
 
-            public static LocalizedString sortchronologically = @"Order Chronologically";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString sortalphabetically = @"Order Alphabetically";
 
             public static LocalizedString slot = @"Equipment Slot:";
 
@@ -3544,7 +3587,8 @@ Tick timer saved in server config.json.";
         public struct MapList
         {
 
-            public static LocalizedString chronological = @"Order Chronologically";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString alphabetical = @"Alphabetical";
 
             public static LocalizedString copyid = @"Copy Id";
 
@@ -3862,7 +3906,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString searchplaceholder = @"Search...";
 
-            public static LocalizedString sortchronologically = @"Order Chronologically";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString sortalphabetically = @"Order Alphabetically";
 
             public static LocalizedString sightrange = @"Sight Range:";
 
@@ -4041,7 +4086,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString searchplaceholder = @"Search...";
 
-            public static LocalizedString sortchronologically = @"Order Chronologically";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString sortalphabetically = @"Order Alphabetically";
 
             public static LocalizedString spawndelay = @"Spawn Delay (ms):";
 
@@ -4134,7 +4180,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString searchplaceholder = @"Search...";
 
-            public static LocalizedString sortchronologically = @"Order Chronologically";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString sortalphabetically = @"Order Alphabetically";
 
             public static LocalizedString showafter = @"Show in quest log after completing quest?";
 
@@ -4234,7 +4281,11 @@ Tick timer saved in server config.json.";
 
 Tick timer saved in server config.json.";
 
+            public static LocalizedString requirementsgroup = @"Requirements";
+
             public static LocalizedString requirements = @"Harvesting Requirements";
+
+            public static LocalizedString cannotharvest = @"Cannot Harvest Message:";
 
             public static LocalizedString resources = @"Resources";
 
@@ -4242,7 +4293,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString searchplaceholder = @"Search...";
 
-            public static LocalizedString sortchronologically = @"Order Chronologically";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString sortalphabetically = @"Order Alphabetically";
 
             public static LocalizedString spawnduration = @"Spawn Duration: (ms)";
 
@@ -4266,84 +4318,127 @@ Tick timer saved in server config.json.";
         public struct ShopEditor
         {
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString addboughtitem = @"Add Item:";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString addlabel = @"Add Item to be Sold:";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString addsolditem = @"Add Selected";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString blacklist = @"Blacklist";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString buycost = @"Sell Amount:";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString buydesc = @"Buy Item {00} For ({01}) Item {02}";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString buyfor = @"Buy For:";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString cancel = @"Cancel";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString copy = @"Copy Shop";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString defaultcurrency = @"Default Currency:";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString delete = @"Delete Shop";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString deleteprompt =
                 @"Are you sure you want to delete this shop? This action cannot be reverted!";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString deletetitle = @"Delete Item";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString dontbuy = @"Don't Buy Item {00}";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString folderlabel = @"Folder:";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString foldertitle = @"Add Folder";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString folderprompt = @"Enter a name for the folder you'd like to add:";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString general = @"General";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString itemsboughtblacklist = @"Items Bought (Blacklist - Don't Buy Listed Items)  ";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString itemsboughtwhitelist = @"Items Bought (Whitelist - Buy Listed Items)  ";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString itemssold = @"Items Sold";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString name = @"Name:";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString New = @"New Shop";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString paste = @"Paste Shop";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString removeboughtitem = @"Remove Selected";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString removesolditem = @"Remove Selected";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString save = @"Save";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString searchplaceholder = @"Search...";
 
-            public static LocalizedString sortchronologically = @"Order Chronologically";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString sortalphabetically = @"Order Alphabetically";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString sellcost = @"Sell Cost:";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString selldesc = @"Sell Item {00} For ({01}) Item {02}";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString sellfor = @"Sell for:";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString shops = @"Shops";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString title = @"Shop Editor";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString undo = @"Undo Changes";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString undoprompt =
                 @"Are you sure you want to undo changes made to this shop? This action cannot be reverted!";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString undotitle = @"Undo Changes";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString whitelist = @"Whitelist";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString buysound = @"Buy Sound:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString sellsound = @"Sell Sound:";
         }
 
         public struct SpellEditor
@@ -4490,6 +4585,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString requirements = @"Casting Requirements";
 
+            public static LocalizedString cannotcast = @"Cannot Cast Message:";
+
             public static LocalizedString requirementsbutton = @"Edit Casting Requirements";
 
             public static LocalizedString save = @"Save";
@@ -4500,7 +4597,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString searchplaceholder = @"Search...";
 
-            public static LocalizedString sortchronologically = @"Order Chronologically";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString sortalphabetically = @"Order Alphabetically";
 
             public static LocalizedString speed = @"Speed:";
 
@@ -4588,7 +4686,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString searchplaceholder = @"Search...";
 
-            public static LocalizedString sortchronologically = @"Order Chronologically";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString sortalphabetically = @"Order Alphabetically";
 
             public static LocalizedString textidgv = @"Text Id: \gv ";
 
@@ -4838,7 +4937,7 @@ Negative values for time to flow backwards.";
 
             public static LocalizedString cancel = @"Cancel";
 
-            public static LocalizedString chronological = @"Chronological";
+            public static LocalizedString alphabetical = @"Alphabetical";
 
             public static LocalizedString maplist = @"Map List";
 
@@ -4849,6 +4948,41 @@ Negative values for time to flow backwards.";
             public static LocalizedString okay = @"Ok";
 
             public static LocalizedString title = @"Warp Tile Selection";
+
+        }
+
+        public struct EventUseSpell
+        {
+
+            public static LocalizedString source = @"Source: ";
+
+            public static Dictionary<int, LocalizedString> sources = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Player"},
+                {1, @"Event"}
+            };
+
+            public static LocalizedString cancel = @"Cancel";
+
+            public static LocalizedString okay = @"Ok";
+
+            public static LocalizedString spell = @"Spell: ";
+
+            public static LocalizedString target = @"Target: ";
+
+            public static LocalizedString title = @"Use Spell";
+
+            public static LocalizedString player = @"Player";
+
+            public static LocalizedString players = @"Players";
+
+            public static LocalizedString friendly = @"Friendly";
+
+            public static LocalizedString entities = @"Entities";
+
+            public static LocalizedString thisevent = @"[THIS EVENT]";
+
+            public static LocalizedString notargetrequired = @"[No target required]";
 
         }
 

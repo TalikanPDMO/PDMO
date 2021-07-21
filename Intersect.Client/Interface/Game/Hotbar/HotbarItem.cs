@@ -32,6 +32,8 @@ namespace Intersect.Client.Interface.Game.Hotbar
 
         public Label KeyLabel;
 
+        public Label QuantityLabel;
+
         //Dragging
         private bool mCanDrag;
 
@@ -50,6 +52,9 @@ namespace Intersect.Client.Interface.Game.Hotbar
         private SpellBase mCurrentSpell = null;
 
         private Draggable mDragIcon;
+
+        //To manage quantities in the hotbar
+        private int mCurrentQuantity = -1;
 
         //Textures
         private Base mHotbarWindow;
@@ -243,6 +248,7 @@ namespace Intersect.Client.Interface.Game.Hotbar
             {
                 mCurrentItem = null;
                 mCurrentSpell = null;
+                mCurrentQuantity = -1;
                 var itm = ItemBase.Get(slot.ItemOrSpellId);
                 var spl = SpellBase.Get(slot.ItemOrSpellId);
                 if (itm != null)
@@ -269,6 +275,10 @@ namespace Intersect.Client.Interface.Game.Hotbar
                 {
                     mInventoryItemIndex = itmIndex;
                     mInventoryItem = Globals.Me.Inventory[itmIndex];
+                    if (mCurrentQuantity == -1)
+                    {
+                        mCurrentQuantity = mInventoryItem.Quantity;
+                    }
                 }
             }
             else if (mCurrentSpell != null)
@@ -285,6 +295,13 @@ namespace Intersect.Client.Interface.Game.Hotbar
                 //We don't have it, and the icon isn't faded
                 if (mInventoryItem == null && !mIsFaded)
                 {
+                    updateDisplay = true;
+                }
+
+                //For quantities, we have it but the quantity is not the same
+                if (mInventoryItem != null && mInventoryItem.Quantity != mCurrentQuantity)
+                {
+                    mCurrentQuantity = mInventoryItem.Quantity;
                     updateDisplay = true;
                 }
 
@@ -372,6 +389,16 @@ namespace Intersect.Client.Interface.Game.Hotbar
                         mIsFaded = true;
                     }
 
+                    // Check if need to display a quantity label 
+                    if (mCurrentItem.IsStackable && mInventoryItemIndex > -1)
+                    {
+                        QuantityLabel.IsHidden = false;
+                        QuantityLabel.Text = Strings.FormatQuantityAbbreviated(Globals.Me.Inventory[mInventoryItemIndex].Quantity);
+                    }
+                    else
+                    {
+                        QuantityLabel.IsHidden = true;
+                    }
                     mTexLoaded = true;
                 }
                 else if (mCurrentSpell != null)
@@ -380,7 +407,7 @@ namespace Intersect.Client.Interface.Game.Hotbar
                     mContentPanel.Texture = Globals.ContentManager.GetTexture(
                         GameContentManager.TextureType.Spell, mCurrentSpell.Icon
                     );
-
+                    QuantityLabel.IsHidden = true; // No quantities for spells
                     EquipPanel.IsHidden = true;
                     EquipLabel.IsHidden = true;
                     mCooldownLabel.IsHidden = true;
@@ -418,6 +445,7 @@ namespace Intersect.Client.Interface.Game.Hotbar
                 else
                 {
                     mContentPanel.Hide();
+                    QuantityLabel.IsHidden = true;
                     mTexLoaded = true;
                     mIsEquipped = false;
                     EquipPanel.IsHidden = true;
@@ -490,9 +518,10 @@ namespace Intersect.Client.Interface.Game.Hotbar
                                     if (Math.Sqrt(Math.Pow(xdiff, 2) + Math.Pow(ydiff, 2)) > 5)
                                     {
                                         IsDragging = true;
+                                        QuantityLabel.IsHidden = true;
                                         mDragIcon = new Draggable(
                                             Pnl.LocalPosToCanvas(new Point(0, 0)).X + mMouseX,
-                                            Pnl.LocalPosToCanvas(new Point(0, 0)).X + mMouseY, mContentPanel.Texture
+                                            Pnl.LocalPosToCanvas(new Point(0, 0)).X + mMouseY, mContentPanel.Texture, mContentPanel.RenderColor
                                         );
 
                                         //SOMETHING SHOULD BE RENDERED HERE, RIGHT?
@@ -507,14 +536,13 @@ namespace Intersect.Client.Interface.Game.Hotbar
                     if (mDragIcon.Update())
                     {
                         mContentPanel.IsHidden = false;
-
+                        QuantityLabel.IsHidden = false;
                         //Drug the item and now we stopped
                         IsDragging = false;
                         var dragRect = new FloatRect(
                             mDragIcon.X - sItemXPadding / 2, mDragIcon.Y - sItemYPadding / 2, sItemXPadding / 2 + 32,
                             sItemYPadding / 2 + 32
                         );
-
                         float bestIntersect = 0;
                         var bestIntersectIndex = -1;
 
@@ -548,6 +576,8 @@ namespace Intersect.Client.Interface.Game.Hotbar
                             if (bestIntersectIndex > -1 && bestIntersectIndex != mYindex)
                             {
                                 Globals.Me.HotbarSwap(mYindex, (byte) bestIntersectIndex);
+                                QuantityLabel.IsHidden = true;
+                                mContentPanel.IsHidden = true;
                             }
                         }
 
