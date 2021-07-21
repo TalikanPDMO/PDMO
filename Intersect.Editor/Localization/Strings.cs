@@ -3731,6 +3731,8 @@ Tick timer saved in server config.json.";
             };
 
             public static LocalizedString title = @"Map Properties";
+            public static LocalizedString copyproperties = @"Copy Properties";
+            public static LocalizedString pasteproperties = @"Paste Properties";
 
             public static Dictionary<int, LocalizedString> zones = new Dictionary<int, LocalizedString>
             {
