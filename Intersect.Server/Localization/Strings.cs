@@ -228,6 +228,17 @@ namespace Intersect.Server.Localization
         //A été traduit par Moussmous pour décrire les actions de combats dans le chat
         public sealed class CombatNamespace : LocaleNamespace
         {
+            //Les premières lignes je les ai ajouté
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString oneBlockAway = @" est un bloc trop loin!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString cantAttack = @"Tu ne peux pas attaquer ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString vaincu = @" a été vaincu.";
+
+            //----------------------------------------------------
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString addsymbol = @"+";

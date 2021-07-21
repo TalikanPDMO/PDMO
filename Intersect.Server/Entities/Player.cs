@@ -1011,6 +1011,12 @@ namespace Intersect.Server.Entities
 
         public void GiveExperience(long amount)
         {
+            //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+            if (Options.Combat.EnableCombatChatMessages)
+            {
+                PacketSender.SendChatMsg(this, this.Name + " a gagné " + amount + " points d'EXP", ChatMessageType.Combat);
+            }
+
             Exp += (int) (amount * GetExpMultiplier() / 100);
             if (Exp < 0)
             {
@@ -1065,7 +1071,10 @@ namespace Intersect.Server.Entities
                         var playerEvent = descriptor.OnDeathEvent;
                         var partyEvent = descriptor.OnDeathPartyEvent;
                         //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
-                        PacketSender.SendChatMsg(this, entity.Name+" a été vaincu.", ChatMessageType.Combat);
+                        if (Options.Combat.EnableCombatChatMessages)
+                        {
+                            PacketSender.SendChatMsg(this, entity.Name + Strings.Combat.vaincu, ChatMessageType.Combat);
+                        }
 
                         // If in party, split the exp.
                         if (Party != null && Party.Count > 0)
@@ -1171,7 +1180,10 @@ namespace Intersect.Server.Entities
             if (!CanAttack(target, parentSpell))
             {
                 //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
-                PacketSender.SendChatMsg(this, target.Name+" impossible à attaquer avec "+parentSpell.Name, ChatMessageType.Combat);
+                if (Options.Combat.EnableCombatChatMessages)
+                {
+                    PacketSender.SendChatMsg(this, target.Name + " impossible à attaquer avec " + parentSpell.Name, ChatMessageType.Combat);
+                }
                 return;
             }
 
@@ -1237,11 +1249,21 @@ namespace Intersect.Server.Entities
 
             if (!IsOneBlockAway(target))
             {
+                //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+                if (Options.Combat.EnableCombatChatMessages)
+                {
+                    PacketSender.SendChatMsg(this, target.Name + Strings.Combat.oneBlockAway, ChatMessageType.Combat);
+                }
                 return;
             }
 
             if (!CanAttack(target, null))
             {
+                //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+                if (Options.Combat.EnableCombatChatMessages)
+                {
+                    PacketSender.SendChatMsg(this, Strings.Combat.cantAttack + target.Name, ChatMessageType.Combat);
+                }
                 return;
             }
 
@@ -4345,7 +4367,8 @@ namespace Intersect.Server.Entities
                 {
                     if (Options.Combat.EnableCombatChatMessages)
                     {
-                        PacketSender.SendChatMsg(this, Strings.Combat.targetoutsiderange, ChatMessageType.Combat);
+                        //A ete modifié pas moussmous pour les logs de combat
+                        PacketSender.SendChatMsg(this, target.Name + " est hors de portée", ChatMessageType.Combat);
                     }
                     return false;
                 }
@@ -4355,9 +4378,10 @@ namespace Intersect.Server.Entities
             {
                 if (spell.VitalCost[(int)Vitals.Mana] > GetVital(Vitals.Mana))
                 {
+                    //A été modifié par Moussmous lors de l'ajout des logs de combat
                     if (Options.Combat.EnableCombatChatMessages)
                     {
-                        PacketSender.SendChatMsg(this, Strings.Combat.lowmana, ChatMessageType.Combat);
+                        PacketSender.SendChatMsg(this, "Pas assez de PM.", ChatMessageType.Combat);
                     }
 
                     return false;
@@ -4367,7 +4391,7 @@ namespace Intersect.Server.Entities
                 {
                     if (Options.Combat.EnableCombatChatMessages)
                     {
-                        PacketSender.SendChatMsg(this, Strings.Combat.lowhealth, ChatMessageType.Combat);
+                        PacketSender.SendChatMsg(this, "Pas assez de points de vie.", ChatMessageType.Combat);
                     }
 
                     return false;
