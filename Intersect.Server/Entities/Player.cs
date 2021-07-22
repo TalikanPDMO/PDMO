@@ -783,6 +783,13 @@ namespace Intersect.Server.Entities
 
         public override void Die(bool dropItems = true, Entity killer = null)
         {
+            //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+            if (Options.Combat.EnableCombatChatMessages)
+            {
+                PacketSender.SendChatMsg(this, Strings.Combat.died, ChatMessageType.Combat);
+            }
+
+
             CastTime = 0;
             CastTarget = null;
 
@@ -4365,9 +4372,9 @@ namespace Intersect.Server.Entities
             {
                 if (!InRangeOf(target, spell.Combat.CastRange))
                 {
+                    //A été modifié par Moussmous pour décrire les actions de combats dans le chat
                     if (Options.Combat.EnableCombatChatMessages)
                     {
-                        //A été modifié par Moussmous pour décrire les actions de combats dans le chat
                         PacketSender.SendChatMsg(this, target.Name + Strings.Combat.outOfRange + spell.Name, ChatMessageType.Combat);
                     }
                     return false;
