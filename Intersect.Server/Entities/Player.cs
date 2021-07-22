@@ -1014,7 +1014,7 @@ namespace Intersect.Server.Entities
             //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
             if (Options.Combat.EnableCombatChatMessages)
             {
-                PacketSender.SendChatMsg(this, this.Name + " a gagné " + amount + " points d'EXP", ChatMessageType.Combat);
+                PacketSender.SendChatMsg(this, this.Name + Strings.Combat.won + amount + Strings.Combat.EXP + ".", ChatMessageType.Combat);
             }
 
             Exp += (int) (amount * GetExpMultiplier() / 100);
@@ -1073,7 +1073,7 @@ namespace Intersect.Server.Entities
                         //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
                         if (Options.Combat.EnableCombatChatMessages)
                         {
-                            PacketSender.SendChatMsg(this, entity.Name + Strings.Combat.vaincu, ChatMessageType.Combat);
+                            PacketSender.SendChatMsg(this, entity.Name + Strings.Combat.defeated, ChatMessageType.Combat);
                         }
 
                         // If in party, split the exp.
@@ -1182,7 +1182,7 @@ namespace Intersect.Server.Entities
                 //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
                 if (Options.Combat.EnableCombatChatMessages)
                 {
-                    PacketSender.SendChatMsg(this, target.Name + " impossible à attaquer avec " + parentSpell.Name, ChatMessageType.Combat);
+                    PacketSender.SendChatMsg(this, target.Name + Strings.Combat.cantAttackWith + parentSpell.Name, ChatMessageType.Combat);
                 }
                 return;
             }
@@ -4367,8 +4367,8 @@ namespace Intersect.Server.Entities
                 {
                     if (Options.Combat.EnableCombatChatMessages)
                     {
-                        //A ete modifié pas moussmous pour les logs de combat
-                        PacketSender.SendChatMsg(this, target.Name + " est hors de portée", ChatMessageType.Combat);
+                        //A été modifié par Moussmous pour décrire les actions de combats dans le chat
+                        PacketSender.SendChatMsg(this, target.Name + Strings.Combat.outOfRange + spell.Name, ChatMessageType.Combat);
                     }
                     return false;
                 }
@@ -4378,10 +4378,9 @@ namespace Intersect.Server.Entities
             {
                 if (spell.VitalCost[(int)Vitals.Mana] > GetVital(Vitals.Mana))
                 {
-                    //A été modifié par Moussmous lors de l'ajout des logs de combat
                     if (Options.Combat.EnableCombatChatMessages)
                     {
-                        PacketSender.SendChatMsg(this, "Pas assez de PM.", ChatMessageType.Combat);
+                        PacketSender.SendChatMsg(this, Strings.Combat.lowmana, ChatMessageType.Combat);
                     }
 
                     return false;
@@ -4391,7 +4390,7 @@ namespace Intersect.Server.Entities
                 {
                     if (Options.Combat.EnableCombatChatMessages)
                     {
-                        PacketSender.SendChatMsg(this, "Pas assez de points de vie.", ChatMessageType.Combat);
+                        PacketSender.SendChatMsg(this, Strings.Combat.lowhealth, ChatMessageType.Combat);
                     }
 
                     return false;

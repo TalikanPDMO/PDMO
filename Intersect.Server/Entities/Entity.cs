@@ -24,6 +24,10 @@ using Intersect.Utilities;
 
 using Newtonsoft.Json;
 
+
+//Ajoute par Moussmous
+using Intersect.Network;
+
 namespace Intersect.Server.Entities
 {
 
@@ -1772,6 +1776,9 @@ namespace Intersect.Server.Entities
                                 enemy, Strings.Combat.removesymbol + (int) baseDamage,
                                 CustomColors.Combat.PhysicalDamage
                             );
+                            //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+                            //PacketSender.SendChatMsg(PROBLEME, enemy.Name + Strings.Combat.lost + (int)baseDamage + Strings.Combat.vitals[0], ChatMessageType.Combat);
+
 
                             break;
                         case DamageType.Magic:
