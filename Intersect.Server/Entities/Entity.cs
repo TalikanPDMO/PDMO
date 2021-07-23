@@ -1764,7 +1764,7 @@ namespace Intersect.Server.Entities
 
                 if (baseDamage > 0 && enemy.HasVital(Vitals.Health) && !invulnerable)
                 {
-                    string criticalHit = "";
+                    string criticalHit = "";  //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
                     if (isCrit)
                     {
                         PacketSender.SendActionMsg(enemy, Strings.Combat.critical, CustomColors.Combat.Critical);
@@ -1774,6 +1774,34 @@ namespace Intersect.Server.Entities
                     }
 
                     enemy.SubVital(Vitals.Health, (int) baseDamage);
+                    //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+                    //Ici ça affiche les attaques de base (reçu et donné)
+                    if (Options.Combat.EnableCombatChatMessages && !(enemy is Resource))
+                    {
+                        if (spellName == null) // Cas où les dégats sont provoqués par une attaque directe mais pas une abilité quoi
+                        {
+                            if (this is Player myPlayer)
+                            {
+                                PacketSender.SendChatMsg(myPlayer, criticalHit + " " + enemy.Name + Strings.Combat.lost + (int)baseDamage + " " + Strings.Combat.vitals[0], ChatMessageType.Combat);
+                            }
+                            else if (enemy is Player myPlayerEnemy)
+                            {
+                                PacketSender.SendChatMsg(myPlayerEnemy, criticalHit + " " + myPlayerEnemy.Name + Strings.Combat.lost + (int)baseDamage + " " + Strings.Combat.vitals[0], ChatMessageType.Combat);
+                            }
+                        }
+                        else //Cas où les dégats sont provoqués par une abilité
+                        {
+                            if (this is Player myPlayer)
+                            {
+                                PacketSender.SendChatMsg(myPlayer, criticalHit + " " + this.Name + Strings.Combat.useAttack + spellName + Strings.Combat.and + enemy.Name + Strings.Combat.lost + (int)baseDamage + " " + Strings.Combat.vitals[0], ChatMessageType.Combat);
+                            }
+                            else if (enemy is Player myPlayerEnemy)
+                            {
+                                PacketSender.SendChatMsg(myPlayerEnemy, criticalHit + " " + this.Name + Strings.Combat.useAttack + spellName + Strings.Combat.and + myPlayerEnemy.Name + Strings.Combat.lost + (int)baseDamage + " " + Strings.Combat.vitals[0], ChatMessageType.Combat);
+                            }
+                        }
+                    }
+                    //------------------------------------------------------------------------------------------
                     switch (damageType)
                     {
                         case DamageType.Physical:
@@ -1781,60 +1809,20 @@ namespace Intersect.Server.Entities
                                 enemy, Strings.Combat.removesymbol + (int) baseDamage,
                                 CustomColors.Combat.PhysicalDamage
                             );
-                            //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
-                            //Ici ça affiche les attaques de base (reçu et donné)
-                            if (Options.Combat.EnableCombatChatMessages)
-                            {
-                                if (this is Player myPlayer)
-                                {
-                                    PacketSender.SendChatMsg(myPlayer, criticalHit + " " + enemy.Name + Strings.Combat.lost + (int)baseDamage + " " + Strings.Combat.vitals[0], ChatMessageType.Combat);
-                                }
-                                else if (enemy is Player myPlayerEnemy)
-                                {
-                                    PacketSender.SendChatMsg(myPlayerEnemy, criticalHit + " " + myPlayerEnemy.Name + Strings.Combat.lost + (int)baseDamage + " " + Strings.Combat.vitals[0], ChatMessageType.Combat);
-                                }
-                            }
-                            //------------------------------------------------------------------------------------------
-
+                           
                             break;
+
                         case DamageType.Magic:
                             PacketSender.SendActionMsg(
                                 enemy, Strings.Combat.removesymbol + (int) baseDamage, CustomColors.Combat.MagicDamage
                             );
-                            //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
-                            // Je sais pas trop a quoi sert cet affichage :/
-                            if (Options.Combat.EnableCombatChatMessages)
-                            {
-                                if (this is Player myPlayer)
-                                {
-                                    PacketSender.SendChatMsg(myPlayer, criticalHit + " " + enemy.Name + Strings.Combat.lost + (int)baseDamage + " " + Strings.Combat.vitals[0], ChatMessageType.Combat);
-                                }
-                                else if (enemy is Player myPlayerEnemy)
-                                {
-                                    PacketSender.SendChatMsg(myPlayerEnemy, criticalHit + " " + myPlayerEnemy.Name + Strings.Combat.lost + (int)baseDamage + " " + Strings.Combat.vitals[0], ChatMessageType.Combat);
-                                }
-                            }
-                            //------------------------------------------------------------------------------------------
 
                             break;
+
                         case DamageType.True:
                             PacketSender.SendActionMsg(
                                 enemy, Strings.Combat.removesymbol + (int) baseDamage, CustomColors.Combat.TrueDamage
                             );
-                            //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
-                            //Ici c'est où s'afficheront les attaques utilisant des PMs dans le chat (reçu et donné)
-                            if (Options.Combat.EnableCombatChatMessages)
-                            {
-                                if (this is Player myPlayer)
-                                {
-                                    PacketSender.SendChatMsg(myPlayer, criticalHit + " " + this.Name + Strings.Combat.useAttack + spellName + Strings.Combat.and + enemy.Name + Strings.Combat.lost + (int)baseDamage + " " + Strings.Combat.vitals[0], ChatMessageType.Combat);
-                                }
-                                else if (enemy is Player myPlayerEnemy)
-                                {
-                                    PacketSender.SendChatMsg(myPlayerEnemy, criticalHit + " " + this.Name + Strings.Combat.useAttack + spellName + Strings.Combat.and + myPlayerEnemy.Name + Strings.Combat.lost + (int)baseDamage + " " + Strings.Combat.vitals[0], ChatMessageType.Combat);
-                                }
-                            }
-                            //------------------------------------------------------------------------------------------
 
                             break;
                     }

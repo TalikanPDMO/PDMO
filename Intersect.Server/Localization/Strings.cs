@@ -236,7 +236,7 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString cantAttack = @"You can't attack ";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString defeated = @" is KO.";
+            public readonly LocalizedString defeated = @"You knocked out ";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString outOfRange = @" is too far to be attacked with ";
@@ -254,7 +254,7 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString lost = @" lost ";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString died = @"You are KO !"; 
+            public readonly LocalizedString died = @"You have been put KO by "; 
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString useAttack = @" uses ";
