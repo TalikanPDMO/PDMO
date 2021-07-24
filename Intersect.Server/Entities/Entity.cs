@@ -24,6 +24,10 @@ using Intersect.Utilities;
 
 using Newtonsoft.Json;
 
+
+//Ajoute par Moussmous
+using Intersect.Network;
+
 namespace Intersect.Server.Entities
 {
 
@@ -1363,8 +1367,8 @@ namespace Intersect.Server.Entities
             {
                 Attack(
                     target, parentItem.Damage, 0, (DamageType) parentItem.DamageType, (Stats) parentItem.ScalingStat,
-                    parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, null, null, true
-                );
+                    parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, null, null, null, true
+                ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
             }
 
             //If projectile, check if a splash spell is applied
@@ -1559,8 +1563,8 @@ namespace Intersect.Server.Entities
                 Attack(
                     target, damageHealth, damageMana, (DamageType) spellBase.Combat.DamageType,
                     (Stats) spellBase.Combat.ScalingStat, spellBase.Combat.Scaling, spellBase.Combat.CritChance,
-                    spellBase.Combat.CritMultiplier, deadAnimations, aliveAnimations, false
-                );
+                    spellBase.Combat.CritMultiplier, spellBase.Name, deadAnimations, aliveAnimations, false
+                ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
             }
 
             if (spellBase.Combat.Effect > 0) //Handle status effects
@@ -1703,9 +1707,9 @@ namespace Intersect.Server.Entities
             }
 
             Attack(
-                target, baseDamage, 0, damageType, scalingStat, scaling, critChance, critMultiplier, deadAnimations,
+                target, baseDamage, 0, damageType, scalingStat, scaling, critChance, critMultiplier, null, deadAnimations,
                 aliveAnimations, true
-            );
+            ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
         }
 
         public void Attack(
@@ -1717,9 +1721,10 @@ namespace Intersect.Server.Entities
             int scaling,
             int critChance,
             double critMultiplier,
+            string spellName,   //A été rajouté par Moussmous pour décrire le nom de l'attaque utilisée pour l'utiliser dans les logs de chats de combat
             List<KeyValuePair<Guid, sbyte>> deadAnimations = null,
             List<KeyValuePair<Guid, sbyte>> aliveAnimations = null,
-            bool isAutoAttack = false
+            bool isAutoAttack = false            
         )
         {
             var originalBaseDamage = baseDamage;
@@ -1776,12 +1781,44 @@ namespace Intersect.Server.Entities
 
                 if (baseDamage > 0 && enemy.HasVital(Vitals.Health) && !invulnerable)
                 {
+                    string criticalHit = "";  //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
                     if (isCrit)
                     {
                         PacketSender.SendActionMsg(enemy, Strings.Combat.critical, CustomColors.Combat.Critical);
+                        //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+                        //Ajoutera dans l'affichage qui arrivge juste après "COUP CRITIQUE!" au tout début
+                        criticalHit = Strings.Combat.critical;
                     }
 
                     enemy.SubVital(Vitals.Health, (int) baseDamage);
+                    //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+                    //Ici ça affiche les attaques de base (reçu et donné)
+                    if (Options.Combat.EnableCombatChatMessages && !(enemy is Resource))
+                    {
+                        if (spellName == null) // Cas où les dégats sont provoqués par une attaque directe mais pas une abilité quoi
+                        {
+                            if (this is Player myPlayer)
+                            {
+                                PacketSender.SendChatMsg(myPlayer, criticalHit + " " + enemy.Name + Strings.Combat.lost + (int)baseDamage + " " + Strings.Combat.vitals[0], ChatMessageType.Combat);
+                            }
+                            else if (enemy is Player myPlayerEnemy)
+                            {
+                                PacketSender.SendChatMsg(myPlayerEnemy, criticalHit + " " + myPlayerEnemy.Name + Strings.Combat.lost + (int)baseDamage + " " + Strings.Combat.vitals[0], ChatMessageType.Combat);
+                            }
+                        }
+                        else //Cas où les dégats sont provoqués par une abilité
+                        {
+                            if (this is Player myPlayer)
+                            {
+                                PacketSender.SendChatMsg(myPlayer, criticalHit + " " + this.Name + Strings.Combat.useAttack + spellName + Strings.Combat.and + enemy.Name + Strings.Combat.lost + (int)baseDamage + " " + Strings.Combat.vitals[0], ChatMessageType.Combat);
+                            }
+                            else if (enemy is Player myPlayerEnemy)
+                            {
+                                PacketSender.SendChatMsg(myPlayerEnemy, criticalHit + " " + this.Name + Strings.Combat.useAttack + spellName + Strings.Combat.and + myPlayerEnemy.Name + Strings.Combat.lost + (int)baseDamage + " " + Strings.Combat.vitals[0], ChatMessageType.Combat);
+                            }
+                        }
+                    }
+                    //------------------------------------------------------------------------------------------
                     switch (damageType)
                     {
                         case DamageType.Physical:
@@ -1789,14 +1826,16 @@ namespace Intersect.Server.Entities
                                 enemy, Strings.Combat.removesymbol + (int) baseDamage,
                                 CustomColors.Combat.PhysicalDamage
                             );
-
+                           
                             break;
+
                         case DamageType.Magic:
                             PacketSender.SendActionMsg(
                                 enemy, Strings.Combat.removesymbol + (int) baseDamage, CustomColors.Combat.MagicDamage
                             );
 
                             break;
+
                         case DamageType.True:
                             PacketSender.SendActionMsg(
                                 enemy, Strings.Combat.removesymbol + (int) baseDamage, CustomColors.Combat.TrueDamage

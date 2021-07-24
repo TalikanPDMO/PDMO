@@ -227,6 +227,43 @@ namespace Intersect.Server.Localization
 
         public sealed class CombatNamespace : LocaleNamespace
         {
+            //Ces lignes ont étées rajoutées par Moussmous pour les logs de Combat
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString oneBlockAway = @" is one block too far!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString cantAttack = @"You can't attack ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString defeated = @"You knocked out ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString outOfRange = @" is too far to be attacked with ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString cantAttackWith = @" cannot be attacked with ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString won = @" won ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString EXP = @" EXP";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString lost = @" lost ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString died = @"You have been put KO by "; 
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString useAttack = @" uses ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString and = @" and ";
+
+
+            //---------------------------------------------------------------------------
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString addsymbol = @"+";
@@ -280,7 +317,7 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString lowhealth = @"Not enough health.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString lowmana = @"Not enough mana.";
+            public readonly LocalizedString lowmana = @"Not enough mana to use ";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString miss = @"MISS!";

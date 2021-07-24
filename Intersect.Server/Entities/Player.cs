@@ -783,6 +783,17 @@ namespace Intersect.Server.Entities
 
         public override void Die(bool dropItems = true, Entity killer = null)
         {
+            //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+            if (Options.Combat.EnableCombatChatMessages) // Ce premier message indique au joueur sur ce compte qu'il vient d'être mis KO par un mob / joueur
+            {
+                PacketSender.SendChatMsg(this, Strings.Combat.died + killer.Name + " !", ChatMessageType.Combat);
+                if (killer is Player killerPlayer) //Ce message suivant s'envoie sur la console du joueur qui a mis KO le joueur qui joue sur ce compte
+                {
+                    PacketSender.SendChatMsg(killerPlayer, Strings.Combat.defeated + this.Name + " !", ChatMessageType.Combat);
+                }
+            }
+
+
             CastTime = 0;
             CastTarget = null;
 
@@ -1011,6 +1022,12 @@ namespace Intersect.Server.Entities
 
         public void GiveExperience(long amount)
         {
+            //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+            if (Options.Combat.EnableCombatChatMessages)
+            {
+                PacketSender.SendChatMsg(this, this.Name + Strings.Combat.won + amount + Strings.Combat.EXP + ".", ChatMessageType.Combat);
+            }
+
             Exp += (int) (amount * GetExpMultiplier() / 100);
             if (Exp < 0)
             {
@@ -1064,6 +1081,11 @@ namespace Intersect.Server.Entities
                         var descriptor = npc.Base;
                         var playerEvent = descriptor.OnDeathEvent;
                         var partyEvent = descriptor.OnDeathPartyEvent;
+                        //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+                        if (Options.Combat.EnableCombatChatMessages)
+                        {
+                            PacketSender.SendChatMsg(this, Strings.Combat.defeated + entity.Name + " !", ChatMessageType.Combat);
+                        }
 
                         // If in party, split the exp.
                         if (Party != null && Party.Count > 0)
@@ -1168,6 +1190,11 @@ namespace Intersect.Server.Entities
         {
             if (!CanAttack(target, parentSpell))
             {
+                //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+                if (Options.Combat.EnableCombatChatMessages)
+                {
+                    PacketSender.SendChatMsg(this, target.Name + Strings.Combat.cantAttackWith + parentSpell.Name, ChatMessageType.Combat);
+                }
                 return;
             }
 
@@ -1233,11 +1260,21 @@ namespace Intersect.Server.Entities
 
             if (!IsOneBlockAway(target))
             {
+                //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+                if (Options.Combat.EnableCombatChatMessages)
+                {
+                    PacketSender.SendChatMsg(this, target.Name + Strings.Combat.oneBlockAway, ChatMessageType.Combat);
+                }
                 return;
             }
 
             if (!CanAttack(target, null))
             {
+                //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+                if (Options.Combat.EnableCombatChatMessages)
+                {
+                    PacketSender.SendChatMsg(this, Strings.Combat.cantAttack + target.Name, ChatMessageType.Combat);
+                }
                 return;
             }
 
@@ -4339,9 +4376,10 @@ namespace Intersect.Server.Entities
             {
                 if (!InRangeOf(target, spell.Combat.CastRange))
                 {
+                    //A été modifié par Moussmous pour décrire les actions de combats dans le chat
                     if (Options.Combat.EnableCombatChatMessages)
                     {
-                        PacketSender.SendChatMsg(this, Strings.Combat.targetoutsiderange, ChatMessageType.Combat);
+                        PacketSender.SendChatMsg(this, target.Name + Strings.Combat.outOfRange + spell.Name, ChatMessageType.Combat);
                     }
                     return false;
                 }
@@ -4353,7 +4391,7 @@ namespace Intersect.Server.Entities
                 {
                     if (Options.Combat.EnableCombatChatMessages)
                     {
-                        PacketSender.SendChatMsg(this, Strings.Combat.lowmana, ChatMessageType.Combat);
+                        PacketSender.SendChatMsg(this, Strings.Combat.lowmana + spell.Name, ChatMessageType.Combat);
                     }
 
                     return false;
