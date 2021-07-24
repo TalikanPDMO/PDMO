@@ -65,6 +65,8 @@ namespace Intersect.Editor.Forms.Editors
             this.btnAlphabetical = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
+            this.lblApiId = new System.Windows.Forms.Label();
+            this.txtApiId = new DarkUI.Controls.DarkTextBox();
             this.grpTypes.SuspendLayout();
             this.grpList.SuspendLayout();
             this.grpEditor.SuspendLayout();
@@ -169,6 +171,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpEditor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEditor.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEditor.Controls.Add(this.txtApiId);
+            this.grpEditor.Controls.Add(this.lblApiId);
             this.grpEditor.Controls.Add(this.btnAddFolder);
             this.grpEditor.Controls.Add(this.lblFolder);
             this.grpEditor.Controls.Add(this.cmbFolder);
@@ -237,9 +241,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpValue.Controls.Add(this.cmbBooleanValue);
             this.grpValue.Controls.Add(this.nudVariableValue);
             this.grpValue.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpValue.Location = new System.Drawing.Point(13, 146);
+            this.grpValue.Location = new System.Drawing.Point(13, 192);
             this.grpValue.Name = "grpValue";
-            this.grpValue.Size = new System.Drawing.Size(251, 200);
+            this.grpValue.Size = new System.Drawing.Size(251, 152);
             this.grpValue.TabIndex = 63;
             this.grpValue.TabStop = false;
             this.grpValue.Text = "Value";
@@ -505,6 +509,28 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
+            // lblApiId
+            // 
+            this.lblApiId.AutoSize = true;
+            this.lblApiId.Location = new System.Drawing.Point(10, 149);
+            this.lblApiId.Name = "lblApiId";
+            this.lblApiId.Size = new System.Drawing.Size(39, 13);
+            this.lblApiId.TabIndex = 67;
+            this.lblApiId.Text = "API Id:";
+            // 
+            // txtApiId
+            // 
+            this.txtApiId.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.txtApiId.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtApiId.ForeColor = System.Drawing.Color.Gainsboro;
+            this.txtApiId.Location = new System.Drawing.Point(49, 149);
+            this.txtApiId.Multiline = true;
+            this.txtApiId.Name = "txtApiId";
+            this.txtApiId.ReadOnly = true;
+            this.txtApiId.Size = new System.Drawing.Size(217, 42);
+            this.txtApiId.TabIndex = 68;
+            this.txtApiId.TabStop = false;
+            // 
             // FrmSwitchVariable
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -573,5 +599,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkComboBox cmbFolder;
         private DarkTextBox txtStringValue;
         private Controls.GameObjectList lstGameObjects;
+        private DarkTextBox txtApiId;
+        private System.Windows.Forms.Label lblApiId;
     }
 }

@@ -4712,6 +4712,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString value = @"Value:";
 
+            public static LocalizedString textapiid = @"API Id:";
+
         }
 
         public struct TaskEditor

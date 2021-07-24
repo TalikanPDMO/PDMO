@@ -215,6 +215,7 @@ namespace Intersect.Editor.Forms.Editors
                 {
                     lblObject.Text = Strings.VariableEditor.playervariable;
                     txtObjectName.Text = ((PlayerVariableBase) mEditorItem).Name;
+                    txtApiId.Text = ((PlayerVariableBase)mEditorItem).Id.ToString();
                     txtId.Text = ((PlayerVariableBase) mEditorItem).TextId;
                     cmbFolder.Text = ((PlayerVariableBase) mEditorItem).Folder;
                     cmbVariableType.SelectedIndex = (int) (((PlayerVariableBase) mEditorItem).Type - 1);
@@ -224,6 +225,7 @@ namespace Intersect.Editor.Forms.Editors
                     lblObject.Text = Strings.VariableEditor.globalvariable;
                     txtObjectName.Text = ((ServerVariableBase) mEditorItem).Name;
                     txtId.Text = ((ServerVariableBase) mEditorItem).TextId;
+                    txtApiId.Text = ((ServerVariableBase)mEditorItem).Id.ToString();
                     cmbFolder.Text = ((ServerVariableBase) mEditorItem).Folder;
                     cmbVariableType.SelectedIndex = (int) (((ServerVariableBase) mEditorItem).Type - 1);
                     grpValue.Show();
@@ -438,7 +440,7 @@ namespace Intersect.Editor.Forms.Editors
             var mFolders = new List<string>();
             cmbFolder.Items.Clear();
             cmbFolder.Items.Add("");
-
+            lblApiId.Text = Strings.VariableEditor.textapiid;
             if (rdoPlayerVariables.Checked)
             {
                 foreach (var itm in PlayerVariableBase.Lookup)
