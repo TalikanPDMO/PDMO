@@ -4391,7 +4391,7 @@ namespace Intersect.Server.Entities
                 {
                     if (Options.Combat.EnableCombatChatMessages)
                     {
-                        PacketSender.SendChatMsg(this, Strings.Combat.lowmana, ChatMessageType.Combat);
+                        PacketSender.SendChatMsg(this, Strings.Combat.lowmana + spell.Name, ChatMessageType.Combat);
                     }
 
                     return false;

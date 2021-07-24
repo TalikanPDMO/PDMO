@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using Intersect.Enums;
 
 namespace Intersect.Client.Interface.Game.Chat
 {
@@ -99,7 +100,16 @@ namespace Intersect.Client.Interface.Game.Chat
             // Are we looking for all messages?
             if (tab == ChatboxTab.All)
             {
-                output = GetMessages();
+                //output = GetMessages(); //ancien code
+                //A été rajouté par Chronozis pour que les actions de combats n'apparaissent pas dans "All"
+                foreach (var message in sGameMessages)
+                {
+                    if (message.Type != ChatMessageType.Combat)
+                    {
+                        output.Add(message);
+                    }
+                }
+                //---------------------------------------------------------------------------------------------
             }
             else
             {

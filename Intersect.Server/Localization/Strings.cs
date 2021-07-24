@@ -317,7 +317,7 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString lowhealth = @"Not enough health.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString lowmana = @"Not enough mana.";
+            public readonly LocalizedString lowmana = @"Not enough mana to use ";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString miss = @"MISS!";
