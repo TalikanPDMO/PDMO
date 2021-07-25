@@ -225,6 +225,7 @@ namespace Intersect.Editor.Forms.Editors
             lblBuffDuration.Text = Strings.SpellEditor.duration;
             grpEffect.Text = Strings.SpellEditor.effectgroup;
             lblEffect.Text = Strings.SpellEditor.effectlabel;
+            lblEffectChance.Text = Strings.SpellEditor.effectchancelabel;
             cmbExtraEffect.Items.Clear();
             for (var i = 0; i < Strings.SpellEditor.effects.Count; i++)
             {
@@ -358,6 +359,7 @@ namespace Intersect.Editor.Forms.Editors
                 chkHOTDOT.Checked = mEditorItem.Combat.HoTDoT;
                 nudBuffDuration.Value = mEditorItem.Combat.Duration;
                 nudTick.Value = mEditorItem.Combat.HotDotInterval;
+                nudEffectChance.Value = mEditorItem.Combat.EffectChance;
                 cmbExtraEffect.SelectedIndex = (int) mEditorItem.Combat.Effect;
                 cmbExtraEffect_SelectedIndexChanged(null, null);
             }
@@ -513,7 +515,16 @@ namespace Intersect.Editor.Forms.Editors
             lblSprite.Visible = false;
             cmbTransform.Visible = false;
             picSprite.Visible = false;
-
+            if (cmbExtraEffect.SelectedIndex == 0)
+            {
+                lblEffectChance.Visible = false;
+                nudEffectChance.Visible = false;
+            }
+            else
+            {
+                lblEffectChance.Visible = true;
+                nudEffectChance.Visible = true;
+            }
             if (cmbExtraEffect.SelectedIndex == 6) //Transform
             {
                 lblSprite.Visible = true;
@@ -940,6 +951,10 @@ namespace Intersect.Editor.Forms.Editors
         private void txtCannotCast_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.CannotCastMessage = txtCannotCast.Text;
+        }
+        private void nudEffectChance_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.EffectChance = (int)nudEffectChance.Value;
         }
 
         #region "Item List - Folders, Searching, Sorting, Etc"

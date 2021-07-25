@@ -1572,21 +1572,25 @@ namespace Intersect.Server.Entities
                 //Check for onhit effect to avoid the onhit effect recycling.
                 if (!(onHitTrigger && spellBase.Combat.Effect == StatusTypes.OnHit))
                 {
-                    new Status(
-                        target, this, spellBase, spellBase.Combat.Effect, spellBase.Combat.Duration,
-                        spellBase.Combat.TransformSprite
-                    );
-
-                    PacketSender.SendActionMsg(
-                        target, Strings.Combat.status[(int) spellBase.Combat.Effect], CustomColors.Combat.Status
-                    );
-
-                    //If an onhit or shield status bail out as we don't want to do any damage.
-                    if (spellBase.Combat.Effect == StatusTypes.OnHit || spellBase.Combat.Effect == StatusTypes.Shield)
+                    // Check for %chance of applying an extraeffect
+                    if (Randomization.Next(1, 101) <= spellBase.Combat.EffectChance)
                     {
-                        Animate(target, aliveAnimations);
+                        new Status(
+                            target, this, spellBase, spellBase.Combat.Effect, spellBase.Combat.Duration,
+                            spellBase.Combat.TransformSprite
+                        );
 
-                        return;
+                        PacketSender.SendActionMsg(
+                            target, Strings.Combat.status[(int)spellBase.Combat.Effect], CustomColors.Combat.Status
+                        );
+
+                        //If an onhit or shield status bail out as we don't want to do any damage.
+                        if (spellBase.Combat.Effect == StatusTypes.OnHit || spellBase.Combat.Effect == StatusTypes.Shield)
+                        {
+                            Animate(target, aliveAnimations);
+
+                            return;
+                        }
                     }
                 }
             }
