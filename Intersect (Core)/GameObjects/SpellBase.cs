@@ -162,9 +162,14 @@ namespace Intersect.GameObjects
 
         public int HitRadius { get; set; }
 
+        public bool SquareHitRadius { get; set; } = false;
+
         public bool Friendly { get; set; }
 
         public int CastRange { get; set; }
+
+        public bool SquareRange { get; set; } = false;
+
 
         //Extra Data, Teleport Coords, Custom Spells, Etc
         [Column("Projectile")]
