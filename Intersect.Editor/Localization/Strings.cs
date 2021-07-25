@@ -4531,6 +4531,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString effectlabel = @"Extra Effect:";
 
+            public static LocalizedString effectchancelabel = @"Chance (%):";
+
             public static LocalizedString Event = @"Event";
 
             public static LocalizedString eventlabel = @"Event:";

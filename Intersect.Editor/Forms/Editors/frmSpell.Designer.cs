@@ -66,6 +66,8 @@ namespace Intersect.Editor.Forms.Editors
             this.lblCastDuration = new System.Windows.Forms.Label();
             this.lblCooldownDuration = new System.Windows.Forms.Label();
             this.grpRequirements = new DarkUI.Controls.DarkGroupBox();
+            this.lblCannotCast = new System.Windows.Forms.Label();
+            this.txtCannotCast = new DarkUI.Controls.DarkTextBox();
             this.btnDynamicRequirements = new DarkUI.Controls.DarkButton();
             this.grpTargetInfo = new DarkUI.Controls.DarkGroupBox();
             this.nudDuration = new DarkUI.Controls.DarkNumericUpDown();
@@ -171,8 +173,8 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
-            this.lblCannotCast = new System.Windows.Forms.Label();
-            this.txtCannotCast = new DarkUI.Controls.DarkTextBox();
+            this.lblEffectChance = new System.Windows.Forms.Label();
+            this.nudEffectChance = new DarkUI.Controls.DarkNumericUpDown();
             this.pnlContainer.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSpell)).BeginInit();
@@ -218,6 +220,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudWarpX)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.grpSpells.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEffectChance)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlContainer
@@ -721,6 +724,26 @@ namespace Intersect.Editor.Forms.Editors
             this.grpRequirements.TabIndex = 18;
             this.grpRequirements.TabStop = false;
             this.grpRequirements.Text = "Casting Requirements";
+            // 
+            // lblCannotCast
+            // 
+            this.lblCannotCast.AutoSize = true;
+            this.lblCannotCast.Location = new System.Drawing.Point(8, 51);
+            this.lblCannotCast.Name = "lblCannotCast";
+            this.lblCannotCast.Size = new System.Drawing.Size(114, 13);
+            this.lblCannotCast.TabIndex = 56;
+            this.lblCannotCast.Text = "Cannot Cast Message:";
+            // 
+            // txtCannotCast
+            // 
+            this.txtCannotCast.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtCannotCast.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCannotCast.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtCannotCast.Location = new System.Drawing.Point(11, 67);
+            this.txtCannotCast.Name = "txtCannotCast";
+            this.txtCannotCast.Size = new System.Drawing.Size(207, 20);
+            this.txtCannotCast.TabIndex = 55;
+            this.txtCannotCast.TextChanged += new System.EventHandler(this.txtCannotCast_TextChanged);
             // 
             // btnDynamicRequirements
             // 
@@ -1453,6 +1476,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpEffect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEffect.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEffect.Controls.Add(this.nudEffectChance);
+            this.grpEffect.Controls.Add(this.lblEffectChance);
             this.grpEffect.Controls.Add(this.lblEffect);
             this.grpEffect.Controls.Add(this.cmbExtraEffect);
             this.grpEffect.Controls.Add(this.picSprite);
@@ -1516,7 +1541,7 @@ namespace Intersect.Editor.Forms.Editors
             this.picSprite.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.picSprite.Location = new System.Drawing.Point(5, 61);
             this.picSprite.Name = "picSprite";
-            this.picSprite.Size = new System.Drawing.Size(222, 120);
+            this.picSprite.Size = new System.Drawing.Size(225, 120);
             this.picSprite.TabIndex = 43;
             this.picSprite.TabStop = false;
             // 
@@ -1535,9 +1560,9 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbTransform.FormattingEnabled = true;
             this.cmbTransform.Items.AddRange(new object[] {
             "None"});
-            this.cmbTransform.Location = new System.Drawing.Point(137, 31);
+            this.cmbTransform.Location = new System.Drawing.Point(152, 31);
             this.cmbTransform.Name = "cmbTransform";
-            this.cmbTransform.Size = new System.Drawing.Size(80, 21);
+            this.cmbTransform.Size = new System.Drawing.Size(77, 21);
             this.cmbTransform.TabIndex = 44;
             this.cmbTransform.Text = "None";
             this.cmbTransform.TextPadding = new System.Windows.Forms.Padding(2);
@@ -1546,7 +1571,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblSprite
             // 
             this.lblSprite.AutoSize = true;
-            this.lblSprite.Location = new System.Drawing.Point(134, 15);
+            this.lblSprite.Location = new System.Drawing.Point(151, 15);
             this.lblSprite.Name = "lblSprite";
             this.lblSprite.Size = new System.Drawing.Size(37, 13);
             this.lblSprite.TabIndex = 40;
@@ -2286,25 +2311,29 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Size = new System.Drawing.Size(191, 422);
             this.lstGameObjects.TabIndex = 32;
             // 
-            // lblCannotCast
+            // lblEffectChance
             // 
-            this.lblCannotCast.AutoSize = true;
-            this.lblCannotCast.Location = new System.Drawing.Point(8, 51);
-            this.lblCannotCast.Name = "lblCannotCast";
-            this.lblCannotCast.Size = new System.Drawing.Size(114, 13);
-            this.lblCannotCast.TabIndex = 56;
-            this.lblCannotCast.Text = "Cannot Cast Message:";
+            this.lblEffectChance.AutoSize = true;
+            this.lblEffectChance.Location = new System.Drawing.Point(84, 15);
+            this.lblEffectChance.Name = "lblEffectChance";
+            this.lblEffectChance.Size = new System.Drawing.Size(64, 13);
+            this.lblEffectChance.TabIndex = 64;
+            this.lblEffectChance.Text = "Chance (%):";
             // 
-            // txtCannotCast
+            // nudEffectChance
             // 
-            this.txtCannotCast.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtCannotCast.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtCannotCast.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtCannotCast.Location = new System.Drawing.Point(11, 67);
-            this.txtCannotCast.Name = "txtCannotCast";
-            this.txtCannotCast.Size = new System.Drawing.Size(207, 20);
-            this.txtCannotCast.TabIndex = 55;
-            this.txtCannotCast.TextChanged += new System.EventHandler(this.txtCannotCast_TextChanged);
+            this.nudEffectChance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudEffectChance.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudEffectChance.Location = new System.Drawing.Point(90, 32);
+            this.nudEffectChance.Name = "nudEffectChance";
+            this.nudEffectChance.Size = new System.Drawing.Size(51, 20);
+            this.nudEffectChance.TabIndex = 64;
+            this.nudEffectChance.ValueChanged += new System.EventHandler(this.nudEffectChance_ValueChanged);
+            this.nudEffectChance.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
             // 
             // FrmSpell
             // 
@@ -2387,6 +2416,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.PerformLayout();
             this.grpSpells.ResumeLayout(false);
             this.grpSpells.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEffectChance)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2534,5 +2564,7 @@ namespace Intersect.Editor.Forms.Editors
         private Controls.GameObjectList lstGameObjects;
         private System.Windows.Forms.Label lblCannotCast;
         private DarkTextBox txtCannotCast;
+        private DarkNumericUpDown nudEffectChance;
+        private System.Windows.Forms.Label lblEffectChance;
     }
 }
