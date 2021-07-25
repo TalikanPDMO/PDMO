@@ -2403,7 +2403,7 @@ namespace Intersect.Server.Entities
             return GetDistanceBetween(Map, targetMap, X, targetX, Y, targetY);
         }
 
-        public int GetDistanceBetween(MapInstance mapA, MapInstance mapB, int xTileA, int xTileB, int yTileA, int yTileB)
+        public int GetDistanceBetween(MapInstance mapA, MapInstance mapB, int xTileA, int xTileB, int yTileA, int yTileB, bool squareBased = false)
         {
             if (mapA != null && mapB != null && mapA.MapGrid == mapB.MapGrid
             ) //Make sure both maps exist and that they are in the same dimension
@@ -2416,7 +2416,19 @@ namespace Intersect.Server.Entities
                 var x2 = xTileB + mapB.MapGridX * Options.MapWidth;
                 var y2 = yTileB + mapB.MapGridY * Options.MapHeight;
 
-                return (int)Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
+                // Changing default distance which was mathematical based
+                // return (int)Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
+                if (squareBased)
+                {
+                    // For square area/distance
+                    return Math.Max(Math.Abs(x1 - x2), Math.Abs(y1 - y2));
+                }
+                else 
+                {
+                    // Default distance : tiles that a player travel ro reach the distance
+                    return Math.Abs(x1-x2) + Math.Abs(y1 - y2);
+                }
+
             }
 
             //Something is null.. return a value that is out of range :) 
