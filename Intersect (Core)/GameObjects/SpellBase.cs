@@ -225,6 +225,8 @@ namespace Intersect.GameObjects
 
         public StatusTypes Effect { get; set; }
 
+        public int EffectChance { get; set; } = 100;
+
         public string TransformSprite { get; set; }
 
         [Column("OnHit")]
