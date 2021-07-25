@@ -2030,7 +2030,7 @@ namespace Intersect.Server.Entities
 
             if (spellCombat.TargetType == SpellTargetTypes.Single)
             {
-                return target == null || InRangeOf(target, spellCombat.CastRange);
+                return target == null || InRangeOf(target, spellCombat.CastRange, spellCombat.SquareRange);
             }
 
             return true;
@@ -2228,7 +2228,7 @@ namespace Intersect.Server.Entities
                             {
                                 if (spellTarget == null || spellTarget == entity)
                                 {
-                                    if (entity.GetDistanceTo(startMap,startX,startY) <= range)
+                                    if (entity.GetDistanceTo(startMap,startX,startY, spellBase.Combat.SquareHitRadius) <= range)
                                     {
                                         //Check to handle a warp to spell
                                         if (spellBase.SpellType == SpellTypes.WarpTo)
@@ -2388,22 +2388,22 @@ namespace Intersect.Server.Entities
             return false;
         }
 
-        public int GetDistanceTo(Entity target)
+        public int GetDistanceTo(Entity target, bool squareBased=false)
         {
             if (target != null)
             {
-                return GetDistanceTo(target.Map, target.X, target.Y);
+                return GetDistanceTo(target.Map, target.X, target.Y, squareBased);
             }
             //Something is null.. return a value that is out of range :) 
             return 9999;
         }
 
-        public int GetDistanceTo(MapInstance targetMap, int targetX, int targetY)
+        public int GetDistanceTo(MapInstance targetMap, int targetX, int targetY, bool squareBased=false)
         {
-            return GetDistanceBetween(Map, targetMap, X, targetX, Y, targetY);
+            return GetDistanceBetween(Map, targetMap, X, targetX, Y, targetY, squareBased);
         }
 
-        public int GetDistanceBetween(MapInstance mapA, MapInstance mapB, int xTileA, int xTileB, int yTileA, int yTileB, bool squareBased = false)
+        public int GetDistanceBetween(MapInstance mapA, MapInstance mapB, int xTileA, int xTileB, int yTileA, int yTileB, bool squareBased=false)
         {
             if (mapA != null && mapB != null && mapA.MapGrid == mapB.MapGrid
             ) //Make sure both maps exist and that they are in the same dimension
@@ -2435,9 +2435,9 @@ namespace Intersect.Server.Entities
             return 9999;
         }
 
-        public bool InRangeOf(Entity target, int range)
+        public bool InRangeOf(Entity target, int range, bool squareBased=false)
         {
-            var dist = GetDistanceTo(target);
+            var dist = GetDistanceTo(target, squareBased);
             if (dist == 9999)
             {
                 return false;

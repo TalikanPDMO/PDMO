@@ -628,7 +628,7 @@ namespace Intersect.Server.Entities
             if (spellBase.SpellType == SpellTypes.CombatSpell &&
                 targetType == SpellTargetTypes.Projectile &&
                 projectileBase != null &&
-                InRangeOf(target, projectileBase.Range))
+                InRangeOf(target, projectileBase.Range, spellBase.Combat.SquareRange))
             {
                 range = projectileBase.Range;
                 var dirToEnemy = DirToEnemy(target);
@@ -673,7 +673,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (!InRangeOf(target, range) && targetType == SpellTargetTypes.Single)
+            if (!InRangeOf(target, range, spellBase.Combat.SquareRange) && targetType == SpellTargetTypes.Single)
             {
                 // ReSharper disable once SwitchStatementMissingSomeCases
                 return;
