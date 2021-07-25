@@ -170,8 +170,10 @@ namespace Intersect.Client.Interface.Game
 
                 if (spell.Combat.Effect > 0)
                 {
+                    var effect = Strings.SpellDesc.effectlist[(int)spell.Combat.Effect];
+                    effect += " (" + spell.Combat.EffectChance + "% chance)";
                     spellStats.AddText(
-                        Strings.SpellDesc.effectlist[(int) spell.Combat.Effect], spellStats.RenderColor,
+                        effect, spellStats.RenderColor,
                         spellStatsText.CurAlignments.Count > 0 ? spellStatsText.CurAlignments[0] : Alignments.Left,
                         spellStatsText.Font
                     );
