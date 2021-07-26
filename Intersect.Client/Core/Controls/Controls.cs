@@ -113,6 +113,16 @@ namespace Intersect.Client.Core.Controls
             return false;
         }
 
+        public static bool KeyUp(Control control)
+        {
+            if (ActiveControls?.ControlMapping.ContainsKey(control) ?? false)
+            {
+                return ActiveControls.ControlMapping[control]?.KeyUp() ?? false;
+            }
+
+            return false;
+        }
+
         public static List<Control> GetControlsFor(Keys key)
         {
             return Enum.GetValues(typeof(Control))

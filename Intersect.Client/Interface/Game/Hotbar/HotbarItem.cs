@@ -133,6 +133,21 @@ namespace Intersect.Client.Interface.Game.Hotbar
             }
         }
 
+        public void Preview()
+        {
+            if (mCurrentId != Guid.Empty)
+            {
+                if (mCurrentItem != null)
+                {
+                    // Preview item ?
+                }
+                else if (mCurrentSpell != null)
+                {
+                    Globals.Me.PreviewSpell(mCurrentSpell.Id);
+                }
+            }
+        }
+
         void pnl_RightClicked(Base sender, ClickedEventArgs arguments)
         {
             Globals.Me.AddToHotbar(mYindex, -1, -1);

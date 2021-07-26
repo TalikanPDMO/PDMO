@@ -23,6 +23,7 @@ using Intersect.Utilities;
 using Intersect.Client.Items;
 using Intersect.Client.Interface.Game.Chat;
 using Intersect.Config.Guilds;
+using Intersect.Client.Framework.File_Management;
 
 namespace Intersect.Client.Entities
 {
@@ -81,6 +82,8 @@ namespace Intersect.Client.Entities
 
         private Dictionary<int, long> mLastHotbarUseTime = new Dictionary<int, long>();
         private int mHotbarUseDelay = 150;
+        private int currentPreviewHotBar = -1;
+        private Guid previewSpellId;
 
         /// <summary>
         /// Name of our guild if we are in one.
@@ -797,6 +800,24 @@ namespace Intersect.Client.Entities
             }
         }
 
+        public void PreviewSpell(Guid spellId)
+        {
+            if (spellId == Guid.Empty)
+            {
+                return;
+            }
+
+            for (var i = 0; i < Spells.Length; i++)
+            {
+                if (Spells[i].SpellId == spellId)
+                {
+                    previewSpellId = spellId;
+
+                    return;
+                }
+            }
+        }
+
         public int FindHotbarSpell(HotbarInstance hotbarInstance)
         {
             if (hotbarInstance.ItemOrSpellId != Guid.Empty && SpellBase.Get(hotbarInstance.ItemOrSpellId) != null)
@@ -942,9 +963,18 @@ namespace Intersect.Client.Entities
                     mLastHotbarUseTime.Add(barSlot, 0);
                 }
 
-                if (Controls.KeyDown((Control)barSlot + 9))
+                if (currentPreviewHotBar == -1 && Controls.KeyDown((Control)barSlot + 9))
                 {
-                    castInput = barSlot;
+                    //castInput = barSlot;
+                    // Hotkey pressed, keep the number in memory for preview
+                    Interface.Interface.GameUi?.Hotbar?.Items?[barSlot]?.Preview();
+                    currentPreviewHotBar = barSlot;
+                }
+                else if(currentPreviewHotBar != -1 && Controls.KeyUp((Control)currentPreviewHotBar + 9))
+                {
+                    //Hotkey released, try to cast and stop preview
+                    castInput = currentPreviewHotBar;
+                    currentPreviewHotBar = -1;
                 }
             }
 
@@ -958,7 +988,7 @@ namespace Intersect.Client.Entities
             }  
         }
 
-        protected int GetDistanceTo(Entity target)
+        protected int GetDistanceTo(Entity target, bool squareBased=false)
         {
             if (target != null)
             {
@@ -974,7 +1004,18 @@ namespace Intersect.Client.Entities
                     var x2 = target.X + targetMap.MapGridX * Options.MapWidth;
                     var y2 = target.Y + targetMap.MapGridY * Options.MapHeight;
 
-                    return (int) Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
+                    // Changing default distance which was mathematical based
+                    // return (int)Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
+                    if (squareBased)
+                    {
+                        // For square area/distance
+                        return Math.Max(Math.Abs(x1 - x2), Math.Abs(y1 - y2));
+                    }
+                    else
+                    {
+                        // Default distance : tiles that a player travel ro reach the distance
+                        return Math.Abs(x1 - x2) + Math.Abs(y1 - y2);
+                    }
                 }
             }
 
@@ -2052,6 +2093,60 @@ namespace Intersect.Client.Entities
                         break;
                     }
                 }
+            }
+        }
+
+        public void DrawPreviewSpell()
+        {
+            if (currentPreviewHotBar == -1 || previewSpellId == Guid.Empty)
+            {
+                return;
+            }
+            var map = MapInstance.Get(CurrentMap);
+            if (map == null)
+            {
+                return;
+            }
+  
+            var previewTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "previewtile.png");
+            if (previewTex != null)
+            {
+                var spellBase = SpellBase.Get(previewSpellId);
+                var srcRectangle = new FloatRect(0, 0, previewTex.Width, previewTex.Height);
+                var destRectangle = new FloatRect();
+                destRectangle.Width = previewTex.Width;
+                destRectangle.Height = previewTex.Height;
+                int range = spellBase.Combat.CastRange;
+                if (spellBase.Combat.SquareRange)
+                {
+                    for (int w=-range; w<=range;w++)
+                    {
+                        for (int h=-range; h<=range; h++)
+                        {
+                            destRectangle.X = WorldPos.X + Options.TileWidth * w;
+                            destRectangle.Y = WorldPos.Y + Options.TileHeight * h;
+                            Graphics.DrawGameTexture(previewTex, srcRectangle, destRectangle, Intersect.Color.White);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int w = -range; w <= range; w++)
+                    {
+                        for (int h = -range; h <= range; h++)
+                        {
+                            if (Math.Abs(w) + Math.Abs(h) <= range)
+                            {
+                                destRectangle.X = WorldPos.X + Options.TileWidth * w;
+                                destRectangle.Y = WorldPos.Y + Options.TileHeight * h;
+                                Graphics.DrawGameTexture(previewTex, srcRectangle, destRectangle, Intersect.Color.White);
+                            }
+                            
+                        }
+                    }
+                }
+                //destRectangle.X = GetCenterPos().X - (int)previewTex.Width / 2;
+                //destRectangle.Y = GetCenterPos().Y - (int)previewTex.Height / 2;
             }
         }
 

@@ -349,7 +349,7 @@ namespace Intersect.Client.Core
 
             //Draw the players targets
             Globals.Me.DrawTargets();
-
+            Globals.Me.DrawPreviewSpell();
             DrawOverlay();
 
             GenerateLightMap();

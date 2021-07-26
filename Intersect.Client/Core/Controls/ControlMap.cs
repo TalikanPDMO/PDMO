@@ -88,6 +88,77 @@ namespace Intersect.Client.Core.Controls
             return false;
         }
 
+        public bool KeyUp()
+        {
+            if (Key1 != Keys.None && Globals.InputManager.KeyUp(Key1))
+            {
+                return true;
+            }
+
+            if (Key2 != Keys.None && Globals.InputManager.KeyUp(Key2))
+            {
+                return true;
+            }
+
+            // Verify here if needed ??
+            if (Interface.Interface.MouseHitGui())
+            {
+                return false;
+            }
+
+            switch (Key1)
+            {
+                case Keys.LButton:
+                    if (Globals.InputManager.MouseButtonUp(GameInput.MouseButtons.Left))
+                    {
+                        return true;
+                    }
+
+                    break;
+                case Keys.RButton:
+                    if (Globals.InputManager.MouseButtonUp(GameInput.MouseButtons.Right))
+                    {
+                        return true;
+                    }
+
+                    break;
+                case Keys.MButton:
+                    if (Globals.InputManager.MouseButtonUp(GameInput.MouseButtons.Middle))
+                    {
+                        return true;
+                    }
+
+                    break;
+            }
+
+            switch (Key2)
+            {
+                case Keys.LButton:
+                    if (Globals.InputManager.MouseButtonUp(GameInput.MouseButtons.Left))
+                    {
+                        return true;
+                    }
+
+                    break;
+                case Keys.RButton:
+                    if (Globals.InputManager.MouseButtonUp(GameInput.MouseButtons.Right))
+                    {
+                        return true;
+                    }
+
+                    break;
+                case Keys.MButton:
+                    if (Globals.InputManager.MouseButtonUp(GameInput.MouseButtons.Middle))
+                    {
+                        return true;
+                    }
+
+                    break;
+            }
+
+            return false;
+        }
+
     }
 
 }
