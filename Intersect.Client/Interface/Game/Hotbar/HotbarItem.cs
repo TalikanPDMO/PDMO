@@ -133,7 +133,7 @@ namespace Intersect.Client.Interface.Game.Hotbar
             }
         }
 
-        public void Preview()
+        public void StartPreview()
         {
             if (mCurrentId != Guid.Empty)
             {
@@ -144,6 +144,21 @@ namespace Intersect.Client.Interface.Game.Hotbar
                 else if (mCurrentSpell != null)
                 {
                     Globals.Me.PreviewSpell(mCurrentSpell.Id);
+                }
+            }
+        }
+
+        public void StopPreview()
+        {
+            if (mCurrentId != Guid.Empty)
+            {
+                if (mCurrentItem != null)
+                {
+                    // Stop Preview item ?
+                }
+                else if (mCurrentSpell != null)
+                {
+                    Globals.Me.previewSpellId = Guid.Empty;
                 }
             }
         }
@@ -173,6 +188,10 @@ namespace Intersect.Client.Interface.Game.Hotbar
             {
                 mSpellDescWindow.Dispose();
                 mSpellDescWindow = null;
+            }
+            if (mCurrentSpell != null && Globals.Me.previewSpellId == mCurrentSpell.Id)
+            {
+                Globals.Me.previewSpellId = Guid.Empty;
             }
         }
 
@@ -216,6 +235,7 @@ namespace Intersect.Client.Interface.Game.Hotbar
                 mSpellDescWindow = new SpellDescWindow(
                     mCurrentSpell.Id, mHotbarWindow.X + Pnl.X + 16, mHotbarWindow.Y + mHotbarWindow.Height + 2, true
                 );
+                Globals.Me.PreviewSpell(mCurrentSpell.Id);
             }
         }
 

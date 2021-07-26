@@ -82,8 +82,8 @@ namespace Intersect.Client.Entities
 
         private Dictionary<int, long> mLastHotbarUseTime = new Dictionary<int, long>();
         private int mHotbarUseDelay = 150;
-        private int currentPreviewHotBar = -1;
-        private Guid previewSpellId;
+        private int currentPreviewHotBarKey = -1;
+        public Guid previewSpellId = Guid.Empty;
 
         /// <summary>
         /// Name of our guild if we are in one.
@@ -812,7 +812,6 @@ namespace Intersect.Client.Entities
                 if (Spells[i].SpellId == spellId)
                 {
                     previewSpellId = spellId;
-
                     return;
                 }
             }
@@ -963,18 +962,19 @@ namespace Intersect.Client.Entities
                     mLastHotbarUseTime.Add(barSlot, 0);
                 }
 
-                if (currentPreviewHotBar == -1 && Controls.KeyDown((Control)barSlot + 9))
+                if (currentPreviewHotBarKey == -1 && Controls.KeyDown((Control)barSlot + 9))
                 {
                     //castInput = barSlot;
                     // Hotkey pressed, keep the number in memory for preview
-                    Interface.Interface.GameUi?.Hotbar?.Items?[barSlot]?.Preview();
-                    currentPreviewHotBar = barSlot;
+                    Interface.Interface.GameUi?.Hotbar?.Items?[barSlot]?.StartPreview();
+                    currentPreviewHotBarKey = barSlot;
                 }
-                else if(currentPreviewHotBar != -1 && Controls.KeyUp((Control)currentPreviewHotBar + 9))
+                else if(currentPreviewHotBarKey != -1 && Controls.KeyUp((Control)currentPreviewHotBarKey + 9))
                 {
                     //Hotkey released, try to cast and stop preview
-                    castInput = currentPreviewHotBar;
-                    currentPreviewHotBar = -1;
+                    castInput = currentPreviewHotBarKey;
+                    Interface.Interface.GameUi?.Hotbar?.Items?[currentPreviewHotBarKey]?.StopPreview();
+                    currentPreviewHotBarKey = -1;
                 }
             }
 
@@ -2098,7 +2098,8 @@ namespace Intersect.Client.Entities
 
         public void DrawPreviewSpell()
         {
-            if (currentPreviewHotBar == -1 || previewSpellId == Guid.Empty)
+            // No test for currentPreviewHotBar because we can also preview when hotbar item is hover
+            if (previewSpellId == Guid.Empty)
             {
                 return;
             }
