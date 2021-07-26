@@ -4458,6 +4458,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString castrange = @"Cast Range (tiles):";
 
+            public static LocalizedString squarerange = @"Square Range?";
+
             public static LocalizedString casttime = @"Cast Time (ms):";
 
             public static LocalizedString combatspell = @"Combat Spell";
@@ -4552,6 +4554,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString bound = @"Bound?";
 
             public static LocalizedString hitradius = @"Hit Radius:";
+
+            public static LocalizedString squareradius = @"Square Radius?";
 
             public static LocalizedString hotdot = @"Heal/Damage Over Time";
 
