@@ -2122,6 +2122,8 @@ namespace Intersect.Client.Entities
                 int radius = spellBase.Combat.HitRadius;
                 switch (spellBase.SpellType)
                 {
+                    // Almost the same for warpto, just no AOE
+                    case SpellTypes.WarpTo:
                     case SpellTypes.CombatSpell:
                         switch (spellBase.Combat.TargetType)
                         {
@@ -2160,7 +2162,13 @@ namespace Intersect.Client.Entities
                                 {
                                     if (targetTex != null)
                                     {
-                                        if (spellBase.Combat.SquareHitRadius)
+                                        if (spellBase.SpellType == SpellTypes.WarpTo)
+                                        {
+                                            destRectangle.X = TargetBox.MyEntity.WorldPos.X;
+                                            destRectangle.Y = TargetBox.MyEntity.WorldPos.Y;
+                                            Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                        }
+                                        else if (spellBase.Combat.SquareHitRadius)
                                         {
                                             for (int w = -radius; w <= radius; w++)
                                             {
@@ -2240,7 +2248,7 @@ namespace Intersect.Client.Entities
                         }
                         break;
                     default:
-                        // Warps and Dash
+                        // Warps map and Dash
                         // No preview for the moment
                         break;
                 } 
