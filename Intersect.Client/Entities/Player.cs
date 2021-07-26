@@ -2118,72 +2118,132 @@ namespace Intersect.Client.Entities
                 destRectangle.Width = Options.TileWidth;
                 destRectangle.Height = Options.TileHeight;
                 int range = spellBase.Combat.CastRange;
-                if (spellBase.Combat.SquareRange)
+                var targetTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "targettile.png");
+                int radius = spellBase.Combat.HitRadius;
+                switch (spellBase.SpellType)
                 {
-                    for (int w=-range; w<=range;w++)
-                    {
-                        for (int h=-range; h<=range; h++)
+                    case SpellTypes.CombatSpell:
+                        switch (spellBase.Combat.TargetType)
                         {
-                            destRectangle.X = WorldPos.X + Options.TileWidth * w;
-                            destRectangle.Y = WorldPos.Y + Options.TileHeight * h;
-                            Graphics.DrawGameTexture(previewTex, srcRectangle, destRectangle, Intersect.Color.White);
-                        }
-                    }
-                }
-                else
-                {
-                    for (int w = -range; w <= range; w++)
-                    {
-                        for (int h = -range; h <= range; h++)
-                        {
-                            if (Math.Abs(w) + Math.Abs(h) <= range)
-                            {
-                                destRectangle.X = WorldPos.X + Options.TileWidth * w;
-                                destRectangle.Y = WorldPos.Y + Options.TileHeight * h;
-                                Graphics.DrawGameTexture(previewTex, srcRectangle, destRectangle, Intersect.Color.White);
-                            }
-                            
-                        }
-                    }
-                }
-                if (GetDistanceTo(TargetBox.MyEntity, spellBase.Combat.SquareRange) <= range)
-                {
-                    var targetTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "targettile.png");
-                    int radius = spellBase.Combat.HitRadius;
-                    if (targetTex != null)
-                    {
-                        if (spellBase.Combat.SquareHitRadius)
-                        {
-                            for (int w = -radius; w <= radius; w++)
-                            {
-                                for (int h = -radius; h <= radius; h++)
+                            case SpellTargetTypes.Single:
+                                // First display the range preview taking into account square range or not
+                                if (spellBase.Combat.SquareRange)
                                 {
-                                    destRectangle.X = TargetBox.MyEntity.WorldPos.X + Options.TileWidth * w;
-                                    destRectangle.Y = TargetBox.MyEntity.WorldPos.Y + Options.TileHeight * h;
+                                    for (int w = -range; w <= range; w++)
+                                    {
+                                        for (int h = -range; h <= range; h++)
+                                        {
+                                            destRectangle.X = WorldPos.X + Options.TileWidth * w;
+                                            destRectangle.Y = WorldPos.Y + Options.TileHeight * h;
+                                            Graphics.DrawGameTexture(previewTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    for (int w = -range; w <= range; w++)
+                                    {
+                                        for (int h = -range; h <= range; h++)
+                                        {
+                                            if (Math.Abs(w) + Math.Abs(h) <= range)
+                                            {
+                                                destRectangle.X = WorldPos.X + Options.TileWidth * w;
+                                                destRectangle.Y = WorldPos.Y + Options.TileHeight * h;
+                                                Graphics.DrawGameTexture(previewTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                            }
+
+                                        }
+                                    }
+                                }
+                                // If target is in range, display an other color and AOE of the impact if needed
+                                if (GetDistanceTo(TargetBox.MyEntity, spellBase.Combat.SquareRange) <= range)
+                                {
+                                    if (targetTex != null)
+                                    {
+                                        if (spellBase.Combat.SquareHitRadius)
+                                        {
+                                            for (int w = -radius; w <= radius; w++)
+                                            {
+                                                for (int h = -radius; h <= radius; h++)
+                                                {
+                                                    destRectangle.X = TargetBox.MyEntity.WorldPos.X + Options.TileWidth * w;
+                                                    destRectangle.Y = TargetBox.MyEntity.WorldPos.Y + Options.TileHeight * h;
+                                                    Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            for (int w = -radius; w <= radius; w++)
+                                            {
+                                                for (int h = -radius; h <= radius; h++)
+                                                {
+                                                    if (Math.Abs(w) + Math.Abs(h) <= radius)
+                                                    {
+                                                        destRectangle.X = TargetBox.MyEntity.WorldPos.X + Options.TileWidth * w;
+                                                        destRectangle.Y = TargetBox.MyEntity.WorldPos.Y + Options.TileHeight * h;
+                                                        Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                            case SpellTargetTypes.AoE:
+                                if (targetTex != null)
+                                {
+                                    // For AOE spell, there is no range and target is always the caster (center of the AOE)
+                                    if (spellBase.Combat.SquareHitRadius)
+                                    {
+                                        for (int w = -radius; w <= radius; w++)
+                                        {
+                                            for (int h = -radius; h <= radius; h++)
+                                            {
+                                                destRectangle.X = WorldPos.X + Options.TileWidth * w;
+                                                destRectangle.Y = WorldPos.Y + Options.TileHeight * h;
+                                                Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        for (int w = -radius; w <= radius; w++)
+                                        {
+                                            for (int h = -radius; h <= radius; h++)
+                                            {
+                                                if (Math.Abs(w) + Math.Abs(h) <= radius)
+                                                {
+                                                    destRectangle.X = WorldPos.X + Options.TileWidth * w;
+                                                    destRectangle.Y = WorldPos.Y + Options.TileHeight * h;
+                                                    Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                            case SpellTargetTypes.Self:
+                            case SpellTargetTypes.OnHit:
+                                if (targetTex != null)
+                                {
+                                    // For Self and OnHit, target is only and always the caster
+                                    destRectangle.X = WorldPos.X;
+                                    destRectangle.Y = WorldPos.Y;
                                     Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
                                 }
-                            }
+                                break;
+                            default:
+                                // Trap and projectiles
+                                // No preview for the moment
+                                break;
                         }
-                        else
-                        {
-                            for (int w = -radius; w <= radius; w++)
-                            {
-                                for (int h = -radius; h <= radius; h++)
-                                {
-                                    if (Math.Abs(w) + Math.Abs(h) <= radius)
-                                    {
-                                        destRectangle.X = TargetBox.MyEntity.WorldPos.X + Options.TileWidth * w;
-                                        destRectangle.Y = TargetBox.MyEntity.WorldPos.Y + Options.TileHeight * h;
-                                        Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
-                                    }
-
-                                }
-                            }
-                        }
-                    }
-                }
-                //destRectangle.X = GetCenterPos().X - (int)previewTex.Width / 2;
-                //destRectangle.Y = GetCenterPos().Y - (int)previewTex.Height / 2;
+                        break;
+                    default:
+                        // Warps and Dash
+                        // No preview for the moment
+                        break;
+                } 
             }
         }
 
