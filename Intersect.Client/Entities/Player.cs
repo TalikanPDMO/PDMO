@@ -2241,8 +2241,86 @@ namespace Intersect.Client.Entities
                                     Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
                                 }
                                 break;
+                            case SpellTargetTypes.Projectile:
+                                var projectileBase = spellBase.Combat.Projectile;
+                                bool targetFound = false;
+                                float baseTargetX = 0.0f;
+                                float baseTargetY = 0.0f;
+                                for (byte x = 0; x < ProjectileBase.SPAWN_LOCATIONS_WIDTH; x++)
+                                {
+                                    for (byte y = 0; y < ProjectileBase.SPAWN_LOCATIONS_HEIGHT; y++)
+                                    {
+                                        for (byte d = 0; d < ProjectileBase.MAX_PROJECTILE_DIRECTIONS; d++)
+                                        {
+                                            if (projectileBase.SpawnLocations[x, y].Directions[d])
+                                            {
+                                                var projPosX = WorldPos.X + Projectile.FindProjectileRotationX(Dir, x-2, y-2) * Options.TileWidth;
+                                                var projPosY = WorldPos.Y + Projectile.FindProjectileRotationY(Dir, x-2, y-2) * Options.TileHeight;
+                                                for (int r=1; r<=projectileBase.Range; r++)
+                                                {
+                                                    destRectangle.X = projPosX + (int)Projectile.GetRangeX(Projectile.FindProjectileRotationDir(Dir, d), r) * Options.TileWidth;
+                                                    destRectangle.Y = projPosY + (int)Projectile.GetRangeY(Projectile.FindProjectileRotationDir(Dir, d), r) * Options.TileHeight;
+                                                    if (!targetFound && TargetBox.MyEntity != null && destRectangle.X == TargetBox.MyEntity.WorldPos.X && destRectangle.Y == TargetBox.MyEntity.WorldPos.Y)
+                                                    {
+                                                        // Store the tile where the target is to display further
+                                                        targetFound = true;
+                                                        baseTargetX = destRectangle.X;
+                                                        baseTargetY = destRectangle.Y;
+                                                    }
+                                                    else
+                                                    {
+                                                        Graphics.DrawGameTexture(previewTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                                    }
+                                                    
+                                                }
+                                                
+                                            }
+                                        }
+                                    }
+                                }
+                                if (targetFound)
+                                {
+                                    destRectangle.X = baseTargetX;
+                                    destRectangle.Y = baseTargetY;
+                                    if (projectileBase.Spell != null && projectileBase.Spell.Combat.HitRadius > 0)
+                                    {
+                                        int radiusProjectile = projectileBase.Spell.Combat.HitRadius;
+                                        if (projectileBase.Spell.Combat.SquareHitRadius)
+                                        {
+                                            for (int w = -radiusProjectile; w <= radiusProjectile; w++)
+                                            {
+                                                for (int h = -radiusProjectile; h <= radiusProjectile; h++)
+                                                {
+                                                    destRectangle.X = baseTargetX + Options.TileWidth * w;
+                                                    destRectangle.Y = baseTargetY + Options.TileHeight * h;
+                                                    Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            for (int w = -radiusProjectile; w <= radiusProjectile; w++)
+                                            {
+                                                for (int h = -radiusProjectile; h <= radiusProjectile; h++)
+                                                {
+                                                    if (Math.Abs(w) + Math.Abs(h) <= radiusProjectile)
+                                                    {
+                                                        destRectangle.X = baseTargetX + Options.TileWidth * w;
+                                                        destRectangle.Y = baseTargetY + Options.TileHeight * h;
+                                                        Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                    }
+                                }
+                                break;
                             default:
-                                // Trap and projectiles
+                                // Trap
                                 // No preview for the moment
                                 break;
                         }
