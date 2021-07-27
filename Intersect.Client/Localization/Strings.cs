@@ -1270,6 +1270,8 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString vsync = @"V-Sync";
 
+            public static LocalizedString AutoPreview = @"Automatic Preview";
+
         }
 
         public struct Parties

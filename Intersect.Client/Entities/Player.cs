@@ -961,20 +961,31 @@ namespace Intersect.Client.Entities
                 {
                     mLastHotbarUseTime.Add(barSlot, 0);
                 }
-
-                if (currentPreviewHotBarKey == -1 && Controls.KeyDown((Control)barSlot + 9))
+                if (Globals.Database.AutoPreview)
                 {
-                    //castInput = barSlot;
-                    // Hotkey pressed, keep the number in memory for preview
-                    Interface.Interface.GameUi?.Hotbar?.Items?[barSlot]?.StartPreview();
-                    currentPreviewHotBarKey = barSlot;
+                    // Autopreview enabled, cast when release key
+                    if (currentPreviewHotBarKey == -1 && Controls.KeyDown((Control)barSlot + 9))
+                    {
+                        // Hotkey pressed, keep the number in memory for preview
+                        Interface.Interface.GameUi?.Hotbar?.Items?[barSlot]?.StartPreview();
+                        currentPreviewHotBarKey = barSlot;
+                    }
+                    else if (currentPreviewHotBarKey != -1 && Controls.KeyUp((Control)currentPreviewHotBarKey + 9))
+                    {
+                        //Hotkey released, try to cast and stop preview
+                        castInput = currentPreviewHotBarKey;
+                        Interface.Interface.GameUi?.Hotbar?.Items?[currentPreviewHotBarKey]?.StopPreview();
+                        currentPreviewHotBarKey = -1;
+                    }
                 }
-                else if(currentPreviewHotBarKey != -1 && Controls.KeyUp((Control)currentPreviewHotBarKey + 9))
+                else
                 {
-                    //Hotkey released, try to cast and stop preview
-                    castInput = currentPreviewHotBarKey;
-                    Interface.Interface.GameUi?.Hotbar?.Items?[currentPreviewHotBarKey]?.StopPreview();
-                    currentPreviewHotBarKey = -1;
+                    // Autopreview disabled, cast directly when pressing key
+                    if (Controls.KeyDown((Control)barSlot + 9))
+                    {
+                        castInput = barSlot;
+                        currentPreviewHotBarKey = -1;
+                    }    
                 }
             }
 
