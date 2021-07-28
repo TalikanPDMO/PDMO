@@ -12,6 +12,7 @@ using Intersect.Client.General;
 using Intersect.Client.Items;
 using Intersect.Client.Localization;
 using Intersect.Client.Spells;
+using Intersect.Enums;
 using Intersect.GameObjects;
 
 namespace Intersect.Client.Interface.Game.Hotbar
@@ -133,30 +134,34 @@ namespace Intersect.Client.Interface.Game.Hotbar
             }
         }
 
-        public void StartPreview()
+        public bool StartPreview()
         {
             if (mCurrentId != Guid.Empty)
             {
                 if (mCurrentItem != null)
                 {
-                    // Preview item ?
+                    if (mInventoryItemIndex > -1 && mCurrentItem.ItemType == ItemTypes.Spell && mCurrentItem.QuickCast)
+                    {
+                        return Globals.Me.PreviewSpell(mCurrentItem.SpellId, true);
+                    }
                 }
                 else if (mCurrentSpell != null)
                 {
-                    Globals.Me.PreviewSpell(mCurrentSpell.Id);
+                    return Globals.Me.PreviewSpell(mCurrentSpell.Id);
                 }
             }
+            return false;
         }
 
         public void StopPreview()
         {
             if (mCurrentId != Guid.Empty)
             {
-                if (mCurrentItem != null)
+                if (mCurrentSpell != null)
                 {
-                    // Stop Preview item ?
+                    Globals.Me.previewSpellId = Guid.Empty;
                 }
-                else if (mCurrentSpell != null)
+                if (mCurrentItem != null)
                 {
                     Globals.Me.previewSpellId = Guid.Empty;
                 }
@@ -165,6 +170,16 @@ namespace Intersect.Client.Interface.Game.Hotbar
 
         void pnl_RightClicked(Base sender, ClickedEventArgs arguments)
         {
+            if (mCurrentSpell != null && Globals.Me.previewSpellId == mCurrentSpell.Id)
+            {
+                // If right click, we remove preview even if hotkey is also pressed
+                Globals.Me.previewSpellId = Guid.Empty;
+            }
+            else if (mCurrentItem != null && Globals.Me.previewSpellId == mCurrentItem.SpellId)
+            {
+                // If right click, we remove preview even if hotkey is also pressed
+                Globals.Me.previewSpellId = Guid.Empty;
+            }
             Globals.Me.AddToHotbar(mYindex, -1, -1);
         }
 
@@ -189,8 +204,14 @@ namespace Intersect.Client.Interface.Game.Hotbar
                 mSpellDescWindow.Dispose();
                 mSpellDescWindow = null;
             }
-            if (mCurrentSpell != null && Globals.Me.previewSpellId == mCurrentSpell.Id)
+            if (mCurrentSpell != null && Globals.Me.previewSpellId == mCurrentSpell.Id && Globals.Me.CurrentPreviewHotBarKey == -1)
             {
+                // If no preview from hotkey is currently displayed
+                Globals.Me.previewSpellId = Guid.Empty;
+            }
+            else if (mCurrentItem != null && Globals.Me.previewSpellId == mCurrentItem.SpellId && Globals.Me.CurrentPreviewHotBarKey == -1)
+            {
+                // If no preview from hotkey is currently displayed
                 Globals.Me.previewSpellId = Guid.Empty;
             }
         }
@@ -223,6 +244,12 @@ namespace Intersect.Client.Interface.Game.Hotbar
                     mCurrentItem, 1, mHotbarWindow.X + Pnl.X + 16, mHotbarWindow.Y + mHotbarWindow.Height + 2,
                     mInventoryItem?.StatBuffs, mCurrentItem.Name, "", true
                 );
+
+                if (Globals.Me.CurrentPreviewHotBarKey == -1 && mInventoryItemIndex > -1 && mCurrentItem.ItemType == ItemTypes.Spell && mCurrentItem.QuickCast)
+                {
+                    // If no preview from a pressed hotkey is displayed
+                    Globals.Me.PreviewSpell(mCurrentItem.SpellId, true);
+                }
             }
             else if (mCurrentSpell != null)
             {
@@ -235,7 +262,11 @@ namespace Intersect.Client.Interface.Game.Hotbar
                 mSpellDescWindow = new SpellDescWindow(
                     mCurrentSpell.Id, mHotbarWindow.X + Pnl.X + 16, mHotbarWindow.Y + mHotbarWindow.Height + 2, true
                 );
-                Globals.Me.PreviewSpell(mCurrentSpell.Id);
+                if (Globals.Me.CurrentPreviewHotBarKey == -1)
+                {
+                    // If no preview from a pressed hotkey is displayed
+                    Globals.Me.PreviewSpell(mCurrentSpell.Id);
+                }
             }
         }
 

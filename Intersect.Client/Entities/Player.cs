@@ -82,7 +82,8 @@ namespace Intersect.Client.Entities
 
         private Dictionary<int, long> mLastHotbarUseTime = new Dictionary<int, long>();
         private int mHotbarUseDelay = 150;
-        private int currentPreviewHotBarKey = -1;
+        public int CurrentPreviewHotBarKey = -1;
+        private bool[] hotbarPressed = Enumerable.Repeat(false, Options.MaxHotbar).ToArray();
         public Guid previewSpellId = Guid.Empty;
 
         /// <summary>
@@ -800,21 +801,26 @@ namespace Intersect.Client.Entities
             }
         }
 
-        public void PreviewSpell(Guid spellId)
+        public bool PreviewSpell(Guid spellId, bool fromItem=false)
         {
             if (spellId == Guid.Empty)
             {
-                return;
+                return false;
             }
-
+            if (fromItem)
+            {
+                previewSpellId = spellId;
+                return true;
+            }
             for (var i = 0; i < Spells.Length; i++)
             {
                 if (Spells[i].SpellId == spellId)
                 {
                     previewSpellId = spellId;
-                    return;
+                    return true;
                 }
             }
+            return false;
         }
 
         public int FindHotbarSpell(HotbarInstance hotbarInstance)
@@ -964,18 +970,30 @@ namespace Intersect.Client.Entities
                 if (Globals.Database.AutoPreview)
                 {
                     // Autopreview enabled, cast when release key
-                    if (currentPreviewHotBarKey == -1 && Controls.KeyDown((Control)barSlot + 9))
+                    if (Controls.KeyDown((Control)barSlot + 9))
                     {
                         // Hotkey pressed, keep the number in memory for preview
-                        Interface.Interface.GameUi?.Hotbar?.Items?[barSlot]?.StartPreview();
-                        currentPreviewHotBarKey = barSlot;
+                        // Replace if different from the current preview
+                        // Can't replace if already down (need to release then press again)
+                        if (barSlot != CurrentPreviewHotBarKey && !hotbarPressed[barSlot])
+                        {
+                            if ((bool)(Interface.Interface.GameUi?.Hotbar?.Items?[barSlot]?.StartPreview()))
+                            {
+                                CurrentPreviewHotBarKey = barSlot;
+                            }
+                        }
+                        hotbarPressed[barSlot] = true;
                     }
-                    else if (currentPreviewHotBarKey != -1 && Controls.KeyUp((Control)currentPreviewHotBarKey + 9))
+                    if (hotbarPressed[barSlot] && Controls.KeyUp((Control)barSlot + 9))
                     {
-                        //Hotkey released, try to cast and stop preview
-                        castInput = currentPreviewHotBarKey;
-                        Interface.Interface.GameUi?.Hotbar?.Items?[currentPreviewHotBarKey]?.StopPreview();
-                        currentPreviewHotBarKey = -1;
+                        hotbarPressed[barSlot] = false;
+                        // If hotkey release is the previewed, start the cast
+                        if (barSlot == CurrentPreviewHotBarKey)
+                        {
+                            castInput = CurrentPreviewHotBarKey;
+                            Interface.Interface.GameUi?.Hotbar?.Items?[CurrentPreviewHotBarKey]?.StopPreview();
+                            CurrentPreviewHotBarKey = -1;
+                        }
                     }
                 }
                 else
@@ -984,19 +1002,18 @@ namespace Intersect.Client.Entities
                     if (Controls.KeyDown((Control)barSlot + 9))
                     {
                         castInput = barSlot;
-                        currentPreviewHotBarKey = -1;
-                    }    
+                        CurrentPreviewHotBarKey = -1;
+                    }
+                }
+                if (castInput != -1)
+                {
+                    if (0 <= castInput && castInput < Interface.Interface.GameUi?.Hotbar?.Items?.Count && mLastHotbarUseTime[castInput] < Timing.Global.Milliseconds)
+                    {
+                        Interface.Interface.GameUi?.Hotbar?.Items?[castInput]?.Activate();
+                        mLastHotbarUseTime[castInput] = Timing.Global.Milliseconds + mHotbarUseDelay;
+                    }
                 }
             }
-
-            if (castInput != -1)
-            {
-                if (0 <= castInput && castInput < Interface.Interface.GameUi?.Hotbar?.Items?.Count && mLastHotbarUseTime[castInput] < Timing.Global.Milliseconds)
-                {
-                    Interface.Interface.GameUi?.Hotbar?.Items?[castInput]?.Activate();
-                    mLastHotbarUseTime[castInput] = Timing.Global.Milliseconds + mHotbarUseDelay;
-                }
-            }  
         }
 
         protected int GetDistanceTo(Entity target, bool squareBased=false)

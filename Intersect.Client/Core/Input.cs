@@ -91,12 +91,16 @@ namespace Intersect.Client.Core
                 {
                     return;
                 }
-
-                // First try and unfocus chat then close all UI elements, then untarget our target.. and THEN open the escape menu.
+                // First try and unfocus chat then close preview if needed then close all UI elements, then untarget our target.. and THEN open the escape menu.
                 // Most games do this, why not this?
                 if (Interface.Interface.GameUi != null && Interface.Interface.GameUi.ChatFocussed)
                 {
                     Interface.Interface.GameUi.UnfocusChat = true;
+                }
+                else if (Globals.Me.CurrentPreviewHotBarKey != -1)
+                {
+                    Globals.Me.CurrentPreviewHotBarKey = -1;
+                    Globals.Me.previewSpellId = Guid.Empty;
                 }
                 else if (Interface.Interface.GameUi != null && Interface.Interface.GameUi.CloseAllWindows())
                 {
