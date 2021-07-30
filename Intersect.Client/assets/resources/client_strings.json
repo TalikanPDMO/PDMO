@@ -194,6 +194,8 @@
   },
   "Crafting": {
     "craft": "Créer",
+    "craftall": "Craft {00}",
+    "craftstop": "Stop",
     "incorrectresources": "Vous n'avez pas les ressources nécessaires.",
     "ingredients": "Ingrédients:",
     "product": "Objet à créer:",
@@ -618,7 +620,7 @@
     "back": "Retour",
     "cancel": "Retour",
     "fullscreen": "Plein écran",
-    "autoclosewindows": "Fermeture automatique",
+    "autoclosewindows": "Un menu à la fois",
     "musicvolume": "Musique: {00}%",
     "resolution": "Résolution:",
     "resolutioncustom": "Custom Resolution",

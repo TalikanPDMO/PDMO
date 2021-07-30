@@ -881,6 +881,7 @@
     <None Include="app.config" />
     <Compile Include="Entities\Entity.Comparison.cs" />
     <Compile Include="Core\ConsoleService.ConsoleThread.cs" />
+    <None Include="assets\resources\server_strings.json" />
     <None Include="packages.config" />
     <EmbeddedResource Include="Resources\libe_sqlite3_x64.so" />
     <EmbeddedResource Include="Resources\libe_sqlite3.dylib" />
@@ -955,8 +956,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>xcopy /S /Y "$(ProjectDir)assets" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
