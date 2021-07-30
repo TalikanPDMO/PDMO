@@ -4374,7 +4374,7 @@ namespace Intersect.Server.Entities
             //Check for range of a single target spell
             if (singleTargetSpell && target != this)
             {
-                if (!InRangeOf(target, spell.Combat.CastRange))
+                if (!InRangeOf(target, spell.Combat.CastRange, spell.Combat.SquareRange))
                 {
                     //A été modifié par Moussmous pour décrire les actions de combats dans le chat
                     if (Options.Combat.EnableCombatChatMessages)

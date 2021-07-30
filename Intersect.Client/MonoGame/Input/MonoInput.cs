@@ -133,6 +133,19 @@ namespace Intersect.Client.MonoGame.Input
             return false;
         }
 
+        public override bool KeyUp(Keys key)
+        {
+            if (mKeyDictionary.ContainsKey(key))
+            {
+                if (mLastKeyboardState.IsKeyUp(mKeyDictionary[key]))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public override Pointf GetMousePosition()
         {
             return new Pointf(mMouseX, mMouseY);
@@ -268,6 +281,20 @@ namespace Intersect.Client.MonoGame.Input
             return; //no on screen keyboard for pc clients
         }
 
+        public override bool MouseButtonUp(MouseButtons mb)
+        {
+            switch (mb)
+            {
+                case MouseButtons.Left:
+                    return mLastMouseState.LeftButton == ButtonState.Released;
+                case MouseButtons.Right:
+                    return mLastMouseState.RightButton == ButtonState.Released;
+                case MouseButtons.Middle:
+                    return mLastMouseState.MiddleButton == ButtonState.Released;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(mb), mb, null);
+            }
+        }
     }
 
 }

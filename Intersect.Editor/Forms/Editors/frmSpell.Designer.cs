@@ -114,6 +114,8 @@ namespace Intersect.Editor.Forms.Editors
             this.chkHOTDOT = new DarkUI.Controls.DarkCheckBox();
             this.lblTick = new System.Windows.Forms.Label();
             this.grpEffect = new DarkUI.Controls.DarkGroupBox();
+            this.nudEffectChance = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblEffectChance = new System.Windows.Forms.Label();
             this.lblEffect = new System.Windows.Forms.Label();
             this.cmbExtraEffect = new DarkUI.Controls.DarkComboBox();
             this.picSprite = new System.Windows.Forms.PictureBox();
@@ -173,8 +175,8 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
-            this.lblEffectChance = new System.Windows.Forms.Label();
-            this.nudEffectChance = new DarkUI.Controls.DarkNumericUpDown();
+            this.chkSquareRange = new DarkUI.Controls.DarkCheckBox();
+            this.chkSquareRadius = new DarkUI.Controls.DarkCheckBox();
             this.pnlContainer.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSpell)).BeginInit();
@@ -204,6 +206,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpHotDot.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudTick)).BeginInit();
             this.grpEffect.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEffectChance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSprite)).BeginInit();
             this.grpEffectDuration.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBuffDuration)).BeginInit();
@@ -220,7 +223,6 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudWarpX)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.grpSpells.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudEffectChance)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlContainer
@@ -759,6 +761,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpTargetInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpTargetInfo.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTargetInfo.Controls.Add(this.chkSquareRadius);
+            this.grpTargetInfo.Controls.Add(this.chkSquareRange);
             this.grpTargetInfo.Controls.Add(this.nudDuration);
             this.grpTargetInfo.Controls.Add(this.lblDuration);
             this.grpTargetInfo.Controls.Add(this.nudHitRadius);
@@ -1490,6 +1494,30 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEffect.TabIndex = 52;
             this.grpEffect.TabStop = false;
             this.grpEffect.Text = "Effect";
+            // 
+            // nudEffectChance
+            // 
+            this.nudEffectChance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudEffectChance.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudEffectChance.Location = new System.Drawing.Point(90, 32);
+            this.nudEffectChance.Name = "nudEffectChance";
+            this.nudEffectChance.Size = new System.Drawing.Size(51, 20);
+            this.nudEffectChance.TabIndex = 64;
+            this.nudEffectChance.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudEffectChance.ValueChanged += new System.EventHandler(this.nudEffectChance_ValueChanged);
+            // 
+            // lblEffectChance
+            // 
+            this.lblEffectChance.AutoSize = true;
+            this.lblEffectChance.Location = new System.Drawing.Point(84, 15);
+            this.lblEffectChance.Name = "lblEffectChance";
+            this.lblEffectChance.Size = new System.Drawing.Size(64, 13);
+            this.lblEffectChance.TabIndex = 64;
+            this.lblEffectChance.Text = "Chance (%):";
             // 
             // lblEffect
             // 
@@ -2311,29 +2339,29 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Size = new System.Drawing.Size(191, 422);
             this.lstGameObjects.TabIndex = 32;
             // 
-            // lblEffectChance
+            // chkSquareRange
             // 
-            this.lblEffectChance.AutoSize = true;
-            this.lblEffectChance.Location = new System.Drawing.Point(84, 15);
-            this.lblEffectChance.Name = "lblEffectChance";
-            this.lblEffectChance.Size = new System.Drawing.Size(64, 13);
-            this.lblEffectChance.TabIndex = 64;
-            this.lblEffectChance.Text = "Chance (%):";
+            this.chkSquareRange.AutoSize = true;
+            this.chkSquareRange.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkSquareRange.Location = new System.Drawing.Point(116, 58);
+            this.chkSquareRange.Name = "chkSquareRange";
+            this.chkSquareRange.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.chkSquareRange.Size = new System.Drawing.Size(101, 17);
+            this.chkSquareRange.TabIndex = 60;
+            this.chkSquareRange.Text = "Square Range?";
+            this.chkSquareRange.CheckedChanged += new System.EventHandler(this.chkSquareRange_CheckedChanged);
             // 
-            // nudEffectChance
+            // chkSquareRadius
             // 
-            this.nudEffectChance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudEffectChance.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudEffectChance.Location = new System.Drawing.Point(90, 32);
-            this.nudEffectChance.Name = "nudEffectChance";
-            this.nudEffectChance.Size = new System.Drawing.Size(51, 20);
-            this.nudEffectChance.TabIndex = 64;
-            this.nudEffectChance.ValueChanged += new System.EventHandler(this.nudEffectChance_ValueChanged);
-            this.nudEffectChance.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
+            this.chkSquareRadius.AutoSize = true;
+            this.chkSquareRadius.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkSquareRadius.Location = new System.Drawing.Point(116, 101);
+            this.chkSquareRadius.Name = "chkSquareRadius";
+            this.chkSquareRadius.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.chkSquareRadius.Size = new System.Drawing.Size(102, 17);
+            this.chkSquareRadius.TabIndex = 61;
+            this.chkSquareRadius.Text = "Square Radius?";
+            this.chkSquareRadius.CheckedChanged += new System.EventHandler(this.chkSquareRadius_CheckedChanged);
             // 
             // FrmSpell
             // 
@@ -2393,6 +2421,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudTick)).EndInit();
             this.grpEffect.ResumeLayout(false);
             this.grpEffect.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEffectChance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSprite)).EndInit();
             this.grpEffectDuration.ResumeLayout(false);
             this.grpEffectDuration.PerformLayout();
@@ -2416,7 +2445,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.PerformLayout();
             this.grpSpells.ResumeLayout(false);
             this.grpSpells.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudEffectChance)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2566,5 +2594,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkTextBox txtCannotCast;
         private DarkNumericUpDown nudEffectChance;
         private System.Windows.Forms.Label lblEffectChance;
+        private DarkCheckBox chkSquareRadius;
+        private DarkCheckBox chkSquareRange;
     }
 }

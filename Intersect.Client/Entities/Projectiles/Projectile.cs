@@ -184,7 +184,7 @@ namespace Intersect.Client.Entities.Projectiles
             mSpawnTime = Globals.System.GetTimeMs() + mMyBase.Delay;
         }
 
-        private int FindProjectileRotationX(int direction, int x, int y)
+        public static int FindProjectileRotationX(int direction, int x, int y)
         {
             switch (direction)
             {
@@ -201,7 +201,7 @@ namespace Intersect.Client.Entities.Projectiles
             }
         }
 
-        private int FindProjectileRotationY(int direction, int x, int y)
+        public static int FindProjectileRotationY(int direction, int x, int y)
         {
             switch (direction)
             {
@@ -218,7 +218,7 @@ namespace Intersect.Client.Entities.Projectiles
             }
         }
 
-        private int FindProjectileRotationDir(int entityDir, int projectionDir)
+        public static int FindProjectileRotationDir(int entityDir, int projectionDir)
         {
             switch (entityDir)
             {
@@ -295,7 +295,7 @@ namespace Intersect.Client.Entities.Projectiles
             }
         }
 
-        private float GetRangeX(int direction, float range)
+        public static float GetRangeX(int direction, float range)
         {
             //Left, UpLeft, DownLeft
             if (direction == 2 || direction == 4 || direction == 6)
@@ -316,7 +316,7 @@ namespace Intersect.Client.Entities.Projectiles
             }
         }
 
-        private float GetRangeY(int direction, float range)
+        public static float GetRangeY(int direction, float range)
         {
             //Up, UpLeft, UpRight
             if (direction == 0 || direction == 4 || direction == 5)

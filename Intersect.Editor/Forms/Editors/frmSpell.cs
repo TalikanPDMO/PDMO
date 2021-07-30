@@ -189,8 +189,10 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             lblCastRange.Text = Strings.SpellEditor.castrange;
+            chkSquareRange.Text = Strings.SpellEditor.squarerange;
             lblProjectile.Text = Strings.SpellEditor.projectile;
             lblHitRadius.Text = Strings.SpellEditor.hitradius;
+            chkSquareRadius.Text = Strings.SpellEditor.squareradius;
             lblDuration.Text = Strings.SpellEditor.duration;
 
             grpCombat.Text = Strings.SpellEditor.combatspell;
@@ -410,8 +412,10 @@ namespace Intersect.Editor.Forms.Editors
         {
             lblHitRadius.Hide();
             nudHitRadius.Hide();
+            chkSquareRadius.Hide();
             lblCastRange.Hide();
             nudCastRange.Hide();
+            chkSquareRange.Hide();
             lblProjectile.Hide();
             cmbProjectile.Hide();
             lblDuration.Hide();
@@ -421,12 +425,16 @@ namespace Intersect.Editor.Forms.Editors
             {
                 lblCastRange.Show();
                 nudCastRange.Show();
+                chkSquareRange.Show();
                 nudCastRange.Value = mEditorItem.Combat.CastRange;
+                chkSquareRange.Checked = mEditorItem.Combat.SquareRange;
                 if (cmbType.SelectedIndex == (int) SpellTypes.CombatSpell)
                 {
                     lblHitRadius.Show();
                     nudHitRadius.Show();
+                    chkSquareRadius.Show();
                     nudHitRadius.Value = mEditorItem.Combat.HitRadius;
+                    chkSquareRadius.Checked = mEditorItem.Combat.SquareHitRadius;
                 }
             }
 
@@ -435,14 +443,18 @@ namespace Intersect.Editor.Forms.Editors
             {
                 lblHitRadius.Show();
                 nudHitRadius.Show();
+                chkSquareRadius.Show();
                 nudHitRadius.Value = mEditorItem.Combat.HitRadius;
+                chkSquareRadius.Checked = mEditorItem.Combat.SquareHitRadius;
             }
 
             if (cmbTargetType.SelectedIndex < (int) SpellTargetTypes.Self)
             {
                 lblCastRange.Show();
                 nudCastRange.Show();
+                chkSquareRange.Show();
                 nudCastRange.Value = mEditorItem.Combat.CastRange;
+                chkSquareRange.Checked = mEditorItem.Combat.SquareRange;
             }
 
             if (cmbTargetType.SelectedIndex == (int) SpellTargetTypes.Projectile)
@@ -794,6 +806,10 @@ namespace Intersect.Editor.Forms.Editors
         {
             mEditorItem.Combat.HitRadius = (int) nudHitRadius.Value;
         }
+        private void chkSquareRadius_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.SquareHitRadius = chkSquareRadius.Checked;
+        }
 
         private void nudHPCost_ValueChanged(object sender, EventArgs e)
         {
@@ -888,6 +904,11 @@ namespace Intersect.Editor.Forms.Editors
         private void nudCastRange_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Combat.CastRange = (int) nudCastRange.Value;
+        }
+
+        private void chkSquareRange_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.SquareRange = chkSquareRange.Checked;
         }
 
         private void nudCritMultiplier_ValueChanged(object sender, EventArgs e)

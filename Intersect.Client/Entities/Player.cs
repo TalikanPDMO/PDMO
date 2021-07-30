@@ -23,6 +23,7 @@ using Intersect.Utilities;
 using Intersect.Client.Items;
 using Intersect.Client.Interface.Game.Chat;
 using Intersect.Config.Guilds;
+using Intersect.Client.Framework.File_Management;
 
 namespace Intersect.Client.Entities
 {
@@ -81,6 +82,9 @@ namespace Intersect.Client.Entities
 
         private Dictionary<int, long> mLastHotbarUseTime = new Dictionary<int, long>();
         private int mHotbarUseDelay = 150;
+        public int CurrentPreviewHotBarKey = -1;
+        private bool[] hotbarPressed = Enumerable.Repeat(false, Options.MaxHotbar).ToArray();
+        public Guid previewSpellId = Guid.Empty;
 
         /// <summary>
         /// Name of our guild if we are in one.
@@ -797,6 +801,28 @@ namespace Intersect.Client.Entities
             }
         }
 
+        public bool PreviewSpell(Guid spellId, bool fromItem=false)
+        {
+            if (spellId == Guid.Empty)
+            {
+                return false;
+            }
+            if (fromItem)
+            {
+                previewSpellId = spellId;
+                return true;
+            }
+            for (var i = 0; i < Spells.Length; i++)
+            {
+                if (Spells[i].SpellId == spellId)
+                {
+                    previewSpellId = spellId;
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public int FindHotbarSpell(HotbarInstance hotbarInstance)
         {
             if (hotbarInstance.ItemOrSpellId != Guid.Empty && SpellBase.Get(hotbarInstance.ItemOrSpellId) != null)
@@ -941,24 +967,56 @@ namespace Intersect.Client.Entities
                 {
                     mLastHotbarUseTime.Add(barSlot, 0);
                 }
-
-                if (Controls.KeyDown((Control)barSlot + 9))
+                if (Globals.Database.AutoPreview)
                 {
-                    castInput = barSlot;
+                    // Autopreview enabled, cast when release key
+                    if (Controls.KeyDown((Control)barSlot + 9))
+                    {
+                        // Hotkey pressed, keep the number in memory for preview
+                        // Replace if different from the current preview
+                        // Can't replace if already down (need to release then press again)
+                        if (barSlot != CurrentPreviewHotBarKey && !hotbarPressed[barSlot])
+                        {
+                            if ((bool)(Interface.Interface.GameUi?.Hotbar?.Items?[barSlot]?.StartPreview()))
+                            {
+                                CurrentPreviewHotBarKey = barSlot;
+                            }
+                        }
+                        hotbarPressed[barSlot] = true;
+                    }
+                    if (hotbarPressed[barSlot] && Controls.KeyUp((Control)barSlot + 9))
+                    {
+                        hotbarPressed[barSlot] = false;
+                        // If hotkey release is the previewed, start the cast
+                        if (barSlot == CurrentPreviewHotBarKey)
+                        {
+                            castInput = CurrentPreviewHotBarKey;
+                            Interface.Interface.GameUi?.Hotbar?.Items?[CurrentPreviewHotBarKey]?.StopPreview();
+                            CurrentPreviewHotBarKey = -1;
+                        }
+                    }
+                }
+                else
+                {
+                    // Autopreview disabled, cast directly when pressing key
+                    if (Controls.KeyDown((Control)barSlot + 9))
+                    {
+                        castInput = barSlot;
+                        CurrentPreviewHotBarKey = -1;
+                    }
+                }
+                if (castInput != -1)
+                {
+                    if (0 <= castInput && castInput < Interface.Interface.GameUi?.Hotbar?.Items?.Count && mLastHotbarUseTime[castInput] < Timing.Global.Milliseconds)
+                    {
+                        Interface.Interface.GameUi?.Hotbar?.Items?[castInput]?.Activate();
+                        mLastHotbarUseTime[castInput] = Timing.Global.Milliseconds + mHotbarUseDelay;
+                    }
                 }
             }
-
-            if (castInput != -1)
-            {
-                if (0 <= castInput && castInput < Interface.Interface.GameUi?.Hotbar?.Items?.Count && mLastHotbarUseTime[castInput] < Timing.Global.Milliseconds)
-                {
-                    Interface.Interface.GameUi?.Hotbar?.Items?[castInput]?.Activate();
-                    mLastHotbarUseTime[castInput] = Timing.Global.Milliseconds + mHotbarUseDelay;
-                }
-            }  
         }
 
-        protected int GetDistanceTo(Entity target)
+        protected int GetDistanceTo(Entity target, bool squareBased=false)
         {
             if (target != null)
             {
@@ -974,7 +1032,18 @@ namespace Intersect.Client.Entities
                     var x2 = target.X + targetMap.MapGridX * Options.MapWidth;
                     var y2 = target.Y + targetMap.MapGridY * Options.MapHeight;
 
-                    return (int) Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
+                    // Changing default distance which was mathematical based
+                    // return (int)Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
+                    if (squareBased)
+                    {
+                        // For square area/distance
+                        return Math.Max(Math.Abs(x1 - x2), Math.Abs(y1 - y2));
+                    }
+                    else
+                    {
+                        // Default distance : tiles that a player travel ro reach the distance
+                        return Math.Abs(x1 - x2) + Math.Abs(y1 - y2);
+                    }
                 }
             }
 
@@ -1947,8 +2016,9 @@ namespace Intersect.Client.Entities
             );
         }
 
-        public void DrawTargets()
+        public List<Tuple<Entity, TargetTypes>> FindTargets()
         {
+            List<Tuple<Entity, TargetTypes>> targets = new List<Tuple<Entity, TargetTypes>>(); 
             foreach (var en in Globals.Entities)
             {
                 if (en.Value == null)
@@ -1962,7 +2032,8 @@ namespace Intersect.Client.Entities
                     {
                         if (TargetType == 0 && TargetIndex == en.Value.Id)
                         {
-                            en.Value.DrawTarget((int) TargetTypes.Selected);
+                            //en.Value.DrawTarget((int) TargetTypes.Selected);
+                            targets.Add(Tuple.Create(en.Value, TargetTypes.Selected));
                         }
                     }
                 }
@@ -1989,7 +2060,8 @@ namespace Intersect.Client.Entities
                     {
                         if (TargetType == 1 && TargetIndex == en.Value.Id)
                         {
-                            en.Value.DrawTarget((int) TargetTypes.Selected);
+                            //en.Value.DrawTarget((int) TargetTypes.Selected);
+                            targets.Add(Tuple.Create(en.Value, TargetTypes.Selected));
                         }
                     }
                 }
@@ -2020,7 +2092,8 @@ namespace Intersect.Client.Entities
                                 {
                                     if (TargetType != 0 || TargetIndex != en.Value.Id)
                                     {
-                                        en.Value.DrawTarget((int) TargetTypes.Hover);
+                                        //en.Value.DrawTarget((int) TargetTypes.Hover);
+                                        targets.Add(Tuple.Create(en.Value, TargetTypes.Hover));
                                     }
                                 }
                             }
@@ -2043,7 +2116,8 @@ namespace Intersect.Client.Entities
                                 {
                                     if (TargetType != 1 || TargetIndex != en.Value.Id)
                                     {
-                                        en.Value.DrawTarget((int) TargetTypes.Hover);
+                                        //en.Value.DrawTarget((int) TargetTypes.Hover);
+                                        targets.Add(Tuple.Create(en.Value, TargetTypes.Hover));
                                     }
                                 }
                             }
@@ -2052,6 +2126,265 @@ namespace Intersect.Client.Entities
                         break;
                     }
                 }
+            }
+            return targets;
+        }
+
+        public void DrawTargets(List<Tuple<Entity, TargetTypes>> targets)
+        {
+            foreach (var target in targets)
+            {
+                // Draw each target found in the FindTargets()
+                target.Item1.DrawTarget((int)target.Item2);
+            }
+        }
+
+        public void DrawPreviewSpell(List<Tuple<Entity, TargetTypes>> targets)
+        {
+            // No test for currentPreviewHotBar because we can also preview when hotbar item is hover
+            if (previewSpellId == Guid.Empty)
+            {
+                return;
+            }
+            var map = MapInstance.Get(CurrentMap);
+            if (map == null)
+            {
+                return;
+            }
+            Entity targetSelected = null;
+            Entity targetHovered = null;
+            foreach (var target in targets)
+            {
+                if (target.Item2 == TargetTypes.Selected)
+                {
+                    targetSelected = target.Item1;
+                }
+                else if (target.Item2 == TargetTypes.Hover)
+                {
+                    targetHovered = target.Item1;
+                }
+            }
+            var previewTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "previewtile.png");
+            if (previewTex != null)
+            {
+                var spellBase = SpellBase.Get(previewSpellId);
+                var srcRectangle = new FloatRect(0, 0, Options.TileWidth, Options.TileHeight);
+                var destRectangle = new FloatRect();
+                destRectangle.Width = Options.TileWidth;
+                destRectangle.Height = Options.TileHeight;
+                int range = spellBase.Combat.CastRange;
+                var targetTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "targettile.png");
+                int radius = spellBase.Combat.HitRadius;
+                switch (spellBase.SpellType)
+                {
+                    // Almost the same for warpto, just no AOE
+                    case SpellTypes.WarpTo:
+                    case SpellTypes.CombatSpell:
+                        switch (spellBase.Combat.TargetType)
+                        {
+                            case SpellTargetTypes.Single:
+                                // First display the range preview taking into account square range or not
+                                if (spellBase.Combat.SquareRange)
+                                {
+                                    for (int w = -range; w <= range; w++)
+                                    {
+                                        for (int h = -range; h <= range; h++)
+                                        {
+                                            destRectangle.X = WorldPos.X + Options.TileWidth * w;
+                                            destRectangle.Y = WorldPos.Y + Options.TileHeight * h;
+                                            Graphics.DrawGameTexture(previewTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    for (int w = -range; w <= range; w++)
+                                    {
+                                        for (int h = -range; h <= range; h++)
+                                        {
+                                            if (Math.Abs(w) + Math.Abs(h) <= range)
+                                            {
+                                                destRectangle.X = WorldPos.X + Options.TileWidth * w;
+                                                destRectangle.Y = WorldPos.Y + Options.TileHeight * h;
+                                                Graphics.DrawGameTexture(previewTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                            }
+
+                                        }
+                                    }
+                                }
+                                // If target is in range, display an other color and AOE of the impact if needed
+                                if (GetDistanceTo(targetSelected, spellBase.Combat.SquareRange) <= range)
+                                {
+                                    if (targetTex != null)
+                                    {
+                                        if (spellBase.SpellType == SpellTypes.WarpTo)
+                                        {
+                                            destRectangle.X = targetSelected.WorldPos.X;
+                                            destRectangle.Y = targetSelected.WorldPos.Y;
+                                            Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                        }
+                                        else if (spellBase.Combat.SquareHitRadius)
+                                        {
+                                            for (int w = -radius; w <= radius; w++)
+                                            {
+                                                for (int h = -radius; h <= radius; h++)
+                                                {
+                                                    destRectangle.X = targetSelected.WorldPos.X + Options.TileWidth * w;
+                                                    destRectangle.Y = targetSelected.WorldPos.Y + Options.TileHeight * h;
+                                                    Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            for (int w = -radius; w <= radius; w++)
+                                            {
+                                                for (int h = -radius; h <= radius; h++)
+                                                {
+                                                    if (Math.Abs(w) + Math.Abs(h) <= radius)
+                                                    {
+                                                        destRectangle.X = targetSelected.WorldPos.X + Options.TileWidth * w;
+                                                        destRectangle.Y = targetSelected.WorldPos.Y + Options.TileHeight * h;
+                                                        Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                            case SpellTargetTypes.AoE:
+                                if (targetTex != null)
+                                {
+                                    // For AOE spell, there is no range and target is always the caster (center of the AOE)
+                                    if (spellBase.Combat.SquareHitRadius)
+                                    {
+                                        for (int w = -radius; w <= radius; w++)
+                                        {
+                                            for (int h = -radius; h <= radius; h++)
+                                            {
+                                                destRectangle.X = WorldPos.X + Options.TileWidth * w;
+                                                destRectangle.Y = WorldPos.Y + Options.TileHeight * h;
+                                                Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        for (int w = -radius; w <= radius; w++)
+                                        {
+                                            for (int h = -radius; h <= radius; h++)
+                                            {
+                                                if (Math.Abs(w) + Math.Abs(h) <= radius)
+                                                {
+                                                    destRectangle.X = WorldPos.X + Options.TileWidth * w;
+                                                    destRectangle.Y = WorldPos.Y + Options.TileHeight * h;
+                                                    Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                            case SpellTargetTypes.Self:
+                            case SpellTargetTypes.OnHit:
+                                if (targetTex != null)
+                                {
+                                    // For Self and OnHit, target is only and always the caster
+                                    destRectangle.X = WorldPos.X;
+                                    destRectangle.Y = WorldPos.Y;
+                                    Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                }
+                                break;
+                            case SpellTargetTypes.Projectile:
+                                var projectileBase = spellBase.Combat.Projectile;
+                                bool targetFound = false;
+                                float baseTargetX = 0.0f;
+                                float baseTargetY = 0.0f;
+                                for (byte x = 0; x < ProjectileBase.SPAWN_LOCATIONS_WIDTH; x++)
+                                {
+                                    for (byte y = 0; y < ProjectileBase.SPAWN_LOCATIONS_HEIGHT; y++)
+                                    {
+                                        for (byte d = 0; d < ProjectileBase.MAX_PROJECTILE_DIRECTIONS; d++)
+                                        {
+                                            if (projectileBase.SpawnLocations[x, y].Directions[d])
+                                            {
+                                                var projPosX = WorldPos.X + Projectile.FindProjectileRotationX(Dir, x-2, y-2) * Options.TileWidth;
+                                                var projPosY = WorldPos.Y + Projectile.FindProjectileRotationY(Dir, x-2, y-2) * Options.TileHeight;
+                                                for (int r=1; r<=projectileBase.Range; r++)
+                                                {
+                                                    destRectangle.X = projPosX + (int)Projectile.GetRangeX(Projectile.FindProjectileRotationDir(Dir, d), r) * Options.TileWidth;
+                                                    destRectangle.Y = projPosY + (int)Projectile.GetRangeY(Projectile.FindProjectileRotationDir(Dir, d), r) * Options.TileHeight;
+                                                    if (!targetFound && targetSelected != null && destRectangle.X == targetSelected.WorldPos.X && destRectangle.Y == targetSelected.WorldPos.Y)
+                                                    {
+                                                        // Store the tile where the target is to display further
+                                                        targetFound = true;
+                                                        baseTargetX = destRectangle.X;
+                                                        baseTargetY = destRectangle.Y;
+                                                    }
+                                                    else
+                                                    {
+                                                        Graphics.DrawGameTexture(previewTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                                    }
+                                                    
+                                                }
+                                                
+                                            }
+                                        }
+                                    }
+                                }
+                                if (targetFound)
+                                {
+                                    destRectangle.X = baseTargetX;
+                                    destRectangle.Y = baseTargetY;
+                                    if (projectileBase.Spell != null && projectileBase.Spell.Combat.HitRadius > 0)
+                                    {
+                                        int radiusProjectile = projectileBase.Spell.Combat.HitRadius;
+                                        if (projectileBase.Spell.Combat.SquareHitRadius)
+                                        {
+                                            for (int w = -radiusProjectile; w <= radiusProjectile; w++)
+                                            {
+                                                for (int h = -radiusProjectile; h <= radiusProjectile; h++)
+                                                {
+                                                    destRectangle.X = baseTargetX + Options.TileWidth * w;
+                                                    destRectangle.Y = baseTargetY + Options.TileHeight * h;
+                                                    Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            for (int w = -radiusProjectile; w <= radiusProjectile; w++)
+                                            {
+                                                for (int h = -radiusProjectile; h <= radiusProjectile; h++)
+                                                {
+                                                    if (Math.Abs(w) + Math.Abs(h) <= radiusProjectile)
+                                                    {
+                                                        destRectangle.X = baseTargetX + Options.TileWidth * w;
+                                                        destRectangle.Y = baseTargetY + Options.TileHeight * h;
+                                                        Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                    }
+                                }
+                                break;
+                            default:
+                                // Trap
+                                // No preview for the moment
+                                break;
+                        }
+                        break;
+                    default:
+                        // Warps map and Dash
+                        // No preview for the moment
+                        break;
+                } 
             }
         }
 

@@ -25,6 +25,8 @@ namespace Intersect.Client.Interface.Shared
 
         private LabeledCheckBox mAutocloseWindowsCheckbox;
 
+        private LabeledCheckBox mAutoPreviewCheckbox;
+
         private Button mBackBtn;
 
         private Button mCancelKeybindingsButton;
@@ -152,6 +154,12 @@ namespace Intersect.Client.Interface.Shared
             {
                 Text = Strings.Options.AutocloseWindows
             };
+
+            mAutoPreviewCheckbox = new LabeledCheckBox(mOptionsContainer, "AutoPreviewCheckbox")
+            {
+                Text = Strings.Options.AutoPreview
+            };
+
 
             mEditKeybindingsBtn = new Button(mOptionsContainer, "KeybindingsButton") {Text = Strings.Controls.edit};
             mEditKeybindingsBtn.Clicked += EditKeybindingsButton_Clicked;
@@ -464,6 +472,7 @@ namespace Intersect.Client.Interface.Shared
             }
 
             mAutocloseWindowsCheckbox.IsChecked = Globals.Database.HideOthersOnWindowOpen;
+            mAutoPreviewCheckbox.IsChecked = Globals.Database.AutoPreview;
             mFullscreen.IsChecked = Globals.Database.FullScreen;
             mMusicSlider.Value = Globals.Database.MusicVolume;
             mSoundSlider.Value = Globals.Database.SoundVolume;
@@ -531,6 +540,7 @@ namespace Intersect.Client.Interface.Shared
             }
 
             Globals.Database.HideOthersOnWindowOpen = mAutocloseWindowsCheckbox.IsChecked;
+            Globals.Database.AutoPreview = mAutoPreviewCheckbox.IsChecked;
             if (Globals.Database.FullScreen != mFullscreen.IsChecked)
             {
                 Globals.Database.FullScreen = mFullscreen.IsChecked;

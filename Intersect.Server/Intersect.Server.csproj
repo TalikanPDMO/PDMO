@@ -608,6 +608,10 @@
     <Compile Include="Migrations\Game\20210725142241_AddingEffectChanceToSpells.designer.cs">
       <DependentUpon>20210725142241_AddingEffectChanceToSpells.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20210725194157_AddingSquareForRangeAndAOE.cs" />
+    <Compile Include="Migrations\Game\20210725194157_AddingSquareForRangeAndAOE.designer.cs">
+      <DependentUpon>20210725194157_AddingSquareForRangeAndAOE.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

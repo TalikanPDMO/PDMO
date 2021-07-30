@@ -12,6 +12,8 @@ namespace Intersect.Client.Framework.Database
 
         public bool TargetAccountDirection;
 
+        public bool AutoPreview;
+
         //Preferences
         public int MusicVolume;
 
@@ -50,6 +52,7 @@ namespace Intersect.Client.Framework.Database
             HideOthersOnWindowOpen = LoadPreference("HideOthersOnWindowOpen", true);
             TargetAccountDirection = LoadPreference("TargetAccountDirection", false);
             StickyTarget = LoadPreference("StickyTarget", true);
+            AutoPreview = LoadPreference("AutoPreview", true);
         }
 
         public virtual void SavePreferences()
@@ -62,6 +65,7 @@ namespace Intersect.Client.Framework.Database
             SavePreference("HideOthersOnWindowOpen", HideOthersOnWindowOpen.ToString());
             SavePreference("TargetAccountDirection", TargetAccountDirection.ToString());
             SavePreference("StickyTarget", StickyTarget.ToString());
+            SavePreference("AutoPreview", AutoPreview.ToString());
         }
 
         public abstract bool LoadConfig();

@@ -233,6 +233,8 @@ namespace Intersect.Client.Core
                     }
                 }
             }
+            var targets = Globals.Me.FindTargets();
+            Globals.Me.DrawPreviewSpell(targets);
 
             foreach (var animInstance in animations)
             {
@@ -348,8 +350,7 @@ namespace Intersect.Client.Core
             }
 
             //Draw the players targets
-            Globals.Me.DrawTargets();
-
+            Globals.Me.DrawTargets(targets);
             DrawOverlay();
 
             GenerateLightMap();
