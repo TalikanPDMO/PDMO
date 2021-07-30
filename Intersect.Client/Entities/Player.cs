@@ -2016,8 +2016,9 @@ namespace Intersect.Client.Entities
             );
         }
 
-        public void DrawTargets()
+        public List<Tuple<Entity, TargetTypes>> FindTargets()
         {
+            List<Tuple<Entity, TargetTypes>> targets = new List<Tuple<Entity, TargetTypes>>(); 
             foreach (var en in Globals.Entities)
             {
                 if (en.Value == null)
@@ -2031,7 +2032,8 @@ namespace Intersect.Client.Entities
                     {
                         if (TargetType == 0 && TargetIndex == en.Value.Id)
                         {
-                            en.Value.DrawTarget((int) TargetTypes.Selected);
+                            //en.Value.DrawTarget((int) TargetTypes.Selected);
+                            targets.Add(Tuple.Create(en.Value, TargetTypes.Selected));
                         }
                     }
                 }
@@ -2058,7 +2060,8 @@ namespace Intersect.Client.Entities
                     {
                         if (TargetType == 1 && TargetIndex == en.Value.Id)
                         {
-                            en.Value.DrawTarget((int) TargetTypes.Selected);
+                            //en.Value.DrawTarget((int) TargetTypes.Selected);
+                            targets.Add(Tuple.Create(en.Value, TargetTypes.Selected));
                         }
                     }
                 }
@@ -2089,7 +2092,8 @@ namespace Intersect.Client.Entities
                                 {
                                     if (TargetType != 0 || TargetIndex != en.Value.Id)
                                     {
-                                        en.Value.DrawTarget((int) TargetTypes.Hover);
+                                        //en.Value.DrawTarget((int) TargetTypes.Hover);
+                                        targets.Add(Tuple.Create(en.Value, TargetTypes.Hover));
                                     }
                                 }
                             }
@@ -2112,7 +2116,8 @@ namespace Intersect.Client.Entities
                                 {
                                     if (TargetType != 1 || TargetIndex != en.Value.Id)
                                     {
-                                        en.Value.DrawTarget((int) TargetTypes.Hover);
+                                        //en.Value.DrawTarget((int) TargetTypes.Hover);
+                                        targets.Add(Tuple.Create(en.Value, TargetTypes.Hover));
                                     }
                                 }
                             }
@@ -2122,9 +2127,19 @@ namespace Intersect.Client.Entities
                     }
                 }
             }
+            return targets;
         }
 
-        public void DrawPreviewSpell()
+        public void DrawTargets(List<Tuple<Entity, TargetTypes>> targets)
+        {
+            foreach (var target in targets)
+            {
+                // Draw each target found in the FindTargets()
+                target.Item1.DrawTarget((int)target.Item2);
+            }
+        }
+
+        public void DrawPreviewSpell(List<Tuple<Entity, TargetTypes>> targets)
         {
             // No test for currentPreviewHotBar because we can also preview when hotbar item is hover
             if (previewSpellId == Guid.Empty)
@@ -2136,7 +2151,19 @@ namespace Intersect.Client.Entities
             {
                 return;
             }
-  
+            Entity targetSelected = null;
+            Entity targetHovered = null;
+            foreach (var target in targets)
+            {
+                if (target.Item2 == TargetTypes.Selected)
+                {
+                    targetSelected = target.Item1;
+                }
+                else if (target.Item2 == TargetTypes.Hover)
+                {
+                    targetHovered = target.Item1;
+                }
+            }
             var previewTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "previewtile.png");
             if (previewTex != null)
             {
@@ -2186,14 +2213,14 @@ namespace Intersect.Client.Entities
                                     }
                                 }
                                 // If target is in range, display an other color and AOE of the impact if needed
-                                if (GetDistanceTo(TargetBox.MyEntity, spellBase.Combat.SquareRange) <= range)
+                                if (GetDistanceTo(targetSelected, spellBase.Combat.SquareRange) <= range)
                                 {
                                     if (targetTex != null)
                                     {
                                         if (spellBase.SpellType == SpellTypes.WarpTo)
                                         {
-                                            destRectangle.X = TargetBox.MyEntity.WorldPos.X;
-                                            destRectangle.Y = TargetBox.MyEntity.WorldPos.Y;
+                                            destRectangle.X = targetSelected.WorldPos.X;
+                                            destRectangle.Y = targetSelected.WorldPos.Y;
                                             Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
                                         }
                                         else if (spellBase.Combat.SquareHitRadius)
@@ -2202,8 +2229,8 @@ namespace Intersect.Client.Entities
                                             {
                                                 for (int h = -radius; h <= radius; h++)
                                                 {
-                                                    destRectangle.X = TargetBox.MyEntity.WorldPos.X + Options.TileWidth * w;
-                                                    destRectangle.Y = TargetBox.MyEntity.WorldPos.Y + Options.TileHeight * h;
+                                                    destRectangle.X = targetSelected.WorldPos.X + Options.TileWidth * w;
+                                                    destRectangle.Y = targetSelected.WorldPos.Y + Options.TileHeight * h;
                                                     Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
                                                 }
                                             }
@@ -2216,8 +2243,8 @@ namespace Intersect.Client.Entities
                                                 {
                                                     if (Math.Abs(w) + Math.Abs(h) <= radius)
                                                     {
-                                                        destRectangle.X = TargetBox.MyEntity.WorldPos.X + Options.TileWidth * w;
-                                                        destRectangle.Y = TargetBox.MyEntity.WorldPos.Y + Options.TileHeight * h;
+                                                        destRectangle.X = targetSelected.WorldPos.X + Options.TileWidth * w;
+                                                        destRectangle.Y = targetSelected.WorldPos.Y + Options.TileHeight * h;
                                                         Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
                                                     }
                                                 }
@@ -2288,7 +2315,7 @@ namespace Intersect.Client.Entities
                                                 {
                                                     destRectangle.X = projPosX + (int)Projectile.GetRangeX(Projectile.FindProjectileRotationDir(Dir, d), r) * Options.TileWidth;
                                                     destRectangle.Y = projPosY + (int)Projectile.GetRangeY(Projectile.FindProjectileRotationDir(Dir, d), r) * Options.TileHeight;
-                                                    if (!targetFound && TargetBox.MyEntity != null && destRectangle.X == TargetBox.MyEntity.WorldPos.X && destRectangle.Y == TargetBox.MyEntity.WorldPos.Y)
+                                                    if (!targetFound && targetSelected != null && destRectangle.X == targetSelected.WorldPos.X && destRectangle.Y == targetSelected.WorldPos.Y)
                                                     {
                                                         // Store the tile where the target is to display further
                                                         targetFound = true;

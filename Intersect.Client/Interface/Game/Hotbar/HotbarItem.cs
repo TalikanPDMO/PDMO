@@ -641,6 +641,11 @@ namespace Intersect.Client.Interface.Game.Hotbar
 
                             if (bestIntersectIndex > -1 && bestIntersectIndex != mYindex)
                             {
+                                if (Globals.Me.CurrentPreviewHotBarKey == mYindex || Globals.Me.CurrentPreviewHotBarKey == bestIntersectIndex)
+                                {
+                                    Globals.Me.previewSpellId = Guid.Empty;
+                                    Globals.Me.CurrentPreviewHotBarKey = -1;
+                                }
                                 Globals.Me.HotbarSwap(mYindex, (byte) bestIntersectIndex);
                                 QuantityLabel.IsHidden = true;
                                 mContentPanel.IsHidden = true;

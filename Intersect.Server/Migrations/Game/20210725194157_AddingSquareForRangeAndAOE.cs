@@ -10,7 +10,7 @@ namespace Intersect.Server.Migrations.Game
                 name: "Combat_SquareHitRadius",
                 table: "Spells",
                 nullable: false,
-                defaultValue: false);
+                defaultValue: true);
 
             migrationBuilder.AddColumn<bool>(
                 name: "Combat_SquareRange",
