@@ -60,6 +60,9 @@ namespace Intersect.Server.Entities
 
         //Moving
         public long LastRandomMove;
+        public int MaxRandomMove = 4;
+        public int RandomMoveValue = -1;
+        public int CurrentRandomMove = 0;
 
         //Pathfinding
         private Pathfinder mPathFinder;
@@ -642,6 +645,7 @@ namespace Intersect.Server.Entities
                     //Face the target -- next frame fire -- then go on with life
                     ChangeDir(dirToEnemy); // Gotta get dir to enemy
                     LastRandomMove = Globals.Timing.Milliseconds + Randomization.Next(1000, 3000);
+                    RandomMoveValue = -1;
 
                     return;
                 }
@@ -779,6 +783,7 @@ namespace Intersect.Server.Entities
                     {
                         if (status.Type == StatusTypes.Stun || status.Type == StatusTypes.Sleep)
                         {
+                            RandomMoveValue = -1;
                             return;
                         }
                     }
@@ -801,6 +806,7 @@ namespace Intersect.Server.Entities
                                 {
                                     PacketSender.SendNpcAggressionToProximity(this);
                                 }
+                                RandomMoveValue = -1;
                                 return;
                             }
                         }
@@ -1067,6 +1073,7 @@ namespace Intersect.Server.Entities
                                                 status.Type == StatusTypes.Snare ||
                                                 status.Type == StatusTypes.Sleep)
                                             {
+                                                RandomMoveValue = -1;
                                                 return;
                                             }
                                         }
@@ -1131,7 +1138,7 @@ namespace Intersect.Server.Entities
                             return;
                         }
 
-                        var i = Randomization.Next(0, 1);
+                        /*var i = Randomization.Next(0, 1);
                         if (i == 0)
                         {
                             i = Randomization.Next(0, 4);
@@ -1151,13 +1158,53 @@ namespace Intersect.Server.Entities
                                 Move((byte)i, null);
                             }
                         }
-
                         LastRandomMove = Globals.Timing.Milliseconds + Randomization.Next(1000, 3000);
-
                         if (fleeing)
                         {
-                            LastRandomMove = Globals.Timing.Milliseconds + (long) GetMovementTime();
+                            LastRandomMove = Globals.Timing.Milliseconds + (long)GetMovementTime();
+                        }*/
+
+
+                        if (RandomMoveValue == -1)
+                        {
+                            RandomMoveValue = Randomization.Next(0, MaxRandomMove);
+                            CurrentRandomMove = 0;
                         }
+                        int dirMove = Randomization.Next(0, 4);
+                        if (CanMove(dirMove) == -1)
+                        {
+                            //check if NPC is snared or stunned
+                            foreach (var status in CachedStatuses)
+                            {
+                                if (status.Type == StatusTypes.Stun ||
+                                    status.Type == StatusTypes.Snare ||
+                                    status.Type == StatusTypes.Sleep)
+                                {
+                                    RandomMoveValue = -1;
+                                    return;
+                                }
+                            }
+
+                            Move((byte)dirMove, null);
+                        }
+                        CurrentRandomMove++;
+                        if (CurrentRandomMove > RandomMoveValue)
+                        {
+                            RandomMoveValue = -1;
+                            if (fleeing)
+                            {
+                                LastRandomMove = Globals.Timing.Milliseconds + (long)GetMovementTime();
+                            }
+                            else
+                            {
+                                LastRandomMove = Globals.Timing.Milliseconds + Randomization.Next(1000, 3000);
+                            }
+                        }
+                        else
+                        {
+                            LastRandomMove = Globals.Timing.Milliseconds + (long)GetMovementTime();
+                        }
+
                     }
 
                     //If we switched maps, lets update the maps
