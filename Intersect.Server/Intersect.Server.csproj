@@ -612,6 +612,10 @@
     <Compile Include="Migrations\Game\20210725194157_AddingSquareForRangeAndAOE.designer.cs">
       <DependentUpon>20210725194157_AddingSquareForRangeAndAOE.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20210731192605_AddingMaxRandomMoveToNpcs.cs" />
+    <Compile Include="Migrations\Game\20210731192605_AddingMaxRandomMoveToNpcs.designer.cs">
+      <DependentUpon>20210731192605_AddingMaxRandomMoveToNpcs.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

@@ -1656,7 +1656,7 @@
     "individualizedloot": "Spawn loot for all attackers?",
     "magicresist": "Magic Resist:",
     "mana": "Mana:",
-    "movement": "Movement",
+    "movement": "Move:",
     "resetradius": "Reset Radius:",
     "movements": {
       "0": "Move Randomly",

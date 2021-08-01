@@ -149,6 +149,7 @@ namespace Intersect.Editor.Forms.Editors
             chkAggressive.Text = Strings.NpcEditor.aggressive;
             lblSightRange.Text = Strings.NpcEditor.sightrange;
             lblMovement.Text = Strings.NpcEditor.movement;
+            lblMaxMove.Text = Strings.NpcEditor.maxmove;
             lblResetRadius.Text = Strings.NpcEditor.resetradius;
             cmbMovement.Items.Clear();
             for (var i = 0; i < Strings.NpcEditor.movements.Count; i++)
@@ -276,6 +277,7 @@ namespace Intersect.Editor.Forms.Editors
                 nudFlee.Value = mEditorItem.FleeHealthPercentage;
                 chkFocusDamageDealer.Checked = mEditorItem.FocusHighestDamageDealer;
                 nudResetRadius.Value = mEditorItem.ResetRadius;
+                nudMaxMove.Value = mEditorItem.MaxRandomMove;
 
                 //Common Events
                 cmbOnDeathEventKiller.SelectedIndex = EventBase.ListIndex(mEditorItem.OnDeathEventId) + 1;
@@ -800,6 +802,16 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbMovement_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.Movement = (byte) cmbMovement.SelectedIndex;
+            if (cmbMovement.SelectedIndex == ((int)NpcMovement.MoveRandomly))
+            {
+                lblMaxMove.Show();
+                nudMaxMove.Show();
+            }
+            else
+            {
+                lblMaxMove.Hide();
+                nudMaxMove.Hide();
+            }
         }
 
         private void chkSwarm_CheckedChanged(object sender, EventArgs e)
@@ -1012,6 +1024,11 @@ namespace Intersect.Editor.Forms.Editors
         }
 
         #endregion
+
+        private void nudMaxMove_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.MaxRandomMove = (int)nudMaxMove.Value;
+        }
     }
 
 }
