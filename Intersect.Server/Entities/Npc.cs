@@ -60,6 +60,9 @@ namespace Intersect.Server.Entities
 
         //Moving
         public long LastRandomMove;
+        public int RandomMoveValue = -1;
+        public int CurrentRandomMove = 0;
+        private int OpposingDir = -1;
 
         //Pathfinding
         private Pathfinder mPathFinder;
@@ -642,6 +645,7 @@ namespace Intersect.Server.Entities
                     //Face the target -- next frame fire -- then go on with life
                     ChangeDir(dirToEnemy); // Gotta get dir to enemy
                     LastRandomMove = Globals.Timing.Milliseconds + Randomization.Next(1000, 3000);
+                    RandomMoveValue = -1;
 
                     return;
                 }
@@ -779,6 +783,7 @@ namespace Intersect.Server.Entities
                     {
                         if (status.Type == StatusTypes.Stun || status.Type == StatusTypes.Sleep)
                         {
+                            RandomMoveValue = -1;
                             return;
                         }
                     }
@@ -801,6 +806,7 @@ namespace Intersect.Server.Entities
                                 {
                                     PacketSender.SendNpcAggressionToProximity(this);
                                 }
+                                RandomMoveValue = -1;
                                 return;
                             }
                         }
@@ -1067,6 +1073,7 @@ namespace Intersect.Server.Entities
                                                 status.Type == StatusTypes.Snare ||
                                                 status.Type == StatusTypes.Sleep)
                                             {
+                                                RandomMoveValue = -1;
                                                 return;
                                             }
                                         }
@@ -1131,33 +1138,71 @@ namespace Intersect.Server.Entities
                             return;
                         }
 
-                        var i = Randomization.Next(0, 1);
-                        if (i == 0)
+                        if (RandomMoveValue == -1)
                         {
-                            i = Randomization.Next(0, 4);
-                            if (CanMove(i) == -1)
+                            RandomMoveValue = Randomization.Next(0, Base.MaxRandomMove);
+                            CurrentRandomMove = 0;
+                            OpposingDir = -1;
+                        }
+                        int dirMove = Randomization.Next(0, 4);
+                        while(dirMove == OpposingDir)
+                        {
+                            dirMove = Randomization.Next(0, 4);
+                        }
+                        switch (dirMove)
+                        {
+                            case 0: //Up
+                                OpposingDir = 1;
+                                break;
+                            case 1: //Down
+                                OpposingDir = 0;
+                                break;
+                            case 2: //Left
+                                OpposingDir = 3;
+                                break;
+                            case 3: //Right
+                                OpposingDir = 2;
+                                break;
+                        }
+                        if (CanMove(dirMove) == -1)
+                        {
+                            //check if NPC is snared or stunned
+                            foreach (var status in CachedStatuses)
                             {
-                                //check if NPC is snared or stunned
-                                foreach (var status in CachedStatuses)
+                                if (status.Type == StatusTypes.Stun ||
+                                    status.Type == StatusTypes.Snare ||
+                                    status.Type == StatusTypes.Sleep)
                                 {
-                                    if (status.Type == StatusTypes.Stun ||
-                                        status.Type == StatusTypes.Snare ||
-                                        status.Type == StatusTypes.Sleep)
-                                    {
-                                        return;
-                                    }
+                                    RandomMoveValue = -1;
+                                    return;
                                 }
+                            }
 
-                                Move((byte)i, null);
+                            Move((byte)dirMove, null);
+                        }
+                        else
+                        {
+                            // Can't move in the direction, so no previous direction to store
+                            OpposingDir = -1;
+                        }
+                        CurrentRandomMove++;
+                        if (CurrentRandomMove > RandomMoveValue)
+                        {
+                            RandomMoveValue = -1;
+                            if (fleeing)
+                            {
+                                LastRandomMove = Globals.Timing.Milliseconds + (long)GetMovementTime();
+                            }
+                            else
+                            {
+                                LastRandomMove = Globals.Timing.Milliseconds + Randomization.Next(1000, 3000);
                             }
                         }
-
-                        LastRandomMove = Globals.Timing.Milliseconds + Randomization.Next(1000, 3000);
-
-                        if (fleeing)
+                        else
                         {
-                            LastRandomMove = Globals.Timing.Milliseconds + (long) GetMovementTime();
+                            LastRandomMove = Globals.Timing.Milliseconds + (long)GetMovementTime();
                         }
+
                     }
 
                     //If we switched maps, lets update the maps

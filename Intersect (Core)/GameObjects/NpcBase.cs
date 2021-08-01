@@ -79,6 +79,8 @@ namespace Intersect.GameObjects
 
         public int ResetRadius { get; set; }
 
+        public int MaxRandomMove { get; set; } = 3;
+
         //Conditions
         [Column("PlayerFriendConditions")]
         [JsonIgnore]
