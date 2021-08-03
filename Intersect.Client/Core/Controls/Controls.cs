@@ -54,12 +54,12 @@ namespace Intersect.Client.Core.Controls
 
         public void ResetDefaults()
         {
-            CreateControlMap(Control.MoveUp, Keys.Up, Keys.W);
+            CreateControlMap(Control.MoveUp, Keys.Up, Keys.Z);
             CreateControlMap(Control.MoveDown, Keys.Down, Keys.S);
-            CreateControlMap(Control.MoveLeft, Keys.Left, Keys.A);
+            CreateControlMap(Control.MoveLeft, Keys.Left, Keys.Q);
             CreateControlMap(Control.MoveRight, Keys.Right, Keys.D);
             CreateControlMap(Control.AttackInteract, Keys.E, Keys.LButton);
-            CreateControlMap(Control.Block, Keys.Q, Keys.RButton);
+            CreateControlMap(Control.Block, Keys.A, Keys.RButton);
             CreateControlMap(Control.AutoTarget, Keys.Tab, Keys.None);
             CreateControlMap(Control.PickUp, Keys.Space, Keys.None);
             CreateControlMap(Control.Enter, Keys.Enter, Keys.None);
