@@ -1195,7 +1195,8 @@ namespace Intersect.Server.Entities
                             }
                             else
                             {
-                                LastRandomMove = Globals.Timing.Milliseconds + Randomization.Next(1000, 3000);
+                                // Default was 1000-3000, changed to 2000-5000
+                                LastRandomMove = Globals.Timing.Milliseconds + Randomization.Next(2000, 5000);
                             }
                         }
                         else
