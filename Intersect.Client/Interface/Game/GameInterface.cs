@@ -592,6 +592,13 @@ namespace Intersect.Client.Interface.Game
                 closedWindows = true;
             }
 
+            if (Globals.Me.ClickedStatus != null)
+            {
+                Globals.Me.ClickedStatus.mDescWindow?.Dispose();
+                Globals.Me.ClickedStatus = null;
+                closedWindows = true;
+            }
+
             if (GameMenu != null && GameMenu.HasWindowsOpen())
             {
                 GameMenu.CloseAllWindows();

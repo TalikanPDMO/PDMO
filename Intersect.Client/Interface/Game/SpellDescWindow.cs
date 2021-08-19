@@ -16,6 +16,7 @@ namespace Intersect.Client.Interface.Game
     {
 
         ImagePanel mDescWindow;
+        public Button CloseButton;
 
         public SpellDescWindow(Guid spellId, int x, int y, bool centerHorizontally = false)
         {
@@ -44,6 +45,8 @@ namespace Intersect.Client.Interface.Game
             spellDescText.IsHidden = true;
             spellStatsText.IsHidden = true;
 
+            CloseButton = new Button(mDescWindow, "CloseButton");
+            CloseButton.Clicked += CloseButton_Clicked;
             //Load this up now so we know what color to make the text when filling out the desc
             mDescWindow.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
             if (spell.Description.Length > 0)
@@ -266,6 +269,12 @@ namespace Intersect.Client.Interface.Game
             }
         }
 
+        private void CloseButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
+        {
+            Globals.Me.ClickedStatus = null;
+            Dispose();
+        }
+
         public void Dispose()
         {
             if (mDescWindow == null)
@@ -276,7 +285,6 @@ namespace Intersect.Client.Interface.Game
             Interface.GameUi.GameCanvas.RemoveChild(mDescWindow, false);
             mDescWindow.Dispose();
         }
-
     }
 
 }

@@ -89,6 +89,8 @@ namespace Intersect.Client.Entities
         private bool[] hotbarPressed = Enumerable.Repeat(false, Options.MaxHotbar).ToArray();
         public Guid previewSpellId = Guid.Empty;
 
+        public SpellStatus ClickedStatus = null;
+
         /// <summary>
         /// Name of our guild if we are in one.
         /// </summary>
