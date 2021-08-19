@@ -246,6 +246,9 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             EntityType = type;
             if (MyEntity != null)
             {
+                // Reset locked status window when switch target (if there is one)
+                Globals.Me.ClickedStatus?.mDescWindow?.Dispose();
+                Globals.Me.ClickedStatus = null;
                 SetupEntityElements();
                 UpdateSpellStatus();
                 if (EntityType == EntityTypes.Event)
