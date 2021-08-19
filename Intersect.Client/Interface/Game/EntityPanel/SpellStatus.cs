@@ -18,7 +18,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
         private Guid mCurrentSpellId;
 
-        private SpellDescWindow mDescWindow;
+        public SpellDescWindow mDescWindow;
 
         private Framework.Gwen.Control.Label mDurationLabel;
 
@@ -44,12 +44,29 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             Pnl = new ImagePanel(Container, "StatusIcon");
             Pnl.HoverEnter += pnl_HoverEnter;
             Pnl.HoverLeave += pnl_HoverLeave;
+            Pnl.Clicked += pnl_Clicked;
             mDurationLabel = new Framework.Gwen.Control.Label(Container, "DurationLabel");
+        }
+        public void pnl_Clicked(Base sender, EventArgs arguments)
+        {
+            if (mDescWindow != null)
+            {
+                mDescWindow.CloseButton.IsHidden = !mDescWindow.CloseButton.IsHidden;
+                if (Globals.Me.ClickedStatus == this)
+                {
+                    Globals.Me.ClickedStatus = null;
+                }
+                else
+                {
+                    Globals.Me.ClickedStatus?.mDescWindow?.Dispose();
+                    Globals.Me.ClickedStatus = this;
+                }
+            }
         }
 
         public void pnl_HoverLeave(Base sender, EventArgs arguments)
         {
-            if (mDescWindow != null)
+            if (mDescWindow != null &&  Globals.Me.ClickedStatus != this)
             {
                 mDescWindow.Dispose();
                 mDescWindow = null;
@@ -58,16 +75,19 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
         void pnl_HoverEnter(Base sender, EventArgs arguments)
         {
-            if (mDescWindow != null)
+            if (Globals.Me.ClickedStatus != this)
             {
-                mDescWindow.Dispose();
-                mDescWindow = null;
+                // No clicked status or clicked status it not this status
+                if (mDescWindow != null)
+                {
+                    mDescWindow.Dispose();
+                    mDescWindow = null;
+                }
+                mDescWindow = new SpellDescWindow(
+                    mStatus.SpellId, mEntityBox.EntityWindow.X + Pnl.X + 16,
+                    mEntityBox.EntityWindow.Y + Container.Parent.Y + Container.Bottom + 2, true
+                );
             }
-
-            mDescWindow = new SpellDescWindow(
-                mStatus.SpellId, mEntityBox.EntityWindow.X + Pnl.X + 16,
-                mEntityBox.EntityWindow.Y + Container.Parent.Y + Container.Bottom + 2, true
-            );
         }
 
         public FloatRect RenderBounds()
