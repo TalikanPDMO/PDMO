@@ -158,6 +158,19 @@ namespace Intersect.GameObjects
 
         public double CritMultiplier { get; set; } = 1.5;
 
+        [Column("CritEffectSpell")]
+        public Guid CritEffectSpellId { get; set; } = Guid.Empty;
+
+        [NotMapped]
+        [JsonIgnore]
+        public SpellBase CritEffectSpell
+        {
+            get => SpellBase.Get(CritEffectSpellId);
+            set => CritEffectSpellId = value?.Id ?? Guid.Empty;
+        }
+
+        public bool CritEffectSpellReplace { get; set; } = false;
+
         public int DamageType { get; set; } = 1;
 
         public int HitRadius { get; set; }
