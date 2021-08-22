@@ -4491,6 +4491,10 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString critmultiplier = @"Crit Multiplier (Default 1.5x):";
 
+            public static LocalizedString criteffectspell = @"Crit Effect Spell:";
+
+            public static LocalizedString replacecriteffectspell = @"Replace initial spell on crit";
+
             public static LocalizedString damagegroup = @"Damage";
 
             public static LocalizedString damagetype = @"Damage Type:";
