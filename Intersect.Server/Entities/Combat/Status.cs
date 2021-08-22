@@ -29,6 +29,8 @@ namespace Intersect.Server.Entities.Combat
 
         public StatusTypes Type;
 
+        public string SourceSpellNameOnCrit;
+
         public static List<StatusTypes> TenacityExcluded = new List<StatusTypes>()
         {
             StatusTypes.None,
@@ -47,13 +49,14 @@ namespace Intersect.Server.Entities.Combat
             StatusTypes.Stun,
         };
 
-        public Status(Entity en, Entity attacker, SpellBase spell, StatusTypes type, int duration, string data)
+        public Status(Entity en, Entity attacker, SpellBase spell, StatusTypes type, int duration, string data, string sourceSpellNameOnCrit = "")
         {
             mEntity = en;
             Attacker = attacker;
             Spell = spell;
             Type = type;
             Data = data;
+            SourceSpellNameOnCrit = sourceSpellNameOnCrit;
 
             // Handle Player specific stuff, such as interrupting spellcasts 
             var tenacity = 0.0;

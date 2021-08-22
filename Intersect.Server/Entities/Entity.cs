@@ -1411,7 +1411,8 @@ namespace Intersect.Server.Entities
             SpellBase spellBase,
             bool onHitTrigger = false,
             bool trapTrigger = false,
-            bool alreadyCrit = false
+            bool alreadyCrit = false,
+            string sourceSpellNameOnCrit = ""
         )
         {
             if (target is Resource)
@@ -1572,7 +1573,7 @@ namespace Intersect.Server.Entities
             if (isCrit && spellBase.Combat.CritEffectSpellId != Guid.Empty && spellBase.Combat.CritEffectSpellReplace)
             {
                 // Directly cast the other spell ignoring the effect of the current spell
-                CastSpell(spellBase.Combat.CritEffectSpellId, -1, true);
+                CastSpell(spellBase.Combat.CritEffectSpellId, -1, true, spellBase.Name);
             }
             else
             {
@@ -1587,7 +1588,7 @@ namespace Intersect.Server.Entities
                         {
                             new Status(
                                 target, this, spellBase, spellBase.Combat.Effect, spellBase.Combat.Duration,
-                                spellBase.Combat.TransformSprite
+                                spellBase.Combat.TransformSprite, sourceSpellNameOnCrit
                             );
 
                             PacketSender.SendActionMsg(
@@ -1608,7 +1609,7 @@ namespace Intersect.Server.Entities
                 {
                     if (statBuffTime > -1)
                     {
-                        new Status(target, this, spellBase, spellBase.Combat.Effect, statBuffTime, "");
+                        new Status(target, this, spellBase, spellBase.Combat.Effect, statBuffTime, "", sourceSpellNameOnCrit);
                     }
                 }
 
@@ -1633,7 +1634,7 @@ namespace Intersect.Server.Entities
                 //Handle crit spell if needed
                 if (isCrit && spellBase.Combat.CritEffectSpellId != Guid.Empty)
                 {
-                    CastSpell(spellBase.Combat.CritEffectSpellId, -1, true);
+                    CastSpell(spellBase.Combat.CritEffectSpellId, -1, true, spellBase.Name);
                 }
             }
             
@@ -2106,7 +2107,7 @@ namespace Intersect.Server.Entities
             return true;
         }
 
-        public virtual void CastSpell(Guid spellId, int spellSlot = -1, bool alreadyCrit = false)
+        public virtual void CastSpell(Guid spellId, int spellSlot = -1, bool alreadyCrit = false, string sourceSpellNameOnCrit = null)
         {
             var spellBase = SpellBase.Get(spellId);
             if (spellBase == null)
@@ -2152,7 +2153,7 @@ namespace Intersect.Server.Entities
                                 ); //Target Type 1 will be global entity
                             }
 
-                            TryAttack(this, spellBase, false, false, alreadyCrit);
+                            TryAttack(this, spellBase, false, false, alreadyCrit, sourceSpellNameOnCrit);
 
                             break;
                         case SpellTargetTypes.Single:
@@ -2174,17 +2175,17 @@ namespace Intersect.Server.Entities
                             {
                                 HandleAoESpell(
                                     spellId, spellBase.Combat.HitRadius, CastTarget.MapId, CastTarget.X, CastTarget.Y,
-                                    null, alreadyCrit
+                                    null, alreadyCrit, sourceSpellNameOnCrit
                                 );
                             }
                             else
                             {
-                                TryAttack(CastTarget, spellBase, false, false, alreadyCrit);
+                                TryAttack(CastTarget, spellBase, false, false, alreadyCrit, sourceSpellNameOnCrit);
                             }
 
                             break;
                         case SpellTargetTypes.AoE:
-                            HandleAoESpell(spellId, spellBase.Combat.HitRadius, MapId, X, Y, null, alreadyCrit);
+                            HandleAoESpell(spellId, spellBase.Combat.HitRadius, MapId, X, Y, null, alreadyCrit, sourceSpellNameOnCrit);
 
                             break;
                         case SpellTargetTypes.Projectile:
@@ -2204,7 +2205,7 @@ namespace Intersect.Server.Entities
                             {
                                 new Status(
                                     this, this, spellBase, StatusTypes.OnHit, spellBase.Combat.OnHitDuration,
-                                    spellBase.Combat.TransformSprite
+                                    spellBase.Combat.TransformSprite, sourceSpellNameOnCrit
                                 );
 
                                 PacketSender.SendActionMsg(
@@ -2236,7 +2237,7 @@ namespace Intersect.Server.Entities
                 case SpellTypes.WarpTo:
                     if (CastTarget != null)
                     {
-                        HandleAoESpell(spellId, spellBase.Combat.CastRange, MapId, X, Y, CastTarget, alreadyCrit);
+                        HandleAoESpell(spellId, spellBase.Combat.CastRange, MapId, X, Y, CastTarget, alreadyCrit, sourceSpellNameOnCrit);
                     }
                     break;
                 case SpellTypes.Dash:
@@ -2281,7 +2282,8 @@ namespace Intersect.Server.Entities
             int startX,
             int startY,
             Entity spellTarget,
-            bool alreadyCrit = false
+            bool alreadyCrit = false,
+            string sourceSpellNameOnCrit = ""
         )
         {
             var spellBase = SpellBase.Get(spellId);
@@ -2313,7 +2315,7 @@ namespace Intersect.Server.Entities
                                             }
                                         }
 
-                                        TryAttack(entity, spellBase, false, false, alreadyCrit); //Handle damage
+                                        TryAttack(entity, spellBase, false, false, alreadyCrit, sourceSpellNameOnCrit); //Handle damage
                                     }
                                 }
                             }
@@ -2839,7 +2841,7 @@ namespace Intersect.Server.Entities
 
                 statusPackets[i] = new StatusPacket(
                     status.Spell.Id, status.Type, status.Data, (int) (status.Duration - Globals.Timing.Milliseconds),
-                    (int) (status.Duration - status.StartTime), vitalShields
+                    (int) (status.Duration - status.StartTime), vitalShields, status.SourceSpellNameOnCrit
                 );
             }
 

@@ -18,7 +18,7 @@ namespace Intersect.Client.Interface.Game
         ImagePanel mDescWindow;
         public Button CloseButton;
 
-        public SpellDescWindow(Guid spellId, int x, int y, bool centerHorizontally = false)
+        public SpellDescWindow(Guid spellId, int x, int y, bool centerHorizontally = false, string sourceSpellNameOnCrit = "")
         {
             var spell = SpellBase.Get(spellId);
             if (spell == null)
@@ -31,7 +31,14 @@ namespace Intersect.Client.Interface.Game
             var icon = new ImagePanel(mDescWindow, "SpellIcon");
 
             var spellName = new Label(mDescWindow, "SpellName");
-            spellName.Text = spell.Name;
+            if (string.IsNullOrEmpty(sourceSpellNameOnCrit))
+            {
+                spellName.Text = spell.Name;
+            }
+            else
+            {
+                spellName.Text = sourceSpellNameOnCrit + Strings.SpellDesc.critsuffix;
+            }
 
             var spellType = new Label(mDescWindow, "SpellType");
             spellType.Text = Strings.SpellDesc.spelltypes[(int) spell.SpellType];

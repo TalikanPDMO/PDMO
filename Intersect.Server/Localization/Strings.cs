@@ -287,7 +287,6 @@ namespace Intersect.Server.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString criticaleffect = @"Critical effect: ";
 
-
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocaleDictionary<int, LocalizedString> damagetypes =
                 new LocaleDictionary<int, LocalizedString>(
