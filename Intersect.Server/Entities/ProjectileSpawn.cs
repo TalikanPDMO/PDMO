@@ -77,7 +77,7 @@ namespace Intersect.Server.Entities
                 scalingStat = (Enums.Stats) Parent.Item.ScalingStat;
             }
 
-            if (targetEntity != null && targetEntity != Parent.Owner)
+            if (targetEntity != null && targetEntity != Parent.Owner && targetEntity != Parent.Target)
             {
 
                 // Have we collided with this entity before? If so, cancel out.

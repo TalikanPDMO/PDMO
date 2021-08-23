@@ -60,6 +60,7 @@ namespace Intersect.Server.Entities
             Owner = owner;
             Stat = owner.Stat;
             MapId = mapId;
+            Target = target;
             base.X = X;
             base.Y = Y;
             Z = z;

@@ -1362,13 +1362,20 @@ namespace Intersect.Server.Entities
                     return;
                 }
             }
-
+            bool isCrit = false;
             if (parentSpell == null)
             {
-                Attack(
+                isCrit = Attack(
                     target, parentItem.Damage, 0, (DamageType) parentItem.DamageType, (Stats) parentItem.ScalingStat,
-                    parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, null, null, null, true
+                    parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, null, null, null, true, parentItem.CritEffectSpellReplace
                 ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
+            }
+
+            if (isCrit && parentItem.CritEffectSpellId != Guid.Empty)
+            {
+                // Directly try to attack with the the crit spell
+                //TryAttack(target, parentItem.CritEffectSpell, false, false, true, parentItem.Name);
+                CastSpell(parentItem.CritEffectSpellId, -1, true, parentItem.Name, target);
             }
 
             //If projectile, check if a splash spell is applied
@@ -1382,6 +1389,7 @@ namespace Intersect.Server.Entities
                 var s = projectile.Spell;
                 if (s != null)
                 {
+                    //s.Name ou parentItem.Name ?
                     HandleAoESpell(projectile.SpellId, s.Combat.HitRadius, target.MapId, target.X, target.Y, null);
                 }
 
@@ -1573,7 +1581,7 @@ namespace Intersect.Server.Entities
             if (isCrit && spellBase.Combat.CritEffectSpellId != Guid.Empty && spellBase.Combat.CritEffectSpellReplace)
             {
                 // Directly cast the other spell ignoring the effect of the current spell
-                CastSpell(spellBase.Combat.CritEffectSpellId, -1, true, spellBase.Name);
+                CastSpell(spellBase.Combat.CritEffectSpellId, -1, true, spellBase.Name, target);
             }
             else
             {
@@ -1634,7 +1642,7 @@ namespace Intersect.Server.Entities
                 //Handle crit spell if needed
                 if (isCrit && spellBase.Combat.CritEffectSpellId != Guid.Empty)
                 {
-                    CastSpell(spellBase.Combat.CritEffectSpellId, -1, true, spellBase.Name);
+                    CastSpell(spellBase.Combat.CritEffectSpellId, -1, true, spellBase.Name, target);
                 }
             }
             
@@ -1728,11 +1736,26 @@ namespace Intersect.Server.Entities
                     }
                 }
             }
-
-            Attack(
-                target, baseDamage, 0, damageType, scalingStat, scaling, critChance, critMultiplier, null, deadAnimations,
-                aliveAnimations, true
-            ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
+            bool isCrit = false;
+            if (weapon == null)
+            {
+                isCrit = Attack(
+                    target, baseDamage, 0, damageType, scalingStat, scaling, critChance, critMultiplier, null, deadAnimations,
+                    aliveAnimations, true
+                ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
+            }
+            else
+            {
+                isCrit = Attack(
+                    target, baseDamage, 0, damageType, scalingStat, scaling, critChance, critMultiplier, null, deadAnimations,
+                    aliveAnimations, true, weapon.CritEffectSpellReplace
+                ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
+                if (isCrit && weapon.CritEffectSpellId != Guid.Empty)
+                {
+                    TryAttack(target, weapon.CritEffectSpell, false, false, true, weapon.Name);
+                }
+            }
+            
         }
 
         //Return true if the attack is a critical hit
@@ -2107,16 +2130,22 @@ namespace Intersect.Server.Entities
             return true;
         }
 
-        public virtual void CastSpell(Guid spellId, int spellSlot = -1, bool alreadyCrit = false, string sourceSpellNameOnCrit = null)
+        public virtual void CastSpell(Guid spellId, int spellSlot = -1, bool alreadyCrit = false, string sourceSpellNameOnCrit = null, Entity specificTarget=null)
         {
             var spellBase = SpellBase.Get(spellId);
             if (spellBase == null)
             {
                 return;
             }
-
-            if (!CanCastSpell(spellBase, CastTarget))
+            Entity baseTarget = specificTarget;
+            if (baseTarget == null)
             {
+                // Handle some cases with a specific target like projectiles on crit and others
+                baseTarget = CastTarget;
+            }
+            if (!alreadyCrit && !CanCastSpell(spellBase, baseTarget))
+            {
+                // Check CanCast only if not already checked before a crit
                 return;
             }
 
@@ -2157,13 +2186,13 @@ namespace Intersect.Server.Entities
 
                             break;
                         case SpellTargetTypes.Single:
-                            if (CastTarget == null)
+                            if (baseTarget == null)
                             {
                                 return;
                             }
 
                             //If target has stealthed we cannot hit the spell.
-                            foreach (var status in CastTarget.CachedStatuses)
+                            foreach (var status in baseTarget.CachedStatuses)
                             {
                                 if (status.Type == StatusTypes.Stealth)
                                 {
@@ -2174,13 +2203,13 @@ namespace Intersect.Server.Entities
                             if (spellBase.Combat.HitRadius > 0) //Single target spells with AoE hit radius'
                             {
                                 HandleAoESpell(
-                                    spellId, spellBase.Combat.HitRadius, CastTarget.MapId, CastTarget.X, CastTarget.Y,
+                                    spellId, spellBase.Combat.HitRadius, baseTarget.MapId, baseTarget.X, baseTarget.Y,
                                     null, alreadyCrit, sourceSpellNameOnCrit
                                 );
                             }
                             else
                             {
-                                TryAttack(CastTarget, spellBase, false, false, alreadyCrit, sourceSpellNameOnCrit);
+                                TryAttack(baseTarget, spellBase, false, false, alreadyCrit, sourceSpellNameOnCrit);
                             }
 
                             break;
@@ -2192,11 +2221,22 @@ namespace Intersect.Server.Entities
                             var projectileBase = spellBase.Combat.Projectile;
                             if (projectileBase != null)
                             {
-                                MapInstance.Get(MapId)
+                                if (specificTarget == null)
+                                {
+                                    MapInstance.Get(MapId)
                                     .SpawnMapProjectile(
-                                        this, projectileBase, spellBase, null, MapId, (byte) X, (byte) Y, (byte) Z,
-                                        (byte) Dir, CastTarget
+                                        this, projectileBase, spellBase, null, MapId, (byte)X, (byte)Y, (byte)Z,
+                                        (byte)Dir, null
                                     );
+                                }
+                                else
+                                {
+                                    MapInstance.Get(MapId)
+                                    .SpawnMapProjectile(
+                                        this, projectileBase, spellBase, null, specificTarget.MapId, (byte)specificTarget.X, (byte)specificTarget.Y, (byte)specificTarget.Z,
+                                        (byte)Dir, specificTarget
+                                    );
+                                }
                             }
 
                             break;
@@ -2235,9 +2275,9 @@ namespace Intersect.Server.Entities
 
                     break;
                 case SpellTypes.WarpTo:
-                    if (CastTarget != null)
+                    if (baseTarget != null)
                     {
-                        HandleAoESpell(spellId, spellBase.Combat.CastRange, MapId, X, Y, CastTarget, alreadyCrit, sourceSpellNameOnCrit);
+                        HandleAoESpell(spellId, spellBase.Combat.CastRange, MapId, X, Y, baseTarget, alreadyCrit, sourceSpellNameOnCrit);
                     }
                     break;
                 case SpellTypes.Dash:

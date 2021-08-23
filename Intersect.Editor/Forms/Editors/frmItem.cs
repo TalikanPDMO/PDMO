@@ -161,6 +161,10 @@ namespace Intersect.Editor.Forms.Editors
             nudMR.Minimum = -Options.MaxStatValue;
             nudSpd.Minimum = -Options.MaxStatValue;
 
+            cmbCritEffectSpell.Items.Clear();
+            cmbCritEffectSpell.Items.Add(Strings.General.none);
+            cmbCritEffectSpell.Items.AddRange(SpellBase.Names);
+
             InitLocalization();
             UpdateEditor();
         }
@@ -232,6 +236,8 @@ namespace Intersect.Editor.Forms.Editors
             lblDamage.Text = Strings.ItemEditor.basedamage;
             lblCritChance.Text = Strings.ItemEditor.critchance;
             lblCritMultiplier.Text = Strings.ItemEditor.critmultiplier;
+            lblCritEffectSpell.Text = Strings.ItemEditor.criteffectspell;
+            chkReplaceCritEffectSpell.Text = Strings.ItemEditor.replacecriteffectspell;
             lblDamageType.Text = Strings.ItemEditor.damagetype;
             cmbDamageType.Items.Clear();
             for (var i = 0; i < Strings.Combat.damagetypes.Count; i++)
@@ -347,6 +353,8 @@ namespace Intersect.Editor.Forms.Editors
                 nudDamage.Value = mEditorItem.Damage;
                 nudCritChance.Value = mEditorItem.CritChance;
                 nudCritMultiplier.Value = (decimal) mEditorItem.CritMultiplier;
+                cmbCritEffectSpell.SelectedIndex = SpellBase.ListIndex(mEditorItem.CritEffectSpellId) + 1;
+                chkReplaceCritEffectSpell.Checked = mEditorItem.CritEffectSpellReplace;
                 cmbAttackSpeedModifier.SelectedIndex = mEditorItem.AttackSpeedModifier;
                 nudAttackSpeedValue.Value = mEditorItem.AttackSpeedValue;
                 nudScaling.Value = mEditorItem.Scaling;
@@ -742,6 +750,22 @@ namespace Intersect.Editor.Forms.Editors
         private void nudCritChance_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.CritChance = (int) nudCritChance.Value;
+        }
+        private void cmbCritEffectSpell_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbCritEffectSpell.SelectedIndex > 0)
+            {
+                mEditorItem.CritEffectSpell = SpellBase.Get(SpellBase.IdFromList(cmbCritEffectSpell.SelectedIndex - 1));
+            }
+            else
+            {
+                mEditorItem.CritEffectSpell = null;
+            }
+        }
+
+        private void chkReplaceCritEffectSpell_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.CritEffectSpellReplace = chkReplaceCritEffectSpell.Checked;
         }
 
         private void nudEffectPercent_ValueChanged(object sender, EventArgs e)
