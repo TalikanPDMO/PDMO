@@ -1310,7 +1310,8 @@ namespace Intersect.Server.Entities
             ProjectileBase projectile,
             SpellBase parentSpell,
             ItemBase parentItem,
-            byte projectileDir
+            byte projectileDir,
+            bool alreadyCrit = false
         )
         {
             if (target is Resource && parentSpell != null)
@@ -1334,7 +1335,7 @@ namespace Intersect.Server.Entities
 
             if (parentSpell != null)
             {
-                TryAttack(target, parentSpell);
+                TryAttack(target, parentSpell, false, false, alreadyCrit);
             }
 
             var targetPlayer = target as Player;
@@ -1362,13 +1363,20 @@ namespace Intersect.Server.Entities
                     return;
                 }
             }
-
+            bool isCrit = false;
             if (parentSpell == null)
             {
-                Attack(
+                isCrit = Attack(
                     target, parentItem.Damage, 0, (DamageType) parentItem.DamageType, (Stats) parentItem.ScalingStat,
-                    parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, null, null, null, true
+                    parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, parentItem.Name, null, null, true, parentItem.CritEffectSpellReplace, alreadyCrit
                 ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
+            }
+
+            if (isCrit && parentItem.CritEffectSpellId != Guid.Empty)
+            {
+                // Directly try to attack with the the crit spell
+                //TryAttack(target, parentItem.CritEffectSpell, false, false, true, parentItem.Name);
+                CastSpell(parentItem.CritEffectSpellId, -1, true, parentItem.Name, target);
             }
 
             //If projectile, check if a splash spell is applied
@@ -1382,7 +1390,9 @@ namespace Intersect.Server.Entities
                 var s = projectile.Spell;
                 if (s != null)
                 {
-                    HandleAoESpell(projectile.SpellId, s.Combat.HitRadius, target.MapId, target.X, target.Y, null);
+                    //s.Name ou parentItem.Name ?
+                    //HandleAoESpell(projectile.SpellId, s.Combat.HitRadius, target.MapId, target.X, target.Y, null, alreadyCrit);
+                    CastSpell(projectile.SpellId, -1, alreadyCrit, projectile.Spell.Name, target);
                 }
 
                 //Check that the npc has not been destroyed by the splash spell
@@ -1410,7 +1420,9 @@ namespace Intersect.Server.Entities
             Entity target,
             SpellBase spellBase,
             bool onHitTrigger = false,
-            bool trapTrigger = false
+            bool trapTrigger = false,
+            bool alreadyCrit = false,
+            string sourceSpellNameOnCrit = ""
         )
         {
             if (target is Resource)
@@ -1557,68 +1569,85 @@ namespace Intersect.Server.Entities
             var damageHealth = spellBase.Combat.VitalDiff[(int)Vitals.Health];
             var damageMana = spellBase.Combat.VitalDiff[(int)Vitals.Mana];
 
+            bool isCrit = false;
             if ((spellBase.Combat.Effect != StatusTypes.OnHit || onHitTrigger) &&
                 spellBase.Combat.Effect != StatusTypes.Shield)
             {
-                Attack(
+                isCrit = Attack(
                     target, damageHealth, damageMana, (DamageType) spellBase.Combat.DamageType,
                     (Stats) spellBase.Combat.ScalingStat, spellBase.Combat.Scaling, spellBase.Combat.CritChance,
-                    spellBase.Combat.CritMultiplier, spellBase.Name, deadAnimations, aliveAnimations, false
+                    spellBase.Combat.CritMultiplier, spellBase.Name, deadAnimations, aliveAnimations, false, spellBase.Combat.CritEffectSpellReplace, alreadyCrit
                 ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
             }
 
-            if (spellBase.Combat.Effect > 0) //Handle status effects
+            if (isCrit && spellBase.Combat.CritEffectSpellId != Guid.Empty && spellBase.Combat.CritEffectSpellReplace)
             {
-                //Check for onhit effect to avoid the onhit effect recycling.
-                if (!(onHitTrigger && spellBase.Combat.Effect == StatusTypes.OnHit))
-                {
-                    // Check for %chance of applying an extraeffect
-                    if (Randomization.Next(1, 101) <= spellBase.Combat.EffectChance)
-                    {
-                        new Status(
-                            target, this, spellBase, spellBase.Combat.Effect, spellBase.Combat.Duration,
-                            spellBase.Combat.TransformSprite
-                        );
-
-                        PacketSender.SendActionMsg(
-                            target, Strings.Combat.status[(int)spellBase.Combat.Effect], CustomColors.Combat.Status
-                        );
-
-                        //If an onhit or shield status bail out as we don't want to do any damage.
-                        if (spellBase.Combat.Effect == StatusTypes.OnHit || spellBase.Combat.Effect == StatusTypes.Shield)
-                        {
-                            Animate(target, aliveAnimations);
-
-                            return;
-                        }
-                    }
-                }
+                // Directly cast the other spell ignoring the effect of the current spell
+                CastSpell(spellBase.Combat.CritEffectSpellId, -1, true, spellBase.Name, target);
             }
             else
             {
-                if (statBuffTime > -1)
+                // If not a crit or if we need to handle a non-replacing crit
+                if (spellBase.Combat.Effect > 0) //Handle status effects
                 {
-                    new Status(target, this, spellBase, spellBase.Combat.Effect, statBuffTime, "");
-                }
-            }
-
-            //Handle DoT/HoT spells]
-            if (spellBase.Combat.HoTDoT)
-            {
-                var doTFound = false;
-                foreach (var dot in target.CachedDots)
-                {
-                    if (dot.SpellBase.Id == spellBase.Id && dot.Target == this)
+                    //Check for onhit effect to avoid the onhit effect recycling.
+                    if (!(onHitTrigger && spellBase.Combat.Effect == StatusTypes.OnHit))
                     {
-                        doTFound = true;
+                        // Check for %chance of applying an extraeffect
+                        if (Randomization.Next(1, 101) <= spellBase.Combat.EffectChance)
+                        {
+                            new Status(
+                                target, this, spellBase, spellBase.Combat.Effect, spellBase.Combat.Duration,
+                                spellBase.Combat.TransformSprite, sourceSpellNameOnCrit
+                            );
+
+                            PacketSender.SendActionMsg(
+                                target, Strings.Combat.status[(int)spellBase.Combat.Effect], CustomColors.Combat.Status
+                            );
+
+                            //If an onhit or shield status bail out as we don't want to do any damage.
+                            if (spellBase.Combat.Effect == StatusTypes.OnHit || spellBase.Combat.Effect == StatusTypes.Shield)
+                            {
+                                Animate(target, aliveAnimations);
+
+                                return;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (statBuffTime > -1)
+                    {
+                        new Status(target, this, spellBase, spellBase.Combat.Effect, statBuffTime, "", sourceSpellNameOnCrit);
                     }
                 }
 
-                if (doTFound == false) //no duplicate DoT/HoT spells.
+                //Handle DoT/HoT spells
+                if (spellBase.Combat.HoTDoT)
                 {
-                    new DoT(this, spellBase.Id, target);
+                    var doTFound = false;
+                    foreach (var dot in target.CachedDots)
+                    {
+                        if (dot.SpellBase.Id == spellBase.Id && dot.Target == this)
+                        {
+                            doTFound = true;
+                        }
+                    }
+
+                    if (doTFound == false) //no duplicate DoT/HoT spells.
+                    {
+                        new DoT(this, spellBase.Id, target);
+                    }
+                }
+
+                //Handle crit spell if needed
+                if (isCrit && spellBase.Combat.CritEffectSpellId != Guid.Empty)
+                {
+                    CastSpell(spellBase.Combat.CritEffectSpellId, -1, true, spellBase.Name, target);
                 }
             }
+            
         }
 
         private void Animate(Entity target, List<KeyValuePair<Guid, sbyte>> animations)
@@ -1646,7 +1675,8 @@ namespace Intersect.Server.Entities
             double critMultiplier,
             List<KeyValuePair<Guid, sbyte>> deadAnimations = null,
             List<KeyValuePair<Guid, sbyte>> aliveAnimations = null,
-            ItemBase weapon = null
+            ItemBase weapon = null,
+            bool alreadyCrit = false
         )
         {
             if (AttackTimer > Globals.Timing.Milliseconds)
@@ -1709,14 +1739,31 @@ namespace Intersect.Server.Entities
                     }
                 }
             }
-
-            Attack(
-                target, baseDamage, 0, damageType, scalingStat, scaling, critChance, critMultiplier, null, deadAnimations,
-                aliveAnimations, true
-            ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
+            bool isCrit = false;
+            if (weapon == null)
+            {
+                isCrit = Attack(
+                    target, baseDamage, 0, damageType, scalingStat, scaling, critChance, critMultiplier, null, deadAnimations,
+                    aliveAnimations, true
+                ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
+            }
+            else
+            {
+                isCrit = Attack(
+                    target, baseDamage, 0, damageType, scalingStat, scaling, critChance, critMultiplier, weapon.Name, deadAnimations,
+                    aliveAnimations, true, weapon.CritEffectSpellReplace, alreadyCrit
+                ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
+                if (isCrit && weapon.CritEffectSpellId != Guid.Empty)
+                {
+                    //TryAttack(target, weapon.CritEffectSpell, false, false, true, weapon.Name);
+                    CastSpell(weapon.CritEffectSpellId, -1, true, weapon.Name, target);
+                }
+            }
+            
         }
 
-        public void Attack(
+        //Return true if the attack is a critical hit
+        public bool Attack(
             Entity enemy,
             int baseDamage,
             int secondaryDamage,
@@ -1725,30 +1772,87 @@ namespace Intersect.Server.Entities
             int scaling,
             int critChance,
             double critMultiplier,
-            string spellName,   //A été rajouté par Moussmous pour décrire le nom de l'attaque utilisée pour l'utiliser dans les logs de chats de combat
+            string name,   //A été rajouté par Moussmous pour décrire le nom de l'attaque utilisée pour l'utiliser dans les logs de chats de combat
             List<KeyValuePair<Guid, sbyte>> deadAnimations = null,
             List<KeyValuePair<Guid, sbyte>> aliveAnimations = null,
-            bool isAutoAttack = false            
+            bool isAutoAttack = false,
+            bool critReplace = false,
+            bool alreadyCrit = false
         )
         {
             var originalBaseDamage = baseDamage;
             var damagingAttack = baseDamage > 0;
             if (enemy == null)
             {
-                return;
+                return false;
             }
 
             var invulnerable = enemy.CachedStatuses.Any(status => status.Type == StatusTypes.Invulnerable);
-
+            string chatLogMessage = "";
             bool isCrit = false;
             //Is this a critical hit?
-            if (Randomization.Next(1, 101) > critChance)
+            if (!alreadyCrit)
             {
-                critMultiplier = 1;
+                if (Randomization.Next(1, 101) > critChance)
+                {
+                    critMultiplier = 1;
+                }
+                else
+                {
+                    isCrit = true;
+                }
             }
-            else
+            if (this is Player || enemy is Player)
             {
-                isCrit = true;
+                if (name != null)
+                {
+                    if (!alreadyCrit)
+                    {
+                        chatLogMessage += this.Name + Strings.Combat.useAttack + name;
+                        chatLogMessage += ".";
+                    }
+                }
+                else
+                {
+                    if (!(this is Player))
+                    {
+                        chatLogMessage += this.Name + Strings.Combat.npcunarmed;
+                    }
+                    else
+                    {
+                        chatLogMessage += this.Name + Strings.Combat.playerunarmed;
+                    }
+                    chatLogMessage += ".";
+                }
+                if (isCrit)
+                {
+                    chatLogMessage += " [" + Strings.Combat.critical + "]";
+                }
+
+            }
+            if (isCrit)
+            {
+                if(!(enemy is Resource))
+                {
+                    // Display the critical message on the concerned entity
+                    PacketSender.SendActionMsg(enemy, Strings.Combat.critical, CustomColors.Combat.Critical);
+                }
+                if (critReplace)
+                {
+                    // Display the critical message log and exit the function to execute after the crit spell
+                    if (Options.Combat.EnableCombatChatMessages && !string.IsNullOrEmpty(chatLogMessage) && !(enemy is Resource))
+                    {
+                        if (this is Player myPlayer)
+                        {
+                            PacketSender.SendChatMsg(myPlayer, chatLogMessage, ChatMessageType.Combat);
+                        }
+                        else if (enemy is Player myPlayerEnemy)
+                        {
+                            PacketSender.SendChatMsg(myPlayerEnemy, chatLogMessage, ChatMessageType.Combat);
+                        }
+                    }
+                    return true;
+                }
             }
             bool isFixedDamage = false;
             //If spell from event or for ressources, fixed damage
@@ -1766,7 +1870,6 @@ namespace Intersect.Server.Entities
             //Calculate Damages
             if (baseDamage != 0)
             {
-
                 if (isFixedDamage)
                 {
                     baseDamage = originalBaseDamage;
@@ -1782,43 +1885,37 @@ namespace Intersect.Server.Entities
                 {
                     baseDamage = 0;
                 }
-
                 if (baseDamage > 0 && enemy.HasVital(Vitals.Health) && !invulnerable)
                 {
-                    string criticalHit = "";  //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
-                    if (isCrit)
-                    {
-                        PacketSender.SendActionMsg(enemy, Strings.Combat.critical, CustomColors.Combat.Critical);
-                        //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
-                        //Ajoutera dans l'affichage qui arrivge juste après "COUP CRITIQUE!" au tout début
-                        criticalHit = Strings.Combat.critical;
-                    }
-
-                    enemy.SubVital(Vitals.Health, (int) baseDamage);
+                     enemy.SubVital(Vitals.Health, (int) baseDamage);
                     //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
                     //Ici ça affiche les attaques de base (reçu et donné)
                     if (Options.Combat.EnableCombatChatMessages && !(enemy is Resource))
                     {
-                        if (spellName == null) // Cas où les dégats sont provoqués par une attaque directe mais pas une abilité quoi
+                        if (name == null) // Cas où les dégats sont provoqués par une attaque directe mais pas une abilité quoi
                         {
                             if (this is Player myPlayer)
                             {
-                                PacketSender.SendChatMsg(myPlayer, criticalHit + " " + enemy.Name + Strings.Combat.lost + (int)baseDamage + " " + Strings.Combat.vitals[0], ChatMessageType.Combat);
+                                PacketSender.SendChatMsg(myPlayer, chatLogMessage + " " + enemy.Name + Strings.Combat.lost + (int)baseDamage + " " + Strings.Combat.vitals[0], ChatMessageType.Combat);
                             }
                             else if (enemy is Player myPlayerEnemy)
                             {
-                                PacketSender.SendChatMsg(myPlayerEnemy, criticalHit + " " + myPlayerEnemy.Name + Strings.Combat.lost + (int)baseDamage + " " + Strings.Combat.vitals[0], ChatMessageType.Combat);
+                                PacketSender.SendChatMsg(myPlayerEnemy, chatLogMessage + " " + myPlayerEnemy.Name + Strings.Combat.lost + (int)baseDamage + " " + Strings.Combat.vitals[0], ChatMessageType.Combat);
                             }
                         }
                         else //Cas où les dégats sont provoqués par une abilité
                         {
+                            if (alreadyCrit)
+                            {
+                                chatLogMessage += Strings.Combat.criticaleffect;
+                            }
                             if (this is Player myPlayer)
                             {
-                                PacketSender.SendChatMsg(myPlayer, criticalHit + " " + this.Name + Strings.Combat.useAttack + spellName + Strings.Combat.and + enemy.Name + Strings.Combat.lost + (int)baseDamage + " " + Strings.Combat.vitals[0], ChatMessageType.Combat);
+                                PacketSender.SendChatMsg(myPlayer, chatLogMessage + " " + enemy.Name + Strings.Combat.lost + (int)baseDamage + " " + Strings.Combat.vitals[0], ChatMessageType.Combat);
                             }
                             else if (enemy is Player myPlayerEnemy)
                             {
-                                PacketSender.SendChatMsg(myPlayerEnemy, criticalHit + " " + this.Name + Strings.Combat.useAttack + spellName + Strings.Combat.and + myPlayerEnemy.Name + Strings.Combat.lost + (int)baseDamage + " " + Strings.Combat.vitals[0], ChatMessageType.Combat);
+                                PacketSender.SendChatMsg(myPlayerEnemy, chatLogMessage + " " + myPlayerEnemy.Name + Strings.Combat.lost + (int)baseDamage + " " + Strings.Combat.vitals[0], ChatMessageType.Combat);
                             }
                         }
                     }
@@ -1878,6 +1975,20 @@ namespace Intersect.Server.Entities
                     PacketSender.SendActionMsg(
                         enemy, Strings.Combat.addsymbol + (int) Math.Abs(baseDamage), CustomColors.Combat.Heal
                     );
+                }
+            }
+            else
+            {
+                if (Options.Combat.EnableCombatChatMessages && !string.IsNullOrEmpty(chatLogMessage) && !(enemy is Resource))
+                {
+                    if (this is Player myPlayer)
+                    {
+                        PacketSender.SendChatMsg(myPlayer, chatLogMessage, ChatMessageType.Combat);
+                    }
+                    else if (enemy is Player myPlayerEnemy)
+                    {
+                        PacketSender.SendChatMsg(myPlayerEnemy, chatLogMessage, ChatMessageType.Combat);
+                    }
                 }
             }
 
@@ -1988,6 +2099,7 @@ namespace Intersect.Server.Entities
             {
                 ((Npc) this).MoveTimer = Globals.Timing.Milliseconds + (long) GetMovementTime();
             }
+            return isCrit;
         }
 
         void CheckForOnhitAttack(Entity enemy, bool isAutoAttack)
@@ -2036,16 +2148,22 @@ namespace Intersect.Server.Entities
             return true;
         }
 
-        public virtual void CastSpell(Guid spellId, int spellSlot = -1)
+        public virtual void CastSpell(Guid spellId, int spellSlot = -1, bool alreadyCrit = false, string sourceSpellNameOnCrit = null, Entity specificTarget=null)
         {
             var spellBase = SpellBase.Get(spellId);
             if (spellBase == null)
             {
                 return;
             }
-
-            if (!CanCastSpell(spellBase, CastTarget))
+            Entity baseTarget = specificTarget;
+            if (baseTarget == null)
             {
+                // Handle some cases with a specific target like projectiles on crit and others
+                baseTarget = CastTarget;
+            }
+            if (!alreadyCrit && !CanCastSpell(spellBase, baseTarget))
+            {
+                // Check CanCast only if not already checked before a crit
                 return;
             }
 
@@ -2082,17 +2200,17 @@ namespace Intersect.Server.Entities
                                 ); //Target Type 1 will be global entity
                             }
 
-                            TryAttack(this, spellBase);
+                            TryAttack(this, spellBase, false, false, alreadyCrit, sourceSpellNameOnCrit);
 
                             break;
                         case SpellTargetTypes.Single:
-                            if (CastTarget == null)
+                            if (baseTarget == null)
                             {
                                 return;
                             }
 
                             //If target has stealthed we cannot hit the spell.
-                            foreach (var status in CastTarget.CachedStatuses)
+                            foreach (var status in baseTarget.CachedStatuses)
                             {
                                 if (status.Type == StatusTypes.Stealth)
                                 {
@@ -2103,29 +2221,40 @@ namespace Intersect.Server.Entities
                             if (spellBase.Combat.HitRadius > 0) //Single target spells with AoE hit radius'
                             {
                                 HandleAoESpell(
-                                    spellId, spellBase.Combat.HitRadius, CastTarget.MapId, CastTarget.X, CastTarget.Y,
-                                    null
+                                    spellId, spellBase.Combat.HitRadius, baseTarget.MapId, baseTarget.X, baseTarget.Y,
+                                    null, alreadyCrit, sourceSpellNameOnCrit
                                 );
                             }
                             else
                             {
-                                TryAttack(CastTarget, spellBase);
+                                TryAttack(baseTarget, spellBase, false, false, alreadyCrit, sourceSpellNameOnCrit);
                             }
 
                             break;
                         case SpellTargetTypes.AoE:
-                            HandleAoESpell(spellId, spellBase.Combat.HitRadius, MapId, X, Y, null);
+                            HandleAoESpell(spellId, spellBase.Combat.HitRadius, MapId, X, Y, null, alreadyCrit, sourceSpellNameOnCrit);
 
                             break;
                         case SpellTargetTypes.Projectile:
                             var projectileBase = spellBase.Combat.Projectile;
                             if (projectileBase != null)
                             {
-                                MapInstance.Get(MapId)
+                                if (specificTarget == null)
+                                {
+                                    MapInstance.Get(MapId)
                                     .SpawnMapProjectile(
-                                        this, projectileBase, spellBase, null, MapId, (byte) X, (byte) Y, (byte) Z,
-                                        (byte) Dir, CastTarget
+                                        this, projectileBase, spellBase, null, MapId, (byte)X, (byte)Y, (byte)Z,
+                                        (byte)Dir, null, alreadyCrit
                                     );
+                                }
+                                else
+                                {
+                                    MapInstance.Get(MapId)
+                                    .SpawnMapProjectile(
+                                        this, projectileBase, spellBase, null, specificTarget.MapId, (byte)specificTarget.X, (byte)specificTarget.Y, (byte)specificTarget.Z,
+                                        (byte)Dir, specificTarget, alreadyCrit
+                                    );
+                                }
                             }
 
                             break;
@@ -2134,7 +2263,7 @@ namespace Intersect.Server.Entities
                             {
                                 new Status(
                                     this, this, spellBase, StatusTypes.OnHit, spellBase.Combat.OnHitDuration,
-                                    spellBase.Combat.TransformSprite
+                                    spellBase.Combat.TransformSprite, sourceSpellNameOnCrit
                                 );
 
                                 PacketSender.SendActionMsg(
@@ -2164,9 +2293,9 @@ namespace Intersect.Server.Entities
 
                     break;
                 case SpellTypes.WarpTo:
-                    if (CastTarget != null)
+                    if (baseTarget != null)
                     {
-                        HandleAoESpell(spellId, spellBase.Combat.CastRange, MapId, X, Y, CastTarget);
+                        HandleAoESpell(spellId, spellBase.Combat.CastRange, MapId, X, Y, baseTarget, alreadyCrit, sourceSpellNameOnCrit);
                     }
                     break;
                 case SpellTypes.Dash:
@@ -2210,7 +2339,9 @@ namespace Intersect.Server.Entities
             Guid startMapId,
             int startX,
             int startY,
-            Entity spellTarget
+            Entity spellTarget,
+            bool alreadyCrit = false,
+            string sourceSpellNameOnCrit = ""
         )
         {
             var spellBase = SpellBase.Get(spellId);
@@ -2242,7 +2373,7 @@ namespace Intersect.Server.Entities
                                             }
                                         }
 
-                                        TryAttack(entity, spellBase); //Handle damage
+                                        TryAttack(entity, spellBase, false, false, alreadyCrit, sourceSpellNameOnCrit); //Handle damage
                                     }
                                 }
                             }
@@ -2768,7 +2899,7 @@ namespace Intersect.Server.Entities
 
                 statusPackets[i] = new StatusPacket(
                     status.Spell.Id, status.Type, status.Data, (int) (status.Duration - Globals.Timing.Milliseconds),
-                    (int) (status.Duration - status.StartTime), vitalShields
+                    (int) (status.Duration - status.StartTime), vitalShields, status.SourceSpellNameOnCrit
                 );
             }
 

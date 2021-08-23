@@ -379,7 +379,7 @@ namespace Intersect.Client.Entities
                 foreach (var status in packet.StatusEffects)
                 {
                     var instance = new Status(
-                        status.SpellId, status.Type, status.TransformSprite, status.TimeRemaining, status.TotalDuration
+                        status.SpellId, status.Type, status.TransformSprite, status.TimeRemaining, status.TotalDuration, status.SourceSpellNameOnCrit
                     );
 
                     Status?.Add(instance);

@@ -1185,7 +1185,9 @@ namespace Intersect.Server.Entities
             ProjectileBase projectile,
             SpellBase parentSpell,
             ItemBase parentItem,
-            byte projectileDir
+            byte projectileDir,
+            bool alreadyCrit = false
+
         )
         {
             if (!CanAttack(target, parentSpell))
@@ -1243,7 +1245,7 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            base.TryAttack(target, projectile, parentSpell, parentItem, projectileDir);
+            base.TryAttack(target, projectile, parentSpell, parentItem, projectileDir, alreadyCrit);
         }
 
         public void TryAttack(Entity target)
@@ -4495,7 +4497,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public override void CastSpell(Guid spellId, int spellSlot = -1)
+        public override void CastSpell(Guid spellId, int spellSlot = -1, bool alreadyCrit=false, string sourceSpellNameOnCrit = null, Entity specificTarget = null)
         {
             var spellBase = SpellBase.Get(spellId);
             if (spellBase == null)
@@ -4513,12 +4515,12 @@ namespace Intersect.Server.Entities
                             StartCommonEvent(evt);
                         }
 
-                        base.CastSpell(spellId, spellSlot); //To get cooldown :P
+                        base.CastSpell(spellId, spellSlot, alreadyCrit, sourceSpellNameOnCrit, specificTarget); //To get cooldown :P
 
                         break;
                     }
                 default:
-                    base.CastSpell(spellId, spellSlot);
+                    base.CastSpell(spellId, spellSlot, alreadyCrit, sourceSpellNameOnCrit, specificTarget);
 
                     break;
             }

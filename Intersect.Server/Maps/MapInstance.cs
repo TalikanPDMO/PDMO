@@ -802,10 +802,11 @@ namespace Intersect.Server.Maps
             byte y,
             byte z,
             byte direction,
-            Entity target
+            Entity target,
+            bool alreadyCrit = false
         )
         {
-            var proj = new Projectile(owner, parentSpell, parentItem, projectile, Id, x, y, z, direction, target);
+            var proj = new Projectile(owner, parentSpell, parentItem, projectile, Id, x, y, z, direction, target, alreadyCrit);
             MapProjectiles.TryAdd(proj.Id, proj);
             MapProjectilesCached = MapProjectiles.Values.ToArray();
             PacketSender.SendEntityDataToProximity(proj);

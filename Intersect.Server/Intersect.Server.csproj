@@ -616,6 +616,10 @@
     <Compile Include="Migrations\Game\20210731192605_AddingMaxRandomMoveToNpcs.designer.cs">
       <DependentUpon>20210731192605_AddingMaxRandomMoveToNpcs.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20210821143823_AddingCritEffectSpellToItemsAndSpells.cs" />
+    <Compile Include="Migrations\Game\20210821143823_AddingCritEffectSpellToItemsAndSpells.designer.cs">
+      <DependentUpon>20210821143823_AddingCritEffectSpellToItemsAndSpells.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

@@ -23,7 +23,9 @@ namespace Intersect.Client.Entities
 
         public StatusTypes Type;
 
-        public Status(Guid spellId, StatusTypes type, string data, long timeRemaining, long totalDuration)
+        public string SourceSpellNameOnCrit;
+
+        public Status(Guid spellId, StatusTypes type, string data, long timeRemaining, long totalDuration, string sourceSpellNameOnCrit)
         {
             SpellId = spellId;
             Type = type;
@@ -31,6 +33,7 @@ namespace Intersect.Client.Entities
             TimeRemaining = timeRemaining;
             TotalDuration = totalDuration;
             TimeRecevied = Globals.System.GetTimeMs();
+            SourceSpellNameOnCrit = sourceSpellNameOnCrit;
         }
 
         public bool IsActive()

@@ -70,6 +70,8 @@ namespace Intersect.Editor.Forms.Editors
             this.txtCannotCast = new DarkUI.Controls.DarkTextBox();
             this.btnDynamicRequirements = new DarkUI.Controls.DarkButton();
             this.grpTargetInfo = new DarkUI.Controls.DarkGroupBox();
+            this.chkSquareRadius = new DarkUI.Controls.DarkCheckBox();
+            this.chkSquareRange = new DarkUI.Controls.DarkCheckBox();
             this.nudDuration = new DarkUI.Controls.DarkNumericUpDown();
             this.lblDuration = new System.Windows.Forms.Label();
             this.nudHitRadius = new DarkUI.Controls.DarkNumericUpDown();
@@ -175,8 +177,9 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
-            this.chkSquareRange = new DarkUI.Controls.DarkCheckBox();
-            this.chkSquareRadius = new DarkUI.Controls.DarkCheckBox();
+            this.cmbCritEffectSpell = new DarkUI.Controls.DarkComboBox();
+            this.lblCritEffectSpell = new System.Windows.Forms.Label();
+            this.chkReplaceCritEffectSpell = new DarkUI.Controls.DarkCheckBox();
             this.pnlContainer.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSpell)).BeginInit();
@@ -238,7 +241,7 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Controls.Add(this.grpWarp);
             this.pnlContainer.Location = new System.Drawing.Point(221, 40);
             this.pnlContainer.Name = "pnlContainer";
-            this.pnlContainer.Size = new System.Drawing.Size(460, 473);
+            this.pnlContainer.Size = new System.Drawing.Size(460, 527);
             this.pnlContainer.TabIndex = 41;
             this.pnlContainer.Visible = false;
             // 
@@ -782,6 +785,30 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTargetInfo.Text = "Targetting Info";
             this.grpTargetInfo.Visible = false;
             // 
+            // chkSquareRadius
+            // 
+            this.chkSquareRadius.AutoSize = true;
+            this.chkSquareRadius.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkSquareRadius.Location = new System.Drawing.Point(116, 101);
+            this.chkSquareRadius.Name = "chkSquareRadius";
+            this.chkSquareRadius.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.chkSquareRadius.Size = new System.Drawing.Size(102, 17);
+            this.chkSquareRadius.TabIndex = 61;
+            this.chkSquareRadius.Text = "Square Radius?";
+            this.chkSquareRadius.CheckedChanged += new System.EventHandler(this.chkSquareRadius_CheckedChanged);
+            // 
+            // chkSquareRange
+            // 
+            this.chkSquareRange.AutoSize = true;
+            this.chkSquareRange.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkSquareRange.Location = new System.Drawing.Point(116, 58);
+            this.chkSquareRange.Name = "chkSquareRange";
+            this.chkSquareRange.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.chkSquareRange.Size = new System.Drawing.Size(101, 17);
+            this.chkSquareRange.TabIndex = 60;
+            this.chkSquareRange.Text = "Square Range?";
+            this.chkSquareRange.CheckedChanged += new System.EventHandler(this.chkSquareRange_CheckedChanged);
+            // 
             // nudDuration
             // 
             this.nudDuration.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
@@ -979,7 +1006,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCombat.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpCombat.Location = new System.Drawing.Point(3, 513);
             this.grpCombat.Name = "grpCombat";
-            this.grpCombat.Size = new System.Drawing.Size(440, 432);
+            this.grpCombat.Size = new System.Drawing.Size(440, 486);
             this.grpCombat.TabIndex = 39;
             this.grpCombat.TabStop = false;
             this.grpCombat.Text = "Combat Spell";
@@ -1430,7 +1457,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpHotDot.Controls.Add(this.chkHOTDOT);
             this.grpHotDot.Controls.Add(this.lblTick);
             this.grpHotDot.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpHotDot.Location = new System.Drawing.Point(6, 350);
+            this.grpHotDot.Location = new System.Drawing.Point(6, 408);
             this.grpHotDot.Name = "grpHotDot";
             this.grpHotDot.Size = new System.Drawing.Size(188, 68);
             this.grpHotDot.TabIndex = 53;
@@ -1652,6 +1679,9 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpDamage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpDamage.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDamage.Controls.Add(this.chkReplaceCritEffectSpell);
+            this.grpDamage.Controls.Add(this.cmbCritEffectSpell);
+            this.grpDamage.Controls.Add(this.lblCritEffectSpell);
             this.grpDamage.Controls.Add(this.nudCritMultiplier);
             this.grpDamage.Controls.Add(this.lblCritMultiplier);
             this.grpDamage.Controls.Add(this.nudCritChance);
@@ -1670,7 +1700,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDamage.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpDamage.Location = new System.Drawing.Point(6, 19);
             this.grpDamage.Name = "grpDamage";
-            this.grpDamage.Size = new System.Drawing.Size(188, 325);
+            this.grpDamage.Size = new System.Drawing.Size(188, 376);
             this.grpDamage.TabIndex = 49;
             this.grpDamage.TabStop = false;
             this.grpDamage.Text = "Damage";
@@ -2266,7 +2296,7 @@ namespace Intersect.Editor.Forms.Editors
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(476, 519);
+            this.btnCancel.Location = new System.Drawing.Point(474, 573);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(190, 27);
@@ -2276,7 +2306,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(280, 519);
+            this.btnSave.Location = new System.Drawing.Point(278, 573);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(190, 27);
@@ -2294,7 +2324,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpells.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpSpells.Location = new System.Drawing.Point(12, 40);
             this.grpSpells.Name = "grpSpells";
-            this.grpSpells.Size = new System.Drawing.Size(203, 473);
+            this.grpSpells.Size = new System.Drawing.Size(203, 527);
             this.grpSpells.TabIndex = 16;
             this.grpSpells.TabStop = false;
             this.grpSpells.Text = "Spells";
@@ -2336,32 +2366,50 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Location = new System.Drawing.Point(6, 43);
             this.lstGameObjects.Name = "lstGameObjects";
             this.lstGameObjects.SelectedImageIndex = 0;
-            this.lstGameObjects.Size = new System.Drawing.Size(191, 422);
+            this.lstGameObjects.Size = new System.Drawing.Size(191, 478);
             this.lstGameObjects.TabIndex = 32;
             // 
-            // chkSquareRange
+            // cmbCritEffectSpell
             // 
-            this.chkSquareRange.AutoSize = true;
-            this.chkSquareRange.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkSquareRange.Location = new System.Drawing.Point(116, 58);
-            this.chkSquareRange.Name = "chkSquareRange";
-            this.chkSquareRange.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.chkSquareRange.Size = new System.Drawing.Size(101, 17);
-            this.chkSquareRange.TabIndex = 60;
-            this.chkSquareRange.Text = "Square Range?";
-            this.chkSquareRange.CheckedChanged += new System.EventHandler(this.chkSquareRange_CheckedChanged);
+            this.cmbCritEffectSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbCritEffectSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbCritEffectSpell.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbCritEffectSpell.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbCritEffectSpell.DrawDropdownHoverOutline = false;
+            this.cmbCritEffectSpell.DrawFocusRectangle = false;
+            this.cmbCritEffectSpell.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbCritEffectSpell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCritEffectSpell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbCritEffectSpell.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbCritEffectSpell.FormattingEnabled = true;
+            this.cmbCritEffectSpell.Items.AddRange(new object[] {
+            "None"});
+            this.cmbCritEffectSpell.Location = new System.Drawing.Point(10, 327);
+            this.cmbCritEffectSpell.Name = "cmbCritEffectSpell";
+            this.cmbCritEffectSpell.Size = new System.Drawing.Size(170, 21);
+            this.cmbCritEffectSpell.TabIndex = 65;
+            this.cmbCritEffectSpell.Text = "None";
+            this.cmbCritEffectSpell.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbCritEffectSpell.SelectedIndexChanged += cmbCritEffectSpell_SelectedIndexChanged;
             // 
-            // chkSquareRadius
+            // lblCritEffectSpell
             // 
-            this.chkSquareRadius.AutoSize = true;
-            this.chkSquareRadius.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkSquareRadius.Location = new System.Drawing.Point(116, 101);
-            this.chkSquareRadius.Name = "chkSquareRadius";
-            this.chkSquareRadius.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.chkSquareRadius.Size = new System.Drawing.Size(102, 17);
-            this.chkSquareRadius.TabIndex = 61;
-            this.chkSquareRadius.Text = "Square Radius?";
-            this.chkSquareRadius.CheckedChanged += new System.EventHandler(this.chkSquareRadius_CheckedChanged);
+            this.lblCritEffectSpell.AutoSize = true;
+            this.lblCritEffectSpell.Location = new System.Drawing.Point(7, 310);
+            this.lblCritEffectSpell.Name = "lblCritEffectSpell";
+            this.lblCritEffectSpell.Size = new System.Drawing.Size(82, 13);
+            this.lblCritEffectSpell.TabIndex = 64;
+            this.lblCritEffectSpell.Text = "Crit Effect Spell:";
+            // 
+            // chkReplaceCritEffectSpell
+            // 
+            this.chkReplaceCritEffectSpell.Location = new System.Drawing.Point(14, 350);
+            this.chkReplaceCritEffectSpell.Name = "chkReplaceCritEffectSpell";
+            this.chkReplaceCritEffectSpell.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.chkReplaceCritEffectSpell.Size = new System.Drawing.Size(162, 20);
+            this.chkReplaceCritEffectSpell.TabIndex = 41;
+            this.chkReplaceCritEffectSpell.Text = "Replace initial spell on crit";
+            this.chkReplaceCritEffectSpell.CheckedChanged += chkReplaceCritEffectSpell_CheckedChanged;
             // 
             // FrmSpell
             // 
@@ -2369,7 +2417,7 @@ namespace Intersect.Editor.Forms.Editors
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(681, 549);
+            this.ClientSize = new System.Drawing.Size(681, 612);
             this.ControlBox = false;
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.btnCancel);
@@ -2596,5 +2644,8 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblEffectChance;
         private DarkCheckBox chkSquareRadius;
         private DarkCheckBox chkSquareRange;
+        private DarkCheckBox chkReplaceCritEffectSpell;
+        private DarkComboBox cmbCritEffectSpell;
+        private System.Windows.Forms.Label lblCritEffectSpell;
     }
 }
