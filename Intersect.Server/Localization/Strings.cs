@@ -262,6 +262,12 @@ namespace Intersect.Server.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString and = @" and ";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString npcunarmed = @" attack unarmed ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString playerunarmed = @" attack unarmed ";
+
 
             //---------------------------------------------------------------------------
 

@@ -1367,7 +1367,7 @@ namespace Intersect.Server.Entities
             {
                 isCrit = Attack(
                     target, parentItem.Damage, 0, (DamageType) parentItem.DamageType, (Stats) parentItem.ScalingStat,
-                    parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, null, null, null, true, parentItem.CritEffectSpellReplace
+                    parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, parentItem.Name, null, null, true, parentItem.CritEffectSpellReplace
                 ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
             }
 
@@ -1747,7 +1747,7 @@ namespace Intersect.Server.Entities
             else
             {
                 isCrit = Attack(
-                    target, baseDamage, 0, damageType, scalingStat, scaling, critChance, critMultiplier, null, deadAnimations,
+                    target, baseDamage, 0, damageType, scalingStat, scaling, critChance, critMultiplier, weapon.Name, deadAnimations,
                     aliveAnimations, true, weapon.CritEffectSpellReplace
                 ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
                 if (isCrit && weapon.CritEffectSpellId != Guid.Empty)
@@ -1768,7 +1768,7 @@ namespace Intersect.Server.Entities
             int scaling,
             int critChance,
             double critMultiplier,
-            string spellName,   //A été rajouté par Moussmous pour décrire le nom de l'attaque utilisée pour l'utiliser dans les logs de chats de combat
+            string name,   //A été rajouté par Moussmous pour décrire le nom de l'attaque utilisée pour l'utiliser dans les logs de chats de combat
             List<KeyValuePair<Guid, sbyte>> deadAnimations = null,
             List<KeyValuePair<Guid, sbyte>> aliveAnimations = null,
             bool isAutoAttack = false,
@@ -1800,13 +1800,25 @@ namespace Intersect.Server.Entities
             }
             if (this is Player || enemy is Player)
             {
-                if (spellName != null)
+                if (name != null)
                 {
                     if (!alreadyCrit)
                     {
-                        chatLogMessage += this.Name + Strings.Combat.useAttack + spellName;
+                        chatLogMessage += this.Name + Strings.Combat.useAttack + name;
                         chatLogMessage += ".";
                     }
+                }
+                else
+                {
+                    if (!(this is Player))
+                    {
+                        chatLogMessage += this.Name + Strings.Combat.npcunarmed;
+                    }
+                    else
+                    {
+                        chatLogMessage += this.Name + Strings.Combat.playerunarmed;
+                    }
+                    chatLogMessage += ".";
                 }
                 if (isCrit)
                 {
@@ -1874,7 +1886,7 @@ namespace Intersect.Server.Entities
                     //Ici ça affiche les attaques de base (reçu et donné)
                     if (Options.Combat.EnableCombatChatMessages && !(enemy is Resource))
                     {
-                        if (spellName == null) // Cas où les dégats sont provoqués par une attaque directe mais pas une abilité quoi
+                        if (name == null) // Cas où les dégats sont provoqués par une attaque directe mais pas une abilité quoi
                         {
                             if (this is Player myPlayer)
                             {
