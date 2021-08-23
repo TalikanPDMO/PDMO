@@ -98,7 +98,7 @@ namespace Intersect.Server.Entities
                 {
                     if (Parent.Owner != Parent.Target)
                     {
-                        Parent.Owner.TryAttack(targetEntity, Parent.Base, Parent.Spell, Parent.Item, Dir);
+                        Parent.Owner.TryAttack(targetEntity, Parent.Base, Parent.Spell, Parent.Item, Dir, Parent.AlreadyCrit);
                         if (Dir <= 3 && Parent.Base.GrappleHook && !Parent.HasGrappled
                         ) //Don't handle directional projectile grapplehooks
                         {
@@ -124,7 +124,7 @@ namespace Intersect.Server.Entities
                     {
                         if (Parent.Owner.GetType() == typeof(Player) && !((Resource) targetEntity).IsDead())
                         {
-                            Parent.Owner.TryAttack(targetEntity, Parent.Base, Parent.Spell, Parent.Item, Dir);
+                            Parent.Owner.TryAttack(targetEntity, Parent.Base, Parent.Spell, Parent.Item, Dir, Parent.AlreadyCrit);
                             if (Dir <= 3 && Parent.Base.GrappleHook && !Parent.HasGrappled
                             ) //Don't handle directional projectile grapplehooks
                             {
@@ -147,7 +147,7 @@ namespace Intersect.Server.Entities
                     if (ownerNpc == null ||
                         ownerNpc.CanNpcCombat(targetEntity, Parent.Spell != null && Parent.Spell.Combat.Friendly))
                     {
-                        Parent.Owner.TryAttack(targetEntity, Parent.Base, Parent.Spell, Parent.Item, Dir);
+                        Parent.Owner.TryAttack(targetEntity, Parent.Base, Parent.Spell, Parent.Item, Dir, Parent.AlreadyCrit);
                         if (Dir <= 3 && Parent.Base.GrappleHook && !Parent.HasGrappled
                         ) //Don't handle directional projectile grapplehooks
                         {

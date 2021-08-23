@@ -1310,7 +1310,8 @@ namespace Intersect.Server.Entities
             ProjectileBase projectile,
             SpellBase parentSpell,
             ItemBase parentItem,
-            byte projectileDir
+            byte projectileDir,
+            bool alreadyCrit = false
         )
         {
             if (target is Resource && parentSpell != null)
@@ -1334,7 +1335,7 @@ namespace Intersect.Server.Entities
 
             if (parentSpell != null)
             {
-                TryAttack(target, parentSpell);
+                TryAttack(target, parentSpell, false, false, alreadyCrit);
             }
 
             var targetPlayer = target as Player;
@@ -1367,7 +1368,7 @@ namespace Intersect.Server.Entities
             {
                 isCrit = Attack(
                     target, parentItem.Damage, 0, (DamageType) parentItem.DamageType, (Stats) parentItem.ScalingStat,
-                    parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, parentItem.Name, null, null, true, parentItem.CritEffectSpellReplace
+                    parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, parentItem.Name, null, null, true, parentItem.CritEffectSpellReplace, alreadyCrit
                 ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
             }
 
@@ -1390,7 +1391,8 @@ namespace Intersect.Server.Entities
                 if (s != null)
                 {
                     //s.Name ou parentItem.Name ?
-                    HandleAoESpell(projectile.SpellId, s.Combat.HitRadius, target.MapId, target.X, target.Y, null);
+                    //HandleAoESpell(projectile.SpellId, s.Combat.HitRadius, target.MapId, target.X, target.Y, null, alreadyCrit);
+                    CastSpell(projectile.SpellId, -1, alreadyCrit, projectile.Spell.Name, target);
                 }
 
                 //Check that the npc has not been destroyed by the splash spell
@@ -1673,7 +1675,8 @@ namespace Intersect.Server.Entities
             double critMultiplier,
             List<KeyValuePair<Guid, sbyte>> deadAnimations = null,
             List<KeyValuePair<Guid, sbyte>> aliveAnimations = null,
-            ItemBase weapon = null
+            ItemBase weapon = null,
+            bool alreadyCrit = false
         )
         {
             if (AttackTimer > Globals.Timing.Milliseconds)
@@ -1748,11 +1751,12 @@ namespace Intersect.Server.Entities
             {
                 isCrit = Attack(
                     target, baseDamage, 0, damageType, scalingStat, scaling, critChance, critMultiplier, weapon.Name, deadAnimations,
-                    aliveAnimations, true, weapon.CritEffectSpellReplace
+                    aliveAnimations, true, weapon.CritEffectSpellReplace, alreadyCrit
                 ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
                 if (isCrit && weapon.CritEffectSpellId != Guid.Empty)
                 {
-                    TryAttack(target, weapon.CritEffectSpell, false, false, true, weapon.Name);
+                    //TryAttack(target, weapon.CritEffectSpell, false, false, true, weapon.Name);
+                    CastSpell(weapon.CritEffectSpellId, -1, true, weapon.Name, target);
                 }
             }
             
@@ -2238,7 +2242,7 @@ namespace Intersect.Server.Entities
                                     MapInstance.Get(MapId)
                                     .SpawnMapProjectile(
                                         this, projectileBase, spellBase, null, MapId, (byte)X, (byte)Y, (byte)Z,
-                                        (byte)Dir, null
+                                        (byte)Dir, null, alreadyCrit
                                     );
                                 }
                                 else
@@ -2246,7 +2250,7 @@ namespace Intersect.Server.Entities
                                     MapInstance.Get(MapId)
                                     .SpawnMapProjectile(
                                         this, projectileBase, spellBase, null, specificTarget.MapId, (byte)specificTarget.X, (byte)specificTarget.Y, (byte)specificTarget.Z,
-                                        (byte)Dir, specificTarget
+                                        (byte)Dir, specificTarget, alreadyCrit
                                     );
                                 }
                             }

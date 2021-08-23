@@ -21,6 +21,8 @@ namespace Intersect.Server.Entities
 
         public bool HasGrappled;
 
+        public bool AlreadyCrit;
+
         public ItemBase Item;
 
         private int mQuantity;
@@ -52,7 +54,8 @@ namespace Intersect.Server.Entities
             byte Y,
             byte z,
             byte direction,
-            Entity target
+            Entity target,
+            bool alreadyCrit
         ) : base()
         {
             Base = projectile;
@@ -61,6 +64,7 @@ namespace Intersect.Server.Entities
             Stat = owner.Stat;
             MapId = mapId;
             Target = target;
+            AlreadyCrit = alreadyCrit;
             base.X = X;
             base.Y = Y;
             Z = z;

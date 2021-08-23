@@ -1185,7 +1185,9 @@ namespace Intersect.Server.Entities
             ProjectileBase projectile,
             SpellBase parentSpell,
             ItemBase parentItem,
-            byte projectileDir
+            byte projectileDir,
+            bool alreadyCrit = false
+
         )
         {
             if (!CanAttack(target, parentSpell))
@@ -1243,7 +1245,7 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            base.TryAttack(target, projectile, parentSpell, parentItem, projectileDir);
+            base.TryAttack(target, projectile, parentSpell, parentItem, projectileDir, alreadyCrit);
         }
 
         public void TryAttack(Entity target)
