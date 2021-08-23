@@ -12,9 +12,16 @@ namespace Intersect.Client.Core.Controls
     {
 
         public readonly IDictionary<Control, ControlMap> ControlMapping;
+        //Ajouté par Moussmous
+        private static XBoxController inputMonitor;
 
         public Controls(Controls gameControls = null)
         {
+            //Ajouté par Moussmous pour permettre la gestion des manettes Xbox (et ptet les autres jsp)
+            inputMonitor = new XBoxController();
+            
+            //-----------------------------------------------------------------------------------------
+
             ControlMapping = new Dictionary<Control, ControlMap>();
 
             if (gameControls != null)
@@ -105,22 +112,43 @@ namespace Intersect.Client.Core.Controls
 
         public static bool KeyDown(Control control)
         {
+            bool retourClavier = false;
+            bool retourManette = false;
             if (ActiveControls?.ControlMapping.ContainsKey(control) ?? false)
             {
-                return ActiveControls.ControlMapping[control]?.KeyDown() ?? false;
-            }
+                retourClavier = ActiveControls.ControlMapping[control]?.KeyDown() ?? false;
+            } 
 
-            return false;
+            retourManette = inputMonitor.isKeyDown(control);
+            
+            if (retourClavier || retourManette)
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
         }
 
         public static bool KeyUp(Control control)
         {
+            bool retourClavier = false;
+            bool retourManette = false;
             if (ActiveControls?.ControlMapping.ContainsKey(control) ?? false)
             {
-                return ActiveControls.ControlMapping[control]?.KeyUp() ?? false;
+                retourClavier = ActiveControls.ControlMapping[control]?.KeyUp() ?? false;
             }
 
-            return false;
+            retourManette = !inputMonitor.isKeyDown(control);
+
+            if (retourClavier || retourManette)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public static List<Control> GetControlsFor(Keys key)
