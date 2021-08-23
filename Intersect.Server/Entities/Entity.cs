@@ -1830,21 +1830,29 @@ namespace Intersect.Server.Entities
                 }
 
             }
-            if (isCrit && critReplace)
+            if (isCrit)
             {
-                // Display the critical message and exit the function to execute after the crit spell
-                if (Options.Combat.EnableCombatChatMessages && !string.IsNullOrEmpty(chatLogMessage) && !(enemy is Resource))
+                if(!(enemy is Resource))
                 {
-                    if (this is Player myPlayer)
-                    {
-                        PacketSender.SendChatMsg(myPlayer, chatLogMessage, ChatMessageType.Combat);
-                    }
-                    else if (enemy is Player myPlayerEnemy)
-                    {
-                        PacketSender.SendChatMsg(myPlayerEnemy, chatLogMessage, ChatMessageType.Combat);
-                    }
+                    // Display the critical message on the concerned entity
+                    PacketSender.SendActionMsg(enemy, Strings.Combat.critical, CustomColors.Combat.Critical);
                 }
-                return true;
+                if (critReplace)
+                {
+                    // Display the critical message log and exit the function to execute after the crit spell
+                    if (Options.Combat.EnableCombatChatMessages && !string.IsNullOrEmpty(chatLogMessage) && !(enemy is Resource))
+                    {
+                        if (this is Player myPlayer)
+                        {
+                            PacketSender.SendChatMsg(myPlayer, chatLogMessage, ChatMessageType.Combat);
+                        }
+                        else if (enemy is Player myPlayerEnemy)
+                        {
+                            PacketSender.SendChatMsg(myPlayerEnemy, chatLogMessage, ChatMessageType.Combat);
+                        }
+                    }
+                    return true;
+                }
             }
             bool isFixedDamage = false;
             //If spell from event or for ressources, fixed damage
@@ -1862,7 +1870,6 @@ namespace Intersect.Server.Entities
             //Calculate Damages
             if (baseDamage != 0)
             {
-
                 if (isFixedDamage)
                 {
                     baseDamage = originalBaseDamage;
@@ -1880,12 +1887,7 @@ namespace Intersect.Server.Entities
                 }
                 if (baseDamage > 0 && enemy.HasVital(Vitals.Health) && !invulnerable)
                 {
-                    if (isCrit)
-                    {
-                        PacketSender.SendActionMsg(enemy, Strings.Combat.critical, CustomColors.Combat.Critical);
-                    }
-
-                    enemy.SubVital(Vitals.Health, (int) baseDamage);
+                     enemy.SubVital(Vitals.Health, (int) baseDamage);
                     //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
                     //Ici ça affiche les attaques de base (reçu et donné)
                     if (Options.Combat.EnableCombatChatMessages && !(enemy is Resource))
