@@ -940,28 +940,43 @@ namespace Intersect.Client.Entities
                 movex = 1;
             }
 
+            // Used this so I can do multiple switch case
+            var move = movex / 10 + movey;
 
             Globals.Me.MoveDir = -1;
             if (movex != 0f || movey != 0f)
             {
-                if (movey < 0)
+                switch(move)
                 {
-                    Globals.Me.MoveDir = 1;
-                }
+                    case 1.0f:
+                        Globals.Me.MoveDir = 0; // Up
+                        break;
+                    case -1.0f:
+                        Globals.Me.MoveDir = 1; // Down
+                        break;
+                    case -0.1f: // x = 0, y = -1
+                        Globals.Me.MoveDir = 2; // Left
+                        break;
+                    case 0.1f:
+                        Globals.Me.MoveDir = 3; // Right
 
-                if (movey > 0)
-                {
-                    Globals.Me.MoveDir = 0;
-                }
+                        break;
+                    case 0.9f:
+                        Globals.Me.MoveDir = 4; // NW
 
-                if (movex < 0)
-                {
-                    Globals.Me.MoveDir = 2;
-                }
+                        break;
+                    case 1.1f:
+                        Globals.Me.MoveDir = 5; // NE
 
-                if (movex > 0)
-                {
-                    Globals.Me.MoveDir = 3;
+                        break;
+                    case -1.1f:
+                        Globals.Me.MoveDir = 6; // SW
+
+                        break;
+                    case -0.9f:
+                        Globals.Me.MoveDir = 7; // SE
+
+                        break;
                 }
             }
 
@@ -1369,6 +1384,24 @@ namespace Intersect.Client.Entities
                 case 3:
                     x++;
 
+                    break;
+                case 4: // UpLeft
+                    y--;
+                    x--;
+
+                    break;
+                case 5: //UpRight
+                    y--;
+                    x++;
+
+                    break;
+                case 6:
+                    y++;
+                    x--;
+                    break;
+                case 7:
+                    y++;
+                    x++;
                     break;
             }
 
@@ -1831,6 +1864,50 @@ namespace Intersect.Client.Entities
                                 OffsetX = -Options.TileWidth;
                             }
 
+                            break;
+                        case 4: // NW
+                            if (IsTileBlocked(X - 1, Y - 1, Z, CurrentMap, ref blockedBy) == -1)
+                            {
+                                tmpY--;
+                                tmpX--;
+                                Dir = 4;
+                                IsMoving = true;
+                                OffsetY = Options.TileHeight;
+                                OffsetX = Options.TileWidth;
+                            }
+                            break;
+                        case 5: // NE
+                            if (IsTileBlocked(X + 1, Y - 1, Z, CurrentMap, ref blockedBy) == -1)
+                            {
+                                tmpY--;
+                                tmpX++;
+                                Dir = 5;
+                                IsMoving = true;
+                                OffsetY = Options.TileHeight;
+                                OffsetX = -Options.TileWidth;
+                            }
+                            break;
+                        case 6: // SW
+                            if (IsTileBlocked(X - 1, Y + 1, Z, CurrentMap, ref blockedBy) == -1)
+                            {
+                                tmpY++;
+                                tmpX--;
+                                Dir = 6;
+                                IsMoving = true;
+                                OffsetY = -Options.TileHeight;
+                                OffsetX = Options.TileWidth;
+                            }
+                            break;
+                        case 7: // SE
+                            if (IsTileBlocked(X + 1, Y + 1, Z, CurrentMap, ref blockedBy) == -1)
+                            {
+                                tmpY++;
+                                tmpX++;
+                                Dir = 7;
+                                IsMoving = true;
+                                OffsetY = -Options.TileHeight;
+                                OffsetX = -Options.TileWidth;
+                            }
                             break;
                     }
 

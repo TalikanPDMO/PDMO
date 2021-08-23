@@ -10,7 +10,7 @@
 
         MoveLeft,
 
-        MoveRight,
+        MoveRight,    
 
         MoveRandomly,
 
@@ -93,6 +93,14 @@
         SetGraphic,
 
         SetAnimation,
+
+        MoveUpLeft,
+
+        MoveUpRight,
+
+        MoveDownLeft,
+
+        MoveDownRight,
 
     }
 
