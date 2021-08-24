@@ -70,6 +70,8 @@ namespace Intersect.Client.Entities
         //Ajouté par Moussmous pour la rotation du joueur (j'ai suivi le patch)
         public long[] MoveDirectionTimers = new long[4];
 
+        public int MoveDirInput = -1;
+
         public long CombatTimer { get; set; } = 0;
 
         // Target data
@@ -943,38 +945,38 @@ namespace Intersect.Client.Entities
             // Used this so I can do multiple switch case
             var move = movex / 10 + movey;
 
-            Globals.Me.MoveDir = -1;
+            Globals.Me.MoveDirInput = -1;
             if (movex != 0f || movey != 0f)
             {
                 switch(move)
                 {
                     case 1.0f:
-                        Globals.Me.MoveDir = 0; // Up
+                        Globals.Me.MoveDirInput = 0; // Up
                         break;
                     case -1.0f:
-                        Globals.Me.MoveDir = 1; // Down
+                        Globals.Me.MoveDirInput = 1; // Down
                         break;
                     case -0.1f: // x = 0, y = -1
-                        Globals.Me.MoveDir = 2; // Left
+                        Globals.Me.MoveDirInput = 2; // Left
                         break;
                     case 0.1f:
-                        Globals.Me.MoveDir = 3; // Right
+                        Globals.Me.MoveDirInput = 3; // Right
 
                         break;
                     case 0.9f:
-                        Globals.Me.MoveDir = 4; // NW
+                        Globals.Me.MoveDirInput = 4; // NW
 
                         break;
                     case 1.1f:
-                        Globals.Me.MoveDir = 5; // NE
+                        Globals.Me.MoveDirInput = 5; // NE
 
                         break;
                     case -1.1f:
-                        Globals.Me.MoveDir = 6; // SW
+                        Globals.Me.MoveDirInput = 6; // SW
 
                         break;
                     case -0.9f:
-                        Globals.Me.MoveDir = 7; // SE
+                        Globals.Me.MoveDirInput = 7; // SE
 
                         break;
                 }
@@ -982,22 +984,22 @@ namespace Intersect.Client.Entities
 
             //Ajouté par Moussmous pour la rotation du joueur (j'ai suivi le patch)
             //Loop through our direction timers and keep track of how long we've been requesting to move in each direction
-            //If we have only just tapped a button we will set Globals.Me.MoveDir to -1 in order to cancel the movement
+            //If we have only just tapped a button we will set Globals.Me.MoveDirInput to -1 in order to cancel the movement
             for (var i = 0; i < 4; i++)
             {
-                if (i == Globals.Me.MoveDir)
+                if (i == Globals.Me.MoveDirInput)
                 {
                     //If we just started to change to a new direction then turn the player only (set the timer to now + 60ms)
-                    if (MoveDirectionTimers[i] == -1 && !Globals.Me.IsMoving && Dir != Globals.Me.MoveDir)
+                    if (MoveDirectionTimers[i] == -1 && !Globals.Me.IsMoving && Dir != Globals.Me.MoveDirInput)
                     {
                         //Turn Only
-                        Dir = (byte)Globals.Me.MoveDir;
-                        PacketSender.SendDirection((byte)Globals.Me.MoveDir);
+                        Dir = (byte)Globals.Me.MoveDirInput;
+                        PacketSender.SendDirection((byte)Globals.Me.MoveDirInput);
                         MoveDirectionTimers[i] = Globals.System.GetTimeMs() + 60;
-                        Globals.Me.MoveDir = -1;
+                        Globals.Me.MoveDirInput = -1;
                     }
                     //If we're already facing the direction then just start moving (set the timer to now)
-                    else if (MoveDirectionTimers[i] == -1 && !Globals.Me.IsMoving && Dir == Globals.Me.MoveDir)
+                    else if (MoveDirectionTimers[i] == -1 && !Globals.Me.IsMoving && Dir == Globals.Me.MoveDirInput)
                     {
                         MoveDirectionTimers[i] = Globals.System.GetTimeMs();
                     }
@@ -1005,7 +1007,7 @@ namespace Intersect.Client.Entities
                     else if (MoveDirectionTimers[i] > Globals.System.GetTimeMs() && !Globals.Me.IsMoving)
                     {
                         //Don't trigger the actual move immediately, wait until button is held
-                        Globals.Me.MoveDir = -1;
+                        Globals.Me.MoveDirInput = -1;
                     }
                 }
                 else
@@ -1809,7 +1811,7 @@ namespace Intersect.Client.Entities
             var tmpY = (sbyte) Y;
             Entity blockedBy = null;
 
-            if (MoveDir > -1 && Globals.EventDialogs.Count == 0)
+            if (MoveDirInput > -1 && Globals.EventDialogs.Count == 0)
             {
                 //Try to move if able and not casting spells.
                 if (!IsMoving && MoveTimer < Timing.Global.Ticks / TimeSpan.TicksPerMillisecond && (Options.Combat.MovementCancelsCast || CastTime < Globals.System.GetTimeMs())) 
@@ -1819,13 +1821,14 @@ namespace Intersect.Client.Entities
                         CastTime = 0;
                     }
 
-                    switch (MoveDir)
+                    switch (MoveDirInput)
                     {
                         case 0: // Up
                             if (IsTileBlocked(X, Y - 1, Z, CurrentMap, ref blockedBy) == -1)
                             {
                                 tmpY--;
                                 IsMoving = true;
+                                MoveDir = 0;
                                 Dir = 0;
                                 OffsetY = Options.TileHeight;
                                 OffsetX = 0;
@@ -1837,6 +1840,7 @@ namespace Intersect.Client.Entities
                             {
                                 tmpY++;
                                 IsMoving = true;
+                                MoveDir = 1;
                                 Dir = 1;
                                 OffsetY = -Options.TileHeight;
                                 OffsetX = 0;
@@ -1848,6 +1852,7 @@ namespace Intersect.Client.Entities
                             {
                                 tmpX--;
                                 IsMoving = true;
+                                MoveDir = 2;
                                 Dir = 2;
                                 OffsetY = 0;
                                 OffsetX = Options.TileWidth;
@@ -1859,6 +1864,7 @@ namespace Intersect.Client.Entities
                             {
                                 tmpX++;
                                 IsMoving = true;
+                                MoveDir = 3;
                                 Dir = 3;
                                 OffsetY = 0;
                                 OffsetX = -Options.TileWidth;
@@ -1870,7 +1876,8 @@ namespace Intersect.Client.Entities
                             {
                                 tmpY--;
                                 tmpX--;
-                                Dir = 4;
+                                MoveDir = 4;
+                                Dir = 2;
                                 IsMoving = true;
                                 OffsetY = Options.TileHeight;
                                 OffsetX = Options.TileWidth;
@@ -1881,7 +1888,8 @@ namespace Intersect.Client.Entities
                             {
                                 tmpY--;
                                 tmpX++;
-                                Dir = 5;
+                                MoveDir = 5;
+                                Dir = 3;
                                 IsMoving = true;
                                 OffsetY = Options.TileHeight;
                                 OffsetX = -Options.TileWidth;
@@ -1892,7 +1900,8 @@ namespace Intersect.Client.Entities
                             {
                                 tmpY++;
                                 tmpX--;
-                                Dir = 6;
+                                MoveDir = 6;
+                                Dir = 2;
                                 IsMoving = true;
                                 OffsetY = -Options.TileHeight;
                                 OffsetX = Options.TileWidth;
@@ -1903,7 +1912,8 @@ namespace Intersect.Client.Entities
                             {
                                 tmpY++;
                                 tmpX++;
-                                Dir = 7;
+                                MoveDir = 7;
+                                Dir = 3;
                                 IsMoving = true;
                                 OffsetY = -Options.TileHeight;
                                 OffsetX = -Options.TileWidth;
@@ -1971,9 +1981,9 @@ namespace Intersect.Client.Entities
                     }
                     else
                     {
-                        if (MoveDir != Dir)
+                        if (MoveDirInput != Dir)
                         {
-                            Dir = (byte) MoveDir;
+                            Dir = (byte) MoveDirInput;
                             PacketSender.SendDirection(Dir);
                         }
 

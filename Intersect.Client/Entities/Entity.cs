@@ -574,7 +574,7 @@ namespace Intersect.Client.Entities
             else if (IsMoving)
             {
                 float deplacementTime = (float)ecTime * (float)Options.TileHeight / GetMovementTime();
-                switch (Dir)
+                switch (MoveDir)
                 {
                     case 0:
                         OffsetY -= deplacementTime;

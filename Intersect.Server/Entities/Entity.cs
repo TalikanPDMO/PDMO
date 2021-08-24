@@ -968,8 +968,23 @@ namespace Intersect.Server.Entities
 
                         return;
                 }
-
-                Dir = moveDir;
+                //Dir = moveDir;
+                // NO DIAGONAL DIRECTION, only movement
+                switch (moveDir)
+                {
+                    case 4:
+                    case 6:
+                        Dir = 2;
+                        break;
+                    case 5:
+                    case 7:
+                        Dir = 3;
+                        break;
+                    default:
+                        Dir = moveDir;
+                        break;
+                }
+               
 
 
                 var tile = new TileHelper(MapId, X, Y);
@@ -1026,16 +1041,16 @@ namespace Intersect.Server.Entities
                         {
                             if (forPlayer != null)
                             {
-                                PacketSender.SendEntityMoveTo(forPlayer, this, correction);
+                                PacketSender.SendEntityMoveTo(forPlayer, this, moveDir, correction);
                             }
                             else
                             {
-                                PacketSender.SendEntityMove(this, correction);
+                                PacketSender.SendEntityMove(this, moveDir, correction); ;
                             }
                         }
                         else
                         {
-                            PacketSender.SendEntityMove(this, correction);
+                            PacketSender.SendEntityMove(this, moveDir, correction);
                         }
 
                         //Check if moving into a projectile.. if so this npc needs to be hit
@@ -2590,7 +2605,8 @@ namespace Intersect.Server.Entities
                 {
                     return true;
                 }
-                myTile.Translate(-2, -1); // Target UpLeft
+                // NO ATTACKS IN DIAGONAL
+                /*myTile.Translate(-2, -1); // Target UpLeft
                 if (myTile.Matches(enemyTile))
                 {
                     return true;
@@ -2611,7 +2627,7 @@ namespace Intersect.Server.Entities
                 if (myTile.Matches(enemyTile))
                 {
                     return true;
-                }
+                }*/
             }
 
             return false;
@@ -2647,7 +2663,8 @@ namespace Intersect.Server.Entities
                 {
                     return true;
                 }
-                myTile.Translate(-2, -1);
+                // NO AUTOATTACKS IN DIAGONAL
+                /*myTile.Translate(-2, -1);
                 if (myTile.Matches(enemyTile) && Dir == (int)Directions.UpLeft)
                 {
                     return true;
@@ -2669,7 +2686,7 @@ namespace Intersect.Server.Entities
                 if (myTile.Matches(enemyTile) && Dir == (int)Directions.DownRight)
                 {
                     return true;
-                }
+                }*/
             }
 
             return false;
@@ -2804,7 +2821,9 @@ namespace Intersect.Server.Entities
             var y2 = y + MapInstance.Get(mapId).MapGridY * Options.MapHeight;
             if (z == Z)
             {
-                if (y1 == y2 || y1 - 1 == y2 || y1 + 1 == y2)
+                // Disable diagonal for npc autoattack
+                //if (y1 == y2 || y1 - 1 == y2 || y1 + 1 == y2)
+                if (y1 == y2)
                 {
                     if (x1 == x2 - 1)
                     {
@@ -2815,8 +2834,9 @@ namespace Intersect.Server.Entities
                         return true;
                     }
                 }
-
-                if (x1 == x2 || x1 - 1 == x2 || x1 + 1 == x2)
+                // Disable diagonal for npc autoattack
+                //if (x1 == x2 || x1 - 1 == x2 || x1 + 1 == x2)
+                if (x1 == x2)
                 {
                     if (y1 == y2 - 1)
                     {

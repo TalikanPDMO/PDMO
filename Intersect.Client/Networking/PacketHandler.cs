@@ -610,14 +610,30 @@ namespace Intersect.Client.Networking
                 en.CurrentMap = map;
                 en.X = x;
                 en.Y = y;
-                en.Dir = dir;
-                if (en is Player p)
+                //if (en is Player p)
+                //{
+                //    p.MoveDir = dir;
+                //}
+                en.MoveDir = dir;
+                //en.Dir = dir;
+                // NO DIAGONAL DIRECTION, only movement
+                switch (dir)
                 {
-                    p.MoveDir = dir;
+                    case 4:
+                    case 6:
+                        en.Dir = 2;
+                        break;
+                    case 5:
+                    case 7:
+                        en.Dir = 3;
+                        break;
+                    default:
+                        en.Dir = dir;
+                        break;
                 }
                 en.IsMoving = true;
 
-                switch (en.Dir)
+                switch (dir)
                 {
                     case 0:
                         en.OffsetY = Options.TileWidth;
