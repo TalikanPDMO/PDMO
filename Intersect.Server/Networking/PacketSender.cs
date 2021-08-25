@@ -765,7 +765,7 @@ namespace Intersect.Server.Networking
         }
 
         //EntityMovePacket
-        public static void SendEntityMove(Entity en, bool correction = false)
+        public static void SendEntityMove(Entity en, int moveDirection, bool correction = false)
         {
             var map = en?.Map;
             if (map != null)
@@ -775,17 +775,17 @@ namespace Intersect.Server.Networking
                     SendDataToProximity(
                         en.MapId,
                         new EntityMovePacket(
-                            en.Id, en.GetEntityType(), en.MapId, (byte)en.X, (byte)en.Y, (byte)en.Dir, correction
+                            en.Id, en.GetEntityType(), en.MapId, (byte)en.X, (byte)en.Y, (byte)moveDirection, correction
                         ), null, TransmissionMode.Any
                     );
                     return;
                 }
-                map.AddBatchedMovement(en, correction, null);
+                map.AddBatchedMovement(en, correction, moveDirection, null);
             }
         }
 
         //EntityMovePacket
-        public static void SendEntityMoveTo(Player player, Entity en, bool correction = false)
+        public static void SendEntityMoveTo(Player player, Entity en, int moveDirection, bool correction = false)
         {
             var map = en?.Map;
             if (map != null)
@@ -794,12 +794,12 @@ namespace Intersect.Server.Networking
                 {
                     player.SendPacket(
                         new EntityMovePacket(
-                            en.Id, en.GetEntityType(), en.MapId, (byte)en.X, (byte)en.Y, (byte)en.Dir, correction
+                            en.Id, en.GetEntityType(), en.MapId, (byte)en.X, (byte)en.Y, (byte)moveDirection, correction
                         )
                     );
                     return;
                 }
-                map.AddBatchedMovement(en, correction, player);
+                map.AddBatchedMovement(en, correction, moveDirection, player);
                 return;
             }
         }

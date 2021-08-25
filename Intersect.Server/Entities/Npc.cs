@@ -1062,6 +1062,22 @@ namespace Intersect.Server.Entities
                                             dir = 2;
 
                                             break;
+                                        case 4:
+                                            dir = 5;
+
+                                            break;
+                                        case 5:
+                                            dir = 4;
+
+                                            break;
+                                        case 6:
+                                            dir = 7;
+
+                                            break;
+                                        case 7:
+                                            dir = 6;
+
+                                            break;
                                     }
 
                                     if (CanMove(dir) == -1 || CanMove(dir) == -4)
@@ -1144,10 +1160,10 @@ namespace Intersect.Server.Entities
                             CurrentRandomMove = 0;
                             OpposingDir = -1;
                         }
-                        int dirMove = Randomization.Next(0, 4);
+                        int dirMove = Randomization.Next(0, 8);
                         while(dirMove == OpposingDir)
                         {
-                            dirMove = Randomization.Next(0, 4);
+                            dirMove = Randomization.Next(0, 8);
                         }
                         switch (dirMove)
                         {
@@ -1163,6 +1179,19 @@ namespace Intersect.Server.Entities
                             case 3: //Right
                                 OpposingDir = 2;
                                 break;
+                            case 4: //UpLeft
+                                OpposingDir = 7;
+                                break;
+                            case 5: //UpRight
+                                OpposingDir = 6;
+                                break;
+                            case 6: //DownLeft
+                                OpposingDir = 5;
+                                break;
+                            case 7: //DownRight
+                                OpposingDir = 4;
+                                break;
+
                         }
                         if (CanMove(dirMove) == -1)
                         {

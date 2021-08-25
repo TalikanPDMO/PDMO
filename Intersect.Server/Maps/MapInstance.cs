@@ -1440,9 +1440,9 @@ namespace Intersect.Server.Maps
         }
 
         #region"Packet Batching"
-        public void AddBatchedMovement(Entity en, bool correction, Player forPlayer)
+        public void AddBatchedMovement(Entity en, bool correction, int moveDirection, Player forPlayer)
         {
-            mEntityMovements.Add(en, correction, forPlayer);
+            mEntityMovements.Add(en, correction, moveDirection, forPlayer);
         }
 
         public void AddBatchedActionMessage(ActionMsgPacket packet)
