@@ -307,8 +307,7 @@ namespace Intersect.Client.Interface.Game.Character
             mMagicRstLabel.SetText(
                 Strings.Character.stat3.ToString(Strings.Combat.stat3, Globals.Me.Stat[(int) Stats.MagicResist])
             );
-
-            mAttackSpeedLabel.SetText(Strings.Character.attackspeed.ToString(ClassBase.Get(Globals.Me.Class)?.AttackSpeedValue));
+            mAttackSpeedLabel.SetText(Strings.Character.attackspeed.ToString(Globals.Me.CalculateAttackTime()));
             mAddAbilityPwrBtn.IsHidden = Globals.Me.StatPoints == 0 ||
                                          Globals.Me.Stat[(int) Stats.AbilityPower] == Options.MaxStatValue;
 

@@ -943,6 +943,7 @@ namespace Intersect.Client.Localization
                 {2, @"Tenacity"},
                 {3, @"Luck"},
                 {4, @"Exp Increase"},
+                {5, @"%Attack Speed" }
             };
 
             public static Dictionary<int, LocalizedString> itemtypes = new Dictionary<int, LocalizedString>

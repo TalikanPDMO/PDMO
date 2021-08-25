@@ -554,7 +554,7 @@
         "MouseDownSound": "octave-tap-warm.wav",
         "ClickSound": ""
       },
-      "SpeedLabel": {
+      "AttackSpeedLabel": {
         "Bounds": "4,275,1,14",
         "Padding": "0,0,0,0",
         "AlignmentEdgeDistances": "0,0,0,0",
@@ -584,7 +584,7 @@
         "Font": "sourcesansproblack,8",
         "TextScale": 1.0
       },
-      "AttackSpeedLabel": {
+      "SpeedLabel": {
         "Bounds": "4,292,1,14",
         "Padding": "0,0,0,0",
         "AlignmentEdgeDistances": "0,0,0,0",

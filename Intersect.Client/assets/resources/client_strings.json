@@ -77,7 +77,7 @@
     "stat2": "{00}: {01}",
     "stat3": "{00}: {01}",
     "stat4": "{00}: {01}",
-    "attackspeed": "Vitesse d'attaque: {00}",
+    "attackspeed": "Allure: {00}",
     "stats": "Stats:",
     "pointstouse": "points à utiliser",
     "title": "Pokémon"
@@ -145,7 +145,7 @@
     "stat1": "Attaque Spé.",
     "stat2": "Défense",
     "stat3": "Défense Spé.",
-    "stat4": "Vitesse de déplacement",
+    "stat4": "Vitesse",
     "targetoutsiderange": "Cible trop éloignée!",
     "vital0": "Vie",
     "vital1": "Mana",
@@ -361,7 +361,8 @@
       "1": "Vol de vie",
       "2": "Ténacité",
       "3": "Chance",
-      "4": "Augmente XP"
+      "4": "Augmente XP",
+      "5":  "% Allure"
     },
     "itemtypes": {
       "0": "Normal",
@@ -378,7 +379,7 @@
       "1": "Attaque Spé.: {00}",
       "2": "Défense: {00}",
       "3": "Défense Spé.: {00}",
-      "4": "Vitesse de déplacement: {00}"
+      "4": "Vitesse: {00}"
     },
     "twohand": "2H",
     "rarity": {
@@ -763,7 +764,7 @@
       "1": "Attaque Spé.: {00}",
       "2": "Défense: {00}",
       "3": "Défense Spé: {00}",
-      "4": "Vitesse de déplacement: {00}"
+      "4": "Vitesse: {00}"
     },
     "targettypes": {
       "0": "Sur soi",
