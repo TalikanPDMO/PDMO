@@ -1240,7 +1240,7 @@ namespace Intersect.Server.Entities
         public virtual int CalculateAttackTime()
         {
             return (int) (Options.MaxAttackRate +
-                          (float) ((Options.MinAttackRate - Options.MaxAttackRate) *
+                          (float) ((Options.MinAttackRate - Options.MaxAttackRate) * 5f *
                                    (((float) Options.MaxStatValue - Stat[(int) Stats.Speed].Value()) /
                                     (float) Options.MaxStatValue)));
         }
