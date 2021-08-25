@@ -371,7 +371,11 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString stat4 = @"{00}: {01}";
 
+            public static LocalizedString attackspeed = @"Attack speed: {00}";
+
             public static LocalizedString stats = @"Stats:";
+
+            public static LocalizedString pointstouse = @"points to spend";
 
             public static LocalizedString title = @"Character";
 

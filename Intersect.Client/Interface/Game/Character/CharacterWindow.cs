@@ -31,7 +31,8 @@ namespace Intersect.Client.Interface.Game.Character
 
         Button mAddMagicResistBtn;
 
-        Button mAddSpeedBtn;
+        // Not possible to invest stats in speed
+        //Button mAddSpeedBtn;
 
         //Stats
         Label mAttackLabel;
@@ -51,13 +52,15 @@ namespace Intersect.Client.Interface.Game.Character
 
         private string mCurrentSprite = "";
 
+        Label mStatsLabel;
+
         Label mDefenseLabel;
 
         private int[] mEmptyStatBoost = new int[(int)Stats.StatCount];
 
         Label mMagicRstLabel;
 
-        Label mPointsLabel;
+        Label mAttackSpeedLabel;
 
         Label mSpeedLabel;
 
@@ -98,8 +101,7 @@ namespace Intersect.Client.Interface.Game.Character
             var equipmentLabel = new Label(mCharacterWindow, "EquipmentLabel");
             equipmentLabel.SetText(Strings.Character.equipment);
 
-            var statsLabel = new Label(mCharacterWindow, "StatsLabel");
-            statsLabel.SetText(Strings.Character.stats);
+            mStatsLabel = new Label(mCharacterWindow, "StatsLabel");
 
             mAttackLabel = new Label(mCharacterWindow, "AttackLabel");
 
@@ -111,8 +113,8 @@ namespace Intersect.Client.Interface.Game.Character
             mAddDefenseBtn.Clicked += _addDefenseBtn_Clicked;
 
             mSpeedLabel = new Label(mCharacterWindow, "SpeedLabel");
-            mAddSpeedBtn = new Button(mCharacterWindow, "IncreaseSpeedButton");
-            mAddSpeedBtn.Clicked += _addSpeedBtn_Clicked;
+            //mAddSpeedBtn = new Button(mCharacterWindow, "IncreaseSpeedButton");
+            //mAddSpeedBtn.Clicked += _addSpeedBtn_Clicked;
 
             mAbilityPwrLabel = new Label(mCharacterWindow, "AbilityPowerLabel");
             mAddAbilityPwrBtn = new Button(mCharacterWindow, "IncreaseAbilityPowerButton");
@@ -122,7 +124,7 @@ namespace Intersect.Client.Interface.Game.Character
             mAddMagicResistBtn = new Button(mCharacterWindow, "IncreaseMagicResistButton");
             mAddMagicResistBtn.Clicked += _addMagicResistBtn_Clicked;
 
-            mPointsLabel = new Label(mCharacterWindow, "PointsLabel");
+            mAttackSpeedLabel = new Label(mCharacterWindow, "AttackSpeedLabel");
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
@@ -145,10 +147,11 @@ namespace Intersect.Client.Interface.Game.Character
             PacketSender.SendUpgradeStat((int) Stats.AbilityPower);
         }
 
-        void _addSpeedBtn_Clicked(Base sender, ClickedEventArgs arguments)
-        {
-            PacketSender.SendUpgradeStat((int) Stats.Speed);
-        }
+        // Not possible to invest stats in speed
+        //void _addSpeedBtn_Clicked(Base sender, ClickedEventArgs arguments)
+        //{
+        //    PacketSender.SendUpgradeStat((int) Stats.Speed);
+        //}
 
         void _addDefenseBtn_Clicked(Base sender, ClickedEventArgs arguments)
         {
@@ -279,7 +282,12 @@ namespace Intersect.Client.Interface.Game.Character
                     PaperdollPanels[i].Hide();
                 }
             }
-
+            string textStats = Strings.Character.stats;
+            if (Globals.Me.StatPoints > 0)
+            {
+                textStats += " (" + Globals.Me.StatPoints + " " + Strings.Character.pointstouse + ")";
+            }
+            mStatsLabel.SetText(textStats);
             mAttackLabel.SetText(
                 Strings.Character.stat0.ToString(Strings.Combat.stat0, Globals.Me.Stat[(int) Stats.Attack])
             );
@@ -300,7 +308,7 @@ namespace Intersect.Client.Interface.Game.Character
                 Strings.Character.stat3.ToString(Strings.Combat.stat3, Globals.Me.Stat[(int) Stats.MagicResist])
             );
 
-            mPointsLabel.SetText(Strings.Character.points.ToString(Globals.Me.StatPoints));
+            mAttackSpeedLabel.SetText(Strings.Character.attackspeed.ToString(ClassBase.Get(Globals.Me.Class)?.AttackSpeedValue));
             mAddAbilityPwrBtn.IsHidden = Globals.Me.StatPoints == 0 ||
                                          Globals.Me.Stat[(int) Stats.AbilityPower] == Options.MaxStatValue;
 
@@ -313,8 +321,8 @@ namespace Intersect.Client.Interface.Game.Character
             mAddMagicResistBtn.IsHidden = Globals.Me.StatPoints == 0 ||
                                           Globals.Me.Stat[(int) Stats.MagicResist] == Options.MaxStatValue;
 
-            mAddSpeedBtn.IsHidden =
-                Globals.Me.StatPoints == 0 || Globals.Me.Stat[(int) Stats.Speed] == Options.MaxStatValue;
+            //mAddSpeedBtn.IsHidden =
+            //    Globals.Me.StatPoints == 0 || Globals.Me.Stat[(int) Stats.Speed] == Options.MaxStatValue;
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {

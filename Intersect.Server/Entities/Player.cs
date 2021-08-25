@@ -4742,7 +4742,8 @@ namespace Intersect.Server.Entities
         //Stats
         public void UpgradeStat(int statIndex)
         {
-            if (Stat[statIndex].BaseStat + StatPointAllocations[statIndex] < Options.MaxStatValue && StatPoints > 0)
+            // Not possible to invest stat in speed
+            if (Stat[statIndex].BaseStat + StatPointAllocations[statIndex] < Options.MaxStatValue && StatPoints > 0 && statIndex != ((int)Stats.Speed))
             {
                 StatPointAllocations[statIndex]++;
                 StatPoints--;

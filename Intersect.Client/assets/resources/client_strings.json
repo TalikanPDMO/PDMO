@@ -77,7 +77,9 @@
     "stat2": "{00}: {01}",
     "stat3": "{00}: {01}",
     "stat4": "{00}: {01}",
+    "attackspeed": "Vitesse d'attaque: {00}",
     "stats": "Stats:",
+    "pointstouse": "points à utiliser",
     "title": "Pokémon"
   },
   "CharacterCreation": {
@@ -143,7 +145,7 @@
     "stat1": "Attaque Spé.",
     "stat2": "Défense",
     "stat3": "Défense Spé.",
-    "stat4": "Vitesse",
+    "stat4": "Vitesse de déplacement",
     "targetoutsiderange": "Cible trop éloignée!",
     "vital0": "Vie",
     "vital1": "Mana",
@@ -376,7 +378,7 @@
       "1": "Attaque Spé.: {00}",
       "2": "Défense: {00}",
       "3": "Défense Spé.: {00}",
-      "4": "Vitesse: {00}"
+      "4": "Vitesse de déplacement: {00}"
     },
     "twohand": "2H",
     "rarity": {
@@ -761,7 +763,7 @@
       "1": "Attaque Spé.: {00}",
       "2": "Défense: {00}",
       "3": "Défense Spé: {00}",
-      "4": "Vitesse: {00}"
+      "4": "Vitesse de déplacement: {00}"
     },
     "targettypes": {
       "0": "Sur soi",

@@ -418,7 +418,7 @@
         "MouseDownSound": "octave-tap-warm.wav",
         "ClickSound": ""
       },
-      "SpeedLabel": {
+      "AbilityPowerLabel": {
         "Bounds": "4,240,1,14",
         "Padding": "0,0,0,0",
         "AlignmentEdgeDistances": "0,0,0,0",
@@ -448,7 +448,7 @@
         "Font": "sourcesansproblack,8",
         "TextScale": 1.0
       },
-      "IncreaseSpeedButton": {
+      "IncreaseAbilityPowerButton": {
         "Bounds": "202,243,9,9",
         "Padding": "3,3,3,3",
         "AlignmentEdgeDistances": "0,0,0,0",
@@ -486,7 +486,7 @@
         "MouseDownSound": "octave-tap-warm.wav",
         "ClickSound": ""
       },
-      "AbilityPowerLabel": {
+      "MagicResistLabel": {
         "Bounds": "4,258,1,14",
         "Padding": "0,0,0,0",
         "AlignmentEdgeDistances": "0,0,0,0",
@@ -516,7 +516,7 @@
         "Font": "sourcesansproblack,8",
         "TextScale": 1.0
       },
-      "IncreaseAbilityPowerButton": {
+      "IncreaseMagicResistButton": {
         "Bounds": "202,261,9,9",
         "Padding": "3,3,3,3",
         "AlignmentEdgeDistances": "0,0,0,0",
@@ -554,7 +554,7 @@
         "MouseDownSound": "octave-tap-warm.wav",
         "ClickSound": ""
       },
-      "MagicResistLabel": {
+      "SpeedLabel": {
         "Bounds": "4,275,1,14",
         "Padding": "0,0,0,0",
         "AlignmentEdgeDistances": "0,0,0,0",
@@ -584,45 +584,7 @@
         "Font": "sourcesansproblack,8",
         "TextScale": 1.0
       },
-      "IncreaseMagicResistButton": {
-        "Bounds": "202,278,9,9",
-        "Padding": "3,3,3,3",
-        "AlignmentEdgeDistances": "0,0,0,0",
-        "AlignmentTransform": "0,0",
-        "Margin": "0,0,0,0",
-        "RenderColor": "255,255,255,255",
-        "Alignments": "",
-        "DrawBackground": true,
-        "MinimumSize": "1,1",
-        "MaximumSize": "4096,4096",
-        "Disabled": false,
-        "Hidden": false,
-        "RestrictToParent": false,
-        "MouseInputEnabled": true,
-        "HideToolTip": false,
-        "ToolTipBackground": null,
-        "ToolTipFont": null,
-        "ToolTipTextColor": "",
-        "TextColor": "0,255,255,255",
-        "HoveredTextColor": "",
-        "ClickedTextColor": "",
-        "DisabledTextColor": "255,90,90,90",
-        "TextAlign": "Center",
-        "TextPadding": "3,3,3,3",
-        "AutoSizeToContents": false,
-        "Font": "arial,10",
-        "TextScale": 1.0,
-        "NormalImage": "addstatnormal.png",
-        "HoveredImage": "addstathover.png",
-        "ClickedImage": "addstatclicked.png",
-        "DisabledImage": "",
-        "CenterImage": false,
-        "HoverSound": "octave-tap-resonant.wav",
-        "MouseUpSound": "",
-        "MouseDownSound": "octave-tap-warm.wav",
-        "ClickSound": ""
-      },
-      "PointsLabel": {
+      "AttackSpeedLabel": {
         "Bounds": "4,292,1,14",
         "Padding": "0,0,0,0",
         "AlignmentEdgeDistances": "0,0,0,0",
