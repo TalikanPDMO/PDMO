@@ -371,7 +371,11 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString stat4 = @"{00}: {01}";
 
+            public static LocalizedString attackspeed = @"Attack speed: {00}";
+
             public static LocalizedString stats = @"Stats:";
+
+            public static LocalizedString pointstouse = @"points to spend";
 
             public static LocalizedString title = @"Character";
 
@@ -939,6 +943,7 @@ namespace Intersect.Client.Localization
                 {2, @"Tenacity"},
                 {3, @"Luck"},
                 {4, @"Exp Increase"},
+                {5, @"%Attack Speed" }
             };
 
             public static Dictionary<int, LocalizedString> itemtypes = new Dictionary<int, LocalizedString>

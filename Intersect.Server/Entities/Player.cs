@@ -1432,6 +1432,8 @@ namespace Intersect.Server.Entities
                 attackTime = cls.AttackSpeedValue;
             }
 
+            attackTime = (int)(attackTime * (1 - (GetAttackSpeedBonus() / 100)));
+
             if (Options.WeaponIndex > -1 &&
                 Options.WeaponIndex < Equipment.Length &&
                 Equipment[Options.WeaponIndex] >= 0)
@@ -2703,6 +2705,34 @@ namespace Intersect.Server.Entities
             return lifesteal;
         }
 
+        public decimal GetAttackSpeedBonus()
+        {
+            var attackspeed = 0;
+
+            for (var i = 0; i < Options.EquipmentSlots.Count; i++)
+            {
+                if (Equipment[i] > -1)
+                {
+                    if (Items[Equipment[i]].ItemId != Guid.Empty)
+                    {
+                        var item = ItemBase.Get(Items[Equipment[i]].ItemId);
+                        if (item != null)
+                        {
+                            if (item.Effect.Type == EffectType.AttackSpeed)
+                            {
+                                attackspeed += item.Effect.Percentage;
+                            }
+                        }
+                    }
+                }
+            }
+            if (attackspeed > 50)
+            {
+                //AttackSpeedBonus max is 50% of normal attack speed
+                attackspeed = 50;
+            }
+            return attackspeed;
+        }
         public double GetTenacity()
         {
             double tenacity = 0;
@@ -4742,7 +4772,8 @@ namespace Intersect.Server.Entities
         //Stats
         public void UpgradeStat(int statIndex)
         {
-            if (Stat[statIndex].BaseStat + StatPointAllocations[statIndex] < Options.MaxStatValue && StatPoints > 0)
+            // Not possible to invest stat in speed
+            if (Stat[statIndex].BaseStat + StatPointAllocations[statIndex] < Options.MaxStatValue && StatPoints > 0 && statIndex != ((int)Stats.Speed))
             {
                 StatPointAllocations[statIndex]++;
                 StatPoints--;

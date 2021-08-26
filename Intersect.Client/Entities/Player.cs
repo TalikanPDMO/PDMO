@@ -480,6 +480,35 @@ namespace Intersect.Client.Entities
             return cooldown;
         }
 
+        public decimal GetAttackSpeedBonus()
+        {
+            var attackspeed = 0;
+
+            for (var i = 0; i < Options.EquipmentSlots.Count; i++)
+            {
+                if (MyEquipment[i] > -1)
+                {
+                    if (Inventory[MyEquipment[i]].ItemId != Guid.Empty)
+                    {
+                        var item = ItemBase.Get(Inventory[MyEquipment[i]].ItemId);
+                        if (item != null)
+                        {
+                            if (item.Effect.Type == EffectType.AttackSpeed)
+                            {
+                                attackspeed += item.Effect.Percentage;
+                            }
+                        }
+                    }
+                }
+            }
+            if (attackspeed > 50)
+            {
+                //AttackSpeedBonus max is 50% of normal attack speed
+                attackspeed = 50;
+            }
+            return attackspeed;
+        }
+
         public void TrySellItem(int index)
         {
             if (ItemBase.Get(Inventory[index].ItemId) != null)
@@ -1741,6 +1770,8 @@ namespace Intersect.Client.Entities
             {
                 attackTime = cls.AttackSpeedValue;
             }
+
+            attackTime = (int)(attackTime * (1-(GetAttackSpeedBonus() / 100)));
 
             if (this == Globals.Me)
             {

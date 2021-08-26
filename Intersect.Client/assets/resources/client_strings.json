@@ -77,7 +77,9 @@
     "stat2": "{00}: {01}",
     "stat3": "{00}: {01}",
     "stat4": "{00}: {01}",
+    "attackspeed": "Allure: {00}",
     "stats": "Stats:",
+    "pointstouse": "points à utiliser",
     "title": "Pokémon"
   },
   "CharacterCreation": {
@@ -359,7 +361,8 @@
       "1": "Vol de vie",
       "2": "Ténacité",
       "3": "Chance",
-      "4": "Augmente XP"
+      "4": "Augmente XP",
+      "5":  "% Allure"
     },
     "itemtypes": {
       "0": "Normal",
