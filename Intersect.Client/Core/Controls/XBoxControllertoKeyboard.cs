@@ -1,9 +1,8 @@
 ﻿using System.Threading;
-using WindowsInput;
 using SharpDX.XInput;
 using System;
-using WindowsInput.Native;
 using Intersect.Client.Core.Controls;
+using System.Collections.Generic;
 
 namespace Intersect.Client.Core.Controls
 {
@@ -13,32 +12,32 @@ namespace Intersect.Client.Core.Controls
 		private const int ScrollDivider = 10_000;
 		private const int RefreshRate = 60;
 
+		private const int seuilBumpers = 150;
+
+		private List<Control> listeMenus;
+
 		private Timer _timer;
 		private Controller _controller;
-		private IKeyboardSimulator _keyboardSimulator;
 
 		private bool _wasADown;
 		private bool _wasBDown;
 		private bool _wasXDown;
 		private bool _wasYDown;
 
-		//Touches que la manette va simuler
-		private VirtualKeyCode LJoystickUp = VirtualKeyCode.UP;
-		private VirtualKeyCode LJoystickDown = VirtualKeyCode.DOWN;
-		private VirtualKeyCode LJoystickLeft = VirtualKeyCode.LEFT;
-		private VirtualKeyCode LJoystickRight = VirtualKeyCode.RIGHT;
-
-		private VirtualKeyCode ControllerA = VirtualKeyCode.OEM_1;
-		private VirtualKeyCode ControllerB = VirtualKeyCode.F14;
-		private VirtualKeyCode ControllerX = VirtualKeyCode.F15;
-		private VirtualKeyCode ControllerY = VirtualKeyCode.F16;
-
 
 		public XBoxController()
 		{
 			_controller = new Controller(UserIndex.One);
-			_keyboardSimulator = new InputSimulator().Keyboard;
 			_timer = new Timer(obj => Update());
+
+			listeMenus = new List<Control>();
+			listeMenus.Add(Control.OpenInventory);
+			listeMenus.Add(Control.OpenSpells);
+			listeMenus.Add(Control.OpenCharacterInfo);
+			listeMenus.Add(Control.OpenQuests);
+			listeMenus.Add(Control.OpenFriends);
+			listeMenus.Add(Control.OpenGuild);
+			listeMenus.Add(Control.OpenParties);
 		}
 
 		public void Start()
@@ -49,138 +48,163 @@ namespace Intersect.Client.Core.Controls
 		private void Update()
 		{
 			_controller.GetState(out var state);
-			Movement(state);
-			ButtonA(state);
-			ButtonB(state);
-			ButtonX(state);
-			ButtonY(state);
 		}
 
-		private void ButtonA(State state)
-		{
-			var isADown = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A);
-			if (isADown && !_wasADown) _keyboardSimulator.TextEntry("A");
-			if (!isADown && _wasADown) _keyboardSimulator.TextEntry("A");
-			//_wasADown = isADown;
+		public State getState()
+        {
+			_controller.GetState(out var state);
+			return state;
+        }
+
+		//-------- Ce bloc intéragit avec Monoinput.cs
+		public bool StateChanged(State lastState)
+        {
+			_controller.GetState(out var state);
+			bool a = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A) && !lastState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A);
+			bool b = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B) && !lastState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B);
+			bool x = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X) && !lastState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X);
+			bool y = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y) && !lastState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y);
+			bool start = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Start) && !lastState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Start);
+			bool back = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Back) && !lastState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Back);
+
+			var lastLeft = lastState.Gamepad.LeftTrigger;
+			var lastRight = lastState.Gamepad.RightTrigger;
+			var newLeft = state.Gamepad.LeftTrigger;
+			var newRight = state.Gamepad.RightTrigger;
+			bool isLeftUpToDown = (lastLeft < seuilBumpers) && (newLeft > seuilBumpers);
+			bool isRightUpToDown = (lastRight < seuilBumpers) && (newRight > seuilBumpers);
+
+			return (a || b || x || y || start || back || isLeftUpToDown || isRightUpToDown);
 		}
 
-		private void ButtonB(State state)
+
+		//-------- Ce bloc ça intéragit avec input.cs
+		public bool IsEscapeKeyUptoDown(State LastState)
 		{
-			var isBDown = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B);
-			if (isBDown && !_wasBDown) _keyboardSimulator.KeyUp(ControllerB);
-			if (!isBDown && _wasBDown) _keyboardSimulator.KeyDown(ControllerB);
-			_wasBDown = isBDown;
+			_controller.GetState(out var state);
+			return ( state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Back) && !LastState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Back) );
+        }
+
+		public bool IsMenuKeyDown()
+		{
+			_controller.GetState(out var state);
+			return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Start);
 		}
 
-		private void ButtonX(State state)
-		{
-			var isXDown = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X);
-			if (isXDown && !_wasXDown) _keyboardSimulator.KeyUp(ControllerX);
-			if (!isXDown && _wasXDown) _keyboardSimulator.KeyDown(ControllerX);
-			_wasXDown = isXDown;
+		public bool IsBlockKeyUptoDown(State LastState)
+        {
+			_controller.GetState(out var state);
+			return (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B) && !LastState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B));
 		}
 
-		private void ButtonY(State state)
+		public bool IsAutotargetKeyUptoDown(State LastState)
 		{
-			var isYDown = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y);
-			if (isYDown && !_wasYDown) _keyboardSimulator.KeyUp(ControllerY);
-			if (!isYDown && _wasYDown) _keyboardSimulator.KeyDown(ControllerY);
-			_wasYDown = isYDown;
+			_controller.GetState(out var state);
+			return (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X) && !LastState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X));
 		}
 
-		private void RJoystick(State state)
+		public bool IsPickupKeyUptoDown(State LastState)
 		{
-			var x = state.Gamepad.RightThumbX / ScrollDivider;
-			var y = state.Gamepad.RightThumbY / ScrollDivider;
-			//_keyboardSimulator.HorizontalScroll(x);
-			//_mouseSimulator.VerticalScroll(y);
+			_controller.GetState(out var state);
+			return (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y) && !LastState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y));
 		}
 
-		private void Movement(State state)
-		{
-			var x = state.Gamepad.LeftThumbX / MovementDivider;
-			var y = state.Gamepad.LeftThumbY / MovementDivider;
-			//Console.WriteLine(x);
-			//Console.WriteLine(y);
-			if (Math.Abs(x) > 2 && Math.Abs(x) > Math.Abs(y))
+		//Ici ça va checker si un des bumpers est accionné et ça va switcher de Menu
+		//Si aucun bumper n'est accionné alors on renvoie Control.Block
+		public Control IsBumpersKeyUptoDown(State LastState, Control lastControl, bool Reafficher)
+        {
+			var lastLeft = LastState.Gamepad.LeftTrigger;
+			var lastRight = LastState.Gamepad.RightTrigger;
+			_controller.GetState(out var state);
+			var newLeft = state.Gamepad.LeftTrigger;
+			var newRight = state.Gamepad.RightTrigger;
+
+			bool isLeftUpToDown = (lastLeft < seuilBumpers) && (newLeft > seuilBumpers);
+			bool isRightUpToDown = (lastRight < seuilBumpers) && (newRight > seuilBumpers);
+
+			if ( (isLeftUpToDown && isRightUpToDown) || (!isLeftUpToDown && !isRightUpToDown) ) //Au cas où on presse les deux bumpers en même temps
+			{
+				return Control.Block;
+			}
+
+			int indexControl = listeMenus.IndexOf(lastControl);
+			if (indexControl < 0)
             {
-				if (x < 0)
+				indexControl = 0;
+            }
+			
+			if (Reafficher)
+            {
+				return listeMenus[indexControl];
+            } else
+            {
+				if (isLeftUpToDown)
                 {
-					_keyboardSimulator.KeyDown(LJoystickLeft);
-					_keyboardSimulator.KeyUp(LJoystickRight);
-				}
-				else
+					if (indexControl > 0)
+                    {
+						return listeMenus[indexControl - 1];
+                    }
+					else
+                    {
+						return listeMenus[6];
+                    }
+                } else if (isRightUpToDown)
                 {
-					_keyboardSimulator.KeyDown(LJoystickRight);
-					_keyboardSimulator.KeyUp(LJoystickLeft);
+					if (indexControl < 6)
+					{
+						return listeMenus[indexControl + 1];
+					}
+					else
+					{
+						return listeMenus[0];
+					}
 				}
             }
-			else
-            {
-				_keyboardSimulator.KeyUp(LJoystickLeft);
-				_keyboardSimulator.KeyUp(LJoystickRight);
-			}
+            
 
-			if (Math.Abs(y) > 2)
-			{
-				if (y < 0)
-				{
-					Controls.KeyDown(Control.MoveUp);
-				}
-				else
-				{
-					Controls.KeyDown(Control.MoveDown);
-				}
-			}
-			else
-			{
-				Controls.KeyUp(Control.MoveUp);
-			}
-		}
+			return Control.Block;
+        }
 
-		public void SaveKey(Control control, Int32 key)
+		//Cette fonction va donner en sortie tous les controls associés aux boutons appuyés sur la manette
+		public List<Control> GetGamepadControls()
         {
-			switch (control)
-			{
-				case Control.MoveUp:
-					LJoystickUp = (VirtualKeyCode) key;
-					break;
-				case Control.MoveDown:
-					LJoystickDown = (VirtualKeyCode) key;
-					break;
-				case Control.MoveLeft:
-					LJoystickLeft = (VirtualKeyCode) key;
-					break;
-				case Control.MoveRight:
-					LJoystickRight = (VirtualKeyCode) key;
-					break;
-				default:
-					
-					break;
-			}
+			List<Control> listeControls = new List<Control>();
+			_controller.GetState(out var state);
+
+			if( state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X) )
+            {
+				listeControls.Add(Control.AutoTarget);
+            }
+
+			return listeControls;
 		}
+
+		//------------- Ce qui a après intéragit avec le fichier controls.cs
 
 		public bool isKeyDown(Control control)
 		{
 			_controller.GetState(out var state);
-			int y = state.Gamepad.LeftThumbY / MovementDivider; ;
-			int x = state.Gamepad.LeftThumbX / MovementDivider;
+			int Ly = state.Gamepad.LeftThumbY / MovementDivider;
+			int Lx = state.Gamepad.LeftThumbX / MovementDivider;
+
+			int Ry = state.Gamepad.RightThumbY / MovementDivider;
+			int Rx = state.Gamepad.RightThumbX / MovementDivider;
 			switch (control)
 			{
 				case Control.MoveUp:
-					return (Math.Abs(y) > Math.Abs(x) && y > 2);
+					return (Math.Abs(Ly) > Math.Abs(Lx) && Ly > 2);
 					break;
 
 				case Control.MoveDown:
-					return (Math.Abs(y) > Math.Abs(x) && y < -2);
+					return (Math.Abs(Ly) > Math.Abs(Lx) && Ly < -2);
 					break;
 
 				case Control.MoveLeft:
-					return (Math.Abs(x) > Math.Abs(y) && x < -2);
+					return (Math.Abs(Lx) > Math.Abs(Ly) && Lx < -2);
 					break;
 
 				case Control.MoveRight:
-					return (Math.Abs(x) > Math.Abs(y) && x > 2);
+					return (Math.Abs(Lx) > Math.Abs(Ly) && Lx > 2);
 					break;
 
 				case Control.AttackInteract:
@@ -206,9 +230,18 @@ namespace Intersect.Client.Core.Controls
 					
 				case Control.Hotkey4:
 					return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight);
-					
-				case Control.OpenSettings:
-					return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.);
+
+				case Control.Hotkey5:
+					return (Math.Abs(Ry) > Math.Abs(Rx) && Ry > 2);
+
+				case Control.Hotkey6:
+					return (Math.Abs(Rx) > Math.Abs(Ry) && Rx < -2);
+
+				case Control.Hotkey7:
+					return (Math.Abs(Ry) > Math.Abs(Rx) && Ry < -2);
+
+				case Control.Hotkey8:
+					return (Math.Abs(Rx) > Math.Abs(Ry) && Rx > 2);
 
 				default:
 					return false;

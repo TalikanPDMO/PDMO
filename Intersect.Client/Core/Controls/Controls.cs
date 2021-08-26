@@ -13,14 +13,12 @@ namespace Intersect.Client.Core.Controls
 
         public readonly IDictionary<Control, ControlMap> ControlMapping;
         //Ajouté par Moussmous
-        private static XBoxController inputMonitor;
+        private static XBoxController XboxControllerMonitor;
 
         public Controls(Controls gameControls = null)
         {
             //Ajouté par Moussmous pour permettre la gestion des manettes Xbox (et ptet les autres jsp)
-            inputMonitor = new XBoxController();
-            
-            //-----------------------------------------------------------------------------------------
+            XboxControllerMonitor = new XBoxController();
 
             ControlMapping = new Dictionary<Control, ControlMap>();
 
@@ -119,7 +117,7 @@ namespace Intersect.Client.Core.Controls
                 retourClavier = ActiveControls.ControlMapping[control]?.KeyDown() ?? false;
             } 
 
-            retourManette = inputMonitor.isKeyDown(control);
+            retourManette = XboxControllerMonitor.isKeyDown(control);
             
             if (retourClavier || retourManette)
             {
@@ -139,7 +137,7 @@ namespace Intersect.Client.Core.Controls
                 retourClavier = ActiveControls.ControlMapping[control]?.KeyUp() ?? false;
             }
 
-            retourManette = !inputMonitor.isKeyDown(control);
+            retourManette = !XboxControllerMonitor.isKeyDown(control);
 
             if (retourClavier || retourManette)
             {
