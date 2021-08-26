@@ -358,7 +358,7 @@ namespace Intersect.Client.Core
             }
 
 
-            Control retourControl = XboxControllerMonitor.IsBumpersKeyUptoDown(lastState, lastMenu, reafficher);
+            Control retourControl = XboxControllerMonitor.AreSwitchMenuKeysUptoDown(lastState, lastMenu, reafficher);
             if (retourControl != Control.Block)
             {
                 reafficher = false;

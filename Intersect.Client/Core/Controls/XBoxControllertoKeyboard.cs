@@ -4,32 +4,21 @@ using System;
 using Intersect.Client.Core.Controls;
 using System.Collections.Generic;
 
+
+//Fichier entier codé par Moussmous pour les controles manette
 namespace Intersect.Client.Core.Controls
 {
 	public class XBoxController
 	{
 		private const int MovementDivider = 2_000;
-		private const int ScrollDivider = 10_000;
-		private const int RefreshRate = 60;
+        private const int RefreshRate = 60;
 
 		private const int seuilBumpers = 150;
+		private const int seuilJoysticks = 2;
 
-		private List<Control> listeMenus;
-
-		private Timer _timer;
-		private Controller _controller;
-
-		private bool _wasADown;
-		private bool _wasBDown;
-		private bool _wasXDown;
-		private bool _wasYDown;
-
-
-		public XBoxController()
-		{
-			_controller = new Controller(UserIndex.One);
-			_timer = new Timer(obj => Update());
-
+		private static List<Control> listeMenus;
+		private void InitListeMenus()
+        {
 			listeMenus = new List<Control>();
 			listeMenus.Add(Control.OpenInventory);
 			listeMenus.Add(Control.OpenSpells);
@@ -38,6 +27,46 @@ namespace Intersect.Client.Core.Controls
 			listeMenus.Add(Control.OpenFriends);
 			listeMenus.Add(Control.OpenGuild);
 			listeMenus.Add(Control.OpenParties);
+		}
+
+		public static Dictionary<Control, string> GamepadMapping;
+		public void ResetDefaultMapping()
+        {
+			GamepadMapping = new Dictionary<Control, string>();
+			GamepadMapping[Control.MoveUp] = "LUp";
+			GamepadMapping[Control.MoveDown] = "LDown";
+			GamepadMapping[Control.MoveLeft] = "LLeft";
+			GamepadMapping[Control.MoveRight] = "LRight";
+			GamepadMapping[Control.AttackInteract] = "A";
+			GamepadMapping[Control.Block] = "B";
+			GamepadMapping[Control.AutoTarget] = "X";
+			GamepadMapping[Control.PickUp] = "Y";
+			GamepadMapping[Control.Hotkey1] = "DPadDown";
+			GamepadMapping[Control.Hotkey2] = "DPadLeft";
+			GamepadMapping[Control.Hotkey3] = "DPadUp";
+			GamepadMapping[Control.Hotkey4] = "DPadRight";
+			GamepadMapping[Control.Hotkey5] = "RDown";
+			GamepadMapping[Control.Hotkey6] = "RLeft";
+			GamepadMapping[Control.Hotkey7] = "RUp";
+			GamepadMapping[Control.Hotkey8] = "RRight";
+			GamepadMapping[Control.Hotkey9] = "LBumper";//Cette touche sert à circuler entre les menus <--
+			GamepadMapping[Control.Hotkey0] = "RBumper";//Cette touche sert à circuler entre les menus -->
+			GamepadMapping[Control.Screenshot] = "Start";
+			GamepadMapping[Control.OpenSettings] = "Back";
+		}
+
+		private Timer _timer;
+		private Controller _controller;
+
+
+		public XBoxController()
+		{
+			_controller = new Controller(UserIndex.One);
+			_timer = new Timer(obj => Update());
+
+			ResetDefaultMapping();
+
+			InitListeMenus();
 		}
 
 		public void Start()
@@ -56,7 +85,98 @@ namespace Intersect.Client.Core.Controls
 			return state;
         }
 
+		/// <summary>
+		/// Tu fournis en argument le control, et en sortie on te dit si la touche associée est appuyée ou non
+		/// </summary>
+		private bool ControlKeyDown(Control control, State state)
+        {
+			int Ly = state.Gamepad.LeftThumbY / MovementDivider;
+			int Lx = state.Gamepad.LeftThumbX / MovementDivider;
+
+			int Ry = state.Gamepad.RightThumbY / MovementDivider;
+			int Rx = state.Gamepad.RightThumbX / MovementDivider;
+
+			string GamepadKeyString = GamepadMapping[control];
+			switch (GamepadKeyString)
+            {
+				case "LUp":
+					return (Math.Abs(Ly) > Math.Abs(Lx) && Ly > seuilJoysticks);
+
+				case "LDown":
+					return (Math.Abs(Ly) > Math.Abs(Lx) && Ly < -seuilJoysticks);
+					break;
+
+				case "LLeft":
+					return (Math.Abs(Lx) > Math.Abs(Ly) && Lx < -seuilJoysticks);
+					break;
+
+				case "LRight":
+					return (Math.Abs(Lx) > Math.Abs(Ly) && Lx > seuilJoysticks);
+					break;
+
+				case "A":
+					return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A);
+
+				case "B":
+					return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B);
+
+				case "X":
+					return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X);
+
+				case "Y":
+					return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y);
+
+				case "DPadDown":
+					return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadDown);
+
+				case "DPadLeft":
+					return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft);
+
+				case "DPadUp":
+					return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadUp);
+
+				case "DPadRight":
+					return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight);
+
+				case "RDown":
+					return (Math.Abs(Ry) > Math.Abs(Rx) && Ry > seuilJoysticks);
+
+				case "RLeft":
+					return (Math.Abs(Rx) > Math.Abs(Ry) && Rx < -seuilJoysticks);
+
+				case "RUp":
+					return (Math.Abs(Ry) > Math.Abs(Rx) && Ry < -seuilJoysticks);
+
+				case "RRight":
+					return (Math.Abs(Rx) > Math.Abs(Ry) && Rx > seuilJoysticks);
+
+				case "Start":
+					return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Start);
+
+				case "Back":
+					return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Back);
+
+				case "LBumper":
+					return (state.Gamepad.LeftTrigger > seuilBumpers);
+
+				case "RBumper":
+					return (state.Gamepad.RightTrigger > seuilBumpers);
+
+				case "LShoulder":
+					return (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftShoulder));
+
+				case "RShoulder":
+					return (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder));
+			}
+
+			return false;
+        }
+
 		//-------- Ce bloc intéragit avec Monoinput.cs
+		/// <summary>
+		/// Regarde si une touche du gamepad a été actionnée
+		/// </summary>
+		/// <param name="lastState">L'état de la manette juste avant</param>
 		public bool StateChanged(State lastState)
         {
 			_controller.GetState(out var state);
@@ -67,12 +187,20 @@ namespace Intersect.Client.Core.Controls
 			bool start = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Start) && !lastState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Start);
 			bool back = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Back) && !lastState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Back);
 
+			//Check des bumpers
 			var lastLeft = lastState.Gamepad.LeftTrigger;
 			var lastRight = lastState.Gamepad.RightTrigger;
 			var newLeft = state.Gamepad.LeftTrigger;
 			var newRight = state.Gamepad.RightTrigger;
 			bool isLeftUpToDown = (lastLeft < seuilBumpers) && (newLeft > seuilBumpers);
 			bool isRightUpToDown = (lastRight < seuilBumpers) && (newRight > seuilBumpers);
+
+			int Ly = state.Gamepad.LeftThumbY / MovementDivider;
+			int Lx = state.Gamepad.LeftThumbX / MovementDivider;
+
+
+			int Ry = state.Gamepad.RightThumbY / MovementDivider;
+			int Rx = state.Gamepad.RightThumbX / MovementDivider;
 
 			return (a || b || x || y || start || back || isLeftUpToDown || isRightUpToDown);
 		}
@@ -82,7 +210,7 @@ namespace Intersect.Client.Core.Controls
 		public bool IsEscapeKeyUptoDown(State LastState)
 		{
 			_controller.GetState(out var state);
-			return ( state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Back) && !LastState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Back) );
+			return ( ControlKeyDown(Control.OpenSettings, state) && !ControlKeyDown(Control.OpenSettings, LastState) );
         }
 
 		public bool IsMenuKeyDown()
@@ -109,9 +237,11 @@ namespace Intersect.Client.Core.Controls
 			return (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y) && !LastState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y));
 		}
 
-		//Ici ça va checker si un des bumpers est accionné et ça va switcher de Menu
-		//Si aucun bumper n'est accionné alors on renvoie Control.Block
-		public Control IsBumpersKeyUptoDown(State LastState, Control lastControl, bool Reafficher)
+		/// <summary>
+		/// Ici ça va checker si un des bumpers est actionné et ça va envoyer à quel menu switcher
+		/// Si aucun bumper n'est actionné / y'a une erreur alors on renvoie Control.Block
+		/// </summary>
+		public Control AreSwitchMenuKeysUptoDown(State LastState, Control lastControl, bool Reafficher)
         {
 			var lastLeft = LastState.Gamepad.LeftTrigger;
 			var lastRight = LastState.Gamepad.RightTrigger;
@@ -165,7 +295,11 @@ namespace Intersect.Client.Core.Controls
 			return Control.Block;
         }
 
-		//Cette fonction va donner en sortie tous les controls associés aux boutons appuyés sur la manette
+		/// <summary>
+		/// Cette fonction va donner en sortie tous les controls associés aux boutons appuyés sur la manette
+		/// pas utile j'pense
+		/// </summary>
+		/// <returns></returns>
 		public List<Control> GetGamepadControls()
         {
 			List<Control> listeControls = new List<Control>();
