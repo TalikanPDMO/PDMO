@@ -66,7 +66,7 @@ namespace Intersect.Client.Interface.Menu
 
         private void WebsiteButton_Clicked(Base sender, ClickedEventArgs arguments)
         {
-            System.Diagnostics.Process.Start("https://pdmo.fr/");
+            System.Diagnostics.Process.Start("https://pdmo.eu/");
         }
         private void DiscordButton_Clicked(Base sender, ClickedEventArgs arguments)
         {
