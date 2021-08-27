@@ -187,6 +187,8 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.lblType = new System.Windows.Forms.Label();
             this.cmbMoveType = new DarkUI.Controls.DarkComboBox();
             this.grpTriggers = new DarkUI.Controls.DarkGroupBox();
+            this.btnMapTrigger = new DarkUI.Controls.DarkButton();
+            this.lblMapTrigger = new System.Windows.Forms.Label();
             this.cmbVariable = new DarkUI.Controls.DarkComboBox();
             this.lblVariableTrigger = new System.Windows.Forms.Label();
             this.txtCommand = new DarkUI.Controls.DarkTextBox();
@@ -658,6 +660,8 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             this.grpTriggers.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpTriggers.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTriggers.Controls.Add(this.btnMapTrigger);
+            this.grpTriggers.Controls.Add(this.lblMapTrigger);
             this.grpTriggers.Controls.Add(this.cmbVariable);
             this.grpTriggers.Controls.Add(this.lblVariableTrigger);
             this.grpTriggers.Controls.Add(this.txtCommand);
@@ -672,6 +676,27 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpTriggers.TabIndex = 21;
             this.grpTriggers.TabStop = false;
             this.grpTriggers.Text = "Trigger";
+            // 
+            // btnMapTrigger
+            // 
+            this.btnMapTrigger.Location = new System.Drawing.Point(115, 14);
+            this.btnMapTrigger.Name = "btnMapTrigger";
+            this.btnMapTrigger.Padding = new System.Windows.Forms.Padding(5);
+            this.btnMapTrigger.Size = new System.Drawing.Size(75, 23);
+            this.btnMapTrigger.TabIndex = 8;
+            this.btnMapTrigger.Text = "Select Map";
+            this.btnMapTrigger.Click += new System.EventHandler(this.btnMapTrigger_Click);
+            // 
+            // lblMapTrigger
+            // 
+            this.lblMapTrigger.AutoSize = true;
+            this.lblMapTrigger.Location = new System.Drawing.Point(192, 19);
+            this.lblMapTrigger.MaximumSize = new System.Drawing.Size(119, 13);
+            this.lblMapTrigger.Name = "lblMapTrigger";
+            this.lblMapTrigger.Size = new System.Drawing.Size(33, 13);
+            this.lblMapTrigger.TabIndex = 15;
+            this.lblMapTrigger.Text = "None";
+            this.lblMapTrigger.Visible = false;
             // 
             // cmbVariable
             // 
@@ -688,7 +713,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.cmbVariable.FormattingEnabled = true;
             this.cmbVariable.Items.AddRange(new object[] {
             "None"});
-            this.cmbVariable.Location = new System.Drawing.Point(181, 13);
+            this.cmbVariable.Location = new System.Drawing.Point(181, 15);
             this.cmbVariable.Name = "cmbVariable";
             this.cmbVariable.Size = new System.Drawing.Size(130, 21);
             this.cmbVariable.TabIndex = 14;
@@ -699,7 +724,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             // lblVariableTrigger
             // 
             this.lblVariableTrigger.AutoSize = true;
-            this.lblVariableTrigger.Location = new System.Drawing.Point(113, 17);
+            this.lblVariableTrigger.Location = new System.Drawing.Point(113, 19);
             this.lblVariableTrigger.Name = "lblVariableTrigger";
             this.lblVariableTrigger.Size = new System.Drawing.Size(48, 13);
             this.lblVariableTrigger.TabIndex = 13;
@@ -711,7 +736,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.txtCommand.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.txtCommand.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtCommand.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtCommand.Location = new System.Drawing.Point(181, 13);
+            this.txtCommand.Location = new System.Drawing.Point(181, 15);
             this.txtCommand.Name = "txtCommand";
             this.txtCommand.Size = new System.Drawing.Size(130, 20);
             this.txtCommand.TabIndex = 12;
@@ -721,7 +746,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             // lblCommand
             // 
             this.lblCommand.AutoSize = true;
-            this.lblCommand.Location = new System.Drawing.Point(113, 17);
+            this.lblCommand.Location = new System.Drawing.Point(113, 19);
             this.lblCommand.Name = "lblCommand";
             this.lblCommand.Size = new System.Drawing.Size(70, 13);
             this.lblCommand.TabIndex = 11;
@@ -753,7 +778,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.cmbTriggerVal.FormattingEnabled = true;
             this.cmbTriggerVal.Items.AddRange(new object[] {
             "None"});
-            this.cmbTriggerVal.Location = new System.Drawing.Point(181, 13);
+            this.cmbTriggerVal.Location = new System.Drawing.Point(181, 15);
             this.cmbTriggerVal.Name = "cmbTriggerVal";
             this.cmbTriggerVal.Size = new System.Drawing.Size(130, 21);
             this.cmbTriggerVal.TabIndex = 9;
@@ -779,9 +804,9 @@ namespace Intersect.Editor.Forms.Editors.Events
             "Player Touch",
             "Autorun",
             "Projectile Hit"});
-            this.cmbTrigger.Location = new System.Drawing.Point(6, 13);
+            this.cmbTrigger.Location = new System.Drawing.Point(2, 15);
             this.cmbTrigger.Name = "cmbTrigger";
-            this.cmbTrigger.Size = new System.Drawing.Size(101, 21);
+            this.cmbTrigger.Size = new System.Drawing.Size(111, 21);
             this.cmbTrigger.TabIndex = 2;
             this.cmbTrigger.Text = "Action Button";
             this.cmbTrigger.TextPadding = new System.Windows.Forms.Padding(2);
@@ -1437,5 +1462,7 @@ namespace Intersect.Editor.Forms.Editors.Events
         private ToolStripMenuItem btnPaste;
         private DarkComboBox cmbVariable;
         private Label lblVariableTrigger;
+        private Label lblMapTrigger;
+        private DarkButton btnMapTrigger;
     }
 }

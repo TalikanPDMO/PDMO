@@ -1766,6 +1766,8 @@ namespace Intersect.Editor.Forms.Editors.Events
             lblCommand.Hide();
             lblVariableTrigger.Hide();
             cmbVariable.Hide();
+            lblMapTrigger.Hide();
+            btnMapTrigger.Hide();
 
             if (MyEvent.CommonEvent)
             {
@@ -1793,6 +1795,23 @@ namespace Intersect.Editor.Forms.Editors.Events
                     cmbVariable.Items.AddRange(ServerVariableBase.Names);
                     cmbVariable.SelectedIndex = ServerVariableBase.ListIndex(CurrentPage.TriggerId) + 1;
                 }
+                else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.OnMapEnter || cmbTrigger.SelectedIndex == (int)CommonEventTrigger.OnMapLeave)
+                {
+                    var map = Intersect.GameObjects.Maps.MapList.MapList.List.FindMap(CurrentPage.TriggerId);
+                    if (map == null)
+                    {
+                        lblMapTrigger.Text = Strings.EventEditor.nomapselected;
+                        btnMapTrigger.Tag = Guid.Empty;
+                    }
+                    else
+                    {
+                        lblMapTrigger.Text = map.Name;
+                        btnMapTrigger.Tag = CurrentPage.TriggerId;
+                    }
+                    btnMapTrigger.Show();
+                    lblMapTrigger.Show();
+                }
+
             }
         }
 
@@ -1879,6 +1898,33 @@ namespace Intersect.Editor.Forms.Editors.Events
         }
 
         #endregion
+
+        private void btnMapTrigger_Click(object sender, EventArgs e)
+        {
+            var frmWarpSelection = new FrmWarpSelection();
+            frmWarpSelection.InitForm(false, null);
+            frmWarpSelection.SelectTile((Guid)btnMapTrigger.Tag, 0, 0);
+            frmWarpSelection.TopMost = true;
+            frmWarpSelection.ShowDialog();
+            if (frmWarpSelection.GetResult())
+            {
+                var mapId = frmWarpSelection.GetMap();
+                btnMapTrigger.Tag = mapId;
+                if(mapId == Guid.Empty)
+                {
+                    lblMapTrigger.Text = Strings.EventEditor.nomapselected;
+                }
+                else
+                {
+                    var map = Intersect.GameObjects.Maps.MapList.MapList.List.FindMap(mapId);
+                    if (map != null)
+                    {
+                        lblMapTrigger.Text = map.Name;
+                        CurrentPage.TriggerId = mapId;
+                    }  
+                }
+            }
+        }
     }
 
     public class CommandListProperties
