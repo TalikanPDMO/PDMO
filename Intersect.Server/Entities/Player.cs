@@ -5692,6 +5692,11 @@ namespace Intersect.Server.Entities
                 {
                     if ((trigger == CommonEventTrigger.None || baseEvent.Pages[i].CommonTrigger == trigger) && Conditions.CanSpawnPage(baseEvent.Pages[i], this, null))
                     {
+                        if ((trigger == CommonEventTrigger.OnMapEnter || trigger == CommonEventTrigger.OnMapLeave) && param != baseEvent.Pages[i].TriggerId.ToString())
+                        {
+                            continue;
+                        }
+
                         if (trigger == CommonEventTrigger.SlashCommand && command.ToLower() != baseEvent.Pages[i].TriggerCommand.ToLower())
                         {
                             continue;

@@ -2343,6 +2343,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString commandlist = @"Commands:";
 
+            public static LocalizedString nomapselected = @"No map selected";
+
             public static Dictionary<int, LocalizedString> commontriggers = new Dictionary<int, LocalizedString>
             {
                 {0, @"None"},
@@ -2360,6 +2362,8 @@ Tick timer saved in server config.json.";
                 {12, @"Guild Member Joined"},
                 {13, @"Guild Member Left"},
                 {14, @"Guild Member Kicked"},
+                {15, @"On Map Enter"},
+                {16, @"On Map Leave"},
             };
 
             public static LocalizedString conditions = @"Conditions";
