@@ -43,6 +43,8 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore] public Entity Target { get; set; } = null;
 
+        [NotMapped, JsonIgnore] public bool Running = false;
+
         public Entity() : this(Guid.NewGuid())
         {
         }
@@ -896,10 +898,14 @@ namespace Intersect.Server.Entities
         //Returns the amount of time required to traverse 1 tile
         public virtual float GetMovementTime()
         {
-            var time = 1000f / (float) (1 + Math.Log(Stat[(int) Stats.Speed].Value()));
+            float time = 500f;
+            if (Running)
+            {
+                time = 1000f / (float)(1 + Math.Log(Stat[(int)Stats.Speed].Value()));
+            }
             if (Blocking)
             {
-                time += time * Options.BlockingSlow;
+                time += time * (float)Options.BlockingSlow;
             }
 
             return Math.Min(1000f, time);

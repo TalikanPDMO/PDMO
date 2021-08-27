@@ -173,6 +173,8 @@ namespace Intersect.Client.Entities
 
         public int WalkFrame;
 
+        public bool Running = false;
+
         public FloatRect WorldPos = new FloatRect();
 
         //Location Info
@@ -479,7 +481,11 @@ namespace Intersect.Client.Entities
         //Returns the amount of time required to traverse 1 tile
         public virtual float GetMovementTime()
         {
-            var time = 1000f / (float) (1 + Math.Log(Stat[(int) Stats.Speed]));
+            float time = 500f;
+            if (Running)
+            {
+                time = 1000f / (float)(1 + Math.Log(Stat[(int)Stats.Speed]));
+            }
             if (Blocking)
             {
                 time += time * (float) Options.BlockingSlow;

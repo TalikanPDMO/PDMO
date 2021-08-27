@@ -971,9 +971,10 @@ namespace Intersect.Client.Entities
                 movex = 1;
             }
 
+            Running = Controls.KeyDown(Control.Running);
+
             // Used this so I can do multiple switch case
             var move = movex / 10 + movey;
-
             Globals.Me.MoveDirInput = -1;
             if (movex != 0f || movey != 0f)
             {
