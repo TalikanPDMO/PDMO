@@ -866,6 +866,11 @@ namespace Intersect.Server.Maps
                 mPlayers.TryRemove(en.Id, out var pResult);
             }
             mCachedEntities = mEntities.Values.ToArray();
+            if (en is Player p)
+            {
+                //Common Event OnMapLeave
+                p.StartCommonEventsWithTrigger(CommonEventTrigger.OnMapLeave, "", this.Id.ToString());
+            }
         }
 
         public void RemoveProjectile(Projectile en)
@@ -1189,10 +1194,14 @@ namespace Intersect.Server.Maps
             PacketSender.SendMapItems(player, Id);
 
             AddEntity(player);
-
             player.LastMapEntered = Id;
+
+           
+
             if (SurroundingMaps.Length <= 0)
             {
+                //Common Event OnMapEnter here
+                player.StartCommonEventsWithTrigger(CommonEventTrigger.OnMapEnter, "", this.Id.ToString());
                 return;
             }
 
@@ -1203,6 +1212,10 @@ namespace Intersect.Server.Maps
             }
 
             PacketSender.SendEntityDataToProximity(player, player);
+            //Common Event OnMapEnter here
+            player.StartCommonEventsWithTrigger(CommonEventTrigger.OnMapEnter, "", this.Id.ToString());
+
+
         }
 
         public void SendMapEntitiesTo(Player player)
