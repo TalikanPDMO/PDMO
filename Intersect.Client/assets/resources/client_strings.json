@@ -188,7 +188,8 @@
       "opensettings": "Ouvrir Options:",
       "opendebugger": "Ouvrir Debugger:",
       "openadminpanel": "Accès Modération:",
-      "togglegui": "Cacher l'Interface:"
+      "togglegui": "Cacher l'Interface:",
+      "running": "Courir:"
     },
     "edit": "Modifier commandes",
     "listening": "Listening",

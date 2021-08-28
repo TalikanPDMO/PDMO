@@ -970,9 +970,15 @@ namespace Intersect.Client.Entities
             {
                 movex = 1;
             }
-
-            Running = Controls.KeyDown(Control.Running);
-
+            if(Running)
+            {
+                Running = Controls.KeyDown(Control.Running);
+            }
+            else
+            {
+                Running = !IsMoving && Controls.KeyDown(Control.Running);
+            }
+            
             // Used this so I can do multiple switch case
             var move = movex / 10 + movey;
             Globals.Me.MoveDirInput = -1;
@@ -1011,39 +1017,41 @@ namespace Intersect.Client.Entities
                         break;
                 }
             }
-
-            //Ajouté par Moussmous pour la rotation du joueur (j'ai suivi le patch)
-            //Loop through our direction timers and keep track of how long we've been requesting to move in each direction
-            //If we have only just tapped a button we will set Globals.Me.MoveDirInput to -1 in order to cancel the movement
-            for (var i = 0; i < 4; i++)
+            if (!Running)
             {
-                if (i == Globals.Me.MoveDirInput)
+                //Ajouté par Moussmous pour la rotation du joueur (j'ai suivi le patch)
+                //Loop through our direction timers and keep track of how long we've been requesting to move in each direction
+                //If we have only just tapped a button we will set Globals.Me.MoveDirInput to -1 in order to cancel the movement
+                for (var i = 0; i < 4; i++)
                 {
-                    //If we just started to change to a new direction then turn the player only (set the timer to now + 60ms)
-                    if (MoveDirectionTimers[i] == -1 && !Globals.Me.IsMoving && Dir != Globals.Me.MoveDirInput)
+                    if (i == Globals.Me.MoveDirInput)
                     {
-                        //Turn Only
-                        Dir = (byte)Globals.Me.MoveDirInput;
-                        PacketSender.SendDirection((byte)Globals.Me.MoveDirInput);
-                        MoveDirectionTimers[i] = Globals.System.GetTimeMs() + 60;
-                        Globals.Me.MoveDirInput = -1;
+                        //If we just started to change to a new direction then turn the player only (set the timer to now + TurnOnlyHeldDuration ms)
+                        if (MoveDirectionTimers[i] == -1 && !Globals.Me.IsMoving && Dir != Globals.Me.MoveDirInput)
+                        {
+                            //Turn Only
+                            Dir = (byte)Globals.Me.MoveDirInput;
+                            PacketSender.SendDirection((byte)Globals.Me.MoveDirInput);
+                            MoveDirectionTimers[i] = Globals.System.GetTimeMs() + Options.Instance.PlayerOpts.TurnOnlyHeldDuration;
+                            Globals.Me.MoveDirInput = -1;
+                        }
+                        //If we're already facing the direction then just start moving (set the timer to now)
+                        else if (MoveDirectionTimers[i] == -1 && !Globals.Me.IsMoving && Dir == Globals.Me.MoveDirInput)
+                        {
+                            MoveDirectionTimers[i] = Globals.System.GetTimeMs();
+                        }
+                        //The timer is greater than the currect time, let's cancel the move.
+                        else if (MoveDirectionTimers[i] > Globals.System.GetTimeMs() && !Globals.Me.IsMoving)
+                        {
+                            //Don't trigger the actual move immediately, wait until button is held
+                            Globals.Me.MoveDirInput = -1;
+                        }
                     }
-                    //If we're already facing the direction then just start moving (set the timer to now)
-                    else if (MoveDirectionTimers[i] == -1 && !Globals.Me.IsMoving && Dir == Globals.Me.MoveDirInput)
+                    else
                     {
-                        MoveDirectionTimers[i] = Globals.System.GetTimeMs();
+                        //Reset the timer if the direction isn't being requested
+                        MoveDirectionTimers[i] = -1;
                     }
-                    //The timer is greater than the currect time, let's cancel the move.
-                    else if (MoveDirectionTimers[i] > Globals.System.GetTimeMs() && !Globals.Me.IsMoving)
-                    {
-                        //Don't trigger the actual move immediately, wait until button is held
-                        Globals.Me.MoveDirInput = -1;
-                    }
-                }
-                else
-                {
-                    //Reset the timer if the direction isn't being requested
-                    MoveDirectionTimers[i] = -1;
                 }
             }
 
@@ -1136,6 +1144,22 @@ namespace Intersect.Client.Entities
 
             //Something is null.. return a value that is out of range :) 
             return 9999;
+        }
+
+        //Returns the amount of time required to traverse 1 tile
+        public override float GetMovementTime()
+        {
+            float time = Options.Instance.PlayerOpts.WalkingSpeed;
+            if (Running)
+            {
+                time = 1000f / (float)(1 + Math.Log(Stat[(int)Stats.Speed]));
+                if (Blocking)
+                {
+                    time += time * (float)Options.BlockingSlow / 100f;
+                }
+
+            }
+            return Math.Min(Options.Instance.PlayerOpts.WalkingSpeed, time);
         }
 
         public void AutoTarget()

@@ -4257,6 +4257,7 @@ namespace Intersect.Server.Entities
             return this.InParty(otherPlayer) || this == otherPlayer;
         }
 
+
         public bool CanSpellCast(SpellBase spell, Entity target, bool checkVitalReqs)
         {
             if (!Conditions.MeetsConditionLists(spell.CastingRequirements, this, null))
@@ -4767,6 +4768,21 @@ namespace Intersect.Server.Entities
                     }
                 }
             }
+        }
+
+        //Returns the amount of time required to traverse 1 tile
+        public override float GetMovementTime()
+        {
+            float time = Options.Instance.PlayerOpts.WalkingSpeed;
+            if (Running)
+            {
+                time = 1000f / (float)(1 + Math.Log(Stat[(int)Stats.Speed].Value()));
+                if (Blocking)
+                {
+                    time += time * (float)Options.BlockingSlow / 100f;
+                }
+            }
+            return Math.Min(Options.Instance.PlayerOpts.WalkingSpeed, time);
         }
 
         //Stats
