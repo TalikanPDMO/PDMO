@@ -1871,16 +1871,7 @@ namespace Intersect.Client.Entities
             {
                 SpriteAnimation = SpriteAnimations.Normal;
             }
-            if (IsMoving)
-            {
-                SpriteAnimation = SpriteAnimations.Normal;
-                if (Running && AnimatedTextures[SpriteAnimations.Run] != null)
-                {
-                    SpriteAnimation = SpriteAnimations.Run;
-                }
-                LastActionTime = Globals.System.GetTimeMs();
-            }
-            else if (AttackTimer > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond) //Attacking
+            if (AttackTimer > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond) //Attacking
             {
                 var timeIn = CalculateAttackTime() - (AttackTimer - Timing.Global.Ticks / TimeSpan.TicksPerMillisecond);
                 LastActionTime = Globals.System.GetTimeMs();
@@ -1950,6 +1941,15 @@ namespace Intersect.Client.Entities
                     }
 
                     SpriteFrame = (int)Math.Floor((timeIn / (duration / (float)SpriteFrames)));
+                }
+                LastActionTime = Globals.System.GetTimeMs();
+            }
+            else if (IsMoving)
+            {
+                SpriteAnimation = SpriteAnimations.Normal;
+                if (Running && AnimatedTextures[SpriteAnimations.Run] != null)
+                {
+                    SpriteAnimation = SpriteAnimations.Run;
                 }
                 LastActionTime = Globals.System.GetTimeMs();
             }

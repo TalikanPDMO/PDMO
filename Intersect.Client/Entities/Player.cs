@@ -340,6 +340,8 @@ namespace Intersect.Client.Entities
             if (Globals.GameShop == null && Globals.InBank == false && Globals.InTrade == false && !ItemOnCd(index) &&
                 index >= 0 && index < Globals.Me.Inventory.Length && Globals.Me.Inventory[index]?.Quantity > 0)
             {
+                // Reset display for not stating idle after using an item
+                LastActionTime = Globals.System.GetTimeMs();
                 PacketSender.SendUseItem(index, TargetIndex);
             }
         }
@@ -804,7 +806,8 @@ namespace Intersect.Client.Entities
                 {
                     return;
                 }
-
+                // Reset display for not stating idle after using an item
+                LastActionTime = Globals.System.GetTimeMs();
                 PacketSender.SendUseSpell(index, TargetIndex);
             }
         }
