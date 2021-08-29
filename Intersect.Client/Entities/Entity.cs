@@ -559,7 +559,7 @@ namespace Intersect.Client.Entities
                     }
                     if (Running)
                     {
-                        mWalkTimer = Globals.System.GetTimeMs() + Options.Instance.Sprites.RunningFrameDuration;
+                        mWalkTimer = Globals.System.GetTimeMs() + 2*(Options.Instance.Sprites.RunningFrameDuration - Stat[(int)Stats.Speed]);
                     }
                     else
                     {

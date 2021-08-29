@@ -691,6 +691,8 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString vital1val = @"{00} / {01}";
 
+            public static LocalizedString sprinttip = @"Hold the Sprint button to run while moving";
+
         }
 
         public struct Errors

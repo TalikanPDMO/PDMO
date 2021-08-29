@@ -592,6 +592,7 @@
     <Content Include="assets\resources\gui\partykick.png" />
     <Content Include="assets\resources\gui\partyleader.png" />
     <Content Include="assets\resources\gui\partyleave.png" />
+    <Content Include="assets\resources\gui\playerrunicon.png" />
     <Content Include="assets\resources\gui\quantity.png" />
     <Content Include="assets\resources\gui\questoffer.png" />
     <Content Include="assets\resources\gui\quests.png" />

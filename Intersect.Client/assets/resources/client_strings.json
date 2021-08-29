@@ -243,7 +243,8 @@
     "vital0": "PV:",
     "vital0val": "{00} / {01}",
     "vital1": "PM:",
-    "vital1val": "{00} / {01}"
+    "vital1val": "{00} / {01}",
+    "sprinttip":  "Maintenez la touche de Sprint enfoncée pour courir en vous déplaçant"
   },
   "Errors": {
     "displaynotsupported": "Paramètres d'affichage invalides!",
