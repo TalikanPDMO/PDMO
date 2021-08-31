@@ -483,7 +483,7 @@ namespace Intersect.Client.Entities
         //Returns the amount of time required to traverse 1 tile
         public virtual float GetMovementTime()
         {
-            float time = 1000f / (float)(1 + Math.Log(Stat[(int)Stats.Speed]));
+            float time = 2.0f * Options.Instance.PlayerOpts.WalkingSpeed / (float)(1 + Math.Log(Stat[(int)Stats.Speed]));
             if (Blocking)
             {
                 time += time * (float)Options.BlockingSlow / 100f;

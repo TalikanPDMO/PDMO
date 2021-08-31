@@ -77,7 +77,7 @@
         /// <summary>
         /// Amount of time (in ms) required to traverse 1 tile when a player is walking
         /// </summary>
-        public int WalkingSpeed = 500;
+        public int WalkingSpeed = 400;
 
     }
 

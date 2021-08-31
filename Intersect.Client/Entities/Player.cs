@@ -1155,7 +1155,7 @@ namespace Intersect.Client.Entities
             float time = Options.Instance.PlayerOpts.WalkingSpeed;
             if (Running)
             {
-                time = 1000f / (float)(1 + Math.Log(Stat[(int)Stats.Speed]));
+                time = 2.0f * Options.Instance.PlayerOpts.WalkingSpeed / (float)(1 + Math.Log(Stat[(int)Stats.Speed]));
                 if (Blocking)
                 {
                     time += time * (float)Options.BlockingSlow / 100f;
