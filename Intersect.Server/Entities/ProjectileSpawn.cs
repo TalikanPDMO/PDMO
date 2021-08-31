@@ -52,8 +52,15 @@ namespace Intersect.Server.Entities
             Dir = dir;
             ProjectileBase = projectileBase;
             Parent = parent;
-            TransmittionTimer = Globals.Timing.Milliseconds +
-                                (long) ((float) ProjectileBase.Speed / (float) ProjectileBase.Range);
+            if (ProjectileBase.Range == 0)
+            {
+                TransmittionTimer = Globals.Timing.Milliseconds + ProjectileBase.Speed;
+            }
+            else
+            {
+                TransmittionTimer = Globals.Timing.Milliseconds +
+                                (long)((float)ProjectileBase.Speed / (float)ProjectileBase.Range);
+            }
         }
 
         public bool IsAtLocation(Guid mapId, int x, int y, int z)

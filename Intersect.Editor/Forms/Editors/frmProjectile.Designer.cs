@@ -297,11 +297,6 @@ namespace Intersect.Editor.Forms.Editors
             this.nudRange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudRange.ForeColor = System.Drawing.Color.Gainsboro;
             this.nudRange.Location = new System.Drawing.Point(107, 149);
-            this.nudRange.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             this.nudRange.Name = "nudRange";
             this.nudRange.Size = new System.Drawing.Size(69, 20);
             this.nudRange.TabIndex = 44;

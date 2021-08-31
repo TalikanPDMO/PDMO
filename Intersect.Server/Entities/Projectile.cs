@@ -537,7 +537,14 @@ namespace Intersect.Server.Entities
             if (move)
             {
                 spawn.Distance++;
-                spawn.TransmittionTimer += (long)((float)Base.Speed / (float)Base.Range);
+                if (Base.Range == 0)
+                {
+                    spawn.TransmittionTimer += Base.Speed;
+                }
+                else
+                {
+                    spawn.TransmittionTimer += (long)((float)Base.Speed / (float)Base.Range);
+                }
                 newx = spawn.X + GetRangeX(spawn.Dir, 1);
                 newy = spawn.Y + GetRangeY(spawn.Dir, 1);
             }

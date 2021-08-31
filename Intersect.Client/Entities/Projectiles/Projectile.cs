@@ -612,8 +612,15 @@ namespace Intersect.Client.Entities.Projectiles
                                 killSpawn = Collided(i);
                             }
 
-                            Spawns[i].TransmittionTimer = Globals.System.GetTimeMs() +
-                                                          (long) ((float) mMyBase.Speed / (float) mMyBase.Range);
+                            if (mMyBase.Range == 0)
+                            {
+                                Spawns[i].TransmittionTimer = Globals.System.GetTimeMs() + mMyBase.Speed;
+                            }
+                            else
+                            {
+                                Spawns[i].TransmittionTimer = Globals.System.GetTimeMs() +
+                                                          (long)((float)mMyBase.Speed / (float)mMyBase.Range);
+                            } 
 
                             if (Spawns[i].Distance >= mMyBase.Range)
                             {
