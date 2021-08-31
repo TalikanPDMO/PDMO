@@ -548,9 +548,9 @@ namespace Intersect.Client.Entities
                     }
                     else
                     {
-                        if (WalkFrame > 0 && WalkFrame / SpriteFrames < 0.7f)
+                        if (WalkFrame > 0 && WalkFrame / Options.Instance.Sprites.NormalFrames < 0.7f)
                         {
-                            WalkFrame = (int)SpriteFrames / 2;
+                            WalkFrame = (int)Options.Instance.Sprites.NormalFrames / 2;
                         }
                         else
                         {
@@ -1051,6 +1051,10 @@ namespace Intersect.Client.Entities
                         else
                         {
                             //Restore Original Attacking/Blocking Code
+                            if (this == Globals.Me)
+                            {
+                                var t = texture;
+                            }
                             srcRectangle = new FloatRect(
                                 WalkFrame * (int) texture.GetWidth() / SpriteFrames, d * (int) texture.GetHeight() / Options.Instance.Sprites.Directions,
                                 (int) texture.GetWidth() / SpriteFrames, (int) texture.GetHeight() / Options.Instance.Sprites.Directions
@@ -1059,6 +1063,10 @@ namespace Intersect.Client.Entities
                     }
                     else
                     {
+                        if (this == Globals.Me)
+                        {
+                            var t = texture;
+                        }
                         srcRectangle = new FloatRect(
                             SpriteFrame * (int)texture.GetWidth() / SpriteFrames, d * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
                             (int)texture.GetWidth() / SpriteFrames, (int)texture.GetHeight() / Options.Instance.Sprites.Directions
