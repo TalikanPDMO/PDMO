@@ -407,7 +407,7 @@ namespace Intersect.Server.Entities
                     var spawn = Spawns[i];
                     if (spawn != null)
                     {
-                        while (Globals.Timing.Milliseconds > spawn.TransmittionTimer && Spawns[i] != null)
+                        while ((Globals.Timing.Milliseconds > spawn.TransmittionTimer || spawn.Dead) && Spawns[i] != null)
                         {
                             var x = spawn.X;
                             var y = spawn.Y;
