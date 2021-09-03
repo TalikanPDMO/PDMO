@@ -16,44 +16,58 @@ namespace Intersect.Client.Core.Controls
 		private const int seuilBumpers = 150;
 		private const int seuilJoysticks = 2;
 
-		private static List<Control> listeMenus;
+		private static List<ControlGamepad> listeMenus;
 		private void InitListeMenus()
         {
-			listeMenus = new List<Control>();
-			listeMenus.Add(Control.OpenInventory);
-			listeMenus.Add(Control.OpenSpells);
-			listeMenus.Add(Control.OpenCharacterInfo);
-			listeMenus.Add(Control.OpenQuests);
-			listeMenus.Add(Control.OpenFriends);
-			listeMenus.Add(Control.OpenGuild);
-			listeMenus.Add(Control.OpenParties);
+			listeMenus = new List<ControlGamepad>();
+			listeMenus.Add(ControlGamepad.OpenInventory);
+			listeMenus.Add(ControlGamepad.OpenSpells);
+			listeMenus.Add(ControlGamepad.OpenCharacterInfo);
+			listeMenus.Add(ControlGamepad.OpenQuests);
+			listeMenus.Add(ControlGamepad.OpenFriends);
+			listeMenus.Add(ControlGamepad.OpenGuild);
+			listeMenus.Add(ControlGamepad.OpenParties);
 		}
 
-		public static Dictionary<Control, string> GamepadMapping;
+		public static Dictionary<ControlGamepad, string> GamepadMapping;
 		public void ResetDefaultMapping()
         {
-			GamepadMapping = new Dictionary<Control, string>();
-			GamepadMapping[Control.MoveUp] = "LUp";
-			GamepadMapping[Control.MoveDown] = "LDown";
-			GamepadMapping[Control.MoveLeft] = "LLeft";
-			GamepadMapping[Control.MoveRight] = "LRight";
-			GamepadMapping[Control.AttackInteract] = "A";
-			GamepadMapping[Control.Block] = "B";
-			GamepadMapping[Control.AutoTarget] = "X";
-			GamepadMapping[Control.PickUp] = "Y";
-			GamepadMapping[Control.Hotkey1] = "DPadDown";
-			GamepadMapping[Control.Hotkey2] = "DPadLeft";
-			GamepadMapping[Control.Hotkey3] = "DPadUp";
-			GamepadMapping[Control.Hotkey4] = "DPadRight";
-			GamepadMapping[Control.Hotkey5] = "RDown";
-			GamepadMapping[Control.Hotkey6] = "RLeft";
-			GamepadMapping[Control.Hotkey7] = "RUp";
-			GamepadMapping[Control.Hotkey8] = "RRight";
-			GamepadMapping[Control.Hotkey9] = "LBumper";//Cette touche sert à circuler entre les menus <--
-			GamepadMapping[Control.Hotkey0] = "RBumper";//Cette touche sert à circuler entre les menus -->
-			GamepadMapping[Control.Screenshot] = "Start";
-			GamepadMapping[Control.OpenSettings] = "Back";
+			GamepadMapping = new Dictionary<ControlGamepad, string>();
+			GamepadMapping[ControlGamepad.MoveUp] = "LJoystickUp";
+			GamepadMapping[ControlGamepad.MoveDown] = "LJoystickDown";
+			GamepadMapping[ControlGamepad.MoveLeft] = "LJoystickLeft";
+			GamepadMapping[ControlGamepad.MoveRight] = "LJoystickRight";
+			GamepadMapping[ControlGamepad.AttackInteract] = "A";
+			GamepadMapping[ControlGamepad.Block] = "B";
+			GamepadMapping[ControlGamepad.AutoTarget] = "X";
+			GamepadMapping[ControlGamepad.PickUp] = "Y";
+			GamepadMapping[ControlGamepad.Hotkey1] = "DPadDown";
+			GamepadMapping[ControlGamepad.Hotkey2] = "DPadLeft";
+			GamepadMapping[ControlGamepad.Hotkey3] = "DPadUp";
+			GamepadMapping[ControlGamepad.Hotkey4] = "DPadRight";
+			GamepadMapping[ControlGamepad.Hotkey5] = "RJoystickDown";
+			GamepadMapping[ControlGamepad.Hotkey6] = "RJoystickLeft";
+			GamepadMapping[ControlGamepad.Hotkey7] = "RJoystickUp";
+			GamepadMapping[ControlGamepad.Hotkey8] = "RJoystickRight";
+			GamepadMapping[ControlGamepad.Hotkey9] = null;
+			GamepadMapping[ControlGamepad.Hotkey0] = null;
+			GamepadMapping[ControlGamepad.SwitchMenuLeft] = "LTrigger";//Cette touche sert à circuler entre les menus <--
+			GamepadMapping[ControlGamepad.SwitchMenuRight] = "RTrigger";//Cette touche sert à circuler entre les menus -->
+			GamepadMapping[ControlGamepad.Screenshot] = "Start";
+			GamepadMapping[ControlGamepad.OpenSettings] = "Back";
+			GamepadMapping[ControlGamepad.OpenMenu] = null;
+			GamepadMapping[ControlGamepad.OpenInventory] = null;
+			GamepadMapping[ControlGamepad.OpenQuests] = null;
+			GamepadMapping[ControlGamepad.OpenCharacterInfo] = null;
+			GamepadMapping[ControlGamepad.OpenParties] = null;
+			GamepadMapping[ControlGamepad.OpenSpells] = null;
+			GamepadMapping[ControlGamepad.OpenGuild] = null;
+			GamepadMapping[ControlGamepad.OpenFriends] = null;
 		}
+		public Dictionary<ControlGamepad, string> getGamepadMapping()
+        {
+			return GamepadMapping;
+        }
 
 		private Timer _timer;
 		private Controller _controller;
@@ -85,10 +99,17 @@ namespace Intersect.Client.Core.Controls
 			return state;
         }
 
+		/*
+		public ControlGamepad ControlToControlGamepad(Control control)
+        {
+			valeurEntier = (int)control;
+			if 
+        }*/
+
 		/// <summary>
 		/// Tu fournis en argument le control, et en sortie on te dit si la touche associée est appuyée ou non
 		/// </summary>
-		private bool ControlKeyDown(Control control, State state)
+		private bool ControlKeyDown(ControlGamepad control, State state)
         {
 			int Ly = state.Gamepad.LeftThumbY / MovementDivider;
 			int Lx = state.Gamepad.LeftThumbX / MovementDivider;
@@ -99,18 +120,18 @@ namespace Intersect.Client.Core.Controls
 			string GamepadKeyString = GamepadMapping[control];
 			switch (GamepadKeyString)
             {
-				case "LUp":
+				case "LJoystickUp":
 					return (Math.Abs(Ly) > Math.Abs(Lx) && Ly > seuilJoysticks);
 
-				case "LDown":
+				case "LJoystickDown":
 					return (Math.Abs(Ly) > Math.Abs(Lx) && Ly < -seuilJoysticks);
 					break;
 
-				case "LLeft":
+				case "LJoystickLeft":
 					return (Math.Abs(Lx) > Math.Abs(Ly) && Lx < -seuilJoysticks);
 					break;
 
-				case "LRight":
+				case "LJoystickRight":
 					return (Math.Abs(Lx) > Math.Abs(Ly) && Lx > seuilJoysticks);
 					break;
 
@@ -138,16 +159,16 @@ namespace Intersect.Client.Core.Controls
 				case "DPadRight":
 					return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight);
 
-				case "RDown":
+				case "RJoystickDown":
 					return (Math.Abs(Ry) > Math.Abs(Rx) && Ry > seuilJoysticks);
 
-				case "RLeft":
+				case "RJoystickLeft":
 					return (Math.Abs(Rx) > Math.Abs(Ry) && Rx < -seuilJoysticks);
 
-				case "RUp":
+				case "RJoystickUp":
 					return (Math.Abs(Ry) > Math.Abs(Rx) && Ry < -seuilJoysticks);
 
-				case "RRight":
+				case "RJoystickRight":
 					return (Math.Abs(Rx) > Math.Abs(Ry) && Rx > seuilJoysticks);
 
 				case "Start":
@@ -156,16 +177,16 @@ namespace Intersect.Client.Core.Controls
 				case "Back":
 					return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Back);
 
-				case "LBumper":
+				case "LTrigger":
 					return (state.Gamepad.LeftTrigger > seuilBumpers);
 
-				case "RBumper":
+				case "RTrigger":
 					return (state.Gamepad.RightTrigger > seuilBumpers);
 
-				case "LShoulder":
+				case "LBumper":
 					return (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftShoulder));
 
-				case "RShoulder":
+				case "RBumper":
 					return (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder));
 			}
 
@@ -210,7 +231,7 @@ namespace Intersect.Client.Core.Controls
 		public bool IsEscapeKeyUptoDown(State LastState)
 		{
 			_controller.GetState(out var state);
-			return ( ControlKeyDown(Control.OpenSettings, state) && !ControlKeyDown(Control.OpenSettings, LastState) );
+			return ( ControlKeyDown(ControlGamepad.OpenSettings, state) && !ControlKeyDown(ControlGamepad.OpenSettings, LastState) );
         }
 
 		public bool IsMenuKeyDown()
@@ -241,7 +262,7 @@ namespace Intersect.Client.Core.Controls
 		/// Ici ça va checker si un des bumpers est actionné et ça va envoyer à quel menu switcher
 		/// Si aucun bumper n'est actionné / y'a une erreur alors on renvoie Control.Block
 		/// </summary>
-		public Control AreSwitchMenuKeysUptoDown(State LastState, Control lastControl, bool Reafficher)
+		public ControlGamepad AreSwitchMenuKeysUptoDown(State LastState, ControlGamepad lastControl, bool Reafficher)
         {
 			var lastLeft = LastState.Gamepad.LeftTrigger;
 			var lastRight = LastState.Gamepad.RightTrigger;
@@ -254,7 +275,7 @@ namespace Intersect.Client.Core.Controls
 
 			if ( (isLeftUpToDown && isRightUpToDown) || (!isLeftUpToDown && !isRightUpToDown) ) //Au cas où on presse les deux bumpers en même temps
 			{
-				return Control.Block;
+				return ControlGamepad.Block;
 			}
 
 			int indexControl = listeMenus.IndexOf(lastControl);
@@ -292,7 +313,7 @@ namespace Intersect.Client.Core.Controls
             }
             
 
-			return Control.Block;
+			return ControlGamepad.Block;
         }
 
 		/// <summary>
@@ -300,14 +321,14 @@ namespace Intersect.Client.Core.Controls
 		/// pas utile j'pense
 		/// </summary>
 		/// <returns></returns>
-		public List<Control> GetGamepadControls()
+		public List<ControlGamepad> GetGamepadControls()
         {
-			List<Control> listeControls = new List<Control>();
+			List<ControlGamepad> listeControls = new List<ControlGamepad>();
 			_controller.GetState(out var state);
 
 			if( state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X) )
             {
-				listeControls.Add(Control.AutoTarget);
+				listeControls.Add(ControlGamepad.AutoTarget);
             }
 
 			return listeControls;

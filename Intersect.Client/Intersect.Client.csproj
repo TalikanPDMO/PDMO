@@ -96,6 +96,7 @@
     <Compile Include="Core\Bootstrapper.cs" />
     <Compile Include="Core\ClientContext.cs" />
     <Compile Include="Core\ClientCommandLineOptions.cs" />
+    <Compile Include="Core\Controls\ControlEnumGamePad.cs" />
     <Compile Include="Core\Controls\ControlEnum.cs" />
     <Compile Include="Core\Controls\ControlMap.cs" />
     <Compile Include="Core\Controls\Controls.cs" />
@@ -450,6 +451,9 @@
     <Content Include="assets\resources\gui\friendsfield.png" />
     <Content Include="assets\resources\gui\friendsicon.png" />
     <Content Include="assets\resources\gui\gamemenu.png" />
+    <Content Include="assets\resources\gui\gamepad_clicked.png" />
+    <Content Include="assets\resources\gui\gamepad_hovered.png" />
+    <Content Include="assets\resources\gui\gamepad_normal.png" />
     <Content Include="assets\resources\gui\guild.png" />
     <Content Include="assets\resources\gui\guildicon.png" />
     <Content Include="assets\resources\gui\hotbar.png" />

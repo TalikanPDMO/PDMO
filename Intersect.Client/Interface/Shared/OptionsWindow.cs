@@ -33,6 +33,8 @@ namespace Intersect.Client.Interface.Shared
 
         private ScrollControl mControlsContainer;
 
+        private ScrollControl mGamepadControlsContainer;    //Ajouté par Moussmous
+
         //Keybindings
         private Button mEditKeybindingsBtn;
 
@@ -56,6 +58,8 @@ namespace Intersect.Client.Interface.Shared
         private bool mGameWindow = false;
 
         private Dictionary<Control, Button[]> mKeyButtons = new Dictionary<Control, Button[]>();
+
+        private Dictionary<ControlGamepad, Button> mGamepadButtons = new Dictionary<ControlGamepad, Button>();    //Ajouté par Moussmous
 
         private long mListeningTimer;
 
@@ -85,6 +89,12 @@ namespace Intersect.Client.Interface.Shared
         private ComboBox mResolutionList;
 
         private Button mRestoreKeybindingsButton;
+        
+        private Button mSwitchToKeyboardBtn;    //Ajouté par Moussmous pour les controles manette
+
+        private Button mSwitchToGamepadBtn;    //Ajouté par Moussmous pour les controles manette
+
+        private static XBoxController XboxControllerMonitor = new XBoxController();    //Ajouté par Moussmous pour les controles manette
 
         private Label mSoundLabel;
 
@@ -204,6 +214,25 @@ namespace Intersect.Client.Interface.Shared
             mRestoreKeybindingsButton.Hide();
             mRestoreKeybindingsButton.Clicked += RestoreKeybindingsButton_Clicked;
 
+            //Ajouté par Moussmous pour les controles manette
+            //Options - Switch to keyboard bindings 
+            mSwitchToKeyboardBtn = new Button(mOptionsPanel, "SwitchToKeyboardButton");
+            mSwitchToKeyboardBtn.Text = Strings.Options.SwitchToKeyboardBindings;
+            mSwitchToKeyboardBtn.Hide();
+            mSwitchToKeyboardBtn.Clicked += mSwitchToKeyboardBtn_Clicked;
+
+            //Options - Switch to Gamepad bindings 
+            mSwitchToGamepadBtn = new Button(mOptionsPanel, "SwitchToGamepadButton");
+            mSwitchToGamepadBtn.Text = Strings.Options.SwitchToGamepadBindings;
+            mSwitchToGamepadBtn.Hide();
+            mSwitchToGamepadBtn.Clicked += mSwitchToGamepadBtn_Clicked;
+
+            //Container spécial gamepad ajouté par moussmous
+            //Controls Get Stored in the Controls Scroll Control
+            mGamepadControlsContainer = new ScrollControl(mOptionsPanel, "GamepadControlsContainer");
+            mGamepadControlsContainer.EnableScroll(false, true);
+            mGamepadControlsContainer.Hide();
+
             var row = 0;
             var defaultFont = GameContentManager.Current?.GetFont("sourcesansproblack", 16);
             foreach (Control control in Enum.GetValues(typeof(Control)))
@@ -245,6 +274,39 @@ namespace Intersect.Client.Interface.Shared
 
                 row++;
             }
+            
+            //Bloc rajouté par Moussmous pour afficher les controles manette ----------
+            row = 0;
+            defaultFont = GameContentManager.Current?.GetFont("sourcesansproblack", 16);
+            foreach (ControlGamepad control in Enum.GetValues(typeof(ControlGamepad)))
+            {
+                var offset = row * 32;
+                var name = Enum.GetName(typeof(ControlGamepad), control)?.ToLower();
+
+                var label = new Label(mGamepadControlsContainer, $"Control{Enum.GetName(typeof(ControlGamepad), control)}Label")
+                {
+                    Text = Strings.Controls.controldict[name],
+                    AutoSizeToContents = true,
+                    Font = defaultFont
+                };
+
+                label.SetBounds(8, 8 + offset, 0, 24);
+                label.SetTextColor(new Color(255, 255, 255, 255), Label.ControlState.Normal);
+
+                var key1 = new Button(mGamepadControlsContainer, $"Control{Enum.GetName(typeof(ControlGamepad), control)}Button1")
+                {
+                    Text = "",
+                    AutoSizeToContents = false,
+                    UserData = new KeyValuePair<ControlGamepad, int>(control, 1),
+                    Font = defaultFont
+                };
+
+                key1.Clicked += Key_Clicked;
+
+                mGamepadButtons.Add(control, key1);
+
+                row++;
+            }//----------------------------------------------------------------------- 
 
             //Options - Apply Button
             mApplyBtn = new Button(mOptionsContainer, "ApplyButton");
@@ -265,6 +327,55 @@ namespace Intersect.Client.Interface.Shared
             );
 
             CloseKeybindings();
+        }
+
+        //Ajouté par Moussmous pour les controles manette
+        private void mSwitchToKeyboardBtn_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            mControlsContainer.Hide();
+            EditKeybindingsButton_Clicked(sender, arguments);
+        }
+
+        //Ajouté par Moussmous pour les controles manette
+        private void mSwitchToGamepadBtn_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            //Determine if controls are currently being shown or not
+            if (!mGamepadControlsContainer.IsVisible)
+            {
+                mGamepadControlsContainer.Show();
+                mOptionsContainer.Hide();
+                mControlsContainer.Hide();
+                mOptionsHeader.SetText(Strings.Controls.title);
+                mApplyKeybindingsButton.Show();
+                mCancelKeybindingsButton.Show();
+                mRestoreKeybindingsButton.Show();
+                mSwitchToKeyboardBtn.Show();   //Ajouté par Moussmous pour les controles manette
+                mSwitchToGamepadBtn.Show();   //Ajouté par Moussmous pour les controles manette
+
+                var GamepadMapping = XboxControllerMonitor.getGamepadMapping();
+
+                foreach (ControlGamepad control in Enum.GetValues(typeof(ControlGamepad)))
+                {
+                    var NomTouche = GamepadMapping[control];
+
+                    if (NomTouche != null)
+                    {
+                        NomTouche = NomTouche;
+                        mGamepadButtons[control].Text = NomTouche;
+                    }
+                    else
+                    {
+                        mGamepadButtons[control].Text = "";
+                    }
+
+
+
+                    /*
+                    mGamepadButtons[control][1].Text =
+                        Strings.Keys.keydict[
+                            Enum.GetName(typeof(Keys), mEdittingControls.ControlMapping[control].Key2).ToLower()];*/
+                }
+            }
         }
 
         private void Key_Clicked(Base sender, ClickedEventArgs arguments)
@@ -296,12 +407,15 @@ namespace Intersect.Client.Interface.Shared
                 mApplyKeybindingsButton.Show();
                 mCancelKeybindingsButton.Show();
                 mRestoreKeybindingsButton.Show();
+                mSwitchToKeyboardBtn.Show();   //Ajouté par Moussmous pour les controles manette
+                mSwitchToGamepadBtn.Show();   //Ajouté par Moussmous pour les controles manette
+                mGamepadControlsContainer.Hide();   //Ajouté par Moussmous pour les controles manette
                 foreach (Control control in Enum.GetValues(typeof(Control)))
                 {
                     mKeyButtons[control][0].Text =
                         Strings.Keys.keydict[
                             Enum.GetName(typeof(Keys), mEdittingControls.ControlMapping[control].Key1).ToLower()];
-
+                    
                     mKeyButtons[control][1].Text =
                         Strings.Keys.keydict[
                             Enum.GetName(typeof(Keys), mEdittingControls.ControlMapping[control].Key2).ToLower()];
@@ -345,6 +459,9 @@ namespace Intersect.Client.Interface.Shared
             mApplyKeybindingsButton.Hide();
             mCancelKeybindingsButton.Hide();
             mRestoreKeybindingsButton.Hide();
+            mSwitchToKeyboardBtn.Hide(); //Ajouté par Moussmous pour les controles manette
+            mSwitchToGamepadBtn.Hide(); //Ajouté par Moussmous pour les controles manette
+            mGamepadControlsContainer.Hide();   //Ajouté par Moussmous pour les controles manette
         }
 
         private void OnKeyDown(Keys key)

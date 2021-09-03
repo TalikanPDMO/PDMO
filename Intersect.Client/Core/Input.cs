@@ -29,7 +29,7 @@ namespace Intersect.Client.Core
 
         //Ajouté par Moussmous pour les controles manette
         private static XBoxController XboxControllerMonitor = new XBoxController();
-        private static Control lastMenu;
+        private static ControlGamepad lastMenu;
         private static bool reafficher = false;
 
         public static void OnKeyPressed(Keys key)
@@ -358,45 +358,45 @@ namespace Intersect.Client.Core
             }
 
 
-            Control retourControl = XboxControllerMonitor.AreSwitchMenuKeysUptoDown(lastState, lastMenu, reafficher);
-            if (retourControl != Control.Block)
+            ControlGamepad retourControl = XboxControllerMonitor.AreSwitchMenuKeysUptoDown(lastState, lastMenu, reafficher);
+            if (retourControl != ControlGamepad.Block)
             {
                 reafficher = false;
                 lastMenu = retourControl;
             }
             switch (retourControl)
             {
-                case Control.OpenInventory:
+                case ControlGamepad.OpenInventory:
                     Interface.Interface.GameUi?.GameMenu?.ToggleInventoryWindow();
 
                     break;
 
-                case Control.OpenQuests:
+                case ControlGamepad.OpenQuests:
                     Interface.Interface.GameUi?.GameMenu?.ToggleQuestsWindow();
 
                     break;
 
-                case Control.OpenCharacterInfo:
+                case ControlGamepad.OpenCharacterInfo:
                     Interface.Interface.GameUi?.GameMenu?.ToggleCharacterWindow();
 
                     break;
 
-                case Control.OpenParties:
+                case ControlGamepad.OpenParties:
                     Interface.Interface.GameUi?.GameMenu?.TogglePartyWindow();
 
                     break;
 
-                case Control.OpenSpells:
+                case ControlGamepad.OpenSpells:
                     Interface.Interface.GameUi?.GameMenu?.ToggleSpellsWindow();
 
                     break;
 
-                case Control.OpenFriends:
+                case ControlGamepad.OpenFriends:
                     Interface.Interface.GameUi?.GameMenu?.ToggleFriendsWindow();
 
                     break;
 
-                case Control.OpenGuild:
+                case ControlGamepad.OpenGuild:
                     Interface.Interface.GameUi?.GameMenu.ToggleGuildWindow();
 
                     break;
