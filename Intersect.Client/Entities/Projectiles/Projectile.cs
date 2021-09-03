@@ -150,6 +150,7 @@ namespace Intersect.Client.Entities.Projectiles
         {
             var spawn = FindSpawnAnimationData();
             var animBase = AnimationBase.Get(mMyBase.Animations[spawn].AnimationId);
+            var animPos = mMyBase.Animations[spawn].AnimationPosition;
 
             for (var x = 0; x < ProjectileBase.SPAWN_LOCATIONS_WIDTH; x++)
             {
@@ -159,11 +160,40 @@ namespace Intersect.Client.Entities.Projectiles
                     {
                         if (mMyBase.SpawnLocations[x, y].Directions[d] == true)
                         {
-                            var s = new ProjectileSpawns(
-                                FindProjectileRotationDir(Dir, d), X + FindProjectileRotationX(Dir, x - 2, y - 2),
-                                Y + FindProjectileRotationY(Dir, x - 2, y - 2), Z, CurrentMap, animBase,
-                                mMyBase.Animations[spawn].AutoRotate, mMyBase, this
-                            );
+                            ProjectileSpawns s = null;
+                            if (animPos == null)
+                            {
+                                // Each spawn has an animation
+                                s = new ProjectileSpawns(
+                                    FindProjectileRotationDir(Dir, d), X + FindProjectileRotationX(Dir, x - 2, y - 2),
+                                    Y + FindProjectileRotationY(Dir, x - 2, y - 2), Z, CurrentMap, animBase,
+                                    mMyBase.Animations[spawn].AutoRotate, mMyBase, this
+                                );
+                            }
+                            else
+                            {
+                                // Only one spawn must have an animation
+                                if (x == animPos.Item1 && y == animPos.Item2)
+                                {
+                                    // The spawn with animation
+                                    s = new ProjectileSpawns(
+                                        FindProjectileRotationDir(Dir, d), X + FindProjectileRotationX(Dir, x - 2, y - 2),
+                                        Y + FindProjectileRotationY(Dir, x - 2, y - 2), Z, CurrentMap, animBase,
+                                        mMyBase.Animations[spawn].AutoRotate, mMyBase, this
+                                    );
+                                }
+                                else
+                                {
+                                    // No animation for the others spawns
+                                    s = new ProjectileSpawns(
+                                        FindProjectileRotationDir(Dir, d), X + FindProjectileRotationX(Dir, x - 2, y - 2),
+                                        Y + FindProjectileRotationY(Dir, x - 2, y - 2), Z, CurrentMap, null,
+                                        mMyBase.Animations[spawn].AutoRotate, mMyBase, this
+                                    );
+                                }
+                                
+                            }
+                            
 
                             Spawns[mSpawnedAmount] = s;
                             if (Collided(mSpawnedAmount))

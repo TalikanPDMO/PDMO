@@ -132,11 +132,14 @@ namespace Intersect.GameObjects
 
         public int SpawnRange = 1;
 
-        public ProjectileAnimation(Guid animationId, int spawnRange, bool autoRotate)
+        public Tuple<int, int> AnimationPosition = null;
+
+        public ProjectileAnimation(Guid animationId, int spawnRange, bool autoRotate, Tuple<int, int> animationPosition = null)
         {
             AnimationId = animationId;
             SpawnRange = spawnRange;
             AutoRotate = autoRotate;
+            AnimationPosition = animationPosition;
         }
 
     }
