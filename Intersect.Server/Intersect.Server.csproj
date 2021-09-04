@@ -620,6 +620,10 @@
     <Compile Include="Migrations\Game\20210821143823_AddingCritEffectSpellToItemsAndSpells.designer.cs">
       <DependentUpon>20210821143823_AddingCritEffectSpellToItemsAndSpells.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20210903182005_AddingLinkedSpawnsToProjectiles.cs" />
+    <Compile Include="Migrations\Game\20210903182005_AddingLinkedSpawnsToProjectiles.designer.cs">
+      <DependentUpon>20210903182005_AddingLinkedSpawnsToProjectiles.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

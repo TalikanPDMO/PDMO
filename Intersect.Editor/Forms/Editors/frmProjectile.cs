@@ -139,6 +139,7 @@ namespace Intersect.Editor.Forms.Editors
             chkIgnoreInactiveResources.Text = Strings.ProjectileEditor.ignoreinactiveresources;
             chkIgnoreZDimensionBlocks.Text = Strings.ProjectileEditor.ignorezdimension;
             chkPierce.Text = Strings.ProjectileEditor.piercetarget;
+            chkLinkedSpawns.Text = Strings.ProjectileEditor.linkedspawns;
 
             grpAmmo.Text = Strings.ProjectileEditor.ammo;
             lblAmmoItem.Text = Strings.ProjectileEditor.ammoitem;
@@ -173,6 +174,7 @@ namespace Intersect.Editor.Forms.Editors
                 chkIgnoreZDimensionBlocks.Checked = mEditorItem.IgnoreZDimension;
                 chkGrapple.Checked = mEditorItem.GrappleHook;
                 chkPierce.Checked = mEditorItem.PierceTarget;
+                chkLinkedSpawns.Checked = mEditorItem.LinkedSpawns;
                 cmbItem.SelectedIndex = ItemBase.ListIndex(mEditorItem.AmmoItemId) + 1;
                 nudConsume.Value = mEditorItem.AmmoRequired;
 
@@ -759,6 +761,11 @@ namespace Intersect.Editor.Forms.Editors
             }
         }
 
+        private void chkLinkedSpawns_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.LinkedSpawns = chkLinkedSpawns.Checked;
+        }
+
         #region "Item List - Folders, Searching, Sorting, Etc"
 
         public void InitEditor()
@@ -860,6 +867,7 @@ namespace Intersect.Editor.Forms.Editors
         }
 
         #endregion
+
     }
 
 }
