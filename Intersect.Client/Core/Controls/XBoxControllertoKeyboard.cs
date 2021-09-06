@@ -217,13 +217,19 @@ namespace Intersect.Client.Core.Controls
 			bool isRightUpToDown = (lastRight < seuilBumpers) && (newRight > seuilBumpers);
 
 			int Ly = state.Gamepad.LeftThumbY / MovementDivider;
+			int Lylast = lastState.Gamepad.RightThumbY / MovementDivider;
 			int Lx = state.Gamepad.LeftThumbX / MovementDivider;
+			int Lxlast = lastState.Gamepad.RightThumbX / MovementDivider;
+			bool isLeftJoystickUsed = (Ly > seuilJoysticks && Lylast < seuilJoysticks) | (Lx > seuilJoysticks && Lxlast < seuilJoysticks);
 
 
 			int Ry = state.Gamepad.RightThumbY / MovementDivider;
+			int Rylast = lastState.Gamepad.RightThumbY / MovementDivider;
 			int Rx = state.Gamepad.RightThumbX / MovementDivider;
+			int Rxlast = lastState.Gamepad.RightThumbX / MovementDivider;
+			bool isRightJoystickUsed = (Ry > seuilJoysticks && Rxlast < seuilJoysticks) | (Rx > seuilJoysticks && Rylast < seuilJoysticks);
 
-			return (a || b || x || y || start || back || isLeftUpToDown || isRightUpToDown);
+			return (a || b || x || y || start || back || isLeftUpToDown || isRightUpToDown || isLeftJoystickUsed || isRightJoystickUsed);
 		}
 
 
@@ -403,5 +409,13 @@ namespace Intersect.Client.Core.Controls
 					break;
 			}
 		}
+
+		// Intéragit avec OptionWindow.cs 
+		public bool SaveKey(ControlGamepad control)
+        {
+
+
+			return false;
+        }
 	}
 }

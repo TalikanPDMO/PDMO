@@ -301,7 +301,7 @@ namespace Intersect.Client.Interface.Shared
                     Font = defaultFont
                 };
 
-                key1.Clicked += Key_Clicked;
+                key1.Clicked += Gamepad_Key_Clicked;
 
                 mGamepadButtons.Add(control, key1);
 
@@ -365,7 +365,7 @@ namespace Intersect.Client.Interface.Shared
                     }
                     else
                     {
-                        mGamepadButtons[control].Text = "";
+                        mGamepadButtons[control].Text = "None";
                     }
 
 
@@ -376,6 +376,33 @@ namespace Intersect.Client.Interface.Shared
                             Enum.GetName(typeof(Keys), mEdittingControls.ControlMapping[control].Key2).ToLower()];*/
                 }
             }
+        }
+
+        //Ajouté par Moussmous pour les controles manette
+        private void Gamepad_Key_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            Button bouton = (Button)sender;
+            //bouton.Text = Strings.Controls.listening;
+            DateTime debut_fonction = new DateTime();
+            debut_fonction = DateTime.Now;
+            DateTime maintenant = new DateTime();
+            int duree_timer = 3;
+            TimeSpan temps_passe = maintenant.Subtract(debut_fonction);
+            bool touche_appuyee = false;
+
+            while (temps_passe.Seconds < duree_timer || touche_appuyee)
+            {
+                temps_passe = maintenant.Subtract(debut_fonction);
+                maintenant = DateTime.Now;
+                foreach (ControlGamepad control in Enum.GetValues(typeof(ControlGamepad)))
+                {
+                    if (mGamepadButtons[control] == bouton)
+                    {
+                        touche_appuyee = XboxControllerMonitor.SaveKey(control);
+                    }
+                }
+            }
+
         }
 
         private void Key_Clicked(Base sender, ClickedEventArgs arguments)
