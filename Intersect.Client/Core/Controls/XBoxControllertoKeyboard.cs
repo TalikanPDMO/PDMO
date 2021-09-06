@@ -68,6 +68,21 @@ namespace Intersect.Client.Core.Controls
         {
 			return GamepadMapping;
         }
+		public string getButtonOfControl(ControlGamepad control)
+        {
+			return GamepadMapping[control];
+        }
+		public ControlGamepad getControlOfButton (string bouton)
+        {
+			foreach (ControlGamepad control in Enum.GetValues(typeof(ControlGamepad)))
+            {
+				if (GamepadMapping[control].Equals(bouton))
+                {
+					return control;
+                }
+            }
+			return 0;
+        }
 
 		private Timer _timer;
 		private Controller _controller;
@@ -207,6 +222,12 @@ namespace Intersect.Client.Core.Controls
 			bool y = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y) && !lastState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y);
 			bool start = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Start) && !lastState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Start);
 			bool back = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Back) && !lastState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Back);
+			bool LBumper = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftShoulder);
+			bool RBumper = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder);
+			bool DPadDown = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadDown);
+			bool DPadLeft = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft);
+			bool DPadUp = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadUp);
+			bool DPadRight = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight);
 
 			//Check des bumpers
 			var lastLeft = lastState.Gamepad.LeftTrigger;
@@ -229,7 +250,7 @@ namespace Intersect.Client.Core.Controls
 			int Rxlast = lastState.Gamepad.RightThumbX / MovementDivider;
 			bool isRightJoystickUsed = (Ry > seuilJoysticks && Rxlast < seuilJoysticks) | (Rx > seuilJoysticks && Rylast < seuilJoysticks);
 
-			return (a || b || x || y || start || back || isLeftUpToDown || isRightUpToDown || isLeftJoystickUsed || isRightJoystickUsed);
+			return (a || b || x || y || start || back || isLeftUpToDown || isRightUpToDown || isLeftJoystickUsed || isRightJoystickUsed || LBumper || RBumper || DPadDown || DPadLeft || DPadUp || DPadRight);
 		}
 
 
@@ -243,25 +264,25 @@ namespace Intersect.Client.Core.Controls
 		public bool IsMenuKeyDown()
 		{
 			_controller.GetState(out var state);
-			return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Start);
+			return ControlKeyDown(ControlGamepad.OpenMenu, state);
 		}
 
 		public bool IsBlockKeyUptoDown(State LastState)
         {
 			_controller.GetState(out var state);
-			return (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B) && !LastState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B));
+			return (ControlKeyDown(ControlGamepad.Block, state) && !ControlKeyDown(ControlGamepad.Block, LastState));
 		}
 
 		public bool IsAutotargetKeyUptoDown(State LastState)
 		{
 			_controller.GetState(out var state);
-			return (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X) && !LastState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X));
+			return (ControlKeyDown(ControlGamepad.AutoTarget, state) && !ControlKeyDown(ControlGamepad.AutoTarget, LastState));
 		}
 
 		public bool IsPickupKeyUptoDown(State LastState)
 		{
 			_controller.GetState(out var state);
-			return (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y) && !LastState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y));
+			return (ControlKeyDown(ControlGamepad.PickUp, state) && !ControlKeyDown(ControlGamepad.PickUp, LastState));
 		}
 
 		/// <summary>
@@ -270,14 +291,10 @@ namespace Intersect.Client.Core.Controls
 		/// </summary>
 		public ControlGamepad AreSwitchMenuKeysUptoDown(State LastState, ControlGamepad lastControl, bool Reafficher)
         {
-			var lastLeft = LastState.Gamepad.LeftTrigger;
-			var lastRight = LastState.Gamepad.RightTrigger;
 			_controller.GetState(out var state);
-			var newLeft = state.Gamepad.LeftTrigger;
-			var newRight = state.Gamepad.RightTrigger;
 
-			bool isLeftUpToDown = (lastLeft < seuilBumpers) && (newLeft > seuilBumpers);
-			bool isRightUpToDown = (lastRight < seuilBumpers) && (newRight > seuilBumpers);
+			bool isLeftUpToDown = (ControlKeyDown(ControlGamepad.SwitchMenuLeft, state) && !ControlKeyDown(ControlGamepad.SwitchMenuLeft, LastState));
+			bool isRightUpToDown = (ControlKeyDown(ControlGamepad.SwitchMenuRight, state) && !ControlKeyDown(ControlGamepad.SwitchMenuRight, LastState));
 
 			if ( (isLeftUpToDown && isRightUpToDown) || (!isLeftUpToDown && !isRightUpToDown) ) //Au cas où on presse les deux bumpers en même temps
 			{
@@ -322,26 +339,7 @@ namespace Intersect.Client.Core.Controls
 			return ControlGamepad.Block;
         }
 
-		/// <summary>
-		/// Cette fonction va donner en sortie tous les controls associés aux boutons appuyés sur la manette
-		/// pas utile j'pense
-		/// </summary>
-		/// <returns></returns>
-		public List<ControlGamepad> GetGamepadControls()
-        {
-			List<ControlGamepad> listeControls = new List<ControlGamepad>();
-			_controller.GetState(out var state);
-
-			if( state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X) )
-            {
-				listeControls.Add(ControlGamepad.AutoTarget);
-            }
-
-			return listeControls;
-		}
-
-		//------------- Ce qui a après intéragit avec le fichier controls.cs
-
+		//------------- Intéragit avec le fichier controls.cs
 		public bool isKeyDown(Control control)
 		{
 			_controller.GetState(out var state);
@@ -353,56 +351,53 @@ namespace Intersect.Client.Core.Controls
 			switch (control)
 			{
 				case Control.MoveUp:
-					return (Math.Abs(Ly) > Math.Abs(Lx) && Ly > 2);
+					return ControlKeyDown(ControlGamepad.MoveUp, state);
 					break;
 
 				case Control.MoveDown:
-					return (Math.Abs(Ly) > Math.Abs(Lx) && Ly < -2);
+					return ControlKeyDown(ControlGamepad.MoveDown, state);
 					break;
 
 				case Control.MoveLeft:
-					return (Math.Abs(Lx) > Math.Abs(Ly) && Lx < -2);
+					return ControlKeyDown(ControlGamepad.MoveLeft, state);
 					break;
 
 				case Control.MoveRight:
-					return (Math.Abs(Lx) > Math.Abs(Ly) && Lx > 2);
+					return ControlKeyDown(ControlGamepad.MoveRight, state);
 					break;
 
 				case Control.AttackInteract:
-					return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A);
-
-				case Control.Block:
-					return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B);
-					
-				case Control.AutoTarget:
-					return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X);
-
-				case Control.PickUp:
-					return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y);
+					return ControlKeyDown(ControlGamepad.AttackInteract, state);
 					
 				case Control.Hotkey1:
-					return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadDown);
+					return ControlKeyDown(ControlGamepad.Hotkey1, state);
 					
 				case Control.Hotkey2:
-					return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft);
+					return ControlKeyDown(ControlGamepad.Hotkey2, state);
 					
 				case Control.Hotkey3:
-					return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadUp);
+					return ControlKeyDown(ControlGamepad.Hotkey3, state);
 					
 				case Control.Hotkey4:
-					return state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight);
+					return ControlKeyDown(ControlGamepad.Hotkey4, state);
 
 				case Control.Hotkey5:
-					return (Math.Abs(Ry) > Math.Abs(Rx) && Ry > 2);
+					return ControlKeyDown(ControlGamepad.Hotkey5, state);
 
 				case Control.Hotkey6:
-					return (Math.Abs(Rx) > Math.Abs(Ry) && Rx < -2);
+					return ControlKeyDown(ControlGamepad.Hotkey6, state);
 
 				case Control.Hotkey7:
-					return (Math.Abs(Ry) > Math.Abs(Rx) && Ry < -2);
+					return ControlKeyDown(ControlGamepad.Hotkey7, state);
 
 				case Control.Hotkey8:
-					return (Math.Abs(Rx) > Math.Abs(Ry) && Rx > 2);
+					return ControlKeyDown(ControlGamepad.Hotkey8, state);
+
+				case Control.Hotkey9:
+					return ControlKeyDown(ControlGamepad.Hotkey9, state);
+
+				case Control.Hotkey0:
+					return ControlKeyDown(ControlGamepad.Hotkey0, state);
 
 				default:
 					return false;
@@ -411,11 +406,96 @@ namespace Intersect.Client.Core.Controls
 		}
 
 		// Intéragit avec OptionWindow.cs 
-		public bool SaveKey(ControlGamepad control)
+		public bool SaveKey(ControlGamepad controlAModifier)
         {
+			_controller.GetState(out var state);
+			int Ly = state.Gamepad.LeftThumbY / MovementDivider;
+			int Lx = state.Gamepad.LeftThumbX / MovementDivider;
 
+			int Ry = state.Gamepad.RightThumbY / MovementDivider;
+			int Rx = state.Gamepad.RightThumbX / MovementDivider;
 
-			return false;
+			ControlGamepad controlAModifierConsequence;
+			string stringBoutonChoisi = getButtonOfControl(controlAModifier);
+			string stringBoutonConsequence;
+
+			if (Math.Abs(Ly) > Math.Abs(Lx) && Ly > seuilJoysticks)
+            {
+				stringBoutonConsequence = "LJoystickUp";
+			} else if (Math.Abs(Ly) > Math.Abs(Lx) && Ly < -seuilJoysticks)
+			{
+				stringBoutonConsequence = "LJoystickDown";
+			} else if (Math.Abs(Lx) > Math.Abs(Ly) && Lx < -seuilJoysticks)
+            {
+				stringBoutonConsequence = "LJoystickLeft";
+			} else if (Math.Abs(Lx) > Math.Abs(Ly) && Lx > seuilJoysticks)
+			{
+				stringBoutonConsequence = "LJoystickRight";
+			} else if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A))
+            {
+				stringBoutonConsequence = "A";
+			} else if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B))
+            {
+				stringBoutonConsequence = "B";
+			} else if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X))
+            {
+				stringBoutonConsequence = "X";
+			} else if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y))
+            {
+				stringBoutonConsequence = "Y";
+			} else if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadDown))
+            {
+				stringBoutonConsequence = "DPadDown";
+			} else if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft))
+            {
+				stringBoutonConsequence = "DPadLeft";
+			} else if(state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadUp))
+            {
+				stringBoutonConsequence = "DPadUp";
+			} else if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight))
+            {
+				stringBoutonConsequence = "DPadRight";
+			} else if (Math.Abs(Ry) > Math.Abs(Rx) && Ry > seuilJoysticks)
+            {
+				stringBoutonConsequence = "RJoystickDown";
+			} else if (Math.Abs(Rx) > Math.Abs(Ry) && Rx < -seuilJoysticks)
+            {
+				stringBoutonConsequence = "RJoystickLeft";
+			} else if (Math.Abs(Ry) > Math.Abs(Rx) && Ry < -seuilJoysticks)
+            {
+				stringBoutonConsequence = "RJoystickUp";
+			} else if (Math.Abs(Rx) > Math.Abs(Ry) && Rx > seuilJoysticks)
+            {
+				stringBoutonConsequence = "RJoystickRight";
+			} else if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Start))
+            {
+				stringBoutonConsequence = "Start";
+			} else if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Back))
+            {
+				stringBoutonConsequence = "Back";
+			} else if (state.Gamepad.LeftTrigger > seuilBumpers)
+            {
+				stringBoutonConsequence = "LTrigger";
+			} else if (state.Gamepad.RightTrigger > seuilBumpers)
+            {
+				stringBoutonConsequence = "RTrigger";
+			} else if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftShoulder))
+            {
+				stringBoutonConsequence = "LBumper";
+			} else if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder))
+            {
+				stringBoutonConsequence = "RBumper";
+			} else
+            {
+				return false;
+            }
+
+			controlAModifierConsequence = getControlOfButton(stringBoutonConsequence); //On enregistre le controle qui était associé à la touche qu'on a press
+
+			GamepadMapping[controlAModifier] = stringBoutonConsequence;
+			GamepadMapping[controlAModifierConsequence] = stringBoutonChoisi;
+
+			return true;
         }
 	}
 }

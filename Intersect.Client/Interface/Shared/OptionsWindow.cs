@@ -390,15 +390,34 @@ namespace Intersect.Client.Interface.Shared
             TimeSpan temps_passe = maintenant.Subtract(debut_fonction);
             bool touche_appuyee = false;
 
-            while (temps_passe.Seconds < duree_timer || touche_appuyee)
+            while (temps_passe.Seconds < duree_timer && !touche_appuyee)
             {
                 temps_passe = maintenant.Subtract(debut_fonction);
                 maintenant = DateTime.Now;
                 foreach (ControlGamepad control in Enum.GetValues(typeof(ControlGamepad)))
                 {
-                    if (mGamepadButtons[control] == bouton)
+                    if (mGamepadButtons[control].Equals(bouton))
                     {
                         touche_appuyee = XboxControllerMonitor.SaveKey(control);
+                    }
+                }
+            }
+
+            if (touche_appuyee) //On re affiche toutes les touches
+            {
+                var GamepadMapping = XboxControllerMonitor.getGamepadMapping();
+                foreach (ControlGamepad control in Enum.GetValues(typeof(ControlGamepad)))
+                {
+                    var NomTouche = GamepadMapping[control];
+
+                    if (NomTouche != null)
+                    {
+                        NomTouche = NomTouche;
+                        mGamepadButtons[control].Text = NomTouche;
+                    }
+                    else
+                    {
+                        mGamepadButtons[control].Text = "None";
                     }
                 }
             }
