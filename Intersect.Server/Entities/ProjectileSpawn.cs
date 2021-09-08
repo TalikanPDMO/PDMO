@@ -35,6 +35,12 @@ namespace Intersect.Server.Entities
 
         private List<Guid> mEntitiesCollided = new List<Guid>();
 
+        public byte SpawnIndex;
+
+        public byte LinkedSpawnIndex;
+
+        public byte LinkedSpawnNumber;
+
         public ProjectileSpawn(
             byte dir,
             byte x,
@@ -42,7 +48,10 @@ namespace Intersect.Server.Entities
             byte z,
             Guid mapId,
             ProjectileBase projectileBase,
-            Projectile parent
+            Projectile parent,
+            byte spawnIndex,
+            byte linkedSpawnIndex,
+            byte linkedSpawnNumber
         )
         {
             MapId = mapId;
@@ -52,8 +61,18 @@ namespace Intersect.Server.Entities
             Dir = dir;
             ProjectileBase = projectileBase;
             Parent = parent;
-            TransmittionTimer = Globals.Timing.Milliseconds +
-                                (long) ((float) ProjectileBase.Speed / (float) ProjectileBase.Range);
+            SpawnIndex = spawnIndex;
+            LinkedSpawnIndex = linkedSpawnIndex;
+            LinkedSpawnNumber = linkedSpawnNumber;
+            if (ProjectileBase.Range == 0)
+            {
+                TransmittionTimer = Globals.Timing.Milliseconds + ProjectileBase.Speed;
+            }
+            else
+            {
+                TransmittionTimer = Globals.Timing.Milliseconds +
+                                (long)((float)ProjectileBase.Speed / (float)ProjectileBase.Range);
+            }
         }
 
         public bool IsAtLocation(Guid mapId, int x, int y, int z)

@@ -40,6 +40,8 @@ namespace Intersect.Server.Entities
         // Individual Spawns
         public ProjectileSpawn[] Spawns;
 
+        public ProjectileSpawn[,] LinkedSpawns;
+
         public SpellBase Spell;
 
         public Entity Target;
@@ -89,13 +91,14 @@ namespace Intersect.Server.Entities
                     }
                 }
             }
-
+            LinkedSpawns = new ProjectileSpawn[Base.Quantity, mTotalSpawns];
             mTotalSpawns *= Base.Quantity;
             Spawns = new ProjectileSpawn[mTotalSpawns];
         }
 
         private void AddProjectileSpawns(List<KeyValuePair<Guid, int>> spawnDeaths)
         {
+            var i = 0;
             for (byte x = 0; x < ProjectileBase.SPAWN_LOCATIONS_WIDTH; x++)
             {
                 for (byte y = 0; y < ProjectileBase.SPAWN_LOCATIONS_HEIGHT; y++)
@@ -107,12 +110,15 @@ namespace Intersect.Server.Entities
                             var s = new ProjectileSpawn(
                                 FindProjectileRotationDir(Dir, d),
                                 (byte) (X + FindProjectileRotationX(Dir, x - 2, y - 2)),
-                                (byte) (Y + FindProjectileRotationY(Dir, x - 2, y - 2)), (byte) Z, MapId, Base, this
+                                (byte) (Y + FindProjectileRotationY(Dir, x - 2, y - 2)), (byte) Z, MapId, Base, this,
+                                (byte)mSpawnedAmount, (byte)mQuantity, (byte)i
                             );
 
                             Spawns[mSpawnedAmount] = s;
+                            LinkedSpawns[mQuantity, i] = s;
                             mSpawnedAmount++;
                             mSpawnCount++;
+                            i++;
                             if (CheckForCollision(s))
                             {
                                 s.Dead = true;
@@ -399,7 +405,7 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
-
+            List<byte> addedDeaths = new List<byte>();
             if (mSpawnCount != 0 || mQuantity < Base.Quantity)
             {
                 for (var i = 0; i < mSpawnedAmount; i++)
@@ -407,7 +413,7 @@ namespace Intersect.Server.Entities
                     var spawn = Spawns[i];
                     if (spawn != null)
                     {
-                        while (Globals.Timing.Milliseconds > spawn.TransmittionTimer && Spawns[i] != null)
+                        while ((Globals.Timing.Milliseconds > spawn.TransmittionTimer || spawn.Dead) && Spawns[i] != null)
                         {
                             var x = spawn.X;
                             var y = spawn.Y;
@@ -425,10 +431,30 @@ namespace Intersect.Server.Entities
                             if (killSpawn || spawn.Dead)
                             {
                                 spawnDeaths.Add(new KeyValuePair<Guid, int>(Id, i));
+                                addedDeaths.Add(Spawns[i].LinkedSpawnIndex);
+                                LinkedSpawns[Spawns[i].LinkedSpawnIndex, Spawns[i].LinkedSpawnNumber] = null;
                                 Spawns[i] = null;
+                                
                                 mSpawnCount--;
                             }
                         }
+                    }
+                }
+                if (Base.LinkedSpawns)
+                {
+                    foreach (var deathIndex in addedDeaths)
+                    {
+                        for(var s=0; s<LinkedSpawns.GetLength(1);s++)
+                        {
+                            if (LinkedSpawns[deathIndex, s] != null)
+                            {
+                                spawnDeaths.Add(new KeyValuePair<Guid, int>(Id, LinkedSpawns[deathIndex, s].SpawnIndex));
+                                Spawns[LinkedSpawns[deathIndex, s].SpawnIndex] = null;
+                                LinkedSpawns[deathIndex, s] = null;
+                                mSpawnCount--;
+                            }
+                        }
+                        
                     }
                 }
             }
@@ -537,7 +563,14 @@ namespace Intersect.Server.Entities
             if (move)
             {
                 spawn.Distance++;
-                spawn.TransmittionTimer += (long)((float)Base.Speed / (float)Base.Range);
+                if (Base.Range == 0)
+                {
+                    spawn.TransmittionTimer += Base.Speed;
+                }
+                else
+                {
+                    spawn.TransmittionTimer += (long)((float)Base.Speed / (float)Base.Range);
+                }
                 newx = spawn.X + GetRangeX(spawn.Dir, 1);
                 newy = spawn.Y + GetRangeY(spawn.Dir, 1);
             }

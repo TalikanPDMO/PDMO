@@ -2497,7 +2497,7 @@ namespace Intersect.Client.Entities
                                             {
                                                 var projPosX = WorldPos.X + Projectile.FindProjectileRotationX(Dir, x-2, y-2) * Options.TileWidth;
                                                 var projPosY = WorldPos.Y + Projectile.FindProjectileRotationY(Dir, x-2, y-2) * Options.TileHeight;
-                                                for (int r=1; r<=projectileBase.Range; r++)
+                                                for (int r=0; r<=projectileBase.Range; r++)
                                                 {
                                                     destRectangle.X = projPosX + (int)Projectile.GetRangeX(Projectile.FindProjectileRotationDir(Dir, d), r) * Options.TileWidth;
                                                     destRectangle.Y = projPosY + (int)Projectile.GetRangeY(Projectile.FindProjectileRotationDir(Dir, d), r) * Options.TileHeight;

@@ -73,8 +73,23 @@ namespace Intersect.Client.Interface.Game
                 if (spell.Combat.TargetType == SpellTargetTypes.Projectile)
                 {
                     var proj = ProjectileBase.Get(spell.Combat.ProjectileId);
-                    spellType.Text = Strings.SpellDesc.targettypes[(int) spell.Combat.TargetType]
+                    if (proj?.Range == 0)
+                    {
+                        spellType.Text = Strings.SpellDesc.meleeprojectile.ToString(spell.Combat.HitRadius);
+                        if (proj?.Quantity > 1)
+                        {
+                            spellType.Text += Strings.SpellDesc.meleeprojectilehits.ToString(proj?.Quantity ?? 1);
+                        }
+                    }
+                    else
+                    {
+                        spellType.Text = Strings.SpellDesc.targettypes[(int)spell.Combat.TargetType]
                         .ToString(proj?.Range ?? 0, spell.Combat.HitRadius);
+                        if (proj?.Quantity > 1)
+                        {
+                            spellType.Text += Strings.SpellDesc.projectileshots.ToString(proj?.Quantity ?? 1);
+                        }
+                    }  
                 }
                 else
                 {
@@ -82,7 +97,6 @@ namespace Intersect.Client.Interface.Game
                         .ToString(spell.Combat.CastRange, spell.Combat.HitRadius);
                 }
             }
-
             if (spell.SpellType == (int) SpellTypes.CombatSpell &&
                 (spell.Combat.TargetType == SpellTargetTypes.AoE ||
                  spell.Combat.TargetType == SpellTargetTypes.Single) &&

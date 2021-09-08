@@ -29,6 +29,8 @@ namespace Intersect.Editor.Forms.Editors
 
         private List<string> mKnownFolders = new List<string>();
 
+        private List<Tuple<int, int>> mPossibleAnimationsPos = new List<Tuple<int, int>>();
+
         public FrmProjectile()
         {
             ApplyHooks();
@@ -126,6 +128,7 @@ namespace Intersect.Editor.Forms.Editors
 
             grpAnimations.Text = Strings.ProjectileEditor.animations;
             lblAnimation.Text = Strings.ProjectileEditor.animation;
+            lblUniqueAnimation.Text = Strings.ProjectileEditor.uniqueanimation;
             chkRotation.Text = Strings.ProjectileEditor.autorotate;
             btnAdd.Text = Strings.ProjectileEditor.addanimation;
             btnRemove.Text = Strings.ProjectileEditor.removeanimation;
@@ -136,6 +139,7 @@ namespace Intersect.Editor.Forms.Editors
             chkIgnoreInactiveResources.Text = Strings.ProjectileEditor.ignoreinactiveresources;
             chkIgnoreZDimensionBlocks.Text = Strings.ProjectileEditor.ignorezdimension;
             chkPierce.Text = Strings.ProjectileEditor.piercetarget;
+            chkLinkedSpawns.Text = Strings.ProjectileEditor.linkedspawns;
 
             grpAmmo.Text = Strings.ProjectileEditor.ammo;
             lblAmmoItem.Text = Strings.ProjectileEditor.ammoitem;
@@ -170,6 +174,7 @@ namespace Intersect.Editor.Forms.Editors
                 chkIgnoreZDimensionBlocks.Checked = mEditorItem.IgnoreZDimension;
                 chkGrapple.Checked = mEditorItem.GrappleHook;
                 chkPierce.Checked = mEditorItem.PierceTarget;
+                chkLinkedSpawns.Checked = mEditorItem.LinkedSpawns;
                 cmbItem.SelectedIndex = ItemBase.ListIndex(mEditorItem.AmmoItemId) + 1;
                 nudConsume.Value = mEditorItem.AmmoRequired;
 
@@ -177,6 +182,8 @@ namespace Intersect.Editor.Forms.Editors
                 {
                     lstAnimations.SelectedIndex = 0;
                 }
+
+                UpdatePossibleAnimationPos();
 
                 UpdateAnimationData(0);
                 lstAnimations.SelectedIndex = 0;
@@ -200,10 +207,85 @@ namespace Intersect.Editor.Forms.Editors
         {
             UpdateAnimations(true);
             cmbAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.Animations[index].AnimationId) + 1;
+            cmbUniqueAnimation.SelectedIndex = GetUniqueAnimationPositionIndex(mEditorItem.Animations[index]);
             scrlSpawnRange.Value = Math.Min(mEditorItem.Animations[index].SpawnRange, scrlSpawnRange.Maximum);
             chkRotation.Checked = mEditorItem.Animations[index].AutoRotate;
             UpdateAnimations(true);
         }
+
+        private int GetUniqueAnimationPositionIndex(ProjectileAnimation projanim)
+        {
+            if (projanim.AnimationPosition == null)
+            {
+                return 0;
+            }
+            else
+            {
+                for (var i=0; i<mPossibleAnimationsPos.Count; i++)
+                {
+                    if (mPossibleAnimationsPos[i].Item1 == projanim.AnimationPosition.Item1 && mPossibleAnimationsPos[i].Item2 == projanim.AnimationPosition.Item2)
+                    {
+                        return i+1;
+                    }
+                }
+            }
+            return 0;
+        }
+
+        private void UpdatePossibleAnimationPos()
+        {
+            cmbUniqueAnimation.Items.Clear();
+            mPossibleAnimationsPos.Clear();
+            cmbUniqueAnimation.Items.Add(Strings.General.none);
+            for (var x = 0; x < ProjectileBase.SPAWN_LOCATIONS_WIDTH; x++)
+            {
+                for (var y = 0; y < ProjectileBase.SPAWN_LOCATIONS_HEIGHT; y++)
+                {
+                    if (mEditorItem.SpawnLocations[x, y].Directions.Contains(true))
+                    {
+                        cmbUniqueAnimation.Items.Add(Strings.ProjectileEditor.uniqueanimationcoords.ToString(x, y));
+                        mPossibleAnimationsPos.Add(Tuple.Create<int, int>(x, y));
+                    }
+                    else
+                    {
+                        // Reset unique animations to none if this unique spawn is removed
+                        for (var i=0; i<mEditorItem.Animations.Count; i++)
+                        {
+                            var animpos = mEditorItem.Animations[i].AnimationPosition;
+                            if (animpos != null && animpos.Item1 == x && animpos.Item2 == y)
+                            {
+                                mEditorItem.Animations[i].AnimationPosition = null;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /*private void UpdateUniqueAnimation(int index)
+        {
+            var projanimpos = mEditorItem.Animations[index].AnimationPosition;
+            cmbUniqueAnimation.Items.Clear();
+            cmbUniqueAnimation.Items.Add(Strings.General.none);
+            var selectedIndex = 0;
+            var i = 0;
+            for (var x = 0; x < ProjectileBase.SPAWN_LOCATIONS_WIDTH; x++)
+            {
+                for (var y = 0; y < ProjectileBase.SPAWN_LOCATIONS_HEIGHT; y++)
+                {
+                    if (mEditorItem.SpawnLocations[x, y].Directions.Contains(true))
+                    {
+                        cmbUniqueAnimation.Items.Add("[" + x + ", " + y + "]");
+                        if (projanimpos != null && projanimpos.Item1 == x && projanimpos.Item2 == y)
+                        {
+                            selectedIndex = i + 1;
+                        }
+                        i++;
+                    }
+                }
+            }
+            cmbUniqueAnimation.SelectedIndex = selectedIndex;
+        }*/
 
         private void UpdateAnimations(bool saveIndex = true)
         {
@@ -460,6 +542,12 @@ namespace Intersect.Editor.Forms.Editors
                 !mEditorItem.SpawnLocations[(int) x, (int) y].Directions[FindDirection((int) i, (int) j)];
 
             Render();
+
+            UpdatePossibleAnimationPos();
+            if (lstAnimations.SelectedIndex > -1)
+            {
+                UpdateAnimationData(lstAnimations.SelectedIndex);
+            }
         }
 
         private void chkIgnoreMapBlocks_CheckedChanged(object sender, EventArgs e)
@@ -615,6 +703,21 @@ namespace Intersect.Editor.Forms.Editors
             UpdateAnimations();
         }
 
+        private void cmbUniqueAnimation_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbUniqueAnimation.SelectedIndex == 0)
+            {
+                mEditorItem.Animations[lstAnimations.SelectedIndex].AnimationPosition = null;
+            }
+            else
+            {
+                mEditorItem.Animations[lstAnimations.SelectedIndex].AnimationPosition =
+                Tuple.Create<int, int>(mPossibleAnimationsPos[cmbUniqueAnimation.SelectedIndex - 1].Item1, mPossibleAnimationsPos[cmbUniqueAnimation.SelectedIndex - 1].Item2);
+
+            }
+            UpdateAnimations();
+        }
+
         private void nudSpeed_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Speed = (int) nudSpeed.Value;
@@ -656,6 +759,11 @@ namespace Intersect.Editor.Forms.Editors
             {
                 mEditorItem.Spell = null;
             }
+        }
+
+        private void chkLinkedSpawns_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.LinkedSpawns = chkLinkedSpawns.Checked;
         }
 
         #region "Item List - Folders, Searching, Sorting, Etc"

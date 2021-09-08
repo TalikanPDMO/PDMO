@@ -65,8 +65,16 @@ namespace Intersect.Client.Entities.Projectiles
             Anim = new Animation(animBase, true, autoRotate, Z, parent);
             AutoRotate = autoRotate;
             ProjectileBase = projectileBase;
-            TransmittionTimer = Globals.System.GetTimeMs() +
-                                (long) ((float) ProjectileBase.Speed / (float) ProjectileBase.Range);
+            if (ProjectileBase.Range == 0)
+            {
+                TransmittionTimer = Globals.System.GetTimeMs() + ProjectileBase.Speed;
+            }
+            else
+            {
+                TransmittionTimer = Globals.System.GetTimeMs() +
+                                (long)((float)ProjectileBase.Speed / (float)ProjectileBase.Range);
+            }
+            
         }
 
         public void Dispose()

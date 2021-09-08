@@ -4048,6 +4048,10 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString animations = @"Animations";
 
+            public static LocalizedString uniqueanimation = @"Unique Animation Position:";
+
+            public static LocalizedString uniqueanimationcoords = @"[x:{00}, y:{01}]";
+
             public static LocalizedString autorotate = @"Auto Rotate Animation?";
 
             public static LocalizedString cancel = @"Cancel";
@@ -4080,6 +4084,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString ignorezdimension = @"Z-Dimension Blocks";
 
             public static LocalizedString piercetarget = @"Pierce Target?";
+
+            public static LocalizedString linkedspawns = @"Linked Spawns?";
 
             public static LocalizedString knockback = @"Knockback:";
 
