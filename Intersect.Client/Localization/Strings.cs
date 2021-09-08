@@ -568,7 +568,8 @@ namespace Intersect.Client.Localization
                 {"opensettings", @"Open Settings:"},
                 {"opendebugger", @"Open Debugger:"},
                 {"openadminpanel", @"Open Admin Panel:"},
-                {"togglegui", @"Toggle Interface:"}
+                {"togglegui", @"Toggle Interface:"},
+                {"running", @"Running:"}
             };
 
             public static LocalizedString edit = @"Edit Controls";
@@ -689,6 +690,8 @@ namespace Intersect.Client.Localization
             public static LocalizedString vital1 = @"MP:";
 
             public static LocalizedString vital1val = @"{00} / {01}";
+
+            public static LocalizedString sprinttip = @"Hold the Sprint button to run while moving";
 
         }
 

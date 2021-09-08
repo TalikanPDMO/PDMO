@@ -69,6 +69,16 @@
         /// </summary>
         public bool ExpLossFromCurrentExp = true;
 
+        /// <summary>
+        /// Max duration (in ms) that a player need to hold when pressing a direction if only want to turn and not to move
+        /// </summary>
+        public int TurnOnlyHeldDuration = 60;
+
+        /// <summary>
+        /// Amount of time (in ms) required to traverse 1 tile when a player is walking
+        /// </summary>
+        public int WalkingSpeed = 400;
+
     }
 
 }

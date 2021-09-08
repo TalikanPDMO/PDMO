@@ -173,6 +173,8 @@ namespace Intersect.Client.Entities
 
         public int WalkFrame;
 
+        public bool Running = false;
+
         public FloatRect WorldPos = new FloatRect();
 
         //Location Info
@@ -279,6 +281,8 @@ namespace Intersect.Client.Entities
                         return Options.Instance.Sprites.CastFrames;
                     case SpriteAnimations.Weapon:
                         return Options.Instance.Sprites.WeaponFrames;
+                    case SpriteAnimations.Run:
+                        return Options.Instance.Sprites.RunFrames;
                 }
 
                 return Options.Instance.Sprites.NormalFrames;
@@ -479,10 +483,10 @@ namespace Intersect.Client.Entities
         //Returns the amount of time required to traverse 1 tile
         public virtual float GetMovementTime()
         {
-            var time = 1000f / (float) (1 + Math.Log(Stat[(int) Stats.Speed]));
+            float time = 2.0f * Options.Instance.PlayerOpts.WalkingSpeed / (float)(1 + Math.Log(Stat[(int)Stats.Speed]));
             if (Blocking)
             {
-                time += time * (float) Options.BlockingSlow;
+                time += time * (float)Options.BlockingSlow / 100f;
             }
 
             return Math.Min(1000f, time);
@@ -544,17 +548,23 @@ namespace Intersect.Client.Entities
                     }
                     else
                     {
-                        if (WalkFrame > 0 && WalkFrame / SpriteFrames < 0.7f)
+                        if (WalkFrame > 0 && WalkFrame / Options.Instance.Sprites.NormalFrames < 0.7f)
                         {
-                            WalkFrame = (int)SpriteFrames / 2;
+                            WalkFrame = (int)Options.Instance.Sprites.NormalFrames / 2;
                         }
                         else
                         {
                             WalkFrame = 0;
                         }
                     }
-
-                    mWalkTimer = Globals.System.GetTimeMs() + Options.Instance.Sprites.MovingFrameDuration;
+                    if (Running)
+                    {
+                        mWalkTimer = Globals.System.GetTimeMs() + 2*(Options.Instance.Sprites.RunningFrameDuration - Stat[(int)Stats.Speed]);
+                    }
+                    else
+                    {
+                        mWalkTimer = Globals.System.GetTimeMs() + Options.Instance.Sprites.MovingFrameDuration;
+                    }
                 }
             }
 
@@ -656,7 +666,6 @@ namespace Intersect.Client.Entities
 
                         break;
                 }
-
                 if (OffsetX == 0 && OffsetY == 0)
                 {
                     IsMoving = false;
@@ -804,7 +813,6 @@ namespace Intersect.Client.Entities
             mLastUpdate = Globals.System.GetTimeMs();
 
             UpdateSpriteAnimation();
-
             return true;
         }
 
@@ -1030,7 +1038,7 @@ namespace Intersect.Client.Entities
                 }
                 else
                 {
-                    if (SpriteAnimation == SpriteAnimations.Normal)
+                    if (SpriteAnimation == SpriteAnimations.Normal || SpriteAnimation == SpriteAnimations.Run)
                     {
                         var attackTime = CalculateAttackTime();
                         if (AttackTimer - CalculateAttackTime() / 2 > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond || Blocking)
@@ -1043,6 +1051,10 @@ namespace Intersect.Client.Entities
                         else
                         {
                             //Restore Original Attacking/Blocking Code
+                            if (this == Globals.Me)
+                            {
+                                var t = texture;
+                            }
                             srcRectangle = new FloatRect(
                                 WalkFrame * (int) texture.GetWidth() / SpriteFrames, d * (int) texture.GetHeight() / Options.Instance.Sprites.Directions,
                                 (int) texture.GetWidth() / SpriteFrames, (int) texture.GetHeight() / Options.Instance.Sprites.Directions
@@ -1051,6 +1063,10 @@ namespace Intersect.Client.Entities
                     }
                     else
                     {
+                        if (this == Globals.Me)
+                        {
+                            var t = texture;
+                        }
                         srcRectangle = new FloatRect(
                             SpriteFrame * (int)texture.GetWidth() / SpriteFrames, d * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
                             (int)texture.GetWidth() / SpriteFrames, (int)texture.GetHeight() / Options.Instance.Sprites.Directions
@@ -1854,13 +1870,16 @@ namespace Intersect.Client.Entities
                 return;
             }
 
-            SpriteAnimation = AnimatedTextures[SpriteAnimations.Idle] != null && LastActionTime + Options.Instance.Sprites.TimeBeforeIdle < Globals.System.GetTimeMs() ? SpriteAnimations.Idle : SpriteAnimations.Normal;
-            if (IsMoving)
+            //SpriteAnimation = AnimatedTextures[SpriteAnimations.Idle] != null && LastActionTime + Options.Instance.Sprites.TimeBeforeIdle < Globals.System.GetTimeMs() ? SpriteAnimations.Idle : SpriteAnimations.Normal;
+            if (AnimatedTextures[SpriteAnimations.Idle] != null && LastActionTime + Options.Instance.Sprites.TimeBeforeIdle < Globals.System.GetTimeMs())
+            {
+                SpriteAnimation = SpriteAnimations.Idle;
+            }
+            else if (LastActionTime + Options.Instance.Sprites.TimeBeforeNormal < Globals.System.GetTimeMs())
             {
                 SpriteAnimation = SpriteAnimations.Normal;
-                LastActionTime = Globals.System.GetTimeMs();
             }
-            else if (AttackTimer > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond) //Attacking
+            if (AttackTimer > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond) //Attacking
             {
                 var timeIn = CalculateAttackTime() - (AttackTimer - Timing.Global.Ticks / TimeSpan.TicksPerMillisecond);
                 LastActionTime = Globals.System.GetTimeMs();
@@ -1933,8 +1952,17 @@ namespace Intersect.Client.Entities
                 }
                 LastActionTime = Globals.System.GetTimeMs();
             }
+            else if (IsMoving)
+            {
+                SpriteAnimation = SpriteAnimations.Normal;
+                if (Running && AnimatedTextures[SpriteAnimations.Run] != null)
+                {
+                    SpriteAnimation = SpriteAnimations.Run;
+                }
+                LastActionTime = Globals.System.GetTimeMs();
+            }
 
-            if (SpriteAnimation == SpriteAnimations.Normal)
+            if (SpriteAnimation == SpriteAnimations.Normal || SpriteAnimation == SpriteAnimations.Run)
             {
                 ResetSpriteFrame();
             }

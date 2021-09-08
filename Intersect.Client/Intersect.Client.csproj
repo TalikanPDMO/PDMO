@@ -276,6 +276,7 @@
     <EmbeddedResource Include="$(NetworkHandshakePublicKey)" />
     <None Include="app.config" />
     <None Include="app.manifest" />
+    <None Include="assets\resources\gui\layouts\game\PlayerRunIcon.json" />
     <None Include="assets\resources\gui\layouts\menu\LinksArea.json" />
     <None Include="packages.config" />
     <None Include="FodyWeavers.xml">
@@ -592,6 +593,7 @@
     <Content Include="assets\resources\gui\partykick.png" />
     <Content Include="assets\resources\gui\partyleader.png" />
     <Content Include="assets\resources\gui\partyleave.png" />
+    <Content Include="assets\resources\gui\playerrunicon.png" />
     <Content Include="assets\resources\gui\quantity.png" />
     <Content Include="assets\resources\gui\questoffer.png" />
     <Content Include="assets\resources\gui\quests.png" />

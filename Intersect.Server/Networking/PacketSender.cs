@@ -507,7 +507,7 @@ namespace Intersect.Server.Networking
             client.Send(
                 new EntityPositionPacket(
                     en.Id, en.GetEntityType(), en.MapId, (byte) en.X, (byte) en.Y, (byte) en.Dir, en.Passable,
-                    en.HideName
+                    en.HideName, en.Running
                 )
             );
         }
@@ -524,7 +524,7 @@ namespace Intersect.Server.Networking
                 en.MapId,
                 new EntityPositionPacket(
                     en.Id, en.GetEntityType(), en.MapId, (byte) en.X, (byte) en.Y, (byte) en.Dir, en.Passable,
-                    en.HideName
+                    en.HideName, en.Running
                 )
             );
         }
@@ -775,7 +775,7 @@ namespace Intersect.Server.Networking
                     SendDataToProximity(
                         en.MapId,
                         new EntityMovePacket(
-                            en.Id, en.GetEntityType(), en.MapId, (byte)en.X, (byte)en.Y, (byte)moveDirection, correction
+                            en.Id, en.GetEntityType(), en.MapId, (byte)en.X, (byte)en.Y, (byte)moveDirection, correction, en.Running
                         ), null, TransmissionMode.Any
                     );
                     return;
@@ -794,7 +794,7 @@ namespace Intersect.Server.Networking
                 {
                     player.SendPacket(
                         new EntityMovePacket(
-                            en.Id, en.GetEntityType(), en.MapId, (byte)en.X, (byte)en.Y, (byte)moveDirection, correction
+                            en.Id, en.GetEntityType(), en.MapId, (byte)en.X, (byte)en.Y, (byte)moveDirection, correction, en.Running
                         )
                     );
                     return;

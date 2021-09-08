@@ -21,7 +21,7 @@ namespace Intersect.Server.Maps
                 {
                     mMovements.Add(id, new List<EntityMovePacket>());
                 }
-                mMovements[id].Add(new EntityMovePacket(en.Id, en.GetEntityType(), en.MapId, (byte)en.X, (byte)en.Y, (byte)moveDirection, correction));
+                mMovements[id].Add(new EntityMovePacket(en.Id, en.GetEntityType(), en.MapId, (byte)en.X, (byte)en.Y, (byte)moveDirection, correction, en.Running));
             }
         }
 

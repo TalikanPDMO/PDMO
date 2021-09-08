@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Intersect.Client.Core;
+using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Game.Bag;
@@ -12,6 +13,7 @@ using Intersect.Client.Interface.Game.Hotbar;
 using Intersect.Client.Interface.Game.Inventory;
 using Intersect.Client.Interface.Game.Shop;
 using Intersect.Client.Interface.Game.Trades;
+using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
@@ -52,6 +54,8 @@ namespace Intersect.Client.Interface.Game
         private ShopWindow mShopWindow;
 
         private MapItemWindow mMapItemWindow;
+
+        private ImagePanel mPlayerRunIcon;
 
         private bool mShouldCloseBag;
 
@@ -122,6 +126,9 @@ namespace Intersect.Client.Interface.Game
             mQuestOfferWindow = new QuestOfferWindow(GameCanvas);
             mDebugMenu = new DebugMenu(GameCanvas);
             mMapItemWindow = new MapItemWindow(GameCanvas);
+            mPlayerRunIcon = new ImagePanel(GameCanvas, "PlayerRunIcon");
+            mPlayerRunIcon.SetToolTipText(Strings.EntityBox.sprinttip);
+            mPlayerRunIcon.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
         }
 
         //Chatbox
@@ -339,6 +346,7 @@ namespace Intersect.Client.Interface.Game
             GameMenu?.Update(mShouldUpdateQuestLog);
             mShouldUpdateQuestLog = false;
             Hotbar?.Update();
+            mPlayerRunIcon.RenderColor = Globals.Me.Running ? new Color(255, 255, 255, 255) : new Color(100, 255, 255, 255);
             mDebugMenu?.Update();
             EscapeMenu.Update();
             PlayerBox?.Update();
