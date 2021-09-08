@@ -112,8 +112,6 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
         public Button GuildLabel;
 
-        public ImagePanel PlayerRunIcon;
-
         //Init
         public EntityBox(Canvas gameCanvas, EntityTypes entityType, Entity myEntity, bool playerBox = false)
         {
@@ -198,9 +196,6 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             GuildLabel.SetToolTipText(Strings.Guilds.guildtip.ToString(MyEntity?.Name));
             GuildLabel.Clicked += guildRequest_Clicked;
             GuildLabel.IsHidden = true;
-
-            PlayerRunIcon = new ImagePanel(EntityInfoPanel, "PlayerRunIcon");
-            PlayerRunIcon.SetToolTipText(Strings.EntityBox.sprinttip);
 
             EntityStatusPanel = new ImagePanel(EntityWindow, "StatusArea");
 
@@ -322,7 +317,6 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                             ExpLbl.Hide();
                             ExpTitle.Hide();
                             EntityMap.Hide();
-                            PlayerRunIcon.Hide();
                         }
                     }
                     else
@@ -332,7 +326,6 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                         ExpLbl.Hide();
                         ExpTitle.Hide();
                         EntityMap.Hide();
-                        PlayerRunIcon.Hide();
                     }
 
                     EventDesc.Hide();
@@ -349,7 +342,6 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                     GuildLabel.Hide();
                     FriendLabel.Hide();
                     EntityMap.Hide();
-                    PlayerRunIcon.Hide();
 
                     break;
                 case EntityTypes.Event:
@@ -371,7 +363,6 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                     FriendLabel.Hide();
                     GuildLabel.Hide();
                     EntityMap.Hide();
-                    PlayerRunIcon.Hide();
 
                     break;
             }
@@ -443,7 +434,6 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             if (PlayerBox && MyEntity == Globals.Me)
             {
                 UpdateXpBar(elapsedTime);
-                PlayerRunIcon.RenderColor = MyEntity.Running ? new Color(255, 255, 255, 255) : new Color(100, 255, 255, 255);
             }
 
             if (MyEntity.GetEntityType() == EntityTypes.Player && MyEntity != Globals.Me)
