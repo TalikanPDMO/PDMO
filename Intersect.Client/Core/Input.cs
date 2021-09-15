@@ -357,6 +357,41 @@ namespace Intersect.Client.Core
                 Globals.Me?.TryPickupItem(Globals.Me.MapInstance.Id, Globals.Me.Y * Options.MapWidth + Globals.Me.X);
             }
 
+            //Ouverture des menus
+            if (XboxControllerMonitor.IsOpenInventoryKeyUptoDown(lastState))
+            {
+                Interface.Interface.GameUi?.GameMenu?.ToggleInventoryWindow();
+            }
+
+            if (XboxControllerMonitor.IsOpenQuestsKeyUptoDown(lastState))
+            {
+                Interface.Interface.GameUi?.GameMenu?.ToggleQuestsWindow();
+            }
+
+            if (XboxControllerMonitor.IsOpenCharacterInfoKeyUptoDown(lastState))
+            {
+                Interface.Interface.GameUi?.GameMenu?.ToggleCharacterWindow();
+            }
+
+            if (XboxControllerMonitor.IsOpenPartiesKeyUptoDown(lastState))
+            {
+                Interface.Interface.GameUi?.GameMenu?.TogglePartyWindow();
+            }
+
+            if (XboxControllerMonitor.IsOpenSpellsKeyUptoDown(lastState))
+            {
+                Interface.Interface.GameUi?.GameMenu?.ToggleSpellsWindow();
+            }
+
+            if (XboxControllerMonitor.IsOpenFriendsKeyUptoDown(lastState))
+            {
+                Interface.Interface.GameUi?.GameMenu?.ToggleFriendsWindow();
+            }
+
+            if (XboxControllerMonitor.IsOpenOpenGuildKeyUptoDown(lastState))
+            {
+                Interface.Interface.GameUi?.GameMenu.ToggleGuildWindow();
+            }
 
             ControlGamepad retourControl = XboxControllerMonitor.AreSwitchMenuKeysUptoDown(lastState, lastMenu, reafficher);
             if (retourControl != ControlGamepad.Block)

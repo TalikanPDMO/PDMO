@@ -472,7 +472,8 @@ namespace Intersect.Client.Interface.Shared
         private void ApplyKeybindingsButton_Clicked(Base sender, ClickedEventArgs arguments)
         {
             Controls.ActiveControls = mEdittingControls;
-            Controls.ActiveControls.Save();
+            Controls.ActiveControls.SaveKeyboard();
+            Controls.ActiveControls.SaveGamepad();   //Ajouté par Moussmous pour les controles manette
             CloseKeybindings();
         }
 

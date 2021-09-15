@@ -53,8 +53,8 @@ namespace Intersect.Client.Core.Controls
 			GamepadMapping[ControlGamepad.Hotkey0] = null;
 			GamepadMapping[ControlGamepad.SwitchMenuLeft] = "LTrigger";//Cette touche sert à circuler entre les menus <--
 			GamepadMapping[ControlGamepad.SwitchMenuRight] = "RTrigger";//Cette touche sert à circuler entre les menus -->
-			GamepadMapping[ControlGamepad.Screenshot] = "Start";
-			GamepadMapping[ControlGamepad.OpenSettings] = "Back";
+			GamepadMapping[ControlGamepad.Screenshot] = null;
+			GamepadMapping[ControlGamepad.OpenSettings] = "Start";
 			GamepadMapping[ControlGamepad.OpenMenu] = null;
 			GamepadMapping[ControlGamepad.OpenInventory] = null;
 			GamepadMapping[ControlGamepad.OpenQuests] = null;
@@ -283,6 +283,49 @@ namespace Intersect.Client.Core.Controls
 		{
 			_controller.GetState(out var state);
 			return (ControlKeyDown(ControlGamepad.PickUp, state) && !ControlKeyDown(ControlGamepad.PickUp, LastState));
+		}
+
+		//Ouverture des menus :
+		public bool IsOpenInventoryKeyUptoDown (State LastState)
+        {
+			_controller.GetState(out var state);
+			return (ControlKeyDown(ControlGamepad.OpenInventory, state) && !ControlKeyDown(ControlGamepad.OpenInventory, LastState));
+		}
+
+		public bool IsOpenQuestsKeyUptoDown(State LastState)
+		{
+			_controller.GetState(out var state);
+			return (ControlKeyDown(ControlGamepad.OpenQuests, state) && !ControlKeyDown(ControlGamepad.OpenQuests, LastState));
+		}
+
+		public bool IsOpenCharacterInfoKeyUptoDown(State LastState)
+		{
+			_controller.GetState(out var state);
+			return (ControlKeyDown(ControlGamepad.OpenCharacterInfo, state) && !ControlKeyDown(ControlGamepad.OpenCharacterInfo, LastState));
+		}
+
+		public bool IsOpenPartiesKeyUptoDown(State LastState)
+		{
+			_controller.GetState(out var state);
+			return (ControlKeyDown(ControlGamepad.OpenParties, state) && !ControlKeyDown(ControlGamepad.OpenParties, LastState));
+		}
+
+		public bool IsOpenSpellsKeyUptoDown(State LastState)
+		{
+			_controller.GetState(out var state);
+			return (ControlKeyDown(ControlGamepad.OpenSpells, state) && !ControlKeyDown(ControlGamepad.OpenSpells, LastState));
+		}
+
+		public bool IsOpenFriendsKeyUptoDown(State LastState)
+		{
+			_controller.GetState(out var state);
+			return (ControlKeyDown(ControlGamepad.OpenFriends, state) && !ControlKeyDown(ControlGamepad.OpenFriends, LastState));
+		}
+
+		public bool IsOpenOpenGuildKeyUptoDown(State LastState)
+		{
+			_controller.GetState(out var state);
+			return (ControlKeyDown(ControlGamepad.OpenGuild, state) && !ControlKeyDown(ControlGamepad.OpenGuild, LastState));
 		}
 
 		/// <summary>

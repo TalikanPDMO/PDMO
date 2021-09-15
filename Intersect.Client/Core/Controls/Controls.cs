@@ -93,13 +93,24 @@ namespace Intersect.Client.Core.Controls
             CreateControlMap(Control.ToggleGui, Keys.F11, Keys.None);
         }
 
-        public void Save()
+        public void SaveKeyboard()
         {
             foreach (Control control in Enum.GetValues(typeof(Control)))
             {
                 var name = Enum.GetName(typeof(Control), control);
                 Globals.Database.SavePreference(name + "_key1", ((int) ControlMapping[control].Key1).ToString());
                 Globals.Database.SavePreference(name + "_key2", ((int) ControlMapping[control].Key2).ToString());
+            }
+        }
+
+        //Créé par Moussmous pour sauvegarder les controles des manettes
+        public void SaveGamepad()
+        {
+            foreach (ControlGamepad control in Enum.GetValues(typeof(ControlGamepad)))
+            {
+                var name = Enum.GetName(typeof(ControlGamepad), control);
+                var GamepadMapping = XboxControllerMonitor.getGamepadMapping();
+                Globals.Database.SavePreference(name + "_key1", GamepadMapping[control]);
             }
         }
 
