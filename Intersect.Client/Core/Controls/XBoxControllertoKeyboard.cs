@@ -64,6 +64,10 @@ namespace Intersect.Client.Core.Controls
 			GamepadMapping[ControlGamepad.OpenGuild] = null;
 			GamepadMapping[ControlGamepad.OpenFriends] = null;
 		}
+		public void assignationMapping(ControlGamepad control, string toucheGamepad)
+        {
+			GamepadMapping[control] = toucheGamepad;
+		}
 		public Dictionary<ControlGamepad, string> getGamepadMapping()
         {
 			return GamepadMapping;
