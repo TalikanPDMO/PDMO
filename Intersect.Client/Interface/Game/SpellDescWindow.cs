@@ -84,7 +84,7 @@ namespace Intersect.Client.Interface.Game
                     else
                     {
                         spellType.Text = Strings.SpellDesc.targettypes[(int)spell.Combat.TargetType]
-                        .ToString(proj?.Range ?? 0, spell.Combat.HitRadius);
+                        .ToString(proj?.Range + 1 ?? 1, spell.Combat.HitRadius);
                         if (proj?.Quantity > 1)
                         {
                             spellType.Text += Strings.SpellDesc.projectileshots.ToString(proj?.Quantity ?? 1);
