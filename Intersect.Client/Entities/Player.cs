@@ -67,6 +67,8 @@ namespace Intersect.Client.Entities
 
         public int TargetType;
 
+        public bool RunningBuffer = false;
+
         //Ajouté par Moussmous pour la rotation du joueur (j'ai suivi le patch)
         public long[] MoveDirectionTimers = new long[4];
 
@@ -842,14 +844,14 @@ namespace Intersect.Client.Entities
 
         public bool PreviewSpell(Guid spellId, bool fromItem=false)
         {
-            if (spellId == Guid.Empty)
-            {
-                return false;
-            }
             if (fromItem)
             {
                 previewSpellId = spellId;
                 return true;
+            }
+            if (spellId == Guid.Empty)
+            {
+                return false;
             }
             for (var i = 0; i < Spells.Length; i++)
             {
@@ -973,15 +975,24 @@ namespace Intersect.Client.Entities
             {
                 movex = 1;
             }
-            if(Running)
+
+            if (!RunningBuffer && Controls.KeyDown(Control.Running))
             {
-                Running = Controls.KeyDown(Control.Running);
+                RunningBuffer = true;
+                if (IsMoving)
+                {
+                    ToggleRunning = true;
+                }
+                else
+                {
+                    Running = !Running;
+                }
             }
-            else
+            if (RunningBuffer && Controls.KeyUp(Control.Running))
             {
-                Running = !IsMoving && Controls.KeyDown(Control.Running);
+                RunningBuffer = false;
             }
-            
+
             // Used this so I can do multiple switch case
             var move = movex / 10 + movey;
             Globals.Me.MoveDirInput = -1;

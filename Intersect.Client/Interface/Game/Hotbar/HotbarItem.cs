@@ -140,9 +140,14 @@ namespace Intersect.Client.Interface.Game.Hotbar
             {
                 if (mCurrentItem != null)
                 {
+                    // Change here for consommable on return true ?
                     if (mInventoryItemIndex > -1 && mCurrentItem.ItemType == ItemTypes.Spell && mCurrentItem.QuickCast)
                     {
                         return Globals.Me.PreviewSpell(mCurrentItem.SpellId, true);
+                    }
+                    else if (mInventoryItemIndex > -1 && mCurrentItem.ItemType == ItemTypes.Consumable)
+                    {
+                        return Globals.Me.PreviewSpell(Guid.Empty, true);
                     }
                 }
                 else if (mCurrentSpell != null)

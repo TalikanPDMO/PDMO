@@ -77,7 +77,13 @@
     "stat2": "{00}: {01}",
     "stat3": "{00}: {01}",
     "stat4": "{00}: {01}",
-    "attackspeed": "Allure: {00}",
+    "attackspeed": "Vitesse d'Atq: {00}s",
+    "stat0desc": "Vos dégâts physiques",
+    "stat1desc": "Votre résistance aux attaques physiques",
+    "stat2desc": "Vos dégâts d'attaques spéciales",
+    "stat3desc": "Votre résistance aux attaques spéciales",
+    "stat4desc": "Votre vitesse de déplacement",
+    "attackspeeddesc": "Le temps que vous mettez pour infliger une attaque de base",
     "stats": "Stats:",
     "pointstouse": "points à utiliser",
     "title": "Pokémon"
@@ -232,19 +238,19 @@
     "exp": "EXP:",
     "expval": "{00} / {01}",
     "friend": "Amis",
-    "friendtip": "Envoyer une demande d'ami à {00}.",
+    "friendtip": "Envoyer une demande d'ami.",
     "level": "Nv. {00}",
     "map": "{00}",
     "maxlevel": "Niveau Max",
     "party": "Groupe",
-    "partytip": "Inviter {00} à votre groupe.",
+    "partytip": "Inviter à votre groupe.",
     "trade": "Échange",
-    "tradetip": "Proposer un échange à {00}.",
+    "tradetip": "Proposer un échange.",
     "vital0": "PV:",
     "vital0val": "{00} / {01}",
     "vital1": "PM:",
     "vital1val": "{00} / {01}",
-    "sprinttip":  "Maintenez la touche de Sprint enfoncée pour courir en vous déplaçant"
+    "sprinttip": "Maintenez la touche de Sprint enfoncée pour courir en vous déplaçant"
   },
   "Errors": {
     "displaynotsupported": "Paramètres d'affichage invalides!",
@@ -364,7 +370,7 @@
       "2": "Ténacité",
       "3": "Chance",
       "4": "Augmente XP",
-      "5":  "% Allure"
+      "5": "% Allure"
     },
     "itemtypes": {
       "0": "Normal",
@@ -634,7 +640,8 @@
     "targetfps": "Limite de FPS:",
     "title": "Options",
     "unlimitedfps": "Sans limite",
-    "vsync": "V-Sync"
+    "vsync": "V-Sync",
+    "autopreview": "Automatic Preview"
   },
   "Parties": {
     "infight": "You are currently fighting!",
@@ -754,6 +761,7 @@
     "shield": "Bouclier: {00}",
     "radius": "Portée: {00}",
     "removesymbol": "-",
+    "critsuffix": " (Crit.) ",
     "spelltypes": {
       "0": "Combat",
       "1": "Téléportation",

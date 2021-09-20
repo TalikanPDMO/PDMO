@@ -175,6 +175,8 @@ namespace Intersect.Client.Entities
 
         public bool Running = false;
 
+        public bool ToggleRunning = false;
+
         public FloatRect WorldPos = new FloatRect();
 
         //Location Info
@@ -669,6 +671,11 @@ namespace Intersect.Client.Entities
                 if (OffsetX == 0 && OffsetY == 0)
                 {
                     IsMoving = false;
+                    if(ToggleRunning)
+                    {
+                        Running = !Running;
+                        ToggleRunning = false;
+                    }
                 }
             }
 

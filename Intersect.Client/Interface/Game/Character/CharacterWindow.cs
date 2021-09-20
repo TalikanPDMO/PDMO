@@ -104,27 +104,33 @@ namespace Intersect.Client.Interface.Game.Character
             mStatsLabel = new Label(mCharacterWindow, "StatsLabel");
 
             mAttackLabel = new Label(mCharacterWindow, "AttackLabel");
-
+            mAttackLabel.SetToolTipText(Strings.Character.stat0desc);
+            
             mAddAttackBtn = new Button(mCharacterWindow, "IncreaseAttackButton");
             mAddAttackBtn.Clicked += _addAttackBtn_Clicked;
 
             mDefenseLabel = new Label(mCharacterWindow, "DefenseLabel");
+            mDefenseLabel.SetToolTipText(Strings.Character.stat1desc);
             mAddDefenseBtn = new Button(mCharacterWindow, "IncreaseDefenseButton");
             mAddDefenseBtn.Clicked += _addDefenseBtn_Clicked;
 
             mSpeedLabel = new Label(mCharacterWindow, "SpeedLabel");
+            mSpeedLabel.SetToolTipText(Strings.Character.stat4desc);
             //mAddSpeedBtn = new Button(mCharacterWindow, "IncreaseSpeedButton");
             //mAddSpeedBtn.Clicked += _addSpeedBtn_Clicked;
 
             mAbilityPwrLabel = new Label(mCharacterWindow, "AbilityPowerLabel");
+            mAbilityPwrLabel.SetToolTipText(Strings.Character.stat2desc);
             mAddAbilityPwrBtn = new Button(mCharacterWindow, "IncreaseAbilityPowerButton");
             mAddAbilityPwrBtn.Clicked += _addAbilityPwrBtn_Clicked;
 
             mMagicRstLabel = new Label(mCharacterWindow, "MagicResistLabel");
+            mMagicRstLabel.SetToolTipText(Strings.Character.stat3desc);
             mAddMagicResistBtn = new Button(mCharacterWindow, "IncreaseMagicResistButton");
             mAddMagicResistBtn.Clicked += _addMagicResistBtn_Clicked;
 
             mAttackSpeedLabel = new Label(mCharacterWindow, "AttackSpeedLabel");
+            mAttackSpeedLabel.SetToolTipText(Strings.Character.attackspeeddesc);
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
@@ -307,7 +313,7 @@ namespace Intersect.Client.Interface.Game.Character
             mMagicRstLabel.SetText(
                 Strings.Character.stat3.ToString(Strings.Combat.stat3, Globals.Me.Stat[(int) Stats.MagicResist])
             );
-            mAttackSpeedLabel.SetText(Strings.Character.attackspeed.ToString(Globals.Me.CalculateAttackTime()));
+            mAttackSpeedLabel.SetText(Strings.Character.attackspeed.ToString(Math.Round(((float)Globals.Me.CalculateAttackTime()) / 1000f, 2)));
             mAddAbilityPwrBtn.IsHidden = Globals.Me.StatPoints == 0 ||
                                          Globals.Me.Stat[(int) Stats.AbilityPower] == Options.MaxStatValue;
 

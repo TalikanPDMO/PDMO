@@ -371,7 +371,19 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString stat4 = @"{00}: {01}";
 
-            public static LocalizedString attackspeed = @"Attack speed: {00}";
+            public static LocalizedString attackspeed = @"Attack speed: {00}s";
+
+            public static LocalizedString stat0desc = @"Your physical damage";
+
+            public static LocalizedString stat1desc = @"Your resistance to physical damage";
+
+            public static LocalizedString stat2desc = @"Your special damage";
+
+            public static LocalizedString stat3desc = @"Your resistance to special damage";
+
+            public static LocalizedString stat4desc = @"Your movement speed";
+
+            public static LocalizedString attackspeeddesc = @"The time you need to do one basic attack";
 
             public static LocalizedString stats = @"Stats:";
 

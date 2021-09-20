@@ -88,7 +88,6 @@ namespace Intersect.Client.General
                     else
                     {
                         presenceActivityMenu = DiscordPresenceState.Initial;
-                        Console.WriteLine("Fail to set menu presence because of " + res.ToString());
                     }
                 });
             }
@@ -101,7 +100,8 @@ namespace Intersect.Client.General
             {
                 presenceInGame = DiscordPresenceState.Ongoing;
                 activity.State = "En jeu";
-                activity.Assets.SmallImage = SMALL_IMAGE_PREFIX + Path.GetFileNameWithoutExtension(Globals.Me.MySprite);
+                
+                activity.Assets.SmallImage = SMALL_IMAGE_PREFIX + Path.GetFileNameWithoutExtension(ClassBase.Get(Globals.Me.Class).Sprites[0].Sprite);
                 activity.Assets.SmallText = ConvertForDiscordUTF8(Globals.Me.Name + " (" + ClassBase.GetName(Globals.Me.Class) + ")");
                 discord.GetActivityManager().UpdateActivity(activity, (res) =>
                 {
@@ -113,7 +113,6 @@ namespace Intersect.Client.General
                     else
                     {
                         presenceInGame = DiscordPresenceState.Initial;
-                        Console.WriteLine("Fail to set In Game because of " + res.ToString());
                     }
                 });
             }
@@ -128,8 +127,6 @@ namespace Intersect.Client.General
 
         private static void OnElapsedTimeDiscord(Object source, ElapsedEventArgs e)
         {
-            Console.WriteLine("THE ELAPSED EVENT WAS RAISED AT {0:HH:mm:ss.fff}",
-                             e.SignalTime);
             if (discord == null)
             {
                 try
