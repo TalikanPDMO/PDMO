@@ -3,6 +3,7 @@ using SharpDX.XInput;
 using System;
 using Intersect.Client.Core.Controls;
 using System.Collections.Generic;
+using Intersect.Client.General;
 
 
 //Fichier entier codé par Moussmous pour les controles manette
@@ -49,21 +50,61 @@ namespace Intersect.Client.Core.Controls
 			GamepadMapping[ControlGamepad.Hotkey6] = "RJoystickLeft";
 			GamepadMapping[ControlGamepad.Hotkey7] = "RJoystickUp";
 			GamepadMapping[ControlGamepad.Hotkey8] = "RJoystickRight";
-			GamepadMapping[ControlGamepad.Hotkey9] = null;
-			GamepadMapping[ControlGamepad.Hotkey0] = null;
-			GamepadMapping[ControlGamepad.SwitchMenuLeft] = "LTrigger";//Cette touche sert à circuler entre les menus <--
-			GamepadMapping[ControlGamepad.SwitchMenuRight] = "RTrigger";//Cette touche sert à circuler entre les menus -->
-			GamepadMapping[ControlGamepad.Screenshot] = null;
+			GamepadMapping[ControlGamepad.Hotkey9] = "LBumper";
+			GamepadMapping[ControlGamepad.Hotkey0] = "RBumper";
+			GamepadMapping[ControlGamepad.SwitchMenuLeft] = "LTrigger";  //Cette touche sert à circuler entre les menus <--
+			GamepadMapping[ControlGamepad.SwitchMenuRight] = "RTrigger"; //Cette touche sert à circuler entre les menus -->
+			GamepadMapping[ControlGamepad.Screenshot] = "Back";
 			GamepadMapping[ControlGamepad.OpenSettings] = "Start";
-			GamepadMapping[ControlGamepad.OpenMenu] = null;
-			GamepadMapping[ControlGamepad.OpenInventory] = null;
-			GamepadMapping[ControlGamepad.OpenQuests] = null;
-			GamepadMapping[ControlGamepad.OpenCharacterInfo] = null;
-			GamepadMapping[ControlGamepad.OpenParties] = null;
-			GamepadMapping[ControlGamepad.OpenSpells] = null;
-			GamepadMapping[ControlGamepad.OpenGuild] = null;
-			GamepadMapping[ControlGamepad.OpenFriends] = null;
+			GamepadMapping[ControlGamepad.OpenMenu] = "";
+			GamepadMapping[ControlGamepad.OpenInventory] = "";
+			GamepadMapping[ControlGamepad.OpenQuests] = "";
+			GamepadMapping[ControlGamepad.OpenCharacterInfo] = "";
+			GamepadMapping[ControlGamepad.OpenParties] = "";
+			GamepadMapping[ControlGamepad.OpenSpells] = "";
+			GamepadMapping[ControlGamepad.OpenGuild] = "";
+			GamepadMapping[ControlGamepad.OpenFriends] = "";
 		}
+		public void InitializeMapping()
+		{
+			GamepadMapping = new Dictionary<ControlGamepad, string>();
+			GamepadMapping[ControlGamepad.MoveUp] = "";
+			GamepadMapping[ControlGamepad.MoveDown] = "";
+			GamepadMapping[ControlGamepad.MoveLeft] = "";
+			GamepadMapping[ControlGamepad.MoveRight] = "";
+			GamepadMapping[ControlGamepad.AttackInteract] = "";
+			GamepadMapping[ControlGamepad.Block] = "";
+			GamepadMapping[ControlGamepad.AutoTarget] = "";
+			GamepadMapping[ControlGamepad.PickUp] = "";
+			GamepadMapping[ControlGamepad.Hotkey1] = "";
+			GamepadMapping[ControlGamepad.Hotkey2] = "";
+			GamepadMapping[ControlGamepad.Hotkey3] = "";
+			GamepadMapping[ControlGamepad.Hotkey4] = "";
+			GamepadMapping[ControlGamepad.Hotkey5] = "";
+			GamepadMapping[ControlGamepad.Hotkey6] = "";
+			GamepadMapping[ControlGamepad.Hotkey7] = "";
+			GamepadMapping[ControlGamepad.Hotkey8] = "";
+			GamepadMapping[ControlGamepad.Hotkey9] = "";
+			GamepadMapping[ControlGamepad.Hotkey0] = "";
+			GamepadMapping[ControlGamepad.SwitchMenuLeft] = "";  //Cette touche sert à circuler entre les menus <--
+			GamepadMapping[ControlGamepad.SwitchMenuRight] = ""; //Cette touche sert à circuler entre les menus -->
+			GamepadMapping[ControlGamepad.Screenshot] = "";
+			GamepadMapping[ControlGamepad.OpenSettings] = "";
+			GamepadMapping[ControlGamepad.OpenMenu] = "";
+			GamepadMapping[ControlGamepad.OpenInventory] = "";
+			GamepadMapping[ControlGamepad.OpenQuests] = "";
+			GamepadMapping[ControlGamepad.OpenCharacterInfo] = "";
+			GamepadMapping[ControlGamepad.OpenParties] = "";
+			GamepadMapping[ControlGamepad.OpenSpells] = "";
+			GamepadMapping[ControlGamepad.OpenGuild] = "";
+			GamepadMapping[ControlGamepad.OpenFriends] = "";
+		}
+
+		/// <summary>
+		/// Assigne au controle donné la touche que l'on veut
+		/// </summary>
+		/// <param name="control"></param>
+		/// <param name="toucheGamepad"></param>
 		public void assignationMapping(ControlGamepad control, string toucheGamepad)
         {
 			GamepadMapping[control] = toucheGamepad;
@@ -72,10 +113,21 @@ namespace Intersect.Client.Core.Controls
         {
 			return GamepadMapping;
         }
+
+		/// <summary>
+		/// Donne la touche associee au controle
+		/// </summary>
+		/// <param name="control"></param>
+		/// <returns></returns>
 		public string getButtonOfControl(ControlGamepad control)
         {
 			return GamepadMapping[control];
         }
+		/// <summary>
+		/// Donne l'action associée au bouton
+		/// </summary>
+		/// <param name="bouton">Bouton de la manette</param>
+		/// <returns></returns>
 		public ControlGamepad getControlOfButton (string bouton)
         {
 			foreach (ControlGamepad control in Enum.GetValues(typeof(ControlGamepad)))
@@ -97,7 +149,24 @@ namespace Intersect.Client.Core.Controls
 			_controller = new Controller(UserIndex.One);
 			_timer = new Timer(obj => Update());
 
-			ResetDefaultMapping();
+			//ResetDefaultMapping();
+			InitializeMapping();
+
+			foreach (ControlGamepad control in Enum.GetValues(typeof(ControlGamepad)))
+			{
+				var name = Enum.GetName(typeof(ControlGamepad), control);
+				var gamepad_key = Globals.Database.LoadPreference(name + "_gamepadkey");
+				if (string.IsNullOrEmpty(gamepad_key))
+				{
+					Globals.Database.SavePreference(
+						name + "_gamepadkey", getButtonOfControl(control)
+					);
+				}
+				else
+				{
+					assignationMapping(control, gamepad_key);
+				}
+			}
 
 			InitListeMenus();
 		}
@@ -117,13 +186,6 @@ namespace Intersect.Client.Core.Controls
 			_controller.GetState(out var state);
 			return state;
         }
-
-		/*
-		public ControlGamepad ControlToControlGamepad(Control control)
-        {
-			valeurEntier = (int)control;
-			if 
-        }*/
 
 		/// <summary>
 		/// Tu fournis en argument le control, et en sortie on te dit si la touche associée est appuyée ou non

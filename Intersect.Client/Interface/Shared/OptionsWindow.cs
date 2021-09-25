@@ -18,6 +18,8 @@ namespace Intersect.Client.Interface.Shared
 
     public class OptionsWindow
     {
+        private int etat; // Ajouté par Moussmous
+        // Vaut 0 quand on est sur la vue changements des touches de clavier, 1 pour gamepad
 
         private Button mApplyBtn;
 
@@ -342,6 +344,7 @@ namespace Intersect.Client.Interface.Shared
             //Determine if controls are currently being shown or not
             if (!mGamepadControlsContainer.IsVisible)
             {
+                etat = 1;
                 mGamepadControlsContainer.Show();
                 mOptionsContainer.Hide();
                 mControlsContainer.Hide();
@@ -358,7 +361,7 @@ namespace Intersect.Client.Interface.Shared
                 {
                     var NomTouche = GamepadMapping[control];
 
-                    if (NomTouche != null)
+                    if (NomTouche != "")
                     {
                         NomTouche = NomTouche;
                         mGamepadButtons[control].Text = NomTouche;
@@ -405,14 +408,11 @@ namespace Intersect.Client.Interface.Shared
 
             if (touche_appuyee) //On re affiche toutes les touches
             {
-                var GamepadMapping = XboxControllerMonitor.getGamepadMapping();
                 foreach (ControlGamepad control in Enum.GetValues(typeof(ControlGamepad)))
                 {
-                    var NomTouche = GamepadMapping[control];
-
-                    if (NomTouche != null)
+                    var NomTouche = XboxControllerMonitor.getButtonOfControl(control);
+                    if (NomTouche != "")
                     {
-                        NomTouche = NomTouche;
                         mGamepadButtons[control].Text = NomTouche;
                     }
                     else
@@ -447,6 +447,7 @@ namespace Intersect.Client.Interface.Shared
             //Determine if controls are currently being shown or not
             if (!mControlsContainer.IsVisible)
             {
+                etat = 0;
                 mControlsContainer.Show();
                 mOptionsContainer.Hide();
                 mOptionsHeader.SetText(Strings.Controls.title);
@@ -485,16 +486,39 @@ namespace Intersect.Client.Interface.Shared
 
         private void RestoreKeybindingsButton_Clicked(Base sender, ClickedEventArgs arguments)
         {
-            mEdittingControls.ResetDefaults();
-            foreach (Control control in Enum.GetValues(typeof(Control)))
+            if (etat == 0)
             {
-                mKeyButtons[control][0].Text =
-                    Strings.Keys.keydict[
-                        Enum.GetName(typeof(Keys), mEdittingControls.ControlMapping[control].Key1).ToLower()];
+                mEdittingControls.ResetDefaults();
+                foreach (Control control in Enum.GetValues(typeof(Control)))
+                {
+                    mKeyButtons[control][0].Text =
+                        Strings.Keys.keydict[
+                            Enum.GetName(typeof(Keys), mEdittingControls.ControlMapping[control].Key1).ToLower()];
 
-                mKeyButtons[control][1].Text =
-                    Strings.Keys.keydict[
-                        Enum.GetName(typeof(Keys), mEdittingControls.ControlMapping[control].Key2).ToLower()];
+                    mKeyButtons[control][1].Text =
+                        Strings.Keys.keydict[
+                            Enum.GetName(typeof(Keys), mEdittingControls.ControlMapping[control].Key2).ToLower()];
+                }
+            } else if (etat == 1)
+            {
+                XboxControllerMonitor.ResetDefaultMapping();
+                foreach (ControlGamepad control in Enum.GetValues(typeof(ControlGamepad)))
+                {
+                    var NomTouche = XboxControllerMonitor.getButtonOfControl(control);
+
+                    if (NomTouche != "")
+                    {
+                        mGamepadButtons[control].Text = NomTouche;
+                    }
+                    else
+                    {
+                        mGamepadButtons[control].Text = "None";
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception();
             }
         }
 

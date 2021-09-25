@@ -55,22 +55,6 @@ namespace Intersect.Client.Core.Controls
                         CreateControlMap(control, (Keys) Convert.ToInt32(key1), (Keys) Convert.ToInt32(key2));
                     }
                 }
-
-                foreach (ControlGamepad control in Enum.GetValues(typeof(ControlGamepad)))
-                {
-                    var name = Enum.GetName(typeof(ControlGamepad), control);
-                    var gamepad_key = Globals.Database.LoadPreference(name + "_gamepadkey");
-                    if (string.IsNullOrEmpty(gamepad_key))
-                    {
-                        Globals.Database.SavePreference(
-                            name + "_gamepadkey", gamepad_key
-                        );
-                    }
-                    else
-                    {
-                        XboxControllerMonitor.assignationMapping(control, gamepad_key);
-                    }
-                }
             }
         }
 
@@ -128,8 +112,7 @@ namespace Intersect.Client.Core.Controls
             foreach (ControlGamepad control in Enum.GetValues(typeof(ControlGamepad)))
             {
                 var name = Enum.GetName(typeof(ControlGamepad), control);
-                var GamepadMapping = XboxControllerMonitor.getGamepadMapping();
-                Globals.Database.SavePreference(name + "_gamepadkey", GamepadMapping[control]);
+                Globals.Database.SavePreference(name + "_gamepadkey", XboxControllerMonitor.getButtonOfControl(control));
             }
         }
 
