@@ -152,20 +152,37 @@ namespace Intersect.Client.Core.Controls
 			//ResetDefaultMapping();
 			InitializeMapping();
 
+			int compteur = 0;
 			foreach (ControlGamepad control in Enum.GetValues(typeof(ControlGamepad)))
 			{
 				var name = Enum.GetName(typeof(ControlGamepad), control);
 				var gamepad_key = Globals.Database.LoadPreference(name + "_gamepadkey");
-				if (string.IsNullOrEmpty(gamepad_key))
+				if (!string.IsNullOrEmpty(gamepad_key))
 				{
+					compteur++;
+				}
+			}
+
+			if (compteur != 22)
+            {
+				ResetDefaultMapping();
+				foreach (ControlGamepad control in Enum.GetValues(typeof(ControlGamepad)))
+				{
+					var name = Enum.GetName(typeof(ControlGamepad), control);
+					var gamepad_key = Globals.Database.LoadPreference(name + "_gamepadkey");
 					Globals.Database.SavePreference(
 						name + "_gamepadkey", getButtonOfControl(control)
 					);
 				}
-				else
-				{
-					assignationMapping(control, gamepad_key);
-				}
+			}
+
+			foreach (ControlGamepad control in Enum.GetValues(typeof(ControlGamepad)))
+			{
+				var name = Enum.GetName(typeof(ControlGamepad), control);
+				var gamepad_key = Globals.Database.LoadPreference(name + "_gamepadkey");
+				
+				assignationMapping(control, gamepad_key);
+				
 			}
 
 			InitListeMenus();

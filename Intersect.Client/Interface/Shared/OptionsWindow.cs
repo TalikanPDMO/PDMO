@@ -96,6 +96,10 @@ namespace Intersect.Client.Interface.Shared
 
         private Button mSwitchToGamepadBtn;    //Ajouté par Moussmous pour les controles manette
 
+        private Button mUnderBarGamepad;  //Ajouté par Moussmous pour les controles manette
+
+        private Button mUnderBarKeyboard;   //Ajouté par Moussmous pour les controles manette
+
         private static XBoxController XboxControllerMonitor = new XBoxController();    //Ajouté par Moussmous pour les controles manette
 
         private Label mSoundLabel;
@@ -229,6 +233,16 @@ namespace Intersect.Client.Interface.Shared
             mSwitchToGamepadBtn.Hide();
             mSwitchToGamepadBtn.Clicked += mSwitchToGamepadBtn_Clicked;
 
+            //Options - Affiche la barre en dessous du bouton "switch to Gamepad bindings"
+            mUnderBarGamepad = new Button(mOptionsPanel, "GamepadUnderBar");
+            mUnderBarGamepad.Text = "";
+            mUnderBarGamepad.Hide();
+
+            //Options - Affiche la barre en dessous du bouton "switch to Gamepad bindings"
+            mUnderBarKeyboard = new Button(mOptionsPanel, "KeyboardUnderBar");
+            mUnderBarKeyboard.Text = "";
+            mUnderBarKeyboard.Hide();
+
             //Container spécial gamepad ajouté par moussmous
             //Controls Get Stored in the Controls Scroll Control
             mGamepadControlsContainer = new ScrollControl(mOptionsPanel, "GamepadControlsContainer");
@@ -354,6 +368,8 @@ namespace Intersect.Client.Interface.Shared
                 mRestoreKeybindingsButton.Show();
                 mSwitchToKeyboardBtn.Show();   //Ajouté par Moussmous pour les controles manette
                 mSwitchToGamepadBtn.Show();   //Ajouté par Moussmous pour les controles manette
+                mUnderBarGamepad.Show();   //Ajouté par Moussmous pour les controles manette
+                mUnderBarKeyboard.Hide();    //Ajouté par Moussmous pour les controles manette
 
                 var GamepadMapping = XboxControllerMonitor.getGamepadMapping();
 
@@ -457,6 +473,9 @@ namespace Intersect.Client.Interface.Shared
                 mSwitchToKeyboardBtn.Show();   //Ajouté par Moussmous pour les controles manette
                 mSwitchToGamepadBtn.Show();   //Ajouté par Moussmous pour les controles manette
                 mGamepadControlsContainer.Hide();   //Ajouté par Moussmous pour les controles manette
+                mUnderBarGamepad.Hide();   //Ajouté par Moussmous pour les controles manette
+                mUnderBarKeyboard.Show();    //Ajouté par Moussmous pour les controles manette
+
                 foreach (Control control in Enum.GetValues(typeof(Control)))
                 {
                     mKeyButtons[control][0].Text =
@@ -533,6 +552,8 @@ namespace Intersect.Client.Interface.Shared
             mSwitchToKeyboardBtn.Hide(); //Ajouté par Moussmous pour les controles manette
             mSwitchToGamepadBtn.Hide(); //Ajouté par Moussmous pour les controles manette
             mGamepadControlsContainer.Hide();   //Ajouté par Moussmous pour les controles manette
+            mUnderBarGamepad.Hide();   //Ajouté par Moussmous pour les controles manette
+            mUnderBarKeyboard.Hide();    //Ajouté par Moussmous pour les controles manette
         }
 
         private void OnKeyDown(Keys key)

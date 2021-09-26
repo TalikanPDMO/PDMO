@@ -457,6 +457,7 @@
     <Content Include="assets\resources\gui\gamepad_control_button_hovered.png" />
     <Content Include="assets\resources\gui\gamepad_hovered.png" />
     <Content Include="assets\resources\gui\gamepad_normal.png" />
+    <Content Include="assets\resources\gui\gamepad_under_bar.png" />
     <Content Include="assets\resources\gui\guild.png" />
     <Content Include="assets\resources\gui\guildicon.png" />
     <Content Include="assets\resources\gui\hotbar.png" />
