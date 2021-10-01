@@ -964,6 +964,7 @@ namespace Intersect.Server.Entities
 
         public void LevelUp(bool resetExperience = true, int levels = 1)
         {
+            int iterateur; //Ajouté par moussmous
             var messages = new List<string>();
             if (Level < Options.MaxLevel)
             {
@@ -991,6 +992,18 @@ namespace Intersect.Server.Entities
                             messages.Add(
                                 Strings.Player.spelltaughtlevelup.ToString(SpellBase.GetName(spellInstance.SpellId))
                             );
+
+                            //ajouté par moussmous
+                            //On ajoute directement le spell appris à la hotbar si elle est pas full
+                            iterateur = 0;
+                            while (!HotbarIsCaseFree(iterateur) && iterateur < Options.MaxHotbar-1)
+                            {
+                                iterateur++;
+                            }
+                            if (HotbarIsCaseFree(iterateur))
+                            {
+                                HotbarChange(iterateur, spell);
+                            }
                         }
                     }
                 }
@@ -4822,7 +4835,22 @@ namespace Intersect.Server.Entities
                     Hotbar[index].ItemOrSpellId = spell.SpellId;
                 }
             }
-        }  
+        }
+
+        //Ajouté par Moussmous
+        //HotbarSlot fonction pour ajouter juste des sorts (utilisé pour ajouter des sorts direcement 
+        //  dans la hotbar après les avoir appris
+        public void HotbarChange(int index, ClassSpell spell)
+        {
+            Hotbar[index].ItemOrSpellId = Guid.Empty;
+            Hotbar[index].BagId = Guid.Empty;
+            Hotbar[index].PreferredStatBuffs = new int[(int)Stats.StatCount];
+            
+            if (spell != null)
+            {
+                Hotbar[index].ItemOrSpellId = spell.Id;
+            }
+        }
 
         public void HotbarSwap(int index, int swapIndex)
         {
@@ -4837,6 +4865,17 @@ namespace Intersect.Server.Entities
             Hotbar[swapIndex].ItemOrSpellId = itemId;
             Hotbar[swapIndex].BagId = bagId;
             Hotbar[swapIndex].PreferredStatBuffs = stats;
+        }
+
+        /// <summary>
+        /// Ajouté par Moussmous
+        /// Renvoie si la case de la hotbar est deja occupée ou non
+        /// </summary>
+        /// <param name="index">index de la case testée</param>
+        /// <returns></returns>
+        public bool HotbarIsCaseFree(int index)
+        {
+            return (Hotbar[index].ItemOrSpellId == Guid.Empty);
         }
 
         //Quests
