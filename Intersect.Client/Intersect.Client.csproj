@@ -96,9 +96,11 @@
     <Compile Include="Core\Bootstrapper.cs" />
     <Compile Include="Core\ClientContext.cs" />
     <Compile Include="Core\ClientCommandLineOptions.cs" />
+    <Compile Include="Core\Controls\ControlEnumGamePad.cs" />
     <Compile Include="Core\Controls\ControlEnum.cs" />
     <Compile Include="Core\Controls\ControlMap.cs" />
     <Compile Include="Core\Controls\Controls.cs" />
+    <Compile Include="Core\Controls\XBoxControllertoKeyboard.cs" />
     <Compile Include="Core\Fade.cs" />
     <Compile Include="Core\Graphics.cs" />
     <Compile Include="Core\IClientContext.cs" />
@@ -254,6 +256,12 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.XInput, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.XInput.4.2.0\lib\net45\SharpDX.XInput.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -445,6 +453,13 @@
     <Content Include="assets\resources\gui\friendsfield.png" />
     <Content Include="assets\resources\gui\friendsicon.png" />
     <Content Include="assets\resources\gui\gamemenu.png" />
+    <Content Include="assets\resources\gui\gamepad_clicked.png" />
+    <Content Include="assets\resources\gui\gamepad_control_button.png" />
+    <Content Include="assets\resources\gui\gamepad_control_button_clicked.png" />
+    <Content Include="assets\resources\gui\gamepad_control_button_hovered.png" />
+    <Content Include="assets\resources\gui\gamepad_hovered.png" />
+    <Content Include="assets\resources\gui\gamepad_normal.png" />
+    <Content Include="assets\resources\gui\gamepad_under_bar.png" />
     <Content Include="assets\resources\gui\guild.png" />
     <Content Include="assets\resources\gui\guildicon.png" />
     <Content Include="assets\resources\gui\hotbar.png" />

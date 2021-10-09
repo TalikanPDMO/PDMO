@@ -563,6 +563,8 @@ namespace Intersect.Client.Localization
                 {"hotkey7", @"Hot Key 7:"},
                 {"hotkey8", @"Hot Key 8:"},
                 {"hotkey9", @"Hot Key 9:"},
+                {"switchmenuleft", @"Switch to Previous Menu"}, //Ajouté par moussmous pour les controles manette
+                {"switchmenuright", @"Switch to Next Menu"}, //Ajouté par moussmous pour les controles manette
                 {"movedown", @"Down:"},
                 {"moveleft", @"Left:"},
                 {"moveright", @"Right:"},
@@ -1291,6 +1293,11 @@ namespace Intersect.Client.Localization
             public static LocalizedString vsync = @"V-Sync";
 
             public static LocalizedString AutoPreview = @"Automatic Preview";
+
+            //Ajouté par Moussmous pour les controles manette
+            public static LocalizedString SwitchToKeyboardBindings = @"Keyboard";
+
+            public static LocalizedString SwitchToGamepadBindings = @"Gamepad";
 
         }
 

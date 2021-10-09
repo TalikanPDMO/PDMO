@@ -13,8 +13,14 @@ namespace Intersect.Client.Core.Controls
 
         public readonly IDictionary<Control, ControlMap> ControlMapping;
 
+        //Ajouté par Moussmous
+        private static XBoxController XboxControllerMonitor;
+
         public Controls(Controls gameControls = null)
         {
+            //Ajouté par Moussmous pour permettre la gestion des manettes Xbox (et ptet les autres jsp)
+            XboxControllerMonitor = new XBoxController();
+
             ControlMapping = new Dictionary<Control, ControlMap>();
 
             if (gameControls != null)
@@ -44,6 +50,8 @@ namespace Intersect.Client.Core.Controls
                     }
                     else
                     {
+                        var cle1 = (Keys)Convert.ToInt32(key1);
+                        var cle2 = (Keys)Convert.ToInt32(key2);
                         CreateControlMap(control, (Keys) Convert.ToInt32(key1), (Keys) Convert.ToInt32(key2));
                     }
                 }
@@ -89,13 +97,23 @@ namespace Intersect.Client.Core.Controls
             CreateControlMap(Control.Running, Keys.Shift, Keys.None);
         }
 
-        public void Save()
+        public void SaveKeyboard()
         {
             foreach (Control control in Enum.GetValues(typeof(Control)))
             {
                 var name = Enum.GetName(typeof(Control), control);
                 Globals.Database.SavePreference(name + "_key1", ((int) ControlMapping[control].Key1).ToString());
                 Globals.Database.SavePreference(name + "_key2", ((int) ControlMapping[control].Key2).ToString());
+            }
+        }
+
+        //Créé par Moussmous pour sauvegarder les controles des manettes
+        public void SaveGamepad()
+        {
+            foreach (ControlGamepad control in Enum.GetValues(typeof(ControlGamepad)))
+            {
+                var name = Enum.GetName(typeof(ControlGamepad), control);
+                Globals.Database.SavePreference(name + "_gamepadkey", XboxControllerMonitor.getButtonOfControl(control));
             }
         }
 
@@ -106,22 +124,43 @@ namespace Intersect.Client.Core.Controls
 
         public static bool KeyDown(Control control)
         {
+            bool retourClavier = false;
+            bool retourManette = false;
             if (ActiveControls?.ControlMapping.ContainsKey(control) ?? false)
             {
-                return ActiveControls.ControlMapping[control]?.KeyDown() ?? false;
-            }
+                retourClavier = ActiveControls.ControlMapping[control]?.KeyDown() ?? false;
+            } 
 
-            return false;
+            retourManette = XboxControllerMonitor.isKeyDown(control);
+            
+            if (retourClavier || retourManette)
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
         }
 
         public static bool KeyUp(Control control)
         {
+            bool retourClavier = false;
+            bool retourManette = false;
             if (ActiveControls?.ControlMapping.ContainsKey(control) ?? false)
             {
-                return ActiveControls.ControlMapping[control]?.KeyUp() ?? false;
+                retourClavier = ActiveControls.ControlMapping[control]?.KeyUp() ?? false;
             }
 
-            return false;
+            retourManette = !XboxControllerMonitor.isKeyDown(control);
+
+            if (retourClavier || retourManette)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public static List<Control> GetControlsFor(Keys key)
