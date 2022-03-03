@@ -153,7 +153,8 @@ namespace Intersect.Client.Core.Controls
 
             retourManette = !XboxControllerMonitor.isKeyDown(control);
 
-            if (retourClavier || retourManette)
+            // We need to put && and not || for the KeyUp logic
+            if (retourClavier && retourManette)
             {
                 return true;
             }
