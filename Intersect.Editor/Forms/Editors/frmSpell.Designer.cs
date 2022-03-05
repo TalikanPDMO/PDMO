@@ -127,6 +127,9 @@ namespace Intersect.Editor.Forms.Editors
             this.nudBuffDuration = new DarkUI.Controls.DarkNumericUpDown();
             this.lblBuffDuration = new System.Windows.Forms.Label();
             this.grpDamage = new DarkUI.Controls.DarkGroupBox();
+            this.chkReplaceCritEffectSpell = new DarkUI.Controls.DarkCheckBox();
+            this.cmbCritEffectSpell = new DarkUI.Controls.DarkComboBox();
+            this.lblCritEffectSpell = new System.Windows.Forms.Label();
             this.nudCritMultiplier = new DarkUI.Controls.DarkNumericUpDown();
             this.lblCritMultiplier = new System.Windows.Forms.Label();
             this.nudCritChance = new DarkUI.Controls.DarkNumericUpDown();
@@ -177,9 +180,6 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
-            this.cmbCritEffectSpell = new DarkUI.Controls.DarkComboBox();
-            this.lblCritEffectSpell = new System.Windows.Forms.Label();
-            this.chkReplaceCritEffectSpell = new DarkUI.Controls.DarkCheckBox();
             this.pnlContainer.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSpell)).BeginInit();
@@ -1705,6 +1705,46 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDamage.TabStop = false;
             this.grpDamage.Text = "Damage";
             // 
+            // chkReplaceCritEffectSpell
+            // 
+            this.chkReplaceCritEffectSpell.Location = new System.Drawing.Point(14, 350);
+            this.chkReplaceCritEffectSpell.Name = "chkReplaceCritEffectSpell";
+            this.chkReplaceCritEffectSpell.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.chkReplaceCritEffectSpell.Size = new System.Drawing.Size(162, 20);
+            this.chkReplaceCritEffectSpell.TabIndex = 41;
+            this.chkReplaceCritEffectSpell.Text = "Replace initial spell on crit";
+            // 
+            // cmbCritEffectSpell
+            // 
+            this.cmbCritEffectSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbCritEffectSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbCritEffectSpell.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbCritEffectSpell.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbCritEffectSpell.DrawDropdownHoverOutline = false;
+            this.cmbCritEffectSpell.DrawFocusRectangle = false;
+            this.cmbCritEffectSpell.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbCritEffectSpell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCritEffectSpell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbCritEffectSpell.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbCritEffectSpell.FormattingEnabled = true;
+            this.cmbCritEffectSpell.Items.AddRange(new object[] {
+            "None"});
+            this.cmbCritEffectSpell.Location = new System.Drawing.Point(10, 327);
+            this.cmbCritEffectSpell.Name = "cmbCritEffectSpell";
+            this.cmbCritEffectSpell.Size = new System.Drawing.Size(170, 21);
+            this.cmbCritEffectSpell.TabIndex = 65;
+            this.cmbCritEffectSpell.Text = "None";
+            this.cmbCritEffectSpell.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lblCritEffectSpell
+            // 
+            this.lblCritEffectSpell.AutoSize = true;
+            this.lblCritEffectSpell.Location = new System.Drawing.Point(7, 310);
+            this.lblCritEffectSpell.Name = "lblCritEffectSpell";
+            this.lblCritEffectSpell.Size = new System.Drawing.Size(82, 13);
+            this.lblCritEffectSpell.TabIndex = 64;
+            this.lblCritEffectSpell.Text = "Crit Effect Spell:";
+            // 
             // nudCritMultiplier
             // 
             this.nudCritMultiplier.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
@@ -1943,7 +1983,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDash.Controls.Add(this.lblRange);
             this.grpDash.Controls.Add(this.scrlRange);
             this.grpDash.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpDash.Location = new System.Drawing.Point(3, 456);
+            this.grpDash.Location = new System.Drawing.Point(215, 105);
             this.grpDash.Name = "grpDash";
             this.grpDash.Size = new System.Drawing.Size(200, 181);
             this.grpDash.TabIndex = 38;
@@ -2040,9 +2080,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpWarp.Controls.Add(this.lblX);
             this.grpWarp.Controls.Add(this.lblMap);
             this.grpWarp.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpWarp.Location = new System.Drawing.Point(3, 456);
+            this.grpWarp.Location = new System.Drawing.Point(215, 105);
             this.grpWarp.Name = "grpWarp";
-            this.grpWarp.Size = new System.Drawing.Size(247, 182);
+            this.grpWarp.Size = new System.Drawing.Size(225, 182);
             this.grpWarp.TabIndex = 35;
             this.grpWarp.TabStop = false;
             this.grpWarp.Text = "Warp Caster:";
@@ -2368,48 +2408,6 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.SelectedImageIndex = 0;
             this.lstGameObjects.Size = new System.Drawing.Size(191, 478);
             this.lstGameObjects.TabIndex = 32;
-            // 
-            // cmbCritEffectSpell
-            // 
-            this.cmbCritEffectSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbCritEffectSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbCritEffectSpell.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbCritEffectSpell.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbCritEffectSpell.DrawDropdownHoverOutline = false;
-            this.cmbCritEffectSpell.DrawFocusRectangle = false;
-            this.cmbCritEffectSpell.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbCritEffectSpell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbCritEffectSpell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbCritEffectSpell.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbCritEffectSpell.FormattingEnabled = true;
-            this.cmbCritEffectSpell.Items.AddRange(new object[] {
-            "None"});
-            this.cmbCritEffectSpell.Location = new System.Drawing.Point(10, 327);
-            this.cmbCritEffectSpell.Name = "cmbCritEffectSpell";
-            this.cmbCritEffectSpell.Size = new System.Drawing.Size(170, 21);
-            this.cmbCritEffectSpell.TabIndex = 65;
-            this.cmbCritEffectSpell.Text = "None";
-            this.cmbCritEffectSpell.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbCritEffectSpell.SelectedIndexChanged += cmbCritEffectSpell_SelectedIndexChanged;
-            // 
-            // lblCritEffectSpell
-            // 
-            this.lblCritEffectSpell.AutoSize = true;
-            this.lblCritEffectSpell.Location = new System.Drawing.Point(7, 310);
-            this.lblCritEffectSpell.Name = "lblCritEffectSpell";
-            this.lblCritEffectSpell.Size = new System.Drawing.Size(82, 13);
-            this.lblCritEffectSpell.TabIndex = 64;
-            this.lblCritEffectSpell.Text = "Crit Effect Spell:";
-            // 
-            // chkReplaceCritEffectSpell
-            // 
-            this.chkReplaceCritEffectSpell.Location = new System.Drawing.Point(14, 350);
-            this.chkReplaceCritEffectSpell.Name = "chkReplaceCritEffectSpell";
-            this.chkReplaceCritEffectSpell.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.chkReplaceCritEffectSpell.Size = new System.Drawing.Size(162, 20);
-            this.chkReplaceCritEffectSpell.TabIndex = 41;
-            this.chkReplaceCritEffectSpell.Text = "Replace initial spell on crit";
-            this.chkReplaceCritEffectSpell.CheckedChanged += chkReplaceCritEffectSpell_CheckedChanged;
             // 
             // FrmSpell
             // 
