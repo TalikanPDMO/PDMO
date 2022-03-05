@@ -198,6 +198,7 @@ namespace Intersect.Editor.Forms.Editors
             lblAnimation.Text = Strings.ResourceEditor.animation;
             chkWalkableBefore.Text = Strings.ResourceEditor.walkablebefore;
             chkWalkableAfter.Text = Strings.ResourceEditor.walkableafter;
+            chkUndashable.Text = Strings.ResourceEditor.undashable;
 
             grpDrops.Text = Strings.ResourceEditor.drops;
             lblDropItem.Text = Strings.ResourceEditor.dropitem;
@@ -250,6 +251,7 @@ namespace Intersect.Editor.Forms.Editors
                 nudMaxHp.Value = mEditorItem.MaxHp;
                 chkWalkableBefore.Checked = mEditorItem.WalkableBefore;
                 chkWalkableAfter.Checked = mEditorItem.WalkableAfter;
+                chkUndashable.Checked = mEditorItem.Undashable;
                 chkInitialFromTileset.Checked = mEditorItem.Initial.GraphicFromTileset;
                 chkExhaustedFromTileset.Checked = mEditorItem.Exhausted.GraphicFromTileset;
                 cmbEvent.SelectedIndex = EventBase.ListIndex(mEditorItem.EventId) + 1;
@@ -979,6 +981,11 @@ namespace Intersect.Editor.Forms.Editors
         }
 
         #endregion
+
+        private void chkUndashable_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Undashable = chkUndashable.Checked;
+        }
     }
 
 }

@@ -4336,6 +4336,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString walkablebefore = @"Walkable before resource removal?";
 
+            public static LocalizedString undashable = @"Undashable?";
+
         }
 
         public struct ShopEditor
