@@ -691,9 +691,9 @@ namespace Intersect.Client.Entities.Projectiles
                 {
                     // Check if ressource should be ignore or not
                     if (blockedBy.GetType() == typeof(Resource) &&
-                        ((!Spawns[i].ProjectileBase.IgnoreActiveResources && !((Resource)blockedBy).IsDead) ||
-                        (!Spawns[i].ProjectileBase.IgnoreExhaustedResources && ((Resource)blockedBy).IsDead))
-                        )
+                        ((!Spawns[i].ProjectileBase.IgnoreActiveResources && !((Resource)blockedBy).IsDead && !((Resource)blockedBy).BaseResource.WalkableBefore)
+                            ||
+                        (!Spawns[i].ProjectileBase.IgnoreExhaustedResources && ((Resource)blockedBy).IsDead)) && !((Resource)blockedBy).BaseResource.WalkableAfter)
                     {
                         killSpawn = true;
                     }

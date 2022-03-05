@@ -2096,14 +2096,14 @@ namespace Intersect.Client.Entities
                                     var resourceBase = ((Resource)en.Value).GetResourceBase();
                                     if (resourceBase != null)
                                     {
-                                        if (!ignoreAliveResources && !((Resource)en.Value).IsDead)
+                                        if (!ignoreAliveResources && !((Resource)en.Value).IsDead && !resourceBase.WalkableBefore)
                                         {
                                             blockedBy = en.Value;
 
                                             return -6;
                                         }
 
-                                        if (!ignoreDeadResources && ((Resource)en.Value).IsDead)
+                                        if (!ignoreDeadResources && ((Resource)en.Value).IsDead && !resourceBase.WalkableAfter)
                                         {
                                             blockedBy = en.Value;
 
