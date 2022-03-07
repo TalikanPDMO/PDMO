@@ -1208,7 +1208,14 @@ namespace Intersect.Server.Entities
                 //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
                 if (Options.Combat.EnableCombatChatMessages)
                 {
-                    PacketSender.SendChatMsg(this, target.Name + Strings.Combat.cantAttackWith + parentSpell.Name, ChatMessageType.Combat);
+                    if (parentSpell != null)
+                    {
+                        PacketSender.SendChatMsg(this, target?.Name + Strings.Combat.cantAttackWith + parentSpell.Name, ChatMessageType.Combat);
+                    }
+                    else if (parentItem != null)
+                    {
+                        PacketSender.SendChatMsg(this, target?.Name + Strings.Combat.cantAttackWith + parentItem.Name, ChatMessageType.Combat);
+                    }
                 }
                 return;
             }
@@ -1410,7 +1417,13 @@ namespace Intersect.Server.Entities
 
             if (entity is Npc npc)
             {   
-                return !friendly && npc.CanPlayerAttack(this) || friendly && npc.IsAllyOf(this);
+                if (spell == null)
+                {
+                    // Attacking with weapon or basic attack
+                    return !friendly && npc.CanPlayerAttack(this) || friendly && npc.IsAllyOf(this);
+                }
+                // Attacking with a targetting spell
+                return !friendly && npc.CanPlayerSpell(this) || friendly && npc.IsAllyOf(this);
             }
 
             return true;

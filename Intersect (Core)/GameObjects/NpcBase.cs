@@ -24,6 +24,10 @@ namespace Intersect.GameObjects
 
         [NotMapped] public ConditionLists PlayerCanAttackConditions = new ConditionLists();
 
+        [NotMapped] public ConditionLists PlayerCanSpellConditions = new ConditionLists();
+
+        [NotMapped] public ConditionLists PlayerCanProjectileConditions = new ConditionLists();
+
         [NotMapped] public ConditionLists PlayerFriendConditions = new ConditionLists();
 
         [NotMapped] public int[] Stats = new int[(int) Enums.Stats.StatCount];
@@ -104,6 +108,22 @@ namespace Intersect.GameObjects
         {
             get => PlayerCanAttackConditions.Data();
             set => PlayerCanAttackConditions.Load(value);
+        }
+
+        [Column("PlayerCanSpellConditions")]
+        [JsonIgnore]
+        public string PlayerCanSpellConditionsJson
+        {
+            get => PlayerCanSpellConditions.Data();
+            set => PlayerCanSpellConditions.Load(value);
+        }
+
+        [Column("PlayerCanProjectileConditions")]
+        [JsonIgnore]
+        public string PlayerCanProjectileConditionsJson
+        {
+            get => PlayerCanProjectileConditions.Data();
+            set => PlayerCanProjectileConditions.Load(value);
         }
 
         //Combat

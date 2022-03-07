@@ -1225,6 +1225,12 @@ Tick timer saved in server config.json.";
             public static LocalizedString instructionsnpccanbeattacked =
                 @"Below are condition lists. If there are conditions, and they are not met, then the player will not be able to attack this npc.";
 
+            public static LocalizedString instructionsnpccanbespelled =
+               @"Below are condition lists. If there are conditions, and they are not met, then the player will not be able to attack this npc with spells.";
+
+            public static LocalizedString instructionsnpccanbeprojectiled =
+               @"Below are condition lists. If there are conditions, and they are not met, then the player will not be able to attack this npc with projectiles.";
+
             public static LocalizedString instructionsquest =
                 @"Below are condition lists. If conditions are met on any of the lists then the player can start the quest.";
 
@@ -3902,6 +3908,10 @@ Tick timer saved in server config.json.";
             public static LocalizedString paste = @"Paste Npc";
 
             public static LocalizedString playercanattackconditions = @"Player Can Attack (Default: True)";
+
+            public static LocalizedString playercanspellconditions = @"Player Can Spell (Default: True)";
+
+            public static LocalizedString playercanprojectileconditions = @"Player Can Projectile (Default: True)";
 
             public static LocalizedString playerfriendprotectorconditions = @"Player Friend/Protector";
 

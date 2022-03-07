@@ -103,6 +103,8 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbOnDeathEventKiller = new DarkUI.Controls.DarkComboBox();
             this.lblOnDeathEventKiller = new System.Windows.Forms.Label();
             this.grpBehavior = new DarkUI.Controls.DarkGroupBox();
+            this.lblMaxMove = new System.Windows.Forms.Label();
+            this.nudMaxMove = new DarkUI.Controls.DarkNumericUpDown();
             this.nudResetRadius = new DarkUI.Controls.DarkNumericUpDown();
             this.lblResetRadius = new System.Windows.Forms.Label();
             this.lblFocusDamageDealer = new System.Windows.Forms.Label();
@@ -164,8 +166,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.searchableDarkTreeView1 = new Intersect.Editor.Forms.Controls.SearchableDarkTreeView();
-            this.nudMaxMove = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblMaxMove = new System.Windows.Forms.Label();
+            this.btnPlayerCanSpellCond = new DarkUI.Controls.DarkButton();
+            this.btnPlayerCanProjectileCond = new DarkUI.Controls.DarkButton();
             this.grpNpcs.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRgbaA)).BeginInit();
@@ -195,6 +197,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudCritChance)).BeginInit();
             this.grpCommonEvents.SuspendLayout();
             this.grpBehavior.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaxMove)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudResetRadius)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudFlee)).BeginInit();
             this.grpConditions.SuspendLayout();
@@ -207,7 +210,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpNpcVsNpc.SuspendLayout();
             this.grpSpells.SuspendLayout();
             this.toolStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMaxMove)).BeginInit();
             this.SuspendLayout();
             // 
             // grpNpcs
@@ -906,7 +908,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCombat.Controls.Add(this.lblAttackAnimation);
             this.grpCombat.Controls.Add(this.lblDamage);
             this.grpCombat.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpCombat.Location = new System.Drawing.Point(215, 309);
+            this.grpCombat.Location = new System.Drawing.Point(215, 363);
             this.grpCombat.Name = "grpCombat";
             this.grpCombat.Size = new System.Drawing.Size(226, 411);
             this.grpCombat.TabIndex = 17;
@@ -1213,11 +1215,11 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCommonEvents.Controls.Add(this.cmbOnDeathEventKiller);
             this.grpCommonEvents.Controls.Add(this.lblOnDeathEventKiller);
             this.grpCommonEvents.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpCommonEvents.Location = new System.Drawing.Point(215, 1018);
+            this.grpCommonEvents.Location = new System.Drawing.Point(215, 1072);
             this.grpCommonEvents.Margin = new System.Windows.Forms.Padding(2);
             this.grpCommonEvents.Name = "grpCommonEvents";
             this.grpCommonEvents.Padding = new System.Windows.Forms.Padding(2);
-            this.grpCommonEvents.Size = new System.Drawing.Size(229, 106);
+            this.grpCommonEvents.Size = new System.Drawing.Size(229, 102);
             this.grpCommonEvents.TabIndex = 32;
             this.grpCommonEvents.TabStop = false;
             this.grpCommonEvents.Text = "Common Events";
@@ -1306,10 +1308,39 @@ namespace Intersect.Editor.Forms.Editors
             this.grpBehavior.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpBehavior.Location = new System.Drawing.Point(215, 1);
             this.grpBehavior.Name = "grpBehavior";
-            this.grpBehavior.Size = new System.Drawing.Size(226, 302);
+            this.grpBehavior.Size = new System.Drawing.Size(226, 362);
             this.grpBehavior.TabIndex = 32;
             this.grpBehavior.TabStop = false;
             this.grpBehavior.Text = "Behavior:";
+            // 
+            // lblMaxMove
+            // 
+            this.lblMaxMove.AutoSize = true;
+            this.lblMaxMove.Location = new System.Drawing.Point(154, 95);
+            this.lblMaxMove.Name = "lblMaxMove";
+            this.lblMaxMove.Size = new System.Drawing.Size(30, 13);
+            this.lblMaxMove.TabIndex = 78;
+            this.lblMaxMove.Text = "Max:";
+            // 
+            // nudMaxMove
+            // 
+            this.nudMaxMove.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudMaxMove.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudMaxMove.Location = new System.Drawing.Point(184, 92);
+            this.nudMaxMove.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+            this.nudMaxMove.Name = "nudMaxMove";
+            this.nudMaxMove.Size = new System.Drawing.Size(36, 20);
+            this.nudMaxMove.TabIndex = 77;
+            this.nudMaxMove.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudMaxMove.ValueChanged += new System.EventHandler(this.nudMaxMove_ValueChanged);
             // 
             // nudResetRadius
             // 
@@ -1396,13 +1427,15 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpConditions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpConditions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpConditions.Controls.Add(this.btnPlayerCanProjectileCond);
+            this.grpConditions.Controls.Add(this.btnPlayerCanSpellCond);
             this.grpConditions.Controls.Add(this.btnAttackOnSightCond);
             this.grpConditions.Controls.Add(this.btnPlayerCanAttackCond);
             this.grpConditions.Controls.Add(this.btnPlayerFriendProtectorCond);
             this.grpConditions.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpConditions.Location = new System.Drawing.Point(8, 189);
             this.grpConditions.Name = "grpConditions";
-            this.grpConditions.Size = new System.Drawing.Size(207, 108);
+            this.grpConditions.Size = new System.Drawing.Size(207, 165);
             this.grpConditions.TabIndex = 66;
             this.grpConditions.TabStop = false;
             this.grpConditions.Text = "Conditions:";
@@ -1412,7 +1445,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnAttackOnSightCond.Location = new System.Drawing.Point(5, 48);
             this.btnAttackOnSightCond.Name = "btnAttackOnSightCond";
             this.btnAttackOnSightCond.Padding = new System.Windows.Forms.Padding(5);
-            this.btnAttackOnSightCond.Size = new System.Drawing.Size(195, 23);
+            this.btnAttackOnSightCond.Size = new System.Drawing.Size(196, 23);
             this.btnAttackOnSightCond.TabIndex = 47;
             this.btnAttackOnSightCond.Text = "Should Not Attack Player On Sight";
             this.btnAttackOnSightCond.Click += new System.EventHandler(this.btnAttackOnSightCond_Click);
@@ -1422,7 +1455,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnPlayerCanAttackCond.Location = new System.Drawing.Point(5, 77);
             this.btnPlayerCanAttackCond.Name = "btnPlayerCanAttackCond";
             this.btnPlayerCanAttackCond.Padding = new System.Windows.Forms.Padding(5);
-            this.btnPlayerCanAttackCond.Size = new System.Drawing.Size(195, 23);
+            this.btnPlayerCanAttackCond.Size = new System.Drawing.Size(196, 23);
             this.btnPlayerCanAttackCond.TabIndex = 46;
             this.btnPlayerCanAttackCond.Text = "Player Can Attack (Default: True)";
             this.btnPlayerCanAttackCond.Click += new System.EventHandler(this.btnPlayerCanAttackCond_Click);
@@ -1432,7 +1465,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnPlayerFriendProtectorCond.Location = new System.Drawing.Point(5, 19);
             this.btnPlayerFriendProtectorCond.Name = "btnPlayerFriendProtectorCond";
             this.btnPlayerFriendProtectorCond.Padding = new System.Windows.Forms.Padding(5);
-            this.btnPlayerFriendProtectorCond.Size = new System.Drawing.Size(195, 23);
+            this.btnPlayerFriendProtectorCond.Size = new System.Drawing.Size(196, 23);
             this.btnPlayerFriendProtectorCond.TabIndex = 44;
             this.btnPlayerFriendProtectorCond.Text = "Player Friend/Protector";
             this.btnPlayerFriendProtectorCond.Click += new System.EventHandler(this.btnPlayerFriendProtectorCond_Click);
@@ -1573,7 +1606,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDrops.Controls.Add(this.lblDropChance);
             this.grpDrops.Controls.Add(this.lblDropItem);
             this.grpDrops.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpDrops.Location = new System.Drawing.Point(218, 728);
+            this.grpDrops.Location = new System.Drawing.Point(218, 782);
             this.grpDrops.Name = "grpDrops";
             this.grpDrops.Size = new System.Drawing.Size(226, 285);
             this.grpDrops.TabIndex = 30;
@@ -2084,34 +2117,25 @@ namespace Intersect.Editor.Forms.Editors
             this.searchableDarkTreeView1.TabIndex = 46;
             this.searchableDarkTreeView1.Visible = false;
             // 
-            // nudMaxMove
+            // btnPlayerCanSpellCond
             // 
-            this.nudMaxMove.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudMaxMove.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudMaxMove.Location = new System.Drawing.Point(184, 92);
-            this.nudMaxMove.Maximum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            0});
-            this.nudMaxMove.Name = "nudMaxMove";
-            this.nudMaxMove.Size = new System.Drawing.Size(36, 20);
-            this.nudMaxMove.TabIndex = 77;
-            this.nudMaxMove.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudMaxMove.ValueChanged += new System.EventHandler(this.nudMaxMove_ValueChanged);
+            this.btnPlayerCanSpellCond.Location = new System.Drawing.Point(5, 106);
+            this.btnPlayerCanSpellCond.Name = "btnPlayerCanSpellCond";
+            this.btnPlayerCanSpellCond.Padding = new System.Windows.Forms.Padding(5);
+            this.btnPlayerCanSpellCond.Size = new System.Drawing.Size(196, 23);
+            this.btnPlayerCanSpellCond.TabIndex = 48;
+            this.btnPlayerCanSpellCond.Text = "Player Can Spell (Default: True)";
+            this.btnPlayerCanSpellCond.Click += new System.EventHandler(this.btnPlayerCanSpellCond_Click);
             // 
-            // lblMaxMove
+            // btnPlayerCanProjectileCond
             // 
-            this.lblMaxMove.AutoSize = true;
-            this.lblMaxMove.Location = new System.Drawing.Point(154, 95);
-            this.lblMaxMove.Name = "lblMaxMove";
-            this.lblMaxMove.Size = new System.Drawing.Size(30, 13);
-            this.lblMaxMove.TabIndex = 78;
-            this.lblMaxMove.Text = "Max:";
+            this.btnPlayerCanProjectileCond.Location = new System.Drawing.Point(5, 135);
+            this.btnPlayerCanProjectileCond.Name = "btnPlayerCanProjectileCond";
+            this.btnPlayerCanProjectileCond.Padding = new System.Windows.Forms.Padding(5);
+            this.btnPlayerCanProjectileCond.Size = new System.Drawing.Size(196, 23);
+            this.btnPlayerCanProjectileCond.TabIndex = 49;
+            this.btnPlayerCanProjectileCond.Text = "Player Can Projectile (Default: True)";
+            this.btnPlayerCanProjectileCond.Click += new System.EventHandler(this.btnPlayerCanProjectileCond_Click);
             // 
             // FrmNpc
             // 
@@ -2172,6 +2196,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCommonEvents.PerformLayout();
             this.grpBehavior.ResumeLayout(false);
             this.grpBehavior.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaxMove)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudResetRadius)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudFlee)).EndInit();
             this.grpConditions.ResumeLayout(false);
@@ -2189,7 +2214,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpells.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMaxMove)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2329,5 +2353,7 @@ namespace Intersect.Editor.Forms.Editors
         private Controls.GameObjectList lstGameObjects;
         private System.Windows.Forms.Label lblMaxMove;
         private DarkNumericUpDown nudMaxMove;
+        private DarkButton btnPlayerCanProjectileCond;
+        private DarkButton btnPlayerCanSpellCond;
     }
 }

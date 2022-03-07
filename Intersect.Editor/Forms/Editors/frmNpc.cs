@@ -163,6 +163,8 @@ namespace Intersect.Editor.Forms.Editors
             btnPlayerFriendProtectorCond.Text = Strings.NpcEditor.playerfriendprotectorconditions;
             btnAttackOnSightCond.Text = Strings.NpcEditor.attackonsightconditions;
             btnPlayerCanAttackCond.Text = Strings.NpcEditor.playercanattackconditions;
+            btnPlayerCanSpellCond.Text = Strings.NpcEditor.playercanspellconditions;
+            btnPlayerCanProjectileCond.Text = Strings.NpcEditor.playercanprojectileconditions;
             lblFocusDamageDealer.Text = Strings.NpcEditor.focusdamagedealer;
 
             grpCommonEvents.Text = Strings.NpcEditor.commonevents;
@@ -857,6 +859,26 @@ namespace Intersect.Editor.Forms.Editors
         {
             var frm = new FrmDynamicRequirements(
                 mEditorItem.PlayerCanAttackConditions, RequirementType.NpcCanBeAttacked
+            );
+
+            frm.TopMost = true;
+            frm.ShowDialog();
+        }
+
+        private void btnPlayerCanSpellCond_Click(object sender, EventArgs e)
+        {
+            var frm = new FrmDynamicRequirements(
+                mEditorItem.PlayerCanSpellConditions, RequirementType.NpcCanBeSpelled
+            );
+
+            frm.TopMost = true;
+            frm.ShowDialog();
+        }
+
+        private void btnPlayerCanProjectileCond_Click(object sender, EventArgs e)
+        {
+            var frm = new FrmDynamicRequirements(
+                mEditorItem.PlayerCanProjectileConditions, RequirementType.NpcCanBeProjectiled
             );
 
             frm.TopMost = true;
