@@ -75,9 +75,26 @@ namespace Intersect.Server.Entities.Combat
                 if (n == -3 && zdimensionPass == false)
                 {
                     return;
-                } //Check for active resources
+                }
 
-                if (n == (int) EntityTypes.Resource && activeResourcePass == false)
+                //Check for resources, update of the Intersect Engine code
+                if (n == (int)EntityTypes.Resource)
+                {
+                    if (en.CollidedResource.Base.Undashable)
+                    {
+                        return;
+                    }
+
+                    if (!deadResourcePass && en.CollidedResource.IsDead())
+                    {
+                        return;
+                    }
+                    if (!activeResourcePass && !en.CollidedResource.IsDead())
+                    {
+                        return;
+                    }
+                }
+/*                if (n == (int) EntityTypes.Resource && activeResourcePass == false)
                 {
                     return;
                 } //Check for dead resources
@@ -85,8 +102,9 @@ namespace Intersect.Server.Entities.Combat
                 if (n == (int) EntityTypes.Resource && deadResourcePass == false)
                 {
                     return;
-                } //Check for players and solid events
-
+                }*/
+                
+                //Check for players and solid events
                 if (n == (int) EntityTypes.Player || n == (int) EntityTypes.Event)
                 {
                     return;

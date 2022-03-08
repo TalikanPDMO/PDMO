@@ -119,6 +119,8 @@ namespace Intersect.GameObjects
 
         public bool WalkableBefore { get; set; }
 
+        public bool Undashable { get; set; }
+
         /// <inheritdoc />
         public string Folder { get; set; } = "";
 

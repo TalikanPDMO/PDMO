@@ -625,6 +625,10 @@
     <Compile Include="Migrations\Game\20210903182005_AddingLinkedSpawnsToProjectiles.designer.cs">
       <DependentUpon>20210903182005_AddingLinkedSpawnsToProjectiles.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20220305170658_AddingUndashableToResources.cs" />
+    <Compile Include="Migrations\Game\20220305170658_AddingUndashableToResources.designer.cs">
+      <DependentUpon>20220305170658_AddingUndashableToResources.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

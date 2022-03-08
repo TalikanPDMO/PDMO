@@ -45,6 +45,8 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore] public bool Running = false;
 
+        [NotMapped, JsonIgnore] public Resource CollidedResource { get; set; } = null;
+
         public Entity() : this(Guid.NewGuid())
         {
         }
@@ -529,6 +531,7 @@ namespace Intersect.Server.Entities
                             //If determine if we should walk
                             if (!resource.IsPassable())
                             {
+                                CollidedResource = (Resource)en;
                                 return (int)EntityTypes.Resource;
                             }
                         }

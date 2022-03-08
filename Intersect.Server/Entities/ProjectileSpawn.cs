@@ -138,8 +138,10 @@ namespace Intersect.Server.Entities
                 }
                 else if (targetEntity.GetType() == typeof(Resource))
                 {
-                    if (((Resource) targetEntity).IsDead() && !ProjectileBase.IgnoreExhaustedResources ||
-                        !((Resource) targetEntity).IsDead() && !ProjectileBase.IgnoreActiveResources)
+                    var resourceEntity = (Resource)targetEntity;
+                    if ((resourceEntity.IsDead() && !ProjectileBase.IgnoreExhaustedResources && !resourceEntity.Base.WalkableAfter) ||
+                        (!resourceEntity.IsDead() && !ProjectileBase.IgnoreActiveResources && !resourceEntity.Base.WalkableBefore))
+
                     {
                         if (Parent.Owner.GetType() == typeof(Player) && !((Resource) targetEntity).IsDead())
                         {
