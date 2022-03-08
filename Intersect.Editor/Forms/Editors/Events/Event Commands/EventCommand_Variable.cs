@@ -62,6 +62,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             btnSave.Text = Strings.EventSetVariable.okay;
             btnCancel.Text = Strings.EventSetVariable.cancel;
             chkSyncParty.Text = Strings.EventSetVariable.syncparty;
+            chkSyncGuild.Text = Strings.EventSetVariable.syncguild;
+            chkSyncAll.Text = Strings.EventSetVariable.syncall;
 
             //Numeric
             grpNumericVariable.Text = Strings.EventSetVariable.numericlabel;
@@ -115,6 +117,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             }
 
             chkSyncParty.Checked = mMyCommand.SyncParty;
+            chkSyncGuild.Checked = mMyCommand.SyncGuild;
+            chkSyncAll.Checked = mMyCommand.SyncAll;
 
             UpdateFormElements();
         }
@@ -228,6 +232,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             }
 
             mMyCommand.SyncParty = chkSyncParty.Checked;
+            mMyCommand.SyncGuild = chkSyncGuild.Checked;
+            mMyCommand.SyncAll = chkSyncAll.Checked;
 
             mEventEditor.FinishCommandEdit();
         }

@@ -2834,6 +2834,10 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString syncparty = @"Party Sync?";
 
+            public static LocalizedString syncguild = @"Guild Sync?";
+
+            public static LocalizedString syncall = @"All Sync?";
+
             public static LocalizedString label = @"Select Variable:";
 
             public static LocalizedString booleanlabel = @"Boolean Variable:";
