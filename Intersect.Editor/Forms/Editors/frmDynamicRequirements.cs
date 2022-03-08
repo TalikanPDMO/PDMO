@@ -31,6 +31,10 @@ namespace Intersect.Editor.Forms.Editors
 
         NpcCanBeAttacked,
 
+        NpcCanBeSpelled,
+
+        NpcCanBeProjectiled
+
     }
 
     public partial class FrmDynamicRequirements : Form
@@ -95,6 +99,14 @@ namespace Intersect.Editor.Forms.Editors
                     break;
                 case RequirementType.NpcCanBeAttacked:
                     lblInstructions.Text = Strings.DynamicRequirements.instructionsnpccanbeattacked;
+
+                    break;
+                case RequirementType.NpcCanBeSpelled:
+                    lblInstructions.Text = Strings.DynamicRequirements.instructionsnpccanbespelled;
+
+                    break;
+                case RequirementType.NpcCanBeProjectiled:
+                    lblInstructions.Text = Strings.DynamicRequirements.instructionsnpccanbeprojectiled;
 
                     break;
                 default:

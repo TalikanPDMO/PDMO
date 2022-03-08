@@ -1449,6 +1449,10 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
+            if (target is Npc npctarget && this is Player && !npctarget.CanPlayerProjectile((Player)this))
+            {
+                return;
+            }
 
             //Check for taunt status and trying to attack a target that has not taunted you.
             foreach (var status in CachedStatuses)
@@ -1466,7 +1470,7 @@ namespace Intersect.Server.Entities
 
             if (parentSpell != null)
             {
-                TryAttack(target, parentSpell, false, false, alreadyCrit);
+                TryAttack(target, parentSpell, false, false, alreadyCrit, "", true);
             }
 
             var targetPlayer = target as Player;
@@ -1553,7 +1557,8 @@ namespace Intersect.Server.Entities
             bool onHitTrigger = false,
             bool trapTrigger = false,
             bool alreadyCrit = false,
-            string sourceSpellNameOnCrit = ""
+            string sourceSpellNameOnCrit = "",
+            bool fromProjectile = false
         )
         {
             if (target is Resource)
@@ -1562,6 +1567,10 @@ namespace Intersect.Server.Entities
             }
 
             if (spellBase == null)
+            {
+                return;
+            }
+            if (target is Npc npctarget && this is Player && !fromProjectile && !npctarget.CanPlayerSpell((Player)this))
             {
                 return;
             }

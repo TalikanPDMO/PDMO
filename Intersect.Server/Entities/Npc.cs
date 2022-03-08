@@ -1347,6 +1347,42 @@ namespace Intersect.Server.Entities
             return false;
         }
 
+        public bool CanPlayerSpell(Player en)
+        {
+            //Check to see if the npc is a friend/protector...
+            if (IsAllyOf(en))
+            {
+                return false;
+            }
+
+            //If not then check and see if player meets the conditions to attack the npc with a spell...
+            if (Base.PlayerCanSpellConditions.Lists.Count == 0 ||
+                Conditions.MeetsConditionLists(Base.PlayerCanSpellConditions, en, null))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool CanPlayerProjectile(Player en)
+        {
+            //Check to see if the npc is a friend/protector...
+            if (IsAllyOf(en))
+            {
+                return false;
+            }
+
+            //If not then check and see if player meets the conditions to attack the npc with a projectile...
+            if (Base.PlayerCanProjectileConditions.Lists.Count == 0 ||
+                Conditions.MeetsConditionLists(Base.PlayerCanProjectileConditions, en, null))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public override bool IsAllyOf(Entity otherEntity)
         {
             switch (otherEntity)
