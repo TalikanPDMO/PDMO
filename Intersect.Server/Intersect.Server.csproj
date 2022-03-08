@@ -628,6 +628,7 @@
     <Compile Include="Migrations\Game\20220305170658_AddingUndashableToResources.cs" />
     <Compile Include="Migrations\Game\20220305170658_AddingUndashableToResources.designer.cs">
       <DependentUpon>20220305170658_AddingUndashableToResources.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Game\20220306164424_AddingCanPlayerSpellAndProjectilesToNpcs.cs" />
     <Compile Include="Migrations\Game\20220306164424_AddingCanPlayerSpellAndProjectilesToNpcs.designer.cs">
       <DependentUpon>20220306164424_AddingCanPlayerSpellAndProjectilesToNpcs.cs</DependentUpon>
