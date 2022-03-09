@@ -719,11 +719,12 @@ namespace Intersect.Client.Maps
                     var itemTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Item, itemBase.Icon);
                     if (itemTex != null)
                     {
+                        float final_x = x + (Options.TileWidth - itemTex.GetWidth()) / 2.0f;
+                        float final_y = y + (Options.TileHeight - itemTex.GetHeight()) / 2.0f;
                         Graphics.DrawGameTexture(
                             itemTex, new FloatRect(0, 0, itemTex.GetWidth(), itemTex.GetHeight()),
                             new FloatRect(
-                                x, y,
-                                Options.TileWidth, Options.TileHeight
+                                final_x, final_y, itemTex.GetWidth(), itemTex.GetHeight()
                             ), itemBase.Color
                         );
                     }
