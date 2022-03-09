@@ -2832,11 +2832,15 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString title = @"Set Variable";
 
-            public static LocalizedString syncparty = @"Party Sync?";
+            public static LocalizedString synchro = @"Synchro:";
 
-            public static LocalizedString syncguild = @"Guild Sync?";
+            public static LocalizedString syncparty = @"Party";
 
-            public static LocalizedString syncall = @"All Sync? /!\";
+            public static LocalizedString syncguild = @"Guild";
+
+            public static LocalizedString syncall = @"All";
+
+            public static LocalizedString syncoffline = @"+ Offline /!\";
 
             public static LocalizedString label = @"Select Variable:";
 

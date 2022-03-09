@@ -1773,27 +1773,39 @@ namespace Intersect.Server.Entities.Events
                 }
                 if (command.SyncAll)
                 {
-                    var listp = Player.FindAll();
-                    using (var context = DbInterface.CreatePlayerContext(false))
+                    if (command.SyncOffline)
                     {
-                        foreach (var pl in listp)
+                        using (var context = DbInterface.CreatePlayerContext(false))
                         {
-                            Player p = Player.Find(pl.Id);
-                            if (p != null && p != player)
+                            foreach (var pl in Player.FindAll())
                             {
-                                if (p.Online)
+                                Player p = Player.Find(pl.Id);
+                                if (p != null && p != player)
                                 {
-                                    p.SetSwitchValue(command.VariableId, mod.Value);
-                                }
-                                else
-                                {
-                                    p.SetSwitchValue(command.VariableId, mod.Value, false);
-                                    context.Update(p);
+                                    if (p.Online)
+                                    {
+                                        p.SetSwitchValue(command.VariableId, mod.Value);
+                                    }
+                                    else
+                                    {
+                                        p.SetSwitchValue(command.VariableId, mod.Value, false);
+                                        context.Update(p);
+                                    }
                                 }
                             }
+                            context.SaveChanges();
                         }
-                        context.SaveChanges();
                     }
+                    else
+                    {
+                        foreach (var p in Player.OnlineList)
+                        {
+                            if (p != null && p != player)
+                            {
+                                p.SetSwitchValue(command.VariableId, mod.Value);
+                            }
+                        }
+                    }  
                 }
                 else
                 {
@@ -1811,25 +1823,39 @@ namespace Intersect.Server.Entities.Events
                     // Set the guild member switches too if Sync Guild enabled!
                     if (command.SyncGuild)
                     {
-                        using (var context = DbInterface.CreatePlayerContext(false))
+                        if (command.SyncOffline)
+                        {
+                            using (var context = DbInterface.CreatePlayerContext(false))
+                            {
+                                foreach (var guildMember in player.Guild.Members)
+                                {
+                                    Player p = Player.Find(guildMember.Key);
+                                    if (p != null && p != player)
+                                    {
+                                        if (p.Online)
+                                        {
+                                            p.SetSwitchValue(command.VariableId, mod.Value);
+                                        }
+                                        else
+                                        {
+                                            p.SetSwitchValue(command.VariableId, mod.Value, false);
+                                            context.Update(p);
+                                        }
+                                    }
+                                }
+                                context.SaveChanges();
+                            }
+                        }
+                        else
                         {
                             foreach (var guildMember in player.Guild.Members)
                             {
-                                Player p = Player.Find(guildMember.Key);
+                                Player p = Player.FindOnline(guildMember.Key);
                                 if (p != null && p != player)
                                 {
-                                    if (p.Online)
-                                    {
-                                        p.SetSwitchValue(command.VariableId, mod.Value);
-                                    }
-                                    else
-                                    {
-                                        p.SetSwitchValue(command.VariableId, mod.Value, false);
-                                        context.Update(p);
-                                    }
+                                    p.SetSwitchValue(command.VariableId, mod.Value);
                                 }
                             }
-                            context.SaveChanges();
                         }
                     }
                 }
@@ -2015,26 +2041,38 @@ namespace Intersect.Server.Entities.Events
                 }
                 if (command.SyncAll)
                 {
-                    var listp = Player.FindAll();
-                    using (var context = DbInterface.CreatePlayerContext(false))
+                    if (command.SyncOffline)
                     {
-                        foreach (var pl in listp)
+                        using (var context = DbInterface.CreatePlayerContext(false))
                         {
-                            Player p = Player.Find(pl.Id);
-                            if (p != null && p != player)
+                            foreach (var pl in Player.FindAll())
                             {
-                                if (p.Online)
+                                Player p = Player.Find(pl.Id);
+                                if (p != null && p != player)
                                 {
-                                    p.SetVariableValue(command.VariableId, value.Integer);
-                                }
-                                else
-                                {
-                                    p.SetVariableValue(command.VariableId, value.Integer, false);
-                                    context.Update(p);
+                                    if (p.Online)
+                                    {
+                                        p.SetVariableValue(command.VariableId, value.Integer);
+                                    }
+                                    else
+                                    {
+                                        p.SetVariableValue(command.VariableId, value.Integer, false);
+                                        context.Update(p);
+                                    }
                                 }
                             }
+                            context.SaveChanges();
                         }
-                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        foreach (var p in Player.OnlineList)
+                        {
+                            if (p != null && p != player)
+                            {
+                                p.SetVariableValue(command.VariableId, value.Integer);
+                            }
+                        }
                     }
                 }
                 else
@@ -2053,25 +2091,39 @@ namespace Intersect.Server.Entities.Events
                     // Set the guild member switches too if Sync Guild enabled!
                     if (command.SyncGuild)
                     {
-                        using (var context = DbInterface.CreatePlayerContext(false))
+                        if (command.SyncOffline)
+                        {
+                            using (var context = DbInterface.CreatePlayerContext(false))
+                            {
+                                foreach (var guildMember in player.Guild.Members)
+                                {
+                                    Player p = Player.Find(guildMember.Key);
+                                    if (p != null && p != player)
+                                    {
+                                        if (p.Online)
+                                        {
+                                            p.SetVariableValue(command.VariableId, value.Integer);
+                                        }
+                                        else
+                                        {
+                                            p.SetVariableValue(command.VariableId, value.Integer, false);
+                                            context.Update(p);
+                                        }
+                                    }
+                                }
+                                context.SaveChanges();
+                            }
+                        }
+                        else
                         {
                             foreach (var guildMember in player.Guild.Members)
                             {
-                                Player p = Player.Find(guildMember.Key);
+                                Player p = Player.FindOnline(guildMember.Key);
                                 if (p != null && p != player)
                                 {
-                                    if (p.Online)
-                                    {
-                                        p.SetVariableValue(command.VariableId, value.Integer);
-                                    }
-                                    else
-                                    {
-                                        p.SetVariableValue(command.VariableId, value.Integer, false);
-                                        context.Update(p);
-                                    }
+                                    p.SetVariableValue(command.VariableId, value.Integer);
                                 }
                             }
-                            context.SaveChanges();
                         }
                     }
                 }
@@ -2135,26 +2187,38 @@ namespace Intersect.Server.Entities.Events
 
                 if (command.SyncAll)
                 {
-                    var listp = Player.FindAll();
-                    using (var context = DbInterface.CreatePlayerContext(false))
+                    if (command.SyncOffline)
                     {
-                        foreach (var pl in listp)
+                        using (var context = DbInterface.CreatePlayerContext(false))
                         {
-                            Player p = Player.Find(pl.Id);
-                            if (p != null && p != player)
+                            foreach (var pl in Player.FindAll())
                             {
-                                if (p.Online)
+                                Player p = Player.Find(pl.Id);
+                                if (p != null && p != player)
                                 {
-                                    p.SetVariableValue(command.VariableId, value.String);
-                                }
-                                else
-                                {
-                                    p.SetVariableValue(command.VariableId, value.String, false);
-                                    context.Update(p);
+                                    if (p.Online)
+                                    {
+                                        p.SetVariableValue(command.VariableId, value.String);
+                                    }
+                                    else
+                                    {
+                                        p.SetVariableValue(command.VariableId, value.String, false);
+                                        context.Update(p);
+                                    }
                                 }
                             }
+                            context.SaveChanges();
                         }
-                        context.SaveChanges();
+                    }                   
+                    else
+                    {
+                        foreach (var p in Player.OnlineList)
+                        {
+                            if (p != null && p != player)
+                            {
+                                p.SetVariableValue(command.VariableId, value.String);
+                            }
+                        }
                     }
                 }
                 else
@@ -2173,25 +2237,39 @@ namespace Intersect.Server.Entities.Events
                     // Set the guild member switches too if Sync Guild enabled!
                     if (command.SyncGuild)
                     {
-                        using (var context = DbInterface.CreatePlayerContext(false))
+                        if (command.SyncOffline)
+                        {
+                            using (var context = DbInterface.CreatePlayerContext(false))
+                            {
+                                foreach (var guildMember in player.Guild.Members)
+                                {
+                                    Player p = Player.Find(guildMember.Key);
+                                    if (p != null && p != player)
+                                    {
+                                        if (p.Online)
+                                        {
+                                            p.SetVariableValue(command.VariableId, value.String);
+                                        }
+                                        else
+                                        {
+                                            p.SetVariableValue(command.VariableId, value.String, false);
+                                            context.Update(p);
+                                        }
+                                    }
+                                }
+                                context.SaveChanges();
+                            }
+                        }
+                        else
                         {
                             foreach (var guildMember in player.Guild.Members)
                             {
-                                Player p = Player.Find(guildMember.Key);
+                                Player p = Player.FindOnline(guildMember.Key);
                                 if (p != null && p != player)
                                 {
-                                    if (p.Online)
-                                    {
-                                        p.SetVariableValue(command.VariableId, value.String);
-                                    }
-                                    else
-                                    {
-                                        p.SetVariableValue(command.VariableId, value.String, false);
-                                        context.Update(p);
-                                    }
+                                    p.SetVariableValue(command.VariableId, value.String);
                                 }
                             }
-                            context.SaveChanges();
                         }
                     }
                 }

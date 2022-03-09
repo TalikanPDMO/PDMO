@@ -277,6 +277,15 @@ namespace Intersect.Server.Database.GameData.Migrations
                 cmd.SyncAll = false;
             }
 
+            if (obj.ContainsKey("SyncOffline") && bool.Parse(obj["SyncOffline"].ToString()))
+            {
+                cmd.SyncOffline = true;
+            }
+            else
+            {
+                cmd.SyncOffline = false;
+            }
+
             var mod = new BooleanVariableMod();
             cmd.Modification = mod;
 
@@ -354,6 +363,15 @@ namespace Intersect.Server.Database.GameData.Migrations
             else
             {
                 cmd.SyncAll = false;
+            }
+
+            if (obj.ContainsKey("SyncOffline") && bool.Parse(obj["SyncOffline"].ToString()))
+            {
+                cmd.SyncOffline = true;
+            }
+            else
+            {
+                cmd.SyncOffline = false;
             }
 
             var mod = new IntegerVariableMod();

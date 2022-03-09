@@ -205,6 +205,8 @@ namespace Intersect.GameObjects.Events.Commands
 
         public bool SyncAll { get; set; }
 
+        public bool SyncOffline { get; set; }
+
 
         public VariableMod Modification { get; set; }
 

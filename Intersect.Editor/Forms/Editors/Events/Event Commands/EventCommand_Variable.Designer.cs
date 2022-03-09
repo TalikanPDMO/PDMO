@@ -81,6 +81,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.optBooleanClonePlayerVar = new DarkUI.Controls.DarkRadioButton();
             this.optBooleanTrue = new DarkUI.Controls.DarkRadioButton();
             this.optBooleanFalse = new DarkUI.Controls.DarkRadioButton();
+            this.lblSync = new System.Windows.Forms.Label();
+            this.chkSyncOffline = new DarkUI.Controls.DarkCheckBox();
             this.grpSetVariable.SuspendLayout();
             this.grpSelectVariable.SuspendLayout();
             this.grpNumericVariable.SuspendLayout();
@@ -117,6 +119,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpSelectVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpSelectVariable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpSelectVariable.Controls.Add(this.chkSyncOffline);
+            this.grpSelectVariable.Controls.Add(this.lblSync);
             this.grpSelectVariable.Controls.Add(this.chkSyncAll);
             this.grpSelectVariable.Controls.Add(this.chkSyncGuild);
             this.grpSelectVariable.Controls.Add(this.chkSyncParty);
@@ -135,31 +139,31 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.chkSyncAll.AutoSize = true;
             this.chkSyncAll.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.chkSyncAll.Location = new System.Drawing.Point(192, 67);
+            this.chkSyncAll.Location = new System.Drawing.Point(165, 67);
             this.chkSyncAll.Name = "chkSyncAll";
-            this.chkSyncAll.Size = new System.Drawing.Size(86, 17);
+            this.chkSyncAll.Size = new System.Drawing.Size(37, 17);
             this.chkSyncAll.TabIndex = 42;
-            this.chkSyncAll.Text = "All Sync? /!\\";
+            this.chkSyncAll.Text = "All";
             // 
             // chkSyncGuild
             // 
             this.chkSyncGuild.AutoSize = true;
             this.chkSyncGuild.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.chkSyncGuild.Location = new System.Drawing.Point(103, 67);
+            this.chkSyncGuild.Location = new System.Drawing.Point(110, 67);
             this.chkSyncGuild.Name = "chkSyncGuild";
-            this.chkSyncGuild.Size = new System.Drawing.Size(83, 17);
+            this.chkSyncGuild.Size = new System.Drawing.Size(50, 17);
             this.chkSyncGuild.TabIndex = 41;
-            this.chkSyncGuild.Text = "Guild Sync?";
+            this.chkSyncGuild.Text = "Guild";
             // 
             // chkSyncParty
             // 
             this.chkSyncParty.AutoSize = true;
             this.chkSyncParty.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.chkSyncParty.Location = new System.Drawing.Point(14, 67);
+            this.chkSyncParty.Location = new System.Drawing.Point(55, 67);
             this.chkSyncParty.Name = "chkSyncParty";
-            this.chkSyncParty.Size = new System.Drawing.Size(83, 17);
+            this.chkSyncParty.Size = new System.Drawing.Size(50, 17);
             this.chkSyncParty.TabIndex = 40;
-            this.chkSyncParty.Text = "Party Sync?";
+            this.chkSyncParty.Text = "Party";
             // 
             // rdoPlayerVariable
             // 
@@ -762,6 +766,25 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.optBooleanFalse.TabIndex = 25;
             this.optBooleanFalse.Text = "False";
             // 
+            // lblSync
+            // 
+            this.lblSync.AutoSize = true;
+            this.lblSync.Location = new System.Drawing.Point(6, 69);
+            this.lblSync.Name = "lblSync";
+            this.lblSync.Size = new System.Drawing.Size(49, 13);
+            this.lblSync.TabIndex = 43;
+            this.lblSync.Text = "Synchro:";
+            // 
+            // chkSyncOffline
+            // 
+            this.chkSyncOffline.AutoSize = true;
+            this.chkSyncOffline.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.chkSyncOffline.Location = new System.Drawing.Point(205, 67);
+            this.chkSyncOffline.Name = "chkSyncOffline";
+            this.chkSyncOffline.Size = new System.Drawing.Size(81, 17);
+            this.chkSyncOffline.TabIndex = 44;
+            this.chkSyncOffline.Text = "+ Offline /!\\";
+            // 
             // EventCommandVariable
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -848,5 +871,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         internal DarkRadioButton optNumericMultiply;
         private DarkCheckBox chkSyncAll;
         private DarkCheckBox chkSyncGuild;
+        private DarkCheckBox chkSyncOffline;
+        private System.Windows.Forms.Label lblSync;
     }
 }
