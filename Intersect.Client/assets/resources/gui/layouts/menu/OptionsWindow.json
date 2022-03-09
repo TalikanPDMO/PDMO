@@ -9409,10 +9409,10 @@
     },
     //Ajoutés par Moussmous
     "SwitchToKeyboardButton": {
-      "Bounds": "238,102,200,26",
+      "Bounds": "98,7,200,24",
       "Padding": "0,0,0,0",
       "AlignmentEdgeDistances": "0,0,0,0",
-      "AlignmentTransform": "-140,-95",
+      "AlignmentTransform": "0,0",
       "Margin": "0,0,0,0",
       "RenderColor": "255,255,255,255",
       "Alignments": "",
@@ -9447,10 +9447,10 @@
       "ClickSound": ""
     },
     "SwitchToGamepadButton": {
-      "Bounds": "310,105,112,20",
+      "Bounds": "310,10,112,20",
       "Padding": "0,0,0,0",
       "AlignmentEdgeDistances": "0,0,0,0",
-      "AlignmentTransform": "0,-95",
+      "AlignmentTransform": "0,0",
       "Margin": "0,0,0,0",
       "RenderColor": "255,255,255,255",
       "Alignments": "",
@@ -9485,10 +9485,10 @@
       "ClickSound": ""
     },
     "GamepadUnderBar": {
-      "Bounds": "336,123,48,4",
+      "Bounds": "336,28,48,4",
       "Padding": "0,0,0,0",
       "AlignmentEdgeDistances": "0,0,0,0",
-      "AlignmentTransform": "0,-95",
+      "AlignmentTransform": "0,0",
       "Margin": "0,0,0,0",
       "RenderColor": "255,255,255,255",
       "Alignments": "",
@@ -9523,10 +9523,10 @@
       "ClickSound": ""
     },
     "KeyboardUnderBar": {
-      "Bounds": "210,123,48,4",
+      "Bounds": "210,28,48,4",
       "Padding": "0,0,0,0",
       "AlignmentEdgeDistances": "0,0,0,0",
-      "AlignmentTransform": "0,-95",
+      "AlignmentTransform": "0,0",
       "Margin": "0,0,0,0",
       "RenderColor": "255,255,255,255",
       "Alignments": "",
