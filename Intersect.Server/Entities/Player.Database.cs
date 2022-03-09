@@ -118,6 +118,22 @@ namespace Intersect.Server.Entities
             }
         }
 
+        public static IEnumerable<Player> FindAll()
+        {
+            try
+            {
+                using (var context = DbInterface.CreatePlayerContext())
+                {
+                    return context.Players.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex);
+                return null;
+            }
+        }
+
         public static bool PlayerExists(string name)
         {
             if (string.IsNullOrWhiteSpace(name))

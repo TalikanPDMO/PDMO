@@ -5288,7 +5288,7 @@ namespace Intersect.Server.Entities
             return s.Value.Boolean;
         }
 
-        public void SetSwitchValue(Guid id, bool value)
+        public void SetSwitchValue(Guid id, bool value, bool startTrigger=true)
         {
             var s = GetSwitch(id);
             var changed = true;
@@ -5307,7 +5307,7 @@ namespace Intersect.Server.Entities
                 Variables.Add(s);
             }
 
-            if (changed)
+            if (changed && startTrigger)
             {
                 StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", id.ToString());
             }
@@ -5360,7 +5360,7 @@ namespace Intersect.Server.Entities
             return v.Value;
         }
 
-        public void SetVariableValue(Guid id, long value)
+        public void SetVariableValue(Guid id, long value, bool startTrigger=true)
         {
             var v = GetVariable(id);
             var changed = true;
@@ -5379,13 +5379,13 @@ namespace Intersect.Server.Entities
                 Variables.Add(v);
             }
 
-            if (changed)
+            if (changed && startTrigger)
             {
                 StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", id.ToString());
             }
         }
 
-        public void SetVariableValue(Guid id, string value)
+        public void SetVariableValue(Guid id, string value, bool startTrigger = true)
         {
             var v = GetVariable(id);
             var changed = true;
@@ -5404,7 +5404,7 @@ namespace Intersect.Server.Entities
                 Variables.Add(v);
             }
 
-            if (changed)
+            if (changed && startTrigger)
             {
                 StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", id.ToString());
             }

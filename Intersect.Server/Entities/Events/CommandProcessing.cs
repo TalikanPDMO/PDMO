@@ -1771,15 +1771,65 @@ namespace Intersect.Server.Entities.Events
                 {
                     player.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", command.VariableId.ToString());
                 }
-
-                // Set the party member switches too if Sync Party enabled!
-                if (command.SyncParty)
+                if (command.SyncAll)
                 {
-                    foreach (var partyMember in player.Party)
+                    var listp = Player.FindAll();
+                    using (var context = DbInterface.CreatePlayerContext(false))
                     {
-                        if (partyMember != player)
+                        foreach (var pl in listp)
                         {
-                            partyMember.SetSwitchValue(command.VariableId, mod.Value);
+                            Player p = Player.Find(pl.Id);
+                            if (p != null && p != player)
+                            {
+                                if (p.Online)
+                                {
+                                    p.SetSwitchValue(command.VariableId, mod.Value);
+                                }
+                                else
+                                {
+                                    p.SetSwitchValue(command.VariableId, mod.Value, false);
+                                    context.Update(p);
+                                }
+                            }
+                        }
+                        context.SaveChanges();
+                    }
+                }
+                else
+                {
+                    // Set the party member switches too if Sync Party enabled!
+                    if (command.SyncParty)
+                    {
+                        foreach (var partyMember in player.Party)
+                        {
+                            if (partyMember != null && partyMember != player)
+                            {
+                                partyMember.SetSwitchValue(command.VariableId, mod.Value);
+                            }
+                        }
+                    }
+                    // Set the guild member switches too if Sync Guild enabled!
+                    if (command.SyncGuild)
+                    {
+                        using (var context = DbInterface.CreatePlayerContext(false))
+                        {
+                            foreach (var guildMember in player.Guild.Members)
+                            {
+                                Player p = Player.Find(guildMember.Key);
+                                if (p != null && p != player)
+                                {
+                                    if (p.Online)
+                                    {
+                                        p.SetSwitchValue(command.VariableId, mod.Value);
+                                    }
+                                    else
+                                    {
+                                        p.SetSwitchValue(command.VariableId, mod.Value, false);
+                                        context.Update(p);
+                                    }
+                                }
+                            }
+                            context.SaveChanges();
                         }
                     }
                 }
@@ -1963,15 +2013,65 @@ namespace Intersect.Server.Entities.Events
                 {
                     player.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", command.VariableId.ToString());
                 }
-
-                // Set the party member switches too if Sync Party enabled!
-                if (command.SyncParty)
+                if (command.SyncAll)
                 {
-                    foreach (var partyMember in player.Party)
+                    var listp = Player.FindAll();
+                    using (var context = DbInterface.CreatePlayerContext(false))
                     {
-                        if (partyMember != player)
+                        foreach (var pl in listp)
                         {
-                            partyMember.SetVariableValue(command.VariableId, value.Integer);
+                            Player p = Player.Find(pl.Id);
+                            if (p != null && p != player)
+                            {
+                                if (p.Online)
+                                {
+                                    p.SetVariableValue(command.VariableId, value.Integer);
+                                }
+                                else
+                                {
+                                    p.SetVariableValue(command.VariableId, value.Integer, false);
+                                    context.Update(p);
+                                }
+                            }
+                        }
+                        context.SaveChanges();
+                    }
+                }
+                else
+                {
+                    // Set the party member switches too if Sync Party enabled!
+                    if (command.SyncParty)
+                    {
+                        foreach (var partyMember in player.Party)
+                        {
+                            if (partyMember != null && partyMember != player)
+                            {
+                                partyMember.SetVariableValue(command.VariableId, value.Integer);
+                            }
+                        }
+                    }
+                    // Set the guild member switches too if Sync Guild enabled!
+                    if (command.SyncGuild)
+                    {
+                        using (var context = DbInterface.CreatePlayerContext(false))
+                        {
+                            foreach (var guildMember in player.Guild.Members)
+                            {
+                                Player p = Player.Find(guildMember.Key);
+                                if (p != null && p != player)
+                                {
+                                    if (p.Online)
+                                    {
+                                        p.SetVariableValue(command.VariableId, value.Integer);
+                                    }
+                                    else
+                                    {
+                                        p.SetVariableValue(command.VariableId, value.Integer, false);
+                                        context.Update(p);
+                                    }
+                                }
+                            }
+                            context.SaveChanges();
                         }
                     }
                 }
@@ -2033,14 +2133,65 @@ namespace Intersect.Server.Entities.Events
                     player.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", command.VariableId.ToString());
                 }
 
-                // Set the party member switches too if Sync Party enabled!
-                if (command.SyncParty)
+                if (command.SyncAll)
                 {
-                    foreach (var partyMember in player.Party)
+                    var listp = Player.FindAll();
+                    using (var context = DbInterface.CreatePlayerContext(false))
                     {
-                        if (partyMember != player)
+                        foreach (var pl in listp)
                         {
-                            partyMember.SetVariableValue(command.VariableId, value.String);
+                            Player p = Player.Find(pl.Id);
+                            if (p != null && p != player)
+                            {
+                                if (p.Online)
+                                {
+                                    p.SetVariableValue(command.VariableId, value.String);
+                                }
+                                else
+                                {
+                                    p.SetVariableValue(command.VariableId, value.String, false);
+                                    context.Update(p);
+                                }
+                            }
+                        }
+                        context.SaveChanges();
+                    }
+                }
+                else
+                {
+                    // Set the party member switches too if Sync Party enabled!
+                    if (command.SyncParty)
+                    {
+                        foreach (var partyMember in player.Party)
+                        {
+                            if (partyMember != null && partyMember != player)
+                            {
+                                partyMember.SetVariableValue(command.VariableId, value.String);
+                            }
+                        }
+                    }
+                    // Set the guild member switches too if Sync Guild enabled!
+                    if (command.SyncGuild)
+                    {
+                        using (var context = DbInterface.CreatePlayerContext(false))
+                        {
+                            foreach (var guildMember in player.Guild.Members)
+                            {
+                                Player p = Player.Find(guildMember.Key);
+                                if (p != null && p != player)
+                                {
+                                    if (p.Online)
+                                    {
+                                        p.SetVariableValue(command.VariableId, value.String);
+                                    }
+                                    else
+                                    {
+                                        p.SetVariableValue(command.VariableId, value.String, false);
+                                        context.Update(p);
+                                    }
+                                }
+                            }
+                            context.SaveChanges();
                         }
                     }
                 }
