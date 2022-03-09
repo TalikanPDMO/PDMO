@@ -676,6 +676,9 @@
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_UseSpell.resx">
       <DependentUpon>EventCommand_UseSpell.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_Variable.resx">
+      <DependentUpon>EventCommand_Variable.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Shaders\radialgradient_editor.xnb" />
   </ItemGroup>
   <ItemGroup>

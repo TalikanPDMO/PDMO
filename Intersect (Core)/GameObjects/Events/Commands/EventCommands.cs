@@ -201,6 +201,13 @@ namespace Intersect.GameObjects.Events.Commands
 
         public bool SyncParty { get; set; }
 
+        public bool SyncGuild { get; set; }
+
+        public bool SyncAll { get; set; }
+
+        public bool SyncOffline { get; set; }
+
+
         public VariableMod Modification { get; set; }
 
     }

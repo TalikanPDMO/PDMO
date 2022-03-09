@@ -259,6 +259,33 @@ namespace Intersect.Server.Database.GameData.Migrations
                 cmd.SyncParty = false;
             }
 
+            if (obj.ContainsKey("SyncGuild") && bool.Parse(obj["SyncGuild"].ToString()))
+            {
+                cmd.SyncGuild = true;
+            }
+            else
+            {
+                cmd.SyncGuild = false;
+            }
+
+            if (obj.ContainsKey("SyncAll") && bool.Parse(obj["SyncAll"].ToString()))
+            {
+                cmd.SyncAll = true;
+            }
+            else
+            {
+                cmd.SyncAll = false;
+            }
+
+            if (obj.ContainsKey("SyncOffline") && bool.Parse(obj["SyncOffline"].ToString()))
+            {
+                cmd.SyncOffline = true;
+            }
+            else
+            {
+                cmd.SyncOffline = false;
+            }
+
             var mod = new BooleanVariableMod();
             cmd.Modification = mod;
 
@@ -318,6 +345,33 @@ namespace Intersect.Server.Database.GameData.Migrations
             else
             {
                 cmd.SyncParty = false;
+            }
+
+            if (obj.ContainsKey("SyncGuild") && bool.Parse(obj["SyncGuild"].ToString()))
+            {
+                cmd.SyncGuild = true;
+            }
+            else
+            {
+                cmd.SyncGuild = false;
+            }
+
+            if (obj.ContainsKey("SyncAll") && bool.Parse(obj["SyncAll"].ToString()))
+            {
+                cmd.SyncAll = true;
+            }
+            else
+            {
+                cmd.SyncAll = false;
+            }
+
+            if (obj.ContainsKey("SyncOffline") && bool.Parse(obj["SyncOffline"].ToString()))
+            {
+                cmd.SyncOffline = true;
+            }
+            else
+            {
+                cmd.SyncOffline = false;
             }
 
             var mod = new IntegerVariableMod();
