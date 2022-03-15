@@ -294,7 +294,11 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             CurExpWidth = -1;
             ShieldBar.Hide();
             UpdateHpBar(0, true);
-            UpdateMpBar(0, true);
+            if (EntityType != EntityTypes.GlobalEntity || MyEntity.MaxVital[(int)Vitals.Mana] != 0)
+            {
+                UpdateMpBar(0, true);
+            }
+            
             if (MyEntity is Player)
             {
                 UpdateXpBar(0, true);
@@ -337,6 +341,13 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                     ExpBar.Hide();
                     ExpLbl.Hide();
                     ExpTitle.Hide();
+                    if (MyEntity.MaxVital[(int)Vitals.Mana] == 0)
+                    {
+                        MpBackground.Hide();
+                        MpBar.Hide();
+                        MpLbl.Hide();
+                        MpTitle.Hide();
+                    }
                     TradeLabel.Hide();
                     PartyLabel.Hide();
                     GuildLabel.Hide();
@@ -419,7 +430,11 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 UpdateLevel();
                 UpdateMap();
                 UpdateHpBar(elapsedTime);
-                UpdateMpBar(elapsedTime);
+                if (EntityType != EntityTypes.GlobalEntity || MyEntity.MaxVital[(int)Vitals.Mana] != 0)
+                {
+                    UpdateMpBar(elapsedTime);
+                }
+                
                 IsHidden = false;
             }
             else

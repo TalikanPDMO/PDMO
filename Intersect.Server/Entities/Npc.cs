@@ -656,7 +656,8 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (spellBase.VitalCost[(int) Vitals.Mana] > GetVital(Vitals.Mana))
+            //Max mana to 0 means that the npc has unlimited mana
+            if (GetMaxVital(Vitals.Mana) != 0 && spellBase.VitalCost[(int) Vitals.Mana] > GetVital(Vitals.Mana))
             {
                 return;
             }
@@ -685,7 +686,7 @@ namespace Intersect.Server.Entities
 
             CastTime = Globals.Timing.Milliseconds + spellBase.CastDuration;
 
-            if (spellBase.VitalCost[(int) Vitals.Mana] > 0)
+            /*if (spellBase.VitalCost[(int) Vitals.Mana] > 0)
             {
                 SubVital(Vitals.Mana, spellBase.VitalCost[(int) Vitals.Mana]);
             }
@@ -701,7 +702,7 @@ namespace Intersect.Server.Entities
             else
             {
                 AddVital(Vitals.Health, -spellBase.VitalCost[(int) Vitals.Health]);
-            }
+            }*/
 
             if ((spellBase.Combat?.Friendly ?? false) && spellBase.SpellType != SpellTypes.WarpTo)
             {
