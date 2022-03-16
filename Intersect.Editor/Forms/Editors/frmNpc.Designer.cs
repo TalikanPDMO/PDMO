@@ -103,6 +103,16 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbOnDeathEventKiller = new DarkUI.Controls.DarkComboBox();
             this.lblOnDeathEventKiller = new System.Windows.Forms.Label();
             this.grpBehavior = new DarkUI.Controls.DarkGroupBox();
+            this.cmbNpcToSwarm = new DarkUI.Controls.DarkComboBox();
+            this.lblNpcToSwarm = new System.Windows.Forms.Label();
+            this.btnRemoveSwarm = new DarkUI.Controls.DarkButton();
+            this.btnAddSwarm = new DarkUI.Controls.DarkButton();
+            this.lstSwarm = new System.Windows.Forms.ListBox();
+            this.chkAttackOnFlee = new DarkUI.Controls.DarkCheckBox();
+            this.chkSwarmAll = new DarkUI.Controls.DarkCheckBox();
+            this.nudSwarmRange = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblSwarmRange = new System.Windows.Forms.Label();
+            this.chkSwarmOnPlayer = new DarkUI.Controls.DarkCheckBox();
             this.lblMaxMove = new System.Windows.Forms.Label();
             this.nudMaxMove = new DarkUI.Controls.DarkNumericUpDown();
             this.nudResetRadius = new DarkUI.Controls.DarkNumericUpDown();
@@ -113,6 +123,8 @@ namespace Intersect.Editor.Forms.Editors
             this.lblFlee = new System.Windows.Forms.Label();
             this.chkSwarm = new DarkUI.Controls.DarkCheckBox();
             this.grpConditions = new DarkUI.Controls.DarkGroupBox();
+            this.btnPlayerCanProjectileCond = new DarkUI.Controls.DarkButton();
+            this.btnPlayerCanSpellCond = new DarkUI.Controls.DarkButton();
             this.btnAttackOnSightCond = new DarkUI.Controls.DarkButton();
             this.btnPlayerCanAttackCond = new DarkUI.Controls.DarkButton();
             this.btnPlayerFriendProtectorCond = new DarkUI.Controls.DarkButton();
@@ -166,8 +178,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.searchableDarkTreeView1 = new Intersect.Editor.Forms.Controls.SearchableDarkTreeView();
-            this.btnPlayerCanSpellCond = new DarkUI.Controls.DarkButton();
-            this.btnPlayerCanProjectileCond = new DarkUI.Controls.DarkButton();
             this.grpNpcs.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRgbaA)).BeginInit();
@@ -197,6 +207,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudCritChance)).BeginInit();
             this.grpCommonEvents.SuspendLayout();
             this.grpBehavior.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSwarmRange)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxMove)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudResetRadius)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudFlee)).BeginInit();
@@ -552,17 +563,17 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudSpawnDuration.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudSpawnDuration.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudSpawnDuration.Location = new System.Drawing.Point(113, 119);
+            this.nudSpawnDuration.Location = new System.Drawing.Point(160, 222);
             this.nudSpawnDuration.Maximum = new decimal(new int[] {
             2147483647,
             0,
             0,
             0});
             this.nudSpawnDuration.Name = "nudSpawnDuration";
-            this.nudSpawnDuration.Size = new System.Drawing.Size(89, 20);
+            this.nudSpawnDuration.Size = new System.Drawing.Size(64, 20);
             this.nudSpawnDuration.TabIndex = 61;
             this.nudSpawnDuration.Value = new decimal(new int[] {
-            0,
+            500000,
             0,
             0,
             0});
@@ -571,24 +582,24 @@ namespace Intersect.Editor.Forms.Editors
             // lblSpawnDuration
             // 
             this.lblSpawnDuration.AutoSize = true;
-            this.lblSpawnDuration.Location = new System.Drawing.Point(1, 121);
+            this.lblSpawnDuration.Location = new System.Drawing.Point(101, 224);
             this.lblSpawnDuration.Name = "lblSpawnDuration";
-            this.lblSpawnDuration.Size = new System.Drawing.Size(86, 13);
+            this.lblSpawnDuration.Size = new System.Drawing.Size(62, 13);
             this.lblSpawnDuration.TabIndex = 7;
-            this.lblSpawnDuration.Text = "Spawn Duration:";
+            this.lblSpawnDuration.Text = "Spawn(ms):";
             // 
             // nudSightRange
             // 
             this.nudSightRange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudSightRange.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudSightRange.Location = new System.Drawing.Point(81, 40);
+            this.nudSightRange.Location = new System.Drawing.Point(158, 15);
             this.nudSightRange.Maximum = new decimal(new int[] {
-            20,
+            50,
             0,
             0,
             0});
             this.nudSightRange.Name = "nudSightRange";
-            this.nudSightRange.Size = new System.Drawing.Size(121, 20);
+            this.nudSightRange.Size = new System.Drawing.Size(35, 20);
             this.nudSightRange.TabIndex = 62;
             this.nudSightRange.Value = new decimal(new int[] {
             0,
@@ -600,7 +611,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblSightRange
             // 
             this.lblSightRange.AutoSize = true;
-            this.lblSightRange.Location = new System.Drawing.Point(1, 42);
+            this.lblSightRange.Location = new System.Drawing.Point(90, 17);
             this.lblSightRange.Name = "lblSightRange";
             this.lblSightRange.Size = new System.Drawing.Size(69, 13);
             this.lblSightRange.TabIndex = 12;
@@ -908,7 +919,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCombat.Controls.Add(this.lblAttackAnimation);
             this.grpCombat.Controls.Add(this.lblDamage);
             this.grpCombat.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpCombat.Location = new System.Drawing.Point(215, 363);
+            this.grpCombat.Location = new System.Drawing.Point(215, 466);
             this.grpCombat.Name = "grpCombat";
             this.grpCombat.Size = new System.Drawing.Size(226, 411);
             this.grpCombat.TabIndex = 17;
@@ -1215,11 +1226,11 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCommonEvents.Controls.Add(this.cmbOnDeathEventKiller);
             this.grpCommonEvents.Controls.Add(this.lblOnDeathEventKiller);
             this.grpCommonEvents.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpCommonEvents.Location = new System.Drawing.Point(215, 1072);
+            this.grpCommonEvents.Location = new System.Drawing.Point(3, 1072);
             this.grpCommonEvents.Margin = new System.Windows.Forms.Padding(2);
             this.grpCommonEvents.Name = "grpCommonEvents";
             this.grpCommonEvents.Padding = new System.Windows.Forms.Padding(2);
-            this.grpCommonEvents.Size = new System.Drawing.Size(229, 102);
+            this.grpCommonEvents.Size = new System.Drawing.Size(206, 102);
             this.grpCommonEvents.TabIndex = 32;
             this.grpCommonEvents.TabStop = false;
             this.grpCommonEvents.Text = "Common Events";
@@ -1288,6 +1299,16 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpBehavior.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpBehavior.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpBehavior.Controls.Add(this.cmbNpcToSwarm);
+            this.grpBehavior.Controls.Add(this.lblNpcToSwarm);
+            this.grpBehavior.Controls.Add(this.btnRemoveSwarm);
+            this.grpBehavior.Controls.Add(this.btnAddSwarm);
+            this.grpBehavior.Controls.Add(this.lstSwarm);
+            this.grpBehavior.Controls.Add(this.chkAttackOnFlee);
+            this.grpBehavior.Controls.Add(this.chkSwarmAll);
+            this.grpBehavior.Controls.Add(this.nudSwarmRange);
+            this.grpBehavior.Controls.Add(this.lblSwarmRange);
+            this.grpBehavior.Controls.Add(this.chkSwarmOnPlayer);
             this.grpBehavior.Controls.Add(this.lblMaxMove);
             this.grpBehavior.Controls.Add(this.nudMaxMove);
             this.grpBehavior.Controls.Add(this.nudResetRadius);
@@ -1308,15 +1329,136 @@ namespace Intersect.Editor.Forms.Editors
             this.grpBehavior.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpBehavior.Location = new System.Drawing.Point(215, 1);
             this.grpBehavior.Name = "grpBehavior";
-            this.grpBehavior.Size = new System.Drawing.Size(226, 362);
+            this.grpBehavior.Size = new System.Drawing.Size(226, 459);
             this.grpBehavior.TabIndex = 32;
             this.grpBehavior.TabStop = false;
             this.grpBehavior.Text = "Behavior:";
             // 
+            // cmbNpcToSwarm
+            // 
+            this.cmbNpcToSwarm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbNpcToSwarm.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbNpcToSwarm.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbNpcToSwarm.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbNpcToSwarm.DrawDropdownHoverOutline = false;
+            this.cmbNpcToSwarm.DrawFocusRectangle = false;
+            this.cmbNpcToSwarm.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbNpcToSwarm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbNpcToSwarm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbNpcToSwarm.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbNpcToSwarm.FormattingEnabled = true;
+            this.cmbNpcToSwarm.Location = new System.Drawing.Point(87, 84);
+            this.cmbNpcToSwarm.Name = "cmbNpcToSwarm";
+            this.cmbNpcToSwarm.Size = new System.Drawing.Size(133, 21);
+            this.cmbNpcToSwarm.TabIndex = 88;
+            this.cmbNpcToSwarm.Text = null;
+            this.cmbNpcToSwarm.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lblNpcToSwarm
+            // 
+            this.lblNpcToSwarm.AutoSize = true;
+            this.lblNpcToSwarm.Location = new System.Drawing.Point(4, 88);
+            this.lblNpcToSwarm.Name = "lblNpcToSwarm";
+            this.lblNpcToSwarm.Size = new System.Drawing.Size(84, 13);
+            this.lblNpcToSwarm.TabIndex = 87;
+            this.lblNpcToSwarm.Text = "NPCs to Swarm:";
+            // 
+            // btnRemoveSwarm
+            // 
+            this.btnRemoveSwarm.Location = new System.Drawing.Point(129, 164);
+            this.btnRemoveSwarm.Name = "btnRemoveSwarm";
+            this.btnRemoveSwarm.Padding = new System.Windows.Forms.Padding(5);
+            this.btnRemoveSwarm.Size = new System.Drawing.Size(75, 23);
+            this.btnRemoveSwarm.TabIndex = 86;
+            this.btnRemoveSwarm.Text = "Remove";
+            this.btnRemoveSwarm.Click += new System.EventHandler(this.btnRemoveSwarm_Click);
+            // 
+            // btnAddSwarm
+            // 
+            this.btnAddSwarm.Location = new System.Drawing.Point(26, 164);
+            this.btnAddSwarm.Name = "btnAddSwarm";
+            this.btnAddSwarm.Padding = new System.Windows.Forms.Padding(5);
+            this.btnAddSwarm.Size = new System.Drawing.Size(75, 23);
+            this.btnAddSwarm.TabIndex = 85;
+            this.btnAddSwarm.Text = "Add";
+            this.btnAddSwarm.Click += new System.EventHandler(this.btnAddSwarm_Click);
+            // 
+            // lstSwarm
+            // 
+            this.lstSwarm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstSwarm.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstSwarm.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstSwarm.FormattingEnabled = true;
+            this.lstSwarm.Items.AddRange(new object[] {
+            "NPC:"});
+            this.lstSwarm.Location = new System.Drawing.Point(7, 108);
+            this.lstSwarm.Name = "lstSwarm";
+            this.lstSwarm.Size = new System.Drawing.Size(212, 54);
+            this.lstSwarm.TabIndex = 84;
+            // 
+            // chkAttackOnFlee
+            // 
+            this.chkAttackOnFlee.AutoSize = true;
+            this.chkAttackOnFlee.Location = new System.Drawing.Point(128, 249);
+            this.chkAttackOnFlee.Name = "chkAttackOnFlee";
+            this.chkAttackOnFlee.Size = new System.Drawing.Size(95, 17);
+            this.chkAttackOnFlee.TabIndex = 83;
+            this.chkAttackOnFlee.Text = "Attack on Flee";
+            this.chkAttackOnFlee.CheckedChanged += new System.EventHandler(this.chkAttackOnFlee_CheckedChanged);
+            // 
+            // chkSwarmAll
+            // 
+            this.chkSwarmAll.AutoSize = true;
+            this.chkSwarmAll.Location = new System.Drawing.Point(6, 62);
+            this.chkSwarmAll.Name = "chkSwarmAll";
+            this.chkSwarmAll.Size = new System.Drawing.Size(99, 17);
+            this.chkSwarmAll.TabIndex = 82;
+            this.chkSwarmAll.Text = "Swarm all kinds";
+            this.chkSwarmAll.CheckedChanged += new System.EventHandler(this.chkSwarmAll_CheckedChanged);
+            // 
+            // nudSwarmRange
+            // 
+            this.nudSwarmRange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSwarmRange.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSwarmRange.Location = new System.Drawing.Point(185, 61);
+            this.nudSwarmRange.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.nudSwarmRange.Name = "nudSwarmRange";
+            this.nudSwarmRange.Size = new System.Drawing.Size(35, 20);
+            this.nudSwarmRange.TabIndex = 81;
+            this.nudSwarmRange.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudSwarmRange.ValueChanged += new System.EventHandler(this.nudSwarmRange_ValueChanged);
+            // 
+            // lblSwarmRange
+            // 
+            this.lblSwarmRange.AutoSize = true;
+            this.lblSwarmRange.Location = new System.Drawing.Point(110, 64);
+            this.lblSwarmRange.Name = "lblSwarmRange";
+            this.lblSwarmRange.Size = new System.Drawing.Size(77, 13);
+            this.lblSwarmRange.TabIndex = 80;
+            this.lblSwarmRange.Text = "Swarm Range:";
+            // 
+            // chkSwarmOnPlayer
+            // 
+            this.chkSwarmOnPlayer.AutoSize = true;
+            this.chkSwarmOnPlayer.Location = new System.Drawing.Point(69, 40);
+            this.chkSwarmOnPlayer.Name = "chkSwarmOnPlayer";
+            this.chkSwarmOnPlayer.Size = new System.Drawing.Size(105, 17);
+            this.chkSwarmOnPlayer.TabIndex = 79;
+            this.chkSwarmOnPlayer.Text = "Swarm on Player";
+            this.chkSwarmOnPlayer.CheckedChanged += new System.EventHandler(this.chkSwarmOnPlayer_CheckedChanged);
+            // 
             // lblMaxMove
             // 
             this.lblMaxMove.AutoSize = true;
-            this.lblMaxMove.Location = new System.Drawing.Point(154, 95);
+            this.lblMaxMove.Location = new System.Drawing.Point(154, 196);
             this.lblMaxMove.Name = "lblMaxMove";
             this.lblMaxMove.Size = new System.Drawing.Size(30, 13);
             this.lblMaxMove.TabIndex = 78;
@@ -1326,7 +1468,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudMaxMove.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudMaxMove.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudMaxMove.Location = new System.Drawing.Point(184, 92);
+            this.nudMaxMove.Location = new System.Drawing.Point(184, 193);
             this.nudMaxMove.Maximum = new decimal(new int[] {
             99,
             0,
@@ -1346,17 +1488,17 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudResetRadius.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudResetRadius.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudResetRadius.Location = new System.Drawing.Point(81, 66);
+            this.nudResetRadius.Location = new System.Drawing.Point(66, 222);
             this.nudResetRadius.Maximum = new decimal(new int[] {
-            9999,
+            50,
             0,
             0,
             0});
             this.nudResetRadius.Name = "nudResetRadius";
-            this.nudResetRadius.Size = new System.Drawing.Size(121, 20);
+            this.nudResetRadius.Size = new System.Drawing.Size(35, 20);
             this.nudResetRadius.TabIndex = 76;
             this.nudResetRadius.Value = new decimal(new int[] {
-            9999,
+            50,
             0,
             0,
             0});
@@ -1365,16 +1507,16 @@ namespace Intersect.Editor.Forms.Editors
             // lblResetRadius
             // 
             this.lblResetRadius.AutoSize = true;
-            this.lblResetRadius.Location = new System.Drawing.Point(1, 68);
+            this.lblResetRadius.Location = new System.Drawing.Point(1, 224);
             this.lblResetRadius.Name = "lblResetRadius";
-            this.lblResetRadius.Size = new System.Drawing.Size(74, 13);
+            this.lblResetRadius.Size = new System.Drawing.Size(69, 13);
             this.lblResetRadius.TabIndex = 75;
-            this.lblResetRadius.Text = "Reset Radius:";
+            this.lblResetRadius.Text = "Reset radius:";
             // 
             // lblFocusDamageDealer
             // 
             this.lblFocusDamageDealer.AutoSize = true;
-            this.lblFocusDamageDealer.Location = new System.Drawing.Point(1, 171);
+            this.lblFocusDamageDealer.Location = new System.Drawing.Point(1, 273);
             this.lblFocusDamageDealer.Name = "lblFocusDamageDealer";
             this.lblFocusDamageDealer.Size = new System.Drawing.Size(155, 13);
             this.lblFocusDamageDealer.TabIndex = 72;
@@ -1383,7 +1525,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkFocusDamageDealer
             // 
             this.chkFocusDamageDealer.AutoSize = true;
-            this.chkFocusDamageDealer.Location = new System.Drawing.Point(162, 171);
+            this.chkFocusDamageDealer.Location = new System.Drawing.Point(162, 273);
             this.chkFocusDamageDealer.Name = "chkFocusDamageDealer";
             this.chkFocusDamageDealer.Size = new System.Drawing.Size(15, 14);
             this.chkFocusDamageDealer.TabIndex = 71;
@@ -1393,9 +1535,9 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudFlee.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudFlee.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudFlee.Location = new System.Drawing.Point(82, 145);
+            this.nudFlee.Location = new System.Drawing.Point(78, 248);
             this.nudFlee.Name = "nudFlee";
-            this.nudFlee.Size = new System.Drawing.Size(80, 20);
+            this.nudFlee.Size = new System.Drawing.Size(39, 20);
             this.nudFlee.TabIndex = 70;
             this.nudFlee.Value = new decimal(new int[] {
             0,
@@ -1407,7 +1549,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblFlee
             // 
             this.lblFlee.AutoSize = true;
-            this.lblFlee.Location = new System.Drawing.Point(0, 147);
+            this.lblFlee.Location = new System.Drawing.Point(2, 251);
             this.lblFlee.Name = "lblFlee";
             this.lblFlee.Size = new System.Drawing.Size(75, 13);
             this.lblFlee.TabIndex = 69;
@@ -1416,7 +1558,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkSwarm
             // 
             this.chkSwarm.AutoSize = true;
-            this.chkSwarm.Location = new System.Drawing.Point(93, 16);
+            this.chkSwarm.Location = new System.Drawing.Point(6, 40);
             this.chkSwarm.Name = "chkSwarm";
             this.chkSwarm.Size = new System.Drawing.Size(58, 17);
             this.chkSwarm.TabIndex = 67;
@@ -1433,12 +1575,32 @@ namespace Intersect.Editor.Forms.Editors
             this.grpConditions.Controls.Add(this.btnPlayerCanAttackCond);
             this.grpConditions.Controls.Add(this.btnPlayerFriendProtectorCond);
             this.grpConditions.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpConditions.Location = new System.Drawing.Point(8, 189);
+            this.grpConditions.Location = new System.Drawing.Point(8, 289);
             this.grpConditions.Name = "grpConditions";
             this.grpConditions.Size = new System.Drawing.Size(207, 165);
             this.grpConditions.TabIndex = 66;
             this.grpConditions.TabStop = false;
             this.grpConditions.Text = "Conditions:";
+            // 
+            // btnPlayerCanProjectileCond
+            // 
+            this.btnPlayerCanProjectileCond.Location = new System.Drawing.Point(5, 135);
+            this.btnPlayerCanProjectileCond.Name = "btnPlayerCanProjectileCond";
+            this.btnPlayerCanProjectileCond.Padding = new System.Windows.Forms.Padding(5);
+            this.btnPlayerCanProjectileCond.Size = new System.Drawing.Size(196, 23);
+            this.btnPlayerCanProjectileCond.TabIndex = 49;
+            this.btnPlayerCanProjectileCond.Text = "Player Can Projectile (Default: True)";
+            this.btnPlayerCanProjectileCond.Click += new System.EventHandler(this.btnPlayerCanProjectileCond_Click);
+            // 
+            // btnPlayerCanSpellCond
+            // 
+            this.btnPlayerCanSpellCond.Location = new System.Drawing.Point(5, 106);
+            this.btnPlayerCanSpellCond.Name = "btnPlayerCanSpellCond";
+            this.btnPlayerCanSpellCond.Padding = new System.Windows.Forms.Padding(5);
+            this.btnPlayerCanSpellCond.Size = new System.Drawing.Size(196, 23);
+            this.btnPlayerCanSpellCond.TabIndex = 48;
+            this.btnPlayerCanSpellCond.Text = "Player Can Spell (Default: True)";
+            this.btnPlayerCanSpellCond.Click += new System.EventHandler(this.btnPlayerCanSpellCond_Click);
             // 
             // btnAttackOnSightCond
             // 
@@ -1473,7 +1635,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblMovement
             // 
             this.lblMovement.AutoSize = true;
-            this.lblMovement.Location = new System.Drawing.Point(1, 95);
+            this.lblMovement.Location = new System.Drawing.Point(1, 196);
             this.lblMovement.Name = "lblMovement";
             this.lblMovement.Size = new System.Drawing.Size(37, 13);
             this.lblMovement.TabIndex = 65;
@@ -1496,7 +1658,7 @@ namespace Intersect.Editor.Forms.Editors
             "Move Randomly",
             "Turn Randomly",
             "No Movement"});
-            this.cmbMovement.Location = new System.Drawing.Point(40, 92);
+            this.cmbMovement.Location = new System.Drawing.Point(40, 193);
             this.cmbMovement.Name = "cmbMovement";
             this.cmbMovement.Size = new System.Drawing.Size(112, 21);
             this.cmbMovement.TabIndex = 64;
@@ -1507,7 +1669,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkAggressive
             // 
             this.chkAggressive.AutoSize = true;
-            this.chkAggressive.Location = new System.Drawing.Point(9, 16);
+            this.chkAggressive.Location = new System.Drawing.Point(6, 15);
             this.chkAggressive.Name = "chkAggressive";
             this.chkAggressive.Size = new System.Drawing.Size(78, 17);
             this.chkAggressive.TabIndex = 1;
@@ -1606,7 +1768,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDrops.Controls.Add(this.lblDropChance);
             this.grpDrops.Controls.Add(this.lblDropItem);
             this.grpDrops.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpDrops.Location = new System.Drawing.Point(218, 782);
+            this.grpDrops.Location = new System.Drawing.Point(218, 885);
             this.grpDrops.Name = "grpDrops";
             this.grpDrops.Size = new System.Drawing.Size(226, 285);
             this.grpDrops.TabIndex = 30;
@@ -2117,26 +2279,6 @@ namespace Intersect.Editor.Forms.Editors
             this.searchableDarkTreeView1.TabIndex = 46;
             this.searchableDarkTreeView1.Visible = false;
             // 
-            // btnPlayerCanSpellCond
-            // 
-            this.btnPlayerCanSpellCond.Location = new System.Drawing.Point(5, 106);
-            this.btnPlayerCanSpellCond.Name = "btnPlayerCanSpellCond";
-            this.btnPlayerCanSpellCond.Padding = new System.Windows.Forms.Padding(5);
-            this.btnPlayerCanSpellCond.Size = new System.Drawing.Size(196, 23);
-            this.btnPlayerCanSpellCond.TabIndex = 48;
-            this.btnPlayerCanSpellCond.Text = "Player Can Spell (Default: True)";
-            this.btnPlayerCanSpellCond.Click += new System.EventHandler(this.btnPlayerCanSpellCond_Click);
-            // 
-            // btnPlayerCanProjectileCond
-            // 
-            this.btnPlayerCanProjectileCond.Location = new System.Drawing.Point(5, 135);
-            this.btnPlayerCanProjectileCond.Name = "btnPlayerCanProjectileCond";
-            this.btnPlayerCanProjectileCond.Padding = new System.Windows.Forms.Padding(5);
-            this.btnPlayerCanProjectileCond.Size = new System.Drawing.Size(196, 23);
-            this.btnPlayerCanProjectileCond.TabIndex = 49;
-            this.btnPlayerCanProjectileCond.Text = "Player Can Projectile (Default: True)";
-            this.btnPlayerCanProjectileCond.Click += new System.EventHandler(this.btnPlayerCanProjectileCond_Click);
-            // 
             // FrmNpc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2196,6 +2338,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCommonEvents.PerformLayout();
             this.grpBehavior.ResumeLayout(false);
             this.grpBehavior.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSwarmRange)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxMove)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudResetRadius)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudFlee)).EndInit();
@@ -2355,5 +2498,15 @@ namespace Intersect.Editor.Forms.Editors
         private DarkNumericUpDown nudMaxMove;
         private DarkButton btnPlayerCanProjectileCond;
         private DarkButton btnPlayerCanSpellCond;
+        private DarkNumericUpDown nudSwarmRange;
+        private System.Windows.Forms.Label lblSwarmRange;
+        private DarkCheckBox chkSwarmOnPlayer;
+        private DarkCheckBox chkSwarmAll;
+        private DarkComboBox cmbNpcToSwarm;
+        private System.Windows.Forms.Label lblNpcToSwarm;
+        private DarkButton btnRemoveSwarm;
+        private DarkButton btnAddSwarm;
+        private System.Windows.Forms.ListBox lstSwarm;
+        private DarkCheckBox chkAttackOnFlee;
     }
 }

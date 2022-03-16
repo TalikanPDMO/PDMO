@@ -630,12 +630,16 @@ namespace Intersect.Server.Entities
 
             if (spellBase.SpellType == SpellTypes.CombatSpell &&
                 targetType == SpellTargetTypes.Projectile &&
-                projectileBase != null &&
-                InRangeOf(target, projectileBase.Range, spellBase.Combat.SquareRange))
+                projectileBase != null)
             {
                 range = projectileBase.Range;
-                var dirToEnemy = DirToEnemy(target);
-                if (dirToEnemy != Dir)
+                var dirToHitTarget = ProjectileInRange(target, projectileBase);
+                if (dirToHitTarget == -1)
+                {
+                    // Target is unreachable with the projectile in any possible directions
+                    return;
+                }
+                if (dirToHitTarget != Dir)
                 {
                     if (LastRandomMove >= Globals.Timing.Milliseconds)
                     {
@@ -643,7 +647,7 @@ namespace Intersect.Server.Entities
                     }
 
                     //Face the target -- next frame fire -- then go on with life
-                    ChangeDir(dirToEnemy); // Gotta get dir to enemy
+                    ChangeDir(dirToHitTarget); // Gotta get dir to enemy
                     LastRandomMove = Globals.Timing.Milliseconds + Randomization.Next(1000, 3000);
                     RandomMoveValue = -1;
 
@@ -656,7 +660,8 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (spellBase.VitalCost[(int) Vitals.Mana] > GetVital(Vitals.Mana))
+            //Max mana to 0 means that the npc has unlimited mana
+            if (GetMaxVital(Vitals.Mana) != 0 && spellBase.VitalCost[(int) Vitals.Mana] > GetVital(Vitals.Mana))
             {
                 return;
             }
@@ -677,7 +682,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (!InRangeOf(target, range, spellBase.Combat.SquareRange) && targetType == SpellTargetTypes.Single)
+            if (!InRangeOf(target, range, spellBase.Combat.SquareRange) && (targetType == SpellTargetTypes.Single || targetType == SpellTargetTypes.AoE))
             {
                 // ReSharper disable once SwitchStatementMissingSomeCases
                 return;
@@ -685,7 +690,7 @@ namespace Intersect.Server.Entities
 
             CastTime = Globals.Timing.Milliseconds + spellBase.CastDuration;
 
-            if (spellBase.VitalCost[(int) Vitals.Mana] > 0)
+            /*if (spellBase.VitalCost[(int) Vitals.Mana] > 0)
             {
                 SubVital(Vitals.Mana, spellBase.VitalCost[(int) Vitals.Mana]);
             }
@@ -701,7 +706,7 @@ namespace Intersect.Server.Entities
             else
             {
                 AddVital(Vitals.Health, -spellBase.VitalCost[(int) Vitals.Health]);
-            }
+            }*/
 
             if ((spellBase.Combat?.Friendly ?? false) && spellBase.SpellType != SpellTypes.WarpTo)
             {
@@ -750,6 +755,48 @@ namespace Intersect.Server.Entities
             }
 
             PacketSender.SendEntityCastTime(this, spellId);
+        }
+
+        // Return the direction needed to hit the target, -1 if the target is unreachable
+        public int ProjectileInRange(Entity target, ProjectileBase projectileBase)
+        {
+            //Calculate World Tile of Me
+            var xMe = X + Map.MapGridX * Options.MapWidth;
+            var yMe = Y + Map.MapGridY * Options.MapHeight;
+
+            //Calculate world tile of target
+            var xTarget = target.X + target.Map.MapGridX * Options.MapWidth;
+            var yTarget = target.Y + target.Map.MapGridY * Options.MapHeight;
+
+            for (byte x = 0; x < ProjectileBase.SPAWN_LOCATIONS_WIDTH; x++)
+            {
+                for (byte y = 0; y < ProjectileBase.SPAWN_LOCATIONS_HEIGHT; y++)
+                {
+                    for (byte d = 0; d < ProjectileBase.MAX_PROJECTILE_DIRECTIONS; d++)
+                    {
+                        if (projectileBase.SpawnLocations[x, y].Directions[d])
+                        {
+                            // Check for each possible directions : 0 1 2 3
+                            for (byte npc_d = 0; npc_d < 4; npc_d++)
+                            {
+                                var projPosX = xMe + Projectile.FindProjectileRotationX(npc_d, x - 2, y - 2);
+                                var projPosY = yMe + Projectile.FindProjectileRotationY(npc_d, x - 2, y - 2);
+
+                                for (int r = 0; r <= projectileBase.Range; r++)
+                                {
+                                    var destX = projPosX + (int)Projectile.GetRangeX(Projectile.FindProjectileRotationDir(npc_d, d), r);
+                                    var destY = projPosY + (int)Projectile.GetRangeY(Projectile.FindProjectileRotationDir(npc_d, d), r);
+                                    if (destX == xTarget && destY == yTarget)
+                                    {
+                                        return npc_d;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return -1;
         }
 
         public bool IsFleeing()
@@ -933,7 +980,10 @@ namespace Intersect.Server.Entities
 
                         if (mPathFinder.GetTarget() != null && Base.Movement != (int)NpcMovement.Static)
                         {
-                            TryCastSpells();
+                            if (!fleeing || Base.AttackOnFlee)
+                            {
+                                TryCastSpells();
+                            }
                             // TODO: Make resetting mobs actually return to their starting location.
                             if ((!mResetting && !IsOneBlockAway(
                                 mPathFinder.GetTarget().TargetMapId, mPathFinder.GetTarget().TargetX,
@@ -968,6 +1018,21 @@ namespace Intersect.Server.Entities
                                                     case 3:
                                                         dir = 2;
 
+                                                        break;
+                                                    case 4:
+                                                        dir = 5;
+
+                                                        break;
+                                                    case 5:
+                                                        dir = 4;
+
+                                                        break;
+                                                    case 6:
+                                                        dir = 7;
+
+                                                        break;
+                                                    case 7:
+                                                        dir = 6;
                                                         break;
                                                 }
                                             }
@@ -1312,15 +1377,23 @@ namespace Intersect.Server.Entities
 
         public override void NotifySwarm(Entity attacker)
         {
+            if (!Base.Swarm)
+            {
+                return;
+            }
             var mapEntities = MapInstance.Get(MapId).GetEntities(true);
             foreach (var en in mapEntities)
             {
                 if (en.GetType() == typeof(Npc))
                 {
                     var npc = (Npc) en;
-                    if (npc.Target == null & npc.Base.Swarm && npc.Base == Base)
+                    if (npc.Target == null && (Base.SwarmAll || Base.SwarmList.Contains(npc.Base.Id)))
                     {
-                        if (npc.InRangeOf(attacker, npc.Base.SightRange))
+                        if (npc.InRangeOf(this, Base.SwarmRange))
+                        {
+                            npc.AssignTarget(attacker);
+                        }
+                        if (Base.SwarmOnPlayer && npc.InRangeOf(attacker, Base.SwarmRange)) // check here with Tali
                         {
                             npc.AssignTarget(attacker);
                         }

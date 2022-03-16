@@ -633,6 +633,10 @@
     <Compile Include="Migrations\Game\20220306164424_AddingCanPlayerSpellAndProjectilesToNpcs.designer.cs">
       <DependentUpon>20220306164424_AddingCanPlayerSpellAndProjectilesToNpcs.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20220316131852_AddingSwarmFleeBehaviorsToNPC.cs" />
+    <Compile Include="Migrations\Game\20220316131852_AddingSwarmFleeBehaviorsToNPC.designer.cs">
+      <DependentUpon>20220316131852_AddingSwarmFleeBehaviorsToNPC.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>
