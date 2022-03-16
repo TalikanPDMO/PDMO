@@ -57,6 +57,17 @@ namespace Intersect.GameObjects
         [NotMapped]
         public List<Guid> AggroList { get; set; } = new List<Guid>();
 
+        [Column("SwarmList")]
+        [JsonIgnore]
+        public string JsonSwarmList
+        {
+            get => JsonConvert.SerializeObject(SwarmList);
+            set => SwarmList = JsonConvert.DeserializeObject<List<Guid>>(value);
+        }
+
+        [NotMapped]
+        public List<Guid> SwarmList { get; set; } = new List<Guid>();
+
         public bool AttackAllies { get; set; }
 
         [Column("AttackAnimation")]
@@ -77,7 +88,15 @@ namespace Intersect.GameObjects
 
         public bool Swarm { get; set; }
 
+        public int SwarmRange { get; set; }
+
+        public bool SwarmOnPlayer { get; set; } = false;
+
+        public bool SwarmAll { get; set; } = false;
+
         public byte FleeHealthPercentage { get; set; }
+
+        public bool AttackOnFlee { get; set; } = true;
 
         public bool FocusHighestDamageDealer { get; set; } = true;
 

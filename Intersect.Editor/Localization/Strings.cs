@@ -3852,6 +3852,9 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString flee = @"Flee Health %";
 
+            public static LocalizedString attackonflee = @"Attack on Flee";
+
+
             public static LocalizedString focusdamagedealer = @"Focus Highest Damage Dealer:";
 
             public static LocalizedString folderlabel = @"Folder:";
@@ -3887,7 +3890,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString maxmove = @"Max:";
 
-            public static LocalizedString resetradius = @"Reset Radius:";
+            public static LocalizedString resetradius = @"Reset radius:";
 
             public static Dictionary<int, LocalizedString> movements = new Dictionary<int, LocalizedString>
             {
@@ -3946,7 +3949,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString sightrange = @"Sight Range:";
 
-            public static LocalizedString spawnduration = @"Spawn Duration: (ms)";
+            public static LocalizedString spawnduration = @"Spawn:(ms)";
 
             public static LocalizedString speed = @"Speed:";
 
@@ -3971,6 +3974,18 @@ Tick timer saved in server config.json.";
             public static LocalizedString stats = @"Stats:";
 
             public static LocalizedString swarm = @"Swarm";
+
+            public static LocalizedString swarmall = @"Swarm all kinds";
+
+            public static LocalizedString swarmonplayer= @"Swarm on Player";
+
+            public static LocalizedString swarmrange = @"Swarm Range:";
+
+            public static LocalizedString npctoswarm = @"NPCs to swarm:";
+
+            public static LocalizedString addswarm = @"Add";
+
+            public static LocalizedString removeswarm = @"Remove";
 
             public static LocalizedString title = @"Npc Editor";
 

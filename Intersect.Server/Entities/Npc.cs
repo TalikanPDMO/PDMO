@@ -1367,7 +1367,11 @@ namespace Intersect.Server.Entities
                     var npc = (Npc) en;
                     if (npc.Target == null & npc.Base.Swarm && npc.Base == Base)
                     {
-                        if (npc.InRangeOf(attacker, npc.Base.SightRange))
+                        /*if (npc.InRangeOf(attacker, npc.Base.SightRange))
+                        {
+                            npc.AssignTarget(attacker);
+                        }*/
+                        if (npc.InRangeOf(this, npc.Base.SightRange))
                         {
                             npc.AssignTarget(attacker);
                         }

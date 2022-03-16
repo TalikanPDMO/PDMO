@@ -95,6 +95,8 @@ namespace Intersect.Editor.Forms.Editors
             cmbSpell.Items.AddRange(SpellBase.Names);
             cmbHostileNPC.Items.Clear();
             cmbHostileNPC.Items.AddRange(NpcBase.Names);
+            cmbNpcToSwarm.Items.Clear();
+            cmbNpcToSwarm.Items.AddRange(NpcBase.Names);
             cmbDropItem.Items.Clear();
             cmbDropItem.Items.Add(Strings.General.none);
             cmbDropItem.Items.AddRange(ItemBase.Names);
@@ -158,7 +160,14 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             chkSwarm.Text = Strings.NpcEditor.swarm;
+            chkSwarmAll.Text = Strings.NpcEditor.swarmall;
+            chkSwarmOnPlayer.Text = Strings.NpcEditor.swarmonplayer;
+            lblSwarmRange.Text = Strings.NpcEditor.swarmrange;
             lblFlee.Text = Strings.NpcEditor.flee;
+            chkAttackOnFlee.Text = Strings.NpcEditor.attackonflee;
+            btnAddSwarm.Text = Strings.NpcEditor.addswarm;
+            btnRemoveSwarm.Text = Strings.NpcEditor.removeswarm;
+
             grpConditions.Text = Strings.NpcEditor.conditions;
             btnPlayerFriendProtectorCond.Text = Strings.NpcEditor.playerfriendprotectorconditions;
             btnAttackOnSightCond.Text = Strings.NpcEditor.attackonsightconditions;
@@ -276,7 +285,27 @@ namespace Intersect.Editor.Forms.Editors
                 nudSightRange.Value = mEditorItem.SightRange;
                 cmbMovement.SelectedIndex = Math.Min(mEditorItem.Movement, cmbMovement.Items.Count - 1);
                 chkSwarm.Checked = mEditorItem.Swarm;
+                chkSwarmAll.Checked = mEditorItem.SwarmAll;
+                chkSwarmOnPlayer.Checked = mEditorItem.SwarmOnPlayer;
+                nudSwarmRange.Value = mEditorItem.SwarmRange;
+                
+
+                // Add the swarm NPC's to the list
+                lstSwarm.Items.Clear();
+                for (var i = 0; i < mEditorItem.SwarmList.Count; i++)
+                {
+                    if (mEditorItem.SwarmList[i] != Guid.Empty)
+                    {
+                        lstSwarm.Items.Add(NpcBase.GetName(mEditorItem.SwarmList[i]));
+                    }
+                    else
+                    {
+                        lstSwarm.Items.Add(Strings.General.none);
+                    }
+                }
+
                 nudFlee.Value = mEditorItem.FleeHealthPercentage;
+                chkAttackOnFlee.Checked = mEditorItem.AttackOnFlee;
                 chkFocusDamageDealer.Checked = mEditorItem.FocusHighestDamageDealer;
                 nudResetRadius.Value = mEditorItem.ResetRadius;
                 nudMaxMove.Value = mEditorItem.MaxRandomMove;
@@ -519,6 +548,33 @@ namespace Intersect.Editor.Forms.Editors
                 var i = lstAggro.SelectedIndex;
                 lstAggro.Items.RemoveAt(i);
                 mEditorItem.AggroList.RemoveAt(i);
+            }
+        }
+
+        private void btnAddSwarm_Click(object sender, EventArgs e)
+        {
+            mEditorItem.SwarmList.Add(NpcBase.IdFromList(cmbNpcToSwarm.SelectedIndex));
+            lstSwarm.Items.Clear();
+            for (var i = 0; i < mEditorItem.SwarmList.Count; i++)
+            {
+                if (mEditorItem.SwarmList[i] != Guid.Empty)
+                {
+                    lstSwarm.Items.Add(NpcBase.GetName(mEditorItem.SwarmList[i]));
+                }
+                else
+                {
+                    lstSwarm.Items.Add(Strings.General.none);
+                }
+            }
+        }
+
+        private void btnRemoveSwarm_Click(object sender, EventArgs e)
+        {
+            if (lstSwarm.SelectedIndex > -1)
+            {
+                var i = lstSwarm.SelectedIndex;
+                lstSwarm.Items.RemoveAt(i);
+                mEditorItem.SwarmList.RemoveAt(i);
             }
         }
 
@@ -819,6 +875,24 @@ namespace Intersect.Editor.Forms.Editors
         private void chkSwarm_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.Swarm = chkSwarm.Checked;
+        }
+
+        private void chkSwarmAll_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.SwarmAll = chkSwarmAll.Checked;
+        }
+
+        private void chkSwarmOnPlayer_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.SwarmOnPlayer = chkSwarmOnPlayer.Checked;
+        }
+        private void chkAttackOnFlee_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.AttackOnFlee = chkAttackOnFlee.Checked;
+        }
+        private void nudSwarmRange_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.SwarmRange = (byte)nudSwarmRange.Value;
         }
 
         private void nudFlee_ValueChanged(object sender, EventArgs e)
