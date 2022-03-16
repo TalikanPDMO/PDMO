@@ -132,7 +132,7 @@ namespace Intersect.Server.Entities
             mSpawnTime = Globals.Timing.Milliseconds + Base.Delay;
         }
 
-        private int FindProjectileRotationX(int direction, int x, int y)
+        public static int FindProjectileRotationX(int direction, int x, int y)
         {
             switch (direction)
             {
@@ -157,7 +157,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        private int FindProjectileRotationY(int direction, int x, int y)
+        public static int FindProjectileRotationY(int direction, int x, int y)
         {
             switch (direction)
             {
@@ -182,7 +182,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        private byte FindProjectileRotationDir(int entityDir, byte projectionDir)
+        public static byte FindProjectileRotationDir(int entityDir, byte projectionDir)
         {
             switch (entityDir)
             {
@@ -357,7 +357,7 @@ namespace Intersect.Server.Entities
             ProcessFragments(projDeaths, spawnDeaths);
         }
 
-        private int GetRangeX(int direction, int range)
+        public static int GetRangeX(int direction, int range)
         {
             //Left, UpLeft, DownLeft
             if (direction == 2 || direction == 4 || direction == 6)
@@ -378,7 +378,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        private int GetRangeY(int direction, int range)
+        public static int GetRangeY(int direction, int range)
         {
             //Up, UpLeft, UpRight
             if (direction == 0 || direction == 4 || direction == 5)

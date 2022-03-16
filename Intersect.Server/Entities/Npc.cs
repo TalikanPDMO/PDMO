@@ -630,12 +630,16 @@ namespace Intersect.Server.Entities
 
             if (spellBase.SpellType == SpellTypes.CombatSpell &&
                 targetType == SpellTargetTypes.Projectile &&
-                projectileBase != null &&
-                InRangeOf(target, projectileBase.Range, spellBase.Combat.SquareRange))
+                projectileBase != null)
             {
                 range = projectileBase.Range;
-                var dirToEnemy = DirToEnemy(target);
-                if (dirToEnemy != Dir)
+                var dirToHitTarget = ProjectileInRange(target, projectileBase);
+                if (dirToHitTarget == -1)
+                {
+                    // Target is unreachable with the projectile in any possible directions
+                    return;
+                }
+                if (dirToHitTarget != Dir)
                 {
                     if (LastRandomMove >= Globals.Timing.Milliseconds)
                     {
@@ -643,7 +647,7 @@ namespace Intersect.Server.Entities
                     }
 
                     //Face the target -- next frame fire -- then go on with life
-                    ChangeDir(dirToEnemy); // Gotta get dir to enemy
+                    ChangeDir(dirToHitTarget); // Gotta get dir to enemy
                     LastRandomMove = Globals.Timing.Milliseconds + Randomization.Next(1000, 3000);
                     RandomMoveValue = -1;
 
@@ -678,7 +682,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (!InRangeOf(target, range, spellBase.Combat.SquareRange) && targetType == SpellTargetTypes.Single)
+            if (!InRangeOf(target, range, spellBase.Combat.SquareRange) && (targetType == SpellTargetTypes.Single || targetType == SpellTargetTypes.AoE))
             {
                 // ReSharper disable once SwitchStatementMissingSomeCases
                 return;
@@ -751,6 +755,48 @@ namespace Intersect.Server.Entities
             }
 
             PacketSender.SendEntityCastTime(this, spellId);
+        }
+
+        // Return the direction needed to hit the target, -1 if the target is unreachable
+        public int ProjectileInRange(Entity target, ProjectileBase projectileBase)
+        {
+            //Calculate World Tile of Me
+            var xMe = X + Map.MapGridX * Options.MapWidth;
+            var yMe = Y + Map.MapGridY * Options.MapHeight;
+
+            //Calculate world tile of target
+            var xTarget = target.X + target.Map.MapGridX * Options.MapWidth;
+            var yTarget = target.Y + target.Map.MapGridY * Options.MapHeight;
+
+            for (byte x = 0; x < ProjectileBase.SPAWN_LOCATIONS_WIDTH; x++)
+            {
+                for (byte y = 0; y < ProjectileBase.SPAWN_LOCATIONS_HEIGHT; y++)
+                {
+                    for (byte d = 0; d < ProjectileBase.MAX_PROJECTILE_DIRECTIONS; d++)
+                    {
+                        if (projectileBase.SpawnLocations[x, y].Directions[d])
+                        {
+                            // Check for each possible directions : 0 1 2 3
+                            for (byte npc_d = 0; npc_d < 4; npc_d++)
+                            {
+                                var projPosX = xMe + Projectile.FindProjectileRotationX(npc_d, x - 2, y - 2);
+                                var projPosY = yMe + Projectile.FindProjectileRotationY(npc_d, x - 2, y - 2);
+
+                                for (int r = 0; r <= projectileBase.Range; r++)
+                                {
+                                    var destX = projPosX + (int)Projectile.GetRangeX(Projectile.FindProjectileRotationDir(npc_d, d), r);
+                                    var destY = projPosY + (int)Projectile.GetRangeY(Projectile.FindProjectileRotationDir(npc_d, d), r);
+                                    if (destX == xTarget && destY == yTarget)
+                                    {
+                                        return npc_d;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return -1;
         }
 
         public bool IsFleeing()
