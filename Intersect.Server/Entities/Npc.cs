@@ -980,7 +980,10 @@ namespace Intersect.Server.Entities
 
                         if (mPathFinder.GetTarget() != null && Base.Movement != (int)NpcMovement.Static)
                         {
-                            TryCastSpells();
+                            if (!fleeing || Base.AttackOnFlee)
+                            {
+                                TryCastSpells();
+                            }
                             // TODO: Make resetting mobs actually return to their starting location.
                             if ((!mResetting && !IsOneBlockAway(
                                 mPathFinder.GetTarget().TargetMapId, mPathFinder.GetTarget().TargetX,
@@ -1015,6 +1018,21 @@ namespace Intersect.Server.Entities
                                                     case 3:
                                                         dir = 2;
 
+                                                        break;
+                                                    case 4:
+                                                        dir = 5;
+
+                                                        break;
+                                                    case 5:
+                                                        dir = 4;
+
+                                                        break;
+                                                    case 6:
+                                                        dir = 7;
+
+                                                        break;
+                                                    case 7:
+                                                        dir = 6;
                                                         break;
                                                 }
                                             }
@@ -1359,19 +1377,23 @@ namespace Intersect.Server.Entities
 
         public override void NotifySwarm(Entity attacker)
         {
+            if (!Base.Swarm)
+            {
+                return;
+            }
             var mapEntities = MapInstance.Get(MapId).GetEntities(true);
             foreach (var en in mapEntities)
             {
                 if (en.GetType() == typeof(Npc))
                 {
                     var npc = (Npc) en;
-                    if (npc.Target == null & npc.Base.Swarm && npc.Base == Base)
+                    if (npc.Target == null && (Base.SwarmAll || Base.SwarmList.Contains(npc.Base.Id)))
                     {
-                        /*if (npc.InRangeOf(attacker, npc.Base.SightRange))
+                        if (npc.InRangeOf(this, Base.SwarmRange))
                         {
                             npc.AssignTarget(attacker);
-                        }*/
-                        if (npc.InRangeOf(this, npc.Base.SightRange))
+                        }
+                        if (Base.SwarmOnPlayer && npc.InRangeOf(attacker, Base.SwarmRange)) // check here with Tali
                         {
                             npc.AssignTarget(attacker);
                         }
