@@ -15,7 +15,7 @@ namespace Intersect.Client.Core.Controls
         private const int RefreshRate = 60;
 
 		private const int seuilBumpers = 150;
-		private const int seuilJoysticks = 2;
+		private const int seuilJoysticks = 7;
 
 		private static List<ControlGamepad> listeMenus;
 		private void InitListeMenus()
@@ -219,18 +219,18 @@ namespace Intersect.Client.Core.Controls
 			switch (GamepadKeyString)
             {
 				case "LJoystickUp":
-					return (Math.Abs(Ly) > Math.Abs(Lx) && Ly > seuilJoysticks);
+					return (Ly > seuilJoysticks);
 
 				case "LJoystickDown":
-					return (Math.Abs(Ly) > Math.Abs(Lx) && Ly < -seuilJoysticks);
+					return (Ly < -seuilJoysticks);
 					break;
 
 				case "LJoystickLeft":
-					return (Math.Abs(Lx) > Math.Abs(Ly) && Lx < -seuilJoysticks);
+					return (Lx < -seuilJoysticks);
 					break;
 
 				case "LJoystickRight":
-					return (Math.Abs(Lx) > Math.Abs(Ly) && Lx > seuilJoysticks);
+					return (Lx > seuilJoysticks);
 					break;
 
 				case "A":
