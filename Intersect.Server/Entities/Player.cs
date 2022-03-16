@@ -964,7 +964,6 @@ namespace Intersect.Server.Entities
 
         public void LevelUp(bool resetExperience = true, int levels = 1)
         {
-            int iterateur; //Ajouté par moussmous
             var messages = new List<string>();
             if (Level < Options.MaxLevel)
             {
@@ -992,18 +991,6 @@ namespace Intersect.Server.Entities
                             messages.Add(
                                 Strings.Player.spelltaughtlevelup.ToString(SpellBase.GetName(spellInstance.SpellId))
                             );
-
-                            //ajouté par moussmous
-                            //On ajoute directement le spell appris à la hotbar si elle est pas full
-                            iterateur = 0;
-                            while (!HotbarIsCaseFree(iterateur) && iterateur < Options.MaxHotbar-1)
-                            {
-                                iterateur++;
-                            }
-                            if (HotbarIsCaseFree(iterateur))
-                            {
-                                HotbarChange(iterateur, spell);
-                            }
                         }
                     }
                 }
@@ -4165,7 +4152,18 @@ namespace Intersect.Server.Entities
                     {
                         PacketSender.SendPlayerSpellUpdate(this, i);
                     }
-
+                    //ajouté par moussmous modifié par Chrono
+                    //On ajoute directement le spell appris à la hotbar si elle est pas full
+                    int iterateur = 0;
+                    while (!HotbarIsCaseFree(iterateur) && iterateur < Options.MaxHotbar - 1)
+                    {
+                        iterateur++;
+                    }
+                    if (HotbarIsCaseFree(iterateur))
+                    {
+                        HotbarChange(iterateur, spell);
+                    }
+                    PacketSender.SendHotbarSlots(this);
                     return true;
                 }
             }
@@ -4853,7 +4851,7 @@ namespace Intersect.Server.Entities
         //Ajouté par Moussmous
         //HotbarSlot fonction pour ajouter juste des sorts (utilisé pour ajouter des sorts direcement 
         //  dans la hotbar après les avoir appris
-        public void HotbarChange(int index, ClassSpell spell)
+        public void HotbarChange(int index, Spell spell)
         {
             Hotbar[index].ItemOrSpellId = Guid.Empty;
             Hotbar[index].BagId = Guid.Empty;
@@ -4861,7 +4859,7 @@ namespace Intersect.Server.Entities
             
             if (spell != null)
             {
-                Hotbar[index].ItemOrSpellId = spell.Id;
+                Hotbar[index].ItemOrSpellId = spell.SpellId;
             }
         }
 
