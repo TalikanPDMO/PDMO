@@ -3870,6 +3870,13 @@ namespace Intersect.Server.Networking
                                     tsk.CompletionEvent = evtb;
                                 }
                             }
+                            foreach (var link in qst.TaskLinks)
+                            {
+                                if (link.Id == evt.Key)
+                                {
+                                    link.CompletionEvent = evtb;
+                                }
+                            }
 
                             evtb.Load(evt.Value.JsonData);
                             DbInterface.SaveGameObject(evtb);

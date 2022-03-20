@@ -976,6 +976,16 @@ namespace Intersect.Server.Database
                                 }
                             }
 
+                            foreach (var link in ((QuestBase)gameObject).TaskLinks)
+                            {
+                                if (link.CompletionEvent != null)
+                                {
+                                    context.Events.Remove(link.CompletionEvent);
+                                    context.Entry(link.CompletionEvent).State = EntityState.Deleted;
+                                    EventBase.Lookup.Delete(link.CompletionEvent);
+                                }
+                            }
+
                             context.Quests.Remove((QuestBase)gameObject);
 
                             break;
@@ -1092,6 +1102,16 @@ namespace Intersect.Server.Database
                                     context.Events.Update(tsk.CompletionEvent);
                                 }
                             }
+
+                            foreach (var link in ((QuestBase)gameObject).TaskLinks)
+                            {
+                                if (link.CompletionEvent != null)
+                                {
+                                    context.Events.Update(link.CompletionEvent);
+                                }
+                            }
+
+
 
                             context.Quests.Update((QuestBase)gameObject);
 
