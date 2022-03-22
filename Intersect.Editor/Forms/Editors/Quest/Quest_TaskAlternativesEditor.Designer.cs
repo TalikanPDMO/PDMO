@@ -105,7 +105,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // lblNoTaskAlternative
             // 
             this.lblNoTaskAlternative.AutoSize = true;
-            this.lblNoTaskAlternative.Location = new System.Drawing.Point(56, 22);
+            this.lblNoTaskAlternative.Location = new System.Drawing.Point(57, 22);
             this.lblNoTaskAlternative.Name = "lblNoTaskAlternative";
             this.lblNoTaskAlternative.Size = new System.Drawing.Size(197, 13);
             this.lblNoTaskAlternative.TabIndex = 35;
@@ -199,7 +199,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // lblAlternatives
             // 
             this.lblAlternatives.AutoSize = true;
-            this.lblAlternatives.Location = new System.Drawing.Point(4, 22);
+            this.lblAlternatives.Location = new System.Drawing.Point(1, 22);
             this.lblAlternatives.Name = "lblAlternatives";
             this.lblAlternatives.Size = new System.Drawing.Size(54, 13);
             this.lblAlternatives.TabIndex = 21;

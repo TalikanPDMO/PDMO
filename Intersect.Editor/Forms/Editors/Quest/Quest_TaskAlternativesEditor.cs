@@ -54,7 +54,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
                 else
                 {
                     //Compatibility for quests created before alternativetask feature
-                    copyalt.EditingEvent = new EventBase(Guid.Empty, Guid.Empty, 0, 0, false);
+                    copyalt.EditingEvent = new EventBase(copyalt.Id, Guid.Empty, 0, 0, false);
                     copyalt.EditingEvent.Name = Strings.TaskAlternativesEditor.completionevent.ToString(mMyQuest.Name, copyalt.Name);
                     if (mMyQuest.AddEvents.ContainsKey(copyalt.Id))
                     {
@@ -252,7 +252,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
                 mMyAlternative = mCopyAlternatives[cmbTaskAlternatives.SelectedIndex];
                 if (mMyAlternative.EditingEvent == null)
                 {
-                    mMyAlternative.EditingEvent = new EventBase(Guid.Empty, Guid.Empty, 0, 0, false);
+                    mMyAlternative.EditingEvent = new EventBase(mMyAlternative.Id, Guid.Empty, 0, 0, false);
                     mMyAlternative.EditingEvent.Name = Strings.TaskAlternativesEditor.completionevent.ToString(mMyQuest.Name, mMyAlternative.Name);
                 }
             }
@@ -297,7 +297,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
         private void btnNewAlternative_Click(object sender, EventArgs e)
         {
             QuestBase.TaskAlternative taskalt = new QuestBase.TaskAlternative(Guid.NewGuid());
-            taskalt.EditingEvent = new EventBase(Guid.Empty, Guid.Empty, 0, 0, false);
+            taskalt.EditingEvent = new EventBase(taskalt.Id, Guid.Empty, 0, 0, false);
             taskalt.EditingEvent.Name = Strings.TaskAlternativesEditor.completionevent.ToString(mMyQuest.Name, taskalt.Name);
             mMyQuest.AddEvents.Add(taskalt.Id, taskalt.EditingEvent);
             mCopyAlternatives.Add(taskalt);
@@ -364,9 +364,9 @@ namespace Intersect.Editor.Forms.Editors.Quest
 
         private void btnRemoveTask_Click(object sender, EventArgs e)
         {
-            if (mMyAlternative != null && mMyAlternative.AlternativesList.Count > 0)
+            if (mMyAlternative != null && mMyAlternative.AlternativesList.Count > 0 && lstTasksOrTaskLinks.SelectedItem != null)
             {
-                if (cmbTaskOrTaskLink.SelectedItem is QuestBase.QuestTask)
+                if (lstTasksOrTaskLinks.SelectedItem is QuestBase.QuestTask)
                 {
                     var task = (QuestBase.QuestTask)lstTasksOrTaskLinks.SelectedItem;
                     if (task != null && mMyAlternative.AlternativesList.Contains(task.Id))
@@ -375,10 +375,10 @@ namespace Intersect.Editor.Forms.Editors.Quest
                         UpdateFormElements();
                     }
                 }
-                else if (cmbTaskOrTaskLink.SelectedItem is QuestBase.TaskLink)
+                else if (lstTasksOrTaskLinks.SelectedItem is QuestBase.TaskLink)
                 {
-                    var link = (QuestBase.TaskLink)cmbTaskOrTaskLink.SelectedItem;
-                    if (link != null && !mMyAlternative.AlternativesList.Contains(link.Id))
+                    var link = (QuestBase.TaskLink)lstTasksOrTaskLinks.SelectedItem;
+                    if (link != null && mMyAlternative.AlternativesList.Contains(link.Id))
                     {
                         mMyAlternative.AlternativesList.Remove(link.Id);
                         UpdateFormElements();

@@ -449,6 +449,7 @@
     <Compile Include="Database\DbLoggerProvider.cs" />
     <Compile Include="Database\GameData\GameContext.cs" />
     <Compile Include="Database\GameData\IGameContext.cs" />
+    <Compile Include="Database\GameData\Migrations\FixQuestTaskCompletionEventMigration.cs" />
     <Compile Include="Database\GameData\Migrations\Beta6Migration.cs" />
     <Compile Include="Database\GameData\Migrations\BoundItemExtensionMigration.cs" />
     <Compile Include="Database\GameData\Migrations\CerasVersionToleranceMigration.cs" />
@@ -644,6 +645,10 @@
     <Compile Include="Migrations\Game\20220320150600_AddingTaskLinkAndAlternativeToQuests.cs" />
     <Compile Include="Migrations\Game\20220320150600_AddingTaskLinkAndAlternativeToQuests.designer.cs">
       <DependentUpon>20220320150600_AddingTaskLinkAndAlternativeToQuests.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20220322114327_FixQuestTaskCompletionEvent.cs" />
+    <Compile Include="Migrations\Game\20220322114327_FixQuestTaskCompletionEvent.designer.cs">
+      <DependentUpon>20220322114327_FixQuestTaskCompletionEvent.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

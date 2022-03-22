@@ -54,7 +54,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
                 else
                 {
                     //Compatibility for quests created before linktask feature
-                    copylink.EditingEvent = new EventBase(Guid.Empty, Guid.Empty, 0, 0, false);
+                    copylink.EditingEvent = new EventBase(copylink.Id, Guid.Empty, 0, 0, false);
                     copylink.EditingEvent.Name = Strings.TaskLinksEditor.completionevent.ToString(mMyQuest.Name, copylink.Name);
                     if (mMyQuest.AddEvents.ContainsKey(copylink.Id))
                     {
@@ -233,7 +233,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
                 mMyLink = mCopyLinks[cmbTaskLinks.SelectedIndex];
                 if (mMyLink.EditingEvent == null)
                 {
-                    mMyLink.EditingEvent = new EventBase(Guid.Empty, Guid.Empty, 0, 0, false);
+                    mMyLink.EditingEvent = new EventBase(mMyLink.Id, Guid.Empty, 0, 0, false);
                     mMyLink.EditingEvent.Name = Strings.TaskLinksEditor.completionevent.ToString(mMyQuest.Name, mMyLink.Name);
                 }
             }
@@ -278,7 +278,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
         private void btnNewLink_Click(object sender, EventArgs e)
         {
             QuestBase.TaskLink tasklink = new QuestBase.TaskLink(Guid.NewGuid());
-            tasklink.EditingEvent = new EventBase(Guid.Empty, Guid.Empty, 0, 0, false);
+            tasklink.EditingEvent = new EventBase(tasklink.Id, Guid.Empty, 0, 0, false);
             tasklink.EditingEvent.Name = Strings.TaskLinksEditor.completionevent.ToString(mMyQuest.Name, tasklink.Name);
             mMyQuest.AddEvents.Add(tasklink.Id, tasklink.EditingEvent);
             mCopyLinks.Add(tasklink);

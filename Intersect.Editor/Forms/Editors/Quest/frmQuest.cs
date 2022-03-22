@@ -404,7 +404,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
         private void btnAddTask_Click(object sender, EventArgs e)
         {
             var questTask = new QuestBase.QuestTask(Guid.NewGuid());
-            questTask.EditingEvent = new EventBase(Guid.Empty, Guid.Empty, 0, 0, false);
+            questTask.EditingEvent = new EventBase(questTask.Id, Guid.Empty, 0, 0, false);
             questTask.EditingEvent.Name = Strings.TaskEditor.completionevent.ToString(mEditorItem.Name);
             mEditorItem.AddEvents.Add(questTask.Id, questTask.EditingEvent);
             if (OpenTaskEditor(questTask))
@@ -693,9 +693,9 @@ namespace Intersect.Editor.Forms.Editors.Quest
                     {
                         var tskEventData = EventBase.Get(tsk.CompletionEventId).JsonData;
                         tsk.CompletionEventId = Guid.Empty;
-                        tsk.EditingEvent = new EventBase(Guid.Empty, Guid.Empty, 0, 0, false);
+                        tsk.EditingEvent = new EventBase(tsk.Id, Guid.Empty, 0, 0, false);
                         tsk.EditingEvent.Name = Strings.TaskEditor.completionevent.ToString(mEditorItem.Name);
-                        tsk.EditingEvent.Load(tskEventData);
+                        tsk.EditingEvent.Load(tskEventData);  
                         mEditorItem.AddEvents.Add(tsk.Id, tsk.EditingEvent);
                     }
                 }
@@ -722,7 +722,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
                     {
                         var linkEventData = EventBase.Get(link.CompletionEventId).JsonData;
                         link.CompletionEventId = Guid.Empty;
-                        link.EditingEvent = new EventBase(Guid.Empty, Guid.Empty, 0, 0, false);
+                        link.EditingEvent = new EventBase(link.Id, Guid.Empty, 0, 0, false);
                         link.EditingEvent.Load(linkEventData);
                         link.EditingEvent.Name = Strings.TaskLinksEditor.completionevent.ToString(mEditorItem.Name, link.Name);
                         mEditorItem.AddEvents.Add(link.Id, link.EditingEvent);
@@ -743,7 +743,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
                     {
                         var altEventData = EventBase.Get(alt.CompletionEventId).JsonData;
                         alt.CompletionEventId = Guid.Empty;
-                        alt.EditingEvent = new EventBase(Guid.Empty, Guid.Empty, 0, 0, false);
+                        alt.EditingEvent = new EventBase(alt.Id, Guid.Empty, 0, 0, false);
                         alt.EditingEvent.Load(altEventData);
                         alt.EditingEvent.Name = Strings.TaskAlternativesEditor.completionevent.ToString(mEditorItem.Name, alt.Name);
                         mEditorItem.AddEvents.Add(alt.Id, alt.EditingEvent);
