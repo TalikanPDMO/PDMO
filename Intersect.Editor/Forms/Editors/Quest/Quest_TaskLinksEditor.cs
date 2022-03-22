@@ -142,8 +142,9 @@ namespace Intersect.Editor.Forms.Editors.Quest
                             addtask = false;
                         }
                     }
-                    if (addtask)
+                    if (addtask && mMyQuest.FindAlternative(task.Id) == null)
                     {
+                        // Only task with no link and no alternative
                         cmbTask.Items.Add(task);
                     }
                 }
@@ -182,6 +183,13 @@ namespace Intersect.Editor.Forms.Editors.Quest
                     mMyQuest.AddEvents.Remove(removeid);
                 }
                 mMyQuest.RemoveEvents.Add(removeid);
+                foreach(var alt in mMyQuest.TaskAlternatives)
+                {
+                    if (alt.AlternativesList.Contains(removeid))
+                    {
+                        alt.AlternativesList.Remove(removeid);
+                    }
+                }
             }
             mRemovedLinks.Clear();
 
@@ -314,7 +322,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             if (mMyLink != null)
             {
                 var task = (QuestBase.QuestTask)cmbTask.SelectedItem;
-                if (task != null && !mMyLink.TasksList.Contains(task.Id))
+                if (task != null && !mMyLink.TasksList.Contains(task.Id) && mMyQuest.FindAlternative(task.Id) == null)
                 {
                     mMyLink.TasksList.Add(task.Id);
                     UpdateFormElements();

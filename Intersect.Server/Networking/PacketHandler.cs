@@ -3878,6 +3878,14 @@ namespace Intersect.Server.Networking
                                 }
                             }
 
+                            foreach (var alt in qst.TaskAlternatives)
+                            {
+                                if (alt.Id == evt.Key)
+                                {
+                                    alt.CompletionEvent = evtb;
+                                }
+                            }
+
                             evtb.Load(evt.Value.JsonData);
                             DbInterface.SaveGameObject(evtb);
                         }

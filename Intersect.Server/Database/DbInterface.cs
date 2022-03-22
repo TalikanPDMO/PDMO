@@ -986,6 +986,16 @@ namespace Intersect.Server.Database
                                 }
                             }
 
+                            foreach (var alt in ((QuestBase)gameObject).TaskAlternatives)
+                            {
+                                if (alt.CompletionEvent != null)
+                                {
+                                    context.Events.Remove(alt.CompletionEvent);
+                                    context.Entry(alt.CompletionEvent).State = EntityState.Deleted;
+                                    EventBase.Lookup.Delete(alt.CompletionEvent);
+                                }
+                            }
+
                             context.Quests.Remove((QuestBase)gameObject);
 
                             break;
@@ -1108,6 +1118,14 @@ namespace Intersect.Server.Database
                                 if (link.CompletionEvent != null)
                                 {
                                     context.Events.Update(link.CompletionEvent);
+                                }
+                            }
+
+                            foreach (var alt in ((QuestBase)gameObject).TaskAlternatives)
+                            {
+                                if (alt.CompletionEvent != null)
+                                {
+                                    context.Events.Update(alt.CompletionEvent);
                                 }
                             }
 

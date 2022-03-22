@@ -74,8 +74,9 @@ namespace Intersect.Editor.Forms.Editors.Quest
 
             grpQuestTasks.Text = Strings.QuestEditor.tasks;
             btnAddTask.Text = Strings.QuestEditor.addtask;
-            btnEditLinks.Text = Strings.QuestEditor.editlinks;
             btnRemoveTask.Text = Strings.QuestEditor.removetask;
+            btnEditLinks.Text = Strings.QuestEditor.editlinks;
+            btnEditAlternatives.Text = Strings.QuestEditor.editalternatives;
 
             grpActions.Text = Strings.QuestEditor.actions;
             lblOnStart.Text = Strings.QuestEditor.onstart;
@@ -203,7 +204,6 @@ namespace Intersect.Editor.Forms.Editors.Quest
                             {
                                 PacketSender.SendSaveObject(tsk.EditingEvent);
                             }
-
                             tsk.EditingEvent.DeleteBackup();
                         }
                     );
@@ -219,8 +219,21 @@ namespace Intersect.Editor.Forms.Editors.Quest
                             {
                                 PacketSender.SendSaveObject(link.EditingEvent);
                             }
-
                             link.EditingEvent.DeleteBackup();
+                        });
+                    item.TaskAlternatives.ForEach(
+                        alt =>
+                        {
+                            if (alt?.EditingEvent == null)
+                            {
+                                return;
+                            }
+
+                            if (alt.EditingEvent.Id != Guid.Empty)
+                            {
+                                PacketSender.SendSaveObject(alt.EditingEvent);
+                            }
+                            alt.EditingEvent.DeleteBackup();
                         });
 
                     item.StartEvent?.DeleteBackup();
@@ -294,6 +307,12 @@ namespace Intersect.Editor.Forms.Editors.Quest
                         link.EditingEvent = link.CompletionEvent;
                     }
 
+                    foreach (var alt in mEditorItem.TaskAlternatives)
+                    {
+                        alt.CompletionEvent?.MakeBackup();
+                        alt.EditingEvent = alt.CompletionEvent;
+                    }
+
                     mEditorItem.MakeBackup();
                 }
             }
@@ -336,6 +355,13 @@ namespace Intersect.Editor.Forms.Editors.Quest
                         if (link != null && link.CompletionEvent != null)
                         {
                             link.CompletionEvent.Name = Strings.TaskLinksEditor.completionevent.ToString(mEditorItem.Name, link.Name);
+                        }
+                    }
+                    foreach (var alt in mEditorItem.TaskAlternatives)
+                    {
+                        if (alt != null && alt.CompletionEvent != null)
+                        {
+                            alt.CompletionEvent.Name = Strings.TaskAlternativesEditor.completionevent.ToString(mEditorItem.Name, alt.Name);
                         }
                     }
                 }
@@ -395,6 +421,14 @@ namespace Intersect.Editor.Forms.Editors.Quest
                 ListQuestTasks();
             }
         }
+        private void btnEditAlternatives_Click(object sender, EventArgs e)
+        {
+            if (OpenTaskAlternativesEditor())
+            {
+                ListQuestTasks();
+            }
+        }
+
 
         private bool OpenTaskLinksEditor()
         {
@@ -421,20 +455,54 @@ namespace Intersect.Editor.Forms.Editors.Quest
             return false;
         }
 
+        private bool OpenTaskAlternativesEditor()
+        {
+            var cmdWindow = new QuestTaskAlternativesEditor(mEditorItem);
+            var frm = new Form
+            {
+                Text = Strings.TaskAlternativesEditor.title
+            };
+
+            frm.Controls.Add(cmdWindow);
+            frm.Size = new Size(0, 0);
+            frm.AutoSize = true;
+            frm.ControlBox = false;
+            frm.FormBorderStyle = FormBorderStyle.FixedDialog;
+            frm.StartPosition = FormStartPosition.CenterParent;
+            frm.BackColor = cmdWindow.BackColor;
+            cmdWindow.BringToFront();
+            frm.ShowDialog();
+            if (!cmdWindow.Cancelled)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         private void ListQuestTasks()
         {
             lstTasks.Items.Clear();
             foreach (var task in mEditorItem.Tasks)
             {
+                var displaytask = "";
+                var alt = mEditorItem.FindAlternative(task.Id);
+                if (alt != null)
+                {
+                    displaytask += alt.ToString() + " | ";
+                }
                 var link = mEditorItem.FindLink(task.Id);
-                if (link == null)
+                if (link != null)
                 {
-                    lstTasks.Items.Add(task.GetTaskString(Strings.TaskEditor.descriptions));
+                    alt = mEditorItem.FindAlternative(link.Id);
+                    if (alt != null)
+                    {
+                        displaytask += alt.ToString() + " | ";
+                    }
+                    displaytask += link.ToString() + " | ";
                 }
-                else
-                {
-                    lstTasks.Items.Add("(L) " + link.Name + " | " + task.GetTaskString(Strings.TaskEditor.descriptions));
-                }
+
+                 lstTasks.Items.Add(displaytask + task.GetTaskString(Strings.TaskEditor.descriptions));
             }
         }
 
@@ -476,6 +544,13 @@ namespace Intersect.Editor.Forms.Editors.Quest
                     if (link.TasksList.Contains(mEditorItem.Tasks[lstTasks.SelectedIndex].Id))
                     {
                         link.TasksList.Remove(mEditorItem.Tasks[lstTasks.SelectedIndex].Id);
+                    }
+                }
+                foreach (var alt in mEditorItem.TaskAlternatives)
+                {
+                    if (alt.AlternativesList.Contains(mEditorItem.Tasks[lstTasks.SelectedIndex].Id))
+                    {
+                        alt.AlternativesList.Remove(mEditorItem.Tasks[lstTasks.SelectedIndex].Id);
                     }
                 }
                 mEditorItem.Tasks.RemoveAt(lstTasks.SelectedIndex);
@@ -601,6 +676,13 @@ namespace Intersect.Editor.Forms.Editors.Quest
                             link.TasksList[link.TasksList.IndexOf(oldId)] = tsk.Id;
                         }
                     }
+                    foreach (var alt in mEditorItem.TaskAlternatives)
+                    {
+                        if (alt.AlternativesList.Contains(oldId))
+                        {
+                            alt.AlternativesList[alt.AlternativesList.IndexOf(oldId)] = tsk.Id;
+                        }
+                    }
                     if (mEditorItem.AddEvents.ContainsKey(oldId))
                     {
                         mEditorItem.AddEvents.Add(tsk.Id, mEditorItem.AddEvents[oldId]);
@@ -623,6 +705,13 @@ namespace Intersect.Editor.Forms.Editors.Quest
                 {
                     var oldId = link.Id;
                     link.Id = Guid.NewGuid();
+                    foreach (var alt in mEditorItem.TaskAlternatives)
+                    {
+                        if (alt.AlternativesList.Contains(oldId))
+                        {
+                            alt.AlternativesList[alt.AlternativesList.IndexOf(oldId)] = link.Id;
+                        }
+                    }
                     if (mEditorItem.AddEvents.ContainsKey(oldId))
                     {
                         mEditorItem.AddEvents.Add(link.Id, mEditorItem.AddEvents[oldId]);
@@ -639,6 +728,28 @@ namespace Intersect.Editor.Forms.Editors.Quest
                         mEditorItem.AddEvents.Add(link.Id, link.EditingEvent);
                     }
                 }
+                //Fix alternatives
+                foreach (var alt in mEditorItem.TaskAlternatives)
+                {
+                    var oldId = alt.Id;
+                    alt.Id = Guid.NewGuid();
+                    if (mEditorItem.AddEvents.ContainsKey(oldId))
+                    {
+                        mEditorItem.AddEvents.Add(alt.Id, mEditorItem.AddEvents[oldId]);
+                        alt.EditingEvent = mEditorItem.AddEvents[alt.Id];
+                        mEditorItem.AddEvents.Remove(oldId);
+                    }
+                    else
+                    {
+                        var altEventData = EventBase.Get(alt.CompletionEventId).JsonData;
+                        alt.CompletionEventId = Guid.Empty;
+                        alt.EditingEvent = new EventBase(Guid.Empty, Guid.Empty, 0, 0, false);
+                        alt.EditingEvent.Load(altEventData);
+                        alt.EditingEvent.Name = Strings.TaskAlternativesEditor.completionevent.ToString(mEditorItem.Name, alt.Name);
+                        mEditorItem.AddEvents.Add(alt.Id, alt.EditingEvent);
+                    }
+                }
+
 
                 UpdateEditor();
             }

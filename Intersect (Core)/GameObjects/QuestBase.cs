@@ -240,6 +240,18 @@ namespace Intersect.GameObjects
             return null;
         }
 
+        public TaskLink ContainsLink(Guid linkId)
+        {
+            foreach (var tasklink in TaskLinks)
+            {
+                if (tasklink.Id == linkId)
+                {
+                    return tasklink;
+                }
+            }
+            return null;
+        }
+
         public bool IsTaskLinked(Guid taskId1, Guid taskId2)
         {
             foreach(var link in TaskLinks)
@@ -250,6 +262,44 @@ namespace Intersect.GameObjects
                 }
             }
             return false;
+        }
+
+        public bool IsTaskAlternative(Guid taskId1, Guid taskId2)
+        {
+            foreach (var alt in TaskAlternatives)
+            {
+                if (alt.AlternativesList.Contains(taskId1) && alt.AlternativesList.Contains(taskId2))
+                {
+                    return true;
+                }
+                var link1 = FindLink(taskId1);
+                if (link1 != null && alt.AlternativesList.Contains(link1.Id) && alt.AlternativesList.Contains(taskId2))
+                {
+                    return true;
+                }
+                var link2 = FindLink(taskId2);
+                if (link2 != null && alt.AlternativesList.Contains(link2.Id) && alt.AlternativesList.Contains(taskId1))
+                {
+                    return true;
+                }
+                if (link1 != null && link2 != null && alt.AlternativesList.Contains(link1.Id) && alt.AlternativesList.Contains(link2.Id))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public TaskAlternative FindAlternative(Guid linkOrtaskId)
+        {
+            foreach (var taskalt in TaskAlternatives)
+            {
+                if (taskalt.AlternativesList.Contains(linkOrtaskId))
+                {
+                    return taskalt;
+                }
+            }
+            return null;
         }
 
         public class QuestTask
@@ -354,6 +404,11 @@ namespace Intersect.GameObjects
                 get => JsonConvert.SerializeObject(TasksList);
                 set => TasksList = JsonConvert.DeserializeObject<List<Guid>>(value);
             }
+
+            public override string ToString()
+            {
+                return ("(L) " + Name);
+            }
         }
 
         public class TaskAlternative
@@ -390,6 +445,11 @@ namespace Intersect.GameObjects
             {
                 get => JsonConvert.SerializeObject(AlternativesList);
                 set => AlternativesList = JsonConvert.DeserializeObject<List<Guid>>(value);
+            }
+
+            public override string ToString()
+            {
+                return ("(A) " + Name);
             }
         }
     }
