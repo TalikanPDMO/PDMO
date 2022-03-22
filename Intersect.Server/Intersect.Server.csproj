@@ -449,6 +449,7 @@
     <Compile Include="Database\DbLoggerProvider.cs" />
     <Compile Include="Database\GameData\GameContext.cs" />
     <Compile Include="Database\GameData\IGameContext.cs" />
+    <Compile Include="Database\GameData\Migrations\FixQuestTaskCompletionEventMigration.cs" />
     <Compile Include="Database\GameData\Migrations\Beta6Migration.cs" />
     <Compile Include="Database\GameData\Migrations\BoundItemExtensionMigration.cs" />
     <Compile Include="Database\GameData\Migrations\CerasVersionToleranceMigration.cs" />
@@ -545,6 +546,10 @@
     <Compile Include="Migrations\20210510223205_TrackPlaytimeAsULongsInSeconds.Designer.cs">
       <DependentUpon>20210510223205_TrackPlaytimeAsULongsInSeconds.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20220320150448_AddingQuestTaskProgressionToPlayers.cs" />
+    <Compile Include="Migrations\20220320150448_AddingQuestTaskProgressionToPlayers.designer.cs">
+      <DependentUpon>20220320150448_AddingQuestTaskProgressionToPlayers.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
       <DependentUpon>20201222164741_NpcResetRadius.cs</DependentUpon>
@@ -636,6 +641,14 @@
     <Compile Include="Migrations\Game\20220316131852_AddingSwarmFleeBehaviorsToNPC.cs" />
     <Compile Include="Migrations\Game\20220316131852_AddingSwarmFleeBehaviorsToNPC.designer.cs">
       <DependentUpon>20220316131852_AddingSwarmFleeBehaviorsToNPC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20220320150600_AddingTaskLinkAndAlternativeToQuests.cs" />
+    <Compile Include="Migrations\Game\20220320150600_AddingTaskLinkAndAlternativeToQuests.designer.cs">
+      <DependentUpon>20220320150600_AddingTaskLinkAndAlternativeToQuests.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20220322114327_FixQuestTaskCompletionEvent.cs" />
+    <Compile Include="Migrations\Game\20220322114327_FixQuestTaskCompletionEvent.designer.cs">
+      <DependentUpon>20220322114327_FixQuestTaskCompletionEvent.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

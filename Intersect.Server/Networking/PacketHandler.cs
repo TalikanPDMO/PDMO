@@ -3862,7 +3862,7 @@ namespace Intersect.Server.Networking
                         foreach (var evt in qst.AddEvents)
                         {
                             var evtb = (EventBase)DbInterface.AddGameObject(GameObjectType.Event, evt.Key);
-                            evtb.CommonEvent = false;
+                            evtb.Load(evt.Value.JsonData);
                             foreach (var tsk in qst.Tasks)
                             {
                                 if (tsk.Id == evt.Key)
@@ -3870,8 +3870,23 @@ namespace Intersect.Server.Networking
                                     tsk.CompletionEvent = evtb;
                                 }
                             }
+                            foreach (var link in qst.TaskLinks)
+                            {
+                                if (link.Id == evt.Key)
+                                {
+                                    link.CompletionEvent = evtb;
+                                }
+                            }
 
-                            evtb.Load(evt.Value.JsonData);
+                            foreach (var alt in qst.TaskAlternatives)
+                            {
+                                if (alt.Id == evt.Key)
+                                {
+                                    alt.CompletionEvent = evtb;
+                                }
+                            }
+
+                            
                             DbInterface.SaveGameObject(evtb);
                         }
 

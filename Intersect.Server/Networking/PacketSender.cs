@@ -1683,6 +1683,14 @@ namespace Intersect.Server.Networking
             {
                 SendEventIfExists(client, tsk.CompletionEvent);
             }
+            foreach (var link in qst.TaskLinks)
+            {
+                SendEventIfExists(client, link.CompletionEvent);
+            }
+            foreach (var alt in qst.TaskAlternatives)
+            {
+                SendEventIfExists(client, alt.CompletionEvent);
+            }
         }
 
         //GameObjectPacket

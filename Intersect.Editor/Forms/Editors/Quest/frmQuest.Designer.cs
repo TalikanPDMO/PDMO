@@ -56,6 +56,8 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.chkQuittable = new DarkUI.Controls.DarkCheckBox();
             this.chkRepeatable = new DarkUI.Controls.DarkCheckBox();
             this.grpLogOptions = new DarkUI.Controls.DarkGroupBox();
+            this.nudOrderValue = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblSortOrder = new System.Windows.Forms.Label();
             this.lblCompletedCategory = new System.Windows.Forms.Label();
             this.cmbCompletedCategory = new DarkUI.Controls.DarkComboBox();
             this.lblInProgressCategory = new System.Windows.Forms.Label();
@@ -66,6 +68,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.chkLogAfterComplete = new DarkUI.Controls.DarkCheckBox();
             this.chkLogBeforeOffer = new DarkUI.Controls.DarkCheckBox();
             this.grpQuestTasks = new DarkUI.Controls.DarkGroupBox();
+            this.btnEditLinks = new DarkUI.Controls.DarkButton();
             this.btnShiftTaskDown = new DarkUI.Controls.DarkButton();
             this.btnShiftTaskUp = new DarkUI.Controls.DarkButton();
             this.btnRemoveTask = new DarkUI.Controls.DarkButton();
@@ -90,18 +93,17 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.nudOrderValue = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblSortOrder = new System.Windows.Forms.Label();
+            this.btnEditAlternatives = new DarkUI.Controls.DarkButton();
             this.grpQuests.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpQuestReqs.SuspendLayout();
             this.grpProgessionOptions.SuspendLayout();
             this.grpLogOptions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudOrderValue)).BeginInit();
             this.grpQuestTasks.SuspendLayout();
             this.pnlContainer.SuspendLayout();
             this.grpActions.SuspendLayout();
             this.toolStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudOrderValue)).BeginInit();
             this.SuspendLayout();
             // 
             // grpQuests
@@ -416,6 +418,35 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpLogOptions.TabStop = false;
             this.grpLogOptions.Text = "Quest Log Options";
             // 
+            // nudOrderValue
+            // 
+            this.nudOrderValue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudOrderValue.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudOrderValue.Location = new System.Drawing.Point(120, 171);
+            this.nudOrderValue.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.nudOrderValue.Name = "nudOrderValue";
+            this.nudOrderValue.Size = new System.Drawing.Size(142, 20);
+            this.nudOrderValue.TabIndex = 59;
+            this.nudOrderValue.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudOrderValue.ValueChanged += new System.EventHandler(this.nudOrderValue_ValueChanged);
+            // 
+            // lblSortOrder
+            // 
+            this.lblSortOrder.AutoSize = true;
+            this.lblSortOrder.Location = new System.Drawing.Point(6, 173);
+            this.lblSortOrder.Name = "lblSortOrder";
+            this.lblSortOrder.Size = new System.Drawing.Size(110, 13);
+            this.lblSortOrder.TabIndex = 58;
+            this.lblSortOrder.Text = "Quest Log Sort Order:";
+            // 
             // lblCompletedCategory
             // 
             this.lblCompletedCategory.AutoSize = true;
@@ -537,6 +568,8 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // 
             this.grpQuestTasks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpQuestTasks.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpQuestTasks.Controls.Add(this.btnEditAlternatives);
+            this.grpQuestTasks.Controls.Add(this.btnEditLinks);
             this.grpQuestTasks.Controls.Add(this.btnShiftTaskDown);
             this.grpQuestTasks.Controls.Add(this.btnShiftTaskUp);
             this.grpQuestTasks.Controls.Add(this.btnRemoveTask);
@@ -549,6 +582,16 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpQuestTasks.TabIndex = 19;
             this.grpQuestTasks.TabStop = false;
             this.grpQuestTasks.Text = "Quest Tasks";
+            // 
+            // btnEditLinks
+            // 
+            this.btnEditLinks.Location = new System.Drawing.Point(246, 170);
+            this.btnEditLinks.Name = "btnEditLinks";
+            this.btnEditLinks.Padding = new System.Windows.Forms.Padding(5);
+            this.btnEditLinks.Size = new System.Drawing.Size(110, 23);
+            this.btnEditLinks.TabIndex = 8;
+            this.btnEditLinks.Text = "Edit Links (L)";
+            this.btnEditLinks.Click += new System.EventHandler(this.btnEditLinks_Click);
             // 
             // btnShiftTaskDown
             // 
@@ -574,10 +617,10 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // 
             // btnRemoveTask
             // 
-            this.btnRemoveTask.Location = new System.Drawing.Point(317, 172);
+            this.btnRemoveTask.Location = new System.Drawing.Point(119, 170);
             this.btnRemoveTask.Name = "btnRemoveTask";
             this.btnRemoveTask.Padding = new System.Windows.Forms.Padding(5);
-            this.btnRemoveTask.Size = new System.Drawing.Size(123, 23);
+            this.btnRemoveTask.Size = new System.Drawing.Size(110, 23);
             this.btnRemoveTask.TabIndex = 5;
             this.btnRemoveTask.Text = "Remove Task";
             this.btnRemoveTask.Click += new System.EventHandler(this.btnRemoveTask_Click);
@@ -591,16 +634,16 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.lstTasks.HorizontalScrollbar = true;
             this.lstTasks.Location = new System.Drawing.Point(6, 19);
             this.lstTasks.Name = "lstTasks";
-            this.lstTasks.Size = new System.Drawing.Size(434, 132);
+            this.lstTasks.Size = new System.Drawing.Size(434, 145);
             this.lstTasks.TabIndex = 3;
             this.lstTasks.DoubleClick += new System.EventHandler(this.lstTasks_DoubleClick);
             // 
             // btnAddTask
             // 
-            this.btnAddTask.Location = new System.Drawing.Point(6, 172);
+            this.btnAddTask.Location = new System.Drawing.Point(6, 170);
             this.btnAddTask.Name = "btnAddTask";
             this.btnAddTask.Padding = new System.Windows.Forms.Padding(5);
-            this.btnAddTask.Size = new System.Drawing.Size(123, 23);
+            this.btnAddTask.Size = new System.Drawing.Size(110, 23);
             this.btnAddTask.TabIndex = 4;
             this.btnAddTask.Text = "Add Task";
             this.btnAddTask.Click += new System.EventHandler(this.btnAddTask_Click);
@@ -813,34 +856,15 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // nudOrderValue
+            // btnEditAlternatives
             // 
-            this.nudOrderValue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudOrderValue.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudOrderValue.Location = new System.Drawing.Point(120, 171);
-            this.nudOrderValue.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.nudOrderValue.Name = "nudOrderValue";
-            this.nudOrderValue.Size = new System.Drawing.Size(142, 20);
-            this.nudOrderValue.TabIndex = 59;
-            this.nudOrderValue.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudOrderValue.ValueChanged += new System.EventHandler(this.nudOrderValue_ValueChanged);
-            // 
-            // lblSortOrder
-            // 
-            this.lblSortOrder.AutoSize = true;
-            this.lblSortOrder.Location = new System.Drawing.Point(6, 173);
-            this.lblSortOrder.Name = "lblSortOrder";
-            this.lblSortOrder.Size = new System.Drawing.Size(110, 13);
-            this.lblSortOrder.TabIndex = 58;
-            this.lblSortOrder.Text = "Quest Log Sort Order:";
+            this.btnEditAlternatives.Location = new System.Drawing.Point(359, 170);
+            this.btnEditAlternatives.Name = "btnEditAlternatives";
+            this.btnEditAlternatives.Padding = new System.Windows.Forms.Padding(5);
+            this.btnEditAlternatives.Size = new System.Drawing.Size(115, 23);
+            this.btnEditAlternatives.TabIndex = 9;
+            this.btnEditAlternatives.Text = "Edit Alternatives (A)";
+            this.btnEditAlternatives.Click += new System.EventHandler(this.btnEditAlternatives_Click);
             // 
             // FrmQuest
             // 
@@ -871,13 +895,13 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpProgessionOptions.PerformLayout();
             this.grpLogOptions.ResumeLayout(false);
             this.grpLogOptions.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudOrderValue)).EndInit();
             this.grpQuestTasks.ResumeLayout(false);
             this.pnlContainer.ResumeLayout(false);
             this.grpActions.ResumeLayout(false);
             this.grpActions.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudOrderValue)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -944,5 +968,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
         private DarkNumericUpDown nudOrderValue;
         private System.Windows.Forms.Label lblSortOrder;
         private Controls.GameObjectList lstGameObjects;
+        private DarkButton btnEditLinks;
+        private DarkButton btnEditAlternatives;
     }
 }

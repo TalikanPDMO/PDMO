@@ -1360,6 +1360,8 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString title = @"Quest Log";
 
+            public static LocalizedString alternative_separator = @"----- OR -----";
+
         }
 
         public struct QuestOffer

@@ -31,6 +31,7 @@ using Intersect.Server.Networking;
 using Intersect.Utilities;
 
 using Newtonsoft.Json;
+using static Intersect.GameObjects.QuestBase;
 
 namespace Intersect.Server.Entities
 {
@@ -1154,26 +1155,100 @@ namespace Intersect.Server.Entities
                         var questTask = quest.FindTask(questProgress.TaskId);
                         if (questTask != null)
                         {
-                            if (questTask.Objective == QuestObjective.KillNpcs && questTask.TargetId == npc.Base.Id)
+                            var link = quest.FindLink(questProgress.TaskId);
+                            if (link == null)
                             {
-                                questProgress.TaskProgress++;
-                                if (questProgress.TaskProgress >= questTask.Quantity)
+                                var alt = quest.FindAlternative(questProgress.TaskId);
+                                if (alt == null)
                                 {
-                                    CompleteQuestTask(questId, questProgress.TaskId);
+                                    if (!questProgress.TasksProgress.ContainsKey(questTask.Id) || questProgress.TasksProgress[questTask.Id] != -1)
+                                    {
+                                        if (questTask.Objective == QuestObjective.KillNpcs && questTask.TargetId == npc.Base.Id)
+                                        {
+                                            UpdateKillTask(questTask, questProgress, quest);
+                                        }
+                                    }
                                 }
                                 else
                                 {
-                                    PacketSender.SendQuestsProgress(this);
-                                    PacketSender.SendChatMsg(
-                                        this,
-                                        Strings.Quests.npctask.ToString(
-                                            quest.Name, questProgress.TaskProgress, questTask.Quantity,
-                                            NpcBase.GetName(questTask.TargetId)
-                                        ),
-                                        ChatMessageType.Quest
-                                    );
+                                    UpdateKillTaskAlternative(alt, questProgress, quest, npc.Base.Id);
                                 }
                             }
+                            else
+                            {
+                                var alt = quest.FindAlternative(link.Id);
+                                if (alt == null)
+                                {
+                                    foreach (var linkedTaskId in link.TasksList)
+                                    {
+                                        if (!questProgress.TasksProgress.ContainsKey(linkedTaskId) || questProgress.TasksProgress[linkedTaskId] != -1)
+                                        {
+                                            var linkedTask = quest.FindTask(linkedTaskId);
+                                            if (linkedTask.Objective == QuestObjective.KillNpcs && linkedTask.TargetId == npc.Base.Id)
+                                            {
+                                                UpdateKillTask(linkedTask, questProgress, quest);
+                                            } 
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    UpdateKillTaskAlternative(alt, questProgress, quest, npc.Base.Id);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public void UpdateKillTask(QuestTask questTask, Quest questProgress, QuestBase quest)
+        {
+            questProgress.UpdateProgress(questTask.Id);
+            if (questProgress.TasksProgress[questTask.Id] >= questTask.Quantity)
+            {
+                CompleteQuestTask(questProgress.QuestId, questTask.Id);
+            }
+            else
+            {
+                PacketSender.SendQuestsProgress(this);
+                PacketSender.SendChatMsg(
+                    this,
+                    Strings.Quests.npctask.ToString(
+                        quest.Name, questProgress.TasksProgress[questTask.Id], questTask.Quantity,
+                        NpcBase.GetName(questTask.TargetId)
+                    ),
+                    ChatMessageType.Quest
+                );
+            }
+        }
+        public void UpdateKillTaskAlternative(TaskAlternative alt, Quest questProgress, QuestBase quest, Guid npcId)
+        {
+            foreach (var altid in alt.AlternativesList)
+            {
+                var link = quest.ContainsLink(altid);
+                if (link == null)
+                {
+                    var questTask = quest.FindTask(altid);
+                    if (!questProgress.TasksProgress.ContainsKey(questTask.Id) || questProgress.TasksProgress[questTask.Id] != -1)
+                    {
+                        if (questTask.Objective == QuestObjective.KillNpcs && questTask.TargetId == npcId)
+                        {
+                            UpdateKillTask(questTask, questProgress, quest);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var linkedTaskId in link.TasksList)
+                    {
+                        if (!questProgress.TasksProgress.ContainsKey(linkedTaskId) || questProgress.TasksProgress[linkedTaskId] != -1)
+                        {
+                            var linkedTask = quest.FindTask(linkedTaskId);
+                            if (linkedTask.Objective == QuestObjective.KillNpcs && linkedTask.TargetId == npcId)
+                            {
+                                UpdateKillTask(linkedTask, questProgress, quest);
+                            }     
                         }
                     }
                 }
@@ -5023,15 +5098,32 @@ namespace Intersect.Server.Entities
                     Quests.Add(questProgress);
                 }
 
-                if (quest.Tasks[0].Objective == QuestObjective.GatherItems) //Gather Items
-                {
-                    UpdateGatherItemQuests(quest.Tasks[0].TargetId);
-                }
-
-                StartCommonEvent(EventBase.Get(quest.StartEventId));
                 PacketSender.SendChatMsg(
                     this, Strings.Quests.started.ToString(quest.Name), ChatMessageType.Quest, CustomColors.Quests.Started
                 );
+                StartCommonEvent(EventBase.Get(quest.StartEventId));
+
+                var link = quest.FindLink(quest.Tasks[0].Id);
+                if (link == null)
+                {
+                    // Update for an unlinked task
+                    if (quest.Tasks[0].Objective == QuestObjective.GatherItems)
+                    {
+                        UpdateGatherItemQuests(quest.Tasks[0].TargetId);
+                    }
+                }
+                else
+                {
+                    // Update for all linked tasks
+                    foreach (var t_id in link.TasksList)
+                    {
+                        var task = quest.FindTask(t_id);
+                        if (task.Objective == QuestObjective.GatherItems)
+                        {
+                            UpdateGatherItemQuests(task.TargetId);
+                        }
+                    }
+                }
 
                 PacketSender.SendQuestsProgress(this);
             }
@@ -5122,6 +5214,7 @@ namespace Intersect.Server.Entities
                         var questProgress = FindQuest(quest.Id);
                         questProgress.TaskId = Guid.Empty;
                         questProgress.TaskProgress = -1;
+                        questProgress.TasksProgress = new Dictionary<Guid, int>();
                         PacketSender.SendChatMsg(
                             this, Strings.Quests.abandoned.ToString(QuestBase.GetName(questId)), ChatMessageType.Quest, Color.Red
                         );
@@ -5140,7 +5233,7 @@ namespace Intersect.Server.Entities
                 var questProgress = FindQuest(questId);
                 if (questProgress != null)
                 {
-                    if (questProgress.TaskId == taskId)
+                    if (questProgress.TaskId == taskId || quest.IsTaskLinked(questProgress.TaskId, taskId) || quest.IsTaskAlternative(questProgress.TaskId, taskId))
                     {
                         //Let's Advance this task or complete the quest
                         for (var i = 0; i < quest.Tasks.Count; i++)
@@ -5148,47 +5241,163 @@ namespace Intersect.Server.Entities
                             if (quest.Tasks[i].Id == taskId)
                             {
                                 PacketSender.SendChatMsg(this, Strings.Quests.taskcompleted, ChatMessageType.Quest);
-                                if (i == quest.Tasks.Count - 1)
+                                questProgress.TasksProgress[taskId] = -1;
+                                //Advance Task
+                                questProgress.TaskProgress++; // Count the number of done tasks
+
+                                var link = quest.FindLink(taskId);
+                                QuestTask nextTask = null;
+                                Guid altId = Guid.Empty;
+                                int done_tasks = 0;
+                                if (link != null)
                                 {
-                                    //Complete Quest
+                                    foreach (var t_id in link.TasksList)
+                                    {
+                                        if (questProgress.TasksProgress.ContainsKey(t_id) && questProgress.TasksProgress[t_id] == -1)
+                                        {
+                                            done_tasks++;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    // Task is not linked, so we will need to check the alternative list with this id
+                                    altId = taskId;
+                                }
+
+                                if (quest.Tasks[i].CompletionEvent != null)
+                                {
+                                    StartCommonEvent(quest.Tasks[i].CompletionEvent);
+                                }
+                                if (link != null && done_tasks == link.TasksList.Count)
+                                {
+                                    // Task is linked and the link is fully finished, so we need to check the alternative list with this id
+                                    altId = link.Id;
+                                    if (link.CompletionEvent != null)
+                                    {
+                                        StartCommonEvent(link.CompletionEvent);
+                                    }
+                                }
+                                // Process to alternatives check
+                                if (altId != Guid.Empty)
+                                {
+                                    var alt = quest.FindAlternative(altId);
+                                    if(alt != null)
+                                    {
+                                        foreach (var v_guid in alt.AlternativesList)
+                                        {
+                                            var altlink = quest.ContainsLink(v_guid);
+                                            if (altlink != null)
+                                            {
+                                                foreach (var v_id in altlink.TasksList)
+                                                {
+                                                    // Manually validate all task in the link
+                                                    if (!questProgress.TasksProgress.ContainsKey(v_id) || questProgress.TasksProgress[v_id] != -1)
+                                                    {
+                                                        //questProgress.TasksProgress[v_id] = -1;
+                                                        questProgress.UpdateProgress(v_id, -1);
+                                                        questProgress.TaskProgress++;
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                // Manually validate the task
+                                                if (!questProgress.TasksProgress.ContainsKey(v_guid) || questProgress.TasksProgress[v_guid] != -1)
+                                                {
+                                                    //questProgress.TasksProgress[v_guid] = -1;
+                                                    questProgress.UpdateProgress(v_guid, -1);
+                                                    questProgress.TaskProgress++;
+                                                }
+                                            }
+                                        }
+                                        if (alt.CompletionEvent != null)
+                                        {
+                                            StartCommonEvent(alt.CompletionEvent);
+                                        }
+                                    }
+                                }
+
+                                if (questProgress.TaskProgress == quest.Tasks.Count)
+                                {
+                                    // Finish quest
                                     questProgress.Completed = true;
                                     questProgress.TaskId = Guid.Empty;
                                     questProgress.TaskProgress = -1;
-                                    if (quest.Tasks[i].CompletionEvent != null)
-                                    {
-                                        StartCommonEvent(quest.Tasks[i].CompletionEvent);
-                                    }
+                                    questProgress.TasksProgress = new Dictionary<Guid, int>();
 
                                     StartCommonEvent(EventBase.Get(quest.EndEventId));
                                     PacketSender.SendChatMsg(
                                         this, Strings.Quests.completed.ToString(quest.Name), ChatMessageType.Quest, Color.Green
                                     );
+                                    PacketSender.SendQuestsProgress(this);
+                                    return;
                                 }
-                                else
+
+                                // Player didn't finished the quest but finished a simple task or finished all linked tasks
+                                if (link == null || done_tasks == link.TasksList.Count)
                                 {
-                                    //Advance Task
-                                    questProgress.TaskId = quest.Tasks[i + 1].Id;
-                                    questProgress.TaskProgress = 0;
-                                    if (quest.Tasks[i].CompletionEvent != null)
+                                    // Need to go to the next task id in the quest
+                                    int t = quest.GetTaskIndex(questProgress.TaskId);
+                                    do
                                     {
-                                        StartCommonEvent(quest.Tasks[i].CompletionEvent);
-                                    }
+                                        nextTask = quest.Tasks[t + 1];
+                                        questProgress.TaskId = nextTask.Id;
+                                        done_tasks = 0;
+                                        link = quest.FindLink(questProgress.TaskId);
+                                        t++;
+                                        if (link != null)
+                                        {
+                                            // All linked task already completed ?
+                                            foreach (var t_id in link.TasksList)
+                                            {
+                                                if (questProgress.TasksProgress.ContainsKey(t_id) && questProgress.TasksProgress[t_id] == -1)
+                                                {
+                                                    done_tasks++;
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            // Is the task already completed ?
+                                            if (questProgress.TasksProgress.ContainsKey(questProgress.TaskId) && questProgress.TasksProgress[questProgress.TaskId] == -1)
+                                            {
+                                                done_tasks = -1; // just for the while condition
+                                            }
+                                        }
+                                    } while (done_tasks == -1 || done_tasks == link?.TasksList.Count);
 
-                                    if (quest.Tasks[i + 1].Objective == QuestObjective.GatherItems)
+                                    link = quest.FindLink(nextTask.Id);
+                                    if (link == null)
                                     {
-                                        UpdateGatherItemQuests(quest.Tasks[i + 1].TargetId);
+                                        // Update for an unlinked task
+                                        if (nextTask.Objective == QuestObjective.GatherItems)
+                                        {
+                                            UpdateGatherItemQuests(nextTask.TargetId);
+                                        }
                                     }
-
-                                    PacketSender.SendChatMsg(
-                                        this, Strings.Quests.updated.ToString(quest.Name),
-                                        ChatMessageType.Quest,
-                                        CustomColors.Quests.TaskUpdated
-                                    );
+                                    else
+                                    {
+                                        // Update for all linked tasks
+                                        foreach (var t_id in link.TasksList)
+                                        {
+                                            var task = quest.FindTask(t_id);
+                                            if (task.Objective == QuestObjective.GatherItems)
+                                            {
+                                                UpdateGatherItemQuests(task.TargetId);
+                                            }
+                                        }
+                                    }
                                 }
+
+                                PacketSender.SendChatMsg(
+                                    this, Strings.Quests.updated.ToString(quest.Name),
+                                    ChatMessageType.Quest,
+                                    CustomColors.Quests.TaskUpdated
+                                );
                             }
                         }
                     }
-
                     PacketSender.SendQuestsProgress(this);
                 }
             }
@@ -5206,6 +5415,7 @@ namespace Intersect.Server.Entities
                     questProgress.Completed = true;
                     questProgress.TaskId = Guid.Empty;
                     questProgress.TaskProgress = -1;
+                    questProgress.TasksProgress = new Dictionary<Guid, int>();
                     if (!skipCompletionEvent)
                     {
                         StartCommonEvent(EventBase.Get(quest.EndEventId));
@@ -5232,28 +5442,102 @@ namespace Intersect.Server.Entities
                         {
                             //Assume this quest is in progress. See if we can find the task in the quest
                             var questTask = quest.FindTask(questProgress.TaskId);
-                            if (questTask?.Objective == QuestObjective.GatherItems && questTask.TargetId == item.Id)
+                            if (questTask != null)
                             {
-                                if (questProgress.TaskProgress != CountItems(item.Id))
+                                var link = quest.FindLink(questProgress.TaskId);
+                                if (link == null)
                                 {
-                                    questProgress.TaskProgress = CountItems(item.Id);
-                                    if (questProgress.TaskProgress >= questTask.Quantity)
+                                    var alt = quest.FindAlternative(questProgress.TaskId);
+                                    if (alt == null)
                                     {
-                                        CompleteQuestTask(questId, questProgress.TaskId);
+                                        if (!questProgress.TasksProgress.ContainsKey(questProgress.TaskId) || questProgress.TasksProgress[questProgress.TaskId] != -1)
+                                        {
+                                            if (questTask.Objective == QuestObjective.GatherItems && questTask.TargetId == item.Id)
+                                            {
+                                                UpdateGatherItemTask(questTask, questProgress, quest, item.Id);
+                                            }
+                                        }
                                     }
                                     else
                                     {
-                                        PacketSender.SendQuestsProgress(this);
-                                        PacketSender.SendChatMsg(
-                                            this,
-                                            Strings.Quests.itemtask.ToString(
-                                                quest.Name, questProgress.TaskProgress, questTask.Quantity,
-                                                ItemBase.GetName(questTask.TargetId)
-                                            ),
-                                            ChatMessageType.Quest
-                                        );
+                                        UpdateGatherItemTaskAlternative(alt, questProgress, quest, item.Id);
                                     }
                                 }
+                                else
+                                {
+                                    var alt = quest.FindAlternative(questProgress.TaskId);
+                                    if (alt == null)
+                                    {
+                                        foreach (var linkedTaskId in link.TasksList)
+                                        {
+                                            if (!questProgress.TasksProgress.ContainsKey(linkedTaskId) || questProgress.TasksProgress[linkedTaskId] != -1)
+                                            {
+                                                var linkedTask = quest.FindTask(linkedTaskId);
+                                                if (linkedTask.Objective == QuestObjective.GatherItems && linkedTask.TargetId == item.Id)
+                                                {
+                                                    UpdateGatherItemTask(linkedTask, questProgress, quest, item.Id);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        UpdateGatherItemTaskAlternative(alt, questProgress, quest, item.Id);
+                                    }
+                                } 
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public void UpdateGatherItemTask(QuestTask questTask, Quest questProgress, QuestBase quest, Guid itemId)
+        {
+            questProgress.UpdateProgress(questTask.Id, CountItems(itemId));
+            if (questProgress.TasksProgress[questTask.Id] >= questTask.Quantity)
+            {
+                CompleteQuestTask(questProgress.QuestId, questTask.Id);
+            }
+            else
+            {
+                PacketSender.SendQuestsProgress(this);
+                PacketSender.SendChatMsg(
+                    this,
+                    Strings.Quests.itemtask.ToString(
+                        quest.Name, questProgress.TasksProgress[questTask.Id], questTask.Quantity,
+                        ItemBase.GetName(questTask.TargetId)
+                    ),
+                    ChatMessageType.Quest
+                );
+            }
+        }
+        public void UpdateGatherItemTaskAlternative(TaskAlternative alt, Quest questProgress, QuestBase quest, Guid itemId)
+        {
+            foreach (var altid in alt.AlternativesList)
+            {
+                var link = quest.ContainsLink(altid);
+                if (link == null)
+                {
+                    var questTask = quest.FindTask(altid);
+                    if (!questProgress.TasksProgress.ContainsKey(questTask.Id) || questProgress.TasksProgress[questTask.Id] != -1)
+                    {
+                        if (questTask.Objective == QuestObjective.GatherItems && questTask.TargetId == itemId)
+                        {
+                            UpdateGatherItemTask(questTask, questProgress, quest, itemId);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var linkedTaskId in link.TasksList)
+                    {
+                        if (!questProgress.TasksProgress.ContainsKey(linkedTaskId) || questProgress.TasksProgress[linkedTaskId] != -1)
+                        {
+                            var linkedTask = quest.FindTask(linkedTaskId);
+                            if (linkedTask.Objective == QuestObjective.GatherItems && linkedTask.TargetId == itemId)
+                            {
+                                UpdateGatherItemTask(linkedTask, questProgress, quest, itemId);
                             }
                         }
                     }

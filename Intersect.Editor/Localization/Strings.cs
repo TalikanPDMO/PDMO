@@ -4173,6 +4173,10 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString addtask = @"Add Task";
 
+            public static LocalizedString editlinks = @"Edit Links (L)";
+
+            public static LocalizedString editalternatives = @"Edit Alternatives (A)";
+
             public static LocalizedString beforeofferdesc = @"Before Offer Description:";
 
             public static LocalizedString cancel = @"Cancel";
@@ -4822,6 +4826,98 @@ Tick timer saved in server config.json.";
                 {1, @"Gather Item(s)"},
                 {2, @"Kill NPC(s)"},
             };
+
+            public static Dictionary<int, LocalizedString> descriptions = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Event Driven - {00}"},
+                {1, @"Gather Items [{00} x{01}] - {02}"},
+                {2, @"Kill Npc(s) [{00} x{01}] - {02}"},
+            };
+
+        }
+
+        public struct TaskLinksEditor
+        {
+
+            public static LocalizedString cancel = @"Cancel";
+
+            public static LocalizedString completionevent = @"Quest: {00} - TaskLink {01} Completion Event";
+
+            public static LocalizedString editcompletionevent = @"Edit TaskLink Completion Event";
+
+            public static LocalizedString editor = @"TaskLinks Editor";
+
+            public static LocalizedString ok = @"Ok";
+
+            public static LocalizedString tasklinks = @"Task Links:";
+
+            public static LocalizedString notasklink = @"Currently no task link in this quest";
+
+            public static LocalizedString newlink = @"New";
+
+            public static LocalizedString removelink = @"Remove";
+
+            public static LocalizedString name = @"Name:";
+
+            public static LocalizedString desc = @"Desc:";
+
+            public static LocalizedString linkedtasks = @"Linked Tasks";
+
+            public static LocalizedString task = @"Task";
+
+            public static LocalizedString noavailabletask = @"There is no available task for a TaskLink";
+
+            public static LocalizedString addtask = @"Add";
+
+            public static LocalizedString removetask = @"Remove";
+
+            public static LocalizedString title = @"Edit Quest TaskLinks";
+
+            public static Dictionary<int, LocalizedString> descriptions = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Event Driven - {00}"},
+                {1, @"Gather Items [{00} x{01}] - {02}"},
+                {2, @"Kill Npc(s) [{00} x{01}] - {02}"},
+            };
+
+        }
+
+        public struct TaskAlternativesEditor
+        {
+
+            public static LocalizedString cancel = @"Cancel";
+
+            public static LocalizedString completionevent = @"Quest: {00} - TaskAlt {01} Completion Event";
+
+            public static LocalizedString editcompletionevent = @"Edit TaskAlternative Completion Event";
+
+            public static LocalizedString editor = @"TaskAlternatives Editor";
+
+            public static LocalizedString ok = @"Ok";
+
+            public static LocalizedString taskalts = @"Tasks Alts:";
+
+            public static LocalizedString notaskalt = @"Currently no task alternative in this quest";
+
+            public static LocalizedString newalt = @"New";
+
+            public static LocalizedString removealt = @"Remove";
+
+            public static LocalizedString name = @"Name:";
+
+            public static LocalizedString desc = @"Desc:";
+
+            public static LocalizedString altedtasks = @"Alternative Tasks";
+
+            public static LocalizedString task = @"Task or TaskLink";
+
+            public static LocalizedString noavailabletask = @"No task/tasklink available for a TaskAlternative";
+
+            public static LocalizedString addtask = @"Add";
+
+            public static LocalizedString removetask = @"Remove";
+
+            public static LocalizedString title = @"Edit Quest TaskAlternatives";
 
             public static Dictionary<int, LocalizedString> descriptions = new Dictionary<int, LocalizedString>
             {

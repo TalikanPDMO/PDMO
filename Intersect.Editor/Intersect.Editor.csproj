@@ -130,6 +130,18 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_UseSpell.Designer.cs">
       <DependentUpon>EventCommand_UseSpell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Quest\Quest_TaskAlternativesEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Quest\Quest_TaskAlternativesEditor.Designer.cs">
+      <DependentUpon>Quest_TaskAlternativesEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\Quest\Quest_TaskLinksEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Quest\Quest_TaskLinksEditor.Designer.cs">
+      <DependentUpon>Quest_TaskLinksEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmUpdate.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -670,14 +682,29 @@
     <EmbeddedResource Include="Forms\DockingElements\frmMapProperties.resx">
       <DependentUpon>frmMapProperties.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_CompleteQuestTask.resx">
+      <DependentUpon>EventCommand_CompleteQuestTask.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ConditionalBranch.resx">
       <DependentUpon>EventCommand_ConditionalBranch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_EndQuest.resx">
+      <DependentUpon>EventCommand_EndQuest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_StartQuest.resx">
+      <DependentUpon>EventCommand_StartQuest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_UseSpell.resx">
       <DependentUpon>EventCommand_UseSpell.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_Variable.resx">
       <DependentUpon>EventCommand_Variable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Quest\Quest_TaskAlternativesEditor.resx">
+      <DependentUpon>Quest_TaskAlternativesEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Quest\Quest_TaskLinksEditor.resx">
+      <DependentUpon>Quest_TaskLinksEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Shaders\radialgradient_editor.xnb" />
   </ItemGroup>
