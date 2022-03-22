@@ -1106,4 +1106,17 @@ namespace Intersect.GameObjects.Events.Commands
         public override EventCommandType Type { get; } = EventCommandType.ResetStatPointAllocations;
 
     }
+
+    public class ShowPopupCommand : EventCommand
+    {
+
+        public override EventCommandType Type { get; } = EventCommandType.ShowPopup;
+
+        public string Text { get; set; } = "";
+
+        public string Title { get; set; } = "";
+
+        public int Duration { get; set; } = -1;
+
+    }
 }

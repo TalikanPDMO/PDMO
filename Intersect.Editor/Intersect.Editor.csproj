@@ -124,6 +124,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_CreateGuild.Designer.cs">
       <DependentUpon>EventCommand_CreateGuild.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ShowPopup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ShowPopup.Designer.cs">
+      <DependentUpon>EventCommand_ShowPopup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_UseSpell.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -2284,6 +2284,19 @@ namespace Intersect.Server.Entities.Events
             }
         }
 
+        //Show Popup Command
+        private static void ProcessCommand(
+            ShowPopupCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            // TODO Delete this SendChatMsg and Setup the behavior of the popup
+            PacketSender.SendChatMsg(player, "Show Popup command", ChatMessageType.Local, Color.White);
+        }
+
     }
 
 }

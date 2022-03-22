@@ -1943,6 +1943,7 @@ Tick timer saved in server config.json.";
                 {"showtext", @"Show Text"},
                 {"spawnnpc", @"Spawn NPC"},
                 {"usespell",@"Use Spell" },
+                {"showpopup",@"Show Popup" },
                 {"specialeffects", @"Special Effects"},
                 {"startcommonevent", @"Start Common Event"},
                 {"startquest", @"Start Quest"},
