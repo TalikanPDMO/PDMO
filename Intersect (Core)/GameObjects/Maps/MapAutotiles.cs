@@ -102,6 +102,8 @@ namespace Intersect.GameObjects.Maps
 
         public Dictionary<string, QuarterTileCls[,]> Layers;
 
+        public bool DevModeDisplay = false;
+
         public MapAutotiles(MapBase map)
         {
             mMyMap = map;
@@ -110,6 +112,284 @@ namespace Intersect.GameObjects.Maps
                 InitVxAutotileTemplate();
                 InitXpAutotileTemplate();
             }
+        }
+
+        public void SwitchDevMode()
+        {
+            if (DevModeDisplay)
+            {
+                // Disable dev mode
+                InitVxAutotileTemplate();
+                InitXpAutotileTemplate();
+                DevModeDisplay = false;
+            }
+            else
+            {
+                // Enable dev mode
+                InitVxAutotileTemplateDev();
+                InitXpAutotileTemplateDev();
+                DevModeDisplay = true;
+            }
+        }
+        private void InitVxAutotileTemplateDev()
+        {
+            // Inner tiles (Top right subtile region)
+            // NW - a
+            AutoInner[1].X = (Int16)Options.DevTileWidth;
+            AutoInner[1].Y = 0;
+
+            // NE - b
+            AutoInner[2].X = (Int16)(2 * Options.DevTileWidth - Options.DevTileWidth / 2);
+            AutoInner[2].Y = 0;
+
+            // SW - c
+            AutoInner[3].X = (Int16)Options.DevTileWidth;
+            AutoInner[3].Y = (Int16)(Options.DevTileHeight / 2);
+
+            // SE - d
+            AutoInner[4].X = (Int16)(2 * Options.DevTileWidth - Options.DevTileWidth / 2);
+            AutoInner[4].Y = (Int16)(Options.DevTileHeight / 2);
+
+            // Outer Tiles - NW (bottom subtile region)
+            // NW - e
+            AutoNw[1].X = 0;
+            AutoNw[1].Y = (Int16)Options.DevTileHeight;
+
+            // NE - f
+            AutoNw[2].X = (Int16)(Options.DevTileWidth / 2);
+            AutoNw[2].Y = (Int16)Options.DevTileHeight;
+
+            // SW - g
+            AutoNw[3].X = 0;
+            AutoNw[3].Y = (Int16)(2 * Options.DevTileHeight - Options.DevTileHeight / 2);
+
+            // SE - h
+            AutoNw[4].X = (Int16)(Options.DevTileWidth / 2);
+            AutoNw[4].Y = (Int16)(2 * Options.DevTileHeight - Options.DevTileHeight / 2);
+
+            // Outer Tiles - NE (bottom subtile region)
+            // NW - i
+            AutoNe[1].X = (Int16)Options.DevTileWidth;
+            AutoNe[1].Y = (Int16)Options.DevTileHeight;
+
+            // NE - g
+            AutoNe[2].X = (Int16)(2 * Options.DevTileWidth - Options.DevTileWidth / 2);
+            AutoNe[2].Y = (Int16)Options.DevTileHeight;
+
+            // SW - k
+            AutoNe[3].X = (Int16)Options.DevTileWidth;
+            AutoNe[3].Y = (Int16)(2 * Options.DevTileHeight - Options.DevTileHeight / 2);
+
+            // SE - l
+            AutoNe[4].X = (Int16)(2 * Options.DevTileWidth - Options.DevTileWidth / 2);
+            AutoNe[4].Y = (Int16)(2 * Options.DevTileHeight - Options.DevTileHeight / 2);
+
+            // Outer Tiles - SW (bottom subtile region)
+            // NW - m
+            AutoSw[1].X = 0;
+            AutoSw[1].Y = (Int16)(2 * Options.DevTileHeight);
+
+            // NE - n
+            AutoSw[2].X = (Int16)(Options.DevTileWidth / 2);
+            AutoSw[2].Y = (Int16)(2 * Options.DevTileHeight);
+
+            // SW - o
+            AutoSw[3].X = 0;
+            AutoSw[3].Y = (Int16)(2 * Options.DevTileHeight + Options.DevTileHeight / 2);
+
+            // SE - p
+            AutoSw[4].X = (Int16)(Options.DevTileWidth / 2);
+            AutoSw[4].Y = (Int16)(2 * Options.DevTileHeight + Options.DevTileHeight / 2);
+
+            // Outer Tiles - SE (bottom subtile region)
+            // NW - q
+            AutoSe[1].X = (Int16)Options.DevTileWidth;
+            AutoSe[1].Y = (Int16)(2 * Options.DevTileHeight);
+
+            // NE - r
+            AutoSe[2].X = (Int16)(2 * Options.DevTileWidth - Options.DevTileWidth / 2);
+            AutoSe[2].Y = (Int16)(2 * Options.DevTileHeight);
+
+            // SW - s
+            AutoSe[3].X = (Int16)Options.DevTileWidth;
+            AutoSe[3].Y = (Int16)(2 * Options.DevTileHeight + Options.DevTileHeight / 2);
+
+            // SE - t
+            AutoSe[4].X = (Int16)(2 * Options.DevTileWidth - Options.DevTileWidth / 2);
+            AutoSe[4].Y = (Int16)(2 * Options.DevTileHeight + Options.DevTileHeight / 2);
+        }
+
+        private void InitXpAutotileTemplateDev()
+        {
+            // Inner tiles (Top right subtile region)
+            // NW - a
+            AutoInnerXp[1].X = (Int16)(Options.DevTileWidth * 2);
+            AutoInnerXp[1].Y = 0;
+
+            // NE - b
+            AutoInnerXp[2].X = (Int16)(2 * Options.DevTileWidth + Options.DevTileWidth / 2);
+            AutoInnerXp[2].Y = 0;
+
+            // SW - c
+            AutoInnerXp[3].X = (Int16)(Options.DevTileWidth * 2);
+            AutoInnerXp[3].Y = (Int16)(Options.DevTileHeight / 2);
+
+            // SE - d
+            AutoInnerXp[4].X = (Int16)(2 * Options.DevTileWidth + Options.DevTileWidth / 2);
+            AutoInnerXp[4].Y = (Int16)(Options.DevTileHeight / 2);
+
+            // Outer Tiles - NW (bottom subtile region)
+            // NW - e
+            AutoNwXp[1].X = 0;
+            AutoNwXp[1].Y = (Int16)Options.DevTileHeight;
+
+            // NE - f
+            AutoNwXp[2].X = (Int16)(Options.DevTileWidth / 2);
+            AutoNwXp[2].Y = (Int16)Options.DevTileHeight;
+
+            // SW - g
+            AutoNwXp[3].X = 0;
+            AutoNwXp[3].Y = (Int16)(Options.DevTileHeight + Options.DevTileHeight / 2);
+
+            // SE - h
+            AutoNwXp[4].X = (Int16)(Options.DevTileWidth / 2);
+            AutoNwXp[4].Y = (Int16)(Options.DevTileHeight + Options.DevTileHeight / 2);
+
+            // Outer Tiles - NE (bottom subtile region)
+            // NW - i
+            AutoNeXp[1].X = (Int16)(Options.DevTileWidth * 2);
+            AutoNeXp[1].Y = (Int16)Options.DevTileHeight;
+
+            // NE - g
+            AutoNeXp[2].X = (Int16)(2 * Options.DevTileWidth + Options.DevTileWidth / 2);
+            AutoNeXp[2].Y = (Int16)Options.DevTileHeight;
+
+            // SW - k
+            AutoNeXp[3].X = (Int16)(Options.DevTileWidth * 2);
+            AutoNeXp[3].Y = (Int16)(Options.DevTileHeight + Options.DevTileHeight / 2);
+
+            // SE - l
+            AutoNeXp[4].X = (Int16)(2 * Options.DevTileWidth + Options.DevTileWidth / 2);
+            AutoNeXp[4].Y = (Int16)(Options.DevTileHeight + Options.DevTileHeight / 2);
+
+            // Outer Tiles - SW (bottom subtile region)
+            // NW - m
+            AutoSwXp[1].X = 0;
+            AutoSwXp[1].Y = (Int16)(3 * Options.DevTileHeight);
+
+            // NE - n
+            AutoSwXp[2].X = (Int16)(Options.DevTileWidth / 2);
+            AutoSwXp[2].Y = (Int16)(3 * Options.DevTileHeight);
+
+            // SW - o
+            AutoSwXp[3].X = 0;
+            AutoSwXp[3].Y = (Int16)(3 * Options.DevTileHeight + Options.DevTileHeight / 2);
+
+            // SE - p
+            AutoSwXp[4].X = (Int16)(Options.DevTileWidth / 2);
+            AutoSwXp[4].Y = (Int16)(3 * Options.DevTileHeight + Options.DevTileHeight / 2);
+
+            // Outer Tiles - SE (bottom subtile region)
+            // NW - q
+            AutoSeXp[1].X = (Int16)(Options.DevTileWidth * 2);
+            AutoSeXp[1].Y = (Int16)(3 * Options.DevTileHeight);
+
+            // NE - r
+            AutoSeXp[2].X = (Int16)(2 * Options.DevTileWidth + Options.DevTileWidth / 2);
+            AutoSeXp[2].Y = (Int16)(3 * Options.DevTileHeight);
+
+            // SW - s
+            AutoSeXp[3].X = (Int16)(Options.DevTileWidth * 2);
+            AutoSeXp[3].Y = (Int16)(3 * Options.DevTileHeight + Options.DevTileHeight / 2);
+
+            // SE - t
+            AutoSeXp[4].X = (Int16)(2 * Options.DevTileWidth + Options.DevTileWidth / 2);
+            AutoSeXp[4].Y = (Int16)(3 * Options.DevTileHeight + Options.DevTileHeight / 2);
+
+            // Center Tiles - C
+            // NW - A
+            AutoCxp[1].X = (Int16)Options.DevTileWidth;
+            AutoCxp[1].Y = (Int16)(Options.DevTileHeight * 2);
+
+            // NE - B
+            AutoCxp[2].X = (Int16)(Options.DevTileWidth + Options.DevTileWidth / 2);
+            AutoCxp[2].Y = (Int16)(Options.DevTileHeight * 2);
+
+            // SW - C
+            AutoCxp[3].X = (Int16)Options.DevTileWidth;
+            AutoCxp[3].Y = (Int16)(Options.DevTileHeight * 2 + Options.DevTileHeight / 2);
+
+            // SE - D
+            AutoCxp[4].X = (Int16)(Options.DevTileWidth + Options.DevTileWidth / 2);
+            AutoCxp[4].Y = (Int16)(Options.DevTileHeight * 2 + Options.DevTileHeight / 2);
+
+            // Outer Tiles - N (North Horizontal region)
+            // NW - E
+            AutoNxp[1].X = (Int16)Options.DevTileWidth;
+            AutoNxp[1].Y = (Int16)Options.DevTileHeight;
+
+            // NE - F
+            AutoNxp[2].X = (Int16)(Options.DevTileWidth + Options.DevTileWidth / 2);
+            AutoNxp[2].Y = (Int16)Options.DevTileHeight;
+
+            // SW - G
+            AutoNxp[3].X = (Int16)Options.DevTileWidth;
+            AutoNxp[3].Y = (Int16)(Options.DevTileHeight + Options.DevTileHeight / 2);
+
+            // SE - H
+            AutoNxp[4].X = (Int16)(Options.DevTileWidth + Options.DevTileWidth / 2);
+            AutoNxp[4].Y = (Int16)(Options.DevTileHeight + Options.DevTileHeight / 2);
+
+            // Outer Tiles - E (East Vertical region)
+            // NW - I
+            AutoExp[1].X = (Int16)(Options.DevTileWidth * 2);
+            AutoExp[1].Y = (Int16)(Options.DevTileHeight * 2);
+
+            // NE - J
+            AutoExp[2].X = (Int16)(Options.DevTileWidth * 2 + Options.DevTileWidth / 2);
+            AutoExp[2].Y = (Int16)(Options.DevTileHeight * 2);
+
+            // SW - K
+            AutoExp[3].X = (Int16)(Options.DevTileWidth * 2);
+            AutoExp[3].Y = (Int16)(Options.DevTileHeight * 2 + Options.DevTileHeight / 2);
+
+            // SE - L
+            AutoExp[4].X = (Int16)(Options.DevTileWidth * 2 + Options.DevTileWidth / 2);
+            AutoExp[4].Y = (Int16)(Options.DevTileHeight * 2 + Options.DevTileHeight / 2);
+
+            // Outer Tiles - W (West Vertical region)
+            // NW - M
+            AutoWxp[1].X = 0;
+            AutoWxp[1].Y = (Int16)(Options.DevTileHeight * 2);
+
+            // NE - N
+            AutoWxp[2].X = (Int16)(Options.DevTileWidth / 2);
+            AutoWxp[2].Y = (Int16)(Options.DevTileHeight * 2);
+
+            // SW - O
+            AutoWxp[3].X = 0;
+            AutoWxp[3].Y = (Int16)(Options.DevTileHeight * 2 + Options.DevTileHeight / 2);
+
+            // SE - P
+            AutoWxp[4].X = (Int16)(Options.DevTileWidth / 2);
+            AutoWxp[4].Y = (Int16)(Options.DevTileHeight * 2 + Options.DevTileHeight / 2);
+
+            // Outer Tiles - S (South Horizontal region)
+            // NW - Q
+            AutoSxp[1].X = (Int16)Options.DevTileWidth;
+            AutoSxp[1].Y = (Int16)(Options.DevTileHeight * 3);
+
+            // NE - R
+            AutoSxp[2].X = (Int16)(Options.DevTileWidth + Options.DevTileWidth / 2);
+            AutoSxp[2].Y = (Int16)(Options.DevTileHeight * 3);
+
+            // SW - S
+            AutoSxp[3].X = (Int16)Options.DevTileWidth;
+            AutoSxp[3].Y = (Int16)(Options.DevTileHeight * 3 + Options.DevTileHeight / 2);
+
+            // SE - T
+            AutoSxp[4].X = (Int16)(Options.DevTileWidth + Options.DevTileWidth / 2);
+            AutoSxp[4].Y = (Int16)(Options.DevTileHeight * 3 + Options.DevTileHeight / 2);
         }
 
         private void InitVxAutotileTemplate()
@@ -585,12 +865,25 @@ namespace Intersect.GameObjects.Maps
 
                 // cache tileset positioning
                 int quarterNum;
-                for (quarterNum = 1; quarterNum < 5; quarterNum++)
+                if (DevModeDisplay)
                 {
-                    autotile.QuarterTile[quarterNum].X = (short) (tile.X * Options.TileWidth + autotile.QuarterTile[quarterNum].X);
+                    for (quarterNum = 1; quarterNum < 5; quarterNum++)
+                    {
+                        autotile.QuarterTile[quarterNum].X = (short)(tile.X * Options.DevTileWidth + autotile.QuarterTile[quarterNum].X);
 
-                    autotile.QuarterTile[quarterNum].Y = (short) (tile.Y * Options.TileHeight + autotile.QuarterTile[quarterNum].Y);
+                        autotile.QuarterTile[quarterNum].Y = (short)(tile.Y * Options.DevTileHeight + autotile.QuarterTile[quarterNum].Y);
+                    }
                 }
+                else
+                {
+                    for (quarterNum = 1; quarterNum < 5; quarterNum++)
+                    {
+                        autotile.QuarterTile[quarterNum].X = (short)(tile.X * Options.TileWidth + autotile.QuarterTile[quarterNum].X);
+
+                        autotile.QuarterTile[quarterNum].Y = (short)(tile.Y * Options.TileHeight + autotile.QuarterTile[quarterNum].Y);
+                    }
+                }
+                
             }
         }
 
