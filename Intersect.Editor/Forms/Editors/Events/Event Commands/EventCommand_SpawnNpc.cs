@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 
 using Intersect.Editor.Forms.Helpers;
+using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
@@ -237,8 +238,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             if (e.X >= 0 && e.Y >= 0 && e.X < pnlSpawnLoc.Width && e.Y < pnlSpawnLoc.Height)
             {
-                mSpawnX = (int) Math.Floor((double) e.X / Options.TileWidth) - 2;
-                mSpawnY = (int) Math.Floor((double) e.Y / Options.TileHeight) - 2;
+                mSpawnX = (int) Math.Floor((double) e.X / Globals.CurrentTileWidth) - 2;
+                mSpawnY = (int) Math.Floor((double) e.Y / Globals.CurrentTileHeight) - 2;
                 UpdateSpawnPreview();
             }
         }

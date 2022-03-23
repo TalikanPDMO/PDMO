@@ -45,6 +45,7 @@ namespace Intersect.Editor.Forms
             this.lblPassword = new System.Windows.Forms.Label();
             this.lblGettingStarted = new System.Windows.Forms.Label();
             this.chkRemember = new DarkUI.Controls.DarkCheckBox();
+            this.chkDevMode = new DarkUI.Controls.DarkCheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -159,12 +160,24 @@ namespace Intersect.Editor.Forms
             this.chkRemember.TabIndex = 3;
             this.chkRemember.Text = "Remember Me";
             // 
+            // chkDevMode
+            // 
+            this.chkDevMode.AutoSize = true;
+            this.chkDevMode.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkDevMode.ForeColor = System.Drawing.Color.White;
+            this.chkDevMode.Location = new System.Drawing.Point(223, 286);
+            this.chkDevMode.Name = "chkDevMode";
+            this.chkDevMode.Size = new System.Drawing.Size(164, 17);
+            this.chkDevMode.TabIndex = 9;
+            this.chkDevMode.Text = "Log in Dev mode editing";
+            // 
             // FrmLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.ClientSize = new System.Drawing.Size(628, 338);
+            this.Controls.Add(this.chkDevMode);
             this.Controls.Add(this.chkRemember);
             this.Controls.Add(this.lblGettingStarted);
             this.Controls.Add(this.lblPassword);
@@ -201,5 +214,6 @@ namespace Intersect.Editor.Forms
         private Label lblGettingStarted;
         private DarkCheckBox chkRemember;
         public Label lblStatus;
+        private DarkCheckBox chkDevMode;
     }
 }

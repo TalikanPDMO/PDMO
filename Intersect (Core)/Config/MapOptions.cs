@@ -18,6 +18,10 @@ namespace Intersect.Config
 
         public int TileWidth = 32;
 
+        public int DevTileHeight = 32;
+
+        public int DevTileWidth = 32;
+
         public int Width = 32;
 
         public bool ZDimensionVisible;

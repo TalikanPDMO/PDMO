@@ -28,9 +28,10 @@ namespace Intersect.Editor.Maps
 
         public MapInstance(Guid id) : base(id)
         {
+            // TODO something here ?
             lock (MapLock)
             {
-                Autotiles = new MapAutotiles(this);
+                Autotiles = new MapAutotiles(this, Globals.DevMode);
             }
         }
 
@@ -38,7 +39,7 @@ namespace Intersect.Editor.Maps
         {
             lock (MapLock)
             {
-                Autotiles = new MapAutotiles(this);
+                Autotiles = new MapAutotiles(this, Globals.DevMode);
                 if (typeof(MapInstance) == mapStruct.GetType())
                 {
                     MapGridX = ((MapInstance) mapStruct).MapGridX;
@@ -73,7 +74,7 @@ namespace Intersect.Editor.Maps
                     Right = right;
                 }
 
-                Autotiles = new MapAutotiles(this);
+                Autotiles = new MapAutotiles(this, Globals.DevMode);
 
                 //Initialize Local Events
                 if (clearEvents)
@@ -273,6 +274,7 @@ namespace Intersect.Editor.Maps
 
         public void InitAutotiles()
         {
+            // TODO Un truc avec 32/64
             lock (MapLock)
             {
                 Autotiles.InitAutotiles(GenerateAutotileGrid());

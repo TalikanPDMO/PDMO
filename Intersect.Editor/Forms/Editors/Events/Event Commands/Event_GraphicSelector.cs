@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows.Forms;
 
 using Intersect.Editor.Content;
+using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.Enums;
 using Intersect.GameObjects;
@@ -227,8 +228,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     graphics.DrawRectangle(
                         new Pen(System.Drawing.Color.White, 2f),
                         new Rectangle(
-                            selX * Options.TileWidth, selY * Options.TileHeight,
-                            Options.TileWidth + selW * Options.TileWidth, Options.TileHeight + selH * Options.TileHeight
+                            selX * Globals.CurrentTileWidth, selY * Globals.CurrentTileHeight,
+                            Globals.CurrentTileWidth + selW * Globals.CurrentTileWidth, Globals.CurrentTileHeight + selH * Globals.CurrentTileHeight
                         )
                     );
                 }
@@ -272,8 +273,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             else
             {
                 mMouseDown = true;
-                mTmpGraphic.X = (int) Math.Floor((double) e.X / Options.TileWidth);
-                mTmpGraphic.Y = (int) Math.Floor((double) e.Y / Options.TileHeight);
+                mTmpGraphic.X = (int) Math.Floor((double) e.X / Globals.CurrentTileWidth);
+                mTmpGraphic.Y = (int) Math.Floor((double) e.Y / Globals.CurrentTileHeight);
             }
 
             mTmpGraphic.Width = 0;
@@ -341,8 +342,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
             if (mMouseDown)
             {
-                var tmpX = (int) Math.Floor((double) e.X / Options.TileWidth);
-                var tmpY = (int) Math.Floor((double) e.Y / Options.TileHeight);
+                var tmpX = (int) Math.Floor((double) e.X / Globals.CurrentTileWidth);
+                var tmpY = (int) Math.Floor((double) e.Y / Globals.CurrentTileHeight);
                 mTmpGraphic.Width = tmpX - mTmpGraphic.X;
                 mTmpGraphic.Height = tmpY - mTmpGraphic.Y;
             }

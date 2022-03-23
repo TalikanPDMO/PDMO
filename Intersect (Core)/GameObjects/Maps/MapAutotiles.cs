@@ -102,35 +102,27 @@ namespace Intersect.GameObjects.Maps
 
         public Dictionary<string, QuarterTileCls[,]> Layers;
 
-        public bool DevModeDisplay = false;
+        public bool DevModeDisplay;
 
-        public MapAutotiles(MapBase map)
+        public MapAutotiles(MapBase map, bool devMode = false)
         {
             mMyMap = map;
+            DevModeDisplay = devMode;
             if (!sLoadedTemplates)
             {
-                InitVxAutotileTemplate();
-                InitXpAutotileTemplate();
+                if (DevModeDisplay)
+                {
+                    InitVxAutotileTemplateDev();
+                    InitXpAutotileTemplateDev();
+                }
+                else
+                {
+                    InitVxAutotileTemplate();
+                    InitXpAutotileTemplate();
+                }
             }
         }
 
-        public void SwitchDevMode()
-        {
-            if (DevModeDisplay)
-            {
-                // Disable dev mode
-                InitVxAutotileTemplate();
-                InitXpAutotileTemplate();
-                DevModeDisplay = false;
-            }
-            else
-            {
-                // Enable dev mode
-                InitVxAutotileTemplateDev();
-                InitXpAutotileTemplateDev();
-                DevModeDisplay = true;
-            }
-        }
         private void InitVxAutotileTemplateDev()
         {
             // Inner tiles (Top right subtile region)

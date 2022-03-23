@@ -93,11 +93,11 @@ namespace Intersect.Editor.Entities
                     }
 
                     Core.Graphics.AddLight(
-                        Options.MapWidth * Options.TileWidth -
+                        Options.MapWidth * Globals.CurrentTileWidth -
                         Core.Graphics.CurrentView.Left +
                         (int) mRenderX +
                         MyBase.Lower.Lights[mLowerFrame].OffsetX,
-                        Options.MapHeight * Options.TileHeight -
+                        Options.MapHeight * Globals.CurrentTileHeight -
                         Core.Graphics.CurrentView.Top +
                         (int) mRenderY +
                         MyBase.Lower.Lights[mLowerFrame].OffsetY, MyBase.Lower.Lights[mLowerFrame]
@@ -136,11 +136,11 @@ namespace Intersect.Editor.Entities
                     }
 
                     Core.Graphics.AddLight(
-                        Options.MapWidth * Options.TileWidth -
+                        Options.MapWidth * Globals.CurrentTileWidth -
                         Core.Graphics.CurrentView.Left +
                         (int) mRenderX +
                         MyBase.Upper.Lights[mUpperFrame].OffsetX,
-                        Options.MapHeight * Options.TileHeight -
+                        Options.MapHeight * Globals.CurrentTileHeight -
                         Core.Graphics.CurrentView.Top +
                         (int) mRenderY +
                         MyBase.Upper.Lights[mUpperFrame].OffsetY, MyBase.Upper.Lights[mUpperFrame]
