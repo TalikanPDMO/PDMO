@@ -413,7 +413,7 @@ namespace Intersect.Editor.Forms.Editors
             gfx.FillRectangle(Brushes.Black, new Rectangle(0, 0, picNpc.Width, picNpc.Height));
             if (cmbSprite.SelectedIndex > 0)
             {
-                var img = Image.FromFile("resources/entities/" + cmbSprite.Text);
+                var img = Image.FromFile(GameContentManager.GraphResFolder + "/entities/" + cmbSprite.Text);
                 var imgAttributes = new ImageAttributes();
 
                 // Microsoft, what the heck is this crap?

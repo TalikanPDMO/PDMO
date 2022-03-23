@@ -1063,7 +1063,7 @@ namespace Intersect.Editor.Forms.Editors
             gfx.FillRectangle(Brushes.Black, new Rectangle(0, 0, picItem.Width, picItem.Height));
             if (cmbPic.SelectedIndex > 0)
             {
-                var img = Image.FromFile("resources/items/" + cmbPic.Text);
+                var img = Image.FromFile(GameContentManager.GraphResFolder + "/items/" + cmbPic.Text);
                 var imgAttributes = new ImageAttributes();
 
                 // Microsoft, what the heck is this crap?
@@ -1123,7 +1123,7 @@ namespace Intersect.Editor.Forms.Editors
             gfx.FillRectangle(Brushes.Black, new Rectangle(0, 0, picPaperdoll.Width, picPaperdoll.Height));
             if (cmbPaperdoll.SelectedIndex > 0)
             {
-                var img = Image.FromFile("resources/paperdolls/" + cmbPaperdoll.Text);
+                var img = Image.FromFile(GameContentManager.GraphResFolder + "/paperdolls/" + cmbPaperdoll.Text);
                 var imgAttributes = new ImageAttributes();
 
                 // Microsoft, what the heck is this crap?

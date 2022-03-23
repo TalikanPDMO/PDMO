@@ -3395,6 +3395,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString version = @"Editor v{00}";
 
+            public static LocalizedString devmode = @"Log in Dev mode editing";
+
         }
 
         public struct MainForm

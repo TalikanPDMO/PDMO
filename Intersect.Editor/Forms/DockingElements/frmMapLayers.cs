@@ -130,8 +130,8 @@ namespace Intersect.Editor.Forms.DockingElements
             }
 
             mTMouseDown = true;
-            Globals.CurSelX = (int) Math.Floor((double) e.X / Options.TileWidth);
-            Globals.CurSelY = (int) Math.Floor((double) e.Y / Options.TileHeight);
+            Globals.CurSelX = (int) Math.Floor((double) e.X / Globals.CurrentTileWidth);
+            Globals.CurSelY = (int) Math.Floor((double) e.Y / Globals.CurrentTileHeight);
             Globals.CurSelW = 0;
             Globals.CurSelH = 0;
             if (Globals.CurSelX < 0)
@@ -189,8 +189,8 @@ namespace Intersect.Editor.Forms.DockingElements
 
             if (mTMouseDown && Globals.Autotilemode == 0)
             {
-                var tmpX = (int) Math.Floor((double) e.X / Options.TileWidth);
-                var tmpY = (int) Math.Floor((double) e.Y / Options.TileHeight);
+                var tmpX = (int) Math.Floor((double) e.X / Globals.CurrentTileWidth);
+                var tmpY = (int) Math.Floor((double) e.Y / Globals.CurrentTileHeight);
                 Globals.CurSelW = tmpX - Globals.CurSelX;
                 Globals.CurSelH = tmpY - Globals.CurSelY;
             }
@@ -275,7 +275,7 @@ namespace Intersect.Editor.Forms.DockingElements
             tilesetList.Sort(new AlphanumComparatorFast());
             foreach (var filename in tilesetList)
             {
-                if (File.Exists("resources/tilesets/" + filename))
+                if (File.Exists(GameContentManager.GraphResFolder + "/tilesets/" + filename))
                 {
                     Globals.MapLayersWindow.cmbTilesets.Items.Add(filename);
                 }
@@ -317,7 +317,7 @@ namespace Intersect.Editor.Forms.DockingElements
 
             if (tSet != null)
             {
-                if (File.Exists("resources/tilesets/" + tSet.Name))
+                if (File.Exists(GameContentManager.GraphResFolder + "/tilesets/" + tSet.Name))
                 {
                     picTileset.Show();
                     Globals.CurrentTileset = tSet;

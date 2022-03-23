@@ -647,9 +647,9 @@ namespace Intersect.Editor.Forms.Editors
             gfx.FillRectangle(Brushes.Black, new Rectangle(0, 0, picSprite.Width, picSprite.Height));
             if (cmbSprite.SelectedIndex > 0)
             {
-                if (File.Exists("resources/entities/" + cmbSprite.Text))
+                if (File.Exists(GameContentManager.GraphResFolder + "/entities/" + cmbSprite.Text))
                 {
-                    var img = Image.FromFile("resources/entities/" + cmbSprite.Text);
+                    var img = Image.FromFile(GameContentManager.GraphResFolder + "/entities/" + cmbSprite.Text);
                     gfx.DrawImage(
                         img, new Rectangle(0, 0, img.Width / Options.Instance.Sprites.NormalFrames, img.Height / Options.Instance.Sprites.Directions),
                         new Rectangle(0, 0, img.Width / Options.Instance.Sprites.NormalFrames, img.Height / Options.Instance.Sprites.Directions), GraphicsUnit.Pixel
@@ -667,9 +667,9 @@ namespace Intersect.Editor.Forms.Editors
             gfx.FillRectangle(Brushes.Black, new Rectangle(0, 0, picSprite.Width, picSprite.Height));
             if (cmbFace.SelectedIndex > 0)
             {
-                if (File.Exists("resources/faces/" + cmbFace.Text))
+                if (File.Exists(GameContentManager.GraphResFolder + "/faces/" + cmbFace.Text))
                 {
-                    var img = Image.FromFile("resources/faces/" + cmbFace.Text);
+                    var img = Image.FromFile(GameContentManager.GraphResFolder + "/faces/" + cmbFace.Text);
                     gfx.DrawImage(
                         img, new Rectangle(0, 0, img.Width, img.Height), new Rectangle(0, 0, img.Width, img.Height),
                         GraphicsUnit.Pixel

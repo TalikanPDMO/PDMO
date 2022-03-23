@@ -50,9 +50,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             var destBitmap = new Bitmap(pnlPreview.Width, pnlPreview.Height);
             var g = Graphics.FromImage(destBitmap);
             g.Clear(System.Drawing.Color.Black);
-            if (File.Exists("resources/faces/" + cmbFace.Text))
+            if (File.Exists(GameContentManager.GraphResFolder + "/faces/" + cmbFace.Text))
             {
-                var sourceBitmap = new Bitmap("resources/faces/" + cmbFace.Text);
+                var sourceBitmap = new Bitmap(GameContentManager.GraphResFolder + "/faces/" + cmbFace.Text);
                 g.DrawImage(
                     sourceBitmap,
                     new Rectangle(

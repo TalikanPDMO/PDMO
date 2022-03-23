@@ -301,7 +301,7 @@ namespace Intersect.Editor.Forms.Editors
                 picSpell.BackgroundImage = null;
                 if (cmbSprite.SelectedIndex > 0)
                 {
-                    picSpell.BackgroundImage = Image.FromFile("resources/spells/" + cmbSprite.Text);
+                    picSpell.BackgroundImage = Image.FromFile(GameContentManager.GraphResFolder + "/spells/" + cmbSprite.Text);
                 }
 
                 nudHPCost.Value = mEditorItem.VitalCost[(int) Vitals.Health];
@@ -508,7 +508,7 @@ namespace Intersect.Editor.Forms.Editors
             picSpell.BackgroundImage?.Dispose();
             picSpell.BackgroundImage = null;
             picSpell.BackgroundImage = cmbSprite.SelectedIndex > 0
-                ? Image.FromFile("resources/spells/" + cmbSprite.Text)
+                ? Image.FromFile(GameContentManager.GraphResFolder + "/spells/" + cmbSprite.Text)
                 : null;
         }
 
@@ -558,7 +558,7 @@ namespace Intersect.Editor.Forms.Editors
                 {
                     var bmp = new Bitmap(picSprite.Width, picSprite.Height);
                     var g = Graphics.FromImage(bmp);
-                    var src = Image.FromFile("resources/entities/" + cmbTransform.Text);
+                    var src = Image.FromFile(GameContentManager.GraphResFolder + "/entities/" + cmbTransform.Text);
                     g.DrawImage(
                         src,
                         new Rectangle(
@@ -616,7 +616,7 @@ namespace Intersect.Editor.Forms.Editors
             {
                 var bmp = new Bitmap(picSprite.Width, picSprite.Height);
                 var g = Graphics.FromImage(bmp);
-                var src = Image.FromFile("resources/entities/" + cmbTransform.Text);
+                var src = Image.FromFile(GameContentManager.GraphResFolder + "/entities/" + cmbTransform.Text);
                 g.DrawImage(
                     src,
                     new Rectangle(

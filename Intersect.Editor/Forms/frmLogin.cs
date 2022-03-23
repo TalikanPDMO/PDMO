@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -51,7 +52,24 @@ namespace Intersect.Editor.Forms
                 mSavedPassword = Preferences.LoadPreference("Password");
                 chkRemember.Checked = true;
             }
-
+            chkDevMode.Checked = false;
+            var prefDevMode = Preferences.LoadPreference("DevMode");
+            if (prefDevMode.Length > 0)
+            {
+                try
+                {
+                    chkDevMode.Checked = Boolean.Parse(prefDevMode);
+                }
+                catch (Exception ex)
+                {
+                    chkDevMode.Checked = false;
+                }
+            }
+            if (!Directory.Exists("resources_devmode"))
+            {
+                chkDevMode.Checked = false;
+                chkDevMode.Hide();
+            }
             Database.InitMapCache();
             InitLocalization();
         }
@@ -66,6 +84,7 @@ namespace Intersect.Editor.Forms
             chkRemember.Text = Strings.Login.rememberme;
             btnLogin.Text = Strings.Login.login;
             lblStatus.Text = Strings.Login.connecting;
+            chkDevMode.Text = Strings.Login.devmode;
         }
 
         private void tmrSocket_Tick(object sender, EventArgs e)
@@ -122,6 +141,19 @@ namespace Intersect.Editor.Forms
 
             if (txtUsername.Text.Trim().Length > 0 && txtPassword.Text.Trim().Length > 0)
             {
+                Globals.DevMode = chkDevMode.Checked;
+                if (Globals.DevMode)
+                {
+                    Globals.CurrentTileHeight = Options.DevTileHeight;
+                    Globals.CurrentTileWidth = Options.DevTileWidth;
+                    GameContentManager.GraphResFolder = "resources_devmode";
+                }
+                else
+                {
+                    Globals.CurrentTileHeight = Options.TileHeight;
+                    Globals.CurrentTileWidth = Options.TileWidth;
+                    GameContentManager.GraphResFolder = "resources";
+                }
                 using (var sha = new SHA256Managed())
                 {
                     if (mSavedPassword != "")
@@ -184,6 +216,7 @@ namespace Intersect.Editor.Forms
                     Preferences.SavePreference("Username", "");
                     Preferences.SavePreference("Password", "");
                 }
+                Preferences.SavePreference("DevMode", chkDevMode.Checked.ToString());
             }
         }
 

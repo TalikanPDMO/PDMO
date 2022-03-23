@@ -10,6 +10,7 @@ using DarkUI.Forms;
 
 using Intersect.Editor.Content;
 using Intersect.Editor.Forms.Editors.Events.Event_Commands;
+using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.Editor.Maps;
 using Intersect.Editor.Networking;
@@ -195,16 +196,16 @@ namespace Intersect.Editor.Forms.Editors.Events
 
             if (CurrentPage.Graphic.Type == EventGraphicType.Sprite)
             {
-                if (File.Exists("resources/entities/" + CurrentPage.Graphic.Filename))
+                if (File.Exists(GameContentManager.GraphResFolder + "/entities/" + CurrentPage.Graphic.Filename))
                 {
-                    sourceBitmap = new Bitmap("resources/entities/" + CurrentPage.Graphic.Filename);
+                    sourceBitmap = new Bitmap(GameContentManager.GraphResFolder + "/entities/" + CurrentPage.Graphic.Filename);
                 }
             }
             else if (CurrentPage.Graphic.Type == EventGraphicType.Tileset)
             {
-                if (File.Exists("resources/tilesets/" + CurrentPage.Graphic.Filename))
+                if (File.Exists(GameContentManager.GraphResFolder + "/tilesets/" + CurrentPage.Graphic.Filename))
                 {
-                    sourceBitmap = new Bitmap("resources/tilesets/" + CurrentPage.Graphic.Filename);
+                    sourceBitmap = new Bitmap(GameContentManager.GraphResFolder + "/tilesets/" + CurrentPage.Graphic.Filename);
                 }
             }
 
@@ -232,16 +233,16 @@ namespace Intersect.Editor.Forms.Editors.Events
                         sourceBitmap,
                         new Rectangle(
                             pnlPreview.Width / 2 -
-                            (Options.TileWidth + CurrentPage.Graphic.Width * Options.TileWidth) / 2,
+                            (Globals.CurrentTileWidth + CurrentPage.Graphic.Width * Globals.CurrentTileWidth) / 2,
                             pnlPreview.Height / 2 -
-                            (Options.TileHeight + CurrentPage.Graphic.Height * Options.TileHeight) / 2,
-                            Options.TileWidth + CurrentPage.Graphic.Width * Options.TileWidth,
-                            Options.TileHeight + CurrentPage.Graphic.Height * Options.TileHeight
+                            (Globals.CurrentTileHeight + CurrentPage.Graphic.Height * Globals.CurrentTileHeight) / 2,
+                            Globals.CurrentTileWidth + CurrentPage.Graphic.Width * Globals.CurrentTileWidth,
+                            Globals.CurrentTileHeight + CurrentPage.Graphic.Height * Globals.CurrentTileHeight
                         ),
                         new Rectangle(
-                            CurrentPage.Graphic.X * Options.TileWidth, CurrentPage.Graphic.Y * Options.TileHeight,
-                            Options.TileWidth + CurrentPage.Graphic.Width * Options.TileWidth,
-                            Options.TileHeight + CurrentPage.Graphic.Height * Options.TileHeight
+                            CurrentPage.Graphic.X * Globals.CurrentTileWidth, CurrentPage.Graphic.Y * Globals.CurrentTileHeight,
+                            Globals.CurrentTileWidth + CurrentPage.Graphic.Width * Globals.CurrentTileWidth,
+                            Globals.CurrentTileHeight + CurrentPage.Graphic.Height * Globals.CurrentTileHeight
                         ), GraphicsUnit.Pixel
                     );
                 }
@@ -1885,9 +1886,9 @@ namespace Intersect.Editor.Forms.Editors.Events
                 return;
             }
 
-            if (File.Exists("resources/faces/" + cmbPreviewFace.Text))
+            if (File.Exists(GameContentManager.GraphResFolder + "/faces/" + cmbPreviewFace.Text))
             {
-                pnlFacePreview.BackgroundImage = new Bitmap("resources/faces/" + cmbPreviewFace.Text);
+                pnlFacePreview.BackgroundImage = new Bitmap(GameContentManager.GraphResFolder + "/faces/" + cmbPreviewFace.Text);
             }
         }
 

@@ -30,7 +30,7 @@ namespace Intersect.Editor.Maps
         {
             lock (MapLock)
             {
-                Autotiles = new MapAutotiles(this);
+                Autotiles = new MapAutotiles(this, Globals.DevMode);
             }
         }
 
@@ -38,7 +38,7 @@ namespace Intersect.Editor.Maps
         {
             lock (MapLock)
             {
-                Autotiles = new MapAutotiles(this);
+                Autotiles = new MapAutotiles(this, Globals.DevMode);
                 if (typeof(MapInstance) == mapStruct.GetType())
                 {
                     MapGridX = ((MapInstance) mapStruct).MapGridX;
@@ -73,7 +73,7 @@ namespace Intersect.Editor.Maps
                     Right = right;
                 }
 
-                Autotiles = new MapAutotiles(this);
+                Autotiles = new MapAutotiles(this, Globals.DevMode);
 
                 //Initialize Local Events
                 if (clearEvents)
