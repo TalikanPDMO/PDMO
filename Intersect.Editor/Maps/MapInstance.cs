@@ -28,7 +28,6 @@ namespace Intersect.Editor.Maps
 
         public MapInstance(Guid id) : base(id)
         {
-            // TODO something here ?
             lock (MapLock)
             {
                 Autotiles = new MapAutotiles(this, Globals.DevMode);
@@ -274,7 +273,6 @@ namespace Intersect.Editor.Maps
 
         public void InitAutotiles()
         {
-            // TODO Un truc avec 32/64
             lock (MapLock)
             {
                 Autotiles.InitAutotiles(GenerateAutotileGrid());

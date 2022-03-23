@@ -344,7 +344,7 @@ namespace Intersect.Editor.Forms.Editors
             {
                 mEditorItem.Initial.Graphic = cmbInitialSprite.Text;
                 var graphic = Path.Combine(
-                    "resources", mEditorItem.Initial.GraphicFromTileset ? "tilesets" : "resources",
+                    GameContentManager.GraphResFolder, mEditorItem.Initial.GraphicFromTileset ? "tilesets" : "resources",
                     cmbInitialSprite.Text
                 );
 
@@ -373,7 +373,7 @@ namespace Intersect.Editor.Forms.Editors
             {
                 mEditorItem.Exhausted.Graphic = cmbEndSprite.Text;
                 var graphic = Path.Combine(
-                    "resources", mEditorItem.Exhausted.GraphicFromTileset ? "tilesets" : "resources", cmbEndSprite.Text
+                    GameContentManager.GraphResFolder, mEditorItem.Exhausted.GraphicFromTileset ? "tilesets" : "resources", cmbEndSprite.Text
                 );
 
                 if (File.Exists(graphic))

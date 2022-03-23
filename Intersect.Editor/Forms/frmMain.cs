@@ -1421,9 +1421,9 @@ namespace Intersect.Editor.Forms
         private void UpdateTimeSimulationList()
         {
             Bitmap transtile = null;
-            if (File.Exists("resources/misc/transtile.png"))
+            if (File.Exists(GameContentManager.GraphResFolder + "/misc/transtile.png"))
             {
-                transtile = new Bitmap("resources/misc/transtile.png");
+                transtile = new Bitmap(GameContentManager.GraphResFolder + "/misc/transtile.png");
             }
 
             toolStripTimeButton.DropDownItems.Clear();

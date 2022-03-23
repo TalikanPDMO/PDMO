@@ -196,16 +196,16 @@ namespace Intersect.Editor.Forms.Editors.Events
 
             if (CurrentPage.Graphic.Type == EventGraphicType.Sprite)
             {
-                if (File.Exists("resources/entities/" + CurrentPage.Graphic.Filename))
+                if (File.Exists(GameContentManager.GraphResFolder + "/entities/" + CurrentPage.Graphic.Filename))
                 {
-                    sourceBitmap = new Bitmap("resources/entities/" + CurrentPage.Graphic.Filename);
+                    sourceBitmap = new Bitmap(GameContentManager.GraphResFolder + "/entities/" + CurrentPage.Graphic.Filename);
                 }
             }
             else if (CurrentPage.Graphic.Type == EventGraphicType.Tileset)
             {
-                if (File.Exists("resources/tilesets/" + CurrentPage.Graphic.Filename))
+                if (File.Exists(GameContentManager.GraphResFolder + "/tilesets/" + CurrentPage.Graphic.Filename))
                 {
-                    sourceBitmap = new Bitmap("resources/tilesets/" + CurrentPage.Graphic.Filename);
+                    sourceBitmap = new Bitmap(GameContentManager.GraphResFolder + "/tilesets/" + CurrentPage.Graphic.Filename);
                 }
             }
 
@@ -1886,9 +1886,9 @@ namespace Intersect.Editor.Forms.Editors.Events
                 return;
             }
 
-            if (File.Exists("resources/faces/" + cmbPreviewFace.Text))
+            if (File.Exists(GameContentManager.GraphResFolder + "/faces/" + cmbPreviewFace.Text))
             {
-                pnlFacePreview.BackgroundImage = new Bitmap("resources/faces/" + cmbPreviewFace.Text);
+                pnlFacePreview.BackgroundImage = new Bitmap(GameContentManager.GraphResFolder + "/faces/" + cmbPreviewFace.Text);
             }
         }
 

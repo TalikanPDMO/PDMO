@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 using DarkUI.Controls;
 using DarkUI.Forms;
-
+using Intersect.Editor.Content;
 using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.Editor.Networking;
@@ -86,7 +86,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private void frmProjectile_Load(object sender, EventArgs e)
         {
-            mDirectionGrid = new Bitmap("resources/misc/directions.png");
+            mDirectionGrid = new Bitmap(GameContentManager.GraphResFolder + "/misc/directions.png");
             cmbAnimation.Items.Clear();
             cmbAnimation.Items.Add(Strings.General.none);
             cmbAnimation.Items.AddRange(AnimationBase.Names);

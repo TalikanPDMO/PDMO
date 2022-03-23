@@ -275,7 +275,7 @@ namespace Intersect.Editor.Forms.DockingElements
             tilesetList.Sort(new AlphanumComparatorFast());
             foreach (var filename in tilesetList)
             {
-                if (File.Exists("resources/tilesets/" + filename))
+                if (File.Exists(GameContentManager.GraphResFolder + "/tilesets/" + filename))
                 {
                     Globals.MapLayersWindow.cmbTilesets.Items.Add(filename);
                 }
@@ -317,7 +317,7 @@ namespace Intersect.Editor.Forms.DockingElements
 
             if (tSet != null)
             {
-                if (File.Exists("resources/tilesets/" + tSet.Name))
+                if (File.Exists(GameContentManager.GraphResFolder + "/tilesets/" + tSet.Name))
                 {
                     picTileset.Show();
                     Globals.CurrentTileset = tSet;

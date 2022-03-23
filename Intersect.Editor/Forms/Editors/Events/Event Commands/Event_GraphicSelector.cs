@@ -113,7 +113,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 cmbGraphic.Items.Clear();
                 foreach (var filename in TilesetBase.Names)
                 {
-                    if (File.Exists("resources/tilesets/" + filename))
+                    if (File.Exists(GameContentManager.GraphResFolder + "/tilesets/" + filename))
                     {
                         cmbGraphic.Items.Add(filename);
                     }
@@ -156,7 +156,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 cmbGraphic.Show();
                 foreach (var filename in TilesetBase.Names)
                 {
-                    if (File.Exists("resources/tilesets/" + filename))
+                    if (File.Exists(GameContentManager.GraphResFolder + "/tilesets/" + filename))
                     {
                         cmbGraphic.Items.Add(filename);
                     }
@@ -179,13 +179,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             Bitmap destBitmap = null;
             if (cmbGraphicType.SelectedIndex == 1) //Sprite
             {
-                sourceBitmap = new Bitmap("resources/entities/" + cmbGraphic.Text);
+                sourceBitmap = new Bitmap(GameContentManager.GraphResFolder + "/entities/" + cmbGraphic.Text);
                 mSpriteWidth = sourceBitmap.Width / Options.Instance.Sprites.NormalFrames;
                 mSpriteHeight = sourceBitmap.Height / Options.Instance.Sprites.Directions;
             }
             else if (cmbGraphicType.SelectedIndex == 2) //Tileset
             {
-                sourceBitmap = new Bitmap("resources/tilesets/" + cmbGraphic.Text);
+                sourceBitmap = new Bitmap(GameContentManager.GraphResFolder + "/tilesets/" + cmbGraphic.Text);
             }
 
             if (sourceBitmap != null)
