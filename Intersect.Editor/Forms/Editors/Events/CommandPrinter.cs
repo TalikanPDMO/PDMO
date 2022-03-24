@@ -843,6 +843,18 @@ namespace Intersect.Editor.Forms.Editors.Events
             return Strings.EventCommandList.usespell.ToString(SpellBase.GetName(command.SpellId));
         }
 
+        private static string GetCommandText(ShowPopupCommand command, MapInstance map)
+        {
+            if (command.Title.Length > 0)
+            {
+                return Strings.EventCommandList.showpopup.ToString(command.Title);
+            }
+           else
+            {
+                return Strings.EventCommandList.showpopup.ToString(Truncate(command.Text, 30));
+            }
+        }
+
         private static string GetCommandText(ChangeItemsCommand command, MapInstance map)
         {
             if (command.Add)

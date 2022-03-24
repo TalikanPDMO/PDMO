@@ -385,6 +385,7 @@ namespace Intersect.Client.Core
             Globals.JoiningGame = false;
             Globals.NeedsMaps = true;
             Globals.Picture = null;
+            Globals.Popup = null;
             Interface.Interface.HideUi = false;
 
             //Dump Game Objects

@@ -1116,7 +1116,20 @@ namespace Intersect.GameObjects.Events.Commands
 
         public string Title { get; set; } = "";
 
-        public int Duration { get; set; } = -1;
+        public string BackgroundFile { get; set; } = "";
+
+        public byte Opacity { get; set; } = 255;
+
+        public int HideTime { get; set; } = 0;
+
+        public bool IncludeParty { get; set; } = false;
+
+        public bool IncludeGuild { get; set; } = false;
+
+        public bool IncludeAll { get; set; } = false;
+
+        public string FaceFile { get; set; } = "";
+
 
     }
 }

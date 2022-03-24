@@ -146,6 +146,9 @@ namespace Intersect.Client.General
         //Event Show Pictures
         public static ShowPicturePacket Picture;
 
+        //Event Show Popup
+        public static ShowPopupPacket Popup;
+
         public static List<Guid> QuestOffers = new List<Guid>();
 
         public static Random Random = new Random();

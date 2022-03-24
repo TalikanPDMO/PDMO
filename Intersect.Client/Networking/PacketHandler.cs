@@ -1515,6 +1515,13 @@ namespace Intersect.Client.Networking
             Globals.Picture = null;
         }
 
+        //ShowPopupPacket
+        public void HandlePacket(IPacketSender packetSender, ShowPopupPacket packet)
+        {
+            packet.ReceiveTime = Globals.System.GetTimeMs();
+            Globals.Popup = packet;
+        }
+
         //ShopPacket
         public void HandlePacket(IPacketSender packetSender, ShopPacket packet)
         {

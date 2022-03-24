@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 using Intersect.Editor.Content;
 using Intersect.Editor.Localization;
 using Intersect.GameObjects.Events.Commands;
+using Intersect.Utilities;
 
 namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 {
@@ -20,63 +23,77 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             InitializeComponent();
             mMyCommand = refCommand;
             mEventEditor = editor;
-            /*cmbPicture.Items.Clear();
-            cmbPicture.Items.AddRange(
+            cmbBgPicture.Items.Clear();
+            cmbBgPicture.Items.Add(Strings.General.none);
+            cmbBgPicture.Items.AddRange(
                 GameContentManager.GetSmartSortedTextureNames(GameContentManager.TextureType.Image)
             );
 
-            if (cmbPicture.Items.IndexOf(mMyCommand.File) > -1)
+            if (cmbBgPicture.Items.IndexOf(TextUtils.NullToNone(mMyCommand.BackgroundFile)) > -1)
             {
-                cmbPicture.SelectedIndex = cmbPicture.Items.IndexOf(mMyCommand.File);
+                cmbBgPicture.SelectedIndex = cmbBgPicture.Items.IndexOf(TextUtils.NullToNone(mMyCommand.BackgroundFile));
             }
             else
             {
-                if (cmbPicture.Items.Count > 0)
-                {
-                    cmbPicture.SelectedIndex = 0;
-                }
+                cmbBgPicture.SelectedIndex = 0;
             }
 
-            cmbSize.Items.Clear();
-            cmbSize.Items.Add(Strings.EventShowPicture.original);
-            cmbSize.Items.Add(Strings.EventShowPicture.fullscreen);
-            cmbSize.Items.Add(Strings.EventShowPicture.halfscreen);
-            cmbSize.Items.Add(Strings.EventShowPicture.stretchtofit);
-            if (mMyCommand.Size > -1)
+            cmbFace.Items.Clear();
+            cmbFace.Items.Add(Strings.General.none);
+            cmbFace.Items.AddRange(GameContentManager.GetSmartSortedTextureNames(GameContentManager.TextureType.Face));
+            if (cmbFace.Items.IndexOf(TextUtils.NullToNone(mMyCommand.FaceFile)) > -1)
             {
-                cmbSize.SelectedIndex = mMyCommand.Size;
+                cmbFace.SelectedIndex = cmbFace.Items.IndexOf(TextUtils.NullToNone(mMyCommand.FaceFile));
             }
             else
             {
-                cmbSize.SelectedIndex = 0;
+                cmbFace.SelectedIndex = 0;
             }
 
-            chkClick.Checked = mMyCommand.Clickable;
+            UpdateFacePreview();
+
+            chkSyncAll.Checked = mMyCommand.IncludeAll;
+            chkSyncGuild.Checked = mMyCommand.IncludeGuild;
+            chkSyncParty.Checked = mMyCommand.IncludeParty;
             nudHideTime.Value = mMyCommand.HideTime;
-            chkWaitUntilClosed.Checked = mMyCommand.WaitUntilClosed;*/
+            nudOpacity.Value = mMyCommand.Opacity;
+            txtText.Text = mMyCommand.Text;
+            txtTitle.Text = mMyCommand.Title;
+
 
             InitLocalization();
         }
 
         private void InitLocalization()
         {
-            grpShowPicture.Text = Strings.EventShowPicture.title;
-            lblPicture.Text = Strings.EventShowPicture.label;
-            btnSave.Text = Strings.EventShowPicture.okay;
-            btnCancel.Text = Strings.EventShowPicture.cancel;
-            chkClick.Text = Strings.EventShowPicture.checkbox;
-            lblSize.Text = Strings.EventShowPicture.size;
-            lblHide.Text = Strings.EventShowPicture.hide;
-            chkWaitUntilClosed.Text = Strings.EventShowPicture.wait;
+            grpShowPopup.Text = Strings.EventShowPopup.title;
+            lblBgPicture.Text = Strings.EventShowPopup.background;
+            btnSave.Text = Strings.EventShowPopup.okay;
+            btnCancel.Text = Strings.EventShowPopup.cancel;
+            chkSyncAll.Text = Strings.EventShowPopup.all;
+            chkSyncGuild.Text = Strings.EventShowPopup.guild;
+            chkSyncParty.Text = Strings.EventShowPopup.party;
+            lblHide.Text = Strings.EventShowPopup.hide;
+            lblFace.Text = Strings.EventShowPopup.face;
+            lblOpacity.Text = Strings.EventShowPopup.opacity;
+            lblSync.Text = Strings.EventShowPopup.include;
+            lblText.Text = Strings.EventShowPopup.text;
+            lblCommands.Text = Strings.EventShowPopup.commands;
+            lblPopupTitle.Text = Strings.EventShowPopup.popuptitle;
+
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            /*mMyCommand.File = cmbPicture.Text;
-            mMyCommand.Size = cmbSize.SelectedIndex;
-            mMyCommand.Clickable = chkClick.Checked;
+            mMyCommand.IncludeAll = chkSyncAll.Checked;
+            mMyCommand.IncludeGuild = chkSyncGuild.Checked;
+            mMyCommand.IncludeParty = chkSyncParty.Checked;
             mMyCommand.HideTime = (int)nudHideTime.Value;
-            mMyCommand.WaitUntilClosed = chkWaitUntilClosed.Checked;*/
+            mMyCommand.Opacity = (byte)nudOpacity.Value;
+            mMyCommand.Text = txtText.Text;
+            mMyCommand.Title = txtTitle.Text;
+            mMyCommand.BackgroundFile = TextUtils.SanitizeNone(cmbBgPicture?.Text);
+            mMyCommand.FaceFile = TextUtils.SanitizeNone(cmbFace?.Text);
             mEventEditor.FinishCommandEdit();
         }
 
@@ -85,6 +102,29 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             mEventEditor.CancelCommandEdit();
         }
 
+        private void UpdateFacePreview()
+        {
+            if (File.Exists("resources/faces/" + cmbFace.Text))
+            {
+                pnlFace.BackgroundImage = new Bitmap("resources/faces/" + cmbFace.Text);
+            }
+            else
+            {
+                pnlFace.BackgroundImage = null;
+            }
+        }
+
+        private void cmbFace_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateFacePreview();
+        }
+
+        private void lblCommands_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(
+                "http://www.ascensiongamedev.com/community/topic/749-event-text-variables/"
+            );
+        }
     }
 
 }

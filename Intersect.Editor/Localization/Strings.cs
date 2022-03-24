@@ -1319,6 +1319,39 @@ Tick timer saved in server config.json.";
 
         }
 
+        public struct EventShowPopup
+        {
+
+            public static LocalizedString cancel = @"Cancel";
+
+            public static LocalizedString background = @"Custom background:";
+
+            public static LocalizedString popuptitle = @"Title:";
+
+            public static LocalizedString text = @"Text:";
+
+            public static LocalizedString face = @"Face:";
+
+            public static LocalizedString include = @"Include Players:";
+
+            public static LocalizedString all = @"All";
+
+            public static LocalizedString party = @"Party";
+
+            public static LocalizedString guild = @"Guild";
+
+            public static LocalizedString okay = @"Ok";
+
+            public static LocalizedString title = @"Show Popup";
+
+            public static LocalizedString hide = @"Hide After (ms):";
+
+            public static LocalizedString opacity = @"Opacity (0-255):";
+
+            public static LocalizedString commands = @"Text Commands";
+
+        }
+
         public struct EventChangeGender
         {
 
@@ -1577,6 +1610,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString changespells = @"Change Player Spells [{00}]";
 
             public static LocalizedString usespell = @"Use Spell [{00}]";
+
+            public static LocalizedString showpopup = @"Show Popup [{00}]";
 
             public static LocalizedString chatboxtext = @"Show Chatbox Text [Channel: {00}, Color: {01}] - {02}";
 

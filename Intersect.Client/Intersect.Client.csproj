@@ -139,6 +139,7 @@
     <Compile Include="Interface\Game\GuildWindow.cs" />
     <Compile Include="Interface\Game\MapItem\MapItemIcon.cs" />
     <Compile Include="Interface\Game\MapItem\MapItemWindow.cs" />
+    <Compile Include="Interface\Game\PopupWindow.cs" />
     <Compile Include="Interface\MutableInterface.cs" />
     <Compile Include="Interface\Shared\Errors\ErrorWindow.cs" />
     <Compile Include="Items\Item.cs" />
@@ -285,6 +286,7 @@
     <None Include="app.config" />
     <None Include="app.manifest" />
     <None Include="assets\resources\gui\layouts\game\PlayerRunIcon.json" />
+    <Content Include="assets\resources\gui\layouts\game\PopupWindow.json" />
     <None Include="assets\resources\gui\layouts\menu\LinksArea.json" />
     <None Include="packages.config" />
     <None Include="FodyWeavers.xml">
@@ -609,6 +611,7 @@
     <Content Include="assets\resources\gui\partyleader.png" />
     <Content Include="assets\resources\gui\partyleave.png" />
     <Content Include="assets\resources\gui\playerrunicon.png" />
+    <Content Include="assets\resources\gui\popup_window.png" />
     <Content Include="assets\resources\gui\quantity.png" />
     <Content Include="assets\resources\gui\questoffer.png" />
     <Content Include="assets\resources\gui\quests.png" />

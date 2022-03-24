@@ -996,6 +996,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             treeNode43.Tag = "58";
             treeNode43.Text = "Use Spell";
             treeNode44.Name = "showpopup";
+            treeNode44.Tag = "59";
             treeNode44.Text = "Show Popup";
             treeNode45.Name = "playanimation";
             treeNode45.Tag = "29";

@@ -49,6 +49,8 @@ namespace Intersect.Client.Interface.Game
 
         private PictureWindow mPictureWindow;
 
+        private PopupWindow mPopupWindow;
+
         private QuestOfferWindow mQuestOfferWindow;
 
         private ShopWindow mShopWindow;
@@ -120,6 +122,11 @@ namespace Intersect.Client.Interface.Game
             if (mPictureWindow == null)
             {
                 mPictureWindow = new PictureWindow(GameCanvas);
+            }
+
+            if (mPopupWindow == null)
+            {
+                mPopupWindow = new PopupWindow(GameCanvas);
             }
 
             mEventWindow = new EventWindow(GameCanvas);
@@ -353,6 +360,7 @@ namespace Intersect.Client.Interface.Game
             mMapItemWindow.Update();
             AnnouncementWindow?.Update();
             mPictureWindow?.Update();
+            mPopupWindow?.Update();
 
             if (Globals.QuestOffers.Count > 0)
             {
@@ -378,6 +386,23 @@ namespace Intersect.Client.Interface.Game
                 if (mPictureWindow != null)
                 {
                     mPictureWindow.Close();
+                }
+            }
+
+            if (Globals.Popup != null)
+            {
+                if (mPopupWindow.Picture != Globals.Popup.Picture ||
+                    mPopupWindow.Title != Globals.Popup.Title ||
+                    mPopupWindow.Text != Globals.Popup.Text)
+                {
+                    mPopupWindow.Setup(Globals.Popup.Picture, Globals.Popup.Title, Globals.Popup.Text, Globals.Popup.Opacity);
+                }
+            }
+            else
+            {
+                if (mPopupWindow != null)
+                {
+                    mPopupWindow.Close();
                 }
             }
 
