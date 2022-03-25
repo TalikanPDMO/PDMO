@@ -1106,4 +1106,49 @@ namespace Intersect.GameObjects.Events.Commands
         public override EventCommandType Type { get; } = EventCommandType.ResetStatPointAllocations;
 
     }
+
+    public class ShowPopupCommand : EventCommand
+    {
+
+        public override EventCommandType Type { get; } = EventCommandType.ShowPopup;
+
+        public string Text { get; set; } = "";
+
+        public string Title { get; set; } = "";
+
+        public string BackgroundFile { get; set; } = "";
+
+        public byte Opacity { get; set; } = 255;
+
+        public int HideTime { get; set; } = 0;
+
+        public bool IncludeParty { get; set; } = false;
+
+        public bool IncludeGuild { get; set; } = false;
+
+        public bool IncludeAll { get; set; } = false;
+
+        public string FaceFile { get; set; } = "";
+
+        public sbyte[] PopupLayout { get; set; } = null;
+
+        public ShowPopupCommand()
+        {
+            if (PopupLayout == null)
+            {
+                // Layout for the default popup window, can be changed in the future or in the popup event editor
+                PopupLayout = new sbyte[Enum.GetNames(typeof(PopupLayoutParams)).Length];
+                PopupLayout[((int)PopupLayoutParams.PopupShiftX)] = 0;
+                PopupLayout[((int)PopupLayoutParams.PopupShiftY)] = -20;
+                PopupLayout[((int)PopupLayoutParams.TitleShiftX)] = 0;
+                PopupLayout[((int)PopupLayoutParams.TitleShiftY)] = -40;
+                PopupLayout[((int)PopupLayoutParams.FaceShiftX)] = 0;
+                PopupLayout[((int)PopupLayoutParams.FaceShiftY)] = 0;
+                PopupLayout[((int)PopupLayoutParams.TextAreaShiftX)] = 0;
+                PopupLayout[((int)PopupLayoutParams.TextAreaShiftY)] = 10;
+                PopupLayout[((int)PopupLayoutParams.TextAreaWidth)] = 90;
+                PopupLayout[((int)PopupLayoutParams.TextAreaHeight)] = 70;
+            }
+        }
+    }
 }

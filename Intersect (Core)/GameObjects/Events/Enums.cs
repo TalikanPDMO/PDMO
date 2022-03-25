@@ -239,6 +239,8 @@
         ResetStatPointAllocations,
 
         UseSpell,
+
+        ShowPopup
     }
 
 }

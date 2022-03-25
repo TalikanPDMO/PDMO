@@ -1319,6 +1319,51 @@ Tick timer saved in server config.json.";
 
         }
 
+        public struct EventShowPopup
+        {
+
+            public static LocalizedString cancel = @"Cancel";
+
+            public static LocalizedString background = @"Custom background:";
+
+            public static LocalizedString popuptitle = @"Title:";
+
+            public static LocalizedString text = @"Text:";
+
+            public static LocalizedString face = @"Face:";
+
+            public static LocalizedString include = @"Include:";
+
+            public static LocalizedString all = @"All";
+
+            public static LocalizedString party = @"Party";
+
+            public static LocalizedString guild = @"Guild";
+
+            public static LocalizedString okay = @"Ok";
+
+            public static LocalizedString title = @"Show Popup";
+
+            public static LocalizedString hide = @"Hide After (ms):";
+
+            public static LocalizedString opacity = @"Opacity (0-255):";
+
+            public static LocalizedString X = @"X :";
+
+            public static LocalizedString Y = @"Y :";
+
+            public static LocalizedString width = @"Width :";
+
+            public static LocalizedString height = @"Height :";
+
+            public static LocalizedString explanations = @"All (X;Y) are from -50% to 50% from the center. Width and Height are from 0% to 100%";
+
+            public static LocalizedString shiftcenter = @"In-Game Popup Position:";
+
+            public static LocalizedString commands = @"Text Commands";
+
+        }
+
         public struct EventChangeGender
         {
 
@@ -1577,6 +1622,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString changespells = @"Change Player Spells [{00}]";
 
             public static LocalizedString usespell = @"Use Spell [{00}]";
+
+            public static LocalizedString showpopup = @"Show Popup [{00}]";
 
             public static LocalizedString chatboxtext = @"Show Chatbox Text [Channel: {00}, Color: {01}] - {02}";
 
@@ -1943,6 +1990,7 @@ Tick timer saved in server config.json.";
                 {"showtext", @"Show Text"},
                 {"spawnnpc", @"Spawn NPC"},
                 {"usespell",@"Use Spell" },
+                {"showpopup",@"Show Popup" },
                 {"specialeffects", @"Special Effects"},
                 {"startcommonevent", @"Start Common Event"},
                 {"startquest", @"Start Quest"},

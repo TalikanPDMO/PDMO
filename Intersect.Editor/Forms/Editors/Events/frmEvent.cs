@@ -653,6 +653,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new UseSpellCommand();
 
                     break;
+                case EventCommandType.ShowPopup:
+                    tmpCommand = new ShowPopupCommand();
+
+                    break;
                 case EventCommandType.PlayAnimation:
                     tmpCommand = new PlayAnimationCommand();
 
@@ -1274,6 +1278,9 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
                 case EventCommandType.UseSpell:
                     cmdWindow = new EventCommandUseSpell((UseSpellCommand)command, MyEvent, mCurrentMap, this);
+                    break;
+                case EventCommandType.ShowPopup:
+                    cmdWindow = new EventCommandShowPopup((ShowPopupCommand)command, this);
                     break;
                 case EventCommandType.PlayAnimation:
                     cmdWindow = new EventCommandPlayAnimation(

@@ -17,6 +17,7 @@ using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.Network.Packets.Server;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -48,6 +49,10 @@ namespace Intersect.Client.Interface.Game
         private EventWindow mEventWindow;
 
         private PictureWindow mPictureWindow;
+
+        public PopupWindow mPopupWindow { get; set; }
+
+        private ShowPopupPacket mCurrentPopup = null;
 
         private QuestOfferWindow mQuestOfferWindow;
 
@@ -120,6 +125,11 @@ namespace Intersect.Client.Interface.Game
             if (mPictureWindow == null)
             {
                 mPictureWindow = new PictureWindow(GameCanvas);
+            }
+
+            if (mPopupWindow == null)
+            {
+                mPopupWindow = new PopupWindow(GameCanvas);
             }
 
             mEventWindow = new EventWindow(GameCanvas);
@@ -353,6 +363,7 @@ namespace Intersect.Client.Interface.Game
             mMapItemWindow.Update();
             AnnouncementWindow?.Update();
             mPictureWindow?.Update();
+            mPopupWindow?.Update();
 
             if (Globals.QuestOffers.Count > 0)
             {
@@ -378,6 +389,24 @@ namespace Intersect.Client.Interface.Game
                 if (mPictureWindow != null)
                 {
                     mPictureWindow.Close();
+                }
+            }
+
+            if (Globals.Popups.Count > 0)
+            {
+                var popup = Globals.Popups[0];
+                if (popup != mCurrentPopup)
+                {
+                    mCurrentPopup = popup;
+                    mPopupWindow.Setup(popup.Picture, popup.Title, popup.Text, popup.Opacity,
+                       popup.Face, popup.PopupLayout);
+                }  
+            }
+            else
+            {
+                if (mPopupWindow != null)
+                {
+                    mPopupWindow.Close();
                 }
             }
 

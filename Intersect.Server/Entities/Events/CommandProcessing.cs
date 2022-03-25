@@ -2284,6 +2284,68 @@ namespace Intersect.Server.Entities.Events
             }
         }
 
+        //Show Popup Command
+        private static void ProcessCommand(
+            ShowPopupCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            PacketSender.SendShowPopup(
+                player, command.BackgroundFile, command.Title, ParseEventText(command.Text, player, instance),
+                command.HideTime, command.Opacity, command.FaceFile, command.PopupLayout
+            );
+
+            // Send popup to all online players if IncludeAll checked
+            if (command.IncludeAll)
+            {
+                foreach (var p in Player.OnlineList)
+                {
+                    if (p != null && p != player)
+                    {
+                        PacketSender.SendShowPopup(
+                            p, command.BackgroundFile, command.Title, ParseEventText(command.Text, p, instance),
+                            command.HideTime, command.Opacity, command.FaceFile, command.PopupLayout
+                         );
+                    }
+                }
+            }
+            else
+            {
+                // Send popup to online party members too if IncludeParty checked
+                if (command.IncludeParty)
+                {
+                    foreach (var partyMember in player.Party)
+                    {
+                        if (partyMember != null && partyMember != player)
+                        {
+                            PacketSender.SendShowPopup(
+                               partyMember, command.BackgroundFile, command.Title, ParseEventText(command.Text, partyMember, instance),
+                               command.HideTime, command.Opacity, command.FaceFile, command.PopupLayout
+                            );
+                        }
+                    }
+                }
+                // Send popup to online guild members too if Include Guild checked
+                if (command.IncludeGuild)
+                {
+                    foreach (var guildMember in player.Guild.Members)
+                    {
+                        Player p = Player.FindOnline(guildMember.Key);
+                        if (p != null && p != player)
+                        {
+                            PacketSender.SendShowPopup(
+                               p, command.BackgroundFile, command.Title, ParseEventText(command.Text, p, instance),
+                               command.HideTime, command.Opacity, command.FaceFile, command.PopupLayout
+                            );
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
 }
