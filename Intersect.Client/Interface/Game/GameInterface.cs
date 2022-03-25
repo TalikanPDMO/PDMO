@@ -17,6 +17,7 @@ using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.Network.Packets.Server;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -50,6 +51,8 @@ namespace Intersect.Client.Interface.Game
         private PictureWindow mPictureWindow;
 
         public PopupWindow mPopupWindow { get; set; }
+
+        private ShowPopupPacket mCurrentPopup = null;
 
         private QuestOfferWindow mQuestOfferWindow;
 
@@ -389,15 +392,15 @@ namespace Intersect.Client.Interface.Game
                 }
             }
 
-            if (Globals.Popup != null)
+            if (Globals.Popups.Count > 0)
             {
-                if (mPopupWindow.Picture != Globals.Popup.Picture ||
-                    mPopupWindow.Title != Globals.Popup.Title ||
-                    mPopupWindow.Text != Globals.Popup.Text)
+                var popup = Globals.Popups[0];
+                if (popup != mCurrentPopup)
                 {
-                    mPopupWindow.Setup(Globals.Popup.Picture, Globals.Popup.Title, Globals.Popup.Text, Globals.Popup.Opacity,
-                        Globals.Popup.Face, Globals.Popup.PopupLayout);
-                }
+                    mCurrentPopup = popup;
+                    mPopupWindow.Setup(popup.Picture, popup.Title, popup.Text, popup.Opacity,
+                       popup.Face, popup.PopupLayout);
+                }  
             }
             else
             {

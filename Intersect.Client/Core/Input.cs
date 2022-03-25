@@ -107,7 +107,7 @@ namespace Intersect.Client.Core
                     Globals.Me.CurrentPreviewHotBarKey = -1;
                     Globals.Me.previewSpellId = Guid.Empty;
                 }
-                else if (Globals.Popup != null)
+                else if (Globals.Popups.Count > 0)
                 {
                     Interface.Interface.GameUi.mPopupWindow.Close();
                 }

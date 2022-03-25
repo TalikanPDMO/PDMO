@@ -1519,7 +1519,7 @@ namespace Intersect.Client.Networking
         public void HandlePacket(IPacketSender packetSender, ShowPopupPacket packet)
         {
             packet.ReceiveTime = Globals.System.GetTimeMs();
-            Globals.Popup = packet;
+            Globals.Popups.Add(packet);
         }
 
         //ShopPacket

@@ -35,13 +35,7 @@ namespace Intersect.Client.Interface.Game
         private RichLabel mPopupTextLabel;
 
         //Properties
-        public string Picture { get; private set; }
-        public string Title { get; private set; }
-        public string Text { get; private set; }
-        public byte Opacity { get; private set; }
-        public string Face { get; private set; }
-        public sbyte[] PopupLayout { get; private set; }
-
+        private long DisplayTime = 0;
 
         public PopupWindow(Canvas gameCanvas)
         {
@@ -70,13 +64,6 @@ namespace Intersect.Client.Interface.Game
 
         public void Setup(string picture, string title, string text, byte opacity, string face, sbyte[] popupLayout)
         {
-            Picture = picture;
-            Title = title;
-            Text = text;
-            Opacity = opacity;
-            Face = face;
-            PopupLayout = popupLayout;
-
             var transparency = Color.FromArgb(opacity, 255, 255, 255);
             if (string.IsNullOrEmpty(picture))
             {
@@ -201,6 +188,7 @@ namespace Intersect.Client.Interface.Game
 
                 mPopupWindow.BringToFront();
                 mPopupWindow.Show();
+                DisplayTime = Globals.System.GetTimeMs();
             }
             else
             {
@@ -217,20 +205,20 @@ namespace Intersect.Client.Interface.Game
         {
             if (mPopupWindow.IsVisible)
             {
-                //PacketSender.SendClosePicture(Globals.Picture?.EventId ?? Guid.Empty);
-                Globals.Popup = null;
-                Picture = null;
-                Title = null;
-                Text = null;
+                if (Globals.Popups.Count > 0)
+                {
+                    Globals.Popups.RemoveAt(0);
+                }
                 mPopupWindow.Hide();
             }
         }
 
         public void Update()
         {
-            if (mPopupWindow.IsVisible)
+            if (mPopupWindow.IsVisible && Globals.Popups.Count > 0)
             {
-                if (Globals.Popup != null && Globals.Popup.HideTime > 0 && Globals.System.GetTimeMs() > Globals.Popup.ReceiveTime + Globals.Popup.HideTime)
+                var popup = Globals.Popups[0];
+                if (popup.HideTime > 0 && Globals.System.GetTimeMs() > DisplayTime + popup.HideTime)
                 {
                     //Should auto close this picture
                     Close();
