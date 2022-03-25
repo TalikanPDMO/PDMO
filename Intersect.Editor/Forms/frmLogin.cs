@@ -70,7 +70,6 @@ namespace Intersect.Editor.Forms
                 chkDevMode.Checked = false;
                 chkDevMode.Hide();
             }
-            Database.InitMapCache();
             InitLocalization();
         }
 
@@ -154,6 +153,7 @@ namespace Intersect.Editor.Forms
                     Globals.CurrentTileWidth = Options.TileWidth;
                     GameContentManager.GraphResFolder = "resources";
                 }
+                Database.InitMapCache();
                 using (var sha = new SHA256Managed())
                 {
                     if (mSavedPassword != "")

@@ -3,7 +3,7 @@ using System.Drawing;
 using System.IO;
 
 using Intersect.Configuration;
-
+using Intersect.Editor.Content;
 using Mono.Data.Sqlite;
 
 namespace Intersect.Editor
@@ -11,8 +11,7 @@ namespace Intersect.Editor
 
     public static class Database
     {
-
-        private const string DB_FILENAME = "resources/mapcache.db";
+        private static string DB_FILENAME = "resources/mapcache.db";
 
         private const string MAP_CACHE_DATA = "data";
 
@@ -66,7 +65,11 @@ namespace Intersect.Editor
             {
                 Directory.CreateDirectory("resources");
             }
-
+            if (!Directory.Exists("resources_devmode"))
+            {
+                Directory.CreateDirectory("resources_devmode");
+            }
+            DB_FILENAME = GameContentManager.GraphResFolder + "/mapcache.db";
             SqliteConnection.SetConfig(SQLiteConfig.Serialized);
             if (!File.Exists(DB_FILENAME))
             {
