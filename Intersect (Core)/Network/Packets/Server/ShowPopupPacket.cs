@@ -11,13 +11,15 @@ namespace Intersect.Network.Packets.Server
         {
         }
 
-        public ShowPopupPacket(string picture, string title, string text, int hideTime, byte opacity)
+        public ShowPopupPacket(string picture, string title, string text, int hideTime, byte opacity, string face, sbyte[] popupLayout)
         {
             Picture = picture;
             Title = title;
             Text = text;
             HideTime = hideTime;
             Opacity = opacity;
+            Face = face;
+            PopupLayout = popupLayout;
         }
 
         [Key(0)]
@@ -34,6 +36,12 @@ namespace Intersect.Network.Packets.Server
 
         [Key(4)]
         public byte Opacity { get; set; }
+
+        [Key(5)]
+        public string Face { get; set; }
+
+        [Key(6)]
+        public sbyte[] PopupLayout { get; set; }
 
     }
 

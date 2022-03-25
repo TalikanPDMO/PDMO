@@ -5,6 +5,7 @@ using System.Windows.Forms;
 
 using Intersect.Editor.Content;
 using Intersect.Editor.Localization;
+using Intersect.Enums;
 using Intersect.GameObjects.Events.Commands;
 using Intersect.Utilities;
 
@@ -59,6 +60,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             nudOpacity.Value = mMyCommand.Opacity;
             txtText.Text = mMyCommand.Text;
             txtTitle.Text = mMyCommand.Title;
+            nudX.Value = mMyCommand.PopupLayout[((int)PopupLayoutParams.PopupShiftX)];
+            nudY.Value = mMyCommand.PopupLayout[((int)PopupLayoutParams.PopupShiftY)];
+            nudTitleX.Value = mMyCommand.PopupLayout[((int)PopupLayoutParams.TitleShiftX)];
+            nudTitleY.Value = mMyCommand.PopupLayout[((int)PopupLayoutParams.TitleShiftY)];
+            nudFaceX.Value = mMyCommand.PopupLayout[((int)PopupLayoutParams.FaceShiftX)];
+            nudFaceY.Value = mMyCommand.PopupLayout[((int)PopupLayoutParams.FaceShiftY)];
+            nudTextX.Value = mMyCommand.PopupLayout[((int)PopupLayoutParams.TextAreaShiftX)];
+            nudTextY.Value = mMyCommand.PopupLayout[((int)PopupLayoutParams.TextAreaShiftY)];
+            nudTextWidth.Value = mMyCommand.PopupLayout[((int)PopupLayoutParams.TextAreaWidth)];
+            nudTextHeight.Value = mMyCommand.PopupLayout[((int)PopupLayoutParams.TextAreaHeight)];
 
 
             InitLocalization();
@@ -80,6 +91,18 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             lblText.Text = Strings.EventShowPopup.text;
             lblCommands.Text = Strings.EventShowPopup.commands;
             lblPopupTitle.Text = Strings.EventShowPopup.popuptitle;
+            lblX.Text = Strings.EventShowPopup.X;
+            lblY.Text = Strings.EventShowPopup.Y;
+            lblTitleX.Text = Strings.EventShowPopup.X;
+            lblTitleY.Text = Strings.EventShowPopup.Y;
+            lblFaceX.Text = Strings.EventShowPopup.X;
+            lblFaceY.Text = Strings.EventShowPopup.Y;
+            lblTextX.Text = Strings.EventShowPopup.X;
+            lblTextY.Text = Strings.EventShowPopup.Y;
+            lblTextWidth.Text = Strings.EventShowPopup.width;
+            lblTextHeight.Text = Strings.EventShowPopup.height;
+            lblExplanations.Text = Strings.EventShowPopup.explanations;
+            lblShiftCenter.Text = Strings.EventShowPopup.shiftcenter;
 
         }
 
@@ -94,6 +117,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             mMyCommand.Title = txtTitle.Text;
             mMyCommand.BackgroundFile = TextUtils.SanitizeNone(cmbBgPicture?.Text);
             mMyCommand.FaceFile = TextUtils.SanitizeNone(cmbFace?.Text);
+            mMyCommand.PopupLayout[((int)PopupLayoutParams.PopupShiftX)] = (sbyte)nudX.Value;
+            mMyCommand.PopupLayout[((int)PopupLayoutParams.PopupShiftY)] = (sbyte)nudY.Value;
+            mMyCommand.PopupLayout[((int)PopupLayoutParams.TitleShiftX)] = (sbyte)nudTitleX.Value;
+            mMyCommand.PopupLayout[((int)PopupLayoutParams.TitleShiftY)] = (sbyte)nudTitleY.Value;
+            mMyCommand.PopupLayout[((int)PopupLayoutParams.FaceShiftX)] = (sbyte)nudFaceX.Value;
+            mMyCommand.PopupLayout[((int)PopupLayoutParams.FaceShiftY)] = (sbyte)nudFaceY.Value;
+            mMyCommand.PopupLayout[((int)PopupLayoutParams.TextAreaShiftX)] = (sbyte)nudTextX.Value;
+            mMyCommand.PopupLayout[((int)PopupLayoutParams.TextAreaShiftY)] = (sbyte)nudTextY.Value;
+            mMyCommand.PopupLayout[((int)PopupLayoutParams.TextAreaWidth)] = (sbyte)nudTextWidth.Value;
+            mMyCommand.PopupLayout[((int)PopupLayoutParams.TextAreaHeight)] = (sbyte)nudTextHeight.Value;
             mEventEditor.FinishCommandEdit();
         }
 

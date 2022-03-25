@@ -1130,6 +1130,25 @@ namespace Intersect.GameObjects.Events.Commands
 
         public string FaceFile { get; set; } = "";
 
+        public sbyte[] PopupLayout { get; set; } = null;
 
+        public ShowPopupCommand()
+        {
+            if (PopupLayout == null)
+            {
+                // Layout for the default popup window, can be changed in the future or in the popup event editor
+                PopupLayout = new sbyte[Enum.GetNames(typeof(PopupLayoutParams)).Length];
+                PopupLayout[((int)PopupLayoutParams.PopupShiftX)] = 0;
+                PopupLayout[((int)PopupLayoutParams.PopupShiftY)] = -20;
+                PopupLayout[((int)PopupLayoutParams.TitleShiftX)] = 0;
+                PopupLayout[((int)PopupLayoutParams.TitleShiftY)] = -40;
+                PopupLayout[((int)PopupLayoutParams.FaceShiftX)] = 0;
+                PopupLayout[((int)PopupLayoutParams.FaceShiftY)] = 0;
+                PopupLayout[((int)PopupLayoutParams.TextAreaShiftX)] = 0;
+                PopupLayout[((int)PopupLayoutParams.TextAreaShiftY)] = 10;
+                PopupLayout[((int)PopupLayoutParams.TextAreaWidth)] = 90;
+                PopupLayout[((int)PopupLayoutParams.TextAreaHeight)] = 70;
+            }
+        }
     }
 }

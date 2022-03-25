@@ -49,7 +49,7 @@ namespace Intersect.Client.Interface.Game
 
         private PictureWindow mPictureWindow;
 
-        private PopupWindow mPopupWindow;
+        public PopupWindow mPopupWindow { get; set; }
 
         private QuestOfferWindow mQuestOfferWindow;
 
@@ -395,7 +395,8 @@ namespace Intersect.Client.Interface.Game
                     mPopupWindow.Title != Globals.Popup.Title ||
                     mPopupWindow.Text != Globals.Popup.Text)
                 {
-                    mPopupWindow.Setup(Globals.Popup.Picture, Globals.Popup.Title, Globals.Popup.Text, Globals.Popup.Opacity);
+                    mPopupWindow.Setup(Globals.Popup.Picture, Globals.Popup.Title, Globals.Popup.Text, Globals.Popup.Opacity,
+                        Globals.Popup.Face, Globals.Popup.PopupLayout);
                 }
             }
             else

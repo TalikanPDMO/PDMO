@@ -1332,7 +1332,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString face = @"Face:";
 
-            public static LocalizedString include = @"Include Players:";
+            public static LocalizedString include = @"Include:";
 
             public static LocalizedString all = @"All";
 
@@ -1347,6 +1347,18 @@ Tick timer saved in server config.json.";
             public static LocalizedString hide = @"Hide After (ms):";
 
             public static LocalizedString opacity = @"Opacity (0-255):";
+
+            public static LocalizedString X = @"X :";
+
+            public static LocalizedString Y = @"Y :";
+
+            public static LocalizedString width = @"Width :";
+
+            public static LocalizedString height = @"Height :";
+
+            public static LocalizedString explanations = @"All (X;Y) are from -50% to 50% from the center. Width and Height are from 0% to 100%";
+
+            public static LocalizedString shiftcenter = @"In-Game Popup Position:";
 
             public static LocalizedString commands = @"Text Commands";
 

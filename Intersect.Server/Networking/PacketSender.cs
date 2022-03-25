@@ -1486,9 +1486,9 @@ namespace Intersect.Server.Networking
         }
 
         //ShowPopupPacket
-        public static void SendShowPopup(Player player, string picture, string title, string text, int hideTime, byte opacity)
+        public static void SendShowPopup(Player player, string picture, string title, string text, int hideTime, byte opacity, string face, sbyte[] popupLayout)
         {
-            player.SendPacket(new ShowPopupPacket(picture, title, text, hideTime, opacity));
+            player.SendPacket(new ShowPopupPacket(picture, title, text, hideTime, opacity, face, popupLayout));
         }
 
         //ShopPacket

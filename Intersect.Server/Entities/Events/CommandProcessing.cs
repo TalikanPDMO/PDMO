@@ -2295,7 +2295,8 @@ namespace Intersect.Server.Entities.Events
         {
             PacketSender.SendShowPopup(
                 player, command.BackgroundFile, command.Title, ParseEventText(command.Text, player, instance),
-                command.HideTime, command.Opacity);
+                command.HideTime, command.Opacity, command.FaceFile, command.PopupLayout
+            );
 
             // Send popup to all online players if IncludeAll checked
             if (command.IncludeAll)
@@ -2306,7 +2307,7 @@ namespace Intersect.Server.Entities.Events
                     {
                         PacketSender.SendShowPopup(
                             p, command.BackgroundFile, command.Title, ParseEventText(command.Text, p, instance),
-                            command.HideTime, command.Opacity
+                            command.HideTime, command.Opacity, command.FaceFile, command.PopupLayout
                          );
                     }
                 }
@@ -2322,7 +2323,7 @@ namespace Intersect.Server.Entities.Events
                         {
                             PacketSender.SendShowPopup(
                                partyMember, command.BackgroundFile, command.Title, ParseEventText(command.Text, partyMember, instance),
-                               command.HideTime, command.Opacity
+                               command.HideTime, command.Opacity, command.FaceFile, command.PopupLayout
                             );
                         }
                     }
@@ -2337,7 +2338,7 @@ namespace Intersect.Server.Entities.Events
                         {
                             PacketSender.SendShowPopup(
                                p, command.BackgroundFile, command.Title, ParseEventText(command.Text, p, instance),
-                               command.HideTime, command.Opacity
+                               command.HideTime, command.Opacity, command.FaceFile, command.PopupLayout
                             );
                         }
                     }
