@@ -137,9 +137,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
         private void UpdateFacePreview()
         {
-            if (File.Exists("resources/faces/" + cmbFace.Text))
+            if (File.Exists(GameContentManager.GraphResFolder + "/faces/" + cmbFace.Text))
             {
-                pnlFace.BackgroundImage = new Bitmap("resources/faces/" + cmbFace.Text);
+                pnlFace.BackgroundImage = new Bitmap(GameContentManager.GraphResFolder + "/faces/" + cmbFace.Text);
             }
             else
             {
