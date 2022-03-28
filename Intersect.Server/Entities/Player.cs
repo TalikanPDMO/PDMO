@@ -635,14 +635,14 @@ namespace Intersect.Server.Entities
                             }
 
                             var eventFound = false;
-                            var eventMap = map;
+                            var eventMap = Map;
 
                             if (evt.Value.MapId != Guid.Empty)
                             {
                                 if (evt.Value.MapId != MapId)
                                 {
                                     eventMap = evt.Value.MapInstance;
-                                    eventFound = map.SurroundingMapIds.Contains(eventMap.Id);
+                                    eventFound = Map.SurroundingMapIds.Contains(eventMap.Id);
                                 }
                                 else
                                 {
