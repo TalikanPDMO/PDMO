@@ -1713,6 +1713,7 @@ namespace Intersect.Editor.Forms.Editors
             this.chkReplaceCritEffectSpell.Size = new System.Drawing.Size(162, 20);
             this.chkReplaceCritEffectSpell.TabIndex = 41;
             this.chkReplaceCritEffectSpell.Text = "Replace initial spell on crit";
+            this.chkReplaceCritEffectSpell.CheckedChanged += new System.EventHandler(this.chkReplaceCritEffectSpell_CheckedChanged);
             // 
             // cmbCritEffectSpell
             // 
@@ -1735,6 +1736,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbCritEffectSpell.TabIndex = 65;
             this.cmbCritEffectSpell.Text = "None";
             this.cmbCritEffectSpell.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbCritEffectSpell.SelectedIndexChanged += new System.EventHandler(this.cmbCritEffectSpell_SelectedIndexChanged);
             // 
             // lblCritEffectSpell
             // 
