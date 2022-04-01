@@ -4675,6 +4675,10 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString hotdottick = @"Tick (ms):";
 
+            public static LocalizedString nextspelleffect = @"Next Spell Effect";
+
+            public static LocalizedString reusevalues = @"Re-use values";
+
             public static LocalizedString hpcost = @"HP Cost:";
 
             public static LocalizedString hpdamage = @"HP Damage:";

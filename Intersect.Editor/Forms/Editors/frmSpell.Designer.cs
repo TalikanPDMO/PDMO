@@ -180,6 +180,9 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
+            this.grpNextSpell = new DarkUI.Controls.DarkGroupBox();
+            this.cmbNextSpell = new DarkUI.Controls.DarkComboBox();
+            this.chkReUseValues = new DarkUI.Controls.DarkCheckBox();
             this.pnlContainer.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSpell)).BeginInit();
@@ -226,6 +229,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudWarpX)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.grpSpells.SuspendLayout();
+            this.grpNextSpell.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlContainer
@@ -998,6 +1002,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpCombat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpCombat.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpCombat.Controls.Add(this.grpNextSpell);
             this.grpCombat.Controls.Add(this.grpStats);
             this.grpCombat.Controls.Add(this.grpHotDot);
             this.grpCombat.Controls.Add(this.grpEffect);
@@ -1457,7 +1462,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpHotDot.Controls.Add(this.chkHOTDOT);
             this.grpHotDot.Controls.Add(this.lblTick);
             this.grpHotDot.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpHotDot.Location = new System.Drawing.Point(6, 408);
+            this.grpHotDot.Location = new System.Drawing.Point(6, 402);
             this.grpHotDot.Name = "grpHotDot";
             this.grpHotDot.Size = new System.Drawing.Size(188, 68);
             this.grpHotDot.TabIndex = 53;
@@ -2411,6 +2416,53 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Size = new System.Drawing.Size(191, 478);
             this.lstGameObjects.TabIndex = 32;
             // 
+            // grpNextSpell
+            // 
+            this.grpNextSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpNextSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpNextSpell.Controls.Add(this.chkReUseValues);
+            this.grpNextSpell.Controls.Add(this.cmbNextSpell);
+            this.grpNextSpell.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpNextSpell.Location = new System.Drawing.Point(200, 424);
+            this.grpNextSpell.Name = "grpNextSpell";
+            this.grpNextSpell.Size = new System.Drawing.Size(234, 46);
+            this.grpNextSpell.TabIndex = 54;
+            this.grpNextSpell.TabStop = false;
+            this.grpNextSpell.Text = "Next Spell Effect";
+            // 
+            // cmbNextSpell
+            // 
+            this.cmbNextSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbNextSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbNextSpell.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbNextSpell.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbNextSpell.DrawDropdownHoverOutline = false;
+            this.cmbNextSpell.DrawFocusRectangle = false;
+            this.cmbNextSpell.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbNextSpell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbNextSpell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbNextSpell.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbNextSpell.FormattingEnabled = true;
+            this.cmbNextSpell.Items.AddRange(new object[] {
+            "None"});
+            this.cmbNextSpell.Location = new System.Drawing.Point(6, 19);
+            this.cmbNextSpell.Name = "cmbNextSpell";
+            this.cmbNextSpell.Size = new System.Drawing.Size(155, 21);
+            this.cmbNextSpell.TabIndex = 66;
+            this.cmbNextSpell.Text = "None";
+            this.cmbNextSpell.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbNextSpell.SelectedIndexChanged += new System.EventHandler(this.cmbNextSpell_SelectedIndexChanged);
+            // 
+            // chkReUseValues
+            // 
+            this.chkReUseValues.Location = new System.Drawing.Point(167, 15);
+            this.chkReUseValues.Name = "chkReUseValues";
+            this.chkReUseValues.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.chkReUseValues.Size = new System.Drawing.Size(63, 27);
+            this.chkReUseValues.TabIndex = 41;
+            this.chkReUseValues.Text = "Re-use values";
+            this.chkReUseValues.CheckedChanged += new System.EventHandler(this.chkReUseValues_CheckedChanged);
+            // 
             // FrmSpell
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2493,6 +2545,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.PerformLayout();
             this.grpSpells.ResumeLayout(false);
             this.grpSpells.PerformLayout();
+            this.grpNextSpell.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -2647,5 +2700,8 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkReplaceCritEffectSpell;
         private DarkComboBox cmbCritEffectSpell;
         private System.Windows.Forms.Label lblCritEffectSpell;
+        private DarkGroupBox grpNextSpell;
+        private DarkCheckBox chkReUseValues;
+        private DarkComboBox cmbNextSpell;
     }
 }

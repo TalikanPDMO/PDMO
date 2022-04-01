@@ -1499,10 +1499,13 @@ namespace Intersect.Server.Entities
                 }
             }
             bool isCrit = false;
+            
             if (parentSpell == null)
             {
+                var damageHealth = parentItem.Damage;
+                var damageMana = 0;
                 isCrit = Attack(
-                    target, parentItem.Damage, 0, (DamageType) parentItem.DamageType, (Stats) parentItem.ScalingStat,
+                    target, ref damageHealth, ref damageMana, (DamageType) parentItem.DamageType, (Stats) parentItem.ScalingStat,
                     parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, parentItem.Name, null, null, true, parentItem.CritEffectSpellReplace, alreadyCrit
                 ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
             }
@@ -1558,7 +1561,11 @@ namespace Intersect.Server.Entities
             bool trapTrigger = false,
             bool alreadyCrit = false,
             string sourceSpellNameOnCrit = "",
-            bool fromProjectile = false
+            bool fromProjectile = false,
+            bool isNextSpell = false,
+            bool reUseValues = false,
+            int baseDamage = 0,
+            int secondaryDamage = 0
         )
         {
             if (target is Resource)
@@ -1708,22 +1715,31 @@ namespace Intersect.Server.Entities
 
             var damageHealth = spellBase.Combat.VitalDiff[(int)Vitals.Health];
             var damageMana = spellBase.Combat.VitalDiff[(int)Vitals.Mana];
+            if (reUseValues)
+            {
+                damageHealth = baseDamage;
+                damageMana = secondaryDamage;
+            }
 
             bool isCrit = false;
             if ((spellBase.Combat.Effect != StatusTypes.OnHit || onHitTrigger) &&
                 spellBase.Combat.Effect != StatusTypes.Shield)
             {
                 isCrit = Attack(
-                    target, damageHealth, damageMana, (DamageType) spellBase.Combat.DamageType,
+                    target, ref damageHealth, ref damageMana, (DamageType) spellBase.Combat.DamageType,
                     (Stats) spellBase.Combat.ScalingStat, spellBase.Combat.Scaling, spellBase.Combat.CritChance,
-                    spellBase.Combat.CritMultiplier, spellBase.Name, deadAnimations, aliveAnimations, false, spellBase.Combat.CritEffectSpellReplace, alreadyCrit
+                    spellBase.Combat.CritMultiplier, spellBase.Name, deadAnimations, aliveAnimations, false, spellBase.Combat.CritEffectSpellReplace, alreadyCrit, reUseValues
                 ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
             }
-
+            if (alreadyCrit && isNextSpell)
+            {
+                // Handle crit when chaining spells using NextSpell
+                isCrit = true;
+            }
             if (isCrit && spellBase.Combat.CritEffectSpellId != Guid.Empty && spellBase.Combat.CritEffectSpellReplace)
             {
                 // Directly cast the other spell ignoring the effect of the current spell
-                CastSpell(spellBase.Combat.CritEffectSpellId, -1, true, spellBase.Name, target);
+                CastSpell(spellBase.Combat.CritEffectSpellId, -1, true, spellBase.Name, target, isNextSpell, reUseValues, damageHealth, damageMana);
             }
             else
             {
@@ -1784,9 +1800,21 @@ namespace Intersect.Server.Entities
                 //Handle crit spell if needed
                 if (isCrit && spellBase.Combat.CritEffectSpellId != Guid.Empty)
                 {
-                    CastSpell(spellBase.Combat.CritEffectSpellId, -1, true, spellBase.Name, target);
+                    // Do not reuse values on crit because it's a new additional effect
+                    CastSpell(spellBase.Combat.CritEffectSpellId, -1, true, spellBase.Name, target, isNextSpell);
+                }
+                if (spellBase.Combat.NextEffectSpellId != Guid.Empty)
+                {
+                    var nextIsCrit = isCrit || alreadyCrit;
+                    // TODO Check if we reuse crit everytime or not
+                    /*if (spellBase.Combat.NextEffectSpellReUseValues)
+                    {
+                        nextIsCrit = 
+                    }*/
+                    CastSpell(spellBase.Combat.NextEffectSpellId, -1, nextIsCrit, spellBase.Name, null, true, spellBase.Combat.NextEffectSpellReUseValues, damageHealth, damageMana);
                 }
             }
+            //TODO Put nextspell here if we want to handle even with critreplace enabled
             
         }
 
@@ -1880,17 +1908,19 @@ namespace Intersect.Server.Entities
                 }
             }
             bool isCrit = false;
+            var damageHealth = baseDamage;
+            var damageMana = 0;
             if (weapon == null)
             {
                 isCrit = Attack(
-                    target, baseDamage, 0, damageType, scalingStat, scaling, critChance, critMultiplier, null, deadAnimations,
+                    target, ref damageHealth, ref damageMana, damageType, scalingStat, scaling, critChance, critMultiplier, null, deadAnimations,
                     aliveAnimations, true
                 ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
             }
             else
             {
                 isCrit = Attack(
-                    target, baseDamage, 0, damageType, scalingStat, scaling, critChance, critMultiplier, weapon.Name, deadAnimations,
+                    target, ref damageHealth, ref damageMana, damageType, scalingStat, scaling, critChance, critMultiplier, weapon.Name, deadAnimations,
                     aliveAnimations, true, weapon.CritEffectSpellReplace, alreadyCrit
                 ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
                 if (isCrit && weapon.CritEffectSpellId != Guid.Empty)
@@ -1905,8 +1935,8 @@ namespace Intersect.Server.Entities
         //Return true if the attack is a critical hit
         public bool Attack(
             Entity enemy,
-            int baseDamage,
-            int secondaryDamage,
+            ref int baseDamage,
+            ref int secondaryDamage,
             DamageType damageType,
             Stats scalingStat,
             int scaling,
@@ -1917,10 +1947,11 @@ namespace Intersect.Server.Entities
             List<KeyValuePair<Guid, sbyte>> aliveAnimations = null,
             bool isAutoAttack = false,
             bool critReplace = false,
-            bool alreadyCrit = false
+            bool alreadyCrit = false,
+            bool reUseValues = false
         )
         {
-            var originalBaseDamage = baseDamage;
+            var originalDamage = baseDamage;
             var damagingAttack = baseDamage > 0;
             if (enemy == null)
             {
@@ -1939,7 +1970,10 @@ namespace Intersect.Server.Entities
                 }
                 else
                 {
-                    isCrit = true;
+                    if (!reUseValues)
+                    {
+                        isCrit = true;
+                    }
                 }
             }
             if (this is Player || enemy is Player)
@@ -2010,9 +2044,9 @@ namespace Intersect.Server.Entities
             //Calculate Damages
             if (baseDamage != 0)
             {
-                if (isFixedDamage)
+                if (isFixedDamage || reUseValues)
                 {
-                    baseDamage = originalBaseDamage;
+                    baseDamage = originalDamage;
                 }
                 else
                 {
@@ -2132,9 +2166,16 @@ namespace Intersect.Server.Entities
                 }
             }
 
+            // Check for mana damage
+            originalDamage = secondaryDamage;
+            damagingAttack = secondaryDamage > 0;
             if (secondaryDamage != 0)
             {
-                if (!isFixedDamage) // Scale if not fixed damage
+                if (isFixedDamage || reUseValues)
+                {
+                    secondaryDamage = originalDamage;
+                }
+                else // Scale if not fixed damage
                 {
                     secondaryDamage = Formulas.CalculateDamage(
                         secondaryDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy);
@@ -2288,7 +2329,8 @@ namespace Intersect.Server.Entities
             return true;
         }
 
-        public virtual void CastSpell(Guid spellId, int spellSlot = -1, bool alreadyCrit = false, string sourceSpellNameOnCrit = null, Entity specificTarget=null)
+        public virtual void CastSpell(Guid spellId, int spellSlot = -1, bool alreadyCrit = false, string sourceSpellNameOnCrit = null, Entity specificTarget = null,
+            bool isNextSpell = false, bool reUseValues = false, int baseDamage = 0, int secondaryDamage = 0)
         {
             var spellBase = SpellBase.Get(spellId);
             if (spellBase == null)
@@ -2301,12 +2343,13 @@ namespace Intersect.Server.Entities
                 // Handle some cases with a specific target like projectiles on crit and others
                 baseTarget = CastTarget;
             }
-            if (!alreadyCrit && !CanCastSpell(spellBase, baseTarget))
+            if (!alreadyCrit && !isNextSpell && !CanCastSpell(spellBase, baseTarget))
             {
-                // Check CanCast only if not already checked before a crit
+                // Check CanCast only if not already checked before a crit or a nextspell
                 return;
             }
 
+            //TODO Check alreadycrit or nextspell if we want to cancel vital/mana costs
             if (spellBase.VitalCost[(int)Vitals.Mana] > 0)
             {
                 SubVital(Vitals.Mana, spellBase.VitalCost[(int)Vitals.Mana]);
@@ -2333,6 +2376,7 @@ namespace Intersect.Server.Entities
                     switch (spellBase.Combat.TargetType)
                     {
                         case SpellTargetTypes.Self:
+                            // TODO Play this after crit
                             if (spellBase.HitAnimationId != Guid.Empty && spellBase.Combat.Effect != StatusTypes.OnHit)
                             {
                                 PacketSender.SendAnimationToProximity(
@@ -2340,7 +2384,7 @@ namespace Intersect.Server.Entities
                                 ); //Target Type 1 will be global entity
                             }
 
-                            TryAttack(this, spellBase, false, false, alreadyCrit, sourceSpellNameOnCrit);
+                            TryAttack(this, spellBase, false, false, alreadyCrit, sourceSpellNameOnCrit, false, isNextSpell, reUseValues, baseDamage, secondaryDamage);
 
                             break;
                         case SpellTargetTypes.Single:
@@ -2362,17 +2406,17 @@ namespace Intersect.Server.Entities
                             {
                                 HandleAoESpell(
                                     spellId, spellBase.Combat.HitRadius, baseTarget.MapId, baseTarget.X, baseTarget.Y,
-                                    null, alreadyCrit, sourceSpellNameOnCrit
+                                    null, alreadyCrit, sourceSpellNameOnCrit, isNextSpell, reUseValues, baseDamage, secondaryDamage
                                 );
                             }
                             else
                             {
-                                TryAttack(baseTarget, spellBase, false, false, alreadyCrit, sourceSpellNameOnCrit);
+                                TryAttack(baseTarget, spellBase, false, false, alreadyCrit, sourceSpellNameOnCrit, false, isNextSpell, reUseValues, baseDamage, secondaryDamage);
                             }
 
                             break;
                         case SpellTargetTypes.AoE:
-                            HandleAoESpell(spellId, spellBase.Combat.HitRadius, MapId, X, Y, null, alreadyCrit, sourceSpellNameOnCrit);
+                            HandleAoESpell(spellId, spellBase.Combat.HitRadius, MapId, X, Y, null, alreadyCrit, sourceSpellNameOnCrit, isNextSpell, reUseValues, baseDamage, secondaryDamage);
 
                             break;
                         case SpellTargetTypes.Projectile:
@@ -2395,6 +2439,22 @@ namespace Intersect.Server.Entities
                                         (byte)Dir, specificTarget, alreadyCrit
                                     );
                                 }
+                                if (spellBase.Combat.NextEffectSpellId != Guid.Empty)
+                                {
+                                    var damageHealth = baseDamage;
+                                    var damageMana = secondaryDamage;
+                                    // Can not reuse value for projectile because it is calculated on impact
+                                    if (isNextSpell)
+                                    {
+                                        // Transmit the originals base and secondary damage
+                                        CastSpell(spellBase.Combat.NextEffectSpellId, -1, alreadyCrit, sourceSpellNameOnCrit, specificTarget, true, reUseValues, damageHealth, damageMana);
+                                    }
+                                    else
+                                    {
+                                        // Re-calculte base and secondary damage for the next spell
+                                        CastSpell(spellBase.Combat.NextEffectSpellId, -1, alreadyCrit, sourceSpellNameOnCrit, specificTarget, true, false, damageHealth, damageMana);
+                                    }
+                                }
                             }
 
                             break;
@@ -2411,7 +2471,6 @@ namespace Intersect.Server.Entities
                                     CustomColors.Combat.Status
                                 );
                             }
-
                             break;
                         case SpellTargetTypes.Trap:
                             MapInstance.Get(MapId).SpawnTrap(this, spellBase, (byte) X, (byte) Y, (byte) Z);
@@ -2435,7 +2494,7 @@ namespace Intersect.Server.Entities
                 case SpellTypes.WarpTo:
                     if (baseTarget != null)
                     {
-                        HandleAoESpell(spellId, spellBase.Combat.CastRange, MapId, X, Y, baseTarget, alreadyCrit, sourceSpellNameOnCrit);
+                        HandleAoESpell(spellId, spellBase.Combat.CastRange, MapId, X, Y, baseTarget, alreadyCrit, sourceSpellNameOnCrit, isNextSpell, reUseValues, baseDamage, secondaryDamage);
                     }
                     break;
                 case SpellTypes.Dash:
@@ -2481,7 +2540,8 @@ namespace Intersect.Server.Entities
             int startY,
             Entity spellTarget,
             bool alreadyCrit = false,
-            string sourceSpellNameOnCrit = ""
+            string sourceSpellNameOnCrit = "",
+            bool isNextSpell = false, bool reUseValues = false, int baseDamage = 0, int secondaryDamage = 0
         )
         {
             var spellBase = SpellBase.Get(spellId);
@@ -2513,7 +2573,7 @@ namespace Intersect.Server.Entities
                                             }
                                         }
 
-                                        TryAttack(entity, spellBase, false, false, alreadyCrit, sourceSpellNameOnCrit); //Handle damage
+                                        TryAttack(entity, spellBase, false, false, alreadyCrit, sourceSpellNameOnCrit, false, isNextSpell, reUseValues, baseDamage, secondaryDamage); //Handle damage
                                     }
                                 }
                             }
