@@ -141,6 +141,10 @@ namespace Intersect.Editor.Forms.Editors
             cmbCritEffectSpell.Items.Add(Strings.General.none);
             cmbCritEffectSpell.Items.AddRange(SpellBase.Names);
 
+            cmbNextSpell.Items.Clear();
+            cmbNextSpell.Items.Add(Strings.General.none);
+            cmbNextSpell.Items.AddRange(SpellBase.Names);
+
             InitLocalization();
             UpdateEditor();
         }
@@ -221,6 +225,9 @@ namespace Intersect.Editor.Forms.Editors
             grpHotDot.Text = Strings.SpellEditor.hotdot;
             chkHOTDOT.Text = Strings.SpellEditor.ishotdot;
             lblTick.Text = Strings.SpellEditor.hotdottick;
+
+            grpNextSpell.Text = Strings.SpellEditor.nextspelleffect;
+            chkReUseValues.Text = Strings.SpellEditor.reusevalues;
 
             grpStats.Text = Strings.SpellEditor.stats;
             lblStr.Text = Strings.SpellEditor.attack;
@@ -365,6 +372,9 @@ namespace Intersect.Editor.Forms.Editors
                 nudCritMultiplier.Value = (decimal) mEditorItem.Combat.CritMultiplier;
                 cmbCritEffectSpell.SelectedIndex = SpellBase.ListIndex(mEditorItem.Combat.CritEffectSpellId) + 1;
                 chkReplaceCritEffectSpell.Checked = mEditorItem.Combat.CritEffectSpellReplace;
+
+                cmbNextSpell.SelectedIndex = SpellBase.ListIndex(mEditorItem.Combat.NextEffectSpellId) + 1;
+                chkReUseValues.Checked = mEditorItem.Combat.NextEffectSpellReUseValues;
 
                 chkHOTDOT.Checked = mEditorItem.Combat.HoTDoT;
                 nudBuffDuration.Value = mEditorItem.Combat.Duration;
@@ -919,6 +929,23 @@ namespace Intersect.Editor.Forms.Editors
         private void chkReplaceCritEffectSpell_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.Combat.CritEffectSpellReplace = chkReplaceCritEffectSpell.Checked;
+        }
+
+        private void cmbNextSpell_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbNextSpell.SelectedIndex > 0)
+            {
+                mEditorItem.Combat.NextEffectSpell = SpellBase.Get(SpellBase.IdFromList(cmbNextSpell.SelectedIndex - 1));
+            }
+            else
+            {
+                mEditorItem.Combat.NextEffectSpell = null;
+            }
+        }
+        
+        private void chkReUseValues_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.NextEffectSpellReUseValues = chkReUseValues.Checked;
         }
 
         private void nudScaling_ValueChanged(object sender, EventArgs e)

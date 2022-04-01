@@ -650,6 +650,10 @@
     <Compile Include="Migrations\Game\20220322114327_FixQuestTaskCompletionEvent.designer.cs">
       <DependentUpon>20220322114327_FixQuestTaskCompletionEvent.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20220331155627_AddingNextSpellEffectsToSpells.cs" />
+    <Compile Include="Migrations\Game\20220331155627_AddingNextSpellEffectsToSpells.designer.cs">
+      <DependentUpon>20220331155627_AddingNextSpellEffectsToSpells.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

@@ -171,6 +171,19 @@ namespace Intersect.GameObjects
 
         public bool CritEffectSpellReplace { get; set; } = false;
 
+        [Column("NextEffectSpell")]
+        public Guid NextEffectSpellId { get; set; } = Guid.Empty;
+
+        [NotMapped]
+        [JsonIgnore]
+        public SpellBase NextEffectSpell
+        {
+            get => SpellBase.Get(NextEffectSpellId);
+            set => NextEffectSpellId = value?.Id ?? Guid.Empty;
+        }
+
+        public bool NextEffectSpellReUseValues { get; set; } = true;
+
         public int DamageType { get; set; } = 1;
 
         public int HitRadius { get; set; }
