@@ -212,6 +212,8 @@ namespace Intersect.Editor.Forms.Editors
             lblDamageType.Text = Strings.SpellEditor.damagetype;
             lblHPDamage.Text = Strings.SpellEditor.hpdamage;
             lblManaDamage.Text = Strings.SpellEditor.mpdamage;
+            lblHPSteal.Text = Strings.SpellEditor.steal;
+            lblManaSteal.Text = Strings.SpellEditor.steal;
             chkFriendly.Text = Strings.SpellEditor.friendly;
             cmbDamageType.Items.Clear();
             for (var i = 0; i < Strings.Combat.damagetypes.Count; i++)
@@ -351,6 +353,9 @@ namespace Intersect.Editor.Forms.Editors
 
                 nudHPDamage.Value = mEditorItem.Combat.VitalDiff[(int) Vitals.Health];
                 nudMPDamage.Value = mEditorItem.Combat.VitalDiff[(int) Vitals.Mana];
+
+                nudHPSteal.Value = mEditorItem.Combat.VitalSteal[(int)Vitals.Health];
+                nudManaSteal.Value = mEditorItem.Combat.VitalSteal[(int)Vitals.Mana];
 
                 nudStr.Value = mEditorItem.Combat.StatDiff[(int) Stats.Attack];
                 nudDef.Value = mEditorItem.Combat.StatDiff[(int) Stats.Defense];
@@ -847,6 +852,16 @@ namespace Intersect.Editor.Forms.Editors
         private void nudMPDamage_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Combat.VitalDiff[(int) Vitals.Mana] = (int) nudMPDamage.Value;
+        }
+
+        private void nudHPSteal_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.VitalSteal[(int)Vitals.Health] = (int)nudHPSteal.Value;
+        }
+
+        private void nudManaSteal_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.VitalSteal[(int)Vitals.Mana] = (int)nudManaSteal.Value;
         }
 
         private void nudStr_ValueChanged(object sender, EventArgs e)

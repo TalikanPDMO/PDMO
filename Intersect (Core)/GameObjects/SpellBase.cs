@@ -154,6 +154,8 @@ namespace Intersect.GameObjects
 
         [NotMapped] public int[] VitalDiff = new int[(int) Vitals.VitalCount];
 
+        [NotMapped] public int[] VitalSteal = new int[(int)Vitals.VitalCount];
+
         public int CritChance { get; set; }
 
         public double CritMultiplier { get; set; } = 1.5;
@@ -216,6 +218,15 @@ namespace Intersect.GameObjects
         {
             get => DatabaseUtils.SaveIntArray(VitalDiff, (int) Vitals.VitalCount);
             set => VitalDiff = DatabaseUtils.LoadIntArray(value, (int) Vitals.VitalCount);
+        }
+
+        // Steal vitals or not and what amount percentage
+        [Column("VitalSteal")]
+        [JsonIgnore]
+        public string VitalStealJson
+        {
+            get => DatabaseUtils.SaveIntArray(VitalSteal, (int)Vitals.VitalCount);
+            set => VitalSteal = DatabaseUtils.LoadIntArray(value, (int)Vitals.VitalCount);
         }
 
         //Buff/Debuff Data
