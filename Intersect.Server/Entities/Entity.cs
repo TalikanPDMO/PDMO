@@ -1807,10 +1807,6 @@ namespace Intersect.Server.Entities
                 {
                     var nextIsCrit = isCrit || alreadyCrit;
                     // TODO Check if we reuse crit everytime or not
-                    /*if (spellBase.Combat.NextEffectSpellReUseValues)
-                    {
-                        nextIsCrit = 
-                    }*/
                     CastSpell(spellBase.Combat.NextEffectSpellId, -1, nextIsCrit, spellBase.Name, null, true, spellBase.Combat.NextEffectSpellReUseValues, damageHealth, damageMana);
                 }
             }
@@ -2376,13 +2372,13 @@ namespace Intersect.Server.Entities
                     switch (spellBase.Combat.TargetType)
                     {
                         case SpellTargetTypes.Self:
-                            // TODO Play this after crit
-                            if (spellBase.HitAnimationId != Guid.Empty && spellBase.Combat.Effect != StatusTypes.OnHit)
+                            // No need because we play animation in the Attack() function
+                            /*if (spellBase.HitAnimationId != Guid.Empty && spellBase.Combat.Effect != StatusTypes.OnHit)
                             {
                                 PacketSender.SendAnimationToProximity(
                                     spellBase.HitAnimationId, 1, Id, MapId, 0, 0, (sbyte) Dir
                                 ); //Target Type 1 will be global entity
-                            }
+                            }*/
 
                             TryAttack(this, spellBase, false, false, alreadyCrit, sourceSpellNameOnCrit, false, isNextSpell, reUseValues, baseDamage, secondaryDamage);
 
