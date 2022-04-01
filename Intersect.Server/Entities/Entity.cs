@@ -1739,7 +1739,7 @@ namespace Intersect.Server.Entities
             if (isCrit && spellBase.Combat.CritEffectSpellId != Guid.Empty && spellBase.Combat.CritEffectSpellReplace)
             {
                 // Directly cast the other spell ignoring the effect of the current spell
-                CastSpell(spellBase.Combat.CritEffectSpellId, -1, true, spellBase.Name, target, false, reUseValues, damageHealth, damageMana);
+                CastSpell(spellBase.Combat.CritEffectSpellId, -1, true, spellBase.Name, target, isNextSpell, reUseValues, damageHealth, damageMana);
             }
             else
             {
@@ -1800,6 +1800,7 @@ namespace Intersect.Server.Entities
                 //Handle crit spell if needed
                 if (isCrit && spellBase.Combat.CritEffectSpellId != Guid.Empty)
                 {
+                    // Do not reuse values on crit because it's a new additional effect
                     CastSpell(spellBase.Combat.CritEffectSpellId, -1, true, spellBase.Name, target, isNextSpell);
                 }
                 if (spellBase.Combat.NextEffectSpellId != Guid.Empty)
@@ -1810,7 +1811,7 @@ namespace Intersect.Server.Entities
                     {
                         nextIsCrit = 
                     }*/
-                    CastSpell(spellBase.Combat.NextEffectSpellId, -1, nextIsCrit, spellBase.Name, target, true, spellBase.Combat.NextEffectSpellReUseValues, damageHealth, damageMana);
+                    CastSpell(spellBase.Combat.NextEffectSpellId, -1, nextIsCrit, spellBase.Name, null, true, spellBase.Combat.NextEffectSpellReUseValues, damageHealth, damageMana);
                 }
             }
             //TODO Put nextspell here if we want to handle even with critreplace enabled
@@ -2375,6 +2376,7 @@ namespace Intersect.Server.Entities
                     switch (spellBase.Combat.TargetType)
                     {
                         case SpellTargetTypes.Self:
+                            // TODO Play this after crit
                             if (spellBase.HitAnimationId != Guid.Empty && spellBase.Combat.Effect != StatusTypes.OnHit)
                             {
                                 PacketSender.SendAnimationToProximity(
@@ -2418,7 +2420,6 @@ namespace Intersect.Server.Entities
 
                             break;
                         case SpellTargetTypes.Projectile:
-                            // TODO NEXT SPELL HERE
                             var projectileBase = spellBase.Combat.Projectile;
                             if (projectileBase != null)
                             {
@@ -2438,6 +2439,22 @@ namespace Intersect.Server.Entities
                                         (byte)Dir, specificTarget, alreadyCrit
                                     );
                                 }
+                                if (spellBase.Combat.NextEffectSpellId != Guid.Empty)
+                                {
+                                    var damageHealth = baseDamage;
+                                    var damageMana = secondaryDamage;
+                                    // Can not reuse value for projectile because it is calculated on impact
+                                    if (isNextSpell)
+                                    {
+                                        // Transmit the originals base and secondary damage
+                                        CastSpell(spellBase.Combat.NextEffectSpellId, -1, alreadyCrit, sourceSpellNameOnCrit, specificTarget, true, reUseValues, damageHealth, damageMana);
+                                    }
+                                    else
+                                    {
+                                        // Re-calculte base and secondary damage for the next spell
+                                        CastSpell(spellBase.Combat.NextEffectSpellId, -1, alreadyCrit, sourceSpellNameOnCrit, specificTarget, true, false, damageHealth, damageMana);
+                                    }
+                                }
                             }
 
                             break;
@@ -2454,7 +2471,6 @@ namespace Intersect.Server.Entities
                                     CustomColors.Combat.Status
                                 );
                             }
-
                             break;
                         case SpellTargetTypes.Trap:
                             MapInstance.Get(MapId).SpawnTrap(this, spellBase, (byte) X, (byte) Y, (byte) Z);
