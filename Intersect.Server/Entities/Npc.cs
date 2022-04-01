@@ -633,13 +633,13 @@ namespace Intersect.Server.Entities
                 projectileBase != null)
             {
                 range = projectileBase.Range;
-                var dirToHitTarget = ProjectileInRange(target, projectileBase);
-                if (dirToHitTarget == -1)
+                var dirsToHitTarget = ProjectileInRange(target, projectileBase);
+                if (dirsToHitTarget.Count == 0)
                 {
                     // Target is unreachable with the projectile in any possible directions
                     return;
                 }
-                if (dirToHitTarget != Dir)
+                if (!dirsToHitTarget.Contains(Dir))
                 {
                     if (LastRandomMove >= Globals.Timing.Milliseconds)
                     {
@@ -647,7 +647,7 @@ namespace Intersect.Server.Entities
                     }
 
                     //Face the target -- next frame fire -- then go on with life
-                    ChangeDir(dirToHitTarget); // Gotta get dir to enemy
+                    ChangeDir(dirsToHitTarget[0]); // Gotta get dir to enemy
                     LastRandomMove = Globals.Timing.Milliseconds + Randomization.Next(1000, 3000);
                     RandomMoveValue = -1;
 
@@ -681,8 +681,11 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
-
-            if (!InRangeOf(target, range, spellBase.Combat.SquareRange) && (targetType == SpellTargetTypes.Single || targetType == SpellTargetTypes.AoE))
+            if (targetType == SpellTargetTypes.AoE && !InRangeOf(target, spellBase.Combat.HitRadius, spellBase.Combat.SquareHitRadius))
+            {
+                return;
+            }
+            else if (targetType == SpellTargetTypes.Single && !InRangeOf(target, range, spellBase.Combat.SquareRange))
             {
                 // ReSharper disable once SwitchStatementMissingSomeCases
                 return;
@@ -758,7 +761,7 @@ namespace Intersect.Server.Entities
         }
 
         // Return the direction needed to hit the target, -1 if the target is unreachable
-        public int ProjectileInRange(Entity target, ProjectileBase projectileBase)
+        public List<int> ProjectileInRange(Entity target, ProjectileBase projectileBase)
         {
             //Calculate World Tile of Me
             var xMe = X + Map.MapGridX * Options.MapWidth;
@@ -767,6 +770,8 @@ namespace Intersect.Server.Entities
             //Calculate world tile of target
             var xTarget = target.X + target.Map.MapGridX * Options.MapWidth;
             var yTarget = target.Y + target.Map.MapGridY * Options.MapHeight;
+
+            List<int> directions = new List<int>();
 
             for (byte x = 0; x < ProjectileBase.SPAWN_LOCATIONS_WIDTH; x++)
             {
@@ -788,7 +793,7 @@ namespace Intersect.Server.Entities
                                     var destY = projPosY + (int)Projectile.GetRangeY(Projectile.FindProjectileRotationDir(npc_d, d), r);
                                     if (destX == xTarget && destY == yTarget)
                                     {
-                                        return npc_d;
+                                        directions.Add(npc_d);
                                     }
                                 }
                             }
@@ -796,7 +801,7 @@ namespace Intersect.Server.Entities
                     }
                 }
             }
-            return -1;
+            return directions;
         }
 
         public bool IsFleeing()

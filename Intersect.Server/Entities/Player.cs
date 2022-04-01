@@ -5241,7 +5241,7 @@ namespace Intersect.Server.Entities
                             if (quest.Tasks[i].Id == taskId)
                             {
                                 PacketSender.SendChatMsg(this, Strings.Quests.taskcompleted, ChatMessageType.Quest);
-                                questProgress.TasksProgress[taskId] = -1;
+                                questProgress.UpdateProgress(taskId, -1);
                                 //Advance Task
                                 questProgress.TaskProgress++; // Count the number of done tasks
 
@@ -5294,7 +5294,6 @@ namespace Intersect.Server.Entities
                                                     // Manually validate all task in the link
                                                     if (!questProgress.TasksProgress.ContainsKey(v_id) || questProgress.TasksProgress[v_id] != -1)
                                                     {
-                                                        //questProgress.TasksProgress[v_id] = -1;
                                                         questProgress.UpdateProgress(v_id, -1);
                                                         questProgress.TaskProgress++;
                                                     }
@@ -5305,7 +5304,6 @@ namespace Intersect.Server.Entities
                                                 // Manually validate the task
                                                 if (!questProgress.TasksProgress.ContainsKey(v_guid) || questProgress.TasksProgress[v_guid] != -1)
                                                 {
-                                                    //questProgress.TasksProgress[v_guid] = -1;
                                                     questProgress.UpdateProgress(v_guid, -1);
                                                     questProgress.TaskProgress++;
                                                 }
@@ -5318,7 +5316,7 @@ namespace Intersect.Server.Entities
                                     }
                                 }
 
-                                if (questProgress.TaskProgress == quest.Tasks.Count)
+                                if (questProgress.TaskProgress >= quest.Tasks.Count)
                                 {
                                     // Finish quest
                                     questProgress.Completed = true;
@@ -5341,6 +5339,21 @@ namespace Intersect.Server.Entities
                                     int t = quest.GetTaskIndex(questProgress.TaskId);
                                     do
                                     {
+                                        if (t+1 >= quest.Tasks.Count)
+                                        {
+                                            // Finish quest, verification and compatibility with players who started a quest before v0.3.0
+                                            questProgress.Completed = true;
+                                            questProgress.TaskId = Guid.Empty;
+                                            questProgress.TaskProgress = -1;
+                                            questProgress.TasksProgress = new Dictionary<Guid, int>();
+
+                                            StartCommonEvent(EventBase.Get(quest.EndEventId));
+                                            PacketSender.SendChatMsg(
+                                                this, Strings.Quests.completed.ToString(quest.Name), ChatMessageType.Quest, Color.Green
+                                            );
+                                            PacketSender.SendQuestsProgress(this);
+                                            return;
+                                        }
                                         nextTask = quest.Tasks[t + 1];
                                         questProgress.TaskId = nextTask.Id;
                                         done_tasks = 0;
