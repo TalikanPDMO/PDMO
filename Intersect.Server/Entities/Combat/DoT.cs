@@ -106,7 +106,7 @@ namespace Intersect.Server.Entities.Combat
             var damageMana = SpellBase.Combat.VitalDiff[(int)Vitals.Mana];
 
             Attacker?.Attack(
-                Target, damageHealth, damageMana,
+                Target, ref damageHealth, ref damageMana,
                 (DamageType) SpellBase.Combat.DamageType, (Stats) SpellBase.Combat.ScalingStat,
                 SpellBase.Combat.Scaling, SpellBase.Combat.CritChance, SpellBase.Combat.CritMultiplier, SpellBase.Name, deadAnimations,
                 aliveAnimations, false
