@@ -1579,6 +1579,12 @@ namespace Intersect.Client.Localization
                 {1, @"MP: {00}{01}"},
             };
 
+            public static Dictionary<int, LocalizedString> vitalsteal = new Dictionary<int, LocalizedString>
+            {
+                {0, @"(Restore {00}% of the damage as HP)"},
+                {1, @"(Restore {00}% of the damage as MP)"},
+            };
+
             public static Dictionary<int, LocalizedString> vitalcosts = new Dictionary<int, LocalizedString>
             {
                 {0, @"HP Cost: {00}"},

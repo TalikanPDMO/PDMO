@@ -4683,6 +4683,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString hpdamage = @"HP Damage:";
 
+            public static LocalizedString steal = @"Steal (%):";
+
             public static LocalizedString icon = @"Icon:";
 
             public static LocalizedString ignoreactiveresources = @"Active Resources";

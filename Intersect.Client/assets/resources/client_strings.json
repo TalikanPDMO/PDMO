@@ -791,6 +791,10 @@
       "0": "PV: {00}{01}",
       "1": "PM: {00}{01}"
     },
+    "vitalsteal": {
+      "0": "(Restaure {00}% des dégats en PV)",
+      "1": "(Restaure {00}% du mana volé)"
+    },
     "vitalcosts": {
       "0": "PV Cost: {00}",
       "1": "PM Cost: {00}"

@@ -1505,7 +1505,7 @@ namespace Intersect.Server.Entities
                 var damageHealth = parentItem.Damage;
                 var damageMana = 0;
                 isCrit = Attack(
-                    target, ref damageHealth, ref damageMana, (DamageType) parentItem.DamageType, (Stats) parentItem.ScalingStat,
+                    target, ref damageHealth, ref damageMana, 0, 0, (DamageType) parentItem.DamageType, (Stats) parentItem.ScalingStat,
                     parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, parentItem.Name, null, null, true, parentItem.CritEffectSpellReplace, alreadyCrit
                 ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
             }
@@ -1726,8 +1726,8 @@ namespace Intersect.Server.Entities
                 spellBase.Combat.Effect != StatusTypes.Shield)
             {
                 isCrit = Attack(
-                    target, ref damageHealth, ref damageMana, (DamageType) spellBase.Combat.DamageType,
-                    (Stats) spellBase.Combat.ScalingStat, spellBase.Combat.Scaling, spellBase.Combat.CritChance,
+                    target, ref damageHealth, ref damageMana, spellBase.Combat.VitalSteal[(int)Vitals.Health], spellBase.Combat.VitalSteal[(int)Vitals.Mana],
+                    (DamageType) spellBase.Combat.DamageType, (Stats) spellBase.Combat.ScalingStat, spellBase.Combat.Scaling, spellBase.Combat.CritChance,
                     spellBase.Combat.CritMultiplier, spellBase.Name, deadAnimations, aliveAnimations, false, spellBase.Combat.CritEffectSpellReplace, alreadyCrit, reUseValues
                 ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
             }
@@ -1909,14 +1909,16 @@ namespace Intersect.Server.Entities
             if (weapon == null)
             {
                 isCrit = Attack(
-                    target, ref damageHealth, ref damageMana, damageType, scalingStat, scaling, critChance, critMultiplier, null, deadAnimations,
+                    target, ref damageHealth, ref damageMana, 0, 0,
+                    damageType, scalingStat, scaling, critChance, critMultiplier, null, deadAnimations,
                     aliveAnimations, true
                 ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
             }
             else
             {
                 isCrit = Attack(
-                    target, ref damageHealth, ref damageMana, damageType, scalingStat, scaling, critChance, critMultiplier, weapon.Name, deadAnimations,
+                    target, ref damageHealth, ref damageMana, 0, 0,
+                    damageType, scalingStat, scaling, critChance, critMultiplier, weapon.Name, deadAnimations,
                     aliveAnimations, true, weapon.CritEffectSpellReplace, alreadyCrit
                 ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
                 if (isCrit && weapon.CritEffectSpellId != Guid.Empty)
@@ -1933,6 +1935,8 @@ namespace Intersect.Server.Entities
             Entity enemy,
             ref int baseDamage,
             ref int secondaryDamage,
+            int stealBase,
+            int stealSecondary,
             DamageType damageType,
             Stats scalingStat,
             int scaling,
@@ -2057,7 +2061,10 @@ namespace Intersect.Server.Entities
                 }
                 if (baseDamage > 0 && enemy.HasVital(Vitals.Health) && !invulnerable)
                 {
-                     enemy.SubVital(Vitals.Health, (int) baseDamage);
+                    //Substract hp and steal if needed
+                    var amounthp = enemy.GetVital(Vitals.Health);
+                    enemy.SubVital(Vitals.Health, (int)baseDamage);
+                    amounthp = (int)((amounthp - enemy.GetVital(Vitals.Health)) * stealBase / 100.0);
                     //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
                     //Ici ça affiche les attaques de base (reçu et donné)
                     if (Options.Combat.EnableCombatChatMessages && !(enemy is Resource))
@@ -2114,7 +2121,13 @@ namespace Intersect.Server.Entities
 
                             break;
                     }
-
+                    if (stealBase > 0 && amounthp > 0)
+                    {
+                        AddVital(Vitals.Health, amounthp);
+                        PacketSender.SendActionMsg(
+                               this, Strings.Combat.addsymbol + amounthp, CustomColors.Combat.Heal
+                           );
+                    }
                     var toRemove = new List<Status>();
                     foreach (var status in enemy.CachedStatuses.ToArray())  // ToArray the Array since removing a status will.. you know, change the collection.
                     {
@@ -2183,12 +2196,21 @@ namespace Intersect.Server.Entities
 
                 if (secondaryDamage > 0 && enemy.HasVital(Vitals.Mana) && !invulnerable)
                 {
+                    // Substract mana and steal if needed
+                    var amountmana = enemy.GetVital(Vitals.Mana);
                     //If we took damage lets reset our combat timer
                     enemy.SubVital(Vitals.Mana, (int) secondaryDamage);
+                    amountmana = (int)((amountmana - enemy.GetVital(Vitals.Mana)) * stealSecondary / 100.0);
                     PacketSender.SendActionMsg(
                         enemy, Strings.Combat.removesymbol + (int) secondaryDamage, CustomColors.Combat.RemoveMana
                     );
-
+                    if (stealSecondary > 0 && amountmana > 0)
+                    {
+                        AddVital(Vitals.Mana, amountmana);
+                        PacketSender.SendActionMsg(
+                            this, Strings.Combat.addsymbol + amountmana, CustomColors.Combat.AddMana
+                        );
+                    }
                     //No Matter what, if we attack the entitiy, make them chase us
                     if (enemy is Npc enemyNpc)
                     {
