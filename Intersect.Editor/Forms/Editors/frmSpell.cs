@@ -237,6 +237,7 @@ namespace Intersect.Editor.Forms.Editors
             lblSpd.Text = Strings.SpellEditor.speed;
             lblMag.Text = Strings.SpellEditor.abilitypower;
             lblMR.Text = Strings.SpellEditor.magicresist;
+            lblStatsChance.Text = Strings.SpellEditor.statschance;
 
             grpEffectDuration.Text = Strings.SpellEditor.boostduration;
             lblBuffDuration.Text = Strings.SpellEditor.duration;
@@ -368,6 +369,12 @@ namespace Intersect.Editor.Forms.Editors
                 nudMagPercentage.Value = mEditorItem.Combat.PercentageStatDiff[(int) Stats.AbilityPower];
                 nudMRPercentage.Value = mEditorItem.Combat.PercentageStatDiff[(int) Stats.MagicResist];
                 nudSpdPercentage.Value = mEditorItem.Combat.PercentageStatDiff[(int) Stats.Speed];
+
+                nudStrChance.Value = mEditorItem.Combat.StatDiffChance[(int)Stats.Attack];
+                nudDefChance.Value = mEditorItem.Combat.StatDiffChance[(int)Stats.Defense];
+                nudSpdChance.Value = mEditorItem.Combat.StatDiffChance[(int)Stats.Speed];
+                nudMagChance.Value = mEditorItem.Combat.StatDiffChance[(int)Stats.AbilityPower];
+                nudMRChance.Value = mEditorItem.Combat.StatDiffChance[(int)Stats.MagicResist];
 
                 chkFriendly.Checked = Convert.ToBoolean(mEditorItem.Combat.Friendly);
                 cmbDamageType.SelectedIndex = mEditorItem.Combat.DamageType;
@@ -912,6 +919,31 @@ namespace Intersect.Editor.Forms.Editors
         private void nudSpdPercentage_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Combat.PercentageStatDiff[(int) Stats.Speed] = (int) nudSpdPercentage.Value;
+        }
+
+        private void nudStrChance_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.StatDiffChance[(int)Stats.Attack] = (byte)nudStrChance.Value;
+        }
+
+        private void nudMagChance_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.StatDiffChance[(int)Stats.AbilityPower] = (byte)nudMagChance.Value;
+        }
+
+        private void nudDefChance_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.StatDiffChance[(int)Stats.Defense] = (byte)nudDefChance.Value;
+        }
+
+        private void nudMRChance_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.StatDiffChance[(int)Stats.MagicResist] = (byte)nudMRChance.Value;
+        }
+
+        private void nudSpdChance_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.StatDiffChance[(int)Stats.Speed] = (byte)nudSpdChance.Value;
         }
 
         private void nudBuffDuration_ValueChanged(object sender, EventArgs e)

@@ -658,6 +658,10 @@
     <Compile Include="Migrations\Game\20220401221721_AddingVitalStealToSpells.designer.cs">
       <DependentUpon>20220401221721_AddingVitalStealToSpells.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20220402134336_AddingStatBuffChanceToSpells.cs" />
+    <Compile Include="Migrations\Game\20220402134336_AddingStatBuffChanceToSpells.designer.cs">
+      <DependentUpon>20220402134336_AddingStatBuffChanceToSpells.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

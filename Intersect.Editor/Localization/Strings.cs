@@ -4697,7 +4697,9 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString ishotdot = @"HOT/DOT?";
 
-            public static LocalizedString magicresist = @"Magic Resist:";
+            public static LocalizedString statschance = @"Chance (%):";
+
+            public static LocalizedString magicresist = @"Mag. resist:";
 
             public static LocalizedString manacost = @"Mana Cost:";
 

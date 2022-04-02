@@ -25,6 +25,23 @@ namespace Intersect.Utilities
             return output;
         }
 
+        public static byte[] LoadByteArray(string json, int arrayLen)
+        {
+            var output = new byte[arrayLen];
+            var jsonList = new List<byte>();
+            if (json != null)
+            {
+                jsonList = JsonConvert.DeserializeObject<List<byte>>(json);
+            }
+
+            for (var i = 0; i < arrayLen && i < jsonList.Count; i++)
+            {
+                output[i] = jsonList[i];
+            }
+
+            return output;
+        }
+
         public static void LoadIntArray(ref int[] output, string json, int arrayLen)
         {
             var jsonList = JsonConvert.DeserializeObject<List<int>>(json);
@@ -42,6 +59,29 @@ namespace Intersect.Utilities
             }
 
             var output = new List<int>();
+            for (var i = 0; i < arrayLen; i++)
+            {
+                if (i < array.Length)
+                {
+                    output.Add(array[i]);
+                }
+                else
+                {
+                    output.Add(0);
+                }
+            }
+
+            return JsonConvert.SerializeObject(output);
+        }
+
+        public static string SaveByteArray(byte[] array, int arrayLen)
+        {
+            if (array == null)
+            {
+                array = new byte[arrayLen];
+            }
+
+            var output = new List<byte>();
             for (var i = 0; i < arrayLen; i++)
             {
                 if (i < array.Length)
