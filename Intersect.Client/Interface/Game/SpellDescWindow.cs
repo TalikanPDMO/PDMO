@@ -222,7 +222,10 @@ namespace Intersect.Client.Interface.Game
                     {
                         stats = Strings.SpellDesc.vitals[i].ToString(vitalSymbol, Math.Abs(vitalDiff));
                     }
-
+                    if (spell.Combat.VitalSteal?[i] > 0)
+                    {
+                        stats += Strings.SpellDesc.vitalsteal[i].ToString(spell.Combat.VitalSteal[i]);
+                    }
                     spellStats.AddText(
                         stats, spellStats.RenderColor,
                         spellStatsText.CurAlignments.Count > 0 ? spellStatsText.CurAlignments[0] : Alignments.Left,
