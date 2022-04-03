@@ -25,7 +25,9 @@ namespace Intersect.Client.Entities
 
         public string SourceSpellNameOnCrit;
 
-        public Status(Guid spellId, StatusTypes type, string data, long timeRemaining, long totalDuration, string sourceSpellNameOnCrit)
+        public bool[] EffectiveStatBuffs = new bool[(int)Stats.StatCount];
+
+        public Status(Guid spellId, StatusTypes type, string data, long timeRemaining, long totalDuration, string sourceSpellNameOnCrit, bool[] effectiveStatBuffs)
         {
             SpellId = spellId;
             Type = type;
@@ -34,6 +36,10 @@ namespace Intersect.Client.Entities
             TotalDuration = totalDuration;
             TimeRecevied = Globals.System.GetTimeMs();
             SourceSpellNameOnCrit = sourceSpellNameOnCrit;
+            if (effectiveStatBuffs != null)
+            {
+                EffectiveStatBuffs = effectiveStatBuffs;
+            }
         }
 
         public bool IsActive()

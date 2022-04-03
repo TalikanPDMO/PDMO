@@ -253,6 +253,18 @@ namespace Intersect.GameObjects
         [NotMapped]
         public int[] PercentageStatDiff { get; set; } = new int[(int) Stats.StatCount];
 
+        //Buff/Debuff probability
+        [Column("StatDiffChance")]
+        [JsonIgnore]
+        public string StatDiffChanceJson
+        {
+            get => DatabaseUtils.SaveByteArray(StatDiffChance, (int)Stats.StatCount);
+            set => StatDiffChance = DatabaseUtils.LoadByteArray(value, (int)Stats.StatCount);
+        }
+
+        [NotMapped]
+        public byte[] StatDiffChance { get; set; } = new byte[(int)Stats.StatCount];
+
         public int Scaling { get; set; } = 100;
 
         public int ScalingStat { get; set; }

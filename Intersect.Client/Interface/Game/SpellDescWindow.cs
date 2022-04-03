@@ -18,7 +18,7 @@ namespace Intersect.Client.Interface.Game
         ImagePanel mDescWindow;
         public Button CloseButton;
 
-        public SpellDescWindow(Guid spellId, int x, int y, bool centerHorizontally = false, string sourceSpellNameOnCrit = "")
+        public SpellDescWindow(Guid spellId, int x, int y, bool centerHorizontally = false, string sourceSpellNameOnCrit = "", bool[] effectiveStatBuffs = null)
         {
             var spell = SpellBase.Get(spellId);
             if (spell == null)
@@ -237,26 +237,76 @@ namespace Intersect.Client.Interface.Game
 
                 if (spell.Combat.Duration > 0)
                 {
-                    for (var i = 0; i < (int)Stats.StatCount; i++)
+                    if (effectiveStatBuffs != null)
                     {
-                        if (spell.Combat.StatDiff[i] != 0)
+                        // Show only current buffs
+                        for (var i = 0; i < (int)Stats.StatCount; i++)
                         {
-                            spellStats.AddText(
-                                Strings.SpellDesc.stats[i]
-                                    .ToString(
-                                        (spell.Combat.StatDiff[i] > 0
-                                            ? Strings.SpellDesc.addsymbol.ToString()
-                                            : Strings.SpellDesc.removesymbol.ToString()) +
-                                        Math.Abs(spell.Combat.StatDiff[i])
-                                    ), spellStats.RenderColor,
-                                spellStatsText.CurAlignments.Count > 0
-                                    ? spellStatsText.CurAlignments[0]
-                                    : Alignments.Left, spellStatsText.Font
-                            );
-
-                            spellStats.AddLineBreak();
+                            if (effectiveStatBuffs[i])
+                            {
+                                var strStat = "";
+                                if (spell.Combat.StatDiff[i] != 0)
+                                {
+                                    strStat += spell.Combat.StatDiff[i] > 0 ? Strings.SpellDesc.addsymbol : Strings.SpellDesc.removesymbol;
+                                    strStat += Math.Abs(spell.Combat.StatDiff[i]);
+                                    if (spell.Combat.PercentageStatDiff[i] != 0)
+                                    {
+                                        strStat += Strings.SpellDesc.statseparator;
+                                    }
+                                }
+                                if (spell.Combat.PercentageStatDiff[i] != 0)
+                                {
+                                    strStat += spell.Combat.PercentageStatDiff[i] > 0 ? Strings.SpellDesc.addsymbol : Strings.SpellDesc.removesymbol;
+                                    strStat += Math.Abs(spell.Combat.PercentageStatDiff[i]) + "%";
+                                }
+                                if (strStat.Length != 0)
+                                {
+                                    spellStats.AddText(
+                                        Strings.SpellDesc.stats[i].ToString(strStat), spellStats.RenderColor,
+                                        spellStatsText.CurAlignments.Count > 0 ? spellStatsText.CurAlignments[0] : Alignments.Left,
+                                        spellStatsText.Font
+                                    );
+                                    spellStats.AddLineBreak();
+                                }
+                            }
                         }
                     }
+                    else
+                    {
+                        // Show probability on the spell description
+                        for (var i = 0; i < (int)Stats.StatCount; i++)
+                        {
+                            if (spell.Combat.StatDiffChance[i] > 0)
+                            {
+                                var strStat = "";
+                                if (spell.Combat.StatDiff[i] != 0)
+                                {
+                                    strStat += spell.Combat.StatDiff[i] > 0 ? Strings.SpellDesc.addsymbol : Strings.SpellDesc.removesymbol;
+                                    strStat += Math.Abs(spell.Combat.StatDiff[i]);
+                                    if (spell.Combat.PercentageStatDiff[i] != 0)
+                                    {
+                                        strStat += Strings.SpellDesc.statseparator;
+                                    }
+                                }
+                                if (spell.Combat.PercentageStatDiff[i] != 0)
+                                {
+                                    strStat += spell.Combat.PercentageStatDiff[i] > 0 ? Strings.SpellDesc.addsymbol : Strings.SpellDesc.removesymbol;
+                                    strStat += Math.Abs(spell.Combat.PercentageStatDiff[i]) + "%";
+                                }
+                                if (strStat.Length != 0)
+                                {
+                                    strStat += Strings.SpellDesc.statchance.ToString(spell.Combat.StatDiffChance[i]);
+                                    spellStats.AddText(
+                                        Strings.SpellDesc.stats[i].ToString(strStat),spellStats.RenderColor,
+                                        spellStatsText.CurAlignments.Count > 0 ? spellStatsText.CurAlignments[0] : Alignments.Left,
+                                        spellStatsText.Font
+                                    );
+                                    spellStats.AddLineBreak();
+                                }
+                            }
+                        }
+                    }
+                    
 
                     var duration = (float) spell.Combat.Duration / 1000f;
                     spellStats.AddText(

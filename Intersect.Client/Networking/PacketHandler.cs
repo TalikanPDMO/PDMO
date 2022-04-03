@@ -783,7 +783,7 @@ namespace Intersect.Client.Networking
                 foreach (var status in en.Statuses)
                 {
                     var instance = new Status(
-                        status.SpellId, status.Type, status.TransformSprite, status.TimeRemaining, status.TotalDuration, status.SourceSpellNameOnCrit
+                        status.SpellId, status.Type, status.TransformSprite, status.TimeRemaining, status.TotalDuration, status.SourceSpellNameOnCrit, status.EffectiveStatBuffs
                     );
 
                     entity.Status.Add(instance);
@@ -868,7 +868,7 @@ namespace Intersect.Client.Networking
             foreach (var status in packet.StatusEffects)
             {
                 var instance = new Status(
-                    status.SpellId, status.Type, status.TransformSprite, status.TimeRemaining, status.TotalDuration, status.SourceSpellNameOnCrit
+                    status.SpellId, status.Type, status.TransformSprite, status.TimeRemaining, status.TotalDuration, status.SourceSpellNameOnCrit, status.EffectiveStatBuffs
                 );
 
                 en.Status.Add(instance);
