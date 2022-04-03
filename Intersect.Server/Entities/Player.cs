@@ -6200,7 +6200,7 @@ namespace Intersect.Server.Entities
             return -1;
         }
 
-        public override void Move(int moveDir, Player forPlayer, bool dontUpdate = false, bool correction = false)
+        public override void Move(int moveDir, Player forPlayer, bool dontUpdate = false, bool correction = false, bool isDash = false)
         {
             lock (EntityLock)
             {
@@ -6233,7 +6233,7 @@ namespace Intersect.Server.Entities
                             var z = evt.Value.PageInstance.GlobalClone?.Z ?? evt.Value.PageInstance.Z;
                             if (x == X && y == Y && z == Z)
                             {
-                                HandleEventCollision(evt.Value, -1);
+                                HandleEventCollision(evt.Value, -1, isDash);
                             }
                         }
                     }
@@ -6272,7 +6272,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public void HandleEventCollision(Event evt, int pageNum)
+        public void HandleEventCollision(Event evt, int pageNum, bool isDash=false)
         {
             var eventInstance = evt;
             if (evt.Player == null) //Global
@@ -6298,7 +6298,10 @@ namespace Intersect.Server.Entities
                 {
                     return;
                 }
-
+                if (isDash && !eventInstance.PageInstance.CollideOnDash)
+                {
+                    return;
+                }
                 if (eventInstance.CallStack.Count != 0)
                 {
                     return;

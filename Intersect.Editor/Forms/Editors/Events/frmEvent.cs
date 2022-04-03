@@ -911,6 +911,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             chkDirectionFix.Text = Strings.EventEditor.directionfix;
             chkWalkingAnimation.Text = Strings.EventEditor.walkinganim;
             chkInteractionFreeze.Text = Strings.EventEditor.interactionfreeze;
+            chkCollideOnDash.Text = Strings.EventEditor.collideondash;
             grpTriggers.Text = Strings.EventEditor.trigger;
             grpNewCommands.Text = Strings.EventEditor.addcommand;
             grpEventCommands.Text = Strings.EventEditor.commandlist;
@@ -1062,6 +1063,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             chkDirectionFix.Checked = Convert.ToBoolean(CurrentPage.DirectionFix);
             chkWalkingAnimation.Checked = Convert.ToBoolean(CurrentPage.WalkingAnimation);
             chkInteractionFreeze.Checked = Convert.ToBoolean(CurrentPage.InteractionFreeze);
+            chkCollideOnDash.Checked = Convert.ToBoolean(CurrentPage.CollideOnDash);
             txtDesc.Text = CurrentPage.Description;
             ListPageCommands();
             UpdateEventPreview();
@@ -1856,6 +1858,11 @@ namespace Intersect.Editor.Forms.Editors.Events
         private void chkInteractionFreeze_CheckedChanged(object sender, EventArgs e)
         {
             CurrentPage.InteractionFreeze = chkInteractionFreeze.Checked;
+        }
+
+        private void chkCollideOnDash_CheckedChanged(object sender, EventArgs e)
+        {
+            CurrentPage.CollideOnDash = chkCollideOnDash.Checked;
         }
 
         #endregion

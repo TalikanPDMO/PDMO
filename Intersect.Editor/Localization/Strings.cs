@@ -2501,6 +2501,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString passable = @"Passable";
 
+            public static LocalizedString collideondash = @"Collide on Dash";
+
             public static LocalizedString pastecommand = @"Paste";
 
             public static LocalizedString pastepage = @"Paste Page";

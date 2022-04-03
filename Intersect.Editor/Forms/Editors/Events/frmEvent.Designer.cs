@@ -228,6 +228,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.btnTabsRight = new DarkUI.Controls.DarkButton();
             this.btnTabsLeft = new DarkUI.Controls.DarkButton();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.chkCollideOnDash = new DarkUI.Controls.DarkCheckBox();
             this.grpEntityOptions.SuspendLayout();
             this.grpExtra.SuspendLayout();
             this.grpInspector.SuspendLayout();
@@ -283,6 +284,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             this.grpExtra.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpExtra.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpExtra.Controls.Add(this.chkCollideOnDash);
             this.grpExtra.Controls.Add(this.chkInteractionFreeze);
             this.grpExtra.Controls.Add(this.chkWalkingAnimation);
             this.grpExtra.Controls.Add(this.chkDirectionFix);
@@ -1340,6 +1342,16 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.panel1.Size = new System.Drawing.Size(811, 498);
             this.panel1.TabIndex = 23;
             // 
+            // chkCollideOnDash
+            // 
+            this.chkCollideOnDash.AutoSize = true;
+            this.chkCollideOnDash.Location = new System.Drawing.Point(123, 41);
+            this.chkCollideOnDash.Name = "chkCollideOnDash";
+            this.chkCollideOnDash.Size = new System.Drawing.Size(100, 17);
+            this.chkCollideOnDash.TabIndex = 7;
+            this.chkCollideOnDash.Text = "Collide on Dash";
+            this.chkCollideOnDash.CheckedChanged += new System.EventHandler(this.chkCollideOnDash_CheckedChanged);
+            // 
             // FrmEvent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1469,5 +1481,6 @@ namespace Intersect.Editor.Forms.Editors.Events
         private Label lblVariableTrigger;
         private Label lblMapTrigger;
         private DarkButton btnMapTrigger;
+        private DarkCheckBox chkCollideOnDash;
     }
 }

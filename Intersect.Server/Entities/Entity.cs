@@ -915,7 +915,7 @@ namespace Intersect.Server.Entities
             return EntityTypes.GlobalEntity;
         }
 
-        public virtual void Move(int moveDir, Player forPlayer, bool doNotUpdate = false, bool correction = false)
+        public virtual void Move(int moveDir, Player forPlayer, bool doNotUpdate = false, bool correction = false, bool isDash = false)
         {
             if (Globals.Timing.Milliseconds < MoveTimer || (!Options.Combat.MovementCancelsCast && CastTime > 0))
             {

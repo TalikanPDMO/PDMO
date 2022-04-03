@@ -52,6 +52,8 @@ namespace Intersect.Server.Entities.Events
 
         public int Speed = 20;
 
+        public bool CollideOnDash;
+
         public EventPageInstance(
             EventBase myEvent,
             EventPage myPage,
@@ -74,6 +76,7 @@ namespace Intersect.Server.Entities.Events
             Trigger = MyPage.Trigger;
             Passable = MyPage.Passable;
             HideName = MyPage.HideName;
+            CollideOnDash = MyPage.CollideOnDash;
             MyEventIndex = eventIndex;
             MoveRoute = new EventMoveRoute();
             MoveRoute.CopyFrom(MyPage.Movement.Route);
@@ -344,7 +347,7 @@ namespace Intersect.Server.Entities.Events
         }
 
         /// <inheritdoc />
-        public override void Move(int moveDir, Player forPlayer, bool doNotUpdate = false, bool correction = false)
+        public override void Move(int moveDir, Player forPlayer, bool doNotUpdate = false, bool correction = false, bool isDash = false)
         {
             base.Move(moveDir, forPlayer, doNotUpdate, correction);
 

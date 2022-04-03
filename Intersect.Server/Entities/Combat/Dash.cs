@@ -35,9 +35,31 @@ namespace Intersect.Server.Entities.Combat
             CalculateRange(en, range, blockPass, activeResourcePass, deadResourcePass, zdimensionPass);
             if (Range <= 0)
             {
+                //Remove dash instance if no where to dash
                 return;
-            } //Remove dash instance if no where to dash
+            } 
 
+            //Check for collide event at the end of the dash
+            if (en is Player p)
+            {
+                foreach (var evt in p.EventLookup)
+                {
+                    if (evt.Value.MapId == p.MapId)
+                    {
+                        if (evt.Value.PageInstance != null && evt.Value.PageInstance.MapId == p.MapId && !evt.Value.PageInstance.CollideOnDash)
+                        {
+                            var x = evt.Value.PageInstance.GlobalClone?.X ?? evt.Value.PageInstance.X;
+                            var y = evt.Value.PageInstance.GlobalClone?.Y ?? evt.Value.PageInstance.Y;
+                            var z = evt.Value.PageInstance.GlobalClone?.Z ?? evt.Value.PageInstance.Z;
+                            if (x == p.X && y == p.Y && z == p.Z)
+                            {
+                                p.HandleEventCollision(evt.Value, -1, false);
+                            }
+                        }
+                    }
+                }
+            }
+            
             TransmittionTimer = Globals.Timing.Milliseconds + (long) ((float) Options.MaxDashSpeed / (float) Range);
             PacketSender.SendEntityDash(
                 en, en.MapId, (byte) en.X, (byte) en.Y, (int) (Options.MaxDashSpeed * (Range / 10f)),
@@ -110,7 +132,7 @@ namespace Intersect.Server.Entities.Combat
                     return;
                 }
 
-                en.Move(Direction, null, true);
+                en.Move(Direction, null, true, false, true);
                 en.Dir = Facing;
 
                 Range = i;
