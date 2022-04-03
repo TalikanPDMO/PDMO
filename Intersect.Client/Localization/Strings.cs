@@ -1504,6 +1504,10 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString addsymbol = @"+";
 
+            public static LocalizedString statseparator = @" and ";
+
+            public static LocalizedString statchance = @" ({00}% chance)";
+
             public static LocalizedString casttime = @"Cast Time: {00} Seconds";
 
             public static LocalizedString cooldowntime = @"Cooldown: {00} Seconds";

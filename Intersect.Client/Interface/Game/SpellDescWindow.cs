@@ -242,21 +242,32 @@ namespace Intersect.Client.Interface.Game
                         // Show only current buffs
                         for (var i = 0; i < (int)Stats.StatCount; i++)
                         {
-                            if (spell.Combat.StatDiff[i] != 0 && effectiveStatBuffs[i])
+                            if (effectiveStatBuffs[i])
                             {
-                                spellStats.AddText(
-                                Strings.SpellDesc.stats[i]
-                                    .ToString(
-                                        (spell.Combat.StatDiff[i] > 0
-                                            ? Strings.SpellDesc.addsymbol.ToString()
-                                            : Strings.SpellDesc.removesymbol.ToString()) +
-                                        Math.Abs(spell.Combat.StatDiff[i])
-                                    ), spellStats.RenderColor,
-                                spellStatsText.CurAlignments.Count > 0
-                                    ? spellStatsText.CurAlignments[0]
-                                    : Alignments.Left, spellStatsText.Font
-                                );
-                                spellStats.AddLineBreak();
+                                var strStat = "";
+                                if (spell.Combat.StatDiff[i] != 0)
+                                {
+                                    strStat += spell.Combat.StatDiff[i] > 0 ? Strings.SpellDesc.addsymbol : Strings.SpellDesc.removesymbol;
+                                    strStat += Math.Abs(spell.Combat.StatDiff[i]);
+                                    if (spell.Combat.PercentageStatDiff[i] != 0)
+                                    {
+                                        strStat += Strings.SpellDesc.statseparator;
+                                    }
+                                }
+                                if (spell.Combat.PercentageStatDiff[i] != 0)
+                                {
+                                    strStat += spell.Combat.PercentageStatDiff[i] > 0 ? Strings.SpellDesc.addsymbol : Strings.SpellDesc.removesymbol;
+                                    strStat += Math.Abs(spell.Combat.PercentageStatDiff[i]) + "%";
+                                }
+                                if (strStat.Length != 0)
+                                {
+                                    spellStats.AddText(
+                                        Strings.SpellDesc.stats[i].ToString(strStat), spellStats.RenderColor,
+                                        spellStatsText.CurAlignments.Count > 0 ? spellStatsText.CurAlignments[0] : Alignments.Left,
+                                        spellStatsText.Font
+                                    );
+                                    spellStats.AddLineBreak();
+                                }
                             }
                         }
                     }
@@ -265,21 +276,33 @@ namespace Intersect.Client.Interface.Game
                         // Show probability on the spell description
                         for (var i = 0; i < (int)Stats.StatCount; i++)
                         {
-                            if (spell.Combat.StatDiff[i] != 0 && spell.Combat.StatDiffChance[i] > 0)
+                            if (spell.Combat.StatDiffChance[i] > 0)
                             {
-                                spellStats.AddText(
-                                Strings.SpellDesc.stats[i]
-                                    .ToString(
-                                        (spell.Combat.StatDiff[i] > 0
-                                            ? Strings.SpellDesc.addsymbol.ToString()
-                                            : Strings.SpellDesc.removesymbol.ToString()) +
-                                        Math.Abs(spell.Combat.StatDiff[i])
-                                    ) + " (" + spell.Combat.StatDiffChance[i] + "% chance)", spellStats.RenderColor,
-                                spellStatsText.CurAlignments.Count > 0
-                                    ? spellStatsText.CurAlignments[0]
-                                    : Alignments.Left, spellStatsText.Font
-                                );
-                                spellStats.AddLineBreak();
+                                var strStat = "";
+                                if (spell.Combat.StatDiff[i] != 0)
+                                {
+                                    strStat += spell.Combat.StatDiff[i] > 0 ? Strings.SpellDesc.addsymbol : Strings.SpellDesc.removesymbol;
+                                    strStat += Math.Abs(spell.Combat.StatDiff[i]);
+                                    if (spell.Combat.PercentageStatDiff[i] != 0)
+                                    {
+                                        strStat += Strings.SpellDesc.statseparator;
+                                    }
+                                }
+                                if (spell.Combat.PercentageStatDiff[i] != 0)
+                                {
+                                    strStat += spell.Combat.PercentageStatDiff[i] > 0 ? Strings.SpellDesc.addsymbol : Strings.SpellDesc.removesymbol;
+                                    strStat += Math.Abs(spell.Combat.PercentageStatDiff[i]) + "%";
+                                }
+                                if (strStat.Length != 0)
+                                {
+                                    strStat += Strings.SpellDesc.statchance.ToString(spell.Combat.StatDiffChance[i]);
+                                    spellStats.AddText(
+                                        Strings.SpellDesc.stats[i].ToString(strStat),spellStats.RenderColor,
+                                        spellStatsText.CurAlignments.Count > 0 ? spellStatsText.CurAlignments[0] : Alignments.Left,
+                                        spellStatsText.Font
+                                    );
+                                    spellStats.AddLineBreak();
+                                }
                             }
                         }
                     }
