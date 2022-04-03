@@ -1686,33 +1686,6 @@ namespace Intersect.Server.Entities
                 aliveAnimations.Add(new KeyValuePair<Guid, sbyte>(spellBase.HitAnimationId, (sbyte) Directions.Up));
             }
 
-            var statBuffTime = -1;
-            var expireTime = Globals.Timing.Milliseconds + spellBase.Combat.Duration;
-            if (!(target is EventPageInstance)) // No buff on events
-            {
-                for (var i = 0; i < (int)Stats.StatCount; i++)
-                {
-                    target.Stat[i]
-                        .AddBuff(
-                            new Buff(spellBase, spellBase.Combat.StatDiff[i], spellBase.Combat.PercentageStatDiff[i], expireTime)
-                        );
-
-                    if (spellBase.Combat.StatDiff[i] != 0 || spellBase.Combat.PercentageStatDiff[i] != 0)
-                    {
-                        statBuffTime = spellBase.Combat.Duration;
-                    }
-                }
-
-                if (statBuffTime == -1)
-                {
-                    if (spellBase.Combat.HoTDoT && spellBase.Combat.HotDotInterval > 0)
-                    {
-                        statBuffTime = spellBase.Combat.Duration;
-                    }
-                }
-            }
-            
-
             var damageHealth = spellBase.Combat.VitalDiff[(int)Vitals.Health];
             var damageMana = spellBase.Combat.VitalDiff[(int)Vitals.Mana];
             if (reUseValues)
@@ -1744,6 +1717,48 @@ namespace Intersect.Server.Entities
             else
             {
                 // If not a crit or if we need to handle a non-replacing crit
+
+                // First, handle buffs
+                var statBuffTime = -1;
+                var expireTime = Globals.Timing.Milliseconds + spellBase.Combat.Duration;
+                var randomBuff = Randomization.Next(1, 101);
+                var effectiveStatBuffs = new bool[(int)Stats.StatCount];
+                if (!(target is EventPageInstance)) // No buff on events
+                {
+                    for (var i = 0; i < (int)Stats.StatCount; i++)
+                    {
+                        if (randomBuff <= spellBase.Combat.StatDiffChance[i])
+                        {
+                            target.Stat[i]
+                                .AddBuff(
+                                    new Buff(spellBase, spellBase.Combat.StatDiff[i], spellBase.Combat.PercentageStatDiff[i], expireTime)
+                                );
+
+                            if (spellBase.Combat.StatDiff[i] != 0 || spellBase.Combat.PercentageStatDiff[i] != 0)
+                            {
+                                statBuffTime = spellBase.Combat.Duration;
+                                effectiveStatBuffs[i] = true;
+                            }
+                        }
+                        else
+                        {
+                            // Reset buffs to 0 when random is not ok
+                            target.Stat[i]
+                                .AddBuff(
+                                    new Buff(spellBase, 0, 0, expireTime)
+                                );
+                        }
+                    }
+
+                    if (statBuffTime == -1)
+                    {
+                        if (spellBase.Combat.HoTDoT && spellBase.Combat.HotDotInterval > 0)
+                        {
+                            statBuffTime = spellBase.Combat.Duration;
+                        }
+                    }
+                }
+
                 if (spellBase.Combat.Effect > 0) //Handle status effects
                 {
                     //Check for onhit effect to avoid the onhit effect recycling.
@@ -1753,7 +1768,7 @@ namespace Intersect.Server.Entities
                         if (Randomization.Next(1, 101) <= spellBase.Combat.EffectChance)
                         {
                             new Status(
-                                target, this, spellBase, spellBase.Combat.Effect, spellBase.Combat.Duration,
+                                target, this, spellBase, spellBase.Combat.Effect, spellBase.Combat.Duration, effectiveStatBuffs,
                                 spellBase.Combat.TransformSprite, sourceSpellNameOnCrit
                             );
 
@@ -1775,7 +1790,7 @@ namespace Intersect.Server.Entities
                 {
                     if (statBuffTime > -1)
                     {
-                        new Status(target, this, spellBase, spellBase.Combat.Effect, statBuffTime, "", sourceSpellNameOnCrit);
+                        new Status(target, this, spellBase, spellBase.Combat.Effect, statBuffTime, effectiveStatBuffs, "", sourceSpellNameOnCrit);
                     }
                 }
 
@@ -2480,7 +2495,7 @@ namespace Intersect.Server.Entities
                             if (spellBase.Combat.Effect == StatusTypes.OnHit)
                             {
                                 new Status(
-                                    this, this, spellBase, StatusTypes.OnHit, spellBase.Combat.OnHitDuration,
+                                    this, this, spellBase, StatusTypes.OnHit, spellBase.Combat.OnHitDuration, null,
                                     spellBase.Combat.TransformSprite, sourceSpellNameOnCrit
                                 );
 
@@ -3182,10 +3197,14 @@ namespace Intersect.Server.Entities
                         vitalShields[x] = status.shield[x];
                     }
                 }
-
+                var effectiveStatBuffs = new bool[(int)Stats.StatCount];
+                for (var b = 0; b < (int)Stats.StatCount; b++)
+                {
+                    effectiveStatBuffs[b] = status.EffectiveStatBuffs[b];
+                }
                 statusPackets[i] = new StatusPacket(
                     status.Spell.Id, status.Type, status.Data, (int) (status.Duration - Globals.Timing.Milliseconds),
-                    (int) (status.Duration - status.StartTime), vitalShields, status.SourceSpellNameOnCrit
+                    (int) (status.Duration - status.StartTime), vitalShields, status.SourceSpellNameOnCrit, effectiveStatBuffs
                 );
             }
 

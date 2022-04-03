@@ -85,7 +85,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 }
                 mDescWindow = new SpellDescWindow(
                     mStatus.SpellId, mEntityBox.EntityWindow.X + Pnl.X + 16,
-                    mEntityBox.EntityWindow.Y + Container.Parent.Y + Container.Bottom + 2, true, mStatus.SourceSpellNameOnCrit
+                    mEntityBox.EntityWindow.Y + Container.Parent.Y + Container.Bottom + 2, true, mStatus.SourceSpellNameOnCrit, mStatus.EffectiveStatBuffs
                 );
             }
         }
