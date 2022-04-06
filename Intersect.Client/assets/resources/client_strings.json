@@ -177,6 +177,8 @@
       "hotkey7": "Raccourci 7:",
       "hotkey8": "Raccourci 8:",
       "hotkey9": "Raccourci 9:",
+      "switchmenuleft": "Aller au Menu Précédent:",
+      "switchmenuright": "Aller au Menu Suivant:",
       "movedown": "Bas:",
       "moveleft": "Gauche:",
       "moveright": "Droite:",
@@ -203,7 +205,7 @@
   },
   "Crafting": {
     "craft": "Créer",
-    "craftall": "Craft {00}",
+    "craftall": "Créer {00}",
     "craftstop": "Stop",
     "incorrectresources": "Vous n'avez pas les ressources nécessaires.",
     "ingredients": "Ingrédients:",
@@ -641,10 +643,12 @@
     "title": "Options",
     "unlimitedfps": "Sans limite",
     "vsync": "V-Sync",
-    "autopreview": "Automatic Preview"
+    "autopreview": "Prévisualisation Auto.",
+    "switchtokeyboardbindings": "Clavier",
+    "switchtogamepadbindings": "Manette"
   },
   "Parties": {
-    "infight": "You are currently fighting!",
+    "infight": "Vous êtes en train de combattre !",
     "inviteprompt": "{00} vous a invité dans son groupe. Acceptez-vous?",
     "kick": "Retirer {00}",
     "kicklbl": "X",
@@ -671,7 +675,8 @@
     "notstarted": "Quête non démarrée",
     "taskitem": "{00}/{01} {02}(s) récupéré(es).",
     "tasknpc": "{00}/{01} {02}(s) éliminé(es).",
-    "title": "Liste de quêtes"
+    "title": "Liste de quêtes",
+    "alternative_separator": "----- OU -----"
   },
   "QuestOffer": {
     "accept": "Accepter",
@@ -737,6 +742,8 @@
   },
   "SpellDesc": {
     "addsymbol": "+",
+    "statseparator": " et ",
+    "statchance": "({00}% de chance)",
     "casttime": "Incantation: {00} Seconds",
     "cooldowntime": "Rechargement: {00} Seconds",
     "desc": "{00}",
@@ -770,11 +777,11 @@
       "4": "Spécial"
     },
     "stats": {
-      "0": "Attaque: {00}",
-      "1": "Attaque Spé.: {00}",
-      "2": "Défense: {00}",
-      "3": "Défense Spé: {00}",
-      "4": "Vitesse: {00}"
+      "0": "{00} Attaque {01}",
+      "1": "{00} Attaque Spé. {01}",
+      "2": "{00} Défense {01}",
+      "3": "{00} Défense Spé. {01}",
+      "4": "{00} Vitesse {01}"
     },
     "targettypes": {
       "0": "Sur soi",
@@ -847,6 +854,6 @@
     "percent": "{00}%"
   },
   "GameWindow": {
-    "entitynameandlevel": "{00} [Lv. {01}]"
+    "entitynameandlevel": "{00} [Nv. {01}]"
   }
 }

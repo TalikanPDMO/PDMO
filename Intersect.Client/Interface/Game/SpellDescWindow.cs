@@ -262,7 +262,7 @@ namespace Intersect.Client.Interface.Game
                                 if (strStat.Length != 0)
                                 {
                                     spellStats.AddText(
-                                        Strings.SpellDesc.stats[i].ToString(strStat), spellStats.RenderColor,
+                                        Strings.SpellDesc.stats[i].ToString(strStat, ""), spellStats.RenderColor,
                                         spellStatsText.CurAlignments.Count > 0 ? spellStatsText.CurAlignments[0] : Alignments.Left,
                                         spellStatsText.Font
                                     );
@@ -295,9 +295,9 @@ namespace Intersect.Client.Interface.Game
                                 }
                                 if (strStat.Length != 0)
                                 {
-                                    strStat += Strings.SpellDesc.statchance.ToString(spell.Combat.StatDiffChance[i]);
+                                    var strChance = Strings.SpellDesc.statchance.ToString(spell.Combat.StatDiffChance[i]);
                                     spellStats.AddText(
-                                        Strings.SpellDesc.stats[i].ToString(strStat),spellStats.RenderColor,
+                                        Strings.SpellDesc.stats[i].ToString(strStat, strChance),spellStats.RenderColor,
                                         spellStatsText.CurAlignments.Count > 0 ? spellStatsText.CurAlignments[0] : Alignments.Left,
                                         spellStatsText.Font
                                     );
