@@ -1767,9 +1767,14 @@ namespace Intersect.Server.Entities
                         // Check for %chance of applying an extraeffect
                         if (Randomization.Next(1, 101) <= spellBase.Combat.EffectChance)
                         {
+                            var sourceStatusName = sourceSpellNameOnCrit;
+                            if (alreadyCrit)
+                            {
+                                sourceStatusName += " (Crit.) ";
+                            }
                             new Status(
                                 target, this, spellBase, spellBase.Combat.Effect, spellBase.Combat.Duration, effectiveStatBuffs,
-                                spellBase.Combat.TransformSprite, sourceSpellNameOnCrit
+                                spellBase.Combat.TransformSprite, sourceStatusName
                             );
 
                             PacketSender.SendActionMsg(
@@ -1790,7 +1795,12 @@ namespace Intersect.Server.Entities
                 {
                     if (statBuffTime > -1)
                     {
-                        new Status(target, this, spellBase, spellBase.Combat.Effect, statBuffTime, effectiveStatBuffs, "", sourceSpellNameOnCrit);
+                        var sourceStatusName = sourceSpellNameOnCrit;
+                        if (alreadyCrit)
+                        {
+                            sourceStatusName += " (Crit.) ";
+                        }
+                        new Status(target, this, spellBase, spellBase.Combat.Effect, statBuffTime, effectiveStatBuffs, "", sourceStatusName);
                     }
                 }
 
@@ -2494,9 +2504,14 @@ namespace Intersect.Server.Entities
                         case SpellTargetTypes.OnHit:
                             if (spellBase.Combat.Effect == StatusTypes.OnHit)
                             {
+                                var sourceStatusName = sourceSpellNameOnCrit;
+                                if (alreadyCrit)
+                                {
+                                    sourceStatusName += " (Crit.) ";
+                                }
                                 new Status(
                                     this, this, spellBase, StatusTypes.OnHit, spellBase.Combat.OnHitDuration, null,
-                                    spellBase.Combat.TransformSprite, sourceSpellNameOnCrit
+                                    spellBase.Combat.TransformSprite, sourceStatusName
                                 );
 
                                 PacketSender.SendActionMsg(

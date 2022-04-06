@@ -748,6 +748,8 @@
     "cooldowntime": "Rechargement: {00} Seconds",
     "desc": "{00}",
     "duration": "Durée: {00}s",
+    "onself": "(Sur soi)",
+    "ontarget": "(Sur la cible)",
     "effectlist": {
       "0": "",
       "1": "Inflige Silence",

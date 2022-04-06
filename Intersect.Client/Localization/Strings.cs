@@ -1516,6 +1516,12 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString duration = @"Duration: {00}s";
 
+            public static LocalizedString onself = @"(On Self)";
+
+            public static LocalizedString ontarget = @"(On Target)"; 
+
+            public static LocalizedString effectseparator = @"----------";
+
             public static Dictionary<int, LocalizedString> effectlist = new Dictionary<int, LocalizedString>
             {
                 {0, @""},
