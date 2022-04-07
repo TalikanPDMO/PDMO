@@ -333,8 +333,9 @@ namespace Intersect.Client.Interface.Game
                         spellStats.AddLineBreak();
                     }
 
-                    if (currentSpell.Combat.NextEffectSpellId != Guid.Empty)
+                    if (effectiveStatBuffs == null && currentSpell.Combat.NextEffectSpellId != Guid.Empty)
                     {
+                        // Display separator only if not an active buff and if there is a next spell
                         spellStats.AddText(Strings.SpellDesc.effectseparator, spellStats.RenderColor, Alignments.CenterH, spellStatsText.Font);
                         spellStats.AddLineBreak();
                         currentSpell = currentSpell.Combat.NextEffectSpell;
