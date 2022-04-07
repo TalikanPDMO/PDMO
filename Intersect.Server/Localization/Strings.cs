@@ -294,6 +294,9 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString criticaleffect = @"Critical effect: ";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString critsuffix = @" (Crit.) ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocaleDictionary<int, LocalizedString> damagetypes =
                 new LocaleDictionary<int, LocalizedString>(
                     new Dictionary<int, LocalizedString>

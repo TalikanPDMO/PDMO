@@ -770,7 +770,6 @@
     "shield": "Bouclier: {00}",
     "radius": "Portée: {00}",
     "removesymbol": "-",
-    "critsuffix": " (Crit.) ",
     "spelltypes": {
       "0": "Combat",
       "1": "Téléportation",

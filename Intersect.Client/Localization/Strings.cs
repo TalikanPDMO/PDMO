@@ -1549,8 +1549,6 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString removesymbol = @"-";
 
-            public static LocalizedString critsuffix = @" (Crit.) ";
-
             public static Dictionary<int, LocalizedString> spelltypes = new Dictionary<int, LocalizedString>
             {
                 {0, @"Combat Spell"},

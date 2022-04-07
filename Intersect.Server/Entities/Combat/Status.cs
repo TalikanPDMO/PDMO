@@ -29,7 +29,7 @@ namespace Intersect.Server.Entities.Combat
 
         public StatusTypes Type;
 
-        public string SourceSpellNameOnCrit;
+        public string SourceSpellName;
 
         public bool[] EffectiveStatBuffs { get; set; } = new bool[(int)Stats.StatCount];
 
@@ -51,14 +51,14 @@ namespace Intersect.Server.Entities.Combat
             StatusTypes.Stun,
         };
 
-        public Status(Entity en, Entity attacker, SpellBase spell, StatusTypes type, int duration, bool[] effectiveStatBuffs, string data, string sourceSpellNameOnCrit = "")
+        public Status(Entity en, Entity attacker, SpellBase spell, StatusTypes type, int duration, bool[] effectiveStatBuffs, string data, string sourceSpellName = "")
         {
             mEntity = en;
             Attacker = attacker;
             Spell = spell;
             Type = type;
             Data = data;
-            SourceSpellNameOnCrit = sourceSpellNameOnCrit;
+            SourceSpellName = sourceSpellName;
             if (effectiveStatBuffs != null)
             {
                 for (var b = 0; b < (int)Stats.StatCount; b++)
