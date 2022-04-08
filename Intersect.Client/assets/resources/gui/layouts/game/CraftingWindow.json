@@ -1,5 +1,5 @@
 {
-  "Bounds": "739,305,442,469",
+  "Bounds": "462,149,442,469",
   "Padding": "0,0,0,0",
   "AlignmentEdgeDistances": "0,0,0,0",
   "AlignmentTransform": "0,0",
@@ -51,7 +51,7 @@
     "MouseDownSound": ""
   },
   "Title": {
-    "Bounds": "76,7,173,26",
+    "Bounds": "76,7,98,26",
     "Padding": "32,6,0,0",
     "AlignmentEdgeDistances": "0,0,0,0",
     "AlignmentTransform": "0,0",
@@ -430,7 +430,7 @@
         }
       },
       "RecipesTitle": {
-        "Bounds": "4,4,56,15",
+        "Bounds": "4,4,51,15",
         "Padding": "0,0,0,0",
         "AlignmentEdgeDistances": "0,0,0,0",
         "AlignmentTransform": "0,0",
@@ -460,7 +460,7 @@
         "TextScale": 1.0
       },
       "IngredientsTitle": {
-        "Bounds": "216,62,73,16",
+        "Bounds": "216,62,57,16",
         "Padding": "0,0,0,0",
         "AlignmentEdgeDistances": "0,0,0,0",
         "AlignmentTransform": "0,0",
@@ -490,7 +490,7 @@
         "TextScale": 1.0
       },
       "ProductLabel": {
-        "Bounds": "216,20,80,16",
+        "Bounds": "216,20,53,16",
         "Padding": "0,0,0,0",
         "AlignmentEdgeDistances": "0,0,0,0",
         "AlignmentTransform": "0,0",
@@ -869,6 +869,44 @@
       },
       "CraftButton": {
         "Bounds": "330,394,96,35",
+        "Padding": "3,3,3,3",
+        "AlignmentEdgeDistances": "0,0,0,0",
+        "AlignmentTransform": "0,0",
+        "Margin": "0,0,0,0",
+        "RenderColor": "255,255,255,255",
+        "Alignments": "",
+        "DrawBackground": true,
+        "MinimumSize": "1,1",
+        "MaximumSize": "4096,4096",
+        "Disabled": false,
+        "Hidden": false,
+        "RestrictToParent": false,
+        "MouseInputEnabled": true,
+        "HideToolTip": false,
+        "ToolTipBackground": null,
+        "ToolTipFont": null,
+        "ToolTipTextColor": "",
+        "TextColor": "255,225,225,225",
+        "HoveredTextColor": "255,225,225,225",
+        "ClickedTextColor": "255,225,225,225",
+        "DisabledTextColor": "255,225,225,225",
+        "TextAlign": "Center",
+        "TextPadding": "3,3,3,3",
+        "AutoSizeToContents": false,
+        "Font": "sourcesansproblack,12",
+        "TextScale": 1.0,
+        "NormalImage": "smallbutton.png",
+        "HoveredImage": "smallbutton_hovered.png",
+        "ClickedImage": "smallbutton_clicked.png",
+        "DisabledImage": "smallbutton_disabled.png",
+        "CenterImage": false,
+        "HoverSound": "octave-tap-resonant.wav",
+        "MouseUpSound": "",
+        "MouseDownSound": "octave-tap-warm.wav",
+        "ClickSound": ""
+      },
+      "CraftAllButton": {
+        "Bounds": "210,394,96,35",
         "Padding": "3,3,3,3",
         "AlignmentEdgeDistances": "0,0,0,0",
         "AlignmentTransform": "0,0",

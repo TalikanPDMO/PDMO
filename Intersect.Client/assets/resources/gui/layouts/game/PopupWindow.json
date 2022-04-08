@@ -1,5 +1,5 @@
 {
-  "Bounds": "0,0,0,0",
+  "Bounds": "800,450,0,0",
   "Padding": "0,0,0,0",
   "AlignmentEdgeDistances": "0,0,0,0",
   "AlignmentTransform": "0,0",
@@ -23,7 +23,7 @@
   "RightMouseClickSound": null,
   "Children": {
     "PopupTitle": {
-      "Bounds": "27,7,0,0",
+      "Bounds": "27,7,1,20",
       "Padding": "0,0,0,0",
       "AlignmentEdgeDistances": "0,0,0,0",
       "AlignmentTransform": "0,0",
@@ -53,7 +53,7 @@
       "TextScale": 1.0
     },
     "CloseButton": {
-      "Bounds": "0,0,26,25",
+      "Bounds": "-26,-25,26,25",
       "Padding": "0,0,0,0",
       "AlignmentEdgeDistances": "0,0,0,0",
       "AlignmentTransform": "0,0",
@@ -438,5 +438,4 @@
       }
     }
   }
-
 }
