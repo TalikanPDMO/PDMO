@@ -20,7 +20,7 @@ namespace Intersect.Network.Packets.Server
             long timeRemaining,
             long totalDuration,
             int[] vitalShields,
-            string sourceSpellNameOnCrit,
+            string sourceSpellName,
             bool[] effectiveStatBuffs
         )
         {
@@ -30,7 +30,7 @@ namespace Intersect.Network.Packets.Server
             TimeRemaining = timeRemaining;
             TotalDuration = totalDuration;
             VitalShields = vitalShields;
-            SourceSpellNameOnCrit = sourceSpellNameOnCrit;
+            SourceSpellName = sourceSpellName;
             EffectiveStatBuffs = effectiveStatBuffs;
         }
 
@@ -53,7 +53,7 @@ namespace Intersect.Network.Packets.Server
         public int[] VitalShields { get; set; }
 
         [Key(6)]
-        public string SourceSpellNameOnCrit { get; set; }
+        public string SourceSpellName { get; set; }
 
         [Key(7)]
         public bool[] EffectiveStatBuffs { get; set; }

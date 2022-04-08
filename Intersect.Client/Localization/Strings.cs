@@ -1516,6 +1516,12 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString duration = @"Duration: {00}s";
 
+            public static LocalizedString onself = @"(On Self)";
+
+            public static LocalizedString ontarget = @"(On Target)"; 
+
+            public static LocalizedString effectseparator = @"----------";
+
             public static Dictionary<int, LocalizedString> effectlist = new Dictionary<int, LocalizedString>
             {
                 {0, @""},
@@ -1535,6 +1541,10 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString effects = @"Effects:";
 
+            public static LocalizedString effect = @"Effect: ";
+
+            public static LocalizedString effectnumber = @"Effect {00} : ";
+
             public static LocalizedString prereqs = @"Prerequisites:";
 
             public static LocalizedString shield = @"Shielding: {00}";
@@ -1542,8 +1552,6 @@ namespace Intersect.Client.Localization
             public static LocalizedString radius = @"Hit Radius: {00}";
 
             public static LocalizedString removesymbol = @"-";
-
-            public static LocalizedString critsuffix = @" (Crit.) ";
 
             public static Dictionary<int, LocalizedString> spelltypes = new Dictionary<int, LocalizedString>
             {

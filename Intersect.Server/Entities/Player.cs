@@ -4627,7 +4627,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public override void CastSpell(Guid spellId, int spellSlot = -1, bool alreadyCrit=false, string sourceSpellNameOnCrit = null, Entity specificTarget = null, bool isNextSpell = false, bool reUseValues = false, int baseDamage = 0, int secondaryDamage = 0)
+        public override void CastSpell(Guid spellId, int spellSlot = -1, bool alreadyCrit=false, string sourceSpellName = null, Entity specificTarget = null, bool isNextSpell = false, bool reUseValues = false, int baseDamage = 0, int secondaryDamage = 0)
         {
             var spellBase = SpellBase.Get(spellId);
             if (spellBase == null)
@@ -4645,12 +4645,12 @@ namespace Intersect.Server.Entities
                             StartCommonEvent(evt);
                         }
 
-                        base.CastSpell(spellId, spellSlot, alreadyCrit, sourceSpellNameOnCrit, specificTarget, isNextSpell, reUseValues, baseDamage, secondaryDamage); //To get cooldown :P
+                        base.CastSpell(spellId, spellSlot, alreadyCrit, sourceSpellName, specificTarget, isNextSpell, reUseValues, baseDamage, secondaryDamage); //To get cooldown :P
 
                         break;
                     }
                 default:
-                    base.CastSpell(spellId, spellSlot, alreadyCrit, sourceSpellNameOnCrit, specificTarget, isNextSpell, reUseValues, baseDamage, secondaryDamage);
+                    base.CastSpell(spellId, spellSlot, alreadyCrit, sourceSpellName, specificTarget, isNextSpell, reUseValues, baseDamage, secondaryDamage);
 
                     break;
             }
