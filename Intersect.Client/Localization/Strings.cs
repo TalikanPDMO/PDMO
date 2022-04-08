@@ -1541,6 +1541,10 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString effects = @"Effects:";
 
+            public static LocalizedString effect = @"Effect: ";
+
+            public static LocalizedString effectnumber = @"Effect {00} : ";
+
             public static LocalizedString prereqs = @"Prerequisites:";
 
             public static LocalizedString shield = @"Shielding: {00}";
