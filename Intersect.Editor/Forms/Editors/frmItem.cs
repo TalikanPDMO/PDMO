@@ -181,6 +181,7 @@ namespace Intersect.Editor.Forms.Editors
             grpItems.Text = Strings.ItemEditor.items;
             grpGeneral.Text = Strings.ItemEditor.general;
             lblName.Text = Strings.ItemEditor.name;
+            lblEditorName.Text = Strings.ItemEditor.editorname;
             lblType.Text = Strings.ItemEditor.type;
             cmbType.Items.Clear();
             for (var i = 0; i < Strings.ItemEditor.types.Count; i++)
@@ -319,6 +320,7 @@ namespace Intersect.Editor.Forms.Editors
                 pnlContainer.Show();
 
                 txtName.Text = mEditorItem.Name;
+                txtEditorName.Text = mEditorItem.EditorName;
                 cmbFolder.Text = mEditorItem.Folder;
                 txtDesc.Text = mEditorItem.Description;
                 cmbType.SelectedIndex = (int) mEditorItem.ItemType;
@@ -533,7 +535,13 @@ namespace Intersect.Editor.Forms.Editors
         private void txtName_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.Name = txtName.Text;
-            lstGameObjects.UpdateText(txtName.Text);
+            lstGameObjects.UpdateText(TextUtils.FormatEditorName(mEditorItem.Name, mEditorItem.EditorName));
+        }
+
+        private void txtEditorName_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.EditorName = txtEditorName.Text;
+            lstGameObjects.UpdateText(TextUtils.FormatEditorName(mEditorItem.Name, mEditorItem.EditorName));
         }
 
         private void cmbPic_SelectedIndexChanged(object sender, EventArgs e)
@@ -1208,8 +1216,12 @@ namespace Intersect.Editor.Forms.Editors
             cmbFolder.Items.Add("");
             cmbFolder.Items.AddRange(mKnownFolders.ToArray());
 
-            var items = ItemBase.Lookup.OrderBy(p => p.Value?.Name).Select(pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
-                new KeyValuePair<string, string>(((ItemBase)pair.Value)?.Name ?? Models.DatabaseObject<ItemBase>.Deleted, ((ItemBase)pair.Value)?.Folder ?? ""))).ToArray();
+            var items = ItemBase.Lookup.OrderBy(p => p.Value?.Name).Select(
+                pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
+                new KeyValuePair<string, string>(
+                   TextUtils.FormatEditorName(((ItemBase)pair.Value)?.Name, ((ItemBase)pair.Value)?.EditorName) ?? Models.DatabaseObject<SpellBase>.Deleted,
+                    ((ItemBase)pair.Value)?.Folder ?? ""))
+                ).ToArray();
             lstGameObjects.Repopulate(items, mFolders, btnAlphabetical.Checked, CustomSearch(), txtSearch.Text);
         }
 

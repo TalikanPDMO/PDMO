@@ -27,7 +27,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             mCurrentPage = refPage;
             InitLocalization();
             cmbItem.Items.Clear();
-            cmbItem.Items.AddRange(ItemBase.Names);
+            cmbItem.Items.AddRange(ItemBase.EditorFormatNames);
             cmbAction.SelectedIndex = mMyCommand.Add ? 0 : 1;
             cmbItem.SelectedIndex = ItemBase.ListIndex(mMyCommand.ItemId);
             cmbMethod.SelectedIndex = (int)mMyCommand.ItemHandling;

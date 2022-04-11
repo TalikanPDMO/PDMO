@@ -93,7 +93,7 @@ namespace Intersect.Editor.Forms.Editors
 
             cmbItem.Items.Clear();
             cmbItem.Items.Add(Strings.General.none);
-            cmbItem.Items.AddRange(ItemBase.Names);
+            cmbItem.Items.AddRange(ItemBase.EditorFormatNames);
 
             cmbSpell.Items.Clear();
             cmbSpell.Items.Add(Strings.General.none);

@@ -38,10 +38,10 @@ namespace Intersect.Editor.Forms.Editors
             lstGameObjects.GotFocus += itemList_FocusChanged;
             cmbResult.Items.Clear();
             cmbResult.Items.Add(Strings.General.none);
-            cmbResult.Items.AddRange(ItemBase.Names);
+            cmbResult.Items.AddRange(ItemBase.EditorFormatNames);
             cmbIngredient.Items.Clear();
             cmbIngredient.Items.Add(Strings.General.none);
-            cmbIngredient.Items.AddRange(ItemBase.Names);
+            cmbIngredient.Items.AddRange(ItemBase.EditorFormatNames);
             cmbEvent.Items.Clear();
             cmbEvent.Items.Add(Strings.General.none);
             cmbEvent.Items.AddRange(EventBase.Names);

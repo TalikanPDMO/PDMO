@@ -99,7 +99,7 @@ namespace Intersect.Editor.Forms.Editors
             cmbNpcToSwarm.Items.AddRange(NpcBase.Names);
             cmbDropItem.Items.Clear();
             cmbDropItem.Items.Add(Strings.General.none);
-            cmbDropItem.Items.AddRange(ItemBase.Names);
+            cmbDropItem.Items.AddRange(ItemBase.EditorFormatNames);
             cmbAttackAnimation.Items.Clear();
             cmbAttackAnimation.Items.Add(Strings.General.none);
             cmbAttackAnimation.Items.AddRange(AnimationBase.Names);
