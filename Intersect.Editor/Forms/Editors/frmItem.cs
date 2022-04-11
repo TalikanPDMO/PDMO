@@ -1219,7 +1219,7 @@ namespace Intersect.Editor.Forms.Editors
             var items = ItemBase.Lookup.OrderBy(p => p.Value?.Name).Select(
                 pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
                 new KeyValuePair<string, string>(
-                   TextUtils.FormatEditorName(((ItemBase)pair.Value)?.Name, ((ItemBase)pair.Value)?.EditorName) ?? Models.DatabaseObject<SpellBase>.Deleted,
+                   TextUtils.FormatEditorName(((ItemBase)pair.Value)?.Name, ((ItemBase)pair.Value)?.EditorName) ?? Models.DatabaseObject<ItemBase>.Deleted,
                     ((ItemBase)pair.Value)?.Folder ?? ""))
                 ).ToArray();
             lstGameObjects.Repopulate(items, mFolders, btnAlphabetical.Checked, CustomSearch(), txtSearch.Text);
