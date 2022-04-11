@@ -34,6 +34,8 @@ namespace Intersect.GameObjects
 
         [NotMapped] public int[] VitalRegen = new int[(int) Vitals.VitalCount];
 
+        public string EditorName { get; set; } = "";
+
         [JsonConstructor]
         public NpcBase(Guid id) : base(id)
         {

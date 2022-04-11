@@ -662,6 +662,10 @@
     <Compile Include="Migrations\Game\20220402134336_AddingStatBuffChanceToSpells.designer.cs">
       <DependentUpon>20220402134336_AddingStatBuffChanceToSpells.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20220411131156_AddingEditorNameToSpellsAndNpcsAndItems.cs" />
+    <Compile Include="Migrations\Game\20220411131156_AddingEditorNameToSpellsAndNpcsAndItems.designer.cs">
+      <DependentUpon>20220411131156_AddingEditorNameToSpellsAndNpcsAndItems.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

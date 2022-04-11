@@ -34,6 +34,8 @@ namespace Intersect.GameObjects
 
         public string Description { get; set; } = "";
 
+        public string EditorName { get; set; } = "";
+
         public string Icon { get; set; } = "";
 
         //Animations
