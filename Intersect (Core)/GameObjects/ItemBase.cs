@@ -20,6 +20,12 @@ namespace Intersect.GameObjects
 
         [NotMapped] public ConditionLists UsageRequirements = new ConditionLists();
 
+        public string EditorName { get; set; } = "";
+        public static string[] EditorFormatNames => Lookup.OrderBy(p => p.Value?.Name)
+            .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((ItemBase)pair.Value)?.EditorName) ?? Deleted)
+            .ToArray();
+
+
         public string CannotUseMessage { get; set; } = "";
 
         public ItemBase()

@@ -43,7 +43,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             mCurrentMap = currentMap;
             InitLocalization();
             cmbNpc.Items.Clear();
-            cmbNpc.Items.AddRange(NpcBase.Names);
+            cmbNpc.Items.AddRange(NpcBase.EditorFormatNames);
             cmbNpc.SelectedIndex = NpcBase.ListIndex(mMyCommand.NpcId);
             if (mMyCommand.MapId != Guid.Empty)
             {

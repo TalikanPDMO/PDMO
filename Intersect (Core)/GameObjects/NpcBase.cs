@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using System.Linq;
 using Intersect.Enums;
 using Intersect.GameObjects.Conditions;
 using Intersect.GameObjects.Events;
@@ -33,6 +33,11 @@ namespace Intersect.GameObjects
         [NotMapped] public int[] Stats = new int[(int) Enums.Stats.StatCount];
 
         [NotMapped] public int[] VitalRegen = new int[(int) Vitals.VitalCount];
+
+        public string EditorName { get; set; } = "";
+        public static string[] EditorFormatNames => Lookup.OrderBy(p => p.Value?.Name)
+            .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((NpcBase)pair.Value)?.EditorName) ?? Deleted)
+            .ToArray();
 
         [JsonConstructor]
         public NpcBase(Guid id) : base(id)

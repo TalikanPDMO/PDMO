@@ -113,7 +113,7 @@ namespace Intersect.Editor.Forms.Editors
             cmbAnimation.Items.AddRange(AnimationBase.Names);
             cmbDropItem.Items.Clear();
             cmbDropItem.Items.Add(Strings.General.none);
-            cmbDropItem.Items.AddRange(ItemBase.Names);
+            cmbDropItem.Items.AddRange(ItemBase.EditorFormatNames);
             InitLocalization();
             UpdateEditor();
         }

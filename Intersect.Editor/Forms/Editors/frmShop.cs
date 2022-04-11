@@ -86,11 +86,11 @@ namespace Intersect.Editor.Forms.Editors
             cmbBuyFor.Items.Clear();
             cmbSellFor.Items.Clear();
             cmbDefaultCurrency.Items.Clear();
-            cmbAddBoughtItem.Items.AddRange(ItemBase.Names);
-            cmbAddSoldItem.Items.AddRange(ItemBase.Names);
-            cmbBuyFor.Items.AddRange(ItemBase.Names);
-            cmbSellFor.Items.AddRange(ItemBase.Names);
-            cmbDefaultCurrency.Items.AddRange(ItemBase.Names);
+            cmbAddBoughtItem.Items.AddRange(ItemBase.EditorFormatNames);
+            cmbAddSoldItem.Items.AddRange(ItemBase.EditorFormatNames);
+            cmbBuyFor.Items.AddRange(ItemBase.EditorFormatNames);
+            cmbSellFor.Items.AddRange(ItemBase.EditorFormatNames);
+            cmbDefaultCurrency.Items.AddRange(ItemBase.EditorFormatNames);
             if (cmbAddBoughtItem.Items.Count > 0)
             {
                 cmbAddBoughtItem.SelectedIndex = 0;

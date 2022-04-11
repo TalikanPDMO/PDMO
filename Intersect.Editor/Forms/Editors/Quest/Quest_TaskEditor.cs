@@ -104,7 +104,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
                 case 1: //Gather Items
                     grpGatherItems.Show();
                     cmbItem.Items.Clear();
-                    cmbItem.Items.AddRange(ItemBase.Names);
+                    cmbItem.Items.AddRange(ItemBase.EditorFormatNames);
                     if (cmbItem.Items.Count > 0)
                     {
                         cmbItem.SelectedIndex = 0;
@@ -116,7 +116,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
                 case 2: //Kill Npcs
                     grpKillNpcs.Show();
                     cmbNpc.Items.Clear();
-                    cmbNpc.Items.AddRange(NpcBase.Names);
+                    cmbNpc.Items.AddRange(NpcBase.EditorFormatNames);
                     if (cmbNpc.Items.Count > 0)
                     {
                         cmbNpc.SelectedIndex = 0;

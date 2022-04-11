@@ -3284,6 +3284,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString name = @"Name:";
 
+            public static LocalizedString editorname = @"Editor Name:";
+
             public static LocalizedString New = @"New Item";
 
             public static LocalizedString paste = @"Paste Item";
@@ -3955,6 +3957,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString mpregen = @"MP (%):";
 
             public static LocalizedString name = @"Name:";
+
+            public static LocalizedString editorname = @"Editor Name:";
 
             public static LocalizedString New = @"New Npc";
 
@@ -4708,6 +4712,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString mpdamage = @"Mana Damage:";
 
             public static LocalizedString name = @"Name:";
+
+            public static LocalizedString editorname = @"Editor Name:";
 
             public static LocalizedString New = @"New Spell";
 

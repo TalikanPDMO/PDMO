@@ -421,7 +421,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     lblItem.Visible = true;
                     cmbItem.Visible = true;
                     cmbItem.Items.Clear();
-                    cmbItem.Items.AddRange(ItemBase.Names);
+                    cmbItem.Items.AddRange(ItemBase.EditorFormatNames);
                     SetupAmountInput();
 
                     break;
@@ -434,7 +434,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 case ConditionTypes.KnowsSpell:
                     grpSpell.Show();
                     cmbSpell.Items.Clear();
-                    cmbSpell.Items.AddRange(SpellBase.Names);
+                    cmbSpell.Items.AddRange(SpellBase.EditorFormatNames);
 
                     break;
                 case ConditionTypes.LevelOrStat:
@@ -495,7 +495,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 case ConditionTypes.IsItemEquipped:
                     grpEquippedItem.Show();
                     cmbEquippedItem.Items.Clear();
-                    cmbEquippedItem.Items.AddRange(ItemBase.Names);
+                    cmbEquippedItem.Items.AddRange(ItemBase.EditorFormatNames);
 
                     break;
 

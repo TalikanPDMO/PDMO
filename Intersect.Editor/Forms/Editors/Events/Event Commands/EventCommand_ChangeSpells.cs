@@ -26,7 +26,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             mCurrentPage = refPage;
             InitLocalization();
             cmbSpell.Items.Clear();
-            cmbSpell.Items.AddRange(SpellBase.Names);
+            cmbSpell.Items.AddRange(SpellBase.EditorFormatNames);
             cmbAction.SelectedIndex = refCommand.Add ? 0 : 1;
             cmbSpell.SelectedIndex = SpellBase.ListIndex(mMyCommand.SpellId);
         }

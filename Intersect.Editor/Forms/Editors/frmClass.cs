@@ -292,9 +292,9 @@ namespace Intersect.Editor.Forms.Editors
             cmbFace.Items.AddRange(GameContentManager.GetSmartSortedTextureNames(GameContentManager.TextureType.Face));
             cmbSpawnItem.Items.Clear();
             cmbSpawnItem.Items.Add(Strings.General.none);
-            cmbSpawnItem.Items.AddRange(ItemBase.Names);
+            cmbSpawnItem.Items.AddRange(ItemBase.EditorFormatNames);
             cmbSpell.Items.Clear();
-            cmbSpell.Items.AddRange(SpellBase.Names);
+            cmbSpell.Items.AddRange(SpellBase.EditorFormatNames);
             nudLevel.Maximum = Options.MaxLevel;
             cmbAttackAnimation.Items.Clear();
             cmbAttackAnimation.Items.Add(Strings.General.none);
