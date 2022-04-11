@@ -39,6 +39,21 @@ namespace Intersect.Utilities
             return IsNone(nullableString) ? null : nullableString;
         }
 
+        public static string FormatEditorName(string name, string editorName)
+        {
+            if (name == null)
+            {
+                return null;
+            }
+            var strName = "";
+            if (!string.IsNullOrEmpty(editorName))
+            {
+                strName += "[" + editorName + "] ";
+            }
+            strName += name;
+            return strName;
+        }
+
     }
 
 }

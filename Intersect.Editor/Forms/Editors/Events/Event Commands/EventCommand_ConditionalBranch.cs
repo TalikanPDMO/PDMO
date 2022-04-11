@@ -434,7 +434,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 case ConditionTypes.KnowsSpell:
                     grpSpell.Show();
                     cmbSpell.Items.Clear();
-                    cmbSpell.Items.AddRange(SpellBase.Names);
+                    cmbSpell.Items.AddRange(SpellBase.EditorFormatNames);
 
                     break;
                 case ConditionTypes.LevelOrStat:

@@ -4709,6 +4709,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString name = @"Name:";
 
+            public static LocalizedString editorname = @"Editor Name:";
+
             public static LocalizedString New = @"New Spell";
 
             public static LocalizedString paste = @"Paste Spell";

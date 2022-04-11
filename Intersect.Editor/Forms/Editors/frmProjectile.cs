@@ -97,7 +97,7 @@ namespace Intersect.Editor.Forms.Editors
 
             cmbSpell.Items.Clear();
             cmbSpell.Items.Add(Strings.General.none);
-            cmbSpell.Items.AddRange(SpellBase.Names);
+            cmbSpell.Items.AddRange(SpellBase.EditorFormatNames);
 
             InitLocalization();
             UpdateEditor();

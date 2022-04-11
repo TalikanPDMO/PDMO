@@ -139,11 +139,11 @@ namespace Intersect.Editor.Forms.Editors
 
             cmbCritEffectSpell.Items.Clear();
             cmbCritEffectSpell.Items.Add(Strings.General.none);
-            cmbCritEffectSpell.Items.AddRange(SpellBase.Names);
+            cmbCritEffectSpell.Items.AddRange(SpellBase.EditorFormatNames);
 
             cmbNextSpell.Items.Clear();
             cmbNextSpell.Items.Add(Strings.General.none);
-            cmbNextSpell.Items.AddRange(SpellBase.Names);
+            cmbNextSpell.Items.AddRange(SpellBase.EditorFormatNames);
 
             InitLocalization();
             UpdateEditor();
@@ -162,6 +162,7 @@ namespace Intersect.Editor.Forms.Editors
 
             grpGeneral.Text = Strings.SpellEditor.general;
             lblName.Text = Strings.SpellEditor.name;
+            lblEditorName.Text = Strings.SpellEditor.editorname;
             lblType.Text = Strings.SpellEditor.type;
             cmbType.Items.Clear();
             for (var i = 0; i < Strings.SpellEditor.types.Count; i++)
@@ -291,6 +292,7 @@ namespace Intersect.Editor.Forms.Editors
                 pnlContainer.Show();
 
                 txtName.Text = mEditorItem.Name;
+                txtEditorName.Text = mEditorItem.EditorName;
                 cmbFolder.Text = mEditorItem.Folder;
                 txtDesc.Text = mEditorItem.Description;
                 cmbType.SelectedIndex = (int) mEditorItem.SpellType;
@@ -512,7 +514,13 @@ namespace Intersect.Editor.Forms.Editors
         private void txtName_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.Name = txtName.Text;
-            lstGameObjects.UpdateText(txtName.Text);
+            lstGameObjects.UpdateText(TextUtils.FormatEditorName(mEditorItem.Name, mEditorItem.EditorName));
+        }
+
+        private void txtEditorName_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.EditorName = txtEditorName.Text;
+            lstGameObjects.UpdateText(TextUtils.FormatEditorName(mEditorItem.Name, mEditorItem.EditorName));
         }
 
         private void cmbType_SelectedIndexChanged(object sender, EventArgs e)
@@ -1126,8 +1134,12 @@ namespace Intersect.Editor.Forms.Editors
             cmbCooldownGroup.Items.Add(string.Empty);
             cmbCooldownGroup.Items.AddRange(mKnownCooldownGroups.ToArray());
 
-            var items = SpellBase.Lookup.OrderBy(p => p.Value?.Name).Select(pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
-                new KeyValuePair<string, string>(((SpellBase)pair.Value)?.Name ?? Models.DatabaseObject<SpellBase>.Deleted, ((SpellBase)pair.Value)?.Folder ?? ""))).ToArray();
+            var items = SpellBase.Lookup.OrderBy(p => p.Value?.Name).Select(
+                pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
+                new KeyValuePair<string, string>(
+                   TextUtils.FormatEditorName(((SpellBase)pair.Value)?.Name, ((SpellBase)pair.Value)?.EditorName) ?? Models.DatabaseObject<SpellBase>.Deleted,
+                    ((SpellBase)pair.Value)?.Folder ?? ""))
+                ).ToArray();
             lstGameObjects.Repopulate(items, mFolders, btnAlphabetical.Checked, CustomSearch(), txtSearch.Text);
         }
 

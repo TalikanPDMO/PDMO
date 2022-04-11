@@ -294,7 +294,7 @@ namespace Intersect.Editor.Forms.Editors
             cmbSpawnItem.Items.Add(Strings.General.none);
             cmbSpawnItem.Items.AddRange(ItemBase.Names);
             cmbSpell.Items.Clear();
-            cmbSpell.Items.AddRange(SpellBase.Names);
+            cmbSpell.Items.AddRange(SpellBase.EditorFormatNames);
             nudLevel.Maximum = Options.MaxLevel;
             cmbAttackAnimation.Items.Clear();
             cmbAttackAnimation.Items.Add(Strings.General.none);

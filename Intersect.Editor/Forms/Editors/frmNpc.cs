@@ -92,7 +92,7 @@ namespace Intersect.Editor.Forms.Editors
             );
 
             cmbSpell.Items.Clear();
-            cmbSpell.Items.AddRange(SpellBase.Names);
+            cmbSpell.Items.AddRange(SpellBase.EditorFormatNames);
             cmbHostileNPC.Items.Clear();
             cmbHostileNPC.Items.AddRange(NpcBase.Names);
             cmbNpcToSwarm.Items.Clear();

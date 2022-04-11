@@ -132,7 +132,7 @@ namespace Intersect.Editor.Forms.Editors
             cmbEquipmentAnimation.Items.AddRange(AnimationBase.Names);
             cmbTeachSpell.Items.Clear();
             cmbTeachSpell.Items.Add(Strings.General.none);
-            cmbTeachSpell.Items.AddRange(SpellBase.Names);
+            cmbTeachSpell.Items.AddRange(SpellBase.EditorFormatNames);
             cmbEvent.Items.Clear();
             cmbEvent.Items.Add(Strings.General.none);
             cmbEvent.Items.AddRange(EventBase.Names);
@@ -163,7 +163,7 @@ namespace Intersect.Editor.Forms.Editors
 
             cmbCritEffectSpell.Items.Clear();
             cmbCritEffectSpell.Items.Add(Strings.General.none);
-            cmbCritEffectSpell.Items.AddRange(SpellBase.Names);
+            cmbCritEffectSpell.Items.AddRange(SpellBase.EditorFormatNames);
 
             InitLocalization();
             UpdateEditor();

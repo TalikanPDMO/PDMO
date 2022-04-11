@@ -34,7 +34,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             mCurrentMap = currentMap;
             InitLocalization();
             cmbSpell.Items.Clear();
-            cmbSpell.Items.AddRange(SpellBase.Names);
+            cmbSpell.Items.AddRange(SpellBase.EditorFormatNames);
             cmbSource.Items.Clear();
             cmbSource.Items.Add(Strings.EventUseSpell.player);
             cmbSource.SelectedIndex = 0; // default but will change with cmbspell update
