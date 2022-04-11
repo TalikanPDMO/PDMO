@@ -30,7 +30,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EventCommandChangeItems));
             this.grpChangeItems = new DarkUI.Controls.DarkGroupBox();
             this.grpVariableAmount = new DarkUI.Controls.DarkGroupBox();
             this.cmbVariable = new DarkUI.Controls.DarkComboBox();
@@ -203,9 +202,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpAmountType.Controls.Add(this.rdoVariable);
             this.grpAmountType.Controls.Add(this.rdoManual);
             this.grpAmountType.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpAmountType.Location = new System.Drawing.Point(185, 19);
+            this.grpAmountType.Location = new System.Drawing.Point(185, 7);
             this.grpAmountType.Name = "grpAmountType";
-            this.grpAmountType.Size = new System.Drawing.Size(115, 75);
+            this.grpAmountType.Size = new System.Drawing.Size(115, 60);
             this.grpAmountType.TabIndex = 36;
             this.grpAmountType.TabStop = false;
             this.grpAmountType.Text = "Amount Type:";
@@ -213,7 +212,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // rdoVariable
             // 
             this.rdoVariable.AutoSize = true;
-            this.rdoVariable.Location = new System.Drawing.Point(9, 42);
+            this.rdoVariable.Location = new System.Drawing.Point(9, 40);
             this.rdoVariable.Name = "rdoVariable";
             this.rdoVariable.Size = new System.Drawing.Size(63, 17);
             this.rdoVariable.TabIndex = 36;
@@ -249,7 +248,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             "Normal",
             "Allow Overflow",
             "Up to Amount"});
-            this.cmbMethod.Location = new System.Drawing.Point(64, 73);
+            this.cmbMethod.Location = new System.Drawing.Point(64, 46);
             this.cmbMethod.Name = "cmbMethod";
             this.cmbMethod.Size = new System.Drawing.Size(115, 21);
             this.cmbMethod.TabIndex = 28;
@@ -259,7 +258,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblMethod
             // 
             this.lblMethod.AutoSize = true;
-            this.lblMethod.Location = new System.Drawing.Point(5, 76);
+            this.lblMethod.Location = new System.Drawing.Point(5, 49);
             this.lblMethod.Name = "lblMethod";
             this.lblMethod.Size = new System.Drawing.Size(46, 13);
             this.lblMethod.TabIndex = 27;
@@ -278,9 +277,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbItem.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbItem.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbItem.FormattingEnabled = true;
-            this.cmbItem.Location = new System.Drawing.Point(64, 46);
+            this.cmbItem.Location = new System.Drawing.Point(64, 73);
             this.cmbItem.Name = "cmbItem";
-            this.cmbItem.Size = new System.Drawing.Size(115, 21);
+            this.cmbItem.Size = new System.Drawing.Size(236, 21);
             this.cmbItem.TabIndex = 24;
             this.cmbItem.Text = null;
             this.cmbItem.TextPadding = new System.Windows.Forms.Padding(2);
@@ -288,7 +287,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblItem
             // 
             this.lblItem.AutoSize = true;
-            this.lblItem.Location = new System.Drawing.Point(5, 48);
+            this.lblItem.Location = new System.Drawing.Point(21, 75);
             this.lblItem.Name = "lblItem";
             this.lblItem.Size = new System.Drawing.Size(30, 13);
             this.lblItem.TabIndex = 23;
@@ -320,7 +319,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblAction
             // 
             this.lblAction.AutoSize = true;
-            this.lblAction.Location = new System.Drawing.Point(5, 21);
+            this.lblAction.Location = new System.Drawing.Point(11, 21);
             this.lblAction.Name = "lblAction";
             this.lblAction.Size = new System.Drawing.Size(40, 13);
             this.lblAction.TabIndex = 21;

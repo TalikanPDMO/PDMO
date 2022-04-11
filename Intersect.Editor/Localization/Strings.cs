@@ -4005,7 +4005,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString sightrange = @"Sight Range:";
 
-            public static LocalizedString spawnduration = @"Spawn:(ms)";
+            public static LocalizedString spawnduration = @"Spawn(ms):";
 
             public static LocalizedString speed = @"Speed:";
 
