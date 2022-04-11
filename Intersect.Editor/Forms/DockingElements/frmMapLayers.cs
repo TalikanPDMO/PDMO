@@ -774,7 +774,7 @@ namespace Intersect.Editor.Forms.DockingElements
         {
             // Update the list incase npcs have been modified since form load.
             cmbNpc.Items.Clear();
-            cmbNpc.Items.AddRange(NpcBase.Names);
+            cmbNpc.Items.AddRange(NpcBase.EditorFormatNames);
 
             // Add the map NPCs
             lstMapNpcs.Items.Clear();

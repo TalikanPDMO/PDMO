@@ -94,9 +94,9 @@ namespace Intersect.Editor.Forms.Editors
             cmbSpell.Items.Clear();
             cmbSpell.Items.AddRange(SpellBase.EditorFormatNames);
             cmbHostileNPC.Items.Clear();
-            cmbHostileNPC.Items.AddRange(NpcBase.Names);
+            cmbHostileNPC.Items.AddRange(NpcBase.EditorFormatNames);
             cmbNpcToSwarm.Items.Clear();
-            cmbNpcToSwarm.Items.AddRange(NpcBase.Names);
+            cmbNpcToSwarm.Items.AddRange(NpcBase.EditorFormatNames);
             cmbDropItem.Items.Clear();
             cmbDropItem.Items.Add(Strings.General.none);
             cmbDropItem.Items.AddRange(ItemBase.EditorFormatNames);
@@ -137,6 +137,7 @@ namespace Intersect.Editor.Forms.Editors
 
             grpGeneral.Text = Strings.NpcEditor.general;
             lblName.Text = Strings.NpcEditor.name;
+            lblEditorName.Text = Strings.NpcEditor.editorname;
             grpBehavior.Text = Strings.NpcEditor.behavior;
 
             lblPic.Text = Strings.NpcEditor.sprite;
@@ -261,6 +262,7 @@ namespace Intersect.Editor.Forms.Editors
                 pnlContainer.Show();
 
                 txtName.Text = mEditorItem.Name;
+                txtEditorName.Text = mEditorItem.EditorName;
                 cmbFolder.Text = mEditorItem.Folder;
                 cmbSprite.SelectedIndex = cmbSprite.FindString(TextUtils.NullToNone(mEditorItem.Sprite));
                 nudRgbaR.Value = mEditorItem.Color.R;
@@ -397,7 +399,12 @@ namespace Intersect.Editor.Forms.Editors
         private void txtName_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.Name = txtName.Text;
-            lstGameObjects.UpdateText(txtName.Text);
+            lstGameObjects.UpdateText(TextUtils.FormatEditorName(mEditorItem.Name, mEditorItem.EditorName));
+        }
+        private void txtEditorName_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.EditorName = txtEditorName.Text;
+            lstGameObjects.UpdateText(TextUtils.FormatEditorName(mEditorItem.Name, mEditorItem.EditorName));
         }
 
         private void cmbSprite_SelectedIndexChanged(object sender, EventArgs e)
@@ -1046,8 +1053,12 @@ namespace Intersect.Editor.Forms.Editors
             cmbFolder.Items.Add("");
             cmbFolder.Items.AddRange(mKnownFolders.ToArray());
 
-            var items = NpcBase.Lookup.OrderBy(p => p.Value?.Name).Select(pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
-                new KeyValuePair<string, string>(((NpcBase)pair.Value)?.Name ?? Models.DatabaseObject<NpcBase>.Deleted, ((NpcBase)pair.Value)?.Folder ?? ""))).ToArray();
+            var items = NpcBase.Lookup.OrderBy(p => p.Value?.Name).Select(
+                pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
+                new KeyValuePair<string, string>(
+                   TextUtils.FormatEditorName(((NpcBase)pair.Value)?.Name, ((NpcBase)pair.Value)?.EditorName) ?? Models.DatabaseObject<NpcBase>.Deleted,
+                    ((NpcBase)pair.Value)?.Folder ?? ""))
+                ).ToArray();
             lstGameObjects.Repopulate(items, mFolders, btnAlphabetical.Checked, CustomSearch(), txtSearch.Text);
         }
 

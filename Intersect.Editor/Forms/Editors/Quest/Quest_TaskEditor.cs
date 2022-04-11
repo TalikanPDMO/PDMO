@@ -116,7 +116,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
                 case 2: //Kill Npcs
                     grpKillNpcs.Show();
                     cmbNpc.Items.Clear();
-                    cmbNpc.Items.AddRange(NpcBase.Names);
+                    cmbNpc.Items.AddRange(NpcBase.EditorFormatNames);
                     if (cmbNpc.Items.Count > 0)
                     {
                         cmbNpc.SelectedIndex = 0;

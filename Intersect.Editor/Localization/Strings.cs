@@ -3958,6 +3958,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString name = @"Name:";
 
+            public static LocalizedString editorname = @"Editor Name:";
+
             public static LocalizedString New = @"New Npc";
 
             public static LocalizedString npc = @"NPC:";
