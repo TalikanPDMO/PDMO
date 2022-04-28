@@ -585,6 +585,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new GiveExperienceCommand();
 
                     break;
+                case EventCommandType.SetExpBoost:
+                    tmpCommand = new SetExpBoostCommand();
+
+                    break;
                 case EventCommandType.ChangeLevel:
                     tmpCommand = new ChangeLevelCommand();
 
@@ -1202,6 +1206,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
                 case EventCommandType.GiveExperience:
                     cmdWindow = new EventCommandGiveExperience((GiveExperienceCommand) command, this);
+
+                    break;
+                case EventCommandType.SetExpBoost:
+                    cmdWindow = new EventCommandSetExpBoost((SetExpBoostCommand)command, this);
 
                     break;
                 case EventCommandType.ChangeLevel:

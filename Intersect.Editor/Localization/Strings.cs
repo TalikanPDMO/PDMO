@@ -1703,7 +1703,9 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString give = @"Give: Item {00}";
 
-            public static LocalizedString giveexp = @"Give Player {00} Experience";
+            public static LocalizedString giveexp = @"Give Player {00} Experience"; 
+
+            public static LocalizedString setexpboost = @"Set Boost Experience to {00} %";
 
             public static LocalizedString globalswitch = @"Set Global Switch {00} to {01}";
 
@@ -1961,6 +1963,7 @@ Tick timer saved in server config.json.";
                 {"exiteventprocess", @"Exit Event Process"},
                 {"fadeoutbgm", @"Fadeout BGM"},
                 {"giveexperience", @"Give Experience"},
+                {"setexpboost",@"Set Exp. Boost" },
                 {"gotolabel", @"Go To Label"},
                 {"hidepicture", @"Hide Picture"},
                 {"holdplayer", @"Hold Player"},
@@ -5215,6 +5218,44 @@ Negative values for time to flow backwards.";
             public static LocalizedString thisevent = @"[THIS EVENT]";
 
             public static LocalizedString notargetrequired = @"[No target required]";
+
+        }
+
+        public struct EventSetExpBoost
+        {
+
+            public static LocalizedString cancel = @"Cancel";
+
+            public static LocalizedString okay = @"Ok";
+
+            public static LocalizedString title = @"Set Experience Boost";
+
+            public static LocalizedString manualkillnpcs = @"Manual Kill Bonus Exp";
+
+            public static LocalizedString variablekillnpcs = @"Variable Kill Bonus Exp";
+
+            public static LocalizedString labelkillnpcsbonus = @"Killing NPCs Bonus Exp (%):";
+
+            public static LocalizedString manualkillnpcsduration = @"Manual Kill Bonus Duration ";
+
+            public static LocalizedString variablekillnpcsduration = @"Variable Kill Bonus Duration ";
+
+            public static LocalizedString labelkillnpcsbonusduration = @"Killing NPCs Bonus Duration (ms):";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString AmountType = @"Amount Type";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Variable = @"Variable";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Manual = @"Manual";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString PlayerVariable = @"Player Variable";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ServerVariable = @"Global Variable";
 
         }
 

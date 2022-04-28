@@ -819,6 +819,29 @@ namespace Intersect.Editor.Forms.Editors.Events
             }
         }
 
+        private static string GetCommandText(SetExpBoostCommand command, MapInstance map)
+        {
+            if (command.UseVariableExpBoostNpc)
+            {
+                var exp = string.Empty;
+                switch (command.VariableTypeExpBoostNpc)
+                {
+                    case VariableTypes.PlayerVariable:
+                        exp = string.Format(@"({0}: {1})", Strings.EventSetExpBoost.PlayerVariable, PlayerVariableBase.GetName(command.VariableIdExpBoostNpc));
+                        break;
+                    case VariableTypes.ServerVariable:
+                        exp = string.Format(@"({0}: {1})", Strings.EventSetExpBoost.ServerVariable, ServerVariableBase.GetName(command.VariableIdExpBoostNpc));
+                        break;
+                }
+
+                return Strings.EventCommandList.setexpboost.ToString(exp);
+            }
+            else
+            {
+                return Strings.EventCommandList.setexpboost.ToString(command.ExpBoostNpc);
+            }
+        }
+
         private static string GetCommandText(ChangeLevelCommand command, MapInstance map)
         {
             return Strings.EventCommandList.setlevel.ToString(command.Level);

@@ -380,7 +380,7 @@ namespace Intersect.Server.Entities.Events
                 }
             }
 
-            player.GiveExperience(quantity);
+            player.GiveExperience(quantity, false, true);
         }
 
         //Change Level Command
@@ -2344,6 +2344,33 @@ namespace Intersect.Server.Entities.Events
                     }
                 }
             }
+        }
+
+        //Set Exp Boost Command
+        private static void ProcessCommand(
+            SetExpBoostCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            var expBoostNpc = command.ExpBoostNpc;
+            if (command.UseVariableExpBoostNpc)
+            {
+                switch (command.VariableTypeExpBoostNpc)
+                {
+                    case VariableTypes.PlayerVariable:
+                        expBoostNpc = (int)player.GetVariableValue(command.VariableIdExpBoostNpc).Integer;
+
+                        break;
+                    case VariableTypes.ServerVariable:
+                        expBoostNpc = (int)ServerVariableBase.Get(command.VariableIdExpBoostNpc)?.Value.Integer;
+                        break;
+                }
+            }
+            Player.ExpBoostNpc = Tuple.Create(expBoostNpc, 0l);
+            PacketSender.SendChatMsg(player, "XP Boost : +" + expBoostNpc + "%", ChatMessageType.Local, Color.Orange);
         }
 
     }
