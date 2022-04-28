@@ -23,6 +23,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Intersect.Logging;
 
 using MainMenu = Intersect.Client.Interface.Menu.MainMenu;
 
@@ -54,6 +55,8 @@ namespace Intersect.Client.MonoGame
         private SpriteBatch updateBatch;
 
         private bool updaterGraphicsReset;
+
+        private bool errorLogged = false;
 
         #endregion
 
@@ -403,6 +406,14 @@ namespace Intersect.Client.MonoGame
                     status = Strings.Update.Error;
                     progress = mUpdater.Exception?.Message ?? "";
                     progressPercent = 100;
+                    if (!errorLogged)
+                    {
+                        if (mUpdater.Exception != null)
+                        {
+                            Log.Error(mUpdater.Exception);
+                            errorLogged = true;
+                        }
+                    }
                     break;
 
                 case UpdateStatus.None:
