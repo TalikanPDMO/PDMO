@@ -4423,7 +4423,8 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            if (target is Player)
+            // Seems useless to our game
+            /*if (target is Player)
             {
                 //Only count safe zones and friendly fire if its a dangerous spell! (If one has been used)
                 if (!spell.Combat.Friendly &&
@@ -4447,7 +4448,7 @@ namespace Intersect.Server.Entities
                     }
 
                 }
-            }
+            }*/
 
             //Check if the caster has the right ammunition if a projectile
             if (spell.SpellType == SpellTypes.CombatSpell &&
