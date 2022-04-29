@@ -254,7 +254,10 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString lost = @" lost ";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString died = @"You have been put KO by "; 
+            public readonly LocalizedString died = @"You have been put KO by ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString diednokiller = @"You have been put KO ";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString useAttack = @" uses ";

@@ -787,10 +787,17 @@ namespace Intersect.Server.Entities
             //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
             if (Options.Combat.EnableCombatChatMessages) // Ce premier message indique au joueur sur ce compte qu'il vient d'être mis KO par un mob / joueur
             {
-                PacketSender.SendChatMsg(this, Strings.Combat.died + killer.Name + " !", ChatMessageType.Combat);
-                if (killer is Player killerPlayer) //Ce message suivant s'envoie sur la console du joueur qui a mis KO le joueur qui joue sur ce compte
+                if (killer != null)
                 {
-                    PacketSender.SendChatMsg(killerPlayer, Strings.Combat.defeated + this.Name + " !", ChatMessageType.Combat);
+                    PacketSender.SendChatMsg(this, Strings.Combat.died + killer.Name + " !", ChatMessageType.Combat);
+                    if (killer is Player killerPlayer) //Ce message suivant s'envoie sur la console du joueur qui a mis KO le joueur qui joue sur ce compte
+                    {
+                        PacketSender.SendChatMsg(killerPlayer, Strings.Combat.defeated + this.Name + " !", ChatMessageType.Combat);
+                    }
+                }
+                else
+                {
+                    PacketSender.SendChatMsg(this, Strings.Combat.diednokiller + " !", ChatMessageType.Combat);
                 }
             }
 
