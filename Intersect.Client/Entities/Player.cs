@@ -2131,9 +2131,29 @@ namespace Intersect.Client.Entities
                 }
                 else //No Power
                 {
-                    textColor = CustomColors.Names.Players["Normal"].Name;
-                    borderColor = CustomColors.Names.Players["Normal"].Outline;
-                    backgroundColor = CustomColors.Names.Players["Normal"].Background;
+                    bool nameParty = false;
+                    if (Globals.Me.Party != null)
+                    {
+                        foreach (var partyMember in Globals.Me.Party)
+                        {
+                            if (partyMember.Id == this.Id)
+                            {
+                                nameParty = true;
+                            }
+                        }
+                    }
+                    if (nameParty)
+                    {
+                        textColor = CustomColors.Names.Players["Party"].Name;
+                        borderColor = CustomColors.Names.Players["Party"].Outline;
+                        backgroundColor = CustomColors.Names.Players["Party"].Background;
+                    }
+                    else
+                    {
+                        textColor = CustomColors.Names.Players["Normal"].Name;
+                        borderColor = CustomColors.Names.Players["Normal"].Outline;
+                        backgroundColor = CustomColors.Names.Players["Normal"].Background;
+                    } 
                 }
             }
 
