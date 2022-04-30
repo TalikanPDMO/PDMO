@@ -9,7 +9,6 @@ namespace Intersect.Server.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "TasksProgress",
                 table: "Player_Quests",
-                defaultValue: "{}",
                 nullable: true);
         }
 
