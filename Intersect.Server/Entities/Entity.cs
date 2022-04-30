@@ -1701,7 +1701,7 @@ namespace Intersect.Server.Entities
                 isCrit = Attack(
                     target, ref damageHealth, ref damageMana, spellBase.Combat.VitalSteal[(int)Vitals.Health], spellBase.Combat.VitalSteal[(int)Vitals.Mana],
                     (DamageType) spellBase.Combat.DamageType, (Stats) spellBase.Combat.ScalingStat, spellBase.Combat.Scaling, spellBase.Combat.CritChance,
-                    spellBase.Combat.CritMultiplier, spellBase.Name, deadAnimations, aliveAnimations, false, spellBase.Combat.CritEffectSpellReplace, alreadyCrit, reUseValues
+                    spellBase.Combat.CritMultiplier, spellBase.Name, deadAnimations, aliveAnimations, false, spellBase.Combat.CritEffectSpellReplace, alreadyCrit, reUseValues, spellBase.Combat.HoTDoT
                 ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
             }
             if (alreadyCrit && isNextSpell)
@@ -1973,7 +1973,8 @@ namespace Intersect.Server.Entities
             bool isAutoAttack = false,
             bool critReplace = false,
             bool alreadyCrit = false,
-            bool reUseValues = false
+            bool reUseValues = false,
+            bool hasDot = false
         )
         {
             var originalDamage = baseDamage;
@@ -2052,6 +2053,10 @@ namespace Intersect.Server.Entities
                     }
                     return true;
                 }
+            }
+            if (hasDot)
+            {
+                return isCrit;
             }
             bool isFixedDamage = false;
             //If spell from event or for ressources, fixed damage
