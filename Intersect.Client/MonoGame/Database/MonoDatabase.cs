@@ -15,22 +15,29 @@ namespace Intersect.Client.MonoGame.Database
         {
             var regkey = Registry.CurrentUser?.OpenSubKey("Software", true);
 
-            regkey?.CreateSubKey("IntersectClient");
-            regkey = regkey?.OpenSubKey("IntersectClient", true);
-            regkey?.CreateSubKey(ClientConfiguration.Instance.Host + ":" + ClientConfiguration.Instance.Port);
-            regkey = regkey?.OpenSubKey(
-                ClientConfiguration.Instance.Host + ":" + ClientConfiguration.Instance.Port, true
-            );
-
+            regkey?.CreateSubKey("PDMO");
+            regkey = regkey?.OpenSubKey("PDMO", true);
+            var clientkey = "PDMOClient";
+            if (ClientConfiguration.Instance.Host == "localhost" || ClientConfiguration.Instance.Host == "127.0.0.1")
+            {
+                clientkey += "Local";
+            }
+            regkey?.CreateSubKey(clientkey);
+            regkey = regkey?.OpenSubKey(clientkey, true);
             regkey?.SetValue(key, Convert.ToString(value));
         }
 
         public override string LoadPreference(string key)
         {
             var regkey = Registry.CurrentUser?.OpenSubKey("Software", false);
-            regkey = regkey?.OpenSubKey("IntersectClient", false);
-            regkey = regkey?.OpenSubKey(ClientConfiguration.Instance.Host + ":" + ClientConfiguration.Instance.Port);
 
+            regkey = regkey?.OpenSubKey("PDMO", false);
+            var clientkey = "PDMOClient";
+            if (ClientConfiguration.Instance.Host == "localhost" || ClientConfiguration.Instance.Host == "127.0.0.1")
+            {
+                clientkey += "Local";
+            }
+            regkey = regkey?.OpenSubKey(clientkey);
             return regkey?.GetValue(key) as string ?? "";
         }
 

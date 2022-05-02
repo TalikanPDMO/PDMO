@@ -197,6 +197,7 @@ namespace Intersect.Client.Interface.Menu
         public void Reset()
         {
             mLoginWindow.Hide();
+            mLoginWindow.ClearPasswordField();
             mRegisterWindow.Hide();
             mOptionsWindow.Hide();
             mCreditsWindow.Hide();
