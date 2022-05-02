@@ -141,17 +141,20 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
                     if (!mEditingEvent.CommonEvent)
                     {
-                        foreach (var evt in mCurrentMap.LocalEvents)
+                        if (mCurrentMap != null)
                         {
-                            cmbEntities.Items.Add(
-                                evt.Key == mEditingEvent.Id ? Strings.EventSpawnNpc.This + " " : "" + evt.Value.Name
-                            );
-
-                            if (mMyCommand.EntityId == evt.Key)
+                            foreach (var evt in mCurrentMap.LocalEvents)
                             {
-                                cmbEntities.SelectedIndex = cmbEntities.Items.Count - 1;
+                                cmbEntities.Items.Add(
+                                    evt.Key == mEditingEvent.Id ? Strings.EventSpawnNpc.This + " " : "" + evt.Value.Name
+                                );
+
+                                if (mMyCommand.EntityId == evt.Key)
+                                {
+                                    cmbEntities.SelectedIndex = cmbEntities.Items.Count - 1;
+                                }
                             }
-                        }
+                        } 
                     }
 
                     UpdateSpawnPreview();
