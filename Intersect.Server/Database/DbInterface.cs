@@ -1712,13 +1712,7 @@ namespace Intersect.Server.Database
             //Shut down server, start migration.
             Console.WriteLine(Strings.Migration.stoppingserver);
 
-            //This variable will end the server loop and save any pending changes
-            ServerContext.Instance.RequestShutdown();
-
-            while (ServerContext.Instance.IsRunning)
-            {
-                System.Threading.Thread.Sleep(100);
-            }
+            
 
 
             Console.WriteLine(Strings.Migration.startingmigration);
@@ -1776,11 +1770,18 @@ namespace Intersect.Server.Database
                 }
                 Options.PlayerDb = newOpts;
                 Options.SaveToDisk();
-
             }
 
             Console.WriteLine(Strings.Migration.migrationcomplete);
             Bootstrapper.Context.ConsoleService.Wait(true);
+
+            //This variable will end the server loop and save any pending changes
+            ServerContext.Instance.RequestShutdown();
+            System.Threading.Thread.Sleep(1000);
+            while (ServerContext.Instance.IsRunning)
+            {
+                System.Threading.Thread.Sleep(100);
+            }
             Environment.Exit(0);
         }
 
