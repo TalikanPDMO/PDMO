@@ -1705,7 +1705,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString giveexp = @"Give Player {00} Experience"; 
 
-            public static LocalizedString setexpboost = @"Set Boost Experience to {00} %";
+            public static LocalizedString setexpboost = @"Set Boost Experience '{00}' to {01}";
 
             public static LocalizedString globalswitch = @"Set Global Switch {00} to {01}";
 
@@ -5230,9 +5230,23 @@ Negative values for time to flow backwards.";
 
             public static LocalizedString title = @"Set Experience Boost";
 
-            public static LocalizedString manualkillnpcs = @"Manual Kill Bonus Exp";
+            public static LocalizedString infos = @"Infos";
 
-            public static LocalizedString variablekillnpcs = @"Variable Kill Bonus Exp";
+            public static LocalizedString boosttitle = @"Title:";
+
+            public static LocalizedString target = @"Target:";
+
+            public static LocalizedString player = @"Player";
+
+            public static LocalizedString party = @"Party";
+
+            public static LocalizedString guild = @"Guild";
+
+            public static LocalizedString allplayers = @"All Players";
+
+            public static LocalizedString manualkillnpcs = @"Manual Kill Bonus Exp ";
+
+            public static LocalizedString variablekillnpcs = @"Variable Kill Bonus Exp ";
 
             public static LocalizedString labelkillnpcsbonus = @"Killing NPCs Bonus Exp (%):";
 
@@ -5241,6 +5255,18 @@ Negative values for time to flow backwards.";
             public static LocalizedString variablekillnpcsduration = @"Variable Kill Bonus Duration ";
 
             public static LocalizedString labelkillnpcsbonusduration = @"Killing NPCs Bonus Duration (ms):";
+
+            public static LocalizedString manualquest = @"Manual Quests Bonus Exp ";
+
+            public static LocalizedString variablequest = @"Variable Quests Bonus Exp ";
+
+            public static LocalizedString labelquestbonus = @"Quests/Events Bonus Exp (%):";
+
+            public static LocalizedString manualquestduration = @"Manual Quests Bonus Duration ";
+
+            public static LocalizedString variablequestduration = @"Variable Quests Bonus Duration ";
+
+            public static LocalizedString labelquestbonusduration = @"Quests/Events Bonus Duration (ms):";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString AmountType = @"Amount Type";

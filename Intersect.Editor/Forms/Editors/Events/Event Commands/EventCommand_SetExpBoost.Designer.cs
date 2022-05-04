@@ -31,6 +31,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpSetExpBoost = new DarkUI.Controls.DarkGroupBox();
+            this.grpTarget = new DarkUI.Controls.DarkGroupBox();
+            this.rdoTargetAllPlayers = new DarkUI.Controls.DarkRadioButton();
+            this.rdoTargetGuild = new DarkUI.Controls.DarkRadioButton();
+            this.rdoTargetParty = new DarkUI.Controls.DarkRadioButton();
+            this.rdoTargetPlayer = new DarkUI.Controls.DarkRadioButton();
             this.grpManualQuestBonusDuration = new DarkUI.Controls.DarkGroupBox();
             this.nudQuestBonusDuration = new DarkUI.Controls.DarkNumericUpDown();
             this.lblQuestBonusDuration = new System.Windows.Forms.Label();
@@ -77,7 +82,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.rdoManualKillNpcsBonus = new DarkUI.Controls.DarkRadioButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
+            this.txtTitle = new DarkUI.Controls.DarkTextBox();
+            this.lblBoostTitle = new System.Windows.Forms.Label();
+            this.lblTarget = new System.Windows.Forms.Label();
             this.grpSetExpBoost.SuspendLayout();
+            this.grpTarget.SuspendLayout();
             this.grpManualQuestBonusDuration.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudQuestBonusDuration)).BeginInit();
             this.grpManualQuestBonusAmount.SuspendLayout();
@@ -100,6 +109,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpSetExpBoost.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpSetExpBoost.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpSetExpBoost.Controls.Add(this.grpTarget);
             this.grpSetExpBoost.Controls.Add(this.grpManualQuestBonusDuration);
             this.grpSetExpBoost.Controls.Add(this.grpManualQuestBonusAmount);
             this.grpSetExpBoost.Controls.Add(this.grpVariableQuestBonusDuration);
@@ -117,10 +127,67 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpSetExpBoost.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpSetExpBoost.Location = new System.Drawing.Point(3, 3);
             this.grpSetExpBoost.Name = "grpSetExpBoost";
-            this.grpSetExpBoost.Size = new System.Drawing.Size(429, 471);
+            this.grpSetExpBoost.Size = new System.Drawing.Size(429, 419);
             this.grpSetExpBoost.TabIndex = 17;
             this.grpSetExpBoost.TabStop = false;
             this.grpSetExpBoost.Text = "Set Experience Boost:";
+            // 
+            // grpTarget
+            // 
+            this.grpTarget.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpTarget.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTarget.Controls.Add(this.lblTarget);
+            this.grpTarget.Controls.Add(this.txtTitle);
+            this.grpTarget.Controls.Add(this.lblBoostTitle);
+            this.grpTarget.Controls.Add(this.rdoTargetAllPlayers);
+            this.grpTarget.Controls.Add(this.rdoTargetGuild);
+            this.grpTarget.Controls.Add(this.rdoTargetParty);
+            this.grpTarget.Controls.Add(this.rdoTargetPlayer);
+            this.grpTarget.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpTarget.Location = new System.Drawing.Point(6, 15);
+            this.grpTarget.Name = "grpTarget";
+            this.grpTarget.Size = new System.Drawing.Size(414, 57);
+            this.grpTarget.TabIndex = 38;
+            this.grpTarget.TabStop = false;
+            this.grpTarget.Text = "Infos";
+            // 
+            // rdoTargetAllPlayers
+            // 
+            this.rdoTargetAllPlayers.AutoSize = true;
+            this.rdoTargetAllPlayers.Location = new System.Drawing.Point(305, 36);
+            this.rdoTargetAllPlayers.Name = "rdoTargetAllPlayers";
+            this.rdoTargetAllPlayers.Size = new System.Drawing.Size(73, 17);
+            this.rdoTargetAllPlayers.TabIndex = 38;
+            this.rdoTargetAllPlayers.Text = "All Players";
+            // 
+            // rdoTargetGuild
+            // 
+            this.rdoTargetGuild.AutoSize = true;
+            this.rdoTargetGuild.Location = new System.Drawing.Point(241, 36);
+            this.rdoTargetGuild.Name = "rdoTargetGuild";
+            this.rdoTargetGuild.Size = new System.Drawing.Size(49, 17);
+            this.rdoTargetGuild.TabIndex = 37;
+            this.rdoTargetGuild.Text = "Guild";
+            // 
+            // rdoTargetParty
+            // 
+            this.rdoTargetParty.AutoSize = true;
+            this.rdoTargetParty.Location = new System.Drawing.Point(177, 36);
+            this.rdoTargetParty.Name = "rdoTargetParty";
+            this.rdoTargetParty.Size = new System.Drawing.Size(49, 17);
+            this.rdoTargetParty.TabIndex = 36;
+            this.rdoTargetParty.Text = "Party";
+            // 
+            // rdoTargetPlayer
+            // 
+            this.rdoTargetPlayer.AutoSize = true;
+            this.rdoTargetPlayer.Checked = true;
+            this.rdoTargetPlayer.Location = new System.Drawing.Point(108, 36);
+            this.rdoTargetPlayer.Name = "rdoTargetPlayer";
+            this.rdoTargetPlayer.Size = new System.Drawing.Size(54, 17);
+            this.rdoTargetPlayer.TabIndex = 35;
+            this.rdoTargetPlayer.TabStop = true;
+            this.rdoTargetPlayer.Text = "Player";
             // 
             // grpManualQuestBonusDuration
             // 
@@ -129,7 +196,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpManualQuestBonusDuration.Controls.Add(this.nudQuestBonusDuration);
             this.grpManualQuestBonusDuration.Controls.Add(this.lblQuestBonusDuration);
             this.grpManualQuestBonusDuration.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpManualQuestBonusDuration.Location = new System.Drawing.Point(7, 250);
+            this.grpManualQuestBonusDuration.Location = new System.Drawing.Point(7, 317);
             this.grpManualQuestBonusDuration.Name = "grpManualQuestBonusDuration";
             this.grpManualQuestBonusDuration.Size = new System.Drawing.Size(292, 71);
             this.grpManualQuestBonusDuration.TabIndex = 49;
@@ -172,7 +239,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpManualQuestBonusAmount.Controls.Add(this.nudQuestBonus);
             this.grpManualQuestBonusAmount.Controls.Add(this.lblQuestBonus);
             this.grpManualQuestBonusAmount.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpManualQuestBonusAmount.Location = new System.Drawing.Point(7, 177);
+            this.grpManualQuestBonusAmount.Location = new System.Drawing.Point(7, 242);
             this.grpManualQuestBonusAmount.Name = "grpManualQuestBonusAmount";
             this.grpManualQuestBonusAmount.Size = new System.Drawing.Size(292, 71);
             this.grpManualQuestBonusAmount.TabIndex = 46;
@@ -217,7 +284,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpVariableQuestBonusDuration.Controls.Add(this.rdoGlobalVariableQuestBonusDuration);
             this.grpVariableQuestBonusDuration.Controls.Add(this.rdoPlayerVariableQuestBonusDuration);
             this.grpVariableQuestBonusDuration.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpVariableQuestBonusDuration.Location = new System.Drawing.Point(7, 250);
+            this.grpVariableQuestBonusDuration.Location = new System.Drawing.Point(7, 316);
             this.grpVariableQuestBonusDuration.Name = "grpVariableQuestBonusDuration";
             this.grpVariableQuestBonusDuration.Size = new System.Drawing.Size(292, 71);
             this.grpVariableQuestBonusDuration.TabIndex = 48;
@@ -262,6 +329,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.rdoGlobalVariableQuestBonusDuration.Size = new System.Drawing.Size(96, 17);
             this.rdoGlobalVariableQuestBonusDuration.TabIndex = 37;
             this.rdoGlobalVariableQuestBonusDuration.Text = "Global Variable";
+            this.rdoGlobalVariableQuestBonusDuration.CheckedChanged += new System.EventHandler(this.rdoGlobalVariableQuestDuration_CheckedChanged);
             // 
             // rdoPlayerVariableQuestBonusDuration
             // 
@@ -273,6 +341,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.rdoPlayerVariableQuestBonusDuration.TabIndex = 36;
             this.rdoPlayerVariableQuestBonusDuration.TabStop = true;
             this.rdoPlayerVariableQuestBonusDuration.Text = "Player Variable";
+            this.rdoPlayerVariableQuestBonusDuration.CheckedChanged += new System.EventHandler(this.rdoPlayerVariableQuestDuration_CheckedChanged);
             // 
             // grpVariableQuestBonusAmount
             // 
@@ -283,7 +352,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpVariableQuestBonusAmount.Controls.Add(this.rdoGlobalVariableQuestBonus);
             this.grpVariableQuestBonusAmount.Controls.Add(this.rdoPlayerVariableQuestBonus);
             this.grpVariableQuestBonusAmount.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpVariableQuestBonusAmount.Location = new System.Drawing.Point(7, 177);
+            this.grpVariableQuestBonusAmount.Location = new System.Drawing.Point(7, 242);
             this.grpVariableQuestBonusAmount.Name = "grpVariableQuestBonusAmount";
             this.grpVariableQuestBonusAmount.Size = new System.Drawing.Size(292, 71);
             this.grpVariableQuestBonusAmount.TabIndex = 45;
@@ -328,6 +397,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.rdoGlobalVariableQuestBonus.Size = new System.Drawing.Size(96, 17);
             this.rdoGlobalVariableQuestBonus.TabIndex = 37;
             this.rdoGlobalVariableQuestBonus.Text = "Global Variable";
+            this.rdoGlobalVariableQuestBonus.CheckedChanged += new System.EventHandler(this.rdoGlobalVariableQuest_CheckedChanged);
             // 
             // rdoPlayerVariableQuestBonus
             // 
@@ -339,6 +409,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.rdoPlayerVariableQuestBonus.TabIndex = 36;
             this.rdoPlayerVariableQuestBonus.TabStop = true;
             this.rdoPlayerVariableQuestBonus.Text = "Player Variable";
+            this.rdoPlayerVariableQuestBonus.CheckedChanged += new System.EventHandler(this.rdoPlayerVariableQuest_CheckedChanged);
             // 
             // grpQuestBonusDurationAmountType
             // 
@@ -347,7 +418,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpQuestBonusDurationAmountType.Controls.Add(this.rdoVariableQuestBonusDuration);
             this.grpQuestBonusDurationAmountType.Controls.Add(this.rdoManualQuestBonusDuration);
             this.grpQuestBonusDurationAmountType.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpQuestBonusDurationAmountType.Location = new System.Drawing.Point(306, 250);
+            this.grpQuestBonusDurationAmountType.Location = new System.Drawing.Point(306, 317);
             this.grpQuestBonusDurationAmountType.Name = "grpQuestBonusDurationAmountType";
             this.grpQuestBonusDurationAmountType.Size = new System.Drawing.Size(115, 71);
             this.grpQuestBonusDurationAmountType.TabIndex = 47;
@@ -362,6 +433,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.rdoVariableQuestBonusDuration.Size = new System.Drawing.Size(63, 17);
             this.rdoVariableQuestBonusDuration.TabIndex = 36;
             this.rdoVariableQuestBonusDuration.Text = "Variable";
+            this.rdoVariableQuestBonusDuration.CheckedChanged += new System.EventHandler(this.rdoVariableQuestDuration_CheckedChanged);
             // 
             // rdoManualQuestBonusDuration
             // 
@@ -373,6 +445,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.rdoManualQuestBonusDuration.TabIndex = 35;
             this.rdoManualQuestBonusDuration.TabStop = true;
             this.rdoManualQuestBonusDuration.Text = "Manual";
+            this.rdoManualQuestBonusDuration.CheckedChanged += new System.EventHandler(this.rdoManualQuestDuration_CheckedChanged);
             // 
             // grpQuestBonusAmountType
             // 
@@ -381,7 +454,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpQuestBonusAmountType.Controls.Add(this.rdoVariableQuestBonus);
             this.grpQuestBonusAmountType.Controls.Add(this.rdoManualQuestBonus);
             this.grpQuestBonusAmountType.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpQuestBonusAmountType.Location = new System.Drawing.Point(306, 177);
+            this.grpQuestBonusAmountType.Location = new System.Drawing.Point(306, 242);
             this.grpQuestBonusAmountType.Name = "grpQuestBonusAmountType";
             this.grpQuestBonusAmountType.Size = new System.Drawing.Size(115, 71);
             this.grpQuestBonusAmountType.TabIndex = 44;
@@ -396,6 +469,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.rdoVariableQuestBonus.Size = new System.Drawing.Size(63, 17);
             this.rdoVariableQuestBonus.TabIndex = 36;
             this.rdoVariableQuestBonus.Text = "Variable";
+            this.rdoVariableQuestBonus.CheckedChanged += new System.EventHandler(this.rdoVariableQuest_CheckedChanged);
             // 
             // rdoManualQuestBonus
             // 
@@ -407,6 +481,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.rdoManualQuestBonus.TabIndex = 35;
             this.rdoManualQuestBonus.TabStop = true;
             this.rdoManualQuestBonus.Text = "Manual";
+            this.rdoManualQuestBonus.CheckedChanged += new System.EventHandler(this.rdoManualQuest_CheckedChanged);
             // 
             // grpManualKillNpcsBonusDuration
             // 
@@ -415,7 +490,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpManualKillNpcsBonusDuration.Controls.Add(this.nudKillNpcsBonusDuration);
             this.grpManualKillNpcsBonusDuration.Controls.Add(this.lblKillNpcsBonusDuration);
             this.grpManualKillNpcsBonusDuration.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpManualKillNpcsBonusDuration.Location = new System.Drawing.Point(6, 92);
+            this.grpManualKillNpcsBonusDuration.Location = new System.Drawing.Point(6, 159);
             this.grpManualKillNpcsBonusDuration.Name = "grpManualKillNpcsBonusDuration";
             this.grpManualKillNpcsBonusDuration.Size = new System.Drawing.Size(292, 71);
             this.grpManualKillNpcsBonusDuration.TabIndex = 43;
@@ -458,7 +533,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpManualKillNpcsBonusAmount.Controls.Add(this.nudKillNpcsBonus);
             this.grpManualKillNpcsBonusAmount.Controls.Add(this.lblKillNpcsBonus);
             this.grpManualKillNpcsBonusAmount.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpManualKillNpcsBonusAmount.Location = new System.Drawing.Point(6, 19);
+            this.grpManualKillNpcsBonusAmount.Location = new System.Drawing.Point(6, 84);
             this.grpManualKillNpcsBonusAmount.Name = "grpManualKillNpcsBonusAmount";
             this.grpManualKillNpcsBonusAmount.Size = new System.Drawing.Size(292, 71);
             this.grpManualKillNpcsBonusAmount.TabIndex = 40;
@@ -503,7 +578,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpVariableKillNpcsBonusDuration.Controls.Add(this.rdoGlobalVariableKillNpcsBonusDuration);
             this.grpVariableKillNpcsBonusDuration.Controls.Add(this.rdoPlayerVariableKillNpcsBonusDuration);
             this.grpVariableKillNpcsBonusDuration.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpVariableKillNpcsBonusDuration.Location = new System.Drawing.Point(6, 92);
+            this.grpVariableKillNpcsBonusDuration.Location = new System.Drawing.Point(6, 158);
             this.grpVariableKillNpcsBonusDuration.Name = "grpVariableKillNpcsBonusDuration";
             this.grpVariableKillNpcsBonusDuration.Size = new System.Drawing.Size(292, 71);
             this.grpVariableKillNpcsBonusDuration.TabIndex = 42;
@@ -571,7 +646,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpVariableKillNpcsBonusAmount.Controls.Add(this.rdoGlobalVariableKillNpcsBonus);
             this.grpVariableKillNpcsBonusAmount.Controls.Add(this.rdoPlayerVariableKillNpcsBonus);
             this.grpVariableKillNpcsBonusAmount.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpVariableKillNpcsBonusAmount.Location = new System.Drawing.Point(6, 19);
+            this.grpVariableKillNpcsBonusAmount.Location = new System.Drawing.Point(6, 84);
             this.grpVariableKillNpcsBonusAmount.Name = "grpVariableKillNpcsBonusAmount";
             this.grpVariableKillNpcsBonusAmount.Size = new System.Drawing.Size(292, 71);
             this.grpVariableKillNpcsBonusAmount.TabIndex = 39;
@@ -637,7 +712,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpKillNpcsBonusDurationAmountType.Controls.Add(this.rdoVariableKillNpcsBonusDuration);
             this.grpKillNpcsBonusDurationAmountType.Controls.Add(this.rdoManualKillNpcsBonusDuration);
             this.grpKillNpcsBonusDurationAmountType.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpKillNpcsBonusDurationAmountType.Location = new System.Drawing.Point(305, 92);
+            this.grpKillNpcsBonusDurationAmountType.Location = new System.Drawing.Point(305, 159);
             this.grpKillNpcsBonusDurationAmountType.Name = "grpKillNpcsBonusDurationAmountType";
             this.grpKillNpcsBonusDurationAmountType.Size = new System.Drawing.Size(115, 71);
             this.grpKillNpcsBonusDurationAmountType.TabIndex = 41;
@@ -673,7 +748,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpKillNpcsBonusAmountType.Controls.Add(this.rdoVariableKillNpcsBonus);
             this.grpKillNpcsBonusAmountType.Controls.Add(this.rdoManualKillNpcsBonus);
             this.grpKillNpcsBonusAmountType.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpKillNpcsBonusAmountType.Location = new System.Drawing.Point(305, 19);
+            this.grpKillNpcsBonusAmountType.Location = new System.Drawing.Point(305, 84);
             this.grpKillNpcsBonusAmountType.Name = "grpKillNpcsBonusAmountType";
             this.grpKillNpcsBonusAmountType.Size = new System.Drawing.Size(115, 71);
             this.grpKillNpcsBonusAmountType.TabIndex = 37;
@@ -704,7 +779,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(223, 442);
+            this.btnCancel.Location = new System.Drawing.Point(150, 392);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -714,13 +789,42 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(6, 442);
+            this.btnSave.Location = new System.Drawing.Point(6, 392);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 19;
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // txtTitle
+            // 
+            this.txtTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtTitle.Location = new System.Drawing.Point(90, 13);
+            this.txtTitle.Name = "txtTitle";
+            this.txtTitle.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.txtTitle.Size = new System.Drawing.Size(304, 20);
+            this.txtTitle.TabIndex = 40;
+            // 
+            // lblBoostTitle
+            // 
+            this.lblBoostTitle.AutoSize = true;
+            this.lblBoostTitle.Location = new System.Drawing.Point(45, 16);
+            this.lblBoostTitle.Name = "lblBoostTitle";
+            this.lblBoostTitle.Size = new System.Drawing.Size(30, 13);
+            this.lblBoostTitle.TabIndex = 39;
+            this.lblBoostTitle.Text = "Title:";
+            // 
+            // lblTarget
+            // 
+            this.lblTarget.AutoSize = true;
+            this.lblTarget.Location = new System.Drawing.Point(45, 37);
+            this.lblTarget.Name = "lblTarget";
+            this.lblTarget.Size = new System.Drawing.Size(41, 13);
+            this.lblTarget.TabIndex = 41;
+            this.lblTarget.Text = "Target:";
             // 
             // EventCommandSetExpBoost
             // 
@@ -730,8 +834,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpSetExpBoost);
             this.Name = "EventCommandSetExpBoost";
-            this.Size = new System.Drawing.Size(436, 477);
+            this.Size = new System.Drawing.Size(436, 425);
             this.grpSetExpBoost.ResumeLayout(false);
+            this.grpTarget.ResumeLayout(false);
+            this.grpTarget.PerformLayout();
             this.grpManualQuestBonusDuration.ResumeLayout(false);
             this.grpManualQuestBonusDuration.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudQuestBonusDuration)).EndInit();
@@ -813,5 +919,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkGroupBox grpQuestBonusAmountType;
         private DarkRadioButton rdoVariableQuestBonus;
         private DarkRadioButton rdoManualQuestBonus;
+        private DarkGroupBox grpTarget;
+        private DarkRadioButton rdoTargetAllPlayers;
+        private DarkRadioButton rdoTargetGuild;
+        private DarkRadioButton rdoTargetParty;
+        private DarkRadioButton rdoTargetPlayer;
+        private System.Windows.Forms.Label lblTarget;
+        private DarkTextBox txtTitle;
+        private System.Windows.Forms.Label lblBoostTitle;
     }
 }

@@ -1157,6 +1157,7 @@ namespace Intersect.GameObjects.Events.Commands
 
         public override EventCommandType Type { get; } = EventCommandType.SetExpBoost;
 
+        public EventTargetType TargetType { get; set; } = EventTargetType.Player;
         public string Title { get; set; } = "";
 
         public int ExpBoostNpc { get; set; } = 0;
