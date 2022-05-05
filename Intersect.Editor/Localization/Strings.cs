@@ -5254,7 +5254,7 @@ Negative values for time to flow backwards.";
 
             public static LocalizedString variablekillnpcsduration = @"Variable Kill Bonus Duration ";
 
-            public static LocalizedString labelkillnpcsbonusduration = @"Killing NPCs Bonus Duration (ms):";
+            public static LocalizedString labelkillnpcsbonusduration = @"Killing NPCs Bonus Duration (s):";
 
             public static LocalizedString manualquest = @"Manual Quests Bonus Exp ";
 
@@ -5266,7 +5266,7 @@ Negative values for time to flow backwards.";
 
             public static LocalizedString variablequestduration = @"Variable Quests Bonus Duration ";
 
-            public static LocalizedString labelquestbonusduration = @"Quests/Events Bonus Duration (ms):";
+            public static LocalizedString labelquestbonusduration = @"Quests/Events Bonus Duration (s):";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString AmountType = @"Amount Type";

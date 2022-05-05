@@ -2355,22 +2355,82 @@ namespace Intersect.Server.Entities.Events
             Stack<CommandInstance> callStack
         )
         {
-            var expBoostNpc = command.ExpBoostNpc;
+            var killExpAmount = command.ExpBoostNpc;
+            long killExpireTime = command.ExpBoostNpcDuration;
+            var questExpAmount = command.ExpBoostQuestEvent;
+            long questExpireTime = command.ExpBoostQuestEventDuration;
+
             if (command.UseVariableExpBoostNpc)
             {
                 switch (command.VariableTypeExpBoostNpc)
                 {
                     case VariableTypes.PlayerVariable:
-                        expBoostNpc = (int)player.GetVariableValue(command.VariableIdExpBoostNpc).Integer;
-
+                        killExpAmount = (int)player.GetVariableValue(command.VariableIdExpBoostNpc).Integer;
                         break;
                     case VariableTypes.ServerVariable:
-                        expBoostNpc = (int)ServerVariableBase.Get(command.VariableIdExpBoostNpc)?.Value.Integer;
+                        killExpAmount = (int)ServerVariableBase.Get(command.VariableIdExpBoostNpc)?.Value.Integer;
                         break;
                 }
             }
-            Player.ExpBoostNpc = Tuple.Create(expBoostNpc, 0l);
-            PacketSender.SendChatMsg(player, "XP Boost : +" + expBoostNpc + "%", ChatMessageType.Local, Color.Orange);
+            if (command.UseVariableExpBoostNpcDuration)
+            {
+                switch (command.VariableTypeExpBoostNpcDuration)
+                {
+                    case VariableTypes.PlayerVariable:
+                        killExpireTime = (long)player.GetVariableValue(command.VariableIdExpBoostNpcDuration).Integer;
+                        break;
+                    case VariableTypes.ServerVariable:
+                        killExpireTime = (long)ServerVariableBase.Get(command.VariableIdExpBoostNpcDuration)?.Value.Integer;
+                        break;
+                }
+            }
+            killExpireTime = Globals.Timing.Milliseconds + killExpireTime * 1000;
+
+            if (command.UseVariableExpBoostQuestEvent)
+            {
+                switch (command.VariableTypeExpBoostQuestEvent)
+                {
+                    case VariableTypes.PlayerVariable:
+                        questExpAmount = (int)player.GetVariableValue(command.VariableIdExpBoostQuestEvent).Integer;
+                        break;
+                    case VariableTypes.ServerVariable:
+                        questExpAmount = (int)ServerVariableBase.Get(command.VariableIdExpBoostQuestEvent)?.Value.Integer;
+                        break;
+                }
+            }
+            if (command.UseVariableExpBoostQuestEventDuration)
+            {
+                switch (command.VariableTypeExpBoostQuestEventDuration)
+                {
+                    case VariableTypes.PlayerVariable:
+                        questExpireTime = (long)player.GetVariableValue(command.VariableIdExpBoostQuestEventDuration).Integer;
+                        break;
+                    case VariableTypes.ServerVariable:
+                        questExpireTime = (long)ServerVariableBase.Get(command.VariableIdExpBoostQuestEventDuration)?.Value.Integer;
+                        break;
+                }
+            }
+            questExpireTime = Globals.Timing.Milliseconds + questExpireTime * 1000;
+            var expboost = new ExpBoost(command.Title, player, command.TargetType, killExpAmount, killExpireTime, questExpAmount, questExpireTime);
+            switch(expboost.TargetType)
+            {
+                case EventTargetType.Player:
+                    ExpBoost.PlayerExpBoosts[player.Id] = expboost;
+                    break;
+                case EventTargetType.Party:
+                    ExpBoost.PartyExpBoosts[player.Id] = expboost;
+                    break;
+                case EventTargetType.Guild:
+                    ExpBoost.GuildExpBoosts[player.Guild.Id] = expboost;
+                    break;
+                case EventTargetType.AllPlayers:
+                    ExpBoost.AllExpBoost = expboost;
+                    break;
+            }
+
+            
+            // TODO Send/Create ExpBoostPacket here and when login ?
+            //PacketSender.SendChatMsg(player, "XP Boost : +" + expBoostNpc + "%", ChatMessageType.Local, Color.Orange);
         }
 
     }

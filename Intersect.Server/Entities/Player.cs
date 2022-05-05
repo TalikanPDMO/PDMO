@@ -43,10 +43,6 @@ namespace Intersect.Server.Entities
 
         public static Player[] OnlineList { get; private set; } = new Player[0];
 
-        public static Tuple<int, long> ExpBoostNpc { get; set; } = Tuple.Create(0, 0l);
-
-        public static Tuple<int, long> ExpBoostQuestEvent { get; set; } = Tuple.Create(0, 0l);
-
         [NotMapped]
         public bool Online => OnlinePlayers.ContainsKey(Id);
 
@@ -2896,17 +2892,55 @@ namespace Intersect.Server.Entities
                     }
                 }
             }
-
-            if (xpBoostNpc)
+            ExpBoost boost;
+            if (ExpBoost.PlayerExpBoosts.TryGetValue(Id, out boost))
             {
-                exp += Player.ExpBoostNpc.Item1;
+                if (xpBoostNpc)
+                {
+                    exp += boost.AmountKill;
+                }
+                if (xpBoostQuestEvent)
+                {
+                    exp += boost.AmountQuest;
+                }
             }
-
-            if (xpBoostQuestEvent)
+            // Check party size and bonus of party leader
+            if (Party?.Count > 1 && ExpBoost.PartyExpBoosts.TryGetValue(Party[0].Id, out boost))
             {
-                exp += Player.ExpBoostQuestEvent.Item1;
+                if (xpBoostNpc)
+                {
+                    exp += boost.AmountKill;
+                }
+                if (xpBoostQuestEvent)
+                {
+                    exp += boost.AmountQuest;
+                }
             }
-
+            // Check guild size and guild id of the player
+            if (Guild?.Members?.Count > 1 && ExpBoost.GuildExpBoosts.TryGetValue(Guild.Id, out boost))
+            {
+                if (xpBoostNpc)
+                {
+                    exp += boost.AmountKill;
+                }
+                if (xpBoostQuestEvent)
+                {
+                    exp += boost.AmountQuest;
+                }
+            }
+            boost = ExpBoost.AllExpBoost;
+            if (boost != null)
+            {
+                if (xpBoostNpc)
+                {
+                    exp += boost.AmountKill;
+                }
+                if (xpBoostQuestEvent)
+                {
+                    exp += boost.AmountQuest;
+                }
+            }
+            Debug.WriteLine("Exp : " + exp);
             return exp;
         }
 

@@ -32,6 +32,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             this.grpSetExpBoost = new DarkUI.Controls.DarkGroupBox();
             this.grpTarget = new DarkUI.Controls.DarkGroupBox();
+            this.lblTarget = new System.Windows.Forms.Label();
+            this.txtTitle = new DarkUI.Controls.DarkTextBox();
+            this.lblBoostTitle = new System.Windows.Forms.Label();
             this.rdoTargetAllPlayers = new DarkUI.Controls.DarkRadioButton();
             this.rdoTargetGuild = new DarkUI.Controls.DarkRadioButton();
             this.rdoTargetParty = new DarkUI.Controls.DarkRadioButton();
@@ -82,9 +85,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.rdoManualKillNpcsBonus = new DarkUI.Controls.DarkRadioButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
-            this.txtTitle = new DarkUI.Controls.DarkTextBox();
-            this.lblBoostTitle = new System.Windows.Forms.Label();
-            this.lblTarget = new System.Windows.Forms.Label();
             this.grpSetExpBoost.SuspendLayout();
             this.grpTarget.SuspendLayout();
             this.grpManualQuestBonusDuration.SuspendLayout();
@@ -150,6 +150,35 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpTarget.TabIndex = 38;
             this.grpTarget.TabStop = false;
             this.grpTarget.Text = "Infos";
+            // 
+            // lblTarget
+            // 
+            this.lblTarget.AutoSize = true;
+            this.lblTarget.Location = new System.Drawing.Point(45, 37);
+            this.lblTarget.Name = "lblTarget";
+            this.lblTarget.Size = new System.Drawing.Size(41, 13);
+            this.lblTarget.TabIndex = 41;
+            this.lblTarget.Text = "Target:";
+            // 
+            // txtTitle
+            // 
+            this.txtTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtTitle.Location = new System.Drawing.Point(90, 13);
+            this.txtTitle.Name = "txtTitle";
+            this.txtTitle.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.txtTitle.Size = new System.Drawing.Size(304, 20);
+            this.txtTitle.TabIndex = 40;
+            // 
+            // lblBoostTitle
+            // 
+            this.lblBoostTitle.AutoSize = true;
+            this.lblBoostTitle.Location = new System.Drawing.Point(45, 16);
+            this.lblBoostTitle.Name = "lblBoostTitle";
+            this.lblBoostTitle.Size = new System.Drawing.Size(30, 13);
+            this.lblBoostTitle.TabIndex = 39;
+            this.lblBoostTitle.Text = "Title:";
             // 
             // rdoTargetAllPlayers
             // 
@@ -226,11 +255,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblQuestBonusDuration
             // 
             this.lblQuestBonusDuration.AutoSize = true;
-            this.lblQuestBonusDuration.Location = new System.Drawing.Point(2, 27);
+            this.lblQuestBonusDuration.Location = new System.Drawing.Point(8, 27);
             this.lblQuestBonusDuration.Name = "lblQuestBonusDuration";
-            this.lblQuestBonusDuration.Size = new System.Drawing.Size(179, 13);
+            this.lblQuestBonusDuration.Size = new System.Drawing.Size(171, 13);
             this.lblQuestBonusDuration.TabIndex = 23;
-            this.lblQuestBonusDuration.Text = "Quests/Events Bonus Duration (ms):";
+            this.lblQuestBonusDuration.Text = "Quests/Events Bonus Duration (s):";
             // 
             // grpManualQuestBonusAmount
             // 
@@ -520,11 +549,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblKillNpcsBonusDuration
             // 
             this.lblKillNpcsBonusDuration.AutoSize = true;
-            this.lblKillNpcsBonusDuration.Location = new System.Drawing.Point(2, 27);
+            this.lblKillNpcsBonusDuration.Location = new System.Drawing.Point(17, 27);
             this.lblKillNpcsBonusDuration.Name = "lblKillNpcsBonusDuration";
-            this.lblKillNpcsBonusDuration.Size = new System.Drawing.Size(165, 13);
+            this.lblKillNpcsBonusDuration.Size = new System.Drawing.Size(157, 13);
             this.lblKillNpcsBonusDuration.TabIndex = 23;
-            this.lblKillNpcsBonusDuration.Text = "Killing NPCs Bonus Duration (ms):";
+            this.lblKillNpcsBonusDuration.Text = "Killing NPCs Bonus Duration (s):";
             // 
             // grpManualKillNpcsBonusAmount
             // 
@@ -563,7 +592,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblKillNpcsBonus
             // 
             this.lblKillNpcsBonus.AutoSize = true;
-            this.lblKillNpcsBonus.Location = new System.Drawing.Point(22, 27);
+            this.lblKillNpcsBonus.Location = new System.Drawing.Point(34, 27);
             this.lblKillNpcsBonus.Name = "lblKillNpcsBonus";
             this.lblKillNpcsBonus.Size = new System.Drawing.Size(138, 13);
             this.lblKillNpcsBonus.TabIndex = 23;
@@ -796,35 +825,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.TabIndex = 19;
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // txtTitle
-            // 
-            this.txtTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtTitle.Location = new System.Drawing.Point(90, 13);
-            this.txtTitle.Name = "txtTitle";
-            this.txtTitle.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.txtTitle.Size = new System.Drawing.Size(304, 20);
-            this.txtTitle.TabIndex = 40;
-            // 
-            // lblBoostTitle
-            // 
-            this.lblBoostTitle.AutoSize = true;
-            this.lblBoostTitle.Location = new System.Drawing.Point(45, 16);
-            this.lblBoostTitle.Name = "lblBoostTitle";
-            this.lblBoostTitle.Size = new System.Drawing.Size(30, 13);
-            this.lblBoostTitle.TabIndex = 39;
-            this.lblBoostTitle.Text = "Title:";
-            // 
-            // lblTarget
-            // 
-            this.lblTarget.AutoSize = true;
-            this.lblTarget.Location = new System.Drawing.Point(45, 37);
-            this.lblTarget.Name = "lblTarget";
-            this.lblTarget.Size = new System.Drawing.Size(41, 13);
-            this.lblTarget.TabIndex = 41;
-            this.lblTarget.Text = "Target:";
             // 
             // EventCommandSetExpBoost
             // 
