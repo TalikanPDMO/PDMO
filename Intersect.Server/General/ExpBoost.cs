@@ -1,5 +1,6 @@
 ﻿using Intersect.Enums;
 using Intersect.Server.Entities;
+using Intersect.Server.Networking;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -95,6 +96,66 @@ namespace Intersect.Server.General
                 boosts.TryRemove(k, out removedBoost);
             }
         }
-    }
+        public static void SendPlayerBoost(Player player, EventTargetType targetType)
+        {
+            ExpBoost expboost;
+            switch (targetType)
+            {
+                case EventTargetType.Player:
+                    if (ExpBoost.PlayerExpBoosts.TryGetValue(player.Id, out expboost))
+                    {
+                        PacketSender.SendExpBoost(player, expboost);
+                    }
+                    break;
+                case EventTargetType.Party:
+                    if (player.Party?.Count > 0 && ExpBoost.PartyExpBoosts.TryGetValue(player.Party[0].Id, out expboost))
+                    {
+                        PacketSender.SendExpBoost(player, expboost);
+                    }
+                    else if (ExpBoost.PartyExpBoosts.TryGetValue(player.Id, out expboost))
+                    {
+                        PacketSender.SendExpBoost(player, expboost);
+                    }
+                    break;
+                case EventTargetType.Guild:
+                    if (player.Guild != null && player.Guild.Id != Guid.Empty)
+                    {
+                        if (ExpBoost.GuildExpBoosts.TryGetValue(player.Guild.Id, out expboost))
+                        {
+                            PacketSender.SendExpBoost(player, expboost);
+                        }
+                    }
+                    break;
+                case EventTargetType.AllPlayers:
+                    expboost = AllExpBoost;
+                    if (expboost != null)
+                    {
+                        PacketSender.SendExpBoost(player, expboost);
+                    }
+                    break;
+            }
+        }
 
+        public static void InitPlayerBoosts(Player player)
+        {
+            ExpBoost expboost;
+            if (ExpBoost.PlayerExpBoosts.TryGetValue(player.Id, out expboost))
+            {
+                PacketSender.SendExpBoost(player, expboost);
+            }
+            if (ExpBoost.PartyExpBoosts.TryGetValue(player.Id, out expboost))
+            {
+                PacketSender.SendExpBoost(player, expboost);
+            }
+            if (player.Guild != null && player.Guild.Id != Guid.Empty && ExpBoost.GuildExpBoosts.TryGetValue(player.Guild.Id, out expboost))
+            {
+                PacketSender.SendExpBoost(player, expboost);
+            }
+            expboost = AllExpBoost;
+            if (expboost != null)
+            {
+                PacketSender.SendExpBoost(player, expboost);
+            }
+        }
+    }
 }

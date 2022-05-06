@@ -2133,6 +2133,13 @@ namespace Intersect.Server.Networking
             }
         }
 
+        // ExpBoostPacket
+        public static void SendExpBoost(Player player, ExpBoost boost)
+        {
+            player.SendPacket(new ExpBoostPacket(boost.Title, boost.SourcePlayer.Name, boost.TargetType,
+                boost.AmountKill, boost.ExpireTimeKill, boost.AmountQuest, boost.AmountKill));
+        }
+
     }
 
 }

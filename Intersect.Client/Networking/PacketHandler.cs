@@ -23,6 +23,7 @@ using Newtonsoft.Json;
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Intersect.Client.Networking
@@ -2088,6 +2089,13 @@ namespace Intersect.Client.Networking
                 InputBox.InputType.YesNo, PacketSender.SendGuildInviteAccept, PacketSender.SendGuildInviteDecline,
                 null
             );
+        }
+
+        //ExpBoost Packet
+        public void HandlePacket(IPacketSender packetSender, ExpBoostPacket packet)
+        {
+            Debug.WriteLine("NEW BOOST : " + packet.Title + " from player " + packet.SourcePlayerName + ". Type :" + packet.TargetType);
+            Debug.WriteLine("KILL : " + packet.AmountKill + "% expire at " + packet.ExpireTimeKill + ". QUEST :" + packet.AmountQuest + "% expire at " + packet.ExpireTimeQuest);
         }
 
     }

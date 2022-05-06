@@ -2411,26 +2411,60 @@ namespace Intersect.Server.Entities.Events
                 }
             }
             questExpireTime = Globals.Timing.Milliseconds + questExpireTime * 1000;
+
             var expboost = new ExpBoost(command.Title, player, command.TargetType, killExpAmount, killExpireTime, questExpAmount, questExpireTime);
             switch(expboost.TargetType)
             {
                 case EventTargetType.Player:
                     ExpBoost.PlayerExpBoosts[player.Id] = expboost;
+                    PacketSender.SendExpBoost(player, expboost);
                     break;
                 case EventTargetType.Party:
                     ExpBoost.PartyExpBoosts[player.Id] = expboost;
+                    if (player.Party?.Count > 0 && player.Party[0].Id == player.Id)
+                    {
+                        // Player is the party leader, apply boost
+                        foreach (var partyMember in player.Party)
+                        {
+                            if (partyMember != null)
+                            {
+                                PacketSender.SendExpBoost(partyMember, expboost);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Send expboost info if not leader or not in party. Client will handle if another party boost is ongoing or not
+                        PacketSender.SendExpBoost(player, expboost);
+                    }
                     break;
                 case EventTargetType.Guild:
-                    ExpBoost.GuildExpBoosts[player.Guild.Id] = expboost;
+                    if (player.Guild != null && player.Guild.Id != Guid.Empty)
+                    {
+                        // Player has a guild
+                        ExpBoost.GuildExpBoosts[player.Guild.Id] = expboost;
+                        foreach (var guildMember in player.Guild.Members)
+                        {
+                            Player p = Player.FindOnline(guildMember.Key);
+                            if (p != null)
+                            {
+                                PacketSender.SendExpBoost(p, expboost);
+                            }
+                        }
+                    }
                     break;
                 case EventTargetType.AllPlayers:
                     ExpBoost.AllExpBoost = expboost;
+                    foreach (var p in Player.OnlineList)
+                    {
+                        if (p != null)
+                        {
+                            PacketSender.SendExpBoost(p, expboost);
+                        }
+                    }
                     break;
             }
-
-            
-            // TODO Send/Create ExpBoostPacket here and when login ?
-            //PacketSender.SendChatMsg(player, "XP Boost : +" + expBoostNpc + "%", ChatMessageType.Local, Color.Orange);
+            // TODO Send/Create ExpBoostPacket here and when login/joinleaveparty/joinleavecreatedisbandguild
         }
 
     }
