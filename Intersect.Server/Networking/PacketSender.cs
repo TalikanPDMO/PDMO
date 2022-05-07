@@ -1811,6 +1811,7 @@ namespace Intersect.Server.Networking
             }
 
             player.SendPacket(new PartyPacket(memberPackets));
+            ExpBoost.SendPlayerBoost(player, EventTargetType.Party);
         }
 
         //PartyUpdatePacket

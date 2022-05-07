@@ -284,6 +284,9 @@ namespace Intersect.Server.Entities
 
             //Send guild list update to all members when coming online
             Guild?.UpdateMemberList();
+
+            // Init all existing expboosts related to the player
+            ExpBoost.InitPlayerBoosts(this);
         }
 
         public void SendPacket(IPacket packet, TransmissionMode mode = TransmissionMode.All)
