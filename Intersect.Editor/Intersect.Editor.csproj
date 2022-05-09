@@ -103,7 +103,7 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_SetExpBoost.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_SetExpBoost.Designer.cs">
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_SetExpBoost.designer.cs">
       <DependentUpon>EventCommand_SetExpBoost.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_SetGuildBankSlots.cs">

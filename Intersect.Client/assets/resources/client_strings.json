@@ -522,16 +522,16 @@
       "noname": "NoName",
       "none": "None",
       "numlock": "NumLock",
-      "numpad0": "NumPad 0",
-      "numpad1": "NumPad 1",
-      "numpad2": "NumPad 2",
-      "numpad3": "NumPad 3",
-      "numpad4": "NumPad 4",
-      "numpad5": "NumPad 5",
-      "numpad6": "NumPad 6",
-      "numpad7": "NumPad 7",
-      "numpad8": "NumPad 8",
-      "numpad9": "NumPad 9",
+      "numpad0": "Num0",
+      "numpad1": "Num1",
+      "numpad2": "Num2",
+      "numpad3": "Num3",
+      "numpad4": "Num4",
+      "numpad5": "Num5",
+      "numpad6": "Num6",
+      "numpad7": "Num7",
+      "numpad8": "Num8",
+      "numpad9": "Num9",
       "o": "O",
       "oem1": "1",
       "oem102": "0",
@@ -750,6 +750,7 @@
     "duration": "Durée: {00}s",
     "onself": "(Sur soi)",
     "ontarget": "(Sur la cible)",
+    "effectseparator": "----------",
     "effectlist": {
       "0": "",
       "1": "Inflige Silence",
@@ -802,8 +803,8 @@
       "1": "PM: {00}{01}"
     },
     "vitalsteal": {
-      "0": " (Restaure {00}% des PV volés)",
-      "1": " (Restaure {00}% du mana volé)"
+      "0": " (Restaure {00}% des PV infligés)",
+      "1": " (Restaure {00}% des PM infligés)"
     },
     "vitalcosts": {
       "0": "PV Cost: {00}",
