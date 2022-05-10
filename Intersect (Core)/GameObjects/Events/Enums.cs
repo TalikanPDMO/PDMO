@@ -240,7 +240,9 @@
 
         UseSpell,
 
-        ShowPopup
+        ShowPopup,
+
+        SetExpBoost
     }
 
 }

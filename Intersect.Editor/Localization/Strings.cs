@@ -1703,7 +1703,9 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString give = @"Give: Item {00}";
 
-            public static LocalizedString giveexp = @"Give Player {00} Experience";
+            public static LocalizedString giveexp = @"Give Player {00} Experience"; 
+
+            public static LocalizedString setexpboost = @"Set Boost Experience '{00}' to {01}";
 
             public static LocalizedString globalswitch = @"Set Global Switch {00} to {01}";
 
@@ -1961,6 +1963,7 @@ Tick timer saved in server config.json.";
                 {"exiteventprocess", @"Exit Event Process"},
                 {"fadeoutbgm", @"Fadeout BGM"},
                 {"giveexperience", @"Give Experience"},
+                {"setexpboost",@"Set Exp. Boost" },
                 {"gotolabel", @"Go To Label"},
                 {"hidepicture", @"Hide Picture"},
                 {"holdplayer", @"Hold Player"},
@@ -5215,6 +5218,70 @@ Negative values for time to flow backwards.";
             public static LocalizedString thisevent = @"[THIS EVENT]";
 
             public static LocalizedString notargetrequired = @"[No target required]";
+
+        }
+
+        public struct EventSetExpBoost
+        {
+
+            public static LocalizedString cancel = @"Cancel";
+
+            public static LocalizedString okay = @"Ok";
+
+            public static LocalizedString title = @"Set Experience Boost";
+
+            public static LocalizedString infos = @"Infos";
+
+            public static LocalizedString boosttitle = @"Title:";
+
+            public static LocalizedString target = @"Target:";
+
+            public static LocalizedString player = @"Player";
+
+            public static LocalizedString party = @"Party";
+
+            public static LocalizedString guild = @"Guild";
+
+            public static LocalizedString allplayers = @"All Players";
+
+            public static LocalizedString manualkillnpcs = @"Manual Kill Bonus Exp ";
+
+            public static LocalizedString variablekillnpcs = @"Variable Kill Bonus Exp ";
+
+            public static LocalizedString labelkillnpcsbonus = @"Killing NPCs Bonus Exp (%):";
+
+            public static LocalizedString manualkillnpcsduration = @"Manual Kill Bonus Duration ";
+
+            public static LocalizedString variablekillnpcsduration = @"Variable Kill Bonus Duration ";
+
+            public static LocalizedString labelkillnpcsbonusduration = @"Killing NPCs Bonus Duration (s):";
+
+            public static LocalizedString manualquest = @"Manual Quests Bonus Exp ";
+
+            public static LocalizedString variablequest = @"Variable Quests Bonus Exp ";
+
+            public static LocalizedString labelquestbonus = @"Quests/Events Bonus Exp (%):";
+
+            public static LocalizedString manualquestduration = @"Manual Quests Bonus Duration ";
+
+            public static LocalizedString variablequestduration = @"Variable Quests Bonus Duration ";
+
+            public static LocalizedString labelquestbonusduration = @"Quests/Events Bonus Duration (s):";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString AmountType = @"Amount Type";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Variable = @"Variable";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Manual = @"Manual";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString PlayerVariable = @"Player Variable";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ServerVariable = @"Global Variable";
 
         }
 

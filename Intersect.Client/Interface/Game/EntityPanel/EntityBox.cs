@@ -68,6 +68,8 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
         public Framework.Gwen.Control.Label ExpTitle;
 
+        public Framework.Gwen.Control.Label ExpNotif;
+
         public Button FriendLabel;
 
         public ImagePanel HpBackground;
@@ -111,6 +113,8 @@ namespace Intersect.Client.Interface.Game.EntityPanel
         public bool IsHidden;
 
         public Button GuildLabel;
+
+        private ExpBoostsWindow mExpBoostsWindow = null;
 
         //Init
         public EntityBox(Canvas gameCanvas, EntityTypes entityType, Entity myEntity, bool playerBox = false)
@@ -173,7 +177,14 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             ExpBar = new ImagePanel(EntityInfoPanel, "EXPBar");
             ExpTitle = new Framework.Gwen.Control.Label(EntityInfoPanel, "EXPTitle");
             ExpTitle.SetText(Strings.EntityBox.exp);
+            ExpNotif = new Framework.Gwen.Control.Label(EntityInfoPanel, "EXPNotif");
             ExpLbl = new Framework.Gwen.Control.Label(EntityInfoPanel, "EXPLabel");
+
+            ExpTitle.HoverEnter += ExpBoost_HoverEnter;
+            ExpNotif.HoverEnter += ExpBoost_HoverEnter;
+
+            ExpTitle.HoverLeave += ExpBoost_HoverLeave;
+            ExpNotif.HoverLeave += ExpBoost_HoverLeave;
 
             TradeLabel = new Button(EntityInfoPanel, "TradeButton");
             TradeLabel.SetText(Strings.EntityBox.trade);
@@ -200,6 +211,11 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             EntityStatusPanel = new ImagePanel(EntityWindow, "StatusArea");
 
             SetEntity(myEntity);
+
+            if (PlayerBox)
+            {
+                mExpBoostsWindow = new ExpBoostsWindow(gameCanvas);
+            }
 
             EntityWindow.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
@@ -761,6 +777,30 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
         private void UpdateXpBar(float elapsedTime, bool instant = false)
         {
+            int boostcount = ExpBoost.BoostCount;
+            if (boostcount < 1)
+            {
+                ExpNotif.Hide();
+                mExpBoostsWindow?.Hide();
+            }
+            else
+            {
+                if (ExpBoost.PartyExpBoost!= null && ExpBoost.PartyExpBoost.SourcePlayerName == null)
+                {
+                    //PlayerName name null means the boost was sent disabled
+                    boostcount--;
+                }
+                if (boostcount == 0)
+                {
+                    ExpNotif.Text = "";
+                }
+                else
+                {
+                    ExpNotif.Text = boostcount.ToString();
+                }
+                ExpNotif.Show();
+                mExpBoostsWindow?.Update();
+            }
             float targetExpWidth = 1;
             if (((Player) MyEntity).GetNextLevelExperience() > 0)
             {
@@ -817,6 +857,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 ExpBar.SetTextureRect(0, 0, (int) CurExpWidth, ExpBar.Height);
                 ExpBar.IsHidden = false;
             }
+
         }
 
         private void UpdateImage()
@@ -975,6 +1016,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
         public void Dispose()
         {
             EntityWindow.Hide();
+            mExpBoostsWindow?.Hide();
             Interface.GameUi.GameCanvas.RemoveChild(EntityWindow, false);
             EntityWindow.Dispose();
         }
@@ -1078,6 +1120,22 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             EntityWindow.Show();
         }
 
+        void ExpBoost_HoverEnter(Base sender, EventArgs arguments)
+        {
+            if (ExpBoost.BoostCount > 0)
+            {
+                mExpBoostsWindow.Show();
+            }
+            else
+            {
+                mExpBoostsWindow.Hide();
+            }
+        }
+
+        void ExpBoost_HoverLeave(Base sender, EventArgs arguments)
+        {
+              mExpBoostsWindow.Hide();
+        }
     }
 
 }

@@ -284,6 +284,9 @@ namespace Intersect.Server.Entities
 
             //Send guild list update to all members when coming online
             Guild?.UpdateMemberList();
+
+            // Init all existing expboosts related to the player
+            ExpBoost.InitPlayerBoosts(this);
         }
 
         public void SendPacket(IPacket packet, TransmissionMode mode = TransmissionMode.All)
@@ -1028,20 +1031,19 @@ namespace Intersect.Server.Entities
             StartCommonEventsWithTrigger(CommonEventTrigger.LevelUp);
         }
 
-        public void GiveExperience(long amount)
+        public void GiveExperience(long amount, bool xpBoostNpc, bool xpBoostQuestEvent)
         {
-            //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
-            if (Options.Combat.EnableCombatChatMessages)
-            {
-                PacketSender.SendChatMsg(this, this.Name + Strings.Combat.won + amount + Strings.Combat.EXP + ".", ChatMessageType.Combat);
-            }
-
-            Exp += (int) (amount * GetExpMultiplier() / 100);
+            var amountWithBoost = (int)(amount * GetExpMultiplier(xpBoostNpc, xpBoostQuestEvent) / 100);
+            Exp += amountWithBoost;
             if (Exp < 0)
             {
                 Exp = 0;
             }
-
+            //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+            if (Options.Combat.EnableCombatChatMessages)
+            {
+                PacketSender.SendChatMsg(this, this.Name + Strings.Combat.won + amountWithBoost + Strings.Combat.EXP + ".", ChatMessageType.Combat);
+            }
             if (!CheckLevelUp())
             {
                 PacketSender.SendExperience(this);
@@ -1104,7 +1106,7 @@ namespace Intersect.Server.Entities
                             var partyExperience = (int)(descriptor.Experience * multiplier) / partyMembersInXpRange.Length;
                             foreach (var partyMember in partyMembersInXpRange)
                             {
-                                partyMember.GiveExperience(partyExperience);
+                                partyMember.GiveExperience(partyExperience, true, false);
                                 partyMember.UpdateQuestKillTasks(entity);
                             }
 
@@ -1121,7 +1123,7 @@ namespace Intersect.Server.Entities
                         }
                         else
                         {
-                            GiveExperience(descriptor.Experience);
+                            GiveExperience(descriptor.Experience, true, false);
                             UpdateQuestKillTasks(entity);
                         }
 
@@ -2334,7 +2336,7 @@ namespace Intersect.Server.Entities
                                 value = itemBase.Consumable.Value +
                                         (int) (GetExperienceToNextLevel(Level) * itemBase.Consumable.Percentage / 100);
 
-                                GiveExperience(value);
+                                GiveExperience(value, false, false);
                                 color = CustomColors.Items.ConsumeExp;
 
                                 break;
@@ -2878,7 +2880,7 @@ namespace Intersect.Server.Entities
             return luck;
         }
 
-        public int GetExpMultiplier()
+        public int GetExpMultiplier(bool xpBoostNpc, bool xpBoostQuestEvent)
         {
             var exp = 100;
 
@@ -2899,7 +2901,66 @@ namespace Intersect.Server.Entities
                     }
                 }
             }
+            if (xpBoostNpc)
+            {
+                exp += GetExpBoostsNpcs();
+            }
+            if (xpBoostQuestEvent)
+            {
+                exp += GetExpBoostsQuestsEvents();
+            }
+            return exp;
+        }
 
+        private int GetExpBoostsNpcs()
+        {
+            int exp = 0;
+            ExpBoost boost;
+            if (ExpBoost.PlayerExpBoosts.TryGetValue(Id, out boost))
+            {
+                exp += boost.AmountKill;
+            }
+            // Check party size and bonus of party leader
+            if (Party?.Count > 1 && ExpBoost.PartyExpBoosts.TryGetValue(Party[0].Id, out boost))
+            {
+                exp += boost.AmountKill;
+            }
+            // Check guild size and guild id of the player (minimum size is 1 for the moment)
+            if (Guild?.Members?.Count > 0 && ExpBoost.GuildExpBoosts.TryGetValue(Guild.Id, out boost))
+            {
+                exp += boost.AmountKill;
+            }
+            boost = ExpBoost.AllExpBoost;
+            if (boost != null)
+            {
+                exp += boost.AmountKill;
+            }
+            return exp;
+        }
+
+        private int GetExpBoostsQuestsEvents()
+        {
+            int exp = 0;
+            ExpBoost boost;
+            if (ExpBoost.PlayerExpBoosts.TryGetValue(Id, out boost))
+            {
+                exp += boost.AmountQuest;
+            }
+            // Check party size and bonus of party leader
+            if (Party?.Count > 1 && ExpBoost.PartyExpBoosts.TryGetValue(Party[0].Id, out boost))
+            {
+                exp += boost.AmountQuest;
+            }
+            // Check guild size and guild id of the player (minimum size is 1 for the moment)
+            if (Guild?.Members?.Count > 0 && ExpBoost.GuildExpBoosts.TryGetValue(Guild.Id, out boost))
+            {
+                exp += boost.AmountQuest;
+            }
+            boost = ExpBoost.AllExpBoost;
+            if (boost != null)
+            {
+                exp += boost.AmountQuest;
+            }
             return exp;
         }
 

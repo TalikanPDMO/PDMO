@@ -240,6 +240,9 @@ namespace Intersect.Server.Database.PlayerData.Players
                         // Send our entity data to nearby players.
                         PacketSender.SendEntityDataToProximity(Player.FindOnline(player.Id));
 
+                        //Update guild exp boost for the player
+                        ExpBoost.SendPlayerBoost(player, EventTargetType.Guild);
+
                         LogActivity(Id, player, initiator, GuildActivityType.Joined);
                     }
                 }
@@ -479,6 +482,7 @@ namespace Intersect.Server.Database.PlayerData.Players
                 context.Guilds.Remove(guild);
 
                 Guilds.TryRemove(guild.Id, out Guild removed);
+                ExpBoost.GuildExpBoosts.TryRemove(guild.Id, out var removedBoost);
 
                 context.ChangeTracker.DetectChanges();
                 context.SaveChanges();

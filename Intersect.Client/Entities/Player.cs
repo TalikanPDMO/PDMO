@@ -126,7 +126,6 @@ namespace Intersect.Client.Entities
             {
                 Hotbar[i] = new HotbarInstance();
             }
-
             mRenderPriority = 2;
         }
 
@@ -196,6 +195,7 @@ namespace Intersect.Client.Entities
             if (Globals.Me == this)
             {
                 HandleInput();
+                ExpBoost.Update();
             }
 
 

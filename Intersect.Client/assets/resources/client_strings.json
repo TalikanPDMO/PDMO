@@ -859,5 +859,28 @@
   },
   "GameWindow": {
     "entitynameandlevel": "{00} [Nv. {01}]"
+  },
+  "ExpBoosts": {
+    "title": "Bonus d'expériences en cours",
+    "you": "Vous",
+    "personnal": "Personnel:",
+    "player": "Joueur:",
+    "party": "Groupe:",
+    "guild": "Guilde:",
+    "allplayers": "Global:",
+    "playertitle": "{00}",
+    "hourminsecformat": "{00:D2}:{01:D2}:{02:D2}",
+    "playerkillvalues": "Monstres: +{00}% (fin dans {01}) ",
+    "playerquestvalues": "Quêtes: +{00}% (fin dans {01}) ",
+    "partytitle": "{00} (initié par {01})",
+    "partytitledisabled": "{00} (Inactif car vous n'êtes pas chef d'un groupe)",
+    "partykillvalues": "Monstres: +{00}% (fin dans {01}) ",
+    "partyquestvalues": "Quêtes: +{00}% (fin dans {01}) ",
+    "guildtitle": "{00} (initié par {01})",
+    "guildkillvalues": "Monstres: +{00}% (fin dans {01}) ",
+    "guildquestvalues": "Quêtes: +{00}% (fin dans {01}) ",
+    "allplayerstitle": "{00} (initié par {01})",
+    "allplayerskillvalues": "Monstres: +{00}% (fin dans {01}) ",
+    "allplayersquestvalues": "Quêtes: +{00}% (fin dans {01}) "
   }
 }

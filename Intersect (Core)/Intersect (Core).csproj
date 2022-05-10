@@ -269,6 +269,7 @@
     <Compile Include="CustomColors.cs" />
     <Compile Include="Enums\ChatboxTab.cs" />
     <Compile Include="Enums\ChatMessageType.cs" />
+    <Compile Include="Enums\EventTargetType.cs" />
     <Compile Include="Enums\PopupLayoutParams.cs" />
     <Compile Include="Enums\GuildMemberUpdateActions.cs" />
     <Compile Include="Enums\ItemHandling.cs" />
@@ -396,6 +397,7 @@
     <Compile Include="Network\Packets\Client\RequestGuildPacket.cs" />
     <Compile Include="Network\Packets\Client\UpdateGuildMemberPacket.cs" />
     <Compile Include="Network\Packets\Client\PictureClosedPacket.cs" />
+    <Compile Include="Network\Packets\Server\ExpBoostPacket.cs" />
     <Compile Include="Network\Packets\Server\ActionMsgPackets.cs" />
     <Compile Include="Network\Packets\Server\EntityMovementPackets.cs" />
     <Compile Include="Network\Packets\Server\GuildInvitePacket.cs" />

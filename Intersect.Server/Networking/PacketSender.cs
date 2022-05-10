@@ -1811,6 +1811,7 @@ namespace Intersect.Server.Networking
             }
 
             player.SendPacket(new PartyPacket(memberPackets));
+            ExpBoost.SendPlayerBoost(player, EventTargetType.Party);
         }
 
         //PartyUpdatePacket
@@ -2131,6 +2132,15 @@ namespace Intersect.Server.Networking
                     }
                 }
             }
+        }
+
+        // ExpBoostPacket
+        public static void SendExpBoost(Player player, ExpBoost boost, bool disabled = false)
+        {
+            // SourcePlayer = null means the boost is disabled (mainly for party boosts)
+            player.SendPacket(new ExpBoostPacket(boost.Title, disabled ? null : boost.SourcePlayer.Name, boost.TargetType,
+                boost.AmountKill, boost.ExpireTimeKill - Globals.Timing.Milliseconds,
+                boost.AmountQuest, boost.ExpireTimeQuest - Globals.Timing.Milliseconds));
         }
 
     }

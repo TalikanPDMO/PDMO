@@ -1709,6 +1709,54 @@ namespace Intersect.Client.Localization
             public static LocalizedString EntityNameAndLevel = @"{00} [Lv. {01}]";
         }
 
+        public struct ExpBoosts
+        {
+
+            public static LocalizedString title = @"Active experience boosts";
+
+            public static LocalizedString you = @"You";
+
+            public static LocalizedString personnal = @"Personnal:";
+
+            public static LocalizedString player = @"Player:";
+
+            public static LocalizedString party = @"Party:";
+
+            public static LocalizedString guild = @"Guild:";
+
+            public static LocalizedString allplayers = @"Global:";
+
+            public static LocalizedString playertitle = @"{00}";
+
+            public static LocalizedString hourminsecformat = @"{00:D2}:{01:D2}:{02:D2}";
+
+            public static LocalizedString playerkillvalues = @"Monsters: +{00}% (end in {01}) ";
+
+            public static LocalizedString playerquestvalues = @"Quests: +{00}% (end in {01}) ";
+
+            public static LocalizedString partytitle = @"{00} (initiated by {01})";
+            
+            public static LocalizedString partytitledisabled = @"{00} (Inactive while your are not a party leader)";
+
+            public static LocalizedString partykillvalues = @"Monsters: +{00}% (end in {01}) ";
+
+            public static LocalizedString partyquestvalues = @"Quests: +{00}% (end in {01}) ";
+
+            public static LocalizedString guildtitle = @"{00} (initiated by {01})";
+
+            public static LocalizedString guildkillvalues = @"Monsters: +{00}% (end in {01}) ";
+
+            public static LocalizedString guildquestvalues = @"Quests: +{00}% (end in {01}) ";
+
+            public static LocalizedString allplayerstitle = @"{00} (initiated by {01})";
+
+            public static LocalizedString allplayerskillvalues = @"Monsters: +{00}% (ends in {01}) ";
+
+            public static LocalizedString allplayersquestvalues = @"Quests: +{00}% (ends in {01}) ";
+
+
+        }
+
     }
 
 }

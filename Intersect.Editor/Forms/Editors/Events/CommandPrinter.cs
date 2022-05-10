@@ -819,6 +819,11 @@ namespace Intersect.Editor.Forms.Editors.Events
             }
         }
 
+        private static string GetCommandText(SetExpBoostCommand command, MapInstance map)
+        {
+            return Strings.EventCommandList.setexpboost.ToString(command.Title, command.TargetType.ToString());
+        }
+
         private static string GetCommandText(ChangeLevelCommand command, MapInstance map)
         {
             return Strings.EventCommandList.setlevel.ToString(command.Level);

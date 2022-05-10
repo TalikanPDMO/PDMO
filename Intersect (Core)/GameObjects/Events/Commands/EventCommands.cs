@@ -1151,4 +1151,48 @@ namespace Intersect.GameObjects.Events.Commands
             }
         }
     }
+
+    public class SetExpBoostCommand : EventCommand
+    {
+
+        public override EventCommandType Type { get; } = EventCommandType.SetExpBoost;
+
+        public EventTargetType TargetType { get; set; } = EventTargetType.Player;
+        public string Title { get; set; } = "";
+
+        public int ExpBoostNpc { get; set; } = 0;
+
+        public bool UseVariableExpBoostNpc { get; set; } = false;
+
+        public VariableTypes VariableTypeExpBoostNpc { get; set; } = VariableTypes.PlayerVariable;
+
+        public Guid VariableIdExpBoostNpc { get; set; }
+
+        public int ExpBoostNpcDuration { get; set; } = 0;
+
+        public bool UseVariableExpBoostNpcDuration { get; set; } = false;
+
+        public VariableTypes VariableTypeExpBoostNpcDuration { get; set; } = VariableTypes.PlayerVariable;
+
+        public Guid VariableIdExpBoostNpcDuration { get; set; }
+        public int ExpBoostQuestEvent { get; set; } = 0;
+
+        public bool UseVariableExpBoostQuestEvent { get; set; } = false;
+
+        public VariableTypes VariableTypeExpBoostQuestEvent { get; set; } = VariableTypes.PlayerVariable;
+
+        public Guid VariableIdExpBoostQuestEvent { get; set; }
+
+        public int ExpBoostQuestEventDuration { get; set; } = 0;
+
+        public bool UseVariableExpBoostQuestEventDuration { get; set; } = false;
+
+        public VariableTypes VariableTypeExpBoostQuestEventDuration { get; set; } = VariableTypes.PlayerVariable;
+
+        public Guid VariableIdExpBoostQuestEventDuration { get; set; }
+
+        public bool IncludeGuild { get; set; } = false;
+
+        public bool IncludeAll { get; set; } = false;
+    }
 }
