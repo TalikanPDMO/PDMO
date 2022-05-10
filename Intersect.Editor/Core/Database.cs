@@ -70,17 +70,29 @@ namespace Intersect.Editor
                 Directory.CreateDirectory("resources_devmode");
             }
             DB_FILENAME = GameContentManager.GraphResFolder + "/mapcache.db";
-            SqliteConnection.SetConfig(SQLiteConfig.Serialized);
+            if (sDbConnection == null)
+            {
+                // Avoid editor to crash, set config only 1 time
+                SqliteConnection.SetConfig(SQLiteConfig.Serialized);
+            }
             if (!File.Exists(DB_FILENAME))
             {
                 CreateDatabase();
             }
-
-            if (sDbConnection == null)
+            else if (sDbConnection == null)
             {
+                // First time we try to connect
                 sDbConnection = new SqliteConnection("Data Source=" + DB_FILENAME + ",Version=3");
                 sDbConnection.Open();
             }
+            else
+            {
+                // Already tried to login, close connection and reopen
+                sDbConnection.Close();
+                sDbConnection = new SqliteConnection("Data Source=" + DB_FILENAME + ",Version=3");
+                sDbConnection.Open();
+            }
+            
 
             GridHideDarkness = GetOptionBool("HideDarkness");
             GridHideFog = GetOptionBool("HideFog");
