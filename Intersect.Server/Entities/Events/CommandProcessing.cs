@@ -2421,21 +2421,29 @@ namespace Intersect.Server.Entities.Events
                     break;
                 case EventTargetType.Party:
                     ExpBoost.PartyExpBoosts[player.Id] = expboost;
-                    if (player.Party?.Count > 0 && player.Party[0].Id == player.Id)
+                    if (player.Party?.Count > 1)
                     {
-                        // Player is the party leader, apply boost
-                        foreach (var partyMember in player.Party)
+                        if (player.Party[0].Id == player.Id)
                         {
-                            if (partyMember != null)
+                            // Player is the party leader, apply boost to all members
+                            foreach (var partyMember in player.Party)
                             {
-                                PacketSender.SendExpBoost(partyMember, expboost);
+                                if (partyMember != null)
+                                {
+                                    PacketSender.SendExpBoost(partyMember, expboost);
+                                }
                             }
+                        }
+                        else if (!ExpBoost.PartyExpBoosts.ContainsKey(player.Party[0].Id))
+                        {
+                            // Party leader has no boost, send the player expboost but disabled
+                            PacketSender.SendExpBoost(player, expboost, true);
                         }
                     }
                     else
                     {
-                        // Send expboost info if not leader or not in party. Client will handle if another party boost is ongoing or not
-                        PacketSender.SendExpBoost(player, expboost);
+                        // Send disabled expboost info if not in party
+                        PacketSender.SendExpBoost(player, expboost, true);
                     }
                     break;
                 case EventTargetType.Guild:

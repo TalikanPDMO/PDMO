@@ -2094,9 +2094,6 @@ namespace Intersect.Client.Networking
         //ExpBoost Packet
         public void HandlePacket(IPacketSender packetSender, ExpBoostPacket packet)
         {
-            Debug.WriteLine("NEW BOOST : " + packet.Title + " from player " + packet.SourcePlayerName + ". Type :" + packet.TargetType);
-            Debug.WriteLine("KILL : " + packet.AmountKill + "% expire at " + packet.ExpireTimeKill + ". QUEST :" + packet.AmountQuest + "% expire at " + packet.ExpireTimeQuest);
-            Debug.WriteLine("Received time : " + packet.ReceiveTime + " . ProcessTime : " + packet.ProcessTime);
             ExpBoost expboost = new ExpBoost(packet.Title, packet.SourcePlayerName, packet.TargetType,
                 packet.AmountKill, packet.ExpireTimeKill, packet.AmountQuest, packet.ExpireTimeQuest);
             ExpBoost.AddOrUpdateBoost(expboost);

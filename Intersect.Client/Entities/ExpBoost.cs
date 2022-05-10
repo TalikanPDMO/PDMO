@@ -65,7 +65,7 @@ namespace Intersect.Client.Entities
                     }
                 }
                 if (PartyExpBoost != null)
-                {
+                { 
                     if (updateTime > PartyExpBoost.ExpireTimeKill)
                     {
                         PartyExpBoost.AmountKill = 0;
@@ -82,16 +82,25 @@ namespace Intersect.Client.Entities
                 }
                 if (GuildExpBoost != null)
                 {
-                    if (updateTime > GuildExpBoost.ExpireTimeKill)
+                    if (Globals.Me.InGuild)
                     {
-                        GuildExpBoost.AmountKill = 0;
+                        if (updateTime > GuildExpBoost.ExpireTimeKill)
+                        {
+                            GuildExpBoost.AmountKill = 0;
+                        }
+                        if (updateTime > GuildExpBoost.ExpireTimeQuest)
+                        {
+                            GuildExpBoost.AmountQuest = 0;
+                        }
+                        if (GuildExpBoost.AmountKill == 0 && GuildExpBoost.AmountQuest == 0)
+                        {
+                            BoostCount--;
+                            GuildExpBoost = null;
+                        }
                     }
-                    if (updateTime > GuildExpBoost.ExpireTimeQuest)
+                    else
                     {
-                        GuildExpBoost.AmountQuest = 0;
-                    }
-                    if (GuildExpBoost.AmountKill == 0 && GuildExpBoost.AmountQuest == 0)
-                    {
+                        // When the player has no more guild (kick, quit)
                         BoostCount--;
                         GuildExpBoost = null;
                     }
@@ -189,31 +198,6 @@ namespace Intersect.Client.Entities
                     break;
             }
         }
-        /*private static void UpdateBoost(long updateTime, ConcurrentDictionary<Guid, ExpBoost> boosts)
-        {
-            List<Guid> removekeys = new List<Guid>();
-            foreach (var boost in boosts)
-            {
-                if (updateTime > boost.Value.ExpireTimeKill)
-                {
-                    boost.Value.AmountKill = 0;
-                }
-                if (updateTime > boost.Value.ExpireTimeQuest)
-                {
-                    boost.Value.AmountQuest = 0;
-                }
-                if (boost.Value.AmountKill == 0 && boost.Value.AmountQuest == 0)
-                {
-                    removekeys.Add(boost.Key);
-                }
-            }
-            ExpBoost removedBoost;
-            foreach (var k in removekeys)
-            {
-                boosts.TryRemove(k, out removedBoost);
-            }
-        }*/
-
     }
 
 }

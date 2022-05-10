@@ -2135,9 +2135,10 @@ namespace Intersect.Server.Networking
         }
 
         // ExpBoostPacket
-        public static void SendExpBoost(Player player, ExpBoost boost)
+        public static void SendExpBoost(Player player, ExpBoost boost, bool disabled = false)
         {
-            player.SendPacket(new ExpBoostPacket(boost.Title, boost.SourcePlayer.Name, boost.TargetType,
+            // SourcePlayer = null means the boost is disabled (mainly for party boosts)
+            player.SendPacket(new ExpBoostPacket(boost.Title, disabled ? null : boost.SourcePlayer.Name, boost.TargetType,
                 boost.AmountKill, boost.ExpireTimeKill - Globals.Timing.Milliseconds,
                 boost.AmountQuest, boost.ExpireTimeQuest - Globals.Timing.Milliseconds));
         }

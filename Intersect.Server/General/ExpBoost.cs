@@ -114,7 +114,12 @@ namespace Intersect.Server.General
                     }
                     else if (ExpBoost.PartyExpBoosts.TryGetValue(player.Id, out expboost))
                     {
-                        PacketSender.SendExpBoost(player, expboost);
+                        PacketSender.SendExpBoost(player, expboost, true);
+                    }
+                    else
+                    {
+                        // Empty boost to clear player boost
+                        PacketSender.SendExpBoost(player, new ExpBoost("", player, targetType,0,0,0,0), true);
                     }
                     break;
                 case EventTargetType.Guild:
@@ -124,6 +129,10 @@ namespace Intersect.Server.General
                         {
                             PacketSender.SendExpBoost(player, expboost);
                         }
+                    }
+                    else
+                    {
+                        PacketSender.SendExpBoost(player, new ExpBoost("", player, targetType, 0, 0, 0, 0));
                     }
                     break;
                 case EventTargetType.AllPlayers:
@@ -145,7 +154,7 @@ namespace Intersect.Server.General
             }
             if (ExpBoost.PartyExpBoosts.TryGetValue(player.Id, out expboost))
             {
-                PacketSender.SendExpBoost(player, expboost);
+                PacketSender.SendExpBoost(player, expboost, true);
             }
             if (player.Guild != null && player.Guild.Id != Guid.Empty && ExpBoost.GuildExpBoosts.TryGetValue(player.Guild.Id, out expboost))
             {

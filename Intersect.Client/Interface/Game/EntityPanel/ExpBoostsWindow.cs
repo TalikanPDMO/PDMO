@@ -118,8 +118,6 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 if (ExpBoost.PartyExpBoost != null)
                 {
                     string txtValues = "";
-                    mPartyExpBoostTitleLabel.Text = Strings.ExpBoosts.partytitle.ToString(
-                        ExpBoost.PartyExpBoost.Title, ExpBoost.PartyExpBoost.SourcePlayerName);
                     if (ExpBoost.PartyExpBoost.AmountKill > 0)
                     {
                         txtValues += Strings.ExpBoosts.partykillvalues.ToString(
@@ -131,11 +129,30 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                             ExpBoost.PartyExpBoost.AmountQuest, HourMinSecFormat(ExpBoost.PartyExpBoost.ExpireTimeQuest - now));
                     }
                     mPartyExpBoostValuesLabel.Text = txtValues;
+                    if (ExpBoost.PartyExpBoost.SourcePlayerName == null)
+                    {
+                        mPartyExpBoostTitleLabel.Text = Strings.ExpBoosts.partytitledisabled.ToString(ExpBoost.PartyExpBoost.Title);
+                        mPartyExpBoostTitleLabel.Disable();
+                        mPartyExpBoostValuesLabel.Disable();
+                    }
+                    else
+                    {
+                        mPartyExpBoostTitleLabel.Text = Strings.ExpBoosts.partytitle.ToString(
+                            ExpBoost.PartyExpBoost.Title, ExpBoost.PartyExpBoost.SourcePlayerName
+                        );
+                        mPartyExpBoostTitleLabel.Enable();
+                        mPartyExpBoostValuesLabel.Enable();
+                    }
+                    // Redraw to show color change from enble/disable
+                    mPartyExpBoostTitleLabel.Redraw();
+                    mPartyExpBoostValuesLabel.Redraw();
                 }
                 else
                 {
                     mPartyExpBoostTitleLabel.Text = "";
                     mPartyExpBoostValuesLabel.Text = "";
+                    mPartyExpBoostTitleLabel.Enable();
+                    mPartyExpBoostValuesLabel.Enable();
                 }
 
                 if (ExpBoost.GuildExpBoost != null)

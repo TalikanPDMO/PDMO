@@ -785,8 +785,9 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             }
             else
             {
-                if (ExpBoost.PartyExpBoost != null && !(Globals.Me.Party?.Count > 1 && Globals.Me.Party[0].Id == Globals.Me.Id))
+                if (ExpBoost.PartyExpBoost!= null && ExpBoost.PartyExpBoost.SourcePlayerName == null)
                 {
+                    //PlayerName name null means the boost was sent disabled
                     boostcount--;
                 }
                 if (boostcount == 0)

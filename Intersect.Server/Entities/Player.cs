@@ -1026,18 +1026,17 @@ namespace Intersect.Server.Entities
 
         public void GiveExperience(long amount, bool xpBoostNpc, bool xpBoostQuestEvent)
         {
-            //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
-            if (Options.Combat.EnableCombatChatMessages)
-            {
-                PacketSender.SendChatMsg(this, this.Name + Strings.Combat.won + amount + Strings.Combat.EXP + ".", ChatMessageType.Combat);
-            }
-
-            Exp += (int) (amount * GetExpMultiplier(xpBoostNpc, xpBoostQuestEvent) / 100);
+            var amountWithBoost = (int)(amount * GetExpMultiplier(xpBoostNpc, xpBoostQuestEvent) / 100);
+            Exp += amountWithBoost;
             if (Exp < 0)
             {
                 Exp = 0;
             }
-
+            //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+            if (Options.Combat.EnableCombatChatMessages)
+            {
+                PacketSender.SendChatMsg(this, this.Name + Strings.Combat.won + amountWithBoost + Strings.Combat.EXP + ".", ChatMessageType.Combat);
+            }
             if (!CheckLevelUp())
             {
                 PacketSender.SendExperience(this);
@@ -2895,55 +2894,66 @@ namespace Intersect.Server.Entities
                     }
                 }
             }
+            if (xpBoostNpc)
+            {
+                exp += GetExpBoostsNpcs();
+            }
+            if (xpBoostQuestEvent)
+            {
+                exp += GetExpBoostsQuestsEvents();
+            }
+            return exp;
+        }
+
+        private int GetExpBoostsNpcs()
+        {
+            int exp = 0;
             ExpBoost boost;
             if (ExpBoost.PlayerExpBoosts.TryGetValue(Id, out boost))
             {
-                if (xpBoostNpc)
-                {
-                    exp += boost.AmountKill;
-                }
-                if (xpBoostQuestEvent)
-                {
-                    exp += boost.AmountQuest;
-                }
+                exp += boost.AmountKill;
             }
             // Check party size and bonus of party leader
             if (Party?.Count > 1 && ExpBoost.PartyExpBoosts.TryGetValue(Party[0].Id, out boost))
             {
-                if (xpBoostNpc)
-                {
-                    exp += boost.AmountKill;
-                }
-                if (xpBoostQuestEvent)
-                {
-                    exp += boost.AmountQuest;
-                }
+                exp += boost.AmountKill;
             }
-            // Check guild size and guild id of the player
-            if (Guild?.Members?.Count > 1 && ExpBoost.GuildExpBoosts.TryGetValue(Guild.Id, out boost))
+            // Check guild size and guild id of the player (minimum size is 1 for the moment)
+            if (Guild?.Members?.Count > 0 && ExpBoost.GuildExpBoosts.TryGetValue(Guild.Id, out boost))
             {
-                if (xpBoostNpc)
-                {
-                    exp += boost.AmountKill;
-                }
-                if (xpBoostQuestEvent)
-                {
-                    exp += boost.AmountQuest;
-                }
+                exp += boost.AmountKill;
             }
             boost = ExpBoost.AllExpBoost;
             if (boost != null)
             {
-                if (xpBoostNpc)
-                {
-                    exp += boost.AmountKill;
-                }
-                if (xpBoostQuestEvent)
-                {
-                    exp += boost.AmountQuest;
-                }
+                exp += boost.AmountKill;
             }
-            Debug.WriteLine("Exp : " + exp);
+            return exp;
+        }
+
+        private int GetExpBoostsQuestsEvents()
+        {
+            int exp = 0;
+            ExpBoost boost;
+            if (ExpBoost.PlayerExpBoosts.TryGetValue(Id, out boost))
+            {
+                exp += boost.AmountQuest;
+            }
+            // Check party size and bonus of party leader
+            if (Party?.Count > 1 && ExpBoost.PartyExpBoosts.TryGetValue(Party[0].Id, out boost))
+            {
+                exp += boost.AmountQuest;
+            }
+            // Check guild size and guild id of the player (minimum size is 1 for the moment)
+            if (Guild?.Members?.Count > 0 && ExpBoost.GuildExpBoosts.TryGetValue(Guild.Id, out boost))
+            {
+                exp += boost.AmountQuest;
+            }
+            boost = ExpBoost.AllExpBoost;
+            if (boost != null)
+            {
+                exp += boost.AmountQuest;
+            }
             return exp;
         }
 

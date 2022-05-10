@@ -1735,6 +1735,8 @@ namespace Intersect.Client.Localization
             public static LocalizedString playerquestvalues = @"Quests: +{00}% (end in {01}) ";
 
             public static LocalizedString partytitle = @"{00} (initiated by {01})";
+            
+            public static LocalizedString partytitledisabled = @"{00} (Inactive while your are not a party leader)";
 
             public static LocalizedString partykillvalues = @"Monsters: +{00}% (end in {01}) ";
 
