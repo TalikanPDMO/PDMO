@@ -199,6 +199,9 @@ namespace Intersect.Editor.Forms.Editors
             lblAnim.Text = Strings.ItemEditor.animation;
             chkCanDrop.Text = Strings.ItemEditor.CanDrop;
             lblDeathDropChance.Text = Strings.ItemEditor.DeathDropChance;
+            lblLossOnDeath.Text = Strings.ItemEditor.LossOnDeath;
+            lblToLoss.Text = Strings.ItemEditor.LossOnDeathTo;
+            chkIsLossPercentage.Text = Strings.ItemEditor.IsLossPercentage;
             chkCanBank.Text = Strings.ItemEditor.CanBank;
             chkCanGuildBank.Text = Strings.ItemEditor.CanGuildBank;
             chkCanBag.Text = Strings.ItemEditor.CanBag;
@@ -371,6 +374,9 @@ namespace Intersect.Editor.Forms.Editors
                 nudInvStackLimit.Value = mEditorItem.MaxInventoryStack;
                 nudBankStackLimit.Value = mEditorItem.MaxBankStack;
                 nudDeathDropChance.Value = mEditorItem.DropChanceOnDeath;
+                chkIsLossPercentage.Checked = Convert.ToBoolean(mEditorItem.IsLossPercentage);
+                nudMinLossOnDeath.Value = mEditorItem.MinLossOnDeath;
+                nudMaxLossOnDeath.Value = mEditorItem.MaxLossOnDeath;
                 cmbToolType.SelectedIndex = mEditorItem.Tool + 1;
                 cmbAttackAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.AttackAnimationId) + 1;
                 RefreshExtendedData();
@@ -884,6 +890,37 @@ namespace Intersect.Editor.Forms.Editors
         private void nudDeathDropChance_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.DropChanceOnDeath = (int)nudDeathDropChance.Value;
+        }
+        private void nudMinLossOnDeath_ValueChanged(object sender, EventArgs e)
+        {
+            if (chkIsLossPercentage.Checked && nudMinLossOnDeath.Value > 100)
+            {
+                nudMinLossOnDeath.Value = 100;
+            }
+            mEditorItem.MinLossOnDeath = (int)nudMinLossOnDeath.Value;
+        }
+        private void nudMaxLossOnDeath_ValueChanged(object sender, EventArgs e)
+        {
+            if (chkIsLossPercentage.Checked && nudMaxLossOnDeath.Value > 100)
+            {
+                nudMaxLossOnDeath.Value = 100;
+            }
+            mEditorItem.MaxLossOnDeath = (int)nudMaxLossOnDeath.Value;
+        }
+        private void chkIsLossPercentage_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkIsLossPercentage.Checked)
+            {
+                if (nudMinLossOnDeath.Value > 100)
+                {
+                    nudMinLossOnDeath.Value = 100;
+                }
+                if (nudMaxLossOnDeath.Value > 100)
+                {
+                    nudMaxLossOnDeath.Value = 100;
+                }
+            }
+            mEditorItem.IsLossPercentage = chkIsLossPercentage.Checked;
         }
 
         private void chkStackable_CheckedChanged(object sender, EventArgs e)

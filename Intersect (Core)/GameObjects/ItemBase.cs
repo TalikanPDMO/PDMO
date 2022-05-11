@@ -85,6 +85,21 @@ namespace Intersect.GameObjects
         public int DropChanceOnDeath { get; set; }
 
         /// <summary>
+        /// Defines the minimum amount to lose when a player drop an item on death.
+        /// </summary>
+        public int MinLossOnDeath { get; set; } = 0;
+
+        /// <summary>
+        /// Defines the maximum amount to lose when a player drop an item on death.
+        /// </summary>
+        public int MaxLossOnDeath { get; set; } = 0;
+
+        /// <summary>
+        /// Defines is the loss amount is a percentage or a fixed value
+        /// </summary>
+        public bool IsLossPercentage { get; set; } = true;
+
+        /// <summary>
         /// Defines whether or not this item can be traded by a player to another player.
         /// </summary>
         public bool CanTrade { get; set; } = true;
