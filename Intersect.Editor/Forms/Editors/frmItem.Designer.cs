@@ -41,11 +41,19 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
+            this.lblToLoss = new System.Windows.Forms.Label();
+            this.nudMaxLossOnDeath = new DarkUI.Controls.DarkNumericUpDown();
+            this.chkIsLossPercentage = new DarkUI.Controls.DarkCheckBox();
+            this.nudMinLossOnDeath = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblLossOnDeath = new System.Windows.Forms.Label();
+            this.chkCanGuildBank = new DarkUI.Controls.DarkCheckBox();
+            this.chkCanBank = new DarkUI.Controls.DarkCheckBox();
+            this.lblEditorName = new System.Windows.Forms.Label();
+            this.txtEditorName = new DarkUI.Controls.DarkTextBox();
             this.grpRequirements = new DarkUI.Controls.DarkGroupBox();
             this.lblCannotUse = new System.Windows.Forms.Label();
             this.txtCannotUse = new DarkUI.Controls.DarkTextBox();
             this.btnEditRequirements = new DarkUI.Controls.DarkButton();
-            this.chkCanGuildBank = new DarkUI.Controls.DarkCheckBox();
             this.nudBankStackLimit = new DarkUI.Controls.DarkNumericUpDown();
             this.nudInvStackLimit = new DarkUI.Controls.DarkNumericUpDown();
             this.lblBankStackLimit = new System.Windows.Forms.Label();
@@ -55,7 +63,6 @@ namespace Intersect.Editor.Forms.Editors
             this.chkCanSell = new DarkUI.Controls.DarkCheckBox();
             this.chkCanTrade = new DarkUI.Controls.DarkCheckBox();
             this.chkCanBag = new DarkUI.Controls.DarkCheckBox();
-            this.chkCanBank = new DarkUI.Controls.DarkCheckBox();
             this.chkIgnoreCdr = new DarkUI.Controls.DarkCheckBox();
             this.chkIgnoreGlobalCooldown = new DarkUI.Controls.DarkCheckBox();
             this.btnAddCooldownGroup = new DarkUI.Controls.DarkButton();
@@ -210,10 +217,10 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.lblEditorName = new System.Windows.Forms.Label();
-            this.txtEditorName = new DarkUI.Controls.DarkTextBox();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaxLossOnDeath)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMinLossOnDeath)).BeginInit();
             this.grpRequirements.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBankStackLimit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudInvStackLimit)).BeginInit();
@@ -347,10 +354,16 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpGeneral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpGeneral.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpGeneral.Controls.Add(this.lblToLoss);
+            this.grpGeneral.Controls.Add(this.nudMaxLossOnDeath);
+            this.grpGeneral.Controls.Add(this.chkIsLossPercentage);
+            this.grpGeneral.Controls.Add(this.nudMinLossOnDeath);
+            this.grpGeneral.Controls.Add(this.lblLossOnDeath);
+            this.grpGeneral.Controls.Add(this.chkCanGuildBank);
+            this.grpGeneral.Controls.Add(this.chkCanBank);
             this.grpGeneral.Controls.Add(this.lblEditorName);
             this.grpGeneral.Controls.Add(this.txtEditorName);
             this.grpGeneral.Controls.Add(this.grpRequirements);
-            this.grpGeneral.Controls.Add(this.chkCanGuildBank);
             this.grpGeneral.Controls.Add(this.nudBankStackLimit);
             this.grpGeneral.Controls.Add(this.nudInvStackLimit);
             this.grpGeneral.Controls.Add(this.lblBankStackLimit);
@@ -360,7 +373,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.Controls.Add(this.chkCanSell);
             this.grpGeneral.Controls.Add(this.chkCanTrade);
             this.grpGeneral.Controls.Add(this.chkCanBag);
-            this.grpGeneral.Controls.Add(this.chkCanBank);
             this.grpGeneral.Controls.Add(this.chkIgnoreCdr);
             this.grpGeneral.Controls.Add(this.chkIgnoreGlobalCooldown);
             this.grpGeneral.Controls.Add(this.btnAddCooldownGroup);
@@ -403,6 +415,114 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.TabIndex = 2;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
+            // 
+            // lblToLoss
+            // 
+            this.lblToLoss.AutoSize = true;
+            this.lblToLoss.Location = new System.Drawing.Point(130, 307);
+            this.lblToLoss.Name = "lblToLoss";
+            this.lblToLoss.Size = new System.Drawing.Size(16, 13);
+            this.lblToLoss.TabIndex = 107;
+            this.lblToLoss.Text = "to";
+            // 
+            // nudMaxLossOnDeath
+            // 
+            this.nudMaxLossOnDeath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudMaxLossOnDeath.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudMaxLossOnDeath.Location = new System.Drawing.Point(147, 305);
+            this.nudMaxLossOnDeath.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.nudMaxLossOnDeath.Name = "nudMaxLossOnDeath";
+            this.nudMaxLossOnDeath.Size = new System.Drawing.Size(43, 20);
+            this.nudMaxLossOnDeath.TabIndex = 106;
+            this.nudMaxLossOnDeath.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudMaxLossOnDeath.ValueChanged += new System.EventHandler(this.nudMaxLossOnDeath_ValueChanged);
+            // 
+            // chkIsLossPercentage
+            // 
+            this.chkIsLossPercentage.AutoSize = true;
+            this.chkIsLossPercentage.Location = new System.Drawing.Point(197, 306);
+            this.chkIsLossPercentage.Name = "chkIsLossPercentage";
+            this.chkIsLossPercentage.Size = new System.Drawing.Size(47, 17);
+            this.chkIsLossPercentage.TabIndex = 105;
+            this.chkIsLossPercentage.Text = "is%?";
+            this.chkIsLossPercentage.CheckedChanged += new System.EventHandler(this.chkIsLossPercentage_CheckedChanged);
+            // 
+            // nudMinLossOnDeath
+            // 
+            this.nudMinLossOnDeath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudMinLossOnDeath.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudMinLossOnDeath.Location = new System.Drawing.Point(84, 305);
+            this.nudMinLossOnDeath.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.nudMinLossOnDeath.Name = "nudMinLossOnDeath";
+            this.nudMinLossOnDeath.Size = new System.Drawing.Size(43, 20);
+            this.nudMinLossOnDeath.TabIndex = 104;
+            this.nudMinLossOnDeath.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudMinLossOnDeath.ValueChanged += new System.EventHandler(this.nudMinLossOnDeath_ValueChanged);
+            // 
+            // lblLossOnDeath
+            // 
+            this.lblLossOnDeath.AutoSize = true;
+            this.lblLossOnDeath.Location = new System.Drawing.Point(5, 307);
+            this.lblLossOnDeath.Name = "lblLossOnDeath";
+            this.lblLossOnDeath.Size = new System.Drawing.Size(79, 13);
+            this.lblLossOnDeath.TabIndex = 103;
+            this.lblLossOnDeath.Text = "Loss on Death:";
+            // 
+            // chkCanGuildBank
+            // 
+            this.chkCanGuildBank.AutoSize = true;
+            this.chkCanGuildBank.Location = new System.Drawing.Point(154, 239);
+            this.chkCanGuildBank.Name = "chkCanGuildBank";
+            this.chkCanGuildBank.Size = new System.Drawing.Size(106, 17);
+            this.chkCanGuildBank.TabIndex = 99;
+            this.chkCanGuildBank.Text = "Can Guild Bank?";
+            this.chkCanGuildBank.CheckedChanged += new System.EventHandler(this.chkCanGuildBank_CheckedChanged);
+            // 
+            // chkCanBank
+            // 
+            this.chkCanBank.AutoSize = true;
+            this.chkCanBank.Location = new System.Drawing.Point(76, 239);
+            this.chkCanBank.Name = "chkCanBank";
+            this.chkCanBank.Size = new System.Drawing.Size(79, 17);
+            this.chkCanBank.TabIndex = 89;
+            this.chkCanBank.Text = "Can Bank?";
+            this.chkCanBank.CheckedChanged += new System.EventHandler(this.chkCanBank_CheckedChanged);
+            // 
+            // lblEditorName
+            // 
+            this.lblEditorName.AutoSize = true;
+            this.lblEditorName.Location = new System.Drawing.Point(8, 77);
+            this.lblEditorName.Name = "lblEditorName";
+            this.lblEditorName.Size = new System.Drawing.Size(68, 13);
+            this.lblEditorName.TabIndex = 102;
+            this.lblEditorName.Text = "Editor Name:";
+            // 
+            // txtEditorName
+            // 
+            this.txtEditorName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtEditorName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtEditorName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtEditorName.Location = new System.Drawing.Point(78, 74);
+            this.txtEditorName.Name = "txtEditorName";
+            this.txtEditorName.Size = new System.Drawing.Size(120, 20);
+            this.txtEditorName.TabIndex = 101;
+            this.txtEditorName.TextChanged += new System.EventHandler(this.txtEditorName_TextChanged);
             // 
             // grpRequirements
             // 
@@ -450,16 +570,6 @@ namespace Intersect.Editor.Forms.Editors
             this.btnEditRequirements.TabIndex = 0;
             this.btnEditRequirements.Text = "Edit Usage Requirements";
             this.btnEditRequirements.Click += new System.EventHandler(this.btnEditRequirements_Click);
-            // 
-            // chkCanGuildBank
-            // 
-            this.chkCanGuildBank.AutoSize = true;
-            this.chkCanGuildBank.Location = new System.Drawing.Point(121, 241);
-            this.chkCanGuildBank.Name = "chkCanGuildBank";
-            this.chkCanGuildBank.Size = new System.Drawing.Size(106, 17);
-            this.chkCanGuildBank.TabIndex = 99;
-            this.chkCanGuildBank.Text = "Can Guild Bank?";
-            this.chkCanGuildBank.CheckedChanged += new System.EventHandler(this.chkCanGuildBank_CheckedChanged);
             // 
             // nudBankStackLimit
             // 
@@ -523,7 +633,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudDeathDropChance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudDeathDropChance.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudDeathDropChance.Location = new System.Drawing.Point(154, 300);
+            this.nudDeathDropChance.Location = new System.Drawing.Point(140, 281);
             this.nudDeathDropChance.Name = "nudDeathDropChance";
             this.nudDeathDropChance.Size = new System.Drawing.Size(48, 20);
             this.nudDeathDropChance.TabIndex = 94;
@@ -537,7 +647,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblDeathDropChance
             // 
             this.lblDeathDropChance.AutoSize = true;
-            this.lblDeathDropChance.Location = new System.Drawing.Point(12, 305);
+            this.lblDeathDropChance.Location = new System.Drawing.Point(4, 284);
             this.lblDeathDropChance.Name = "lblDeathDropChance";
             this.lblDeathDropChance.Size = new System.Drawing.Size(136, 13);
             this.lblDeathDropChance.TabIndex = 93;
@@ -546,7 +656,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkCanSell
             // 
             this.chkCanSell.AutoSize = true;
-            this.chkCanSell.Location = new System.Drawing.Point(121, 281);
+            this.chkCanSell.Location = new System.Drawing.Point(87, 260);
             this.chkCanSell.Name = "chkCanSell";
             this.chkCanSell.Size = new System.Drawing.Size(71, 17);
             this.chkCanSell.TabIndex = 92;
@@ -556,7 +666,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkCanTrade
             // 
             this.chkCanTrade.AutoSize = true;
-            this.chkCanTrade.Location = new System.Drawing.Point(13, 281);
+            this.chkCanTrade.Location = new System.Drawing.Point(4, 260);
             this.chkCanTrade.Name = "chkCanTrade";
             this.chkCanTrade.Size = new System.Drawing.Size(82, 17);
             this.chkCanTrade.TabIndex = 91;
@@ -566,22 +676,12 @@ namespace Intersect.Editor.Forms.Editors
             // chkCanBag
             // 
             this.chkCanBag.AutoSize = true;
-            this.chkCanBag.Location = new System.Drawing.Point(121, 261);
+            this.chkCanBag.Location = new System.Drawing.Point(4, 239);
             this.chkCanBag.Name = "chkCanBag";
             this.chkCanBag.Size = new System.Drawing.Size(73, 17);
             this.chkCanBag.TabIndex = 90;
             this.chkCanBag.Text = "Can Bag?";
             this.chkCanBag.CheckedChanged += new System.EventHandler(this.chkCanBag_CheckedChanged);
-            // 
-            // chkCanBank
-            // 
-            this.chkCanBank.AutoSize = true;
-            this.chkCanBank.Location = new System.Drawing.Point(13, 261);
-            this.chkCanBank.Name = "chkCanBank";
-            this.chkCanBank.Size = new System.Drawing.Size(79, 17);
-            this.chkCanBank.TabIndex = 89;
-            this.chkCanBank.Text = "Can Bank?";
-            this.chkCanBank.CheckedChanged += new System.EventHandler(this.chkCanBank_CheckedChanged);
             // 
             // chkIgnoreCdr
             // 
@@ -898,7 +998,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkCanDrop
             // 
             this.chkCanDrop.AutoSize = true;
-            this.chkCanDrop.Location = new System.Drawing.Point(13, 241);
+            this.chkCanDrop.Location = new System.Drawing.Point(160, 260);
             this.chkCanDrop.Name = "chkCanDrop";
             this.chkCanDrop.Size = new System.Drawing.Size(77, 17);
             this.chkCanDrop.TabIndex = 26;
@@ -2814,26 +2914,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // lblEditorName
-            // 
-            this.lblEditorName.AutoSize = true;
-            this.lblEditorName.Location = new System.Drawing.Point(8, 77);
-            this.lblEditorName.Name = "lblEditorName";
-            this.lblEditorName.Size = new System.Drawing.Size(68, 13);
-            this.lblEditorName.TabIndex = 102;
-            this.lblEditorName.Text = "Editor Name:";
-            // 
-            // txtEditorName
-            // 
-            this.txtEditorName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtEditorName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtEditorName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtEditorName.Location = new System.Drawing.Point(78, 74);
-            this.txtEditorName.Name = "txtEditorName";
-            this.txtEditorName.Size = new System.Drawing.Size(120, 20);
-            this.txtEditorName.TabIndex = 101;
-            this.txtEditorName.TextChanged += new System.EventHandler(this.txtEditorName_TextChanged);
-            // 
             // FrmItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2859,6 +2939,8 @@ namespace Intersect.Editor.Forms.Editors
             this.grpItems.PerformLayout();
             this.grpGeneral.ResumeLayout(false);
             this.grpGeneral.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaxLossOnDeath)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMinLossOnDeath)).EndInit();
             this.grpRequirements.ResumeLayout(false);
             this.grpRequirements.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBankStackLimit)).EndInit();
@@ -3105,5 +3187,10 @@ namespace Intersect.Editor.Forms.Editors
         private Label lblCritEffectSpell;
         private Label lblEditorName;
         private DarkTextBox txtEditorName;
+        private Label lblToLoss;
+        private DarkNumericUpDown nudMaxLossOnDeath;
+        private DarkCheckBox chkIsLossPercentage;
+        private DarkNumericUpDown nudMinLossOnDeath;
+        private Label lblLossOnDeath;
     }
 }

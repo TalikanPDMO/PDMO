@@ -3090,6 +3090,7 @@ namespace Intersect.Server.Entities
                 var playerKiller = killer as Player;
                 var luck = 1.0 + (playerKiller != null ? playerKiller.GetLuck() : 0) / 100;
 
+                var quantity = item.Quantity;
                 Guid lootOwner = Guid.Empty;
                 if (this is Player)
                 {
@@ -3102,6 +3103,30 @@ namespace Intersect.Server.Entities
                     // It's a player, try and set ownership to the player that killed them.. If it was a player.
                     // Otherwise set to self, so they can come and reclaim their items.
                     lootOwner = playerKiller?.Id ?? Id;
+
+                    // Calculate the loss amount if it's a pleayer
+                    int loss;
+                    if (itemBase.MinLossOnDeath == itemBase.MaxLossOnDeath)
+                    {
+                        loss = itemBase.MinLossOnDeath;
+                    }
+                    else
+                    {
+                        loss = Randomization.Next(itemBase.MinLossOnDeath, itemBase.MaxLossOnDeath + 1);
+                    }
+                    if (itemBase.IsLossPercentage)
+                    {
+                        loss = (int)Math.Round(item.Quantity * loss / 100.0, MidpointRounding.AwayFromZero);
+                    }
+                    if (loss < item.Quantity)
+                    {
+                        if (loss == 0)
+                        {
+                            // Go to next item if we will lose an amount of 0
+                            continue;
+                        }
+                        quantity = loss;
+                    }
                 }
                 else
                 {
@@ -3120,16 +3145,16 @@ namespace Intersect.Server.Entities
                     }
 
                     // Set the attributes for this item.
-                    item.Set(new Item(item.ItemId, item.Quantity, true));
+                    item.Set(new Item(item.ItemId, quantity, true));
                 }
 
                 // Spawn the actual item!
                 var map = MapInstance.Get(MapId);
-                map?.SpawnItem(X, Y, item, item.Quantity, lootOwner, sendUpdate);
+                map?.SpawnItem(X, Y, item, quantity, lootOwner, sendUpdate);
 
                 // Remove the item from inventory if a player.
                 var player = this as Player;
-                player?.TryTakeItem(Items[n], item.Quantity);
+                player?.TryTakeItem(Items[n], quantity);
             }
 
 
