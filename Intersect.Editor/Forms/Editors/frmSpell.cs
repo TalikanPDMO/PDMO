@@ -157,6 +157,7 @@ namespace Intersect.Editor.Forms.Editors
             toolStripItemCopy.Text = Strings.SpellEditor.copy;
             toolStripItemPaste.Text = Strings.SpellEditor.paste;
             toolStripItemUndo.Text = Strings.SpellEditor.undo;
+            toolStripItemRelations.Text = Strings.SpellEditor.relations;
 
             grpSpells.Text = Strings.SpellEditor.spells;
 
@@ -726,14 +727,14 @@ namespace Intersect.Editor.Forms.Editors
                 Dictionary<string, List<string>> dataDict = new Dictionary<string, List<string>>();
 
                 //Retrieve all npcs that could use the spell
-                var npcList = NpcBase.Lookup.Where(pair => ((NpcBase)pair.Value)?.Spells.Contains(mEditorItem.Id) ?? false)
+                var npcList = NpcBase.Lookup.Where(pair => ((NpcBase)pair.Value)?.Spells?.Contains(mEditorItem.Id) ?? false)
                     .OrderBy(p => p.Value?.Name)
                     .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((NpcBase)pair.Value)?.EditorName) ?? NpcBase.Deleted)
                     .ToList();
                 dataDict.Add(Strings.Relations.npcs, npcList);
 
-                //Retrieve all npcs that could use the spell
-                var classList = ClassBase.Lookup.Where(pair => ((ClassBase)pair.Value)?.Spells.Any(c => c.Id == mEditorItem.Id) ?? false)
+                //Retrieve all classes who learn the spell in their leveling
+                var classList = ClassBase.Lookup.Where(pair => ((ClassBase)pair.Value)?.Spells?.Any(c => c?.Id == mEditorItem.Id) ?? false)
                     .OrderBy(p => p.Value?.Name)
                     .Select(pair => pair.Value?.Name ?? ClassBase.Deleted)
                     .ToList();

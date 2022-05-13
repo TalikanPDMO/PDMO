@@ -111,6 +111,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.tmrRender = new System.Windows.Forms.Timer(this.components);
+            this.toolStripItemRelations = new System.Windows.Forms.ToolStripButton();
             this.grpAnimations.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpLower.SuspendLayout();
@@ -1063,7 +1064,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemCopy,
             this.toolStripItemPaste,
             this.toolStripSeparator3,
-            this.toolStripItemUndo});
+            this.toolStripItemUndo,
+            this.toolStripItemRelations});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
@@ -1174,6 +1176,18 @@ namespace Intersect.Editor.Forms.Editors
             this.tmrRender.Enabled = true;
             this.tmrRender.Interval = 16;
             this.tmrRender.Tick += new System.EventHandler(this.tmrRender_Tick);
+            // 
+            // toolStripItemRelations
+            // 
+            this.toolStripItemRelations.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripItemRelations.Enabled = false;
+            this.toolStripItemRelations.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripItemRelations.Image = ((System.Drawing.Image)(resources.GetObject("toolStripItemRelations.Image")));
+            this.toolStripItemRelations.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripItemRelations.Name = "toolStripItemRelations";
+            this.toolStripItemRelations.Size = new System.Drawing.Size(23, 22);
+            this.toolStripItemRelations.Text = "Relations"; 
+            this.toolStripItemRelations.Click += new System.EventHandler(this.toolStripItemRelations_Click);
             // 
             // FrmAnimation
             // 
@@ -1311,5 +1325,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkTextBox txtSearch;
         private DarkCheckBox chkCompleteSoundPlayback;
         private Controls.GameObjectList lstGameObjects;
+        public System.Windows.Forms.ToolStripButton toolStripItemRelations;
     }
 }
