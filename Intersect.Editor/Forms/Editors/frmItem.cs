@@ -52,7 +52,7 @@ namespace Intersect.Editor.Forms.Editors
             cmbProjectile.Items.Add(Strings.General.none);
             cmbProjectile.Items.AddRange(ProjectileBase.Names);
 
-            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
+            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click, null);
         }
         private void AssignEditorItem(Guid id)
         {

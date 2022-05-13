@@ -540,6 +540,22 @@ namespace Intersect.Editor.Localization
 
         }
 
+        public struct Relations
+        {
+            public static LocalizedString title = @"Relations";
+
+            public static LocalizedString none = @"None";
+
+            public static LocalizedString npcs = @"NPCs: ";
+
+            public static LocalizedString classes = @"Classes: ";
+
+            public static LocalizedString spells = @"Spells: ";
+
+            public static LocalizedString items = @"Items: ";
+
+        }
+
         public struct AnimationEditor
         {
 

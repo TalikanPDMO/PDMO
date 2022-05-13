@@ -34,6 +34,8 @@ namespace Intersect.Editor.Forms.Editors
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSpell));
             this.pnlContainer = new System.Windows.Forms.Panel();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
+            this.lblEditorName = new System.Windows.Forms.Label();
+            this.txtEditorName = new DarkUI.Controls.DarkTextBox();
             this.btnAddFolder = new DarkUI.Controls.DarkButton();
             this.lblFolder = new System.Windows.Forms.Label();
             this.cmbFolder = new DarkUI.Controls.DarkComboBox();
@@ -193,8 +195,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
-            this.txtEditorName = new DarkUI.Controls.DarkTextBox();
-            this.lblEditorName = new System.Windows.Forms.Label();
+            this.toolStripItemRelations = new System.Windows.Forms.ToolStripButton();
             this.pnlContainer.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSpell)).BeginInit();
@@ -298,6 +299,26 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.TabIndex = 17;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
+            // 
+            // lblEditorName
+            // 
+            this.lblEditorName.AutoSize = true;
+            this.lblEditorName.Location = new System.Drawing.Point(7, 71);
+            this.lblEditorName.Name = "lblEditorName";
+            this.lblEditorName.Size = new System.Drawing.Size(68, 13);
+            this.lblEditorName.TabIndex = 61;
+            this.lblEditorName.Text = "Editor Name:";
+            // 
+            // txtEditorName
+            // 
+            this.txtEditorName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtEditorName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtEditorName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtEditorName.Location = new System.Drawing.Point(78, 68);
+            this.txtEditorName.Name = "txtEditorName";
+            this.txtEditorName.Size = new System.Drawing.Size(123, 20);
+            this.txtEditorName.TabIndex = 60;
+            this.txtEditorName.TextChanged += new System.EventHandler(this.txtEditorName_TextChanged);
             // 
             // btnAddFolder
             // 
@@ -2454,7 +2475,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemCopy,
             this.toolStripItemPaste,
             this.toolStripSeparator3,
-            this.toolStripItemUndo});
+            this.toolStripItemUndo,
+            this.toolStripItemRelations});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
@@ -2636,25 +2658,17 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Size = new System.Drawing.Size(191, 478);
             this.lstGameObjects.TabIndex = 32;
             // 
-            // txtEditorName
+            // toolStripItemRelations
             // 
-            this.txtEditorName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtEditorName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtEditorName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtEditorName.Location = new System.Drawing.Point(78, 68);
-            this.txtEditorName.Name = "txtEditorName";
-            this.txtEditorName.Size = new System.Drawing.Size(123, 20);
-            this.txtEditorName.TabIndex = 60;
-            this.txtEditorName.TextChanged += new System.EventHandler(this.txtEditorName_TextChanged);
-            // 
-            // lblEditorName
-            // 
-            this.lblEditorName.AutoSize = true;
-            this.lblEditorName.Location = new System.Drawing.Point(7, 71);
-            this.lblEditorName.Name = "lblEditorName";
-            this.lblEditorName.Size = new System.Drawing.Size(68, 13);
-            this.lblEditorName.TabIndex = 61;
-            this.lblEditorName.Text = "Editor Name:";
+            this.toolStripItemRelations.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripItemRelations.Enabled = false;
+            this.toolStripItemRelations.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripItemRelations.Image = ((System.Drawing.Image)(resources.GetObject("toolStripItemRelations.Image")));
+            this.toolStripItemRelations.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripItemRelations.Name = "toolStripItemRelations";
+            this.toolStripItemRelations.Size = new System.Drawing.Size(23, 22);
+            this.toolStripItemRelations.Text = "Relations";
+            this.toolStripItemRelations.Click += new System.EventHandler(this.toolStripItemRelations_Click);
             // 
             // FrmSpell
             // 
@@ -2915,5 +2929,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkNumericUpDown nudMagChance;
         private System.Windows.Forms.Label lblEditorName;
         private DarkTextBox txtEditorName;
+        public System.Windows.Forms.ToolStripButton toolStripItemRelations;
     }
 }

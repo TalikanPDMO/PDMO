@@ -31,7 +31,7 @@ namespace Intersect.Editor.Forms.Editors
 
             lstGameObjects.NodeMouseDoubleClick += lstGameObjects_NodeMouseDoubleClick;
             lstGameObjects.AfterSelect += lstGameObjects_AfterSelect;
-            lstGameObjects.Init(null, null, toolStripItemNew_Click, toolStripItemCopy_Click, null, toolStripItemPaste_Click, toolStripItemDelete_Click);
+            lstGameObjects.Init(null, null, toolStripItemNew_Click, toolStripItemCopy_Click, null, toolStripItemPaste_Click, toolStripItemDelete_Click, null);
         }
 
         private void InitLocalization()
