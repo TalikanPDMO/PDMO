@@ -548,6 +548,8 @@ namespace Intersect.Editor.Localization
 
             public static LocalizedString npcs = @"NPCS: ";
 
+            public static LocalizedString npcsdrops = @"NPCS DROPS: ";
+
             public static LocalizedString classes = @"CLASSES: ";
 
             public static LocalizedString spells = @"SPELLS: ";
@@ -559,6 +561,12 @@ namespace Intersect.Editor.Localization
             public static LocalizedString maps = @"MAPS: ";
 
             public static LocalizedString resources = @"RESOURCES: ";
+
+            public static LocalizedString resourcesdrops = @"RESOURCES DROPS: ";
+
+            public static LocalizedString crafts = @"CRAFTS: ";
+
+            public static LocalizedString shops = @"SHOPS: ";
 
 
         }
@@ -3414,6 +3422,8 @@ Tick timer saved in server config.json.";
             };
 
             public static LocalizedString undo = @"Undo Changes";
+
+            public static LocalizedString relations = @"View Relations";
 
             public static LocalizedString undoprompt =
                 @"Are you sure you want to undo changes made to this item? This action cannot be reverted!";

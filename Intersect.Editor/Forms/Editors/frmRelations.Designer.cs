@@ -36,7 +36,7 @@
             this.treeViewItems.Location = new System.Drawing.Point(12, 12);
             this.treeViewItems.MaxDragChange = 20;
             this.treeViewItems.Name = "treeViewItems";
-            this.treeViewItems.Size = new System.Drawing.Size(313, 435);
+            this.treeViewItems.Size = new System.Drawing.Size(405, 540);
             this.treeViewItems.TabIndex = 10;
             // 
             // FrmRelations
@@ -44,7 +44,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(337, 459);
+            this.ClientSize = new System.Drawing.Size(429, 564);
             this.Controls.Add(this.treeViewItems);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
