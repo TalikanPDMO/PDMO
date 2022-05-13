@@ -739,7 +739,31 @@ namespace Intersect.Editor.Forms.Editors
                     .ToList();
                 dataDict.Add(Strings.Relations.classes, classList);
 
-                var relationsfrm = new FrmRelations(dataDict);
+                //Retrieve all spells using the spell (crit or next effect)
+                var spellList = SpellBase.Lookup.Where(pair => ((SpellBase)pair.Value)?.Combat?.CritEffectSpellId == mEditorItem.Id 
+                    || ((SpellBase)pair.Value)?.Combat?.NextEffectSpellId == mEditorItem.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((SpellBase)pair.Value)?.EditorName) ?? SpellBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.spells, spellList);
+
+                //Retrieve all projectiles using the spell
+                var projList = ProjectileBase.Lookup.Where(pair => ((ProjectileBase)pair.Value)?.SpellId == mEditorItem.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? ProjectileBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.projectiles, projList);
+
+                //Retrieve all iems using the spell
+                var itemList = ItemBase.Lookup.Where(pair => ((ItemBase)pair.Value)?.SpellId == mEditorItem.Id
+                    || ((ItemBase)pair.Value)?.CritEffectSpellId == mEditorItem.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((ItemBase)pair.Value)?.EditorName) ?? ItemBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.items, itemList);
+
+                string titleTarget = "Spell : " + TextUtils.FormatEditorName(mEditorItem.Name, mEditorItem.EditorName);
+                var relationsfrm = new FrmRelations(titleTarget, dataDict);
                 relationsfrm.ShowDialog();
             }
         }

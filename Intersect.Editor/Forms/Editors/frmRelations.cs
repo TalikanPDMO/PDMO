@@ -11,17 +11,20 @@ namespace Intersect.Editor.Forms
     public partial class FrmRelations : Form
     {
         private Dictionary<string, List<string>> DataDict;
+        private string TitleTarget;
         public FrmRelations()
         {
             InitializeComponent();
             DataDict = new Dictionary<string, List<string>>();
             this.Icon = Properties.Resources.Icon;
+            this.TitleTarget = "Unknown";
         }
-        public FrmRelations(Dictionary<string, List<string>> dataDict)
+        public FrmRelations(string titleTarget, Dictionary<string, List<string>> dataDict)
         {
             InitializeComponent();
             DataDict = dataDict;
             this.Icon = Properties.Resources.Icon;
+            TitleTarget = titleTarget;
         }
 
         private void frmRelations_Load(object sender, EventArgs e)
@@ -32,7 +35,7 @@ namespace Intersect.Editor.Forms
 
         private void InitLocalization()
         {
-            Text = Strings.Relations.title;
+            Text = Strings.Relations.title.ToString(TitleTarget);
         }
         public void SetDataDict(Dictionary<string, List<string>> dataDict)
         {
