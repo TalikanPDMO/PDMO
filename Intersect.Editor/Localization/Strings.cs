@@ -568,6 +568,8 @@ namespace Intersect.Editor.Localization
 
             public static LocalizedString shops = @"SHOPS: ";
 
+            public static LocalizedString quests = @"QUESTS: ";
+
 
         }
 
@@ -4093,6 +4095,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString title = @"Npc Editor";
 
             public static LocalizedString undo = @"Undo Changes";
+
+            public static LocalizedString relations = @"View Relations";
 
             public static LocalizedString undoprompt =
                 @"Are you sure you want to undo changes made to this npc? This action cannot be reverted!";
