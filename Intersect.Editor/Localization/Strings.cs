@@ -540,6 +540,40 @@ namespace Intersect.Editor.Localization
 
         }
 
+        public struct Relations
+        {
+            public static LocalizedString title = @"Relations of {00}";
+
+            public static LocalizedString none = @"None";
+
+            public static LocalizedString npcs = @"NPCS: ";
+
+            public static LocalizedString npcsdrops = @"NPCS DROPS: ";
+
+            public static LocalizedString classes = @"CLASSES: ";
+
+            public static LocalizedString spells = @"SPELLS: ";
+
+            public static LocalizedString items = @"ITEMS: ";
+
+            public static LocalizedString projectiles = @"PROJECTILES: ";
+
+            public static LocalizedString maps = @"MAPS (ONLY LOADED): ";
+
+            public static LocalizedString resources = @"RESOURCES: ";
+
+            public static LocalizedString resourcesdrops = @"RESOURCES DROPS: ";
+
+            public static LocalizedString crafts = @"CRAFTS: ";
+
+            public static LocalizedString shops = @"SHOPS: ";
+
+            public static LocalizedString quests = @"QUESTS: ";
+
+            public static LocalizedString craftingtables = @"CRAFTING TABLES: ";
+
+        }
+
         public struct AnimationEditor
         {
 
@@ -620,6 +654,8 @@ namespace Intersect.Editor.Localization
             public static LocalizedString title = @"Animation Editor";
 
             public static LocalizedString undo = @"Undo Changes";
+
+            public static LocalizedString relations = @"View Relations";
 
             public static LocalizedString undoprompt =
                 @"Are you sure you want to undo changes made to this animation? This action cannot be reverted!";
@@ -1012,6 +1048,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString paste = @"Paste Event";
 
+            public static LocalizedString relations = @"View Relations";
+
             public static LocalizedString pasteprompt =
                 @"You cannot undo an event-paste operation! Are you sure you want to overwrite this event?";
 
@@ -1167,6 +1205,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString title = @"Crafts Editor";
 
             public static LocalizedString undo = @"Undo Changes";
+
+            public static LocalizedString relations = @"View Relations";
 
             public static LocalizedString undoprompt =
                 @"Are you sure you want to undo changes made to this craft? This action cannot be reverted!";
@@ -2466,6 +2506,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString global = @"Global Event";
 
+            public static LocalizedString relations = @"View Relations";
+
             public static LocalizedString hidename = @"Hide Name";
 
             public static LocalizedString insertcommand = @"Insert";
@@ -3390,6 +3432,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString undo = @"Undo Changes";
 
+            public static LocalizedString relations = @"View Relations";
+
             public static LocalizedString undoprompt =
                 @"Are you sure you want to undo changes made to this item? This action cannot be reverted!";
 
@@ -4059,6 +4103,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString undo = @"Undo Changes";
 
+            public static LocalizedString relations = @"View Relations";
+
             public static LocalizedString undoprompt =
                 @"Are you sure you want to undo changes made to this npc? This action cannot be reverted!";
 
@@ -4226,6 +4272,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString title = @"Projectile Editor";
 
             public static LocalizedString undo = @"Undo Changes";
+
+            public static LocalizedString relations = @"View Relations";
 
             public static LocalizedString undoprompt =
                 @"Are you sure you want to undo changes made to this projectile? This action cannot be reverted!";
@@ -4786,6 +4834,8 @@ Tick timer saved in server config.json.";
             };
 
             public static LocalizedString undo = @"Undo Changes";
+
+            public static LocalizedString relations = @"View Relations";
 
             public static LocalizedString undoprompt =
                 @"Are you sure you want to undo changes made to this spell? This action cannot be reverted!";

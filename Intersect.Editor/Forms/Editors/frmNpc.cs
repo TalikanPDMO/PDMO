@@ -14,6 +14,7 @@ using Intersect.Editor.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
+using Intersect.GameObjects.Maps;
 using Intersect.Utilities;
 
 namespace Intersect.Editor.Forms.Editors
@@ -35,7 +36,7 @@ namespace Intersect.Editor.Forms.Editors
             ApplyHooks();
             InitializeComponent();
 
-            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
+            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click, toolStripItemRelations_Click);
         }
         private void AssignEditorItem(Guid id)
         {
@@ -132,6 +133,7 @@ namespace Intersect.Editor.Forms.Editors
             toolStripItemCopy.Text = Strings.NpcEditor.copy;
             toolStripItemPaste.Text = Strings.NpcEditor.paste;
             toolStripItemUndo.Text = Strings.NpcEditor.undo;
+            toolStripItemRelations.Text = Strings.NpcEditor.relations;
 
             grpNpcs.Text = Strings.NpcEditor.npcs;
 
@@ -639,12 +641,47 @@ namespace Intersect.Editor.Forms.Editors
             }
         }
 
+        private void toolStripItemRelations_Click(object sender, EventArgs e)
+        {
+            if (mEditorItem != null)
+            {
+                Dictionary<string, List<string>> dataDict = new Dictionary<string, List<string>>();
+
+                //Retrieve all npcs related to the npc (aggro or swarm)
+                var npcList = NpcBase.Lookup.Where(pair => (((NpcBase)pair.Value)?.AggroList?.Contains(mEditorItem.Id) ?? false)
+                || (((NpcBase)pair.Value)?.SwarmList?.Contains(mEditorItem.Id) ?? false))
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((NpcBase)pair.Value)?.EditorName) ?? NpcBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.npcs, npcList);
+
+                //Retrieve all maps related to the npc
+                var mapList = MapBase.Lookup.Where(pair => ((MapBase)pair.Value)?.Spawns?.Any(s => s?.NpcId == mEditorItem.Id) ?? false)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? MapBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.maps, mapList);
+
+                //Retrieve all quests where we need to kill the npc
+                var questList = QuestBase.Lookup.Where(pair =>
+                    ((QuestBase)pair.Value)?.Tasks?.Any(t => t?.Objective == QuestObjective.KillNpcs && t?.TargetId == mEditorItem.Id) ?? false)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? QuestBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.quests, questList);
+
+                string titleTarget = "Npc : " + TextUtils.FormatEditorName(mEditorItem.Name, mEditorItem.EditorName);
+                var relationsfrm = new FrmRelations(titleTarget, dataDict);
+                relationsfrm.ShowDialog();
+            }
+        }
         private void UpdateToolStripItems()
         {
             toolStripItemCopy.Enabled = mEditorItem != null && lstGameObjects.Focused;
             toolStripItemPaste.Enabled = mEditorItem != null && mCopiedItem != null && lstGameObjects.Focused;
             toolStripItemDelete.Enabled = mEditorItem != null && lstGameObjects.Focused;
             toolStripItemUndo.Enabled = mEditorItem != null && lstGameObjects.Focused;
+            toolStripItemRelations.Enabled = mEditorItem != null;
         }
 
         private void form_KeyDown(object sender, KeyEventArgs e)

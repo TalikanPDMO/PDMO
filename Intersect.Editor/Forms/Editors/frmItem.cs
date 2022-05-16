@@ -13,6 +13,7 @@ using Intersect.Editor.Localization;
 using Intersect.Editor.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Crafting;
 using Intersect.GameObjects.Events;
 using Intersect.Utilities;
 
@@ -52,7 +53,7 @@ namespace Intersect.Editor.Forms.Editors
             cmbProjectile.Items.Add(Strings.General.none);
             cmbProjectile.Items.AddRange(ProjectileBase.Names);
 
-            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
+            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click, toolStripItemRelations_Click);
         }
         private void AssignEditorItem(Guid id)
         {
@@ -177,6 +178,7 @@ namespace Intersect.Editor.Forms.Editors
             toolStripItemCopy.Text = Strings.ItemEditor.copy;
             toolStripItemPaste.Text = Strings.ItemEditor.paste;
             toolStripItemUndo.Text = Strings.ItemEditor.undo;
+            toolStripItemRelations.Text = Strings.ItemEditor.relations;
 
             grpItems.Text = Strings.ItemEditor.items;
             grpGeneral.Text = Strings.ItemEditor.general;
@@ -685,12 +687,77 @@ namespace Intersect.Editor.Forms.Editors
             }
         }
 
+        private void toolStripItemRelations_Click(object sender, EventArgs e)
+        {
+            if (mEditorItem != null)
+            {
+                Dictionary<string, List<string>> dataDict = new Dictionary<string, List<string>>();
+
+                //Retrieve all npcs related the item (drop)
+                var npcList = NpcBase.Lookup.Where(pair => ((NpcBase)pair.Value)?.Drops?.Any(d => d?.ItemId == mEditorItem.Id) ?? false)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((NpcBase)pair.Value)?.EditorName) ?? NpcBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.npcsdrops, npcList);
+
+                //Retrieve all classes using the item
+                var classList = ClassBase.Lookup.Where(pair => ((ClassBase)pair.Value)?.Items?.Any(i => i?.Id == mEditorItem.Id) ?? false)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? ClassBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.classes, classList);
+
+                //Retrieve all projectiles using the item as ammunition
+                var projList = ProjectileBase.Lookup.Where(pair => ((ProjectileBase)pair.Value)?.AmmoItemId == mEditorItem.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? ProjectileBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.projectiles, projList);
+
+                //Retrieve all resources related to the item (drops)
+                var resourceList = ResourceBase.Lookup.Where(pair => ((ResourceBase)pair.Value)?.Drops?.Any(d => d?.ItemId == mEditorItem.Id) ?? false)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? ResourceBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.resourcesdrops, resourceList);
+
+                //Retrieve all quests where we need to gather the item
+                var questList = QuestBase.Lookup.Where(pair =>
+                    ((QuestBase)pair.Value)?.Tasks?.Any(t => t?.Objective == QuestObjective.GatherItems && t?.TargetId == mEditorItem.Id) ?? false)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((NpcBase)pair.Value)?.EditorName) ?? QuestBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.quests, questList);
+
+                //Retrieve all crafts related to the item 
+                var craftList = CraftBase.Lookup.Where(pair => ((CraftBase)pair.Value)?.ItemId == mEditorItem.Id
+                    || (((CraftBase)pair.Value)?.Ingredients?.Any(i => i?.ItemId == mEditorItem.Id) ?? false))
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? CraftBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.crafts, craftList);
+
+                //Retrieve all shops related to the item 
+                var shopList = ShopBase.Lookup.Where(pair => (((ShopBase)pair.Value)?.SellingItems?.Any(si => si?.ItemId == mEditorItem.Id) ?? false)
+                    || (((ShopBase)pair.Value)?.BuyingItems?.Any(bi => bi?.ItemId == mEditorItem.Id) ?? false))
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? ShopBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.shops, shopList);
+
+                string titleTarget = "Item : " + mEditorItem.Name;
+                var relationsfrm = new FrmRelations(titleTarget, dataDict);
+                relationsfrm.ShowDialog();
+            }
+        }
+
         private void UpdateToolStripItems()
         {
             toolStripItemCopy.Enabled = mEditorItem != null && lstGameObjects.Focused;
             toolStripItemPaste.Enabled = mEditorItem != null && mCopiedItem != null && lstGameObjects.Focused;
             toolStripItemDelete.Enabled = mEditorItem != null && lstGameObjects.Focused;
             toolStripItemUndo.Enabled = mEditorItem != null && lstGameObjects.Focused;
+            toolStripItemRelations.Enabled = mEditorItem != null;
         }
 
         private void form_KeyDown(object sender, KeyEventArgs e)

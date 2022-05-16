@@ -231,6 +231,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.btnTabsRight = new DarkUI.Controls.DarkButton();
             this.btnTabsLeft = new DarkUI.Controls.DarkButton();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnRelations = new DarkUI.Controls.DarkButton();
             this.grpEntityOptions.SuspendLayout();
             this.grpExtra.SuspendLayout();
             this.grpInspector.SuspendLayout();
@@ -1291,6 +1292,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             this.grpGeneral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpGeneral.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpGeneral.Controls.Add(this.btnRelations);
             this.grpGeneral.Controls.Add(this.chkIsGlobal);
             this.grpGeneral.Controls.Add(this.lblName);
             this.grpGeneral.Controls.Add(this.txtEventname);
@@ -1305,7 +1307,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             // chkIsGlobal
             // 
             this.chkIsGlobal.AutoSize = true;
-            this.chkIsGlobal.Location = new System.Drawing.Point(202, 22);
+            this.chkIsGlobal.Location = new System.Drawing.Point(205, 30);
             this.chkIsGlobal.Name = "chkIsGlobal";
             this.chkIsGlobal.Size = new System.Drawing.Size(87, 17);
             this.chkIsGlobal.TabIndex = 3;
@@ -1356,6 +1358,16 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(811, 498);
             this.panel1.TabIndex = 23;
+            // 
+            // btnRelations
+            // 
+            this.btnRelations.Location = new System.Drawing.Point(200, 8);
+            this.btnRelations.Name = "btnRelations";
+            this.btnRelations.Padding = new System.Windows.Forms.Padding(5);
+            this.btnRelations.Size = new System.Drawing.Size(93, 20);
+            this.btnRelations.TabIndex = 14;
+            this.btnRelations.Text = "View Relations";
+            this.btnRelations.Click += new System.EventHandler(this.btnRelations_Click);
             // 
             // FrmEvent
             // 
@@ -1487,5 +1499,6 @@ namespace Intersect.Editor.Forms.Editors.Events
         private Label lblMapTrigger;
         private DarkButton btnMapTrigger;
         private DarkCheckBox chkCollideOnDash;
+        private DarkButton btnRelations;
     }
 }

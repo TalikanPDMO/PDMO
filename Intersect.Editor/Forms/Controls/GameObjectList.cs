@@ -34,6 +34,8 @@ namespace Intersect.Editor.Forms.Controls
 
         public ToolstripButtonClickDelegate ToolStripItemDelete_Click;
 
+        public ToolstripButtonClickDelegate ToolStripItemRelations_Click;
+
         private List<string> mExpandedFolders = new List<string>();
 
 
@@ -58,7 +60,7 @@ namespace Intersect.Editor.Forms.Controls
         /// Sets up this game object list for working with our editor
         /// </summary>
         public void Init(UpdateToolstripDelegate updateToolStripHandler, UpdateItemDelegate updateItemHandler, ToolstripButtonClickDelegate newDelegate, 
-            ToolstripButtonClickDelegate copyDelegate, ToolstripButtonClickDelegate undoDelegate, ToolstripButtonClickDelegate pasteDelegate, ToolstripButtonClickDelegate deleteDelegate)
+            ToolstripButtonClickDelegate copyDelegate, ToolstripButtonClickDelegate undoDelegate, ToolstripButtonClickDelegate pasteDelegate, ToolstripButtonClickDelegate deleteDelegate, ToolstripButtonClickDelegate relationsDelegate)
         {
             FocusChangedHandler = updateToolStripHandler;
             UpdateItemHandler = updateItemHandler;
@@ -67,6 +69,7 @@ namespace Intersect.Editor.Forms.Controls
             ToolStripItemPaste_Click = pasteDelegate;
             ToolStripItemUndo_Click = undoDelegate;
             ToolStripItemDelete_Click = deleteDelegate;
+            ToolStripItemRelations_Click = relationsDelegate;
         }
 
         /// <summary>

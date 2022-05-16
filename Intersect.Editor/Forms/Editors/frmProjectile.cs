@@ -12,6 +12,7 @@ using Intersect.Editor.Localization;
 using Intersect.Editor.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.Utilities;
 
 namespace Intersect.Editor.Forms.Editors
 {
@@ -36,7 +37,7 @@ namespace Intersect.Editor.Forms.Editors
             ApplyHooks();
             InitializeComponent();
 
-            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
+            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click, toolStripItemRelations_Click);
         }
         private void AssignEditorItem(Guid id)
         {
@@ -111,6 +112,7 @@ namespace Intersect.Editor.Forms.Editors
             toolStripItemCopy.Text = Strings.ProjectileEditor.copy;
             toolStripItemPaste.Text = Strings.ProjectileEditor.paste;
             toolStripItemUndo.Text = Strings.ProjectileEditor.undo;
+            toolStripItemRelations.Text = Strings.ProjectileEditor.relations;
 
             grpProjectiles.Text = Strings.ProjectileEditor.projectiles;
 
@@ -671,12 +673,39 @@ namespace Intersect.Editor.Forms.Editors
             }
         }
 
+        private void toolStripItemRelations_Click(object sender, EventArgs e)
+        {
+            if (mEditorItem != null)
+            {
+                Dictionary<string, List<string>> dataDict = new Dictionary<string, List<string>>();
+
+                //Retrieve all spells using the projectile 
+                var spellList = SpellBase.Lookup.Where(pair => ((SpellBase)pair.Value)?.Combat?.ProjectileId == mEditorItem.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((SpellBase)pair.Value)?.EditorName) ?? SpellBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.spells, spellList);
+
+                //Retrieve all items using the projectile
+                var itemList = ItemBase.Lookup.Where(pair => ((ItemBase)pair.Value)?.ProjectileId == mEditorItem.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((ItemBase)pair.Value)?.EditorName) ?? ItemBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.items, itemList);
+
+                string titleTarget = "Projectile : " + mEditorItem.Name;
+                var relationsfrm = new FrmRelations(titleTarget, dataDict);
+                relationsfrm.ShowDialog();
+            }
+        }
+
         private void UpdateToolStripItems()
         {
             toolStripItemCopy.Enabled = mEditorItem != null && lstGameObjects.Focused;
             toolStripItemPaste.Enabled = mEditorItem != null && mCopiedItem != null && lstGameObjects.Focused;
             toolStripItemDelete.Enabled = mEditorItem != null && lstGameObjects.Focused;
             toolStripItemUndo.Enabled = mEditorItem != null && lstGameObjects.Focused;
+            toolStripItemRelations.Enabled = mEditorItem != null;
         }
 
         private void form_KeyDown(object sender, KeyEventArgs e)
