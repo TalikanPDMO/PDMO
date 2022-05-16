@@ -162,6 +162,8 @@ namespace Intersect.Editor.Forms.Editors
             {
                 pnlContainer.Show();
 
+                lstAnimations.SelectedIndex = 0;
+
                 txtName.Text = mEditorItem.Name;
                 cmbFolder.Text = mEditorItem.Folder;
                 nudSpeed.Value = mEditorItem.Speed;
@@ -188,7 +190,7 @@ namespace Intersect.Editor.Forms.Editors
                 UpdatePossibleAnimationPos();
 
                 UpdateAnimationData(0);
-                lstAnimations.SelectedIndex = 0;
+                
 
                 Render();
                 if (mChanged.IndexOf(mEditorItem) == -1)
