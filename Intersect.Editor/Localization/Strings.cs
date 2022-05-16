@@ -2506,6 +2506,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString global = @"Global Event";
 
+            public static LocalizedString relations = @"View Relations";
+
             public static LocalizedString hidename = @"Hide Name";
 
             public static LocalizedString insertcommand = @"Insert";

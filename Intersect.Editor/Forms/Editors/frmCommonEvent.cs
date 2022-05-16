@@ -190,19 +190,6 @@ namespace Intersect.Editor.Forms.Editors
                     .ToList();
                 dataDict.Add(Strings.Relations.crafts, craftList);
 
-                //Retrieve all quests where we need to kill the npc
-                var questList = QuestBase.Lookup.Where(pair => ((QuestBase)pair.Value)?.EndEventId == evt.Id
-                    || ((QuestBase)pair.Value)?.StartEventId == evt.Id
-                    || (((QuestBase)pair.Value)?.TaskLinks?.Any(tl => tl?.CompletionEventId == evt.Id) ?? false)
-                    || (((QuestBase)pair.Value)?.TaskAlternatives?.Any(ta => ta?.CompletionEventId == evt.Id) ?? false)
-                    || (((QuestBase)pair.Value)?.Tasks?.Any(t => (t?.Objective == QuestObjective.EventDriven && t?.TargetId == evt.Id)
-                            || t?.CompletionEventId == evt.Id )?? false)
-                    )
-                    .OrderBy(p => p.Value?.Name)
-                    .Select(pair => pair.Value?.Name ?? QuestBase.Deleted)
-                    .ToList();
-                dataDict.Add(Strings.Relations.quests, questList);
-
                 string titleTarget = "Event : " + evt.Name;
                 var relationsfrm = new FrmRelations(titleTarget, dataDict);
                 relationsfrm.ShowDialog();

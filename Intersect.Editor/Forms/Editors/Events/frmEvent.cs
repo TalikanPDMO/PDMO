@@ -16,6 +16,7 @@ using Intersect.Editor.Maps;
 using Intersect.Editor.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Crafting;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
 using Intersect.GameObjects.Maps;
@@ -270,6 +271,54 @@ namespace Intersect.Editor.Forms.Editors.Events
             MyEvent.Pages.Add(new EventPage());
             UpdateTabControl();
             LoadPage(MyEvent.Pages.Count - 1);
+        }
+
+        private void btnRelations_Click(object sender, EventArgs e)
+        {
+            if (MyEvent != null)
+            {
+                Dictionary<string, List<string>> dataDict = new Dictionary<string, List<string>>();
+
+                //Retrieve all npcs triggering the event on death
+                var npcList = NpcBase.Lookup.Where(pair => ((NpcBase)pair.Value)?.OnDeathEventId == MyEvent.Id
+                || ((NpcBase)pair.Value)?.OnDeathPartyEventId == MyEvent.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((NpcBase)pair.Value)?.EditorName) ?? NpcBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.npcs, npcList);
+
+                //Retrieve all spells using the event 
+                var spellList = SpellBase.Lookup.Where(pair => ((SpellBase)pair.Value)?.EventId == MyEvent.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((SpellBase)pair.Value)?.EditorName) ?? SpellBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.spells, spellList);
+
+                //Retrieve all items using the event
+                var itemList = ItemBase.Lookup.Where(pair => ((ItemBase)pair.Value)?.EventId == MyEvent.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((ItemBase)pair.Value)?.EditorName) ?? ItemBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.items, itemList);
+
+                //Retrieve all resources triggering the event
+                var resourceList = ResourceBase.Lookup.Where(pair => ((ResourceBase)pair.Value)?.EventId == MyEvent.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? ResourceBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.resources, resourceList);
+
+                //Retrieve all crafts triggering the event
+                var craftList = CraftBase.Lookup.Where(pair => ((CraftBase)pair.Value)?.EventId == MyEvent.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? CraftBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.crafts, craftList);
+
+                string titleTarget = "Event : " + MyEvent.Name;
+                var relationsfrm = new FrmRelations(titleTarget, dataDict);
+                relationsfrm.ShowDialog();
+            }
         }
 
         private void UpdateTabControl()
@@ -860,6 +909,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             grpGeneral.Text = Strings.EventEditor.general;
             lblName.Text = Strings.EventEditor.name;
             chkIsGlobal.Text = Strings.EventEditor.global;
+            btnRelations.Text = Strings.EventEditor.relations;
 
             grpPageOptions.Text = Strings.EventEditor.pageoptions;
             btnNewPage.Text = Strings.EventEditor.newpage;

@@ -721,6 +721,14 @@ namespace Intersect.Editor.Forms.Editors
                     .ToList();
                 dataDict.Add(Strings.Relations.resourcesdrops, resourceList);
 
+                //Retrieve all quests where we need to gather the item
+                var questList = QuestBase.Lookup.Where(pair =>
+                    ((QuestBase)pair.Value)?.Tasks?.Any(t => t?.Objective == QuestObjective.GatherItems && t?.TargetId == mEditorItem.Id) ?? false)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((NpcBase)pair.Value)?.EditorName) ?? QuestBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.quests, questList);
+
                 //Retrieve all crafts related to the item 
                 var craftList = CraftBase.Lookup.Where(pair => ((CraftBase)pair.Value)?.ItemId == mEditorItem.Id
                     || (((CraftBase)pair.Value)?.Ingredients?.Any(i => i?.ItemId == mEditorItem.Id) ?? false))
