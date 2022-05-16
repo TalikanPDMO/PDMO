@@ -570,6 +570,7 @@ namespace Intersect.Editor.Localization
 
             public static LocalizedString quests = @"QUESTS: ";
 
+            public static LocalizedString craftingtables = @"CRAFTING TABLES: ";
 
         }
 
@@ -1202,6 +1203,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString title = @"Crafts Editor";
 
             public static LocalizedString undo = @"Undo Changes";
+
+            public static LocalizedString relations = @"View Relations";
 
             public static LocalizedString undoprompt =
                 @"Are you sure you want to undo changes made to this craft? This action cannot be reverted!";

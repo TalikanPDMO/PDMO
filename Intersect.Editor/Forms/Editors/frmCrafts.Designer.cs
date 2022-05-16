@@ -73,6 +73,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
+            this.toolStripItemRelations = new System.Windows.Forms.ToolStripButton();
             this.grpCrafts.SuspendLayout();
             this.pnlContainer.SuspendLayout();
             this.grpGeneral.SuspendLayout();
@@ -526,7 +527,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemCopy,
             this.toolStripItemPaste,
             this.toolStripSeparator3,
-            this.toolStripItemUndo});
+            this.toolStripItemUndo,
+            this.toolStripItemRelations});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
@@ -632,6 +634,18 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
+            // toolStripItemRelations
+            // 
+            this.toolStripItemRelations.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripItemRelations.Enabled = false;
+            this.toolStripItemRelations.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripItemRelations.Image = ((System.Drawing.Image)(resources.GetObject("toolStripItemRelations.Image")));
+            this.toolStripItemRelations.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripItemRelations.Name = "toolStripItemRelations";
+            this.toolStripItemRelations.Size = new System.Drawing.Size(23, 22);
+            this.toolStripItemRelations.Text = "Relations";
+            this.toolStripItemRelations.Click += new System.EventHandler(this.toolStripItemRelations_Click);
+            // 
             // FrmCrafts
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -713,5 +727,6 @@ namespace Intersect.Editor.Forms.Editors
         private Controls.GameObjectList lstGameObjects;
         private System.Windows.Forms.Label lblCommonEvent;
         private DarkComboBox cmbEvent;
+        public System.Windows.Forms.ToolStripButton toolStripItemRelations;
     }
 }

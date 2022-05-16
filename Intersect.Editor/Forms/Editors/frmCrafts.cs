@@ -46,7 +46,7 @@ namespace Intersect.Editor.Forms.Editors
             cmbEvent.Items.Add(Strings.General.none);
             cmbEvent.Items.AddRange(EventBase.Names);
 
-            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click, null);
+            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click, toolStripItemRelations_Click);
         }
         private void AssignEditorItem(Guid id)
         {
@@ -269,6 +269,25 @@ namespace Intersect.Editor.Forms.Editors
             }
         }
 
+        private void toolStripItemRelations_Click(object sender, EventArgs e)
+        {
+            if (mEditorItem != null)
+            {
+                Dictionary<string, List<string>> dataDict = new Dictionary<string, List<string>>();
+
+                //Retrieve all crafting tables where the craft is possible
+                var craftingTableList = CraftingTableBase.Lookup.Where(pair => ((CraftingTableBase)pair.Value)?.Crafts?.Contains(mEditorItem.Id) ?? false)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? CraftingTableBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.craftingtables, craftingTableList);
+
+                string titleTarget = "Craft : " + mEditorItem.Name;
+                var relationsfrm = new FrmRelations(titleTarget, dataDict);
+                relationsfrm.ShowDialog();
+            }
+        }
+
         private void itemList_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control)
@@ -301,6 +320,7 @@ namespace Intersect.Editor.Forms.Editors
             toolStripItemPaste.Enabled = mEditorItem != null && mCopiedItem != null && lstGameObjects.Focused;
             toolStripItemDelete.Enabled = mEditorItem != null && lstGameObjects.Focused;
             toolStripItemUndo.Enabled = mEditorItem != null && lstGameObjects.Focused;
+            toolStripItemRelations.Enabled = mEditorItem != null;
         }
 
         private void itemList_FocusChanged(object sender, EventArgs e)
@@ -419,6 +439,7 @@ namespace Intersect.Editor.Forms.Editors
             toolStripItemCopy.Text = Strings.CraftsEditor.copy;
             toolStripItemPaste.Text = Strings.CraftsEditor.paste;
             toolStripItemUndo.Text = Strings.CraftsEditor.undo;
+            toolStripItemRelations.Text = Strings.CraftsEditor.relations;
 
             grpCrafts.Text = Strings.CraftsEditor.crafts;
 
