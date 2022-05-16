@@ -1048,6 +1048,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString paste = @"Paste Event";
 
+            public static LocalizedString relations = @"View Relations";
+
             public static LocalizedString pasteprompt =
                 @"You cannot undo an event-paste operation! Are you sure you want to overwrite this event?";
 

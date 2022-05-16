@@ -10,7 +10,11 @@ using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.Editor.Networking;
 using Intersect.Enums;
+using Intersect.GameObjects;
+using Intersect.GameObjects.Crafting;
 using Intersect.GameObjects.Events;
+using Intersect.GameObjects.Maps;
+using Intersect.Utilities;
 
 namespace Intersect.Editor.Forms.Editors
 {
@@ -31,7 +35,7 @@ namespace Intersect.Editor.Forms.Editors
 
             lstGameObjects.NodeMouseDoubleClick += lstGameObjects_NodeMouseDoubleClick;
             lstGameObjects.AfterSelect += lstGameObjects_AfterSelect;
-            lstGameObjects.Init(null, null, toolStripItemNew_Click, toolStripItemCopy_Click, null, toolStripItemPaste_Click, toolStripItemDelete_Click, null);
+            lstGameObjects.Init(null, null, toolStripItemNew_Click, toolStripItemCopy_Click, null, toolStripItemPaste_Click, toolStripItemDelete_Click, toolStripItemRelations_Click);
         }
 
         private void InitLocalization()
@@ -42,6 +46,7 @@ namespace Intersect.Editor.Forms.Editors
             toolStripItemDelete.Text = Strings.CommonEventEditor.delete;
             toolStripItemCopy.Text = Strings.CommonEventEditor.copy;
             toolStripItemPaste.Text = Strings.CommonEventEditor.paste;
+            toolStripItemRelations.Text = Strings.CommonEventEditor.relations;
 
             //Searching/Sorting
             btnAlphabetical.ToolTipText = Strings.CommonEventEditor.sortalphabetically;
@@ -139,6 +144,68 @@ namespace Intersect.Editor.Forms.Editors
                     PacketSender.SendSaveObject(evt);
                     InitEditor();
                 }
+            }
+        }
+
+        private void toolStripItemRelations_Click(object sender, EventArgs e)
+        {
+            var evt = GetSelectedEvent();
+            if (evt != null)
+            {
+                Dictionary<string, List<string>> dataDict = new Dictionary<string, List<string>>();
+
+                //Retrieve all npcs triggering the event on death
+                var npcList = NpcBase.Lookup.Where(pair => ((NpcBase)pair.Value)?.OnDeathEventId == evt.Id
+                || ((NpcBase)pair.Value)?.OnDeathPartyEventId == evt.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((NpcBase)pair.Value)?.EditorName) ?? NpcBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.npcs, npcList);
+
+                //Retrieve all spells using the event 
+                var spellList = SpellBase.Lookup.Where(pair => ((SpellBase)pair.Value)?.EventId == evt.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((SpellBase)pair.Value)?.EditorName) ?? SpellBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.spells, spellList);
+
+                //Retrieve all items using the event
+                var itemList = ItemBase.Lookup.Where(pair => ((ItemBase)pair.Value)?.EventId == evt.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((ItemBase)pair.Value)?.EditorName) ?? ItemBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.items, itemList);
+
+                //Retrieve all resources triggering the event
+                var resourceList = ResourceBase.Lookup.Where(pair => ((ResourceBase)pair.Value)?.EventId == evt.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? ResourceBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.resources, resourceList);
+
+                //Retrieve all crafts triggering the event
+                var craftList = CraftBase.Lookup.Where(pair => ((CraftBase)pair.Value)?.EventId == evt.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? CraftBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.crafts, craftList);
+
+                //Retrieve all quests where we need to kill the npc
+                var questList = QuestBase.Lookup.Where(pair => ((QuestBase)pair.Value)?.EndEventId == evt.Id
+                    || ((QuestBase)pair.Value)?.StartEventId == evt.Id
+                    || (((QuestBase)pair.Value)?.TaskLinks?.Any(tl => tl?.CompletionEventId == evt.Id) ?? false)
+                    || (((QuestBase)pair.Value)?.TaskAlternatives?.Any(ta => ta?.CompletionEventId == evt.Id) ?? false)
+                    || (((QuestBase)pair.Value)?.Tasks?.Any(t => (t?.Objective == QuestObjective.EventDriven && t?.TargetId == evt.Id)
+                            || t?.CompletionEventId == evt.Id )?? false)
+                    )
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? QuestBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.quests, questList);
+
+                string titleTarget = "Event : " + evt.Name;
+                var relationsfrm = new FrmRelations(titleTarget, dataDict);
+                relationsfrm.ShowDialog();
             }
         }
 
@@ -261,6 +328,7 @@ namespace Intersect.Editor.Forms.Editors
             toolStripItemDelete.Enabled = false;
             toolStripItemCopy.Enabled = false;
             toolStripItemPaste.Enabled = false;
+            toolStripItemRelations.Enabled = false;
             cmbFolder.Hide();
             btnAddFolder.Hide();
             lblFolder.Hide();
@@ -270,6 +338,7 @@ namespace Intersect.Editor.Forms.Editors
                 toolStripItemDelete.Enabled = true;
                 toolStripItemCopy.Enabled = true;
                 toolStripItemPaste.Enabled = mCopiedItem != null;
+                toolStripItemRelations.Enabled = true;
                 cmbFolder.Show();
                 btnAddFolder.Show();
                 lblFolder.Show();
