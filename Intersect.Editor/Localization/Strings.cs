@@ -558,7 +558,7 @@ namespace Intersect.Editor.Localization
 
             public static LocalizedString projectiles = @"PROJECTILES: ";
 
-            public static LocalizedString maps = @"MAPS: ";
+            public static LocalizedString maps = @"MAPS (ONLY LOADED): ";
 
             public static LocalizedString resources = @"RESOURCES: ";
 
@@ -4265,6 +4265,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString title = @"Projectile Editor";
 
             public static LocalizedString undo = @"Undo Changes";
+
+            public static LocalizedString relations = @"View Relations";
 
             public static LocalizedString undoprompt =
                 @"Are you sure you want to undo changes made to this projectile? This action cannot be reverted!";
