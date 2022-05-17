@@ -725,7 +725,7 @@ namespace Intersect.Editor.Forms.Editors
                 var questList = QuestBase.Lookup.Where(pair =>
                     ((QuestBase)pair.Value)?.Tasks?.Any(t => t?.Objective == QuestObjective.GatherItems && t?.TargetId == mEditorItem.Id) ?? false)
                     .OrderBy(p => p.Value?.Name)
-                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((NpcBase)pair.Value)?.EditorName) ?? QuestBase.Deleted)
+                    .Select(pair => pair.Value?.Name ?? QuestBase.Deleted)
                     .ToList();
                 dataDict.Add(Strings.Relations.quests, questList);
 
