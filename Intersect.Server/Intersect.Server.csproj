@@ -508,6 +508,7 @@
     <Compile Include="Entities\Trading.cs" />
     <Compile Include="Entities\Events\CommandInstance.cs" />
     <Compile Include="Entities\Events\CommandProcessing.cs" />
+    <Compile Include="General\PvpStadiumUnit.cs" />
     <Compile Include="General\ExpBoost.cs" />
     <Compile Include="General\Formulas.cs" />
     <Compile Include="General\Time.cs" />

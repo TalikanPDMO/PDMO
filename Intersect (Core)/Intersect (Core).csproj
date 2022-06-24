@@ -213,6 +213,7 @@
     <Compile Include="Configuration\IConfigurable.cs" />
     <Compile Include="Configuration\IConfiguration.cs" />
     <Compile Include="Configuration\ConfigurationHelper.cs" />
+    <Compile Include="Config\PvpStadiumOption.cs" />
     <Compile Include="Config\ChatOptions.cs" />
     <Compile Include="Config\Guilds\GuildOptions.cs" />
     <Compile Include="Config\Guilds\GuildPermissions.cs" />
@@ -269,6 +270,7 @@
     <Compile Include="CustomColors.cs" />
     <Compile Include="Enums\ChatboxTab.cs" />
     <Compile Include="Enums\ChatMessageType.cs" />
+    <Compile Include="Enums\PvpStadiumState.cs" />
     <Compile Include="Enums\EventTargetType.cs" />
     <Compile Include="Enums\PopupLayoutParams.cs" />
     <Compile Include="Enums\GuildMemberUpdateActions.cs" />

@@ -199,6 +199,7 @@ namespace Intersect.Server.Core
 
                         Time.Update();
                         ExpBoost.Update();
+                        PvpStadiumUnit.Update();
                         swCps++;
 
                         var endTime = Globals.Timing.Milliseconds;
