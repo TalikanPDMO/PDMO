@@ -2143,6 +2143,12 @@ namespace Intersect.Server.Networking
                 boost.AmountQuest, boost.ExpireTimeQuest - Globals.Timing.Milliseconds));
         }
 
+        // ShowStadiumDialogPacket
+        public static void SendMatchmakingStadium(Player player, bool isDeclinedNotif=false)
+        {
+            player.SendPacket(new MatchmakingStadiumPacket(isDeclinedNotif));
+        }
+
     }
 
 }

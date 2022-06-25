@@ -1757,6 +1757,18 @@ namespace Intersect.Client.Localization
 
         }
 
+        public struct PvpStadium
+        {
+            public static LocalizedString matchmaking_title = @"PokeStadium Match found";
+
+            public static LocalizedString matchmaking_message = @"You and your opponent have {00} seconds to accept the match. If you decline or exceed this duration, you will be kick from the PokeStadium queue";
+
+            public static LocalizedString declined_title = @"PokeStadium Match declined";
+
+            public static LocalizedString declined_message = @"Your opponent was afk or declined the match. You are still in the PokeStadium queue";
+
+        }
+
     }
 
 }

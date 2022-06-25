@@ -2886,6 +2886,25 @@ namespace Intersect.Server.Networking
             player.PictureClosed(packet.EventId);
         }
 
+        //MatchmakingStadiumResponse Packet
+        public void HandlePacket(Client client, MatchmakingStadiumResponsePacket packet)
+        {
+            var player = client?.Entity;
+            if (player == null)
+            {
+                return;
+            }
+
+            if (packet.AcceptingMatch)
+            {
+                PvpStadiumUnit.AcceptMatch(player.Id);
+            }
+            else
+            {
+                PvpStadiumUnit.DeclineMatch(player.Id);
+            }
+        }
+
         #endregion
 
         #region "Editor Packets"

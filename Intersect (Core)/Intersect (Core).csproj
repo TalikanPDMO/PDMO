@@ -396,9 +396,11 @@
     <Compile Include="Network\Packets\Client\HotbarSwapPacket.cs" />
     <Compile Include="Network\Packets\Client\HotbarUpdatePacket.cs" />
     <Compile Include="Network\Packets\Client\LoginPacket.cs" />
+    <Compile Include="Network\Packets\Client\MatchmakingStadiumResponsePacket.cs" />
     <Compile Include="Network\Packets\Client\RequestGuildPacket.cs" />
     <Compile Include="Network\Packets\Client\UpdateGuildMemberPacket.cs" />
     <Compile Include="Network\Packets\Client\PictureClosedPacket.cs" />
+    <Compile Include="Network\Packets\Server\MatchmakingStadiumPacket.cs" />
     <Compile Include="Network\Packets\Server\ExpBoostPacket.cs" />
     <Compile Include="Network\Packets\Server\ActionMsgPackets.cs" />
     <Compile Include="Network\Packets\Server\EntityMovementPackets.cs" />

@@ -2291,6 +2291,7 @@ namespace Intersect.Server.Entities
                     //PVP Kill common events
                     if (!enemy.Dead && enemy is Player && this is Player)
                     {
+                        //TODO add kill in stadium
                         ((Player)this).StartCommonEventsWithTrigger(CommonEventTrigger.PVPKill, "", enemy.Name);
                         ((Player)enemy).StartCommonEventsWithTrigger(CommonEventTrigger.PVPDeath, "", this.Name);
                     }

@@ -2099,6 +2099,36 @@ namespace Intersect.Client.Networking
             ExpBoost.AddOrUpdateBoost(expboost);
         }
 
+        //MatchmakingStadium Packet
+        public void HandlePacket(IPacketSender packetSender, MatchmakingStadiumPacket packet)
+        {
+            if (packet.IsDeclinedNotif)
+            {
+                if (Globals.Me.MatchmakingBox != null)
+                {
+                    Globals.Me.MatchmakingBox.Dispose();
+                    Globals.Me.MatchmakingBox = null;
+                }
+                var popup = new ShowPopupPacket("", Strings.PvpStadium.declined_title, Strings.PvpStadium.declined_message, 0, 255, "",
+                    new GameObjects.Events.Commands.ShowPopupCommand().PopupLayout);
+                Globals.Popups.Add(popup);
+            }
+            else
+            {
+                string message = Strings.PvpStadium.matchmaking_message.ToString(Options.PvpStadium.AcceptMatchPopupTime / 1000);
+                if (Globals.Me.MatchmakingBox != null)
+                {
+                    Globals.Me.MatchmakingBox.Dispose();
+                }
+                Globals.Me.MatchmakingBox = new InputBox(
+                    Strings.PvpStadium.matchmaking_title, message, true,
+                    InputBox.InputType.YesNo, PacketSender.SendMatchmakingAccept, PacketSender.SendMatchmakingDecline, null
+                );
+            }
+            
+        }
+
+
     }
 
 }

@@ -332,6 +332,9 @@ namespace Intersect.Server.Entities
             //Update trade
             CancelTrade();
 
+            //Update PvpStadium
+            PvpStadiumUnit.UnregisterPlayer(this.Id, true);
+
             mSentMap = false;
             ChatTarget = null;
 
@@ -769,20 +772,29 @@ namespace Intersect.Server.Entities
 
             CombatTimer = 0;
 
-            var cls = ClassBase.Get(ClassId);
-            if (cls != null)
+            // Bypass classic respawn when Stadium kill
+            if (PvpStadiumUnit.CurrentMatchPlayers.TryGetValue(this.Id, out var playerUnit) &&
+                (playerUnit.StadiumState == PvpStadiumState.MatchOnGoing || playerUnit.StadiumState == PvpStadiumState.MatchEnded))
             {
-                Warp(cls.SpawnMapId, (byte) cls.SpawnX, (byte) cls.SpawnY, (byte) cls.SpawnDir);
+                PvpStadiumUnit.EndMatch(this.Id);
             }
             else
             {
-                Warp(Guid.Empty, 0, 0, 0);
+                var cls = ClassBase.Get(ClassId);
+                if (cls != null)
+                {
+                    Warp(cls.SpawnMapId, (byte)cls.SpawnX, (byte)cls.SpawnY, (byte)cls.SpawnDir);
+                }
+                else
+                {
+                    Warp(Guid.Empty, 0, 0, 0);
+                }
+
+                PacketSender.SendEntityDataToProximity(this);
+
+                //Search death common event trigger
+                StartCommonEventsWithTrigger(CommonEventTrigger.OnRespawn);
             }
-
-            PacketSender.SendEntityDataToProximity(this);
-
-            //Search death common event trigger
-            StartCommonEventsWithTrigger(CommonEventTrigger.OnRespawn);
         }
 
         public override void Die(bool dropItems = true, Entity killer = null)

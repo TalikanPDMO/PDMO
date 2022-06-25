@@ -53,13 +53,27 @@ namespace Intersect.Server.General
                     // Check for afk
                     foreach (var p in CurrentMatchPlayers)
                     {
-                        if (updateTime > p.Value.TimeoutTimer)
+                        if (p.Value.TimeoutTimer > 0 && updateTime > p.Value.TimeoutTimer)
                         {
-                            // Unregister the first afk in the match
-                            if (UnregisterPlayer(p.Key, true))
+                            if (p.Value.StadiumState == PvpStadiumState.MatchOnPreparation)
                             {
-                                // break To avoid error with the foreach
+                                StartMatch();
+                                break; // break To avoid error with the foreach
+                            }
+                            else if (p.Value.StadiumState == PvpStadiumState.MatchOnGoing)
+                            {
+                                // Tie after a certain amount of time
+                                EndMatch(Guid.Empty);
+                                break; // break To avoid error with the foreach
+                            }
+                            else if (p.Value.StadiumState == PvpStadiumState.MatchEnded)
+                            {
+                                ReleaseStadium();
                                 break;
+                            }
+                            else if (UnregisterPlayer(p.Key, true)) // Unregister the first afk in the match
+                            {
+                                break; // break To avoid error with the foreach
                             }
                         }
                     }
@@ -86,9 +100,9 @@ namespace Intersect.Server.General
                             {
                                 p.Value.StadiumState = PvpStadiumState.WaitForResponse;
                                 p.Value.TimeoutTimer = Globals.Timing.Milliseconds + Options.PvpStadium.AcceptMatchPopupTime;
+                                PacketSender.SendMatchmakingStadium(Player.FindOnline(p.Key));
                                 CurrentMatchPlayers.Add(p.Key, p.Value);
                             }
-                            // TODO Send Popup stadium
                             break;
                         }
                     }
@@ -118,21 +132,20 @@ namespace Intersect.Server.General
             PvpStadiumUnit playerUnit = null;
             if (StadiumQueue.TryGetValue(playerId, out playerUnit))
             {
-                if (playerUnit.StadiumState == PvpStadiumState.None || playerUnit.StadiumState == PvpStadiumState.MatchDeclined)
+                if (playerUnit.StadiumState == PvpStadiumState.None || playerUnit.StadiumState == PvpStadiumState.MatchDeclined ||
+                    playerUnit.StadiumState == PvpStadiumState.MatchEnded)
                 {
                     return StadiumQueue.TryRemove(playerId, out playerUnit);
                 }
                 else if (isForced)
                 {
-                    if (playerUnit.StadiumState == PvpStadiumState.WaitForResponse)
+                    if (playerUnit.StadiumState == PvpStadiumState.WaitForResponse || playerUnit.StadiumState == PvpStadiumState.MatchAccepted)
                     {
                         DeclineMatch(playerId);
                     }
-                    else if (playerUnit.StadiumState == PvpStadiumState.MatchAccepted ||
-                        playerUnit.StadiumState == PvpStadiumState.MatchOnPreparation ||
-                        playerUnit.StadiumState == PvpStadiumState.MatchOnGoing)
+                    else if (playerUnit.StadiumState == PvpStadiumState.MatchOnPreparation || playerUnit.StadiumState == PvpStadiumState.MatchOnGoing)
                     {
-                        //LooseMatch
+                        EndMatch(playerId, isForced);
                     }
                     return true;
                 }
@@ -158,36 +171,13 @@ namespace Intersect.Server.General
                 {
                     p.Value.StadiumState = PvpStadiumState.None;
                     p.Value.TimeoutTimer = 0;
+                    PacketSender.SendMatchmakingStadium(Player.FindOnline(p.Key), true);
                 }
                 CurrentMatchPlayers.Clear();
                 playerUnit.StadiumState = PvpStadiumState.MatchDeclined;
                 UnregisterPlayer(declinerId);
             }  
         }
-
-        /*public static void DeclineMatch(Guid declinerId)
-        {
-            PvpStadiumUnit playerUnit = null;
-            if (CurrentMatchPlayers.TryGetValue(declinerId, out playerUnit))
-            {
-                CurrentMatchPlayers.Remove(declinerId);
-                foreach (var p in CurrentMatchPlayers)
-                {
-                    // Reset state for the other player
-                    if (StadiumQueue.TryGetValue(p.Key, out playerUnit))
-                    {
-                        playerUnit.StadiumState = PvpStadiumState.None;
-                        playerUnit.TimeoutTimer = 0;
-                    }
-                }
-                CurrentMatchPlayers.Clear();
-            }
-            if (StadiumQueue.TryGetValue(declinerId, out playerUnit))
-            {
-                playerUnit.StadiumState = PvpStadiumState.MatchDeclined;
-                UnregisterPlayer(declinerId);
-            }
-        }*/
 
         public static void AcceptMatch(Guid accepterId)
         {
@@ -196,6 +186,7 @@ namespace Intersect.Server.General
             if (CurrentMatchPlayers.TryGetValue(accepterId, out playerUnit))
             {
                 playerUnit.StadiumState = PvpStadiumState.MatchAccepted;
+                playerUnit.TimeoutTimer = 0;
                 foreach (var p in CurrentMatchPlayers)
                 {
                     if (p.Value.StadiumState != PvpStadiumState.MatchAccepted)
@@ -205,9 +196,140 @@ namespace Intersect.Server.General
                 }
                 if (matchReady)
                 {
-                    //LaunchMatch
+                    StartPreparation();
                 }
             }
+        }
+        private static void StartPreparation()
+        {
+            List<Player> localList = new List<Player>();
+            foreach (var matchplayer in CurrentMatchPlayers)
+            {
+                var player = Player.FindOnline(matchplayer.Key);
+                if (player != null)
+                {
+                    matchplayer.Value.InitialMapId = player.MapId;
+                    matchplayer.Value.InitialMapX = player.X;
+                    matchplayer.Value.InitialMapY = player.Y;
+                    matchplayer.Value.StadiumState = PvpStadiumState.MatchOnPreparation;
+                    matchplayer.Value.TimeoutTimer = Globals.Timing.Milliseconds + Options.PvpStadium.BeforeMatchTime;
+                    localList.Add(player);
+                }
+                else
+                {
+                    UnregisterPlayer(matchplayer.Key);
+                    break;
+                }
+            }
+            if (localList.Count == 2)
+            {
+                localList[0].Warp(Options.PvpStadium.StadiumPreparationMapId,
+                        Options.PvpStadium.Location1_PreparationX, Options.PvpStadium.Location1_PreparationY);
+                localList[1].Warp(Options.PvpStadium.StadiumPreparationMapId,
+                        Options.PvpStadium.Location2_PreparationX, Options.PvpStadium.Location2_PreparationY);
+            }                
+        }
+
+        private static void StartMatch()
+        {
+            List<Player> localList = new List<Player>();
+            foreach (var matchplayer in CurrentMatchPlayers)
+            {
+                var player = Player.FindOnline(matchplayer.Key);
+                if (player != null)
+                {
+                    matchplayer.Value.StadiumState = PvpStadiumState.MatchOnGoing;
+                    matchplayer.Value.TimeoutTimer = Globals.Timing.Milliseconds + Options.PvpStadium.MaxMatchDuration;
+                    localList.Add(player);
+                }
+                else
+                {
+                    UnregisterPlayer(matchplayer.Key);
+                    break;
+                }
+            }
+            if (localList.Count == 2)
+            {
+                localList[0].Warp(Options.PvpStadium.StadiumCombatMapId,
+                        Options.PvpStadium.Location1_CombatX, Options.PvpStadium.Location1_CombatY);
+                localList[1].Warp(Options.PvpStadium.StadiumCombatMapId,
+                        Options.PvpStadium.Location2_CombatX, Options.PvpStadium.Location2_CombatY);
+            }
+        }
+
+        public static void EndMatch(Guid loserId, bool isForced = false)
+        {
+            var i = 0;
+            foreach (var matchplayer in CurrentMatchPlayers)
+            {
+                if(matchplayer.Value.StadiumState == PvpStadiumState.MatchOnGoing || matchplayer.Value.StadiumState == PvpStadiumState.MatchOnPreparation)
+                {
+                    
+                    if (loserId != Guid.Empty)
+                    {
+                        // Not a tie
+                        if (matchplayer.Key == loserId)
+                        {
+                            // TODO Count loss ++
+                        }
+                        else
+                        {
+                            // TODO Count win ++
+                        }
+                    }
+                    var player = Player.FindOnline(matchplayer.Key);
+                    if (player != null && matchplayer.Value.StadiumState == PvpStadiumState.MatchOnGoing)
+                    {
+                        if (i == 0)
+                        {
+                            player.Warp(Options.PvpStadium.StadiumPreparationMapId,
+                                Options.PvpStadium.Location1_PreparationX, Options.PvpStadium.Location1_PreparationY);
+                            
+                        }
+                        else
+                        {
+                            player.Warp(Options.PvpStadium.StadiumPreparationMapId,
+                                Options.PvpStadium.Location2_PreparationX, Options.PvpStadium.Location2_PreparationY);
+                        }
+                    }
+                    matchplayer.Value.StadiumState = PvpStadiumState.MatchEnded;
+                    matchplayer.Value.TimeoutTimer = Globals.Timing.Milliseconds + Options.PvpStadium.AfterMatchTime;
+                    //TODO message end match ?
+                    i++;
+                }
+            }
+            if (isForced)
+            {
+                // When it is a logout
+                if (CurrentMatchPlayers.TryGetValue(loserId, out var loserUnit))
+                {
+                    var loser = Player.FindOnline(loserId);
+                    if (loserUnit.InitialMapId != Guid.Empty)
+                    {
+                        loser.MapId = loserUnit.InitialMapId;
+                        loser.X = loserUnit.InitialMapX;
+                        loser.Y = loserUnit.InitialMapY;
+                    }
+                    CurrentMatchPlayers.Remove(loserId);
+                    UnregisterPlayer(loserId);
+
+                }
+            }
+        }
+
+        private static void ReleaseStadium()
+        {
+            foreach (var matchplayer in CurrentMatchPlayers)
+            {
+                matchplayer.Value.TimeoutTimer = 0;
+                var player = Player.FindOnline(matchplayer.Key);
+                if (player != null)
+                {
+                    player.Warp(matchplayer.Value.InitialMapId, matchplayer.Value.InitialMapX, matchplayer.Value.InitialMapY);
+                }
+                UnregisterPlayer(matchplayer.Key);
+            }
+            CurrentMatchPlayers.Clear();
         }
     }
 }
