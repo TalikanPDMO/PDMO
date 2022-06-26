@@ -1492,10 +1492,13 @@ namespace Intersect.Server.Entities
                 {
                     return;
                 }
-
-                if (player.InParty(targetPlayer))
+                if (!PvpStadiumUnit.StadiumQueue.TryGetValue(targetPlayer.Id, out var playerUnit) ||
+                    playerUnit.StadiumState != PvpStadiumState.MatchOnGoing)
                 {
-                    return;
+                    if (player.InParty(targetPlayer))
+                    {
+                        return;
+                    }
                 }
             }
             bool isCrit = false;
@@ -1876,9 +1879,13 @@ namespace Intersect.Server.Entities
             //Check for parties and safe zones, friendly fire off (unless its healing)
             if (target is Player targetPlayer && this is Player player)
             {
-                if (player.InParty(targetPlayer))
+                if (!PvpStadiumUnit.StadiumQueue.TryGetValue(targetPlayer.Id, out var playerUnit) ||
+                    playerUnit.StadiumState != PvpStadiumState.MatchOnGoing)
                 {
-                    return;
+                    if (player.InParty(targetPlayer))
+                    {
+                        return;
+                    }
                 }
 
                 //Check if either the attacker or the defender is in a "safe zone" (Only apply if combat is PVP)

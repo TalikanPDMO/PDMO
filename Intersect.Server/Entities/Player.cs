@@ -1484,6 +1484,27 @@ namespace Intersect.Server.Entities
             var friendly = spell?.Combat != null && spell.Combat.Friendly;
             if (entity is Player player)
             {
+                if (PvpStadiumUnit.StadiumQueue.TryGetValue(player.Id, out var playerUnit))
+                {
+                    if (playerUnit.StadiumState == PvpStadiumState.MatchOnGoing)
+                    {
+                        // In PvpStadium match, we have no friend except ourself
+                        if (this == player)
+                        {
+                            return friendly;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                    else if (playerUnit.StadiumState == PvpStadiumState.MatchOnPreparation || playerUnit.StadiumState == PvpStadiumState.MatchEnded)
+                    {
+                        // In preparation or when the match is ended, players are untouchable
+                        return false;
+                    }
+                }
+
                 if (player.InParty(this) || this == player || (!Options.Instance.Guild.AllowGuildMemberPvp && friendly != (player.Guild != null && player.Guild == this.Guild)))
                 {
                     return friendly;
@@ -4433,6 +4454,10 @@ namespace Intersect.Server.Entities
 
         public virtual bool IsAllyOf(Player otherPlayer)
         {
+            if (PvpStadiumUnit.StadiumQueue.TryGetValue(otherPlayer.Id, out var playerUnit) && playerUnit.StadiumState == PvpStadiumState.MatchOnGoing)
+            {
+                return false;
+            }      
             return this.InParty(otherPlayer) || this == otherPlayer;
         }
 

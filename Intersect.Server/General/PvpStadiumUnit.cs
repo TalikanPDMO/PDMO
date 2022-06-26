@@ -17,15 +17,17 @@ namespace Intersect.Server.General
 
         public PvpStadiumState StadiumState;
 
-        public long RegistrationTime;
+        private long RegistrationTime;
 
-        public long TimeoutTimer;
+        private long TimeoutTimer;
 
-        public Guid InitialMapId;
+        private Guid InitialMapId;
 
-        public int InitialMapX;
+        private int InitialMapX;
 
-        public int InitialMapY;
+        private int InitialMapY;
+
+        private int[] InitialVitals;
 
 
         public PvpStadiumUnit()
@@ -35,6 +37,7 @@ namespace Intersect.Server.General
             InitialMapId = Guid.Empty;
             InitialMapX = 0;
             InitialMapY = 0;
+            InitialVitals = new int[(int)Vitals.VitalCount];
             TimeoutTimer = 0;
         }
 
@@ -208,9 +211,26 @@ namespace Intersect.Server.General
                 var player = Player.FindOnline(matchplayer.Key);
                 if (player != null)
                 {
+                    // Save player position
                     matchplayer.Value.InitialMapId = player.MapId;
                     matchplayer.Value.InitialMapX = player.X;
                     matchplayer.Value.InitialMapY = player.Y;
+
+                    // Save and restore vitals
+                    for (var v = 0; v < (int)Vitals.VitalCount; v++)
+                    {
+                        matchplayer.Value.InitialVitals[v] = player.GetVital(v);
+                        player.RestoreVital((Vitals)v);
+                    }
+                    // Clear all status and dot for a stadium match
+                    foreach (var status in player.CachedStatuses)
+                    {
+                         status.RemoveStatus();
+                    }
+                    foreach (var dot in player.CachedDots)
+                    {
+                        dot.Expire();
+                    }
                     matchplayer.Value.StadiumState = PvpStadiumState.MatchOnPreparation;
                     matchplayer.Value.TimeoutTimer = Globals.Timing.Milliseconds + Options.PvpStadium.BeforeMatchTime;
                     localList.Add(player);
@@ -304,11 +324,18 @@ namespace Intersect.Server.General
                 if (CurrentMatchPlayers.TryGetValue(loserId, out var loserUnit))
                 {
                     var loser = Player.FindOnline(loserId);
-                    if (loserUnit.InitialMapId != Guid.Empty)
+                    if (loser != null)
                     {
-                        loser.MapId = loserUnit.InitialMapId;
-                        loser.X = loserUnit.InitialMapX;
-                        loser.Y = loserUnit.InitialMapY;
+                        if (loserUnit.InitialMapId != Guid.Empty)
+                        {
+                            loser.MapId = loserUnit.InitialMapId;
+                            loser.X = loserUnit.InitialMapX;
+                            loser.Y = loserUnit.InitialMapY;
+                        }
+                        for (var v = 0; v < (int)Vitals.VitalCount; v++)
+                        {
+                            loser.SetVital(v, loserUnit.InitialVitals[v]);
+                        }
                     }
                     CurrentMatchPlayers.Remove(loserId);
                     UnregisterPlayer(loserId);
@@ -325,7 +352,11 @@ namespace Intersect.Server.General
                 var player = Player.FindOnline(matchplayer.Key);
                 if (player != null)
                 {
-                    player.Warp(matchplayer.Value.InitialMapId, matchplayer.Value.InitialMapX, matchplayer.Value.InitialMapY);
+                    for (var v = 0; v < (int)Vitals.VitalCount; v++)
+                    {
+                        player.SetVital(v, matchplayer.Value.InitialVitals[v]);
+                    }
+                    player.Warp(matchplayer.Value.InitialMapId, matchplayer.Value.InitialMapX, matchplayer.Value.InitialMapY); 
                 }
                 UnregisterPlayer(matchplayer.Key);
             }
