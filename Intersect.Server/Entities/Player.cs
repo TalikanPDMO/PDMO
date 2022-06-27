@@ -6181,6 +6181,12 @@ namespace Intersect.Server.Entities
                             continue;
                         }
 
+                        if ((trigger == CommonEventTrigger.PVPKill || trigger == CommonEventTrigger.PVPDeath) &&
+                            baseEvent.Pages[i].TriggerCommand != null && command != baseEvent.Pages[i].TriggerCommand)
+                        {
+                            continue;
+                        }
+
                         newEvent = new Event(evtId, null, this, baseEvent)
                         {
                             MapId = mapId,

@@ -225,13 +225,14 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.btnCopyPage = new DarkUI.Controls.DarkButton();
             this.btnNewPage = new DarkUI.Controls.DarkButton();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
+            this.btnRelations = new DarkUI.Controls.DarkButton();
             this.chkIsGlobal = new DarkUI.Controls.DarkCheckBox();
             this.pnlTabsContainer = new System.Windows.Forms.Panel();
             this.pnlTabs = new System.Windows.Forms.Panel();
             this.btnTabsRight = new DarkUI.Controls.DarkButton();
             this.btnTabsLeft = new DarkUI.Controls.DarkButton();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnRelations = new DarkUI.Controls.DarkButton();
+            this.chkPvpStadium = new DarkUI.Controls.DarkCheckBox();
             this.grpEntityOptions.SuspendLayout();
             this.grpExtra.SuspendLayout();
             this.grpInspector.SuspendLayout();
@@ -677,6 +678,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             this.grpTriggers.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpTriggers.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTriggers.Controls.Add(this.chkPvpStadium);
             this.grpTriggers.Controls.Add(this.btnMapTrigger);
             this.grpTriggers.Controls.Add(this.lblMapTrigger);
             this.grpTriggers.Controls.Add(this.cmbVariable);
@@ -1304,6 +1306,16 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
             // 
+            // btnRelations
+            // 
+            this.btnRelations.Location = new System.Drawing.Point(200, 8);
+            this.btnRelations.Name = "btnRelations";
+            this.btnRelations.Padding = new System.Windows.Forms.Padding(5);
+            this.btnRelations.Size = new System.Drawing.Size(93, 20);
+            this.btnRelations.TabIndex = 14;
+            this.btnRelations.Text = "View Relations";
+            this.btnRelations.Click += new System.EventHandler(this.btnRelations_Click);
+            // 
             // chkIsGlobal
             // 
             this.chkIsGlobal.AutoSize = true;
@@ -1359,15 +1371,15 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.panel1.Size = new System.Drawing.Size(811, 498);
             this.panel1.TabIndex = 23;
             // 
-            // btnRelations
+            // chkPvpStadium
             // 
-            this.btnRelations.Location = new System.Drawing.Point(200, 8);
-            this.btnRelations.Name = "btnRelations";
-            this.btnRelations.Padding = new System.Windows.Forms.Padding(5);
-            this.btnRelations.Size = new System.Drawing.Size(93, 20);
-            this.btnRelations.TabIndex = 14;
-            this.btnRelations.Text = "View Relations";
-            this.btnRelations.Click += new System.EventHandler(this.btnRelations_Click);
+            this.chkPvpStadium.AutoSize = true;
+            this.chkPvpStadium.Location = new System.Drawing.Point(133, 17);
+            this.chkPvpStadium.Name = "chkPvpStadium";
+            this.chkPvpStadium.Size = new System.Drawing.Size(92, 17);
+            this.chkPvpStadium.TabIndex = 8;
+            this.chkPvpStadium.Text = "PvpStadium ?";
+            this.chkPvpStadium.CheckedChanged += new System.EventHandler(this.chkPvpStadium_CheckedChanged);
             // 
             // FrmEvent
             // 
@@ -1500,5 +1512,6 @@ namespace Intersect.Editor.Forms.Editors.Events
         private DarkButton btnMapTrigger;
         private DarkCheckBox chkCollideOnDash;
         private DarkButton btnRelations;
+        private DarkCheckBox chkPvpStadium;
     }
 }

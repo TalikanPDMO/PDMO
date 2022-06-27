@@ -2299,8 +2299,16 @@ namespace Intersect.Server.Entities
                     if (!enemy.Dead && enemy is Player && this is Player)
                     {
                         //TODO add kill in stadium
-                        ((Player)this).StartCommonEventsWithTrigger(CommonEventTrigger.PVPKill, "", enemy.Name);
-                        ((Player)enemy).StartCommonEventsWithTrigger(CommonEventTrigger.PVPDeath, "", this.Name);
+                        string stadiumKill = "";
+                        if (PvpStadiumUnit.StadiumQueue.TryGetValue(this.Id, out var playerUnit) && playerUnit.StadiumState == PvpStadiumState.MatchOnGoing)
+                        {
+                            if (PvpStadiumUnit.StadiumQueue.TryGetValue(enemy.Id, out playerUnit) && playerUnit.StadiumState == PvpStadiumState.MatchOnGoing)
+                            {
+                                stadiumKill = nameof(PvpStadiumState);
+                            }
+                        }
+                        ((Player)this).StartCommonEventsWithTrigger(CommonEventTrigger.PVPKill, stadiumKill, enemy.Name);
+                        ((Player)enemy).StartCommonEventsWithTrigger(CommonEventTrigger.PVPDeath, stadiumKill, this.Name);
                     }
 
                     lock (enemy.EntityLock)
