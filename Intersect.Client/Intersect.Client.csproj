@@ -138,6 +138,7 @@
     <Compile Include="General\Globals.cs" />
     <Compile Include="Interface\Game\AnnouncementWindow.cs" />
     <Compile Include="Interface\Game\EntityPanel\ExpBoostsWindow.cs" />
+    <Compile Include="Interface\Game\PvpStadiumWindow.cs" />
     <Compile Include="Interface\Game\GuildWindow.cs" />
     <Compile Include="Interface\Game\MapItem\MapItemIcon.cs" />
     <Compile Include="Interface\Game\MapItem\MapItemWindow.cs" />
@@ -287,6 +288,7 @@
     <EmbeddedResource Include="$(NetworkHandshakePublicKey)" />
     <None Include="app.config" />
     <None Include="app.manifest" />
+    <Content Include="assets\resources\gui\layouts\game\PvpStadiumWindow.json" />
     <None Include="assets\resources\gui\layouts\game\PlayerRunIcon.json" />
     <Content Include="assets\resources\gui\layouts\game\PopupWindow.json" />
     <Content Include="assets\resources\gui\layouts\game\ExpBoostsWindow.json" />
@@ -617,6 +619,7 @@
     <Content Include="assets\resources\gui\playerrunicon.png" />
     <Content Include="assets\resources\gui\expboosts_window.png" />
     <Content Include="assets\resources\gui\popup_window.png" />
+    <Content Include="assets\resources\gui\pvpstadium.png" />
     <Content Include="assets\resources\gui\quantity.png" />
     <Content Include="assets\resources\gui\questoffer.png" />
     <Content Include="assets\resources\gui\quests.png" />

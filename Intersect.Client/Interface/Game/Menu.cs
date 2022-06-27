@@ -69,6 +69,8 @@ namespace Intersect.Client.Interface.Game
 
         private readonly GuildWindow mGuildWindow;
 
+        private readonly PvpStadiumWindow mPvpStadiumWindow;
+
         private int mBackgroundHeight = 42;
 
         private int mBackgroundWidth = 42;
@@ -120,10 +122,11 @@ namespace Intersect.Client.Interface.Game
             mPartyButton.SetToolTipText(Strings.GameMenu.party);
             mPartyButton.Clicked += PartyBtn_Clicked;
 
+            // Guild replaced by PvpStadium
             mGuildBackground = new ImagePanel(mMenuContainer, "GuildContainer");
             mGuildButton = new Button(mGuildBackground, "GuildButton");
-            mGuildButton.SetToolTipText(Strings.Guilds.Guild);
-            mGuildButton.Clicked += GuildBtn_Clicked;
+            mGuildButton.SetToolTipText(Strings.PvpStadium.title);
+            mGuildButton.Clicked += PvpStadiumBtn_Clicked;
 
             mMenuBackground = new ImagePanel(mMenuContainer, "MenuContainer");
             mMenuButton = new Button(mMenuBackground, "MenuButton");
@@ -141,6 +144,7 @@ namespace Intersect.Client.Interface.Game
             mQuestsWindow = new QuestsWindow(gameCanvas);
             mMapItemWindow = new MapItemWindow(gameCanvas);
             mGuildWindow = new GuildWindow(gameCanvas);
+            mPvpStadiumWindow = new PvpStadiumWindow(gameCanvas);
         }
 
         //Methods
@@ -154,6 +158,7 @@ namespace Intersect.Client.Interface.Game
             mQuestsWindow.Update(updateQuestLog);
             mMapItemWindow.Update();
             mGuildWindow.Update();
+            mPvpStadiumWindow.Update();
         }
 
         public void UpdateFriendsList()
@@ -180,6 +185,7 @@ namespace Intersect.Client.Interface.Game
             mQuestsWindow.Hide();
             mSpellsWindow.Hide();
             mGuildWindow.Hide();
+            mPvpStadiumWindow.Hide();
         }
 
         public void ToggleCharacterWindow()
@@ -210,6 +216,22 @@ namespace Intersect.Client.Interface.Game
             }
 
             return mFriendsWindow.IsVisible();
+        }
+        public bool TogglePvpStadiumWindow()
+        {
+            if (mPvpStadiumWindow.IsVisible())
+            {
+                mPvpStadiumWindow.Hide();
+            }
+            else
+            {
+                HideWindows();
+                //PacketSender.SendRequestGuild();
+                //mGuildWindow.UpdateList();
+                mPvpStadiumWindow.Show();
+            }
+
+            return mPvpStadiumWindow.IsVisible();
         }
 
         public bool ToggleGuildWindow()
@@ -311,6 +333,8 @@ namespace Intersect.Client.Interface.Game
             mPartyWindow.Hide();
 
             mGuildWindow.Hide();
+
+            mPvpStadiumWindow.Hide();
         }
 
         public bool HasWindowsOpen()
@@ -352,6 +376,11 @@ namespace Intersect.Client.Interface.Game
                 windowsOpen = true;
             }
 
+            if (mPvpStadiumWindow.IsVisible())
+            {
+                windowsOpen = true;
+            }
+
             return windowsOpen;
         }
 
@@ -369,6 +398,11 @@ namespace Intersect.Client.Interface.Game
         private void FriendsBtn_Clicked(Base sender, ClickedEventArgs arguments)
         {
             ToggleFriendsWindow();
+        }
+
+        private void PvpStadiumBtn_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            TogglePvpStadiumWindow();
         }
 
         private void GuildBtn_Clicked(Base sender, ClickedEventArgs arguments)
