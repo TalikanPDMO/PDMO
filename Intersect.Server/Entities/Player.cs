@@ -2684,7 +2684,7 @@ namespace Intersect.Server.Entities
         public List<InventorySlot> FindInventoryItemSlots(Guid itemId, int quantity = 1)
         {
             var slots = new List<InventorySlot>();
-            if (Items == null)
+            if (Items == null || quantity < 0)
             {
                 return slots;
             }
