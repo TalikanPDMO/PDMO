@@ -1759,6 +1759,22 @@ namespace Intersect.Client.Localization
 
         public struct PvpStadium
         {
+            public static LocalizedString title = @"PokeStadium";
+
+            public static LocalizedString description = @"Here you can register to the Pokestadium queue and play 1vs1 matches with other players";
+
+            public static LocalizedString register = @"Register";
+
+            public static LocalizedString unregister = @"Unregister";
+
+            public static LocalizedString status = @"Status: {00}";
+
+            public static LocalizedString infos = @"Informations:";
+
+            public static LocalizedString victories = @"Victories: {00}";
+
+            public static LocalizedString defeats = @"Defeats: {00}";
+
             public static LocalizedString matchmaking_title = @"PokeStadium Match found";
 
             public static LocalizedString matchmaking_message = @"You and your opponent have {00} seconds to accept the match. If you decline or exceed this duration, you will be kick from the PokeStadium queue";
@@ -1768,7 +1784,6 @@ namespace Intersect.Client.Localization
             public static LocalizedString declined_message = @"Your opponent was afk or declined the match. You are still in the PokeStadium queue";
 
         }
-
     }
 
 }

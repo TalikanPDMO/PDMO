@@ -7,6 +7,8 @@ namespace Intersect.Config
     {
 
         //PvpStadium
+        public bool StadiumEnabled = true;
+        public int StadiumMinLevel = 25;
         public int StadiumUpdateInterval = 1000;
         public int MinRegistrationTime = 5000;
         public int AcceptMatchPopupTime = 15000;

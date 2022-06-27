@@ -44,7 +44,7 @@ namespace Intersect.Server.General
         public static void Update()
         {
             var updateTime = Globals.Timing.Milliseconds;
-            if (updateTime > sUpdateTime)
+            if (updateTime > sUpdateTime && Options.PvpStadium.StadiumEnabled)
             {
                 if (CurrentMatchPlayers.Count == 0)
                 {
@@ -96,15 +96,27 @@ namespace Intersect.Server.General
                     if (playerUnit.Value.RegistrationTime + Options.PvpStadium.MinRegistrationTime < Globals.Timing.Milliseconds 
                         && playerUnit.Value.StadiumState == PvpStadiumState.None)
                     {
-                        localDict.Add(playerUnit.Key, playerUnit.Value);
-                        if (localDict.Count == 2)
+                        var player = Player.FindOnline(playerUnit.Key);
+                        if (player?.CombatTimer < Globals.Timing.Milliseconds)
                         {
-                            foreach (var p in localDict)
+                            localDict.Add(playerUnit.Key, playerUnit.Value);
+                            if (localDict.Count == 2)
                             {
-                                p.Value.StadiumState = PvpStadiumState.WaitForResponse;
-                                p.Value.TimeoutTimer = Globals.Timing.Milliseconds + Options.PvpStadium.AcceptMatchPopupTime;
-                                PacketSender.SendMatchmakingStadium(Player.FindOnline(p.Key));
-                                CurrentMatchPlayers.Add(p.Key, p.Value);
+                                foreach (var p in localDict)
+                                {
+                                    p.Value.StadiumState = PvpStadiumState.WaitForResponse;
+                                    p.Value.TimeoutTimer = Globals.Timing.Milliseconds + Options.PvpStadium.AcceptMatchPopupTime;
+                                    PacketSender.SendMatchmakingStadium(Player.FindOnline(p.Key));
+                                    CurrentMatchPlayers.Add(p.Key, p.Value);
+                                }
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            if (UnregisterPlayer(playerUnit.Key))
+                            {
+                                PacketSender.SendMatchmakingStadium(player, true);
                             }
                             break;
                         }
@@ -114,20 +126,33 @@ namespace Intersect.Server.General
             }
         }
         
-        public static bool ToggleRegistrationForPlayer(Guid playerId)
+        public static bool ToggleRegistrationForPlayer(Guid playerId, int playerLvl)
         {
-           // If can't unregister, try to register it 
-            if (!UnregisterPlayer(playerId))
+            if (Options.PvpStadium.StadiumEnabled)
             {
-                PvpStadiumUnit playerUnit = new PvpStadiumUnit();
-                return StadiumQueue.TryAdd(playerId, playerUnit);
+                // If can't unregister, try to register it 
+                if (!UnregisterPlayer(playerId))
+                {
+                    if (playerLvl >= Options.PvpStadium.StadiumMinLevel)
+                    {
+                        PvpStadiumUnit playerUnit = new PvpStadiumUnit();
+                        return StadiumQueue.TryAdd(playerId, playerUnit);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    // Successfully unregistred
+                    return true;
+                }
             }
             else
             {
-                // Successfully unregistred
-                return true;
+                return false;
             }
-            
         }
 
         public static bool UnregisterPlayer(Guid playerId, bool isForced = false)
@@ -280,24 +305,28 @@ namespace Intersect.Server.General
         public static void EndMatch(Guid loserId, bool isForced = false)
         {
             var i = 0;
+            Player winner = null;
+            Player loser = null;
             foreach (var matchplayer in CurrentMatchPlayers)
             {
                 if(matchplayer.Value.StadiumState == PvpStadiumState.MatchOnGoing || matchplayer.Value.StadiumState == PvpStadiumState.MatchOnPreparation)
                 {
-                    
+                    var player = Player.FindOnline(matchplayer.Key);
                     if (loserId != Guid.Empty)
                     {
                         // Not a tie
                         if (matchplayer.Key == loserId)
                         {
                             // TODO Count loss ++
+                            loser = player;
                         }
                         else
                         {
                             // TODO Count win ++
+                            winner = player;
                         }
                     }
-                    var player = Player.FindOnline(matchplayer.Key);
+                    
                     if (player != null && matchplayer.Value.StadiumState == PvpStadiumState.MatchOnGoing)
                     {
                         if (i == 0)
@@ -314,16 +343,20 @@ namespace Intersect.Server.General
                     }
                     matchplayer.Value.StadiumState = PvpStadiumState.MatchEnded;
                     matchplayer.Value.TimeoutTimer = Globals.Timing.Milliseconds + Options.PvpStadium.AfterMatchTime;
-                    //TODO message end match ?
                     i++;
                 }
+            }
+            if (loserId != Guid.Empty)
+            {
+                // Not a tie, start event for winner and loser (show message via event probably ?)
+                 winner?.StartCommonEventsWithTrigger(CommonEventTrigger.PVPKill, nameof(PvpStadiumState), loser?.Name);
+                 loser?.StartCommonEventsWithTrigger(CommonEventTrigger.PVPDeath, nameof(PvpStadiumState), winner?.Name);
             }
             if (isForced)
             {
                 // When it is a logout
                 if (CurrentMatchPlayers.TryGetValue(loserId, out var loserUnit))
                 {
-                    var loser = Player.FindOnline(loserId);
                     if (loser != null)
                     {
                         if (loserUnit.InitialMapId != Guid.Empty)
@@ -339,7 +372,6 @@ namespace Intersect.Server.General
                     }
                     CurrentMatchPlayers.Remove(loserId);
                     UnregisterPlayer(loserId);
-
                 }
             }
         }
