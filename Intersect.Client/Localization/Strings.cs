@@ -579,6 +579,7 @@ namespace Intersect.Client.Localization
                 {"openspells", @"Open Spells:"},
                 {"openfriends", @"Open Friends:"},
                 {"openguild", @"Open Guild:"},
+                {"openpvpstadium", @"Open PokeStadium:"},
                 {"opensettings", @"Open Settings:"},
                 {"opendebugger", @"Open Debugger:"},
                 {"openadminpanel", @"Open Admin Panel:"},

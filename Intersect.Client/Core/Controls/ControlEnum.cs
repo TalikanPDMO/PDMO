@@ -58,6 +58,8 @@
 
         OpenGuild,
 
+        OpenPvpStadium,
+
         OpenFriends,
 
         OpenSettings,
@@ -68,7 +70,7 @@
 
         ToggleGui,
 
-        Running
+        Running,
 
     }
 
