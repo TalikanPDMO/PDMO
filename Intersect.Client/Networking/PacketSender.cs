@@ -433,6 +433,11 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new MatchmakingStadiumResponsePacket(false));
         }
+
+        public static void SendTogglePvpStadium(bool onlyInfos = false)
+        {
+            Network.SendPacket(new MatchmakingStadiumTogglePacket(onlyInfos));
+        }
     }
 
 }

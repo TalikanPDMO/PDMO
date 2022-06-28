@@ -16,7 +16,11 @@
 
         MatchOnGoing,
 
-        MatchEnded
+        MatchEnded,
+
+        Unregistred,
+
+        InCombat
 
     }
 

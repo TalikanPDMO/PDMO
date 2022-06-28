@@ -170,6 +170,10 @@ namespace Intersect.Client.Interface.Game
         {
             mGuildWindow.UpdateList();
         }
+        public void UpdateStadiumInfos()
+        {
+            mPvpStadiumWindow.UpdateInfos();
+        }
 
         public void HideWindows()
         {
@@ -226,8 +230,6 @@ namespace Intersect.Client.Interface.Game
             else
             {
                 HideWindows();
-                //PacketSender.SendRequestGuild();
-                //mGuildWindow.UpdateList();
                 mPvpStadiumWindow.Show();
             }
 

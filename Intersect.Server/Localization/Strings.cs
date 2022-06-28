@@ -1305,6 +1305,14 @@ namespace Intersect.Server.Localization
 
         }
 
+        public sealed class PvpStadiumNamespace : LocaleNamespace
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)] public readonly LocalizedString disabled = @"Pokestadium is currently disabled";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)] public readonly LocalizedString lowlevel = @"You must be at least level {00} to go in the Pokestadium";
+
+        }
+
         #region Serialization
 
         public static bool Load()
@@ -1439,6 +1447,8 @@ namespace Intersect.Server.Localization
 
             public readonly GuildsNamespace Guilds = new GuildsNamespace();
 
+            public readonly PvpStadiumNamespace PvpStadium = new PvpStadiumNamespace();
+
         }
 
         // ReSharper restore MemberHidesStaticFromOuterClass
@@ -1513,6 +1523,8 @@ namespace Intersect.Server.Localization
         public static TradingNamespace Trading => Root.Trading;
 
         public static UpnpNamespace Upnp => Root.Upnp;
+
+        public static PvpStadiumNamespace PvpStadium => Root.PvpStadium;
 
         #endregion
 

@@ -8,6 +8,7 @@ using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
+using Intersect.Enums;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -22,8 +23,8 @@ namespace Intersect.Client.Interface.Game
         private Button mToggleRegistrationButton;
         private Label mStatus;
         private Label mInfos;
-        private Label mVictories;
-        private Label mDefeats;
+        private Label mWins;
+        private Label mLosses;
 
         //Init
         public PvpStadiumWindow(Canvas gameCanvas)
@@ -37,7 +38,7 @@ namespace Intersect.Client.Interface.Game
             //mDescriptionText.Font = mDescriptionText.Parent.Skin.DefaultFont;
 
             mStatus = new Label(mStadiumWindow, "StatusLabel");
-            mStatus.SetText(Strings.PvpStadium.status.ToString("Match accepté"));
+            //mStatus.SetText(Strings.PvpStadium.status.ToString("Match accepté"));
 
             mToggleRegistrationButton = new Button(mStadiumWindow, "ToggleRegistrationButton");
             mToggleRegistrationButton.SetText(Strings.PvpStadium.register);
@@ -46,18 +47,18 @@ namespace Intersect.Client.Interface.Game
             mInfos = new Label(mStadiumWindow, "InfosLabel");
             mInfos.SetText(Strings.PvpStadium.infos);
 
-            mVictories = new Label(mStadiumWindow, "VictoriesLabel");
-            mVictories.SetText(Strings.PvpStadium.victories.ToString("3"));
+            mWins = new Label(mStadiumWindow, "WinsLabel");
+            //mWins.SetText(Strings.PvpStadium.wins.ToString("3"));
 
-            mDefeats = new Label(mStadiumWindow, "DefeatsLabel");
-            mDefeats.SetText(Strings.PvpStadium.defeats.ToString("1"));
-
-            //UpdateList();
+            mLosses = new Label(mStadiumWindow, "LossesLabel");
+            //mLosses.SetText(Strings.PvpStadium.losses.ToString("1"));
 
             mStadiumWindow.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
             mDescription.AddText(Strings.PvpStadium.description, mDescription.RenderColor,
                 mDescriptionText.CurAlignments.Count > 0 ? mDescriptionText.CurAlignments[0] : Alignments.Left, mDescriptionText.Font);
+
+            PacketSender.SendTogglePvpStadium(true);
         }
 
         //Methods
@@ -82,6 +83,33 @@ namespace Intersect.Client.Interface.Game
         public void Hide()
         {
             mStadiumWindow.IsHidden = true;
+        }
+
+        public void UpdateInfos()
+        {
+            switch(Globals.Me.StadiumState)
+            {
+                case PvpStadiumState.Unregistred:
+                    mToggleRegistrationButton.SetText(Strings.PvpStadium.register);
+                    mToggleRegistrationButton.Show();
+                    break;
+                case PvpStadiumState.None:
+                    mToggleRegistrationButton.SetText(Strings.PvpStadium.unregister);
+                    mToggleRegistrationButton.Show();
+                    break;
+                case PvpStadiumState.MatchAccepted:
+                case PvpStadiumState.MatchOnGoing:
+                case PvpStadiumState.MatchOnPreparation:
+                    mToggleRegistrationButton.SetText(Strings.PvpStadium.abandon);
+                    mToggleRegistrationButton.Show();
+                    break;
+                case PvpStadiumState.MatchEnded:
+                    mToggleRegistrationButton.Hide();
+                    break;
+            }
+            mStatus.SetText(Strings.PvpStadium.status.ToString(Strings.PvpStadium.StadiumStates[Globals.Me.StadiumState]));
+            mWins.SetText(Strings.PvpStadium.wins.ToString(Globals.Me.StadiumWins));
+            mLosses.SetText(Strings.PvpStadium.losses.ToString(Globals.Me.StadiumLosses));
         }
 
         /*public void UpdateList()
@@ -115,14 +143,7 @@ namespace Intersect.Client.Interface.Game
 
         void toggleRegistrationButton_Clicked(Base sender, ClickedEventArgs arguments)
         {
-            if (mToggleRegistrationButton.Text == Strings.PvpStadium.register)
-            {
-                mToggleRegistrationButton.SetText(Strings.PvpStadium.unregister);
-            }
-            else
-            {
-                mToggleRegistrationButton.SetText(Strings.PvpStadium.register);
-            }
+            PacketSender.SendTogglePvpStadium();
         }
 
 

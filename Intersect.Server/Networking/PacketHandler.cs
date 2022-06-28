@@ -1503,6 +1503,8 @@ namespace Intersect.Server.Networking
             newChar.Name = packet.Name;
             newChar.ClassId = packet.ClassId;
             newChar.Level = 1;
+            newChar.StadiumWins = 0;
+            newChar.StadiumLosses = 0;
 
             if (classBase.Sprites.Count > 0)
             {
@@ -2903,6 +2905,25 @@ namespace Intersect.Server.Networking
             {
                 PvpStadiumUnit.DeclineMatch(player.Id);
             }
+        }
+
+        //MatchmakingStadiumToggle Packet
+        public void HandlePacket(Client client, MatchmakingStadiumTogglePacket packet)
+        {
+            var player = client?.Entity;
+            if (player == null)
+            {
+                return;
+            }
+            if (packet.OnlyInfos)
+            {
+                PacketSender.SendMatchmakingStadium(player, PvpStadiumState.Unregistred);
+            }
+            else
+            {
+                PvpStadiumUnit.ToggleRegistrationForPlayer(player.Id, player.Level);
+            }
+            
         }
 
         #endregion

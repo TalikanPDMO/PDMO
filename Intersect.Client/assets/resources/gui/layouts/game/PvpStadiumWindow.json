@@ -240,7 +240,7 @@
         "ToolTipFont": null,
         "ToolTipTextColor": "",
         "TextColor": "255,255,255,255",
-        "HoveredTextColor": "255,20,20,20",
+        "HoveredTextColor": "255,255,255,255",
         "ClickedTextColor": "255,215,215,215",
         "DisabledTextColor": "255,90,90,90",
         "TextAlign": "Center",
@@ -288,7 +288,7 @@
         "Font": "sourcesansproblack,10",
         "TextScale": 1.0
       },
-      "VictoriesLabel": {
+      "WinsLabel": {
         "Bounds": "4,215,1,14",
         "Padding": "0,0,0,0",
         "AlignmentEdgeDistances": "0,0,0,0",
@@ -318,7 +318,7 @@
         "Font": "sourcesansproblack,10",
         "TextScale": 1.0
       },
-      "DefeatsLabel": {
+      "LossesLabel": {
         "Bounds": "4,240,1,14",
         "Padding": "0,0,0,0",
         "AlignmentEdgeDistances": "0,0,0,0",

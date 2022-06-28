@@ -2144,9 +2144,9 @@ namespace Intersect.Server.Networking
         }
 
         // ShowStadiumDialogPacket
-        public static void SendMatchmakingStadium(Player player, bool isDeclinedNotif=false)
+        public static void SendMatchmakingStadium(Player player, PvpStadiumState stadiumState, bool isDeclinedNotif=false)
         {
-            player.SendPacket(new MatchmakingStadiumPacket(isDeclinedNotif));
+            player?.SendPacket(new MatchmakingStadiumPacket(isDeclinedNotif, stadiumState, player.StadiumWins, player.StadiumLosses));
         }
 
     }

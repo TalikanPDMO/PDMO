@@ -1767,13 +1767,15 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString unregister = @"Unregister";
 
+            public static LocalizedString abandon = @"Abandon";
+
             public static LocalizedString status = @"Status: {00}";
 
             public static LocalizedString infos = @"Informations:";
 
-            public static LocalizedString victories = @"Victories: {00}";
+            public static LocalizedString wins = @"Wins: {00}";
 
-            public static LocalizedString defeats = @"Defeats: {00}";
+            public static LocalizedString losses = @"Losses: {00}";
 
             public static LocalizedString matchmaking_title = @"PokeStadium Match found";
 
@@ -1783,6 +1785,26 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString declined_message = @"Your opponent was afk or declined the match. You are still in the PokeStadium queue";
 
+            public static LocalizedString incombat_title = @"PokeStadium Match on combat";
+
+            public static LocalizedString incombat_message = @"You were in combat when a match was found for you. You are not anymore in the PokeStadium queue";
+
+            public static LocalizedString missed_title = @"PokeStadium Match missed";
+
+            public static LocalizedString missed_message = @"You didn't answer when a match was found for you. You are not anymore in the PokeStadium queue";
+
+
+            public static Dictionary<PvpStadiumState, LocalizedString> StadiumStates = new Dictionary<Enums.PvpStadiumState, LocalizedString>() {
+                { PvpStadiumState.None, @"Registered" },
+                { PvpStadiumState.Unregistred, @"Unregistred" },
+                { PvpStadiumState.WaitForResponse, @"Wait for response" },
+                { PvpStadiumState.MatchAccepted, @"Match accepted" },
+                { PvpStadiumState.MatchDeclined, @"Match declined" },
+                { PvpStadiumState.MatchOnPreparation, @"Match on-preparation" },
+                { PvpStadiumState.MatchOnGoing, @"Match on-going" },
+                { PvpStadiumState.MatchEnded, @"Match ended" },
+                { PvpStadiumState.InCombat, @"Busy in fight" },
+            };
         }
     }
 

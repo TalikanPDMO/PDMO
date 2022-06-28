@@ -2102,6 +2102,10 @@ namespace Intersect.Client.Networking
         //MatchmakingStadium Packet
         public void HandlePacket(IPacketSender packetSender, MatchmakingStadiumPacket packet)
         {
+            Globals.Me.StadiumState = packet.StadiumState;
+            Globals.Me.StadiumWins = packet.StadiumWins;
+            Globals.Me.StadiumLosses = packet.StadiumLosses;
+            var layoutDefault = new GameObjects.Events.Commands.ShowPopupCommand().PopupLayout;
             if (packet.IsDeclinedNotif)
             {
                 if (Globals.Me.MatchmakingBox != null)
@@ -2109,12 +2113,13 @@ namespace Intersect.Client.Networking
                     Globals.Me.MatchmakingBox.Dispose();
                     Globals.Me.MatchmakingBox = null;
                 }
-                var popup = new ShowPopupPacket("", Strings.PvpStadium.declined_title, Strings.PvpStadium.declined_message, 0, 255, "",
-                    new GameObjects.Events.Commands.ShowPopupCommand().PopupLayout);
+                var popup = new ShowPopupPacket("", Strings.PvpStadium.declined_title, Strings.PvpStadium.declined_message, 5000, 255, "",
+                    layoutDefault);
                 Globals.Popups.Add(popup);
             }
-            else
+            else if (packet.StadiumState == PvpStadiumState.WaitForResponse)
             {
+                
                 string message = Strings.PvpStadium.matchmaking_message.ToString(Options.PvpStadium.AcceptMatchPopupTime / 1000);
                 if (Globals.Me.MatchmakingBox != null)
                 {
@@ -2125,7 +2130,25 @@ namespace Intersect.Client.Networking
                     InputBox.InputType.YesNo, PacketSender.SendMatchmakingAccept, PacketSender.SendMatchmakingDecline, null
                 );
             }
-            
+            else if (packet.StadiumState == PvpStadiumState.InCombat)
+            {
+                var popup = new ShowPopupPacket("", Strings.PvpStadium.incombat_title, Strings.PvpStadium.incombat_message, 5000, 255, "",
+                    layoutDefault);
+                Globals.Popups.Add(popup);
+            }
+            else if (packet.StadiumState == PvpStadiumState.MatchDeclined)
+            {
+                if (Globals.Me.MatchmakingBox != null)
+                {
+                    Globals.Me.MatchmakingBox.Dispose();
+                    Globals.Me.MatchmakingBox = null;
+                }
+                var popup = new ShowPopupPacket("", Strings.PvpStadium.missed_title, Strings.PvpStadium.missed_message, 0, 255, "",
+                    layoutDefault);
+                Globals.Popups.Add(popup);
+            }
+
+            Interface.Interface.GameUi.NotifyUpdateStadiumInfos();
         }
 
 
