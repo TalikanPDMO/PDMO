@@ -115,11 +115,8 @@ namespace Intersect.Server.General
                         }
                         else
                         {
-                            if (UnregisterPlayer(playerUnit.Key))
-                            {
-                                // Player successfully deleted from the queue, notify him
-                                PacketSender.SendMatchmakingStadium(player, PvpStadiumState.InCombat);
-                            }
+                            PacketSender.SendMatchmakingStadium(player, PvpStadiumState.InCombat);
+                            UnregisterPlayer(playerUnit.Key);
                             break;
                         }
                     }

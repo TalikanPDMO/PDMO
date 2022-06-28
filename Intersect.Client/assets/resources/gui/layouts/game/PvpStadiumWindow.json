@@ -221,7 +221,7 @@
         "TextScale": 1.0
       },
       "ToggleRegistrationButton": {
-        "Bounds": "4,120,96,35",
+        "Bounds": "4,123,120,28",
         "Padding": "3,3,3,3",
         "AlignmentEdgeDistances": "0,0,0,0",
         "AlignmentTransform": "0,0",
@@ -248,10 +248,9 @@
         "AutoSizeToContents": false,
         "Font": "sourcesansproblack,12",
         "TextScale": 1.0,
-        "NormalImage": "smallbutton.png",
-        "HoveredImage": "smallbutton_hovered.png",
-        "ClickedImage": "smallbutton_clicked.png",
-        "DisabledImage": "smallbutton_disabled",
+        "NormalImage": "control_button.png",
+        "HoveredImage": "control_button_hovered.png",
+        "ClickedImage": "control_button_clicked.png",
         "CenterImage": false,
         "HoverSound": "octave-tap-resonant.wav",
         "MouseUpSound": "",

@@ -35,10 +35,8 @@ namespace Intersect.Client.Interface.Game
             mDescription = new RichLabel(mStadiumWindow, "DescriptionLabel");
             mDescriptionText = new Label(mStadiumWindow, "DescriptionText");
             mDescriptionText.IsHidden = true;
-            //mDescriptionText.Font = mDescriptionText.Parent.Skin.DefaultFont;
 
             mStatus = new Label(mStadiumWindow, "StatusLabel");
-            //mStatus.SetText(Strings.PvpStadium.status.ToString("Match accepté"));
 
             mToggleRegistrationButton = new Button(mStadiumWindow, "ToggleRegistrationButton");
             mToggleRegistrationButton.SetText(Strings.PvpStadium.register);
@@ -48,10 +46,8 @@ namespace Intersect.Client.Interface.Game
             mInfos.SetText(Strings.PvpStadium.infos);
 
             mWins = new Label(mStadiumWindow, "WinsLabel");
-            //mWins.SetText(Strings.PvpStadium.wins.ToString("3"));
 
             mLosses = new Label(mStadiumWindow, "LossesLabel");
-            //mLosses.SetText(Strings.PvpStadium.losses.ToString("1"));
 
             mStadiumWindow.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
@@ -107,7 +103,7 @@ namespace Intersect.Client.Interface.Game
                     mToggleRegistrationButton.Hide();
                     break;
             }
-            mStatus.SetText(Strings.PvpStadium.status.ToString(Strings.PvpStadium.StadiumStates[Globals.Me.StadiumState]));
+            mStatus.SetText(Strings.PvpStadium.status.ToString(Strings.PvpStadium.stadiumstates[(int)Globals.Me.StadiumState]));
             mWins.SetText(Strings.PvpStadium.wins.ToString(Globals.Me.StadiumWins));
             mLosses.SetText(Strings.PvpStadium.losses.ToString(Globals.Me.StadiumLosses));
         }

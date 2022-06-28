@@ -1794,17 +1794,16 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString missed_message = @"You didn't answer when a match was found for you. You are not anymore in the PokeStadium queue";
 
-
-            public static Dictionary<PvpStadiumState, LocalizedString> StadiumStates = new Dictionary<Enums.PvpStadiumState, LocalizedString>() {
-                { PvpStadiumState.None, @"Registered" },
-                { PvpStadiumState.Unregistred, @"Unregistred" },
-                { PvpStadiumState.WaitForResponse, @"Wait for response" },
-                { PvpStadiumState.MatchAccepted, @"Match accepted" },
-                { PvpStadiumState.MatchDeclined, @"Match declined" },
-                { PvpStadiumState.MatchOnPreparation, @"Match on-preparation" },
-                { PvpStadiumState.MatchOnGoing, @"Match on-going" },
-                { PvpStadiumState.MatchEnded, @"Match ended" },
-                { PvpStadiumState.InCombat, @"Busy in fight" },
+            public static Dictionary<int, LocalizedString> stadiumstates = new Dictionary<int, LocalizedString> {
+                { 0, @"Registered" },
+                { 1, @"Wait for response" },
+                { 2, @"Match accepted" },
+                { 3, @"Match declined" },
+                { 4, @"Match on-preparation" },
+                { 5, @"Match on-going" },
+                { 6, @"Match ended" },
+                { 7, @"Unregistred" },
+                { 8, @"Busy in fight" },
             };
         }
     }
