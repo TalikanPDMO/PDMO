@@ -637,6 +637,12 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString timesecond = @"\second";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString playerstadiumwins = @"\pwins";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString playerstadiumlosses = @"\plosses";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString watchdogkill =
                 @"Event killed due to commands processed in a single frame surpassing Event Watchdog Threshhold.  (Map: {00}  Event: {01})";
 
