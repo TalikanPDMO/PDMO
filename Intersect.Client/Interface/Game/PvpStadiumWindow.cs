@@ -94,10 +94,10 @@ namespace Intersect.Client.Interface.Game
                     mToggleRegistrationButton.Show();
                     break;
                 case PvpStadiumState.None:
+                case PvpStadiumState.MatchAccepted:
                     mToggleRegistrationButton.SetText(Strings.PvpStadium.unregister);
                     mToggleRegistrationButton.Show();
                     break;
-                case PvpStadiumState.MatchAccepted:
                 case PvpStadiumState.MatchOnGoing:
                 case PvpStadiumState.MatchOnPreparation:
                     mToggleRegistrationButton.SetText(Strings.PvpStadium.abandon);
@@ -111,35 +111,6 @@ namespace Intersect.Client.Interface.Game
             mWins.SetText(Strings.PvpStadium.wins.ToString(Globals.Me.StadiumWins));
             mLosses.SetText(Strings.PvpStadium.losses.ToString(Globals.Me.StadiumLosses));
         }
-
-        /*public void UpdateList()
-        {
-            //Clear previous instances if already existing
-            if (mFriends != null)
-            {
-                mFriends.Clear();
-            }
-
-            foreach (var f in Globals.Me.Friends)
-            {
-                var row = f.Online ? mFriends.AddRow(f.Name + " - " + f.Map) : mFriends.AddRow(f.Name);
-                row.UserData = f.Name;
-                row.Clicked += friends_Clicked;
-                row.RightClicked += friends_RightClicked;
-
-                //Row Render color (red = offline, green = online)
-                if (f.Online == true)
-                {
-                    row.SetTextColor(Color.Green);
-                }
-                else
-                {
-                    row.SetTextColor(Color.Red);
-                }
-
-                row.RenderColor = new Color(50, 255, 255, 255);
-            }
-        }*/
 
         void toggleRegistrationButton_Clicked(Base sender, ClickedEventArgs arguments)
         {

@@ -172,16 +172,14 @@ namespace Intersect.Server.General
                     PacketSender.SendMatchmakingStadium(Player.FindOnline(playerId), PvpStadiumState.Unregistred);
                     return StadiumQueue.TryRemove(playerId, out playerUnit);
                 }
-                else if (isForced)
+                else if (playerUnit.StadiumState == PvpStadiumState.WaitForResponse || playerUnit.StadiumState == PvpStadiumState.MatchAccepted)
                 {
-                    if (playerUnit.StadiumState == PvpStadiumState.WaitForResponse || playerUnit.StadiumState == PvpStadiumState.MatchAccepted)
-                    {
-                        DeclineMatch(playerId);
-                    }
-                    else if (playerUnit.StadiumState == PvpStadiumState.MatchOnPreparation || playerUnit.StadiumState == PvpStadiumState.MatchOnGoing)
-                    {
-                        EndMatch(playerId, isForced);
-                    }
+                    DeclineMatch(playerId, isForced);
+                    return true;
+                }
+                else if (playerUnit.StadiumState == PvpStadiumState.MatchOnPreparation || playerUnit.StadiumState == PvpStadiumState.MatchOnGoing)
+                {
+                    EndMatch(playerId, isForced);
                     return true;
                 }
                 else
@@ -196,7 +194,7 @@ namespace Intersect.Server.General
             }
         }
 
-        public static void DeclineMatch(Guid declinerId)
+        public static void DeclineMatch(Guid declinerId, bool isForced=false)
         {
             PvpStadiumUnit playerUnit = null;
             if (CurrentMatchPlayers.TryGetValue(declinerId, out playerUnit))
@@ -210,7 +208,10 @@ namespace Intersect.Server.General
                 }
                 CurrentMatchPlayers.Clear();
                 playerUnit.StadiumState = PvpStadiumState.MatchDeclined;
-                PacketSender.SendMatchmakingStadium(Player.FindOnline(declinerId), PvpStadiumState.MatchDeclined);
+                if (isForced)
+                {
+                    PacketSender.SendMatchmakingStadium(Player.FindOnline(declinerId), PvpStadiumState.MatchDeclined);
+                }
                 UnregisterPlayer(declinerId);
             }  
         }
