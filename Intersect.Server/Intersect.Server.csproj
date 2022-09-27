@@ -508,6 +508,7 @@
     <Compile Include="Entities\Trading.cs" />
     <Compile Include="Entities\Events\CommandInstance.cs" />
     <Compile Include="Entities\Events\CommandProcessing.cs" />
+    <Compile Include="General\PvpStadiumUnit.cs" />
     <Compile Include="General\ExpBoost.cs" />
     <Compile Include="General\Formulas.cs" />
     <Compile Include="General\Time.cs" />
@@ -550,6 +551,10 @@
     <Compile Include="Migrations\20220320150448_AddingQuestTaskProgressionToPlayers.cs" />
     <Compile Include="Migrations\20220320150448_AddingQuestTaskProgressionToPlayers.designer.cs">
       <DependentUpon>20220320150448_AddingQuestTaskProgressionToPlayers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20220628115302_AddingStadiumWinsAndLossesToPlayers.cs" />
+    <Compile Include="Migrations\20220628115302_AddingStadiumWinsAndLossesToPlayers.designer.cs">
+      <DependentUpon>20220628115302_AddingStadiumWinsAndLossesToPlayers.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">

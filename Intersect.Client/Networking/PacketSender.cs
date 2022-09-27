@@ -424,7 +424,20 @@ namespace Intersect.Client.Networking
                 Network.SendPacket(new PictureClosedPacket(eventId));
             }
         }
+        public static void SendMatchmakingAccept(object sender, EventArgs e)
+        {
+            Network.SendPacket(new MatchmakingStadiumResponsePacket(true));
+        }
 
+        public static void SendMatchmakingDecline(object sender, EventArgs e)
+        {
+            Network.SendPacket(new MatchmakingStadiumResponsePacket(false));
+        }
+
+        public static void SendTogglePvpStadium(bool onlyInfos = false)
+        {
+            Network.SendPacket(new MatchmakingStadiumTogglePacket(onlyInfos));
+        }
     }
 
 }

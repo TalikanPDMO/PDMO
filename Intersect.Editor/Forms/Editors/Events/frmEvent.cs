@@ -1836,6 +1836,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             cmbVariable.Hide();
             lblMapTrigger.Hide();
             btnMapTrigger.Hide();
+            chkPvpStadium.Hide();
 
             if (MyEvent.CommonEvent)
             {
@@ -1879,6 +1880,20 @@ namespace Intersect.Editor.Forms.Editors.Events
                     btnMapTrigger.Show();
                     lblMapTrigger.Show();
                 }
+                else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.PVPKill || cmbTrigger.SelectedIndex == (int)CommonEventTrigger.PVPDeath)
+                {
+                    chkPvpStadium.Text = Strings.EventEditor.ispvpstadium;
+                    if (CurrentPage.TriggerCommand == nameof(PvpStadiumState))
+                    {
+                        chkPvpStadium.Checked = true;
+                    }
+                    else
+                    {
+                        CurrentPage.TriggerCommand = "";
+                        chkPvpStadium.Checked = false;
+                    }
+                    chkPvpStadium.Show();
+                }
 
             }
         }
@@ -1897,6 +1912,11 @@ namespace Intersect.Editor.Forms.Editors.Events
                 }
             }
         }
+        private void chkPvpStadium_CheckedChanged(object sender, EventArgs e)
+        {
+            CurrentPage.TriggerCommand = (chkPvpStadium.Checked  ? nameof(PvpStadiumState) : "");
+        }
+
 
         private void chkHideName_CheckedChanged(object sender, EventArgs e)
         {

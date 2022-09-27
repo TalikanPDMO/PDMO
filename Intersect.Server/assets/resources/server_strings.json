@@ -94,10 +94,11 @@
     "EXP": " points d'EXP",
     "lost": " a perdu ",
     "died": "Vous avez été mis KO par ",
+    "diednokiller": "Vous avez été mis KO ",
     "useAttack": " utilise ",
+    "and": " et ",
     "npcunarmed": " attaque au corps-à-corps ",
     "playerunarmed": " attaque à mains nues ",
-    "and": " et ",
     "addsymbol": "+",
     "blocked": "BLOQUÉE!",
     "channeling": "Vous canalisez actuellement une autre compétence.",
@@ -105,6 +106,7 @@
     "cooldown": "Cette compétence se recharge.",
     "critical": "COUP CRITIQUE",
     "criticaleffect": "Effet Critique: ",
+    "critsuffix": " (Crit.) ",
     "damagetypes": {
       "0": "Physique",
       "1": "Spécial",
@@ -512,6 +514,8 @@
     "timeminute": "\\minute",
     "timeperiod": "\\period",
     "timesecond": "\\second",
+    "playerstadiumwins": "\\pwins",
+    "playerstadiumlosses": "\\plosses",
     "watchdogkill": "Event killed due to commands processed in a single frame surpassing Event Watchdog Threshhold.  (Map: {00}  Event: {01})",
     "watchdogkillcommon": "Common event killed due to commands processed in a single frame surpassing the Event Watchdog Threshhold.  (Event {00})"
   },
@@ -650,21 +654,21 @@
     "deadmin": "{00} has had their administrative powers revoked!",
     "demod": "{00} has had their moderation powers revoked!",
     "haswarpedto": "{00} has been warped to you.",
-    "joined": "{00} has joined {01}.",
+    "joined": "{00} a rejoint {01}.",
     "kicked": "{00} has been kicked by {01}!",
     "killed": "{00} has been killed by {01}!",
-    "left": "{00} has left {01}.",
-    "levelup": "You have leveled up! You are now level {00}!",
+    "left": "{00} a quitté {01}.",
+    "levelup": "Vous avez gagné un niveau! Vous êtes maintenant niveau {00}!",
     "mod": "{00} has been given moderation powers!",
     "modjoined": "You are a moderator! Press Insert at any time to access the administration menu or F2 for debug information.",
-    "notarget": "You need to select a valid target.",
+    "notarget": "Cible non valide !",
     "offline": "User not online!",
     "powerchanged": "Your power has been modified!",
     "serverkicked": "{00} has been kicked by the server!",
     "serverkilled": "{00} has been killed by the server!",
-    "spelltaughtlevelup": "You've learned the {00} spell!",
-    "statpoints": "You have {00} stat points available to be spent!",
-    "targetoutsiderange": "Target not in range.",
+    "spelltaughtlevelup": "Vous avez appris la compétence : {00} !",
+    "statpoints": "Vous avez {00} points de stats à attribuer !",
+    "targetoutsiderange": "La cible est trop loin.",
     "warpedto": "Warped to {00}.",
     "warpedtoyou": "{00} warped to you."
   },
@@ -687,7 +691,7 @@
     "completed": "Quête: {00} terminée!",
     "declined": "Quête refusée: {00}!",
     "itemtask": "{00}  mise à jour! {01}/{02} {03}(s) trouvé(s)!",
-    "npctask": "{00}  mise à jour! {01}/{02} {03}(s) tué(s)!",
+    "npctask": "{00}  mise à jour! {01}/{02} {03}(s) KO(s)!",
     "started": "Quête démarrée: {00}!",
     "taskcompleted": "Tâche terminée!",
     "updated": "Quête: {00} mise à jour!"
@@ -757,5 +761,9 @@
     "NotAllowedSwap": "You do not have permission to swap items around within {00}'s guild bank!",
     "RankLimit": "Failed to join {00} because their guild is full!",
     "RankLimitResponse": "This guild has already hit it's member limit for the rank of {00}. Promote or demote other members in order to make room for {01}."
+  },
+  "PvpStadium": {
+    "disabled": "Le PokéStadium est actuellement fermé",
+    "lowlevel": "Vous devez être au minimum niveau {00} pour vous inscrire au PokéStadium"
   }
 }

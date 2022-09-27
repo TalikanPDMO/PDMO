@@ -1152,7 +1152,6 @@ namespace Intersect.Server.Entities.Events
                 id = instance.PageInstance.Id;
                 stackInfo.WaitingForResponse = CommandInstance.EventResponse.Picture;
             }
-            
             PacketSender.SendShowPicture(player, command.File, command.Size, command.Clickable, command.HideTime, id);
         }
 
@@ -1674,7 +1673,8 @@ namespace Intersect.Server.Entities.Events
                     { Strings.Events.eventnamecommand, instance?.PageInstance?.Name ?? "" },
                     { Strings.Events.commandparameter, instance?.PageInstance?.Param ?? "" },
                     { Strings.Events.eventparams, (instance != null && input.Contains(Strings.Events.eventparams)) ? instance.FormatParameters(player) : "" },
-
+                    { Strings.Events.playerstadiumwins, player.StadiumWins.ToString() },
+                    { Strings.Events.playerstadiumlosses, player.StadiumLosses.ToString() }
                 };
 
                 foreach (var val in replacements)

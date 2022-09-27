@@ -579,6 +579,7 @@ namespace Intersect.Client.Localization
                 {"openspells", @"Open Spells:"},
                 {"openfriends", @"Open Friends:"},
                 {"openguild", @"Open Guild:"},
+                {"openpvpstadium", @"Open PokeStadium:"},
                 {"opensettings", @"Open Settings:"},
                 {"opendebugger", @"Open Debugger:"},
                 {"openadminpanel", @"Open Admin Panel:"},
@@ -1757,6 +1758,54 @@ namespace Intersect.Client.Localization
 
         }
 
+        public struct PvpStadium
+        {
+            public static LocalizedString title = @"PokeStadium";
+
+            public static LocalizedString description = @"Here you can register to the Pokestadium queue and play 1vs1 matches with other players";
+
+            public static LocalizedString register = @"Register";
+
+            public static LocalizedString unregister = @"Unregister";
+
+            public static LocalizedString abandon = @"Abandon";
+
+            public static LocalizedString status = @"Status: {00}";
+
+            public static LocalizedString infos = @"Informations:";
+
+            public static LocalizedString wins = @"Wins: {00}";
+
+            public static LocalizedString losses = @"Losses: {00}";
+
+            public static LocalizedString matchmaking_title = @"PokeStadium Match found";
+
+            public static LocalizedString matchmaking_message = @"You and your opponent have {00} seconds to accept the match. If you decline or exceed this duration, you will be kick from the PokeStadium queue";
+
+            public static LocalizedString declined_title = @"PokeStadium Match declined";
+
+            public static LocalizedString declined_message = @"Your opponent was afk or declined the match. You are still in the PokeStadium queue";
+
+            public static LocalizedString incombat_title = @"PokeStadium Match on combat";
+
+            public static LocalizedString incombat_message = @"You were in combat when a match was found for you. You are not anymore in the PokeStadium queue";
+
+            public static LocalizedString missed_title = @"PokeStadium Match missed";
+
+            public static LocalizedString missed_message = @"You didn't answer when a match was found for you. You are not anymore in the PokeStadium queue";
+
+            public static Dictionary<int, LocalizedString> stadiumstates = new Dictionary<int, LocalizedString> {
+                { 0, @"Registered" },
+                { 1, @"Wait for response" },
+                { 2, @"Match accepted" },
+                { 3, @"Match declined" },
+                { 4, @"Match on-preparation" },
+                { 5, @"Match on-going" },
+                { 6, @"Match ended" },
+                { 7, @"Unregistred" },
+                { 8, @"Busy in fight" },
+            };
+        }
     }
 
 }

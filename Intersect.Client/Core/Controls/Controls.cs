@@ -90,6 +90,7 @@ namespace Intersect.Client.Core.Controls
             CreateControlMap(Control.OpenSpells, Keys.X, Keys.None);
             CreateControlMap(Control.OpenFriends, Keys.F, Keys.None);
             CreateControlMap(Control.OpenGuild, Keys.G, Keys.None);
+            CreateControlMap(Control.OpenPvpStadium, Keys.J, Keys.None);
             CreateControlMap(Control.OpenSettings, Keys.None, Keys.None);
             CreateControlMap(Control.OpenDebugger, Keys.F2, Keys.None);
             CreateControlMap(Control.OpenAdminPanel, Keys.Insert, Keys.None);

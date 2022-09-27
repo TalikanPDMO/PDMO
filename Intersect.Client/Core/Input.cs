@@ -266,6 +266,11 @@ namespace Intersect.Client.Core
                                         Interface.Interface.GameUi?.GameMenu.ToggleGuildWindow();
 
                                         break;
+
+                                    case Control.OpenPvpStadium:
+                                        Interface.Interface.GameUi?.GameMenu.TogglePvpStadiumWindow();
+
+                                        break;
                                 }
 
                                 break;

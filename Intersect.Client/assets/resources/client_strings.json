@@ -193,6 +193,7 @@
       "openspells": "Ouvrir Compétences:",
       "openfriends": "Ouvrir Liste d'Amis:",
       "openguild": "Ouvrir Guilde:",
+      "openpvpstadium": "Ouvrir PokéStadium:",
       "opensettings": "Ouvrir Options:",
       "opendebugger": "Ouvrir Debugger:",
       "openadminpanel": "Accès Modération:",
@@ -882,5 +883,35 @@
     "allplayerstitle": "{00} (initié par {01})",
     "allplayerskillvalues": "Monstres: +{00}% (fin dans {01}) ",
     "allplayersquestvalues": "Quêtes: +{00}% (fin dans {01}) "
+  },
+  "PvpStadium": {
+    "title": "PokéStadium (Beta)",
+    "description": "Enregistrez vous dans la file du Pokéstadium pour affronter d'autres joueurs dans des 1vs1",
+    "register": "S'inscrire",
+    "unregister": "Se désinscrire",
+    "abandon": "Abandonner",
+    "status": "Statut: {00}",
+    "infos": "Vos statistiques:",
+    "wins": "Victoires: {00}",
+    "losses": "Défaites: {00}",
+    "matchmaking_title": "PokéStadium : Match trouvé",
+    "matchmaking_message": "Vous et votre adversaire avez {00} secondes pour accepter ce match. Si vous refusez ou dépassez cette durée, vous serez éjecté de la file d'attente du PokéStadium",
+    "declined_title": "Pokéstadium : Match annulé",
+    "declined_message": "Votre adversaire était absent ou a refusé le match. Vous êtes toujours dans la file d'attente du PokéStadium",
+    "incombat_title": "Pokéstadium : Match en combat",
+    "incombat_message": "Vous étiez considéré en combat quand un match a été trouvé pour vous. Vous n'êtes plus dans la file d'attente du PokéStadium",
+    "missed_title": "Pokéstadium : Match manqué",
+    "missed_message": "Vous n'avez pas répondu lorsqu'un match a été trouvé pour vous. Vous n'êtes plus dans la file d'attente du PokéStadium",
+    "stadiumstates": {
+      "0": "Inscrit",
+      "1": "En attente",
+      "2": "Match accepté",
+      "3": "Match refusé",
+      "4": "Match en preparation",
+      "5": "Match en cours",
+      "6": "Match terminé",
+      "7": "Non-inscrit",
+      "8": "Occupé en combat"
+    }
   }
 }

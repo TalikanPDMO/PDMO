@@ -67,6 +67,14 @@ namespace Intersect.Client.Entities
 
         public int TargetType;
 
+        public InputBox MatchmakingBox = null;
+
+        public int StadiumWins = 0;
+
+        public int StadiumLosses = 0;
+
+        public PvpStadiumState StadiumState = PvpStadiumState.Unregistred;
+
         public bool RunningBuffer = false;
 
         //Ajouté par Moussmous pour la rotation du joueur (j'ai suivi le patch)

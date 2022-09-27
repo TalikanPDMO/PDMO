@@ -1492,10 +1492,13 @@ namespace Intersect.Server.Entities
                 {
                     return;
                 }
-
-                if (player.InParty(targetPlayer))
+                if (!PvpStadiumUnit.StadiumQueue.TryGetValue(targetPlayer.Id, out var playerUnit) ||
+                    playerUnit.StadiumState != PvpStadiumState.MatchOnGoing)
                 {
-                    return;
+                    if (player.InParty(targetPlayer))
+                    {
+                        return;
+                    }
                 }
             }
             bool isCrit = false;
@@ -1876,9 +1879,13 @@ namespace Intersect.Server.Entities
             //Check for parties and safe zones, friendly fire off (unless its healing)
             if (target is Player targetPlayer && this is Player player)
             {
-                if (player.InParty(targetPlayer))
+                if (!PvpStadiumUnit.StadiumQueue.TryGetValue(targetPlayer.Id, out var playerUnit) ||
+                    playerUnit.StadiumState != PvpStadiumState.MatchOnGoing)
                 {
-                    return;
+                    if (player.InParty(targetPlayer))
+                    {
+                        return;
+                    }
                 }
 
                 //Check if either the attacker or the defender is in a "safe zone" (Only apply if combat is PVP)
@@ -2291,8 +2298,20 @@ namespace Intersect.Server.Entities
                     //PVP Kill common events
                     if (!enemy.Dead && enemy is Player && this is Player)
                     {
-                        ((Player)this).StartCommonEventsWithTrigger(CommonEventTrigger.PVPKill, "", enemy.Name);
-                        ((Player)enemy).StartCommonEventsWithTrigger(CommonEventTrigger.PVPDeath, "", this.Name);
+                        // No trigger if it is a stadium kill (we handle it in Stadium EndMatch method)
+                        bool stadiumKill = false;
+                        if (PvpStadiumUnit.StadiumQueue.TryGetValue(this.Id, out var playerUnit) && playerUnit.StadiumState == PvpStadiumState.MatchOnGoing)
+                        {
+                            if (PvpStadiumUnit.StadiumQueue.TryGetValue(enemy.Id, out playerUnit) && playerUnit.StadiumState == PvpStadiumState.MatchOnGoing)
+                            {
+                                stadiumKill = true;
+                            }
+                        }
+                        if (!stadiumKill)
+                        {
+                            ((Player)this).StartCommonEventsWithTrigger(CommonEventTrigger.PVPKill, "", enemy.Name);
+                            ((Player)enemy).StartCommonEventsWithTrigger(CommonEventTrigger.PVPDeath, "", this.Name);
+                        }
                     }
 
                     lock (enemy.EntityLock)
