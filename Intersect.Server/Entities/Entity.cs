@@ -2619,6 +2619,11 @@ namespace Intersect.Server.Entities
             var spellBase = SpellBase.Get(spellId);
             if (spellBase != null)
             {
+                var isSquare = spellBase.Combat.SquareHitRadius;
+                if (spellBase.SpellType == SpellTypes.WarpTo)
+                {
+                    isSquare = spellBase.Combat.SquareRange;
+                }
                 var startMap = MapInstance.Get(startMapId);
                 if (startMap != null)
                 {
@@ -2631,7 +2636,7 @@ namespace Intersect.Server.Entities
                             {
                                 if (spellTarget == null || spellTarget == entity)
                                 {
-                                    if (entity.GetDistanceTo(startMap,startX,startY, spellBase.Combat.SquareHitRadius) <= range)
+                                    if (entity.GetDistanceTo(startMap,startX,startY, isSquare) <= range)
                                     {
                                         //Check to handle a warp to spell
                                         if (spellBase.SpellType == SpellTypes.WarpTo)
