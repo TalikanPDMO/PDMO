@@ -63,9 +63,13 @@ namespace Intersect.Client.Interface.Game
 
         private readonly MapItemWindow mMapItemWindow;
 
-        private readonly ImagePanel mGuildBackground;
+        //private readonly ImagePanel mGuildBackground;
 
-        private readonly Button mGuildButton;
+        //private readonly Button mGuildButton;
+
+        private readonly ImagePanel mPvpStadiumBackground;
+
+        private readonly Button mPvpStadiumButton;
 
         private readonly GuildWindow mGuildWindow;
 
@@ -123,10 +127,15 @@ namespace Intersect.Client.Interface.Game
             mPartyButton.Clicked += PartyBtn_Clicked;
 
             // Guild replaced by PvpStadium
-            mGuildBackground = new ImagePanel(mMenuContainer, "GuildContainer");
-            mGuildButton = new Button(mGuildBackground, "GuildButton");
-            mGuildButton.SetToolTipText(Strings.PvpStadium.title);
-            mGuildButton.Clicked += PvpStadiumBtn_Clicked;
+            // mGuildBackground = new ImagePanel(mMenuContainer, "GuildContainer");
+            // mGuildButton = new Button(mGuildBackground, "GuildButton");
+            // mGuildButton.SetToolTipText(Strings.PvpStadium.title);
+            // mGuildButton.Clicked += PvpStadiumBtn_Clicked;
+
+            mPvpStadiumBackground = new ImagePanel(mMenuContainer, "PvpStadiumContainer");
+            mPvpStadiumButton = new Button(mPvpStadiumBackground, "PvpStadiumButton");
+            mPvpStadiumButton.SetToolTipText(Strings.PvpStadium.title);
+            mPvpStadiumButton.Clicked += PvpStadiumBtn_Clicked;
 
             mMenuBackground = new ImagePanel(mMenuContainer, "MenuContainer");
             mMenuButton = new Button(mMenuBackground, "MenuButton");
