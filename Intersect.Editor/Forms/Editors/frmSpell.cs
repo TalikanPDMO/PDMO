@@ -232,6 +232,7 @@ namespace Intersect.Editor.Forms.Editors
 
             grpNextSpell.Text = Strings.SpellEditor.nextspelleffect;
             chkReUseValues.Text = Strings.SpellEditor.reusevalues;
+            lblNextSpellChance.Text = Strings.SpellEditor.nextspellchance;
 
             grpStats.Text = Strings.SpellEditor.stats;
             lblStr.Text = Strings.SpellEditor.attack;
@@ -390,6 +391,7 @@ namespace Intersect.Editor.Forms.Editors
 
                 cmbNextSpell.SelectedIndex = SpellBase.ListIndex(mEditorItem.Combat.NextEffectSpellId) + 1;
                 chkReUseValues.Checked = mEditorItem.Combat.NextEffectSpellReUseValues;
+                nudNextSpellChance.Value = mEditorItem.Combat.NextEffectSpellChance;
 
                 chkHOTDOT.Checked = mEditorItem.Combat.HoTDoT;
                 nudBuffDuration.Value = mEditorItem.Combat.Duration;
@@ -1052,6 +1054,11 @@ namespace Intersect.Editor.Forms.Editors
         private void chkReUseValues_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.Combat.NextEffectSpellReUseValues = chkReUseValues.Checked;
+        }
+
+        private void nudNextSpellChance_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.NextEffectSpellChance = (int)nudNextSpellChance.Value;
         }
 
         private void nudScaling_ValueChanged(object sender, EventArgs e)
