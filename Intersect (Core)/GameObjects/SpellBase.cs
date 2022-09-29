@@ -191,6 +191,8 @@ namespace Intersect.GameObjects
 
         public bool NextEffectSpellReUseValues { get; set; } = true;
 
+        public int NextEffectSpellChance { get; set; } = 100;
+
         public int DamageType { get; set; } = 1;
 
         public int HitRadius { get; set; }

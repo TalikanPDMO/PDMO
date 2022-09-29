@@ -88,6 +88,8 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbEvent = new DarkUI.Controls.DarkComboBox();
             this.grpCombat = new DarkUI.Controls.DarkGroupBox();
             this.grpNextSpell = new DarkUI.Controls.DarkGroupBox();
+            this.lblNextSpellChance = new System.Windows.Forms.Label();
+            this.nudNextSpellChance = new DarkUI.Controls.DarkNumericUpDown();
             this.chkReUseValues = new DarkUI.Controls.DarkCheckBox();
             this.cmbNextSpell = new DarkUI.Controls.DarkComboBox();
             this.grpStats = new DarkUI.Controls.DarkGroupBox();
@@ -189,13 +191,13 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
+            this.toolStripItemRelations = new System.Windows.Forms.ToolStripButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.grpSpells = new DarkUI.Controls.DarkGroupBox();
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
-            this.toolStripItemRelations = new System.Windows.Forms.ToolStripButton();
             this.pnlContainer.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSpell)).BeginInit();
@@ -212,6 +214,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEvent.SuspendLayout();
             this.grpCombat.SuspendLayout();
             this.grpNextSpell.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudNextSpellChance)).BeginInit();
             this.grpStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpdChance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMRChance)).BeginInit();
@@ -1063,22 +1066,48 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpNextSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpNextSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpNextSpell.Controls.Add(this.lblNextSpellChance);
+            this.grpNextSpell.Controls.Add(this.nudNextSpellChance);
             this.grpNextSpell.Controls.Add(this.chkReUseValues);
             this.grpNextSpell.Controls.Add(this.cmbNextSpell);
             this.grpNextSpell.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpNextSpell.Location = new System.Drawing.Point(200, 424);
+            this.grpNextSpell.Location = new System.Drawing.Point(200, 420);
             this.grpNextSpell.Name = "grpNextSpell";
-            this.grpNextSpell.Size = new System.Drawing.Size(234, 46);
+            this.grpNextSpell.Size = new System.Drawing.Size(234, 62);
             this.grpNextSpell.TabIndex = 54;
             this.grpNextSpell.TabStop = false;
             this.grpNextSpell.Text = "Next Spell Effect";
             // 
+            // lblNextSpellChance
+            // 
+            this.lblNextSpellChance.AutoSize = true;
+            this.lblNextSpellChance.Location = new System.Drawing.Point(7, 42);
+            this.lblNextSpellChance.Name = "lblNextSpellChance";
+            this.lblNextSpellChance.Size = new System.Drawing.Size(64, 13);
+            this.lblNextSpellChance.TabIndex = 73;
+            this.lblNextSpellChance.Text = "Chance (%):";
+            // 
+            // nudNextSpellChance
+            // 
+            this.nudNextSpellChance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudNextSpellChance.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudNextSpellChance.Location = new System.Drawing.Point(71, 39);
+            this.nudNextSpellChance.Name = "nudNextSpellChance";
+            this.nudNextSpellChance.Size = new System.Drawing.Size(43, 20);
+            this.nudNextSpellChance.TabIndex = 74;
+            this.nudNextSpellChance.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudNextSpellChance.ValueChanged += new System.EventHandler(this.nudNextSpellChance_ValueChanged); 
+            // 
             // chkReUseValues
             // 
-            this.chkReUseValues.Location = new System.Drawing.Point(167, 15);
+            this.chkReUseValues.Location = new System.Drawing.Point(130, 40);
             this.chkReUseValues.Name = "chkReUseValues";
             this.chkReUseValues.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.chkReUseValues.Size = new System.Drawing.Size(63, 27);
+            this.chkReUseValues.Size = new System.Drawing.Size(101, 17);
             this.chkReUseValues.TabIndex = 41;
             this.chkReUseValues.Text = "Re-use values";
             this.chkReUseValues.CheckedChanged += new System.EventHandler(this.chkReUseValues_CheckedChanged);
@@ -1098,9 +1127,9 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbNextSpell.FormattingEnabled = true;
             this.cmbNextSpell.Items.AddRange(new object[] {
             "None"});
-            this.cmbNextSpell.Location = new System.Drawing.Point(6, 19);
+            this.cmbNextSpell.Location = new System.Drawing.Point(7, 16);
             this.cmbNextSpell.Name = "cmbNextSpell";
-            this.cmbNextSpell.Size = new System.Drawing.Size(155, 21);
+            this.cmbNextSpell.Size = new System.Drawing.Size(220, 21);
             this.cmbNextSpell.TabIndex = 66;
             this.cmbNextSpell.Text = "None";
             this.cmbNextSpell.TextPadding = new System.Windows.Forms.Padding(2);
@@ -1641,9 +1670,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpHotDot.Controls.Add(this.chkHOTDOT);
             this.grpHotDot.Controls.Add(this.lblTick);
             this.grpHotDot.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpHotDot.Location = new System.Drawing.Point(6, 402);
+            this.grpHotDot.Location = new System.Drawing.Point(6, 401);
             this.grpHotDot.Name = "grpHotDot";
-            this.grpHotDot.Size = new System.Drawing.Size(188, 68);
+            this.grpHotDot.Size = new System.Drawing.Size(188, 81);
             this.grpHotDot.TabIndex = 53;
             this.grpHotDot.TabStop = false;
             this.grpHotDot.Text = "Heal/Damage Over Time";
@@ -2582,6 +2611,18 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
+            // toolStripItemRelations
+            // 
+            this.toolStripItemRelations.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripItemRelations.Enabled = false;
+            this.toolStripItemRelations.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripItemRelations.Image = ((System.Drawing.Image)(resources.GetObject("toolStripItemRelations.Image")));
+            this.toolStripItemRelations.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripItemRelations.Name = "toolStripItemRelations";
+            this.toolStripItemRelations.Size = new System.Drawing.Size(23, 22);
+            this.toolStripItemRelations.Text = "Relations";
+            this.toolStripItemRelations.Click += new System.EventHandler(this.toolStripItemRelations_Click);
+            // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
@@ -2658,18 +2699,6 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Size = new System.Drawing.Size(191, 478);
             this.lstGameObjects.TabIndex = 32;
             // 
-            // toolStripItemRelations
-            // 
-            this.toolStripItemRelations.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripItemRelations.Enabled = false;
-            this.toolStripItemRelations.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.toolStripItemRelations.Image = ((System.Drawing.Image)(resources.GetObject("toolStripItemRelations.Image")));
-            this.toolStripItemRelations.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripItemRelations.Name = "toolStripItemRelations";
-            this.toolStripItemRelations.Size = new System.Drawing.Size(23, 22);
-            this.toolStripItemRelations.Text = "Relations";
-            this.toolStripItemRelations.Click += new System.EventHandler(this.toolStripItemRelations_Click);
-            // 
             // FrmSpell
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2712,6 +2741,8 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEvent.ResumeLayout(false);
             this.grpCombat.ResumeLayout(false);
             this.grpNextSpell.ResumeLayout(false);
+            this.grpNextSpell.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudNextSpellChance)).EndInit();
             this.grpStats.ResumeLayout(false);
             this.grpStats.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpdChance)).EndInit();
@@ -2930,5 +2961,7 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblEditorName;
         private DarkTextBox txtEditorName;
         public System.Windows.Forms.ToolStripButton toolStripItemRelations;
+        private System.Windows.Forms.Label lblNextSpellChance;
+        private DarkNumericUpDown nudNextSpellChance;
     }
 }
