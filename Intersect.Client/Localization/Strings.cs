@@ -1523,6 +1523,8 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString effectseparator = @"----------";
 
+            public static LocalizedString effectseparatorchance = @"({00}% chance)";
+
             public static Dictionary<int, LocalizedString> effectlist = new Dictionary<int, LocalizedString>
             {
                 {0, @""},
