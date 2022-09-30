@@ -140,6 +140,8 @@ namespace Intersect.Editor.Forms.Editors
             this.lblManaRegen = new System.Windows.Forms.Label();
             this.lblRegenHint = new System.Windows.Forms.Label();
             this.grpDrops = new DarkUI.Controls.DarkGroupBox();
+            this.chkDropChanceIterative = new DarkUI.Controls.DarkCheckBox();
+            this.chkDropAmountRandom = new DarkUI.Controls.DarkCheckBox();
             this.chkIndividualLoot = new DarkUI.Controls.DarkCheckBox();
             this.btnDropRemove = new DarkUI.Controls.DarkButton();
             this.btnDropAdd = new DarkUI.Controls.DarkButton();
@@ -179,8 +181,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.searchableDarkTreeView1 = new Intersect.Editor.Forms.Controls.SearchableDarkTreeView();
             this.toolStripItemRelations = new System.Windows.Forms.ToolStripButton();
+            this.searchableDarkTreeView1 = new Intersect.Editor.Forms.Controls.SearchableDarkTreeView();
             this.grpNpcs.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRgbaA)).BeginInit();
@@ -1782,6 +1784,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpDrops.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpDrops.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDrops.Controls.Add(this.chkDropChanceIterative);
+            this.grpDrops.Controls.Add(this.chkDropAmountRandom);
             this.grpDrops.Controls.Add(this.chkIndividualLoot);
             this.grpDrops.Controls.Add(this.btnDropRemove);
             this.grpDrops.Controls.Add(this.btnDropAdd);
@@ -1799,6 +1803,26 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDrops.TabIndex = 30;
             this.grpDrops.TabStop = false;
             this.grpDrops.Text = "Drops";
+            // 
+            // chkDropChanceIterative
+            // 
+            this.chkDropChanceIterative.AutoSize = true;
+            this.chkDropChanceIterative.Location = new System.Drawing.Point(153, 199);
+            this.chkDropChanceIterative.Name = "chkDropChanceIterative";
+            this.chkDropChanceIterative.Size = new System.Drawing.Size(70, 17);
+            this.chkDropChanceIterative.TabIndex = 79;
+            this.chkDropChanceIterative.Text = "Iterative?";
+            this.chkDropChanceIterative.CheckedChanged += new System.EventHandler(this.chkDropChanceIterative_CheckedChanged);
+            // 
+            // chkDropAmountRandom
+            // 
+            this.chkDropAmountRandom.AutoSize = true;
+            this.chkDropAmountRandom.Location = new System.Drawing.Point(153, 153);
+            this.chkDropAmountRandom.Name = "chkDropAmountRandom";
+            this.chkDropAmountRandom.Size = new System.Drawing.Size(72, 17);
+            this.chkDropAmountRandom.TabIndex = 46;
+            this.chkDropAmountRandom.Text = "Random?";
+            this.chkDropAmountRandom.CheckedChanged += new System.EventHandler(this.chkDropAmountRandom_CheckedChanged);
             // 
             // chkIndividualLoot
             // 
@@ -1838,7 +1862,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lstDrops.FormattingEnabled = true;
             this.lstDrops.Location = new System.Drawing.Point(9, 19);
             this.lstDrops.Name = "lstDrops";
-            this.lstDrops.Size = new System.Drawing.Size(192, 67);
+            this.lstDrops.Size = new System.Drawing.Size(211, 67);
             this.lstDrops.TabIndex = 62;
             this.lstDrops.SelectedIndexChanged += new System.EventHandler(this.lstDrops_SelectedIndexChanged);
             // 
@@ -1853,7 +1877,7 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0});
             this.nudDropAmount.Name = "nudDropAmount";
-            this.nudDropAmount.Size = new System.Drawing.Size(195, 20);
+            this.nudDropAmount.Size = new System.Drawing.Size(140, 20);
             this.nudDropAmount.TabIndex = 61;
             this.nudDropAmount.Value = new decimal(new int[] {
             1,
@@ -1874,7 +1898,7 @@ namespace Intersect.Editor.Forms.Editors
             131072});
             this.nudDropChance.Location = new System.Drawing.Point(6, 198);
             this.nudDropChance.Name = "nudDropChance";
-            this.nudDropChance.Size = new System.Drawing.Size(195, 20);
+            this.nudDropChance.Size = new System.Drawing.Size(140, 20);
             this.nudDropChance.TabIndex = 60;
             this.nudDropChance.Value = new decimal(new int[] {
             0,
@@ -1898,7 +1922,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbDropItem.FormattingEnabled = true;
             this.cmbDropItem.Location = new System.Drawing.Point(6, 110);
             this.cmbDropItem.Name = "cmbDropItem";
-            this.cmbDropItem.Size = new System.Drawing.Size(195, 21);
+            this.cmbDropItem.Size = new System.Drawing.Size(214, 21);
             this.cmbDropItem.TabIndex = 17;
             this.cmbDropItem.Text = null;
             this.cmbDropItem.TextPadding = new System.Windows.Forms.Padding(2);
@@ -2292,6 +2316,18 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
+            // toolStripItemRelations
+            // 
+            this.toolStripItemRelations.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripItemRelations.Enabled = false;
+            this.toolStripItemRelations.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripItemRelations.Image = ((System.Drawing.Image)(resources.GetObject("toolStripItemRelations.Image")));
+            this.toolStripItemRelations.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripItemRelations.Name = "toolStripItemRelations";
+            this.toolStripItemRelations.Size = new System.Drawing.Size(23, 22);
+            this.toolStripItemRelations.Text = "Relations";
+            this.toolStripItemRelations.Click += new System.EventHandler(this.toolStripItemRelations_Click);
+            // 
             // searchableDarkTreeView1
             // 
             this.searchableDarkTreeView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
@@ -2304,18 +2340,6 @@ namespace Intersect.Editor.Forms.Editors
             this.searchableDarkTreeView1.Size = new System.Drawing.Size(240, 480);
             this.searchableDarkTreeView1.TabIndex = 46;
             this.searchableDarkTreeView1.Visible = false;
-            // 
-            // toolStripItemRelations
-            // 
-            this.toolStripItemRelations.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripItemRelations.Enabled = false;
-            this.toolStripItemRelations.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.toolStripItemRelations.Image = ((System.Drawing.Image)(resources.GetObject("toolStripItemRelations.Image")));
-            this.toolStripItemRelations.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripItemRelations.Name = "toolStripItemRelations";
-            this.toolStripItemRelations.Size = new System.Drawing.Size(23, 22);
-            this.toolStripItemRelations.Text = "Relations";
-            this.toolStripItemRelations.Click += new System.EventHandler(this.toolStripItemRelations_Click);
             // 
             // FrmNpc
             // 
@@ -2549,5 +2573,7 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblEditorName;
         private DarkTextBox txtEditorName;
         public System.Windows.Forms.ToolStripButton toolStripItemRelations;
+        private DarkCheckBox chkDropAmountRandom;
+        private DarkCheckBox chkDropChanceIterative;
     }
 }
