@@ -136,6 +136,8 @@ namespace Intersect.Server.Entities
                 var slot = new InventorySlot(itemSlot);
                 slot.Set(new Item(drop.ItemId, drop.Quantity));
                 slot.DropChance = drop.Chance;
+                slot.DropAmountRandom = drop.Random;
+                slot.DropChanceIterative = drop.Iterative;
                 Items.Add(slot);
                 itemSlot++;
             }

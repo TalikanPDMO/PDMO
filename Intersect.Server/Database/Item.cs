@@ -15,6 +15,8 @@ namespace Intersect.Server.Database
     {
 
         [JsonIgnore] [NotMapped] public double DropChance = 100;
+        [JsonIgnore] [NotMapped] public bool DropAmountRandom = false;
+        [JsonIgnore] [NotMapped] public bool DropChanceIterative = false;
 
         public Item()
         {
@@ -59,6 +61,8 @@ namespace Intersect.Server.Database
             }
 
             DropChance = item.DropChance;
+            DropAmountRandom = item.DropAmountRandom;
+            DropChanceIterative = item.DropChanceIterative;
         }
         
         // TODO: THIS SHOULD NOT BE A NULLABLE. This needs to be fixed.
