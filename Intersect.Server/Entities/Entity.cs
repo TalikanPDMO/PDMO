@@ -3155,11 +3155,47 @@ namespace Intersect.Server.Entities
                 else
                 {
                     //Npc drop rates
-                    var randomChance = Randomization.Next(1, 100001);
-                    if (randomChance >= (item.DropChance * 1000) * luck)
+
+                    // Check if quantity should be randomized or fixed
+                    if (item.DropAmountRandom)
+                    {
+                        quantity = Randomization.Next(0, quantity + 1);
+                    }
+
+                    // Iterative mode, loop using the maximum quantity
+                    if (item.DropChanceIterative)
+                    {
+                        // No need to iterate if the drop chance is 100%
+                        if (item.DropChance != 100.00)
+                        { 
+                            int final_quantity = 0;
+                            for (int i = 0; i < quantity; i++)
+                            {
+                                // One chance to loot the item for each iteration
+                                if (Randomization.Next(1, 100001) <= (item.DropChance * 1000) * luck)
+                                {
+                                    final_quantity++;
+                                }
+                            }
+                            // Change the quantity variable for spawning the good final iterative amount
+                            quantity = final_quantity;
+                        }
+                    }
+                    else
+                    {
+                        // Only one chance to spawn all the quantity
+                        if (Randomization.Next(1, 100001) > (item.DropChance * 1000) * luck)
+                        {
+                            continue;
+                        }
+                    }
+
+                    // Go to next item if the final quantity is 0
+                    if (quantity == 0)
                     {
                         continue;
                     }
+                    
 
                     // Set owner to player that killed this, if there is any.
                     if (playerKiller != null && this is Npc thisNpc)

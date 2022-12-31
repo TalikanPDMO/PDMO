@@ -302,6 +302,10 @@ namespace Intersect.GameObjects
 
         public int Quantity;
 
+        public bool Random = false;
+
+        public bool Iterative = false;
+
     }
 
 }
