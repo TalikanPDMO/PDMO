@@ -250,6 +250,10 @@ namespace Intersect.Editor.Forms.Editors
             lblScaling.Text = Strings.NpcEditor.scalingamount;
             lblAttackAnimation.Text = Strings.NpcEditor.attackanimation;
 
+            grpPhases.Text = Strings.NpcEditor.phases;
+            btnAddPhase.Text = Strings.NpcEditor.addphase;
+            btnRemovePhase.Text = Strings.NpcEditor.removephase;
+
             //Searching/Sorting
             btnAlphabetical.ToolTipText = Strings.NpcEditor.sortalphabetically;
             txtSearch.Text = Strings.NpcEditor.searchplaceholder;
@@ -368,6 +372,8 @@ namespace Intersect.Editor.Forms.Editors
 
                 cmbFreq.SelectedIndex = mEditorItem.SpellFrequency;
 
+                // Add the phases to the list
+                ListNpcPhases();
                 // Add the aggro NPC's to the list
                 lstAggro.Items.Clear();
                 for (var i = 0; i < mEditorItem.AggroList.Count; i++)
@@ -527,6 +533,39 @@ namespace Intersect.Editor.Forms.Editors
                 var i = lstSpells.SelectedIndex;
                 lstSpells.Items.RemoveAt(i);
                 mEditorItem.Spells.RemoveAt(i);
+            }
+        }
+
+        private void btnAddPhase_Click(object sender, EventArgs e)
+        {
+            var npcPhase = new NpcPhase(Guid.NewGuid());
+            npcPhase.Name += " " + (lstPhases.Items.Count);
+            mEditorItem.NpcPhases.Add(npcPhase);
+            ListNpcPhases();
+            /*if (OpenTaskEditor(questTask))
+            {
+                mEditorItem.Tasks.Add(questTask);
+                ListQuestTasks();
+            }*/
+        }
+
+        private void btnRemovePhase_Click(object sender, EventArgs e)
+        {
+            if (lstPhases.SelectedIndex > -1)
+            {
+                var i = lstPhases.SelectedIndex;
+                lstPhases.Items.RemoveAt(i);
+                mEditorItem.NpcPhases.RemoveAt(i);
+                ListNpcPhases();
+            }
+        }
+
+        private void ListNpcPhases()
+        {
+            lstPhases.Items.Clear();
+            foreach (var phase in mEditorItem.NpcPhases)
+            {
+                lstPhases.Items.Add(phase?.Name);
             }
         }
 

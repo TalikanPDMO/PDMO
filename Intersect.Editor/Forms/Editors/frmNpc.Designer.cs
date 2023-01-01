@@ -183,6 +183,10 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.toolStripItemRelations = new System.Windows.Forms.ToolStripButton();
             this.searchableDarkTreeView1 = new Intersect.Editor.Forms.Controls.SearchableDarkTreeView();
+            this.grpPhases = new DarkUI.Controls.DarkGroupBox();
+            this.btnRemovePhase = new DarkUI.Controls.DarkButton();
+            this.btnAddPhase = new DarkUI.Controls.DarkButton();
+            this.lstPhases = new System.Windows.Forms.ListBox();
             this.grpNpcs.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRgbaA)).BeginInit();
@@ -226,6 +230,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpNpcVsNpc.SuspendLayout();
             this.grpSpells.SuspendLayout();
             this.toolStrip.SuspendLayout();
+            this.grpPhases.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpNpcs
@@ -912,6 +917,7 @@ namespace Intersect.Editor.Forms.Editors
             // pnlContainer
             // 
             this.pnlContainer.AutoScroll = true;
+            this.pnlContainer.Controls.Add(this.grpPhases);
             this.pnlContainer.Controls.Add(this.grpCombat);
             this.pnlContainer.Controls.Add(this.grpCommonEvents);
             this.pnlContainer.Controls.Add(this.grpBehavior);
@@ -923,6 +929,7 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Controls.Add(this.grpStats);
             this.pnlContainer.Location = new System.Drawing.Point(225, 39);
             this.pnlContainer.Name = "pnlContainer";
+            this.pnlContainer.Padding = new System.Windows.Forms.Padding(0, 0, 0, 3);
             this.pnlContainer.Size = new System.Drawing.Size(464, 529);
             this.pnlContainer.TabIndex = 17;
             // 
@@ -1257,7 +1264,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCommonEvents.Margin = new System.Windows.Forms.Padding(2);
             this.grpCommonEvents.Name = "grpCommonEvents";
             this.grpCommonEvents.Padding = new System.Windows.Forms.Padding(2);
-            this.grpCommonEvents.Size = new System.Drawing.Size(206, 102);
+            this.grpCommonEvents.Size = new System.Drawing.Size(206, 98);
             this.grpCommonEvents.TabIndex = 32;
             this.grpCommonEvents.TabStop = false;
             this.grpCommonEvents.Text = "Common Events";
@@ -1275,7 +1282,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbOnDeathEventParty.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbOnDeathEventParty.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbOnDeathEventParty.FormattingEnabled = true;
-            this.cmbOnDeathEventParty.Location = new System.Drawing.Point(12, 80);
+            this.cmbOnDeathEventParty.Location = new System.Drawing.Point(12, 73);
             this.cmbOnDeathEventParty.Name = "cmbOnDeathEventParty";
             this.cmbOnDeathEventParty.Size = new System.Drawing.Size(182, 21);
             this.cmbOnDeathEventParty.TabIndex = 21;
@@ -1286,7 +1293,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblOnDeathEventParty
             // 
             this.lblOnDeathEventParty.AutoSize = true;
-            this.lblOnDeathEventParty.Location = new System.Drawing.Point(9, 64);
+            this.lblOnDeathEventParty.Location = new System.Drawing.Point(9, 57);
             this.lblOnDeathEventParty.Name = "lblOnDeathEventParty";
             this.lblOnDeathEventParty.Size = new System.Drawing.Size(103, 13);
             this.lblOnDeathEventParty.TabIndex = 20;
@@ -1305,7 +1312,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbOnDeathEventKiller.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbOnDeathEventKiller.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbOnDeathEventKiller.FormattingEnabled = true;
-            this.cmbOnDeathEventKiller.Location = new System.Drawing.Point(12, 36);
+            this.cmbOnDeathEventKiller.Location = new System.Drawing.Point(12, 32);
             this.cmbOnDeathEventKiller.Name = "cmbOnDeathEventKiller";
             this.cmbOnDeathEventKiller.Size = new System.Drawing.Size(182, 21);
             this.cmbOnDeathEventKiller.TabIndex = 19;
@@ -1316,7 +1323,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblOnDeathEventKiller
             // 
             this.lblOnDeathEventKiller.AutoSize = true;
-            this.lblOnDeathEventKiller.Location = new System.Drawing.Point(9, 20);
+            this.lblOnDeathEventKiller.Location = new System.Drawing.Point(9, 16);
             this.lblOnDeathEventKiller.Name = "lblOnDeathEventKiller";
             this.lblOnDeathEventKiller.Size = new System.Drawing.Size(101, 13);
             this.lblOnDeathEventKiller.TabIndex = 18;
@@ -2341,6 +2348,52 @@ namespace Intersect.Editor.Forms.Editors
             this.searchableDarkTreeView1.TabIndex = 46;
             this.searchableDarkTreeView1.Visible = false;
             // 
+            // grpPhases
+            // 
+            this.grpPhases.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpPhases.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpPhases.Controls.Add(this.btnRemovePhase);
+            this.grpPhases.Controls.Add(this.btnAddPhase);
+            this.grpPhases.Controls.Add(this.lstPhases);
+            this.grpPhases.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpPhases.Location = new System.Drawing.Point(3, 1174);
+            this.grpPhases.Name = "grpPhases";
+            this.grpPhases.Size = new System.Drawing.Size(441, 85);
+            this.grpPhases.TabIndex = 44;
+            this.grpPhases.TabStop = false;
+            this.grpPhases.Text = "Phases";
+            // 
+            // btnRemovePhase
+            // 
+            this.btnRemovePhase.Location = new System.Drawing.Point(346, 48);
+            this.btnRemovePhase.Name = "btnRemovePhase";
+            this.btnRemovePhase.Padding = new System.Windows.Forms.Padding(5);
+            this.btnRemovePhase.Size = new System.Drawing.Size(75, 23);
+            this.btnRemovePhase.TabIndex = 38;
+            this.btnRemovePhase.Text = "Remove";
+            this.btnRemovePhase.Click += new System.EventHandler(this.btnRemovePhase_Click);
+            // 
+            // btnAddPhase
+            // 
+            this.btnAddPhase.Location = new System.Drawing.Point(346, 19);
+            this.btnAddPhase.Name = "btnAddPhase";
+            this.btnAddPhase.Padding = new System.Windows.Forms.Padding(5);
+            this.btnAddPhase.Size = new System.Drawing.Size(75, 23);
+            this.btnAddPhase.TabIndex = 37;
+            this.btnAddPhase.Text = "Add";
+            this.btnAddPhase.Click += new System.EventHandler(this.btnAddPhase_Click);
+            // 
+            // lstPhases
+            // 
+            this.lstPhases.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstPhases.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstPhases.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstPhases.FormattingEnabled = true;
+            this.lstPhases.Location = new System.Drawing.Point(12, 15);
+            this.lstPhases.Name = "lstPhases";
+            this.lstPhases.Size = new System.Drawing.Size(328, 67);
+            this.lstPhases.TabIndex = 29;
+            // 
             // FrmNpc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2419,6 +2472,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpells.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.grpPhases.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -2575,5 +2629,9 @@ namespace Intersect.Editor.Forms.Editors
         public System.Windows.Forms.ToolStripButton toolStripItemRelations;
         private DarkCheckBox chkDropAmountRandom;
         private DarkCheckBox chkDropChanceIterative;
+        private DarkGroupBox grpPhases;
+        private DarkButton btnRemovePhase;
+        private DarkButton btnAddPhase;
+        private System.Windows.Forms.ListBox lstPhases;
     }
 }

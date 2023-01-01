@@ -278,6 +278,17 @@ namespace Intersect.GameObjects
         /// <inheritdoc />
         public string Folder { get; set; } = "";
 
+        //Phases
+        [NotMapped] public List<NpcPhase> NpcPhases = new List<NpcPhase>();
+
+        [Column("NpcPhases")]
+        [JsonIgnore]
+        public string NpcPhasesJson
+        {
+            get => JsonConvert.SerializeObject(NpcPhases);
+            set => NpcPhases = JsonConvert.DeserializeObject<List<NpcPhase>>(value);
+        }
+
         public SpellBase GetRandomSpell(Random random)
         {
             if (Spells == null || Spells.Count == 0)
@@ -306,6 +317,33 @@ namespace Intersect.GameObjects
 
         public bool Iterative = false;
 
+    }
+
+    public class NpcPhase
+    {
+        //TODOPDMO Remove id and useless fields ?
+        public NpcPhase(Guid id)
+        {
+            Id = id;
+            Name = "New Name";
+        }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; } = "";
+
+        //Spells
+        [NotMapped]
+        public DbList<SpellBase> Spells { get; set; } = new DbList<SpellBase>();
+ 
+        [Column("Spells")]
+        [JsonIgnore]
+        public string JsonSpells
+        {
+            get => JsonConvert.SerializeObject(Spells, Formatting.None);
+            protected set => Spells = JsonConvert.DeserializeObject<DbList<SpellBase>>(value);
+        }
+
+        
     }
 
 }

@@ -4120,6 +4120,13 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString undotitle = @"Undo Changes";
 
+            public static LocalizedString phases = @"Phases";
+
+            public static LocalizedString addphase = @"Add";
+
+            public static LocalizedString removephase = @"Remove";
+
+
         }
 
         public struct NpcSpawns
