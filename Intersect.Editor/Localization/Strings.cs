@@ -4129,6 +4129,28 @@ Tick timer saved in server config.json.";
 
         }
 
+        public struct NpcPhaseEditor
+        {
+            public static LocalizedString title = @"Add/Edit Phase";
+
+            public static LocalizedString editor = @"Phase Editor";
+
+            public static LocalizedString name = @"Name:";
+
+            public static LocalizedString desc = @"Desc:";
+
+            public static LocalizedString spells = @"Spells";
+
+            public static LocalizedString spell = @"Spell";
+
+            public static LocalizedString addspell = @"Add";
+
+            public static LocalizedString removespell = @"Remove";
+
+            public static LocalizedString ok = @"Ok";
+
+            public static LocalizedString cancel = @"Cancel";
+        }
         public struct NpcSpawns
         {
 

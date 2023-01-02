@@ -160,6 +160,12 @@
     <Compile Include="Forms\Editors\Quest\Quest_TaskLinksEditor.Designer.cs">
       <DependentUpon>Quest_TaskLinksEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Npc_PhaseEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Npc_PhaseEditor.Designer.cs">
+      <DependentUpon>Npc_PhaseEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmUpdate.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -738,6 +744,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Quest\Quest_TaskLinksEditor.resx">
       <DependentUpon>Quest_TaskLinksEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Npc_PhaseEditor.resx">
+      <DependentUpon>Npc_PhaseEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Shaders\radialgradient_editor.xnb" />
   </ItemGroup>

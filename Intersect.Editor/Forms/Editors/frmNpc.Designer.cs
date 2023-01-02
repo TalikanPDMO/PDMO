@@ -2393,6 +2393,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lstPhases.Name = "lstPhases";
             this.lstPhases.Size = new System.Drawing.Size(328, 67);
             this.lstPhases.TabIndex = 29;
+            this.lstPhases.DoubleClick += new System.EventHandler(this.lstPhases_DoubleClick);
             // 
             // FrmNpc
             // 

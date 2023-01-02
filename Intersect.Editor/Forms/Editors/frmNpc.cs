@@ -539,14 +539,11 @@ namespace Intersect.Editor.Forms.Editors
         private void btnAddPhase_Click(object sender, EventArgs e)
         {
             var npcPhase = new NpcPhase(Guid.NewGuid());
-            npcPhase.Name += " " + (lstPhases.Items.Count);
-            mEditorItem.NpcPhases.Add(npcPhase);
-            ListNpcPhases();
-            /*if (OpenTaskEditor(questTask))
+            if (OpenPhaseEditor(npcPhase))
             {
-                mEditorItem.Tasks.Add(questTask);
-                ListQuestTasks();
-            }*/
+                mEditorItem.NpcPhases.Add(npcPhase);
+                ListNpcPhases();
+            }
         }
 
         private void btnRemovePhase_Click(object sender, EventArgs e)
@@ -566,6 +563,42 @@ namespace Intersect.Editor.Forms.Editors
             foreach (var phase in mEditorItem.NpcPhases)
             {
                 lstPhases.Items.Add(phase?.Name);
+            }
+        }
+
+        private bool OpenPhaseEditor(NpcPhase phase)
+        {
+            var cmdWindow = new NpcPhaseEditor(mEditorItem, phase);
+            var frm = new Form
+            {
+                Text = Strings.NpcPhaseEditor.title
+            };
+
+            frm.Controls.Add(cmdWindow);
+            frm.Size = new Size(0, 0);
+            frm.AutoSize = true;
+            frm.ControlBox = false;
+            frm.FormBorderStyle = FormBorderStyle.FixedDialog;
+            frm.StartPosition = FormStartPosition.CenterParent;
+            frm.BackColor = cmdWindow.BackColor;
+            cmdWindow.BringToFront();
+            frm.ShowDialog();
+            if (!cmdWindow.Cancelled)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private void lstPhases_DoubleClick(object sender, EventArgs e)
+        {
+            if (lstPhases.SelectedIndex > -1 && mEditorItem.NpcPhases.Count > lstPhases.SelectedIndex)
+            {
+                if (OpenPhaseEditor(mEditorItem.NpcPhases[lstPhases.SelectedIndex]))
+                {
+                    ListNpcPhases();
+                }
             }
         }
 
