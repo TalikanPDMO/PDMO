@@ -289,6 +289,18 @@ namespace Intersect.Editor.Localization
             return Strings.EventConditionDesc.MapZoneTypeIs.ToString(Strings.MapProperties.zones[(int)condition.ZoneType]);
         }
 
+        public static string GetEventConditionalDesc(FightingNPC condition)
+        {
+            if (condition.NpcId == Guid.Empty)
+            {
+                return Strings.EventConditionDesc.fighting.ToString(Strings.EventConditional.anynpc);
+            }
+            else
+            {
+                return Strings.EventConditionDesc.fighting.ToString(NpcBase.GetName(condition.NpcId));
+            }
+        }
+
         public static string GetVariableComparisonString(VariableCompaison comparison)
         {
             return "";
@@ -2136,7 +2148,8 @@ Tick timer saved in server config.json.";
                 {17, @"Item Equipped is..."},
                 {18, @"Has X free Inventory slots..." },
                 {19, @"In Guild With At Least Rank..." },
-                {20, @"Map Zone Type is..." }
+                {20, @"Map Zone Type is..." },
+                {21, @"Player is fighting NPC..." }
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2281,6 +2294,12 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString MapZoneTypeLabel = @"Zone Type:";
+
+            public static LocalizedString fightingnpc = @"Player is fighting NPC:";
+
+            public static LocalizedString fightnpc = @"NPC:";
+
+            public static LocalizedString anynpc = @"[ANY NPC]";
         }
 
         public struct EventConditionDesc
@@ -2383,6 +2402,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString timeinvalid = @"invalid";
 
             public static LocalizedString True = @"True";
+
+            public static LocalizedString fighting = @"Player is fighting NPC: {00}";
 
         }
 

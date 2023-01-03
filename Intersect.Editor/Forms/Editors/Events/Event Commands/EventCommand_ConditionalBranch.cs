@@ -246,6 +246,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 cmbMapZoneType.Items.Add(Strings.MapProperties.zones[i]);
             }
 
+            // Fighting NPC
+            grpFightingNPC.Text = Strings.EventConditional.fightingnpc;
+            lblFightNpc.Text = Strings.EventConditional.fightnpc;
+            cmbFightNpc.Items.Clear();
+
             btnSave.Text = Strings.EventConditional.okay;
             btnCancel.Text = Strings.EventConditional.cancel;
         }
@@ -376,6 +381,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     }
 
                     break;
+                case ConditionTypes.FightingNPC:
+                    Condition = new FightingNPC();
+                    if (cmbFightNpc.Items.Count > 0)
+                    {
+                        cmbFightNpc.SelectedIndex = 0;
+                    }
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -399,6 +412,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             grpEquippedItem.Hide();
             grpInGuild.Hide();
             grpMapZoneType.Hide();
+            grpFightingNPC.Hide();
             switch (type)
             {
                 case ConditionTypes.VariableIs:
@@ -514,6 +528,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     break;
                 case ConditionTypes.MapZoneTypeIs:
                     grpMapZoneType.Show();
+
+                    break;
+                case ConditionTypes.FightingNPC:
+                    grpFightingNPC.Show();
+                    cmbFightNpc.Items.Clear();
+                    cmbFightNpc.Items.Add(Strings.EventConditional.anynpc);
+                    cmbFightNpc.Items.AddRange(NpcBase.EditorFormatNames);
 
                     break;
                 default:
@@ -1174,6 +1195,21 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             }
         }
 
+        private void SetupFormValues(FightingNPC condition)
+        {
+            if (cmbFightNpc.Items.Count > 0)
+            {
+                if (condition.NpcId == Guid.Empty)
+                {
+                    cmbFightNpc.SelectedIndex = 0;
+                }
+                else
+                {
+                    cmbFightNpc.SelectedIndex = NpcBase.ListIndex(condition.NpcId) + 1;
+                }
+            }
+        }
+
 
         #endregion
 
@@ -1326,6 +1362,22 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             if (cmbMapZoneType.Items.Count > 0)
             {
                 condition.ZoneType = (MapZones)cmbMapZoneType.SelectedIndex;
+            }
+        }
+
+        private void SaveFormValues(FightingNPC condition)
+        {
+            if (cmbFightNpc.Items.Count > 0)
+            {
+                // If selected is "Any", set npcId to empty Guid
+                if (cmbFightNpc.SelectedIndex == 0 || cmbFightNpc.SelectedIndex == -1)
+                {
+                    condition.NpcId = Guid.Empty;
+                }
+                else
+                {
+                    condition.NpcId = NpcBase.IdFromList(cmbFightNpc.SelectedIndex - 1);
+                }
             }
         }
 

@@ -135,6 +135,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.rdoManual = new DarkUI.Controls.DarkRadioButton();
             this.cmbItem = new DarkUI.Controls.DarkComboBox();
             this.lblItem = new System.Windows.Forms.Label();
+            this.grpFightingNPC = new DarkUI.Controls.DarkGroupBox();
+            this.lblFightNpc = new System.Windows.Forms.Label();
+            this.cmbFightNpc = new DarkUI.Controls.DarkComboBox();
             this.grpConditional.SuspendLayout();
             this.grpMapZoneType.SuspendLayout();
             this.grpInGuild.SuspendLayout();
@@ -162,12 +165,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpManualAmount.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudItemAmount)).BeginInit();
             this.grpAmountType.SuspendLayout();
+            this.grpFightingNPC.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpConditional
             // 
             this.grpConditional.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpConditional.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpConditional.Controls.Add(this.grpFightingNPC);
             this.grpConditional.Controls.Add(this.grpMapZoneType);
             this.grpConditional.Controls.Add(this.grpInGuild);
             this.grpConditional.Controls.Add(this.chkHasElse);
@@ -1709,6 +1714,50 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblItem.TabIndex = 2;
             this.lblItem.Text = "Item:";
             // 
+            // grpFightingNPC
+            // 
+            this.grpFightingNPC.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpFightingNPC.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpFightingNPC.Controls.Add(this.lblFightNpc);
+            this.grpFightingNPC.Controls.Add(this.cmbFightNpc);
+            this.grpFightingNPC.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpFightingNPC.Location = new System.Drawing.Point(8, 39);
+            this.grpFightingNPC.Name = "grpFightingNPC";
+            this.grpFightingNPC.Size = new System.Drawing.Size(262, 71);
+            this.grpFightingNPC.TabIndex = 59;
+            this.grpFightingNPC.TabStop = false;
+            this.grpFightingNPC.Text = "Player is fighting NPC:";
+            this.grpFightingNPC.Visible = false;
+            // 
+            // lblFightNpc
+            // 
+            this.lblFightNpc.AutoSize = true;
+            this.lblFightNpc.Location = new System.Drawing.Point(6, 21);
+            this.lblFightNpc.Name = "lblFightNpc";
+            this.lblFightNpc.Size = new System.Drawing.Size(32, 13);
+            this.lblFightNpc.TabIndex = 5;
+            this.lblFightNpc.Text = "NPC:";
+            // 
+            // cmbFightNpc
+            // 
+            this.cmbFightNpc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbFightNpc.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbFightNpc.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbFightNpc.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbFightNpc.DrawDropdownHoverOutline = false;
+            this.cmbFightNpc.DrawFocusRectangle = false;
+            this.cmbFightNpc.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbFightNpc.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbFightNpc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbFightNpc.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbFightNpc.FormattingEnabled = true;
+            this.cmbFightNpc.Location = new System.Drawing.Point(92, 18);
+            this.cmbFightNpc.Name = "cmbFightNpc";
+            this.cmbFightNpc.Size = new System.Drawing.Size(162, 21);
+            this.cmbFightNpc.TabIndex = 3;
+            this.cmbFightNpc.Text = null;
+            this.cmbFightNpc.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
             // EventCommandConditionalBranch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1767,6 +1816,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             ((System.ComponentModel.ISupportInitialize)(this.nudItemAmount)).EndInit();
             this.grpAmountType.ResumeLayout(false);
             this.grpAmountType.PerformLayout();
+            this.grpFightingNPC.ResumeLayout(false);
+            this.grpFightingNPC.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1878,5 +1929,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkGroupBox grpMapZoneType;
         private System.Windows.Forms.Label lblMapZoneType;
         private DarkComboBox cmbMapZoneType;
+        private DarkGroupBox grpFightingNPC;
+        private System.Windows.Forms.Label lblFightNpc;
+        private DarkComboBox cmbFightNpc;
     }
 }

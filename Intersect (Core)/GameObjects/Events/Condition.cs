@@ -44,6 +44,8 @@ namespace Intersect.GameObjects.Events
 
         MapZoneTypeIs,
 
+        FightingNPC
+
     }
 
     public class Condition
@@ -290,6 +292,22 @@ namespace Intersect.GameObjects.Events
         /// Defines the map Zone Type to compare to.
         /// </summary>
         public MapZones ZoneType { get; set; }
+    }
+
+    /// <summary>
+    /// Defines the condition class used when checking if a player is fighting with a specific NPC.
+    /// </summary>
+    public class FightingNPC : Condition
+    {
+        /// <summary>
+        /// Defines the type of condition.
+        /// </summary>
+        public override ConditionTypes Type { get; } = ConditionTypes.FightingNPC;
+
+        /// <summary>
+        /// Defines the map Zone Type to compare to.
+        /// </summary>
+        public Guid NpcId { get; set; }
     }
 
     public class VariableCompaison

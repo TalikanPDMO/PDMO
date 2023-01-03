@@ -2268,7 +2268,14 @@ namespace Intersect.Server.Entities
             // Set combat timers!
             enemy.CombatTimer = Globals.Timing.Milliseconds + Options.CombatTime;
             CombatTimer = Globals.Timing.Milliseconds + Options.CombatTime;
-
+            if (this is Player && enemy is Npc)
+            {
+                ((Player)this).FightingNpcs.AddOrUpdate(((Npc)enemy).Base.Id, CombatTimer, (guid, t) => CombatTimer);
+            }
+            if (this is Npc && enemy is Player)
+            {
+                ((Player)enemy).FightingNpcs.AddOrUpdate(((Npc)this).Base.Id, CombatTimer, (guid, t) => CombatTimer);
+            }
             //Check for lifesteal
             if (GetType() == typeof(Player) && enemy.GetType() != typeof(Resource))
             {

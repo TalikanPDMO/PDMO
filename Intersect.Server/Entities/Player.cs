@@ -54,6 +54,8 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore] public long LastChatTime = -1;
 
+        [NotMapped, JsonIgnore] public ConcurrentDictionary<Guid, long> FightingNpcs = new ConcurrentDictionary<Guid, long>();
+
         #region Quests
 
         [NotMapped, JsonIgnore] public List<Guid> QuestOffers = new List<Guid>();
@@ -475,6 +477,10 @@ namespace Intersect.Server.Entities
                                 DbInterface.Pool.QueueWorkItem(user.Save, false);
                             }
                             SaveTimer = Globals.Timing.Milliseconds + Options.Instance.Processing.PlayerSaveInterval;
+                        }
+                        if (CombatTimer < Globals.Timing.Milliseconds)// && FightingNpcs.Count > 0)
+                        {
+                            FightingNpcs.Clear();
                         }
                     }
 

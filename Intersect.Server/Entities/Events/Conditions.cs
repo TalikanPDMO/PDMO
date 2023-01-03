@@ -481,6 +481,22 @@ namespace Intersect.Server.Entities.Events
             return player.Map?.ZoneType == condition.ZoneType;
         }
 
+        public static bool MeetsCondition(
+           FightingNPC condition,
+           Player player,
+           Event eventInstance,
+           QuestBase questBase)
+        {
+            if (condition.NpcId == Guid.Empty)
+            {
+                return player.FightingNpcs.Count > 0 && Globals.Timing.Milliseconds < player.CombatTimer;
+            }
+            else
+            {
+                return player.FightingNpcs.TryGetValue(condition.NpcId, out var timer) && Globals.Timing.Milliseconds < timer;
+            }
+        }
+
         //Variable Comparison Processing
 
         public static bool CheckVariableComparison(
