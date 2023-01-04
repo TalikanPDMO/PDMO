@@ -945,6 +945,16 @@ namespace Intersect.Server.Database
                         case GameObjectType.Npc:
                             context.Npcs.Remove((NpcBase)gameObject);
 
+                            foreach (var phase in ((NpcBase)gameObject).NpcPhases)
+                            {
+                                if (phase.BeginEvent != null)
+                                {
+                                    context.Events.Remove(phase.BeginEvent);
+                                    context.Entry(phase.BeginEvent).State = EntityState.Deleted;
+                                    EventBase.Lookup.Delete(phase.BeginEvent);
+                                }
+                            }
+
                             break;
                         case GameObjectType.Projectile:
                             context.Projectiles.Remove((ProjectileBase)gameObject);
@@ -1087,6 +1097,13 @@ namespace Intersect.Server.Database
                             break;
                         case GameObjectType.Npc:
                             context.Npcs.Update((NpcBase)gameObject);
+                            foreach (var phase in ((NpcBase)gameObject).NpcPhases)
+                            {
+                                if (phase.BeginEvent != null)
+                                {
+                                    context.Events.Update(phase.BeginEvent);
+                                }
+                            }
 
                             break;
                         case GameObjectType.Projectile:

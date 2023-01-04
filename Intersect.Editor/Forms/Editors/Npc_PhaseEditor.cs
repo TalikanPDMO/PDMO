@@ -20,8 +20,8 @@ namespace Intersect.Editor.Forms.Editors
         public bool Cancelled;
         private NpcBase mMyNpc;
         private NpcPhase mMyPhase;
-        private DbList<SpellBase> mCopySpells = new DbList<SpellBase>();
-
+        public string mEventBackup = null;
+        public string mPhaseBackup = null;
         public NpcPhaseEditor(NpcBase refNpc, NpcPhase refPhase)
         {
             if (refNpc == null)
@@ -35,15 +35,16 @@ namespace Intersect.Editor.Forms.Editors
             InitializeComponent();
             mMyPhase = refPhase;
             mMyNpc = refNpc;
+            mEventBackup = refPhase?.EditingEvent?.JsonData;
+            mPhaseBackup = refPhase?.JsonData;
 
             InitLocalization();
-            txtName.Text = mMyPhase?.Name;
-            txtDesc.Text = mMyPhase?.Description;
-            foreach(var spell in refPhase.Spells)
+            if (mMyPhase != null)
             {
-                mCopySpells.Add(spell);
+                txtName.Text = mMyPhase.Name;
+                txtDesc.Text = mMyPhase.Description;
+                chkReplaceSpells.Checked = mMyPhase.ReplaceSpells;
             }
-            
             
             UpdateFormElements();
         }
@@ -56,6 +57,7 @@ namespace Intersect.Editor.Forms.Editors
             lblDesc.Text = Strings.NpcPhaseEditor.desc;
 
             grpSpells.Text = Strings.NpcPhaseEditor.spells;
+            chkReplaceSpells.Text = Strings.NpcPhaseEditor.replacespells;
             lblSpell.Text = Strings.NpcPhaseEditor.spell;
             lstSpells.Items.Clear();
             cmbSpell.Items.Clear();
@@ -63,7 +65,10 @@ namespace Intersect.Editor.Forms.Editors
             btnAddSpell.Text = Strings.NpcPhaseEditor.addspell;
             btnRemoveSpell.Text = Strings.NpcPhaseEditor.removespell;
 
-            btnEditTaskLinkEvent.Text = Strings.TaskLinksEditor.editcompletionevent;
+            grpPhaseConditions.Text = Strings.NpcPhaseEditor.phaseconditions;
+            btnEditConditions.Text = Strings.NpcPhaseEditor.editconditions;
+
+            btnEditBeginEvent.Text = Strings.NpcPhaseEditor.editbeginevent;
             btnSave.Text = Strings.NpcPhaseEditor.ok;
             btnCancel.Text = Strings.NpcPhaseEditor.cancel;
         }
@@ -72,11 +77,11 @@ namespace Intersect.Editor.Forms.Editors
         {
             // Add the spells to the list
             lstSpells.Items.Clear();
-            for (var i = 0; i < mCopySpells.Count; i++)
+            for (var i = 0; i < mMyPhase.Spells.Count; i++)
             {
-                if (mCopySpells[i] != Guid.Empty)
+                if (mMyPhase.Spells[i] != Guid.Empty)
                 {
-                    lstSpells.Items.Add(SpellBase.GetName(mCopySpells[i]));
+                    lstSpells.Items.Add(SpellBase.GetName(mMyPhase.Spells[i]));
                 }
                 else
                 {
@@ -87,7 +92,7 @@ namespace Intersect.Editor.Forms.Editors
             if (lstSpells.Items.Count > 0)
             {
                 lstSpells.SelectedIndex = 0;
-                cmbSpell.SelectedIndex = SpellBase.ListIndex(mCopySpells[lstSpells.SelectedIndex]);
+                cmbSpell.SelectedIndex = SpellBase.ListIndex(mMyPhase.Spells[lstSpells.SelectedIndex]);
             }
         }
 
@@ -95,45 +100,47 @@ namespace Intersect.Editor.Forms.Editors
         {
             mMyPhase.Name = txtName.Text;
             mMyPhase.Description = txtDesc.Text;
-            mMyPhase.Spells.Clear();
-            foreach(var spell in mCopySpells)
-            {
-                mMyPhase.Spells.Add(spell);
-            }
+            mMyPhase.ReplaceSpells = chkReplaceSpells.Checked;
+            mMyPhase.EditingEvent.Name = Strings.NpcPhaseEditor.beginevent.ToString(mMyNpc.Name, mMyPhase.Name);
             ParentForm.Close();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             Cancelled = true;
+            mMyPhase.Load(mPhaseBackup);
+            mMyPhase.EditingEvent.Load(mEventBackup);
             ParentForm.Close();
         }
 
-        private void btnEditTaskLinkEvent_Click(object sender, EventArgs e)
+        private void btnEditBeginEvent_Click(object sender, EventArgs e)
         {
-            /*if (mMyLink != null)
+            mMyPhase.EditingEvent.Name = Strings.NpcPhaseEditor.beginevent.ToString(mMyNpc.Name, txtName.Text);
+            var editor = new FrmEvent(null)
             {
-                mMyLink.EditingEvent.Name = Strings.TaskLinksEditor.completionevent.ToString(mMyQuest.Name, mMyLink.Name);
-                var editor = new FrmEvent(null)
-                {
-                    MyEvent = mMyLink.EditingEvent
-                };
+                MyEvent = mMyPhase.EditingEvent
+            };
 
-                editor.InitEditor(true, true, true);
-                editor.ShowDialog();
-                Globals.MainForm.BringToFront();
-                BringToFront();
-            }*/
+            editor.InitEditor(true, true, true);
+            editor.ShowDialog();
+            Globals.MainForm.BringToFront();
+            BringToFront();
+        }
+
+        private void btnEditConditions_Click(object sender, EventArgs e)
+        {
+            var editForm = new FrmDynamicRequirements(mMyPhase.ConditionLists, RequirementType.NpcPhase);
+            editForm.ShowDialog();
         }
 
         private void btnAddSpell_Click(object sender, EventArgs e)
         {
-            mCopySpells.Add(SpellBase.IdFromList(cmbSpell.SelectedIndex));
+            mMyPhase.Spells.Add(SpellBase.IdFromList(cmbSpell.SelectedIndex));
             var n = lstSpells.SelectedIndex;
             lstSpells.Items.Clear();
-            for (var i = 0; i < mCopySpells.Count; i++)
+            for (var i = 0; i < mMyPhase.Spells.Count; i++)
             {
-                lstSpells.Items.Add(SpellBase.GetName(mCopySpells[i]));
+                lstSpells.Items.Add(SpellBase.GetName(mMyPhase.Spells[i]));
             }
 
             lstSpells.SelectedIndex = n;
@@ -145,7 +152,7 @@ namespace Intersect.Editor.Forms.Editors
             {
                 var i = lstSpells.SelectedIndex;
                 lstSpells.Items.RemoveAt(i);
-                mCopySpells.RemoveAt(i);
+                mMyPhase.Spells.RemoveAt(i);
             }
         }
 
@@ -153,22 +160,22 @@ namespace Intersect.Editor.Forms.Editors
         {
             if (lstSpells.SelectedIndex > -1)
             {
-                cmbSpell.SelectedIndex = SpellBase.ListIndex(mCopySpells[lstSpells.SelectedIndex]);
+                cmbSpell.SelectedIndex = SpellBase.ListIndex(mMyPhase.Spells[lstSpells.SelectedIndex]);
             }
         }
 
         private void cmbSpell_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (lstSpells.SelectedIndex > -1 && lstSpells.SelectedIndex < mCopySpells.Count)
+            if (lstSpells.SelectedIndex > -1 && lstSpells.SelectedIndex < mMyPhase.Spells.Count)
             {
-                mCopySpells[lstSpells.SelectedIndex] = SpellBase.IdFromList(cmbSpell.SelectedIndex);
+                mMyPhase.Spells[lstSpells.SelectedIndex] = SpellBase.IdFromList(cmbSpell.SelectedIndex);
             }
 
             var n = lstSpells.SelectedIndex;
             lstSpells.Items.Clear();
-            for (var i = 0; i < mCopySpells.Count; i++)
+            for (var i = 0; i < mMyPhase.Spells.Count; i++)
             {
-                lstSpells.Items.Add(SpellBase.GetName(mCopySpells[i]));
+                lstSpells.Items.Add(SpellBase.GetName(mMyPhase.Spells[i]));
             }
 
             lstSpells.SelectedIndex = n;

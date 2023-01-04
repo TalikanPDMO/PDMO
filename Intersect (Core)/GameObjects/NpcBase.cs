@@ -34,6 +34,15 @@ namespace Intersect.GameObjects
 
         [NotMapped] public int[] VitalRegen = new int[(int) Vitals.VitalCount];
 
+        [NotMapped] public List<Guid> AddEvents = new List<Guid>(); //Events that need to be added for the quest, int is task id
+
+        [NotMapped] public List<Guid> RemoveEvents = new List<Guid>(); //Events that need to be removed for the quest
+
+        //Editor Only
+        [NotMapped]
+        [JsonIgnore]
+        public Dictionary<Guid, Guid> OriginalPhaseEventIds { get; set; } = new Dictionary<Guid, Guid>();
+
         public string EditorName { get; set; } = "";
         public static string[] EditorFormatNames => Lookup.OrderBy(p => p.Value?.Name)
             .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((NpcBase)pair.Value)?.EditorName) ?? Deleted)
@@ -322,10 +331,14 @@ namespace Intersect.GameObjects
     public class NpcPhase
     {
         //TODOPDMO Remove id and useless fields ?
+
+        [NotMapped] [JsonIgnore] public EventBase EditingEvent;
+
         public NpcPhase(Guid id)
         {
             Id = id;
             Name = "New Name";
+            ReplaceSpells = false;
         }
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -343,7 +356,44 @@ namespace Intersect.GameObjects
             protected set => Spells = JsonConvert.DeserializeObject<DbList<SpellBase>>(value);
         }
 
-        
+        public bool ReplaceSpells { get; set; }
+
+        public ConditionLists ConditionLists { get; set; } = new ConditionLists();
+
+        public Guid BeginEventId { get; set; }
+
+        [JsonIgnore]
+        public EventBase BeginEvent
+        {
+            get => EventBase.Get(BeginEventId);
+            set => BeginEventId = value.Id;
+        }
+
+        [JsonIgnore]
+        [NotMapped]
+        public string JsonData => JsonConvert.SerializeObject(
+            this, Formatting.Indented,
+            new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.Auto,
+                DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+                ObjectCreationHandling = ObjectCreationHandling.Replace
+            }
+        );
+
+        public void Load(string json)
+        {
+            JsonConvert.PopulateObject(
+                json, this,
+                new JsonSerializerSettings()
+                {
+                    TypeNameHandling = TypeNameHandling.Auto,
+                    DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+                    ObjectCreationHandling = ObjectCreationHandling.Replace
+                }
+            );
+        }
+
     }
 
 }

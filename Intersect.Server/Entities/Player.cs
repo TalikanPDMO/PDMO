@@ -478,7 +478,7 @@ namespace Intersect.Server.Entities
                             }
                             SaveTimer = Globals.Timing.Milliseconds + Options.Instance.Processing.PlayerSaveInterval;
                         }
-                        if (CombatTimer < Globals.Timing.Milliseconds)// && FightingNpcs.Count > 0)
+                        if (CombatTimer < Globals.Timing.Milliseconds && FightingNpcs.Count > 0)
                         {
                             FightingNpcs.Clear();
                         }
@@ -781,6 +781,7 @@ namespace Intersect.Server.Entities
             CachedStatuses = new Status[0];
 
             CombatTimer = 0;
+            FightingNpcs.Clear();
 
             // Bypass classic respawn when Stadium kill
             if (PvpStadiumUnit.CurrentMatchPlayers.TryGetValue(this.Id, out var playerUnit) &&

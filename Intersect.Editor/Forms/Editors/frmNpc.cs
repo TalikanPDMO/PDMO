@@ -73,11 +73,50 @@ namespace Intersect.Editor.Forms.Editors
         private void btnSave_Click(object sender, EventArgs e)
         {
             //Send Changed items
-            foreach (var item in mChanged)
-            {
-                PacketSender.SendSaveObject(item);
-                item.DeleteBackup();
-            }
+            mChanged?.ForEach(
+                item =>
+                {
+                    if (item == null)
+                    {
+                        return;
+                    }
+
+                    foreach (var id in item.OriginalPhaseEventIds.Keys)
+                    {
+                        var found = false;
+                        for (var i = 0; i < item.NpcPhases.Count; i++)
+                        {
+                            if (item.NpcPhases[i].Id == id)
+                            {
+                                found = true;
+                            }
+                        }
+
+                        if (!found)
+                        {
+                            item.RemoveEvents.Add(item.OriginalPhaseEventIds[id]);
+                        }
+                    }
+
+                    PacketSender.SendSaveObject(item);
+                    item.NpcPhases?.ForEach(
+                        phase =>
+                        {
+                            if (phase?.EditingEvent == null)
+                            {
+                                return;
+                            }
+
+                            if (phase.EditingEvent.Id != Guid.Empty)
+                            {
+                                PacketSender.SendSaveObject(phase.EditingEvent);
+                            }
+                            phase.EditingEvent.DeleteBackup();
+                        }
+                    );
+                    item.DeleteBackup();
+                }
+            );
 
             Hide();
             Globals.CurrentEditor = -1;
@@ -374,6 +413,7 @@ namespace Intersect.Editor.Forms.Editors
 
                 // Add the phases to the list
                 ListNpcPhases();
+
                 // Add the aggro NPC's to the list
                 lstAggro.Items.Clear();
                 for (var i = 0; i < mEditorItem.AggroList.Count; i++)
@@ -395,6 +435,11 @@ namespace Intersect.Editor.Forms.Editors
                 if (mChanged.IndexOf(mEditorItem) == -1)
                 {
                     mChanged.Add(mEditorItem);
+                    foreach (var phase in mEditorItem.NpcPhases)
+                    {
+                        phase.BeginEvent?.MakeBackup();
+                        phase.EditingEvent = phase.BeginEvent;
+                    }
                     mEditorItem.MakeBackup();
                 }
             }
@@ -539,6 +584,8 @@ namespace Intersect.Editor.Forms.Editors
         private void btnAddPhase_Click(object sender, EventArgs e)
         {
             var npcPhase = new NpcPhase(Guid.NewGuid());
+            npcPhase.EditingEvent = new EventBase(npcPhase.Id, Guid.Empty, 0, 0, false);
+            mEditorItem.AddEvents.Add(npcPhase.Id);
             if (OpenPhaseEditor(npcPhase))
             {
                 mEditorItem.NpcPhases.Add(npcPhase);
@@ -550,6 +597,10 @@ namespace Intersect.Editor.Forms.Editors
         {
             if (lstPhases.SelectedIndex > -1)
             {
+                if (mEditorItem.AddEvents.Contains(mEditorItem.NpcPhases[lstPhases.SelectedIndex].Id))
+                {
+                    mEditorItem.AddEvents.Remove(mEditorItem.NpcPhases[lstPhases.SelectedIndex].Id);
+                }
                 var i = lstPhases.SelectedIndex;
                 lstPhases.Items.RemoveAt(i);
                 mEditorItem.NpcPhases.RemoveAt(i);
@@ -705,6 +756,26 @@ namespace Intersect.Editor.Forms.Editors
             if (mEditorItem != null && mCopiedItem != null && lstGameObjects.Focused)
             {
                 mEditorItem.Load(mCopiedItem, true);
+                foreach (var phase in mEditorItem.NpcPhases)
+                {
+                    var oldId = phase.Id;
+                    phase.Id = Guid.NewGuid();
+                    if (mEditorItem.AddEvents.Contains(oldId))
+                    {
+                        mEditorItem.AddEvents.Add(phase.Id);
+                        //phase.EditingEvent = mEditorItem.AddEvents[phase.Id];
+                        mEditorItem.AddEvents.Remove(oldId);
+                    }
+                    else
+                    {
+                        var phaseEventData = EventBase.Get(phase.BeginEventId).JsonData;
+                        phase.BeginEventId = Guid.Empty;
+                        phase.EditingEvent = new EventBase(phase.Id, Guid.Empty, 0, 0, false);
+                        phase.EditingEvent.Name = Strings.NpcPhaseEditor.beginevent.ToString(mEditorItem.Name, phase.Name);
+                        phase.EditingEvent.Load(phaseEventData);
+                        mEditorItem.AddEvents.Add(phase.Id);
+                    }
+                }
                 UpdateEditor();
             }
         }

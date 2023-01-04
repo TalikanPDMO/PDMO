@@ -33,7 +33,9 @@ namespace Intersect.Editor.Forms.Editors
 
         NpcCanBeSpelled,
 
-        NpcCanBeProjectiled
+        NpcCanBeProjectiled,
+
+        NpcPhase
 
     }
 
@@ -107,6 +109,10 @@ namespace Intersect.Editor.Forms.Editors
                     break;
                 case RequirementType.NpcCanBeProjectiled:
                     lblInstructions.Text = Strings.DynamicRequirements.instructionsnpccanbeprojectiled;
+
+                    break;
+                case RequirementType.NpcPhase:
+                    lblInstructions.Text = Strings.DynamicRequirements.instructionsnpcphase;
 
                     break;
                 default:

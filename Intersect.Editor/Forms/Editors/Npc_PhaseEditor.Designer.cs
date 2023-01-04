@@ -38,20 +38,25 @@ namespace Intersect.Editor.Forms.Editors
             this.lstSpells = new System.Windows.Forms.ListBox();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
-            this.btnEditTaskLinkEvent = new DarkUI.Controls.DarkButton();
+            this.btnEditBeginEvent = new DarkUI.Controls.DarkButton();
             this.txtName = new DarkUI.Controls.DarkTextBox();
             this.lblName = new System.Windows.Forms.Label();
             this.lblDesc = new System.Windows.Forms.Label();
             this.txtDesc = new DarkUI.Controls.DarkTextBox();
             this.grpEditor = new DarkUI.Controls.DarkGroupBox();
+            this.grpPhaseConditions = new DarkUI.Controls.DarkGroupBox();
+            this.btnEditConditions = new DarkUI.Controls.DarkButton();
+            this.chkReplaceSpells = new DarkUI.Controls.DarkCheckBox();
             this.grpSpells.SuspendLayout();
             this.grpEditor.SuspendLayout();
+            this.grpPhaseConditions.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpSpells
             // 
             this.grpSpells.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpSpells.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpSpells.Controls.Add(this.chkReplaceSpells);
             this.grpSpells.Controls.Add(this.cmbSpell);
             this.grpSpells.Controls.Add(this.lblSpell);
             this.grpSpells.Controls.Add(this.btnRemoveSpell);
@@ -78,9 +83,9 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbSpell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbSpell.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbSpell.FormattingEnabled = true;
-            this.cmbSpell.Location = new System.Drawing.Point(17, 120);
+            this.cmbSpell.Location = new System.Drawing.Point(6, 133);
             this.cmbSpell.Name = "cmbSpell";
-            this.cmbSpell.Size = new System.Drawing.Size(213, 21);
+            this.cmbSpell.Size = new System.Drawing.Size(224, 21);
             this.cmbSpell.TabIndex = 48;
             this.cmbSpell.Text = null;
             this.cmbSpell.TextPadding = new System.Windows.Forms.Padding(2);
@@ -89,7 +94,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblSpell
             // 
             this.lblSpell.AutoSize = true;
-            this.lblSpell.Location = new System.Drawing.Point(14, 104);
+            this.lblSpell.Location = new System.Drawing.Point(14, 117);
             this.lblSpell.Name = "lblSpell";
             this.lblSpell.Size = new System.Drawing.Size(33, 13);
             this.lblSpell.TabIndex = 47;
@@ -97,7 +102,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnRemoveSpell
             // 
-            this.btnRemoveSpell.Location = new System.Drawing.Point(126, 148);
+            this.btnRemoveSpell.Location = new System.Drawing.Point(126, 158);
             this.btnRemoveSpell.Name = "btnRemoveSpell";
             this.btnRemoveSpell.Padding = new System.Windows.Forms.Padding(5);
             this.btnRemoveSpell.Size = new System.Drawing.Size(75, 23);
@@ -107,7 +112,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnAddSpell
             // 
-            this.btnAddSpell.Location = new System.Drawing.Point(45, 148);
+            this.btnAddSpell.Location = new System.Drawing.Point(45, 158);
             this.btnAddSpell.Name = "btnAddSpell";
             this.btnAddSpell.Padding = new System.Windows.Forms.Padding(5);
             this.btnAddSpell.Size = new System.Drawing.Size(75, 23);
@@ -121,9 +126,9 @@ namespace Intersect.Editor.Forms.Editors
             this.lstSpells.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lstSpells.ForeColor = System.Drawing.Color.Gainsboro;
             this.lstSpells.FormattingEnabled = true;
-            this.lstSpells.Location = new System.Drawing.Point(10, 19);
+            this.lstSpells.Location = new System.Drawing.Point(6, 34);
             this.lstSpells.Name = "lstSpells";
-            this.lstSpells.Size = new System.Drawing.Size(220, 80);
+            this.lstSpells.Size = new System.Drawing.Size(224, 80);
             this.lstSpells.TabIndex = 44;
             this.lstSpells.SelectedIndexChanged += new System.EventHandler(this.lstSpells_SelectedIndexChanged);
             // 
@@ -147,22 +152,22 @@ namespace Intersect.Editor.Forms.Editors
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // btnEditTaskLinkEvent
+            // btnEditBeginEvent
             // 
-            this.btnEditTaskLinkEvent.Location = new System.Drawing.Point(10, 361);
-            this.btnEditTaskLinkEvent.Name = "btnEditTaskLinkEvent";
-            this.btnEditTaskLinkEvent.Padding = new System.Windows.Forms.Padding(5);
-            this.btnEditTaskLinkEvent.Size = new System.Drawing.Size(236, 23);
-            this.btnEditTaskLinkEvent.TabIndex = 30;
-            this.btnEditTaskLinkEvent.Text = "Edit Link Completion Event";
-            this.btnEditTaskLinkEvent.Click += new System.EventHandler(this.btnEditTaskLinkEvent_Click);
+            this.btnEditBeginEvent.Location = new System.Drawing.Point(194, 20);
+            this.btnEditBeginEvent.Name = "btnEditBeginEvent";
+            this.btnEditBeginEvent.Padding = new System.Windows.Forms.Padding(5);
+            this.btnEditBeginEvent.Size = new System.Drawing.Size(143, 23);
+            this.btnEditBeginEvent.TabIndex = 30;
+            this.btnEditBeginEvent.Text = "Edit Begin Event";
+            this.btnEditBeginEvent.Click += new System.EventHandler(this.btnEditBeginEvent_Click);
             // 
             // txtName
             // 
             this.txtName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.txtName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtName.Location = new System.Drawing.Point(72, 72);
+            this.txtName.Location = new System.Drawing.Point(44, 20);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(94, 20);
             this.txtName.TabIndex = 33;
@@ -170,7 +175,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblName
             // 
             this.lblName.AutoSize = true;
-            this.lblName.Location = new System.Drawing.Point(17, 74);
+            this.lblName.Location = new System.Drawing.Point(5, 22);
             this.lblName.Name = "lblName";
             this.lblName.Size = new System.Drawing.Size(38, 13);
             this.lblName.TabIndex = 34;
@@ -179,7 +184,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblDesc
             // 
             this.lblDesc.AutoSize = true;
-            this.lblDesc.Location = new System.Drawing.Point(17, 122);
+            this.lblDesc.Location = new System.Drawing.Point(154, 22);
             this.lblDesc.Name = "lblDesc";
             this.lblDesc.Size = new System.Drawing.Size(35, 13);
             this.lblDesc.TabIndex = 36;
@@ -191,45 +196,79 @@ namespace Intersect.Editor.Forms.Editors
             this.txtDesc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.txtDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtDesc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtDesc.Location = new System.Drawing.Point(72, 98);
+            this.txtDesc.Location = new System.Drawing.Point(195, 20);
             this.txtDesc.Multiline = true;
             this.txtDesc.Name = "txtDesc";
             this.txtDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtDesc.Size = new System.Drawing.Size(173, 66);
+            this.txtDesc.Size = new System.Drawing.Size(173, 47);
             this.txtDesc.TabIndex = 37;
             // 
             // grpEditor
             // 
             this.grpEditor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEditor.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEditor.Controls.Add(this.grpPhaseConditions);
             this.grpEditor.Controls.Add(this.txtDesc);
             this.grpEditor.Controls.Add(this.lblDesc);
             this.grpEditor.Controls.Add(this.lblName);
             this.grpEditor.Controls.Add(this.txtName);
-            this.grpEditor.Controls.Add(this.btnEditTaskLinkEvent);
             this.grpEditor.Controls.Add(this.btnSave);
             this.grpEditor.Controls.Add(this.btnCancel);
             this.grpEditor.Controls.Add(this.grpSpells);
             this.grpEditor.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpEditor.Location = new System.Drawing.Point(0, 2);
             this.grpEditor.Name = "grpEditor";
-            this.grpEditor.Size = new System.Drawing.Size(309, 420);
+            this.grpEditor.Size = new System.Drawing.Size(374, 420);
             this.grpEditor.TabIndex = 18;
             this.grpEditor.TabStop = false;
             this.grpEditor.Text = "Phase Editor";
             // 
-            // NpcPhasesEditor
+            // grpPhaseConditions
+            // 
+            this.grpPhaseConditions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpPhaseConditions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpPhaseConditions.Controls.Add(this.btnEditConditions);
+            this.grpPhaseConditions.Controls.Add(this.btnEditBeginEvent);
+            this.grpPhaseConditions.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpPhaseConditions.Location = new System.Drawing.Point(10, 73);
+            this.grpPhaseConditions.Name = "grpPhaseConditions";
+            this.grpPhaseConditions.Size = new System.Drawing.Size(358, 55);
+            this.grpPhaseConditions.TabIndex = 38;
+            this.grpPhaseConditions.TabStop = false;
+            this.grpPhaseConditions.Text = "Conditions";
+            // 
+            // btnEditConditions
+            // 
+            this.btnEditConditions.Location = new System.Drawing.Point(7, 20);
+            this.btnEditConditions.Name = "btnEditConditions";
+            this.btnEditConditions.Padding = new System.Windows.Forms.Padding(5);
+            this.btnEditConditions.Size = new System.Drawing.Size(172, 23);
+            this.btnEditConditions.TabIndex = 0;
+            this.btnEditConditions.Text = "Edit Trigger Conditions";
+            this.btnEditConditions.Click += new System.EventHandler(this.btnEditConditions_Click);
+            // 
+            // chkReplaceSpells
+            // 
+            this.chkReplaceSpells.AutoSize = true;
+            this.chkReplaceSpells.Location = new System.Drawing.Point(50, 13);
+            this.chkReplaceSpells.Name = "chkReplaceSpells";
+            this.chkReplaceSpells.Size = new System.Drawing.Size(152, 17);
+            this.chkReplaceSpells.TabIndex = 49;
+            this.chkReplaceSpells.Text = "Replace all known spells ?";
+            // 
+            // NpcPhaseEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpEditor);
-            this.Name = "NpcPhasesEditor";
+            this.Name = "NpcPhaseEditor";
             this.Size = new System.Drawing.Size(391, 451);
             this.grpSpells.ResumeLayout(false);
             this.grpSpells.PerformLayout();
             this.grpEditor.ResumeLayout(false);
             this.grpEditor.PerformLayout();
+            this.grpPhaseConditions.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -244,11 +283,14 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.ListBox lstSpells;
         private DarkButton btnCancel;
         private DarkButton btnSave;
-        private DarkButton btnEditTaskLinkEvent;
+        private DarkButton btnEditBeginEvent;
         private DarkTextBox txtName;
         private System.Windows.Forms.Label lblName;
         private System.Windows.Forms.Label lblDesc;
         private DarkTextBox txtDesc;
         private DarkGroupBox grpEditor;
+        private DarkGroupBox grpPhaseConditions;
+        private DarkButton btnEditConditions;
+        private DarkCheckBox chkReplaceSpells;
     }
 }

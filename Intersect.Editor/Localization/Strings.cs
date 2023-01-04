@@ -1292,6 +1292,9 @@ Tick timer saved in server config.json.";
             public static LocalizedString instructionsspell =
                 @"Below are condition lists. If conditions are met on any of the lists then the player can use cast the spell.";
 
+            public static LocalizedString instructionsnpcphase =
+              @"Below are condition lists. If conditions are met on any of the lists when the npc is attacked by a player, then it will start the phase (mainly use 'Player is fighting NPC...')";
+
             public static LocalizedString listname = @"Desc:";
 
             public static LocalizedString removecondition = @"Remove Condition";
@@ -4164,9 +4167,19 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString spell = @"Spell";
 
+            public static LocalizedString replacespells = @"Replace all known spells?";
+
             public static LocalizedString addspell = @"Add";
 
             public static LocalizedString removespell = @"Remove";
+
+            public static LocalizedString phaseconditions = @"Phase Conditions";
+
+            public static LocalizedString editconditions = @"Edit Trigger Conditions";
+
+            public static LocalizedString editbeginevent = @"Edit Begin Event";
+
+            public static LocalizedString beginevent = @"NPC {00} - Begin Phase {01}";
 
             public static LocalizedString ok = @"Ok";
 

@@ -1666,6 +1666,10 @@ namespace Intersect.Server.Networking
                 {
                     SendQuestEventsTo(client, (QuestBase) obj);
                 }
+                else if (obj.Type == GameObjectType.Npc)
+                {
+                    SendNpcEventsTo(client, (NpcBase)obj);
+                }
             }
 
             if (packetList == null)
@@ -1696,6 +1700,15 @@ namespace Intersect.Server.Networking
             foreach (var alt in qst.TaskAlternatives)
             {
                 SendEventIfExists(client, alt.CompletionEvent);
+            }
+        }
+
+        //GameObjectPacket
+        public static void SendNpcEventsTo(Client client, NpcBase npc)
+        {
+            foreach (var phase in npc.NpcPhases)
+            {
+                SendEventIfExists(client, phase.BeginEvent);
             }
         }
 

@@ -2271,10 +2271,12 @@ namespace Intersect.Server.Entities
             if (this is Player && enemy is Npc)
             {
                 ((Player)this).FightingNpcs.AddOrUpdate(((Npc)enemy).Base.Id, CombatTimer, (guid, t) => CombatTimer);
+                ((Npc)enemy).HandlePhases((Player)this);
             }
             if (this is Npc && enemy is Player)
             {
                 ((Player)enemy).FightingNpcs.AddOrUpdate(((Npc)this).Base.Id, CombatTimer, (guid, t) => CombatTimer);
+                ((Npc)this).HandlePhases((Player)enemy);
             }
             //Check for lifesteal
             if (GetType() == typeof(Player) && enemy.GetType() != typeof(Resource))

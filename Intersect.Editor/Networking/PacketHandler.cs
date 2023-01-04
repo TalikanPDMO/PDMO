@@ -435,6 +435,10 @@ namespace Intersect.Editor.Networking
                     {
                         var npc = new NpcBase(id);
                         npc.Load(json);
+                        foreach (var phase in npc.NpcPhases)
+                        {
+                            npc.OriginalPhaseEventIds.Add(phase.Id, phase.BeginEventId);
+                        }
                         NpcBase.Lookup.Set(id, npc);
                     }
 

@@ -3885,8 +3885,6 @@ namespace Intersect.Server.Networking
 
                     obj.Load(packet.Data);
 
-                    DbInterface.SaveGameObject(obj);
-
                     if (type == GameObjectType.Quest)
                     {
                         var qst = (QuestBase)obj;
@@ -3925,13 +3923,39 @@ namespace Intersect.Server.Networking
                                     alt.CompletionEvent = evtb;
                                 }
                             }
-
-                            
                             DbInterface.SaveGameObject(evtb);
                         }
 
                         qst.AddEvents.Clear();
                         qst.RemoveEvents.Clear();
+                    }
+                    else if (type == GameObjectType.Npc)
+                    {
+                        var npc = (NpcBase)obj;
+                        foreach (var evt in npc.RemoveEvents)
+                        {
+                            var evtb = EventBase.Get(evt);
+                            if (evtb != null)
+                            {
+                                DbInterface.DeleteGameObject(evtb);
+                            }
+                        }
+
+                        foreach (var evt in npc.AddEvents)
+                        {
+                            var evtb = (EventBase)DbInterface.AddGameObject(GameObjectType.Event, evt);
+                            foreach (var phase in npc.NpcPhases)
+                            {
+                                if (phase.Id == evt)
+                                {
+                                    phase.BeginEvent = evtb;
+                                }
+                            }
+                            DbInterface.SaveGameObject(evtb);
+                        }
+
+                        npc.AddEvents.Clear();
+                        npc.RemoveEvents.Clear();
                     }
                     else if (type == GameObjectType.PlayerVariable)
                     {
@@ -3942,7 +3966,7 @@ namespace Intersect.Server.Networking
                         Player.StartCommonEventsWithTriggerForAll(CommonEventTrigger.ServerVariableChange, "", obj.Id.ToString());
                         DbInterface.CacheServerVariableEventTextLookups();
                     }
-
+                    DbInterface.SaveGameObject(obj);
                     // Only replace the modified object
                     PacketSender.CacheGameDataPacket();
 

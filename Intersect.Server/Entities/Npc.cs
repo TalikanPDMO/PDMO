@@ -37,6 +37,8 @@ namespace Intersect.Server.Entities
 
         public Guid[] LootMapCache = Array.Empty<Guid>();
 
+        public NpcPhase CurrentPhase = null;
+
         /// <summary>
         /// Returns the entity that ranks the highest on this NPC's damage map.
         /// </summary>
@@ -614,7 +616,8 @@ namespace Intersect.Server.Entities
 
             // Pick a random spell
             var spellIndex = Randomization.Next(0, Spells.Count);
-            var spellId = Base.Spells[spellIndex];
+            //var spellId = Base.Spells[spellIndex];
+            var spellId = Spells[spellIndex].SpellId;
             var spellBase = SpellBase.Get(spellId);
             if (spellBase == null)
             {
@@ -1358,6 +1361,7 @@ namespace Intersect.Server.Entities
             DamageMap.Clear();
             LootMap.Clear();
             LootMapCache = Array.Empty<Guid>();
+            EndCurrentPhase();
 
             if (clearLocation)
             {
@@ -1796,6 +1800,72 @@ namespace Intersect.Server.Entities
             pkt.Aggression = GetAggression(forPlayer);
 
             return pkt;
+        }
+
+        public void HandlePhases(Player player)
+        {
+            foreach(var phase in Base.NpcPhases)
+            {
+                if (phase.Id != CurrentPhase?.Id && Conditions.MeetsConditionLists(phase.ConditionLists, player, null))
+                {
+                    EndCurrentPhase();
+
+                    SetCurrentPhase(phase);
+                    
+                    player.StartCommonEvent(phase.BeginEvent);
+                    break; // Exit the loop, only one phase can be triggered
+                }
+            }
+        }
+
+        private void EndCurrentPhase()
+        {
+            if (CurrentPhase != null)
+            {
+                // Put back the base spells
+                if (CurrentPhase.ReplaceSpells)
+                {
+                    Spells.Clear();
+                    var spellSlot = 0;
+                    for (var I = 0; I < Base.Spells.Count; I++)
+                    {
+                        var slot = new SpellSlot(spellSlot);
+                        slot.Set(new Spell(Base.Spells[I]));
+                        Spells.Add(slot);
+                        spellSlot++;
+                    }
+                }
+                else // Forget all spell related to the phase
+                {
+                    Spells.RemoveRange(Base.Spells.Count, CurrentPhase.Spells.Count);
+                }
+            }
+            CurrentPhase = null;
+        }
+
+        private void SetCurrentPhase(NpcPhase phase)
+        {
+            var spellSlot = 0;
+            if (phase.ReplaceSpells)
+            {
+                // Forget all the base spells and replace it after by the phase spells
+                Spells.Clear();
+            }
+            else
+            {
+                // Add phase spells to the known base spells
+                spellSlot = Base.Spells.Count;
+            }
+            
+            SpellSlot slot;
+            foreach (var phaseSpell in phase.Spells)
+            {
+                slot = new SpellSlot(spellSlot);
+                slot.Set(new Spell(phaseSpell));
+                Spells.Add(slot);
+                spellSlot++;
+            }
+            CurrentPhase = phase;
         }
 
     }
