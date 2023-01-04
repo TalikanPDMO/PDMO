@@ -609,7 +609,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (Base.Spells == null || Base.Spells.Count <= 0)
+            if (Base.Spells == null || Base.Spells.Count <= 0 || Spells.Count <= 0)
             {
                 return;
             }
@@ -1362,7 +1362,7 @@ namespace Intersect.Server.Entities
             LootMap.Clear();
             LootMapCache = Array.Empty<Guid>();
             EndCurrentPhase();
-
+            PacketSender.SendEntityStats(this);
             if (clearLocation)
             {
                 mPathFinder.SetTarget(null);
@@ -1698,8 +1698,12 @@ namespace Intersect.Server.Entities
                 {
                     continue;
                 }
-
                 var vitalRegenRate = Base.VitalRegen[vitalId] / 100f;
+                if (CurrentPhase?.VitalRegen != null)
+                {
+                    vitalRegenRate = CurrentPhase.VitalRegen[vitalId] / 100f;
+                }
+                
                 var regenValue = (int) Math.Max(1, maxVitalValue * vitalRegenRate) *
                                  Math.Abs(Math.Sign(vitalRegenRate));
 
@@ -1811,7 +1815,7 @@ namespace Intersect.Server.Entities
                     EndCurrentPhase();
 
                     SetCurrentPhase(phase);
-                    
+                    PacketSender.SendEntityStats(this);
                     player.StartCommonEvent(phase.BeginEvent);
                     break; // Exit the loop, only one phase can be triggered
                 }
@@ -1835,9 +1839,15 @@ namespace Intersect.Server.Entities
                         spellSlot++;
                     }
                 }
-                else // Forget all spell related to the phase
+                else if (CurrentPhase.Spells != null)
                 {
+                    // Forget all spell related to the phase
                     Spells.RemoveRange(Base.Spells.Count, CurrentPhase.Spells.Count);
+                }
+
+                for (var i = 0; i < (int)Stats.StatCount; i++)
+                {
+                    BaseStats[i] = Base.Stats[i];
                 }
             }
             CurrentPhase = null;
@@ -1856,14 +1866,23 @@ namespace Intersect.Server.Entities
                 // Add phase spells to the known base spells
                 spellSlot = Base.Spells.Count;
             }
-            
             SpellSlot slot;
-            foreach (var phaseSpell in phase.Spells)
+            if (phase.Spells != null)
             {
-                slot = new SpellSlot(spellSlot);
-                slot.Set(new Spell(phaseSpell));
-                Spells.Add(slot);
-                spellSlot++;
+                foreach (var phaseSpell in phase.Spells)
+                {
+                    slot = new SpellSlot(spellSlot);
+                    slot.Set(new Spell(phaseSpell));
+                    Spells.Add(slot);
+                    spellSlot++;
+                }
+            }
+            if (phase.BaseStatsDiff != null)
+            {
+                for (var i = 0; i < (int)Stats.StatCount; i++)
+                {
+                    BaseStats[i] = (int)(BaseStats[i] * phase.BaseStatsDiff[i]);
+                }
             }
             CurrentPhase = phase;
         }

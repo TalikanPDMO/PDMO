@@ -4173,6 +4173,28 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString removespell = @"Remove";
 
+            public static LocalizedString stats = @"Stats Multiplier";
+
+            public static LocalizedString x = @"x";
+
+            public static LocalizedString str = @"Strength:";
+
+            public static LocalizedString mag = @"Magic:";
+
+            public static LocalizedString def = @"Defense:";
+
+            public static LocalizedString MR = @"Mag. resist:";
+
+            public static LocalizedString spd = @"Speed:";
+
+            public static LocalizedString regen = @"Regen";
+
+            public static LocalizedString changeregen = @"Change from base?";
+
+            public static LocalizedString hpregen = @"HP: (%)";
+
+            public static LocalizedString manaregen = @"Mana: (%)";
+
             public static LocalizedString phaseconditions = @"Phase Conditions";
 
             public static LocalizedString editconditions = @"Edit Trigger Conditions";

@@ -44,8 +44,53 @@ namespace Intersect.Editor.Forms.Editors
                 txtName.Text = mMyPhase.Name;
                 txtDesc.Text = mMyPhase.Description;
                 chkReplaceSpells.Checked = mMyPhase.ReplaceSpells;
+
+                //Stats diff
+                if (mMyPhase.BaseStatsDiff != null)
+                {
+                    nudStrPercentage.Value = (decimal)mMyPhase.BaseStatsDiff[(int)Stats.Attack];
+                    nudDefPercentage.Value = (decimal)mMyPhase.BaseStatsDiff[(int)Stats.Defense];
+                    nudMagPercentage.Value = (decimal)mMyPhase.BaseStatsDiff[(int)Stats.AbilityPower];
+                    nudMRPercentage.Value = (decimal)mMyPhase.BaseStatsDiff[(int)Stats.MagicResist];
+                    nudSpdPercentage.Value = (decimal)mMyPhase.BaseStatsDiff[(int)Stats.Speed];
+                }
+                else
+                {
+                    nudStrPercentage.Value = 1;
+                    nudDefPercentage.Value = 1;
+                    nudMagPercentage.Value = 1;
+                    nudMRPercentage.Value = 1;
+                    nudSpdPercentage.Value = 1;
+                }
+
+                //Regen
+                if (mMyPhase.VitalRegen == null)
+                {
+                    chkChangeRegen.Checked = false;
+                    nudHpRegen.Enabled = false;
+                    nudMpRegen.Enabled = false;
+                    if (mMyNpc != null)
+                    {
+                        nudHpRegen.Value = mMyNpc.VitalRegen[(int)Vitals.Health];
+                        nudMpRegen.Value = mMyNpc.VitalRegen[(int)Vitals.Mana];
+                    } 
+                }
+                else
+                {
+                    chkChangeRegen.Checked = true;
+                    nudHpRegen.Value = mMyPhase.VitalRegen[(int)Vitals.Health];
+                    nudMpRegen.Value = mMyPhase.VitalRegen[(int)Vitals.Mana];
+                    nudHpRegen.Enabled = true;
+                    nudMpRegen.Enabled = true;
+                }
+                
+
             }
             
+            if (mMyPhase.Spells == null)
+            {
+                mMyPhase.Spells = new DbList<SpellBase>();
+            }
             UpdateFormElements();
         }
 
@@ -56,6 +101,10 @@ namespace Intersect.Editor.Forms.Editors
             lblName.Text = Strings.NpcPhaseEditor.name;
             lblDesc.Text = Strings.NpcPhaseEditor.desc;
 
+            grpPhaseConditions.Text = Strings.NpcPhaseEditor.phaseconditions;
+            btnEditConditions.Text = Strings.NpcPhaseEditor.editconditions;
+            btnEditBeginEvent.Text = Strings.NpcPhaseEditor.editbeginevent;
+
             grpSpells.Text = Strings.NpcPhaseEditor.spells;
             chkReplaceSpells.Text = Strings.NpcPhaseEditor.replacespells;
             lblSpell.Text = Strings.NpcPhaseEditor.spell;
@@ -65,10 +114,26 @@ namespace Intersect.Editor.Forms.Editors
             btnAddSpell.Text = Strings.NpcPhaseEditor.addspell;
             btnRemoveSpell.Text = Strings.NpcPhaseEditor.removespell;
 
-            grpPhaseConditions.Text = Strings.NpcPhaseEditor.phaseconditions;
-            btnEditConditions.Text = Strings.NpcPhaseEditor.editconditions;
 
-            btnEditBeginEvent.Text = Strings.NpcPhaseEditor.editbeginevent;
+            grpStats.Text = Strings.NpcPhaseEditor.stats;
+            lblX1.Text = Strings.NpcPhaseEditor.x;
+            lblX2.Text = Strings.NpcPhaseEditor.x;
+            lblX3.Text = Strings.NpcPhaseEditor.x;
+            lblX4.Text = Strings.NpcPhaseEditor.x;
+            lblX5.Text = Strings.NpcPhaseEditor.x;
+
+            lblStr.Text = Strings.NpcPhaseEditor.str;
+            lblMag.Text = Strings.NpcPhaseEditor.mag;
+            lblDef.Text = Strings.NpcPhaseEditor.def;
+            lblMR.Text = Strings.NpcPhaseEditor.MR;
+            lblSpd.Text = Strings.NpcPhaseEditor.spd;
+
+            grpRegen.Text = Strings.NpcPhaseEditor.regen;
+            chkChangeRegen.Text = Strings.NpcPhaseEditor.changeregen;
+            lblHpRegen.Text = Strings.NpcPhaseEditor.hpregen;
+            lblManaRegen.Text = Strings.NpcPhaseEditor.manaregen;
+
+
             btnSave.Text = Strings.NpcPhaseEditor.ok;
             btnCancel.Text = Strings.NpcPhaseEditor.cancel;
         }
@@ -101,6 +166,40 @@ namespace Intersect.Editor.Forms.Editors
             mMyPhase.Name = txtName.Text;
             mMyPhase.Description = txtDesc.Text;
             mMyPhase.ReplaceSpells = chkReplaceSpells.Checked;
+
+            mMyPhase.BaseStatsDiff = new double[(int)Stats.StatCount];
+            mMyPhase.BaseStatsDiff[(int)Stats.Attack] = (double)nudStrPercentage.Value;
+            mMyPhase.BaseStatsDiff[(int)Stats.Defense] = (double)nudDefPercentage.Value;
+            mMyPhase.BaseStatsDiff[(int)Stats.AbilityPower] = (double)nudMagPercentage.Value;
+            mMyPhase.BaseStatsDiff[(int)Stats.MagicResist] = (double)nudMRPercentage.Value;
+            mMyPhase.BaseStatsDiff[(int)Stats.Speed] = (double)nudSpdPercentage.Value;
+            bool allOne = true;
+            for (var i =0; i< mMyPhase.BaseStatsDiff.Length; i++)
+            {
+                if (mMyPhase.BaseStatsDiff[i] != 1.00)
+                {
+                    allOne = false;
+                }
+            }
+            if (allOne)
+            {
+                // We dont't store the multipliers if all are equals to one
+                mMyPhase.BaseStatsDiff = null;
+            }
+            if (chkChangeRegen.Checked)
+            {
+                mMyPhase.VitalRegen = new int[(int)Vitals.VitalCount];
+                mMyPhase.VitalRegen[(int)Vitals.Health] = (int)nudHpRegen.Value;
+                mMyPhase.VitalRegen[(int)Vitals.Mana] = (int)nudMpRegen.Value;
+            }
+            else
+            {
+                mMyPhase.VitalRegen = null;
+            }
+            if (mMyPhase.Spells.Count == 0)
+            {
+                mMyPhase.Spells = null;
+            }
             mMyPhase.EditingEvent.Name = Strings.NpcPhaseEditor.beginevent.ToString(mMyNpc.Name, mMyPhase.Name);
             ParentForm.Close();
         }
@@ -179,6 +278,25 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             lstSpells.SelectedIndex = n;
+        }
+
+        private void chkChangeRegen_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkChangeRegen.Checked)
+            {
+                nudHpRegen.Enabled = true;
+                nudMpRegen.Enabled = true;
+            }
+            else
+            {
+                nudHpRegen.Enabled = false;
+                nudMpRegen.Enabled = false;
+                if (mMyNpc != null)
+                {
+                    nudHpRegen.Value = mMyNpc.VitalRegen[(int)Vitals.Health];
+                    nudMpRegen.Value = mMyNpc.VitalRegen[(int)Vitals.Mana];
+                }
+            }
         }
     }
 

@@ -294,7 +294,10 @@ namespace Intersect.GameObjects
         [JsonIgnore]
         public string NpcPhasesJson
         {
-            get => JsonConvert.SerializeObject(NpcPhases);
+            get => JsonConvert.SerializeObject(NpcPhases, Formatting.None, new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
             set => NpcPhases = JsonConvert.DeserializeObject<List<NpcPhase>>(value);
         }
 
@@ -346,7 +349,7 @@ namespace Intersect.GameObjects
 
         //Spells
         [NotMapped]
-        public DbList<SpellBase> Spells { get; set; } = new DbList<SpellBase>();
+        public DbList<SpellBase> Spells { get; set; } = null;
  
         [Column("Spells")]
         [JsonIgnore]
@@ -358,7 +361,28 @@ namespace Intersect.GameObjects
 
         public bool ReplaceSpells { get; set; }
 
+        [Column("BaseStatsDiff")]
+        [JsonIgnore]
+        public string JsonBaseStatsDiff
+        {
+            get => JsonConvert.SerializeObject(BaseStatsDiff);
+            set => BaseStatsDiff = JsonConvert.DeserializeObject<double[]>(value);
+        }
+
+        [NotMapped]
+        public double[] BaseStatsDiff { get; set; } = null;
+
         public ConditionLists ConditionLists { get; set; } = new ConditionLists();
+
+        [NotMapped] public int[] VitalRegen = null;
+        //Vital Regen %
+        [JsonIgnore]
+        [Column("VitalRegen")]
+        public string JsonVitalRegen
+        {
+            get => JsonConvert.SerializeObject(VitalRegen);
+            set => VitalRegen = JsonConvert.DeserializeObject<int[]>(value);
+        }
 
         public Guid BeginEventId { get; set; }
 
