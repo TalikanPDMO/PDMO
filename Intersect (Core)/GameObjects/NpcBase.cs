@@ -384,6 +384,32 @@ namespace Intersect.GameObjects
             set => VitalRegen = JsonConvert.DeserializeObject<int[]>(value);
         }
 
+        public int? Damage { get; set; } = null;
+
+        public int? DamageType { get; set; } = null;
+        public int? Scaling { get; set; } = null;
+
+        public int? ScalingStat { get; set; } = null;
+
+        public int? CritChance { get; set; } = null;
+
+        public double? CritMultiplier { get; set; } = null;
+
+        public int? AttackSpeedModifier { get; set; } = null;
+
+        public int? AttackSpeedValue { get; set; } = null;
+
+        [Column("AttackAnimation")]
+        public Guid? AttackAnimationId { get; set; } = null;
+
+        [NotMapped]
+        [JsonIgnore]
+        public AnimationBase AttackAnimation
+        {
+            get => AnimationBase.Get(AttackAnimationId?? Guid.Empty);
+            set => AttackAnimationId = value?.Id;
+        }
+
         public Guid BeginEventId { get; set; }
 
         [JsonIgnore]

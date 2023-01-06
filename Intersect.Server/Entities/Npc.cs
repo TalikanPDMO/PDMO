@@ -299,10 +299,21 @@ namespace Intersect.Server.Entities
 
         public override int CalculateAttackTime()
         {
-            if (Base.AttackSpeedModifier == 1) //Static
+            if (CurrentPhase != null)
             {
-                return Base.AttackSpeedValue;
+                if ((CurrentPhase.AttackSpeedModifier ?? Base.AttackSpeedModifier) == 1) //Static
+                {
+                    return CurrentPhase.AttackSpeedValue ?? Base.AttackSpeedValue;
+                }
             }
+            else
+            {
+                if (Base.AttackSpeedModifier == 1) //Static
+                {
+                    return Base.AttackSpeedValue;
+                }
+            }
+            
 
             return base.CalculateAttackTime();
         }
@@ -393,18 +404,35 @@ namespace Intersect.Server.Entities
             //https://www.ascensiongamedev.com/community/bug_tracker/intersect/npc-set-at-0-attack-damage-still-damages-player-by-1-initially-r915/
             if (AttackTimer < Globals.Timing.Milliseconds)
             {
-                if (Base.AttackAnimation != null)
+                if (CurrentPhase != null)
                 {
-                    PacketSender.SendAnimationToProximity(
-                        Base.AttackAnimationId, -1, Guid.Empty, target.MapId, (byte) target.X, (byte) target.Y,
-                        (sbyte) Dir
-                    );
+                    // if any members of CurrentPhase is null using ??, we use the base member instead
+                    if ((CurrentPhase.AttackAnimation ?? Base.AttackAnimation) != null)
+                    {
+                        PacketSender.SendAnimationToProximity(
+                            CurrentPhase.AttackAnimationId ?? Base.AttackAnimationId, -1, Guid.Empty, target.MapId, (byte)target.X, (byte)target.Y,
+                            (sbyte)Dir
+                        );
+                    }
+                    base.TryAttack(
+                        target, CurrentPhase.Damage ?? Base.Damage, (DamageType)(CurrentPhase.DamageType ?? Base.DamageType),
+                        (Stats)(CurrentPhase.ScalingStat ?? Base.ScalingStat), CurrentPhase.Scaling ?? Base.Scaling,
+                        CurrentPhase.CritChance ?? Base.CritChance, CurrentPhase.CritMultiplier ?? Base.CritMultiplier,
+                        deadAnimations, aliveAnimations);
                 }
-
-                base.TryAttack(
-                    target, Base.Damage, (DamageType) Base.DamageType, (Stats) Base.ScalingStat, Base.Scaling,
-                    Base.CritChance, Base.CritMultiplier, deadAnimations, aliveAnimations
-                );
+                else
+                {
+                    if (Base.AttackAnimation != null)
+                    {
+                        PacketSender.SendAnimationToProximity(
+                            Base.AttackAnimationId, -1, Guid.Empty, target.MapId, (byte)target.X, (byte)target.Y,
+                            (sbyte)Dir
+                        );
+                    }
+                    base.TryAttack(
+                        target, Base.Damage, (DamageType)Base.DamageType, (Stats)Base.ScalingStat, Base.Scaling,
+                        Base.CritChance, Base.CritMultiplier, deadAnimations, aliveAnimations);
+                }
 
                 PacketSender.SendEntityAttack(this, CalculateAttackTime());
             }

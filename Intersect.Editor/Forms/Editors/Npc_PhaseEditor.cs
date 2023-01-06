@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
+using DarkUI.Controls;
 using Intersect.Editor.Forms.Editors.Events;
 using Intersect.Editor.General;
 using Intersect.Editor.Localization;
@@ -37,7 +37,6 @@ namespace Intersect.Editor.Forms.Editors
             mMyNpc = refNpc;
             mEventBackup = refPhase?.EditingEvent?.JsonData;
             mPhaseBackup = refPhase?.JsonData;
-
             InitLocalization();
             if (mMyPhase != null)
             {
@@ -83,14 +82,71 @@ namespace Intersect.Editor.Forms.Editors
                     nudHpRegen.Enabled = true;
                     nudMpRegen.Enabled = true;
                 }
-                
 
+                if (mMyPhase.Spells == null)
+                {
+                    mMyPhase.Spells = new DbList<SpellBase>();
+                }
+
+                //Combat
+                nudDamage.Value = mMyPhase.Damage?? mMyNpc.Damage;
+                nudCritChance.Value = mMyPhase.CritChance ?? mMyNpc.CritChance;
+                nudCritMultiplier.Value = (decimal)(mMyPhase.CritMultiplier ?? mMyNpc.CritMultiplier);
+                nudScaling.Value = mMyPhase.Scaling ?? mMyNpc.Scaling;
+                cmbDamageType.SelectedIndex = mMyPhase.DamageType ?? mMyNpc.DamageType;
+                cmbScalingStat.Items.Clear();
+                for (var x = 0; x < (int)Stats.StatCount; x++)
+                {
+                    cmbScalingStat.Items.Add(Globals.GetStatName(x));
+                }
+                cmbScalingStat.SelectedIndex = mMyPhase.ScalingStat ?? mMyNpc.ScalingStat;
+                cmbAttackAnimation.Items.Clear();
+                cmbAttackAnimation.Items.Add(Strings.General.none);
+                cmbAttackAnimation.Items.AddRange(AnimationBase.Names);
+                cmbAttackAnimation.SelectedIndex = AnimationBase.ListIndex(mMyPhase.AttackAnimationId?? mMyNpc.AttackAnimationId) + 1;
+                if (mMyPhase.Damage != null || mMyPhase.CritChance != null || mMyPhase.CritMultiplier != null
+                    || mMyPhase.Scaling != null || mMyPhase.DamageType != null || mMyPhase.ScalingStat != null
+                    || mMyPhase.AttackAnimation != null)
+                {
+                    chkChangeCombat.Checked = true;
+                    nudDamage.Enabled = true;
+                    nudCritChance.Enabled = true;
+                    nudCritMultiplier.Enabled = true;
+                    nudScaling.Enabled = true;
+                    cmbDamageType.Enabled = true;
+                    cmbScalingStat.Enabled = true;
+                    cmbAttackAnimation.Enabled = true;
+                }
+                else
+                {
+                    chkChangeCombat.Checked = false;
+                    nudDamage.Enabled = false;
+                    nudCritChance.Enabled = false;
+                    nudCritMultiplier.Enabled = false;
+                    nudScaling.Enabled = false;
+                    cmbDamageType.Enabled = false;
+                    cmbScalingStat.Enabled = false;
+                    cmbAttackAnimation.Enabled = false;
+                }
+
+                //Attack speed
+                cmbAttackSpeedModifier.SelectedIndex = mMyPhase.AttackSpeedModifier ?? mMyNpc.AttackSpeedModifier;
+                nudAttackSpeedValue.Value = mMyPhase.AttackSpeedValue ?? mMyNpc.AttackSpeedValue;
+                if (mMyPhase.AttackSpeedModifier != null || mMyPhase.AttackSpeedValue != null)
+                {
+                    chkChangeAttackSpeed.Checked = true;
+                    cmbAttackSpeedModifier.Enabled = true;
+                    nudAttackSpeedValue.Enabled = cmbAttackSpeedModifier.SelectedIndex > 0;
+                }
+                else
+                {
+                    chkChangeAttackSpeed.Checked = false;
+                    cmbAttackSpeedModifier.Enabled = false;
+                    nudAttackSpeedValue.Enabled = false;
+                }
             }
             
-            if (mMyPhase.Spells == null)
-            {
-                mMyPhase.Spells = new DbList<SpellBase>();
-            }
+            
             UpdateFormElements();
         }
 
@@ -133,6 +189,32 @@ namespace Intersect.Editor.Forms.Editors
             lblHpRegen.Text = Strings.NpcPhaseEditor.hpregen;
             lblManaRegen.Text = Strings.NpcPhaseEditor.manaregen;
 
+            //Combat
+            grpCombat.Text = Strings.NpcPhaseEditor.combat;
+            chkChangeCombat.Text = Strings.NpcPhaseEditor.changecombat;
+            lblDamage.Text = Strings.NpcPhaseEditor.basedamage;
+            lblCritChance.Text = Strings.NpcPhaseEditor.critchance;
+            lblCritMultiplier.Text = Strings.NpcPhaseEditor.critmultiplier;
+            lblDamageType.Text = Strings.NpcPhaseEditor.damagetype;
+            cmbDamageType.Items.Clear();
+            for (var i = 0; i < Strings.Combat.damagetypes.Count; i++)
+            {
+                cmbDamageType.Items.Add(Strings.Combat.damagetypes[i]);
+            }
+
+            lblScalingStat.Text = Strings.NpcPhaseEditor.scalingstat;
+            lblScaling.Text = Strings.NpcPhaseEditor.scalingamount;
+
+            lblAttackAnimation.Text = Strings.NpcPhaseEditor.attackanimation;
+            grpAttackSpeed.Text = Strings.NpcPhaseEditor.attackspeed;
+            chkChangeAttackSpeed.Text = Strings.NpcPhaseEditor.changeattackspeed;
+            lblAttackSpeedModifier.Text = Strings.NpcPhaseEditor.modifier;
+            cmbAttackSpeedModifier.Items.Clear();
+            foreach (var val in Strings.NpcPhaseEditor.attackspeedmodifiers.Values)
+            {
+                cmbAttackSpeedModifier.Items.Add(val.ToString());
+            }
+            lblAttackSpeedValue.Text = Strings.NpcPhaseEditor.value;
 
             btnSave.Text = Strings.NpcPhaseEditor.ok;
             btnCancel.Text = Strings.NpcPhaseEditor.cancel;
@@ -196,10 +278,23 @@ namespace Intersect.Editor.Forms.Editors
             {
                 mMyPhase.VitalRegen = null;
             }
+
             if (mMyPhase.Spells.Count == 0)
             {
                 mMyPhase.Spells = null;
             }
+
+            mMyPhase.Damage = (mMyNpc.Damage == nudDamage.Value ? null : (int?)nudDamage.Value);
+            mMyPhase.CritChance = (mMyNpc.CritChance == nudCritChance.Value ? null : (int?)nudCritChance.Value);
+            mMyPhase.CritMultiplier = (mMyNpc.CritMultiplier == (double)nudCritMultiplier.Value ? null : (double?)nudCritMultiplier.Value);
+            mMyPhase.Scaling = (mMyNpc.Scaling == nudScaling.Value ? null : (int?)nudScaling.Value);
+            mMyPhase.DamageType = (mMyNpc.DamageType == cmbDamageType.SelectedIndex ? null : (int?)cmbDamageType.SelectedIndex);
+            mMyPhase.ScalingStat = (mMyNpc.ScalingStat == cmbScalingStat.SelectedIndex ? null : (int?)cmbScalingStat.SelectedIndex);
+            mMyPhase.AttackAnimation = (mMyNpc.AttackAnimationId == AnimationBase.IdFromList(cmbAttackAnimation.SelectedIndex - 1) ?
+                                        null : AnimationBase.Get(AnimationBase.IdFromList(cmbAttackAnimation.SelectedIndex - 1)));
+            mMyPhase.AttackSpeedModifier = (mMyNpc.AttackSpeedModifier == cmbAttackSpeedModifier.SelectedIndex ? null : (int?)cmbAttackSpeedModifier.SelectedIndex);
+            mMyPhase.AttackSpeedValue = (mMyNpc.AttackSpeedValue == nudAttackSpeedValue.Value ? null : (int?)nudAttackSpeedValue.Value);
+
             mMyPhase.EditingEvent.Name = Strings.NpcPhaseEditor.beginevent.ToString(mMyNpc.Name, mMyPhase.Name);
             ParentForm.Close();
         }
@@ -297,6 +392,77 @@ namespace Intersect.Editor.Forms.Editors
                     nudMpRegen.Value = mMyNpc.VitalRegen[(int)Vitals.Mana];
                 }
             }
+        }
+
+        private void chkChangeAttackSpeed_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkChangeAttackSpeed.Checked)
+            {
+                nudAttackSpeedValue.Enabled = cmbAttackSpeedModifier.SelectedIndex > 0;
+                cmbAttackSpeedModifier.Enabled = true;
+            }
+            else
+            {
+                nudAttackSpeedValue.Enabled = false;
+                cmbAttackSpeedModifier.Enabled = false;
+                if (mMyNpc != null)
+                {
+                    nudAttackSpeedValue.Value = mMyNpc.AttackSpeedValue;
+                    cmbAttackSpeedModifier.SelectedIndex = mMyNpc.AttackSpeedModifier;
+                }
+            }
+        }
+
+        private void chkChangeCombat_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkChangeCombat.Checked)
+            {
+                nudDamage.Enabled = true;
+                nudCritChance.Enabled = true;
+                nudCritMultiplier.Enabled = true;
+                nudScaling.Enabled = true;
+                cmbDamageType.Enabled = true;
+                cmbScalingStat.Enabled = true;
+                cmbAttackAnimation.Enabled = true;
+            }
+            else
+            {
+                nudDamage.Enabled = false;
+                nudCritChance.Enabled = false;
+                nudCritMultiplier.Enabled = false;
+                nudScaling.Enabled = false;
+                cmbDamageType.Enabled = false;
+                cmbScalingStat.Enabled = false;
+                cmbAttackAnimation.Enabled = false;
+                if (mMyNpc != null)
+                {
+                    nudDamage.Value = mMyNpc.Damage;
+                    nudCritChance.Value = mMyNpc.CritChance;
+                    nudCritMultiplier.Value = (decimal)mMyNpc.CritMultiplier;
+                    nudScaling.Value = mMyNpc.Scaling;
+                    cmbDamageType.SelectedIndex = mMyNpc.DamageType;
+                    cmbScalingStat.SelectedIndex = mMyNpc.ScalingStat;
+                    cmbAttackAnimation.SelectedIndex = AnimationBase.ListIndex(mMyNpc.AttackAnimationId) + 1;
+                }
+            }
+        }
+
+        private void comboBoxes_EnableChanged(object sender, EventArgs e)
+        {
+            DarkComboBox comboBox = (DarkComboBox)sender;
+            if (comboBox.Enabled)
+            {
+                comboBox.ForeColor = System.Drawing.Color.Gainsboro;
+            }
+            else
+            {
+                comboBox.ForeColor = System.Drawing.Color.Gray;
+            }
+        }
+
+        private void cmbAttackSpeedModifier_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            nudAttackSpeedValue.Enabled = cmbAttackSpeedModifier.SelectedIndex > 0;
         }
     }
 

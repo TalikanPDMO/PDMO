@@ -4163,7 +4163,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString desc = @"Desc:";
 
-            public static LocalizedString spells = @"Spells";
+            public static LocalizedString spells = @"Spells Modifier";
 
             public static LocalizedString spell = @"Spell";
 
@@ -4189,11 +4189,43 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString regen = @"Regen";
 
-            public static LocalizedString changeregen = @"Change from base?";
+            public static LocalizedString changeregen = @"Replace base?";
 
             public static LocalizedString hpregen = @"HP: (%)";
 
             public static LocalizedString manaregen = @"Mana: (%)";
+
+            public static LocalizedString combat = @"Combat Modifier";
+
+            public static LocalizedString changecombat = @"Replace base?";
+
+            public static LocalizedString basedamage = @"Base Damage:";
+
+            public static LocalizedString critchance = @"Crit Chance (%):";
+
+            public static LocalizedString critmultiplier = @"Crit Multiplier:";
+
+            public static LocalizedString damagetype = @"Damage Type:";
+
+            public static LocalizedString scalingstat = @"Scaling Stat:";
+
+            public static LocalizedString scalingamount = @"Scaling Amount:";
+
+            public static LocalizedString attackanimation = @"Attack Animation:";
+
+            public static LocalizedString attackspeed = @"AttackSpeed Modifier";
+
+            public static LocalizedString changeattackspeed = @"Replace base?";
+
+            public static LocalizedString modifier = @"Modifier:";
+
+            public static LocalizedString value = @"Value:";
+
+            public static Dictionary<int, LocalizedString> attackspeedmodifiers = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Disabled"},
+                {1, @"Static (ms)"},
+            };
 
             public static LocalizedString phaseconditions = @"Phase Conditions";
 
