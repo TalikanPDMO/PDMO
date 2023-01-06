@@ -372,8 +372,6 @@ namespace Intersect.GameObjects
         [NotMapped]
         public double[] BaseStatsDiff { get; set; } = null;
 
-        public ConditionLists ConditionLists { get; set; } = new ConditionLists();
-
         [NotMapped] public int[] VitalRegen = null;
         //Vital Regen %
         [JsonIgnore]
@@ -410,6 +408,8 @@ namespace Intersect.GameObjects
             set => AttackAnimationId = value?.Id;
         }
 
+        public ConditionLists ConditionLists { get; set; } = new ConditionLists();
+
         public Guid BeginEventId { get; set; }
 
         [JsonIgnore]
@@ -418,6 +418,19 @@ namespace Intersect.GameObjects
             get => EventBase.Get(BeginEventId);
             set => BeginEventId = value.Id;
         }
+
+        [Column("BeginAnimation")]
+        public Guid? BeginAnimationId { get; set; } = null;
+
+        [NotMapped]
+        [JsonIgnore]
+        public AnimationBase BeginAnimation
+        {
+            get => AnimationBase.Get(BeginAnimationId ?? Guid.Empty);
+            set => BeginAnimationId = value?.Id;
+        }
+
+        public int? Duration { get; set; } = null;
 
         [JsonIgnore]
         [NotMapped]

@@ -43,6 +43,10 @@ namespace Intersect.Editor.Forms.Editors
                 txtName.Text = mMyPhase.Name;
                 txtDesc.Text = mMyPhase.Description;
                 chkReplaceSpells.Checked = mMyPhase.ReplaceSpells;
+                cmbBeginAnimation.Items.Clear();
+                cmbBeginAnimation.Items.Add(Strings.General.none);
+                cmbBeginAnimation.Items.AddRange(AnimationBase.Names);
+                cmbBeginAnimation.SelectedIndex = AnimationBase.ListIndex(mMyPhase.BeginAnimationId ?? Guid.Empty) + 1;
 
                 //Stats diff
                 if (mMyPhase.BaseStatsDiff != null)
@@ -144,6 +148,18 @@ namespace Intersect.Editor.Forms.Editors
                     cmbAttackSpeedModifier.Enabled = false;
                     nudAttackSpeedValue.Enabled = false;
                 }
+
+                //Duration
+                if (mMyPhase.Duration != null)
+                {
+                    nudDuration.Value = (decimal)mMyPhase.Duration;
+                    chkDurationEnable.Checked = true;
+                }
+                else
+                {
+                    chkDurationEnable.Checked = false;
+                    nudDuration.Enabled = false;
+                }
             }
             
             
@@ -157,9 +173,10 @@ namespace Intersect.Editor.Forms.Editors
             lblName.Text = Strings.NpcPhaseEditor.name;
             lblDesc.Text = Strings.NpcPhaseEditor.desc;
 
-            grpPhaseConditions.Text = Strings.NpcPhaseEditor.phaseconditions;
+            grpPhaseBegin.Text = Strings.NpcPhaseEditor.phaseconditions;
             btnEditConditions.Text = Strings.NpcPhaseEditor.editconditions;
             btnEditBeginEvent.Text = Strings.NpcPhaseEditor.editbeginevent;
+            lblBeginAnimation.Text = Strings.NpcPhaseEditor.beginanimation;
 
             grpSpells.Text = Strings.NpcPhaseEditor.spells;
             chkReplaceSpells.Text = Strings.NpcPhaseEditor.replacespells;
@@ -204,8 +221,9 @@ namespace Intersect.Editor.Forms.Editors
 
             lblScalingStat.Text = Strings.NpcPhaseEditor.scalingstat;
             lblScaling.Text = Strings.NpcPhaseEditor.scalingamount;
-
             lblAttackAnimation.Text = Strings.NpcPhaseEditor.attackanimation;
+
+            //AttackSpeed
             grpAttackSpeed.Text = Strings.NpcPhaseEditor.attackspeed;
             chkChangeAttackSpeed.Text = Strings.NpcPhaseEditor.changeattackspeed;
             lblAttackSpeedModifier.Text = Strings.NpcPhaseEditor.modifier;
@@ -215,6 +233,11 @@ namespace Intersect.Editor.Forms.Editors
                 cmbAttackSpeedModifier.Items.Add(val.ToString());
             }
             lblAttackSpeedValue.Text = Strings.NpcPhaseEditor.value;
+
+            //Duration
+            grpDuration.Text = Strings.NpcPhaseEditor.duration;
+            chkDurationEnable.Text = Strings.NpcPhaseEditor.durationenable;
+            lblDurationMs.Text = Strings.NpcPhaseEditor.durationms;
 
             btnSave.Text = Strings.NpcPhaseEditor.ok;
             btnCancel.Text = Strings.NpcPhaseEditor.cancel;
@@ -248,6 +271,8 @@ namespace Intersect.Editor.Forms.Editors
             mMyPhase.Name = txtName.Text;
             mMyPhase.Description = txtDesc.Text;
             mMyPhase.ReplaceSpells = chkReplaceSpells.Checked;
+            mMyPhase.BeginAnimation = (cmbBeginAnimation.SelectedIndex == 0 ? null :
+                AnimationBase.Get(AnimationBase.IdFromList(cmbBeginAnimation.SelectedIndex - 1))); 
 
             mMyPhase.BaseStatsDiff = new double[(int)Stats.StatCount];
             mMyPhase.BaseStatsDiff[(int)Stats.Attack] = (double)nudStrPercentage.Value;
@@ -283,7 +308,6 @@ namespace Intersect.Editor.Forms.Editors
             {
                 mMyPhase.Spells = null;
             }
-
             mMyPhase.Damage = (mMyNpc.Damage == nudDamage.Value ? null : (int?)nudDamage.Value);
             mMyPhase.CritChance = (mMyNpc.CritChance == nudCritChance.Value ? null : (int?)nudCritChance.Value);
             mMyPhase.CritMultiplier = (mMyNpc.CritMultiplier == (double)nudCritMultiplier.Value ? null : (double?)nudCritMultiplier.Value);
@@ -295,6 +319,7 @@ namespace Intersect.Editor.Forms.Editors
             mMyPhase.AttackSpeedModifier = (mMyNpc.AttackSpeedModifier == cmbAttackSpeedModifier.SelectedIndex ? null : (int?)cmbAttackSpeedModifier.SelectedIndex);
             mMyPhase.AttackSpeedValue = (mMyNpc.AttackSpeedValue == nudAttackSpeedValue.Value ? null : (int?)nudAttackSpeedValue.Value);
 
+            mMyPhase.Duration = (chkDurationEnable.Checked ? (int?)nudDuration.Value : null);
             mMyPhase.EditingEvent.Name = Strings.NpcPhaseEditor.beginevent.ToString(mMyNpc.Name, mMyPhase.Name);
             ParentForm.Close();
         }
@@ -463,6 +488,11 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbAttackSpeedModifier_SelectedIndexChanged(object sender, EventArgs e)
         {
             nudAttackSpeedValue.Enabled = cmbAttackSpeedModifier.SelectedIndex > 0;
+        }
+
+        private void chkDurationEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            nudDuration.Enabled = chkDurationEnable.Checked;
         }
     }
 

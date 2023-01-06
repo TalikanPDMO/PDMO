@@ -4227,13 +4227,22 @@ Tick timer saved in server config.json.";
                 {1, @"Static (ms)"},
             };
 
-            public static LocalizedString phaseconditions = @"Phase Conditions";
+            public static LocalizedString phaseconditions = @"Phase Beginning";
 
-            public static LocalizedString editconditions = @"Edit Trigger Conditions";
+            public static LocalizedString editconditions = @"Trigger Conditions";
 
-            public static LocalizedString editbeginevent = @"Edit Begin Event";
+            public static LocalizedString editbeginevent = @"Begin Event";
+
+            public static LocalizedString beginanimation = @"NPC Animation:";
 
             public static LocalizedString beginevent = @"NPC {00} - Begin Phase {01}";
+
+            public static LocalizedString duration = @"Phase Duration";
+
+            public static LocalizedString durationenable = @"Enable";
+
+            public static LocalizedString durationms = @"(ms)";
+
 
             public static LocalizedString ok = @"Ok";
 

@@ -38,6 +38,8 @@ namespace Intersect.Server.Entities
         public Guid[] LootMapCache = Array.Empty<Guid>();
 
         public NpcPhase CurrentPhase = null;
+        public long CurrentPhaseTimer;
+
 
         /// <summary>
         /// Returns the entity that ranks the highest on this NPC's damage map.
@@ -871,6 +873,11 @@ namespace Intersect.Server.Entities
                             RandomMoveValue = -1;
                             return;
                         }
+                    }
+
+                    if (CurrentPhase?.Duration != null && Globals.Timing.Milliseconds > CurrentPhaseTimer)
+                    {
+                        EndCurrentPhase();
                     }
 
                     var fleeing = IsFleeing();
@@ -1844,6 +1851,11 @@ namespace Intersect.Server.Entities
 
                     SetCurrentPhase(phase);
                     PacketSender.SendEntityStats(this);
+                    if (phase.BeginAnimationId != null && phase.BeginAnimationId != Guid.Empty)
+                    {
+                        PacketSender.SendAnimationToProximity((Guid)phase.BeginAnimationId, 1, Id, MapId, 0, 0, (sbyte)Dir);
+                        //Target Type 1 will be global entity
+                    }
                     player.StartCommonEvent(phase.BeginEvent);
                     break; // Exit the loop, only one phase can be triggered
                 }
@@ -1879,6 +1891,7 @@ namespace Intersect.Server.Entities
                 }
             }
             CurrentPhase = null;
+            CurrentPhaseTimer = 0;
         }
 
         private void SetCurrentPhase(NpcPhase phase)
@@ -1913,6 +1926,7 @@ namespace Intersect.Server.Entities
                 }
             }
             CurrentPhase = phase;
+            CurrentPhaseTimer = (phase.Duration?? 0) + Globals.Timing.Milliseconds;
         }
 
     }
