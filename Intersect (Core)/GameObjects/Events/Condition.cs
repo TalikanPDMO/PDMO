@@ -308,6 +308,10 @@ namespace Intersect.GameObjects.Events
         /// Defines the map Zone Type to compare to.
         /// </summary>
         public Guid NpcId { get; set; }
+
+        public NpcPhasesProgressState Progress { get; set; } = NpcPhasesProgressState.OnNoneOrAnyPhase;
+
+        public Guid PhaseId { get; set; }
     }
 
     public class VariableCompaison

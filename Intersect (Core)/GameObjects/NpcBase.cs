@@ -314,6 +314,19 @@ namespace Intersect.GameObjects
             return SpellBase.Get(spellId);
         }
 
+        public int GetPhaseIndex(Guid phaseId)
+        {
+            for (var i = 0; i < NpcPhases.Count; i++)
+            {
+                if (NpcPhases[i].Id == phaseId)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
     }
 
     public class NpcDrop
@@ -328,6 +341,22 @@ namespace Intersect.GameObjects
         public bool Random = false;
 
         public bool Iterative = false;
+
+    }
+
+    public enum NpcPhasesProgressState
+    {
+        OnNoneOrAnyPhase = 0,
+
+        OnNonePhase = 1,
+
+        OnAnyPhase = 2,
+
+        BeforePhase = 3,
+
+        AfterPhase = 4,
+
+        OnPhase = 5,
 
     }
 

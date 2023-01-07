@@ -250,7 +250,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             grpFightingNPC.Text = Strings.EventConditional.fightingnpc;
             lblFightNpc.Text = Strings.EventConditional.fightnpc;
             cmbFightNpc.Items.Clear();
-
+            lblIsOnPhase.Text = Strings.EventConditional.isonphase;
+            cmbIsOnPhase.Items.Clear();
+            for (var i = 0; i < Strings.EventConditional.phasecomparators.Count; i++)
+            {
+                cmbIsOnPhase.Items.Add(Strings.EventConditional.phasecomparators[i]);
+            }
+            lblNpcPhase.Text = Strings.EventConditional.npcphase;
             btnSave.Text = Strings.EventConditional.okay;
             btnCancel.Text = Strings.EventConditional.cancel;
         }
@@ -387,6 +393,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     {
                         cmbFightNpc.SelectedIndex = 0;
                     }
+
+                    cmbIsOnPhase.SelectedIndex = 0;
 
                     break;
                 default:
@@ -621,6 +629,71 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 if (cmbQuestTask.Items.Count > 0)
                 {
                     cmbQuestTask.SelectedIndex = 0;
+                }
+            }
+        }
+
+        private void cmbIsOnPhase_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbIsOnPhase.SelectedIndex > (int) NpcPhasesProgressState.OnAnyPhase)
+            {
+                cmbNpcPhase.Enabled = true;
+                lblNpcPhase.ForeColor = System.Drawing.Color.Gainsboro;
+                cmbNpcPhase.ForeColor = System.Drawing.Color.Gainsboro;
+            }
+            else
+            {
+                cmbNpcPhase.Enabled = false;
+                lblNpcPhase.ForeColor = System.Drawing.Color.Gray;
+                cmbNpcPhase.ForeColor = System.Drawing.Color.Gray;
+            }
+        }
+
+        private void cmbFightingNpc_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            cmbNpcPhase.Items.Clear();
+            cmbNpcPhase.ResetText();
+            int previousIndex = cmbIsOnPhase.SelectedIndex;
+            cmbIsOnPhase.Items.Clear();
+            if (cmbFightNpc.SelectedIndex == 0)
+            {
+                for (var i = 0; i < (int)NpcPhasesProgressState.BeforePhase; i++)
+                {
+                    cmbIsOnPhase.Items.Add(Strings.EventConditional.phasecomparators[i]);
+                }
+                if (previousIndex < (int)NpcPhasesProgressState.BeforePhase)
+                {
+                    cmbIsOnPhase.SelectedIndex = previousIndex;
+                }
+                else
+                {
+                    cmbIsOnPhase.SelectedIndex = 0;
+                }
+                cmbNpcPhase.SelectedIndex = -1;
+            }
+            else
+            {
+                for (var i = 0; i < Strings.EventConditional.phasecomparators.Count; i++)
+                {
+                    cmbIsOnPhase.Items.Add(Strings.EventConditional.phasecomparators[i]);
+                }
+                cmbIsOnPhase.SelectedIndex = previousIndex;
+                var npc = NpcBase.Get(NpcBase.IdFromList(cmbFightNpc.SelectedIndex - 1));
+                if (npc != null)
+                {
+                    foreach (var phase in npc.NpcPhases)
+                    {
+                        cmbNpcPhase.Items.Add(phase.Name);
+                    }
+
+                    if (cmbNpcPhase.Items.Count > 0)
+                    {
+                        cmbNpcPhase.SelectedIndex = 0;
+                    }
+                    else
+                    {
+                        cmbNpcPhase.SelectedIndex = -1;
+                    }
                 }
             }
         }
@@ -1208,6 +1281,27 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     cmbFightNpc.SelectedIndex = NpcBase.ListIndex(condition.NpcId) + 1;
                 }
             }
+
+            cmbIsOnPhase.SelectedIndex = (int)condition.Progress;
+            if (cmbIsOnPhase.SelectedIndex == -1)
+            {
+                cmbIsOnPhase.SelectedIndex = 0;
+            }
+
+            if (cmbFightNpc.SelectedIndex > 0 && cmbIsOnPhase.SelectedIndex > (int) NpcPhasesProgressState.OnAnyPhase)
+            {
+                var npc = NpcBase.Get(NpcBase.IdFromList(cmbFightNpc.SelectedIndex - 1));
+                if (npc != null)
+                {
+                    for (var i = 0; i < npc.NpcPhases.Count; i++)
+                    {
+                        if (npc.NpcPhases[i].Id == condition.PhaseId)
+                        {
+                            cmbNpcPhase.SelectedIndex = i;
+                        }
+                    }
+                }
+            }
         }
 
 
@@ -1367,16 +1461,22 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
         private void SaveFormValues(FightingNPC condition)
         {
-            if (cmbFightNpc.Items.Count > 0)
+            condition.NpcId = Guid.Empty;
+            condition.Progress = (NpcPhasesProgressState)cmbIsOnPhase.SelectedIndex;
+            condition.PhaseId = Guid.Empty;
+            if (cmbFightNpc.SelectedIndex > 0)
             {
-                // If selected is "Any", set npcId to empty Guid
-                if (cmbFightNpc.SelectedIndex == 0 || cmbFightNpc.SelectedIndex == -1)
+                condition.NpcId = NpcBase.IdFromList(cmbFightNpc.SelectedIndex - 1);
+                if (cmbIsOnPhase.SelectedIndex > (int)NpcPhasesProgressState.OnAnyPhase)
                 {
-                    condition.NpcId = Guid.Empty;
-                }
-                else
-                {
-                    condition.NpcId = NpcBase.IdFromList(cmbFightNpc.SelectedIndex - 1);
+                    var npc = NpcBase.Get(NpcBase.IdFromList(cmbFightNpc.SelectedIndex - 1));
+                    if (npc != null)
+                    {
+                        if (cmbNpcPhase.SelectedIndex > -1)
+                        {
+                            condition.PhaseId = npc.NpcPhases[cmbNpcPhase.SelectedIndex].Id;
+                        }
+                    }
                 }
             }
         }

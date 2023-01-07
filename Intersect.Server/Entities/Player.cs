@@ -54,7 +54,10 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore] public long LastChatTime = -1;
 
-        [NotMapped, JsonIgnore] public ConcurrentDictionary<Guid, long> FightingNpcs = new ConcurrentDictionary<Guid, long>();
+        [NotMapped, JsonIgnore] public ConcurrentDictionary<Guid, long> FightingNpcBaseIds = new ConcurrentDictionary<Guid, long>();
+
+        //HashSet to contains only 1 reference for each npc, no order
+        [NotMapped, JsonIgnore] public ConcurrentDictionary<Guid, HashSet<Npc>> FightingListNpcs = new ConcurrentDictionary<Guid, HashSet<Npc>>();
 
         #region Quests
 
@@ -478,9 +481,10 @@ namespace Intersect.Server.Entities
                             }
                             SaveTimer = Globals.Timing.Milliseconds + Options.Instance.Processing.PlayerSaveInterval;
                         }
-                        if (CombatTimer < Globals.Timing.Milliseconds && FightingNpcs.Count > 0)
+                        if (CombatTimer < Globals.Timing.Milliseconds && FightingNpcBaseIds.Count > 0)
                         {
-                            FightingNpcs.Clear();
+                            FightingNpcBaseIds.Clear();
+                            FightingListNpcs.Clear();
                         }
                     }
 
@@ -781,8 +785,8 @@ namespace Intersect.Server.Entities
             CachedStatuses = new Status[0];
 
             CombatTimer = 0;
-            FightingNpcs.Clear();
-
+            FightingNpcBaseIds.Clear();
+            FightingListNpcs.Clear();
             // Bypass classic respawn when Stadium kill
             if (PvpStadiumUnit.CurrentMatchPlayers.TryGetValue(this.Id, out var playerUnit) &&
                 (playerUnit.StadiumState == PvpStadiumState.MatchOnGoing || playerUnit.StadiumState == PvpStadiumState.MatchEnded))

@@ -2303,6 +2303,20 @@ Tick timer saved in server config.json.";
             public static LocalizedString fightnpc = @"NPC:";
 
             public static LocalizedString anynpc = @"[ANY NPC]";
+
+            public static LocalizedString isonphase = @"Is:";
+
+            public static LocalizedString npcphase = @"Phase:";
+
+            public static Dictionary<int, LocalizedString> phasecomparators = new Dictionary<int, LocalizedString>
+            {
+                {0, @"On None or Any Phase"},
+                {1, @"On None Phase"},
+                {2, @"On Any Phase"},
+                {3, @"Before Phase..."},
+                {4, @"After Phase..."},
+                {5, @"On Phase..."},
+            };
         }
 
         public struct EventConditionDesc

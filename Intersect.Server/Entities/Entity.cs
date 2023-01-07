@@ -2270,12 +2270,16 @@ namespace Intersect.Server.Entities
             CombatTimer = Globals.Timing.Milliseconds + Options.CombatTime;
             if (this is Player && enemy is Npc)
             {
-                ((Player)this).FightingNpcs.AddOrUpdate(((Npc)enemy).Base.Id, CombatTimer, (guid, t) => CombatTimer);
+                ((Player)this).FightingNpcBaseIds.AddOrUpdate(((Npc)enemy).Base.Id, CombatTimer, (guid, t) => CombatTimer);
+                var npclist = ((Player)this).FightingListNpcs.GetOrAdd(((Npc)enemy).Base.Id, new HashSet<Npc>());
+                npclist.Add((Npc)enemy);
                 ((Npc)enemy).HandlePhases((Player)this);
             }
             if (this is Npc && enemy is Player)
             {
-                ((Player)enemy).FightingNpcs.AddOrUpdate(((Npc)this).Base.Id, CombatTimer, (guid, t) => CombatTimer);
+                ((Player)enemy).FightingNpcBaseIds.AddOrUpdate(((Npc)this).Base.Id, CombatTimer, (guid, t) => CombatTimer);
+                var npclist = ((Player)enemy).FightingListNpcs.GetOrAdd(((Npc)this).Base.Id, new HashSet<Npc>());
+                npclist.Add((Npc)this);
                 ((Npc)this).HandlePhases((Player)enemy);
             }
             //Check for lifesteal

@@ -489,12 +489,106 @@ namespace Intersect.Server.Entities.Events
         {
             if (condition.NpcId == Guid.Empty)
             {
-                return player.FightingNpcs.Count > 0 && Globals.Timing.Milliseconds < player.CombatTimer;
+                if (player.FightingNpcBaseIds.Count > 0 && Globals.Timing.Milliseconds < player.CombatTimer)
+                {
+                    switch (condition.Progress)
+                    {
+                        case NpcPhasesProgressState.OnNoneOrAnyPhase:
+                            return true;
+                            break;
+                        case NpcPhasesProgressState.OnNonePhase:
+                            foreach (var npcs in player.FightingListNpcs.Values)
+                            {
+                                foreach (var npc in npcs)
+                                {
+                                    if (npc.CurrentPhase == null)
+                                    {
+                                        return true;
+                                    }
+                                }
+                            }
+                            break;
+                        case NpcPhasesProgressState.OnAnyPhase:
+                            foreach (var npcs in player.FightingListNpcs.Values)
+                            {
+                                foreach (var npc in npcs)
+                                {
+                                    if (npc.CurrentPhase != null)
+                                    {
+                                        return true;
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }
             }
             else
             {
-                return player.FightingNpcs.TryGetValue(condition.NpcId, out var timer) && Globals.Timing.Milliseconds < timer;
+                if(player.FightingNpcBaseIds.TryGetValue(condition.NpcId, out var timer) && Globals.Timing.Milliseconds < timer)
+                {
+                    if (player.FightingListNpcs.TryGetValue(condition.NpcId, out var npcs))
+                    {
+                        int phaseIndex = -1;
+                        switch (condition.Progress)
+                        {
+                            case NpcPhasesProgressState.OnNoneOrAnyPhase:
+                                return true;
+                                break;
+                            case NpcPhasesProgressState.OnNonePhase:
+                                foreach (var npc in npcs)
+                                {
+                                    if (npc.CurrentPhase == null)
+                                    {
+                                        return true;
+                                    }
+                                }
+                                break;
+                            case NpcPhasesProgressState.OnAnyPhase:
+                                foreach (var npc in npcs)
+                                {
+                                    if (npc.CurrentPhase != null)
+                                    {
+                                        return true;
+                                    }
+                                }
+                                break;
+                            case NpcPhasesProgressState.BeforePhase:
+                                foreach (var npc in npcs)
+                                {
+                                    if (npc.CurrentPhase != null)
+                                    {
+                                        phaseIndex = npc.Base.GetPhaseIndex(condition.PhaseId);
+                                        return npc.Base.GetPhaseIndex(npc.CurrentPhase.Id) < phaseIndex;
+                                    }
+                                }
+                                break;
+                            case NpcPhasesProgressState.AfterPhase:
+                                foreach (var npc in npcs)
+                                {
+                                    if (npc.CurrentPhase != null)
+                                    {
+                                        phaseIndex = npc.Base.GetPhaseIndex(condition.PhaseId);
+                                        return npc.Base.GetPhaseIndex(npc.CurrentPhase.Id) > phaseIndex;
+                                    }
+                                }
+                                break;
+                            case NpcPhasesProgressState.OnPhase:
+                                foreach (var npc in npcs)
+                                {
+                                    if (npc.CurrentPhase != null)
+                                    {
+                                        phaseIndex = npc.Base.GetPhaseIndex(condition.PhaseId);
+                                        return npc.Base.GetPhaseIndex(npc.CurrentPhase.Id) == phaseIndex;
+                                    }
+                                }
+                                break;
+                        }
+                        
+                    }
+                }
             }
+            return false;
         }
 
         //Variable Comparison Processing
