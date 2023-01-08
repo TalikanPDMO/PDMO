@@ -482,7 +482,7 @@ namespace Intersect.Server.Entities.Events
         }
 
         public static bool MeetsCondition(
-           FightingNPC condition,
+           FightingNPCPhase condition,
            Player player,
            Event eventInstance,
            QuestBase questBase)
@@ -585,6 +585,117 @@ namespace Intersect.Server.Entities.Events
                                 break;
                         }
                         
+                    }
+                }
+            }
+            return false;
+        }
+
+        public static bool MeetsCondition(
+           FightingNPCStats condition,
+           Player player,
+           Event eventInstance,
+           QuestBase questBase)
+        {
+            if (condition.NpcId == Guid.Empty)
+            {
+                if (player.FightingNpcBaseIds.Count > 0 && Globals.Timing.Milliseconds < player.CombatTimer)
+                {
+                    foreach (var npcs in player.FightingListNpcs.Values)
+                    {
+                        foreach (var npc in npcs)
+                        {
+                            bool test = true;
+                            foreach (var perc in condition.Percents)
+                            {
+                                double value = 0;
+                                if (perc.Key < (int)Vitals.VitalCount)
+                                {
+                                    value = npc.GetVital(perc.Key) * 100.0 / (double)npc.GetMaxVital(perc.Key);
+                                }
+                                else
+                                {
+                                    int s = perc.Key - (int)Vitals.VitalCount;
+                                    value = npc.Stat[s].Value() * 100.0 / (double)npc.BaseStats[s];
+                                }
+                                switch ((VariableComparators)perc.Value[1]) //Comparator
+                                {
+                                    case VariableComparators.Equal:
+                                        test &= (value == perc.Value[0]);
+                                        break;
+                                    case VariableComparators.GreaterOrEqual:
+                                        test &= (value >= perc.Value[0]);
+                                        break;
+                                    case VariableComparators.LesserOrEqual:
+                                        test &= (value <= perc.Value[0]);
+                                        break;
+                                    case VariableComparators.Greater:
+                                        test &= (value > perc.Value[0]);
+                                        break;
+                                    case VariableComparators.Less:
+                                        test &= (value < perc.Value[0]);
+                                        break;
+                                    case VariableComparators.NotEqual:
+                                        test &= (value != perc.Value[0]);
+                                        break;
+                                }
+                            }
+                            if (test)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (player.FightingNpcBaseIds.TryGetValue(condition.NpcId, out var timer) && Globals.Timing.Milliseconds < timer)
+                {
+                    if (player.FightingListNpcs.TryGetValue(condition.NpcId, out var npcs))
+                    {
+                        foreach (var npc in npcs)
+                        {
+                            bool test = true;
+                            foreach (var perc in condition.Percents)
+                            {
+                                double value = 0;
+                                if (perc.Key < (int)Vitals.VitalCount)
+                                {
+                                    value = npc.GetVital(perc.Key) * 100.0 / (double)npc.GetMaxVital(perc.Key);
+                                }
+                                else
+                                {
+                                    int s = perc.Key - (int)Vitals.VitalCount;
+                                    value = npc.Stat[s].Value() * 100.0 / (double)npc.BaseStats[s];
+                                }
+                                switch ((VariableComparators)perc.Value[1]) //Comparator
+                                {
+                                    case VariableComparators.Equal:
+                                        test &= (value == perc.Value[0]);
+                                        break;
+                                    case VariableComparators.GreaterOrEqual:
+                                        test &= (value >= perc.Value[0]);
+                                        break;
+                                    case VariableComparators.LesserOrEqual:
+                                        test &= (value <= perc.Value[0]);
+                                        break;
+                                    case VariableComparators.Greater:
+                                        test &= (value > perc.Value[0]);
+                                        break;
+                                    case VariableComparators.Less:
+                                        test &= (value < perc.Value[0]);
+                                        break;
+                                    case VariableComparators.NotEqual:
+                                        test &= (value != perc.Value[0]);
+                                        break;
+                                }
+                            }
+                            if (test)
+                            {
+                                return true;
+                            }
+                        }
                     }
                 }
             }

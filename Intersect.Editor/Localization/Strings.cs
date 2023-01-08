@@ -7,7 +7,7 @@ using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.Localization;
-
+using Intersect.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -289,16 +289,53 @@ namespace Intersect.Editor.Localization
             return Strings.EventConditionDesc.MapZoneTypeIs.ToString(Strings.MapProperties.zones[(int)condition.ZoneType]);
         }
 
-        public static string GetEventConditionalDesc(FightingNPC condition)
+        public static string GetEventConditionalDesc(FightingNPCPhase condition)
         {
+            string npcname = "";
             if (condition.NpcId == Guid.Empty)
             {
-                return Strings.EventConditionDesc.fighting.ToString(Strings.EventConditional.anynpc);
+                npcname = Strings.EventConditional.anynpc;
             }
             else
             {
-                return Strings.EventConditionDesc.fighting.ToString(NpcBase.GetName(condition.NpcId));
+                var npc = NpcBase.Get(condition.NpcId);
+                npcname = TextUtils.FormatEditorName(npc.Name, npc.EditorName);
             }
+            switch (condition.Progress)
+            {
+                case NpcPhasesProgressState.OnNonePhase:
+                    return Strings.EventConditionDesc.fightingphase.ToString(npcname, Strings.EventConditionDesc.onnonephase);
+                    break;
+                case NpcPhasesProgressState.OnAnyPhase:
+                    return Strings.EventConditionDesc.fightingphase.ToString(npcname, Strings.EventConditionDesc.onanyphase);
+                    break;
+                case NpcPhasesProgressState.BeforePhase:
+                    return Strings.EventConditionDesc.fightingphase.ToString(npcname, Strings.EventConditionDesc.beforephase);
+                    break;
+                case NpcPhasesProgressState.AfterPhase:
+                    return Strings.EventConditionDesc.fightingphase.ToString(npcname, Strings.EventConditionDesc.afterphase);
+                    break;
+                case NpcPhasesProgressState.OnPhase:
+                    return Strings.EventConditionDesc.fightingphase.ToString(npcname, Strings.EventConditionDesc.onphase);
+                    break;
+                default:
+                    return Strings.EventConditionDesc.fightingphase.ToString(npcname, Strings.EventConditionDesc.onnoneoranyphase);
+            }
+        }
+
+        public static string GetEventConditionalDesc(FightingNPCStats condition)
+        {
+            string npcname = "";
+            if (condition.NpcId == Guid.Empty)
+            {
+                npcname = Strings.EventConditional.anynpc;
+            }
+            else
+            {
+                var npc = NpcBase.Get(condition.NpcId);
+                npcname = TextUtils.FormatEditorName(npc.Name, npc.EditorName);
+            }
+            return Strings.EventConditionDesc.fightingstats.ToString(npcname);
         }
 
         public static string GetVariableComparisonString(VariableCompaison comparison)
@@ -2152,7 +2189,8 @@ Tick timer saved in server config.json.";
                 {18, @"Has X free Inventory slots..." },
                 {19, @"In Guild With At Least Rank..." },
                 {20, @"Map Zone Type is..." },
-                {21, @"Player is fighting NPC..." }
+                {21, @"Player is fighting NPC on Phase..." },
+                {22, @"Player is fighting NPC with Stats..." }
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2298,7 +2336,7 @@ Tick timer saved in server config.json.";
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString MapZoneTypeLabel = @"Zone Type:";
 
-            public static LocalizedString fightingnpc = @"Player is fighting NPC:";
+            public static LocalizedString fightingnpc = @"Player is fighting NPC on Phase";
 
             public static LocalizedString fightnpc = @"NPC:";
 
@@ -2317,6 +2355,31 @@ Tick timer saved in server config.json.";
                 {4, @"After Phase..."},
                 {5, @"On Phase..."},
             };
+
+            public static LocalizedString fightingstats = @"Player is fighting NPC with Stats:";
+
+            public static LocalizedString statsnpc = @"NPC:";
+
+            public static LocalizedString any = @"Any";
+
+            public static LocalizedString percent = @"%";
+
+            public static LocalizedString npchp = @"HP:";
+
+            public static LocalizedString npcmana = @"Mana:";
+
+            public static LocalizedString npcattack = @"Attack:";
+
+            public static LocalizedString npcmagic = @"Magic:";
+
+            public static LocalizedString npcdefense = @"Defense:";
+
+            public static LocalizedString npcmr = @"Magic Resist:";
+
+            public static LocalizedString npcspeed = @"Speed:";
+
+
+
         }
 
         public struct EventConditionDesc
@@ -2420,7 +2483,21 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString True = @"True";
 
-            public static LocalizedString fighting = @"Player is fighting NPC: {00}";
+            public static LocalizedString fightingphase = @"Player is fighting NPC {00} {01}";
+
+            public static LocalizedString onnoneoranyphase = @"on None or Any Phase";
+
+            public static LocalizedString onnonephase = @"on None Phase";
+
+            public static LocalizedString onanyphase = @"on Any Phase";
+
+            public static LocalizedString beforephase = @"Before Phase ...";
+
+            public static LocalizedString afterphase = @"After Phase ...";
+
+            public static LocalizedString onphase = @"On Phase ...";
+
+            public static LocalizedString fightingstats = @"Player is fighting NPC {00} with Vitals/Stats ...";
 
         }
 

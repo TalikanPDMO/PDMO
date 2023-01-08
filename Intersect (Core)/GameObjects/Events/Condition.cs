@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections.Generic;
 using Intersect.Enums;
 
 namespace Intersect.GameObjects.Events
@@ -44,7 +44,9 @@ namespace Intersect.GameObjects.Events
 
         MapZoneTypeIs,
 
-        FightingNPC
+        FightingNPCPhase,
+
+        FightingNPCStats
 
     }
 
@@ -297,21 +299,31 @@ namespace Intersect.GameObjects.Events
     /// <summary>
     /// Defines the condition class used when checking if a player is fighting with a specific NPC.
     /// </summary>
-    public class FightingNPC : Condition
+    public class FightingNPCPhase : Condition
     {
         /// <summary>
         /// Defines the type of condition.
         /// </summary>
-        public override ConditionTypes Type { get; } = ConditionTypes.FightingNPC;
+        public override ConditionTypes Type { get; } = ConditionTypes.FightingNPCPhase;
 
-        /// <summary>
-        /// Defines the map Zone Type to compare to.
-        /// </summary>
         public Guid NpcId { get; set; }
 
         public NpcPhasesProgressState Progress { get; set; } = NpcPhasesProgressState.OnNoneOrAnyPhase;
 
         public Guid PhaseId { get; set; }
+    }
+
+    public class FightingNPCStats : Condition
+    {
+        /// <summary>
+        /// Defines the type of condition.
+        /// </summary>
+        public override ConditionTypes Type { get; } = ConditionTypes.FightingNPCStats;
+
+        public Guid NpcId { get; set; }
+
+        public Dictionary<int, int[]> Percents { get; set; } = new Dictionary<int, int[]>();
+
     }
 
     public class VariableCompaison

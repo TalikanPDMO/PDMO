@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-
+using DarkUI.Controls;
 using Intersect.Editor.Localization;
 using Intersect.Enums;
 using Intersect.GameObjects;
@@ -246,7 +246,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 cmbMapZoneType.Items.Add(Strings.MapProperties.zones[i]);
             }
 
-            // Fighting NPC
+            // Fighting NPC Phase
             grpFightingNPC.Text = Strings.EventConditional.fightingnpc;
             lblFightNpc.Text = Strings.EventConditional.fightnpc;
             cmbFightNpc.Items.Clear();
@@ -257,6 +257,58 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 cmbIsOnPhase.Items.Add(Strings.EventConditional.phasecomparators[i]);
             }
             lblNpcPhase.Text = Strings.EventConditional.npcphase;
+
+            // Fighting NPC Stats
+            grpFightingStats.Text = Strings.EventConditional.fightingstats;
+            lblNpcStats.Text = Strings.EventConditional.statsnpc;
+            cmbStatsNpc.Items.Clear();
+
+            lblNpcHp.Text = Strings.EventConditional.npchp;
+            cmbNpcHpComp.Items.Clear();
+            cmbNpcHpComp.Items.Add(Strings.EventConditional.any);
+            lblHpPerc.Text = Strings.EventConditional.percent;
+
+            lblNpcMana.Text = Strings.EventConditional.npcmana;
+            cmbNpcManaComp.Items.Clear();
+            cmbNpcManaComp.Items.Add(Strings.EventConditional.any);
+            lblManaPerc.Text = Strings.EventConditional.percent;
+
+            lblNpcAttack.Text = Strings.EventConditional.npcattack;
+            cmbNpcAttackComp.Items.Clear();
+            cmbNpcAttackComp.Items.Add(Strings.EventConditional.any);
+            lblAttackPerc.Text = Strings.EventConditional.percent;
+
+            lblNpcMagic.Text = Strings.EventConditional.npcmagic;
+            cmbNpcMagicComp.Items.Clear();
+            cmbNpcMagicComp.Items.Add(Strings.EventConditional.any);
+            lblMagicPerc.Text = Strings.EventConditional.percent;
+
+            lblNpcDefense.Text = Strings.EventConditional.npcdefense;
+            cmbNpcDefenseComp.Items.Clear();
+            cmbNpcDefenseComp.Items.Add(Strings.EventConditional.any);
+            lblDefensePerc.Text = Strings.EventConditional.percent;
+
+            lblNpcMR.Text = Strings.EventConditional.npcmr;
+            cmbNpcMRComp.Items.Clear();
+            cmbNpcMRComp.Items.Add(Strings.EventConditional.any);
+            lblMRPerc.Text = Strings.EventConditional.percent;
+
+            lblNpcSpeed.Text = Strings.EventConditional.npcspeed;
+            cmbNpcSpeedComp.Items.Clear();
+            cmbNpcSpeedComp.Items.Add(Strings.EventConditional.any);
+            lblSpeedPerc.Text = Strings.EventConditional.percent;
+
+            for (var i = 0; i < Strings.EventConditional.comparators.Count; i++)
+            {
+                cmbNpcHpComp.Items.Add(Strings.EventConditional.comparators[i]);
+                cmbNpcManaComp.Items.Add(Strings.EventConditional.comparators[i]);
+                cmbNpcAttackComp.Items.Add(Strings.EventConditional.comparators[i]);
+                cmbNpcMagicComp.Items.Add(Strings.EventConditional.comparators[i]);
+                cmbNpcDefenseComp.Items.Add(Strings.EventConditional.comparators[i]);
+                cmbNpcMRComp.Items.Add(Strings.EventConditional.comparators[i]);
+                cmbNpcSpeedComp.Items.Add(Strings.EventConditional.comparators[i]);
+            }
+            
             btnSave.Text = Strings.EventConditional.okay;
             btnCancel.Text = Strings.EventConditional.cancel;
         }
@@ -387,14 +439,37 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     }
 
                     break;
-                case ConditionTypes.FightingNPC:
-                    Condition = new FightingNPC();
+                case ConditionTypes.FightingNPCPhase:
+                    Condition = new FightingNPCPhase();
                     if (cmbFightNpc.Items.Count > 0)
                     {
                         cmbFightNpc.SelectedIndex = 0;
                     }
 
                     cmbIsOnPhase.SelectedIndex = 0;
+
+                    break;
+                case ConditionTypes.FightingNPCStats:
+                    Condition = new FightingNPCStats();
+                    if (cmbStatsNpc.Items.Count > 0)
+                    {
+                        cmbStatsNpc.SelectedIndex = 0;
+                    }
+                    nudNpcHp.Value = 100;
+                    nudNpcMana.Value = 100;
+                    nudNpcAttack.Value = 100;
+                    nudNpcMagic.Value = 100;
+                    nudNpcDefense.Value = 100;
+                    nudNpcMR.Value = 100;
+                    nudNpcSpeed.Value = 100;
+
+                    cmbNpcHpComp.SelectedIndex = 0;
+                    cmbNpcManaComp.SelectedIndex = 0;
+                    cmbNpcAttackComp.SelectedIndex = 0;
+                    cmbNpcMagicComp.SelectedIndex = 0;
+                    cmbNpcDefenseComp.SelectedIndex = 0;
+                    cmbNpcMRComp.SelectedIndex = 0;
+                    cmbNpcSpeedComp.SelectedIndex = 0;
 
                     break;
                 default:
@@ -421,6 +496,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             grpInGuild.Hide();
             grpMapZoneType.Hide();
             grpFightingNPC.Hide();
+            grpFightingStats.Hide();
             switch (type)
             {
                 case ConditionTypes.VariableIs:
@@ -538,11 +614,18 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     grpMapZoneType.Show();
 
                     break;
-                case ConditionTypes.FightingNPC:
+                case ConditionTypes.FightingNPCPhase:
                     grpFightingNPC.Show();
                     cmbFightNpc.Items.Clear();
                     cmbFightNpc.Items.Add(Strings.EventConditional.anynpc);
                     cmbFightNpc.Items.AddRange(NpcBase.EditorFormatNames);
+
+                    break;
+                case ConditionTypes.FightingNPCStats:
+                    grpFightingStats.Show();
+                    cmbStatsNpc.Items.Clear();
+                    cmbStatsNpc.Items.Add(Strings.EventConditional.anynpc);
+                    cmbStatsNpc.Items.AddRange(NpcBase.EditorFormatNames);
 
                     break;
                 default:
@@ -694,6 +777,61 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     {
                         cmbNpcPhase.SelectedIndex = -1;
                     }
+                }
+            }
+        }
+
+        private void cmbAnyPhaseStat_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DarkComboBox comboBox = (DarkComboBox)sender;
+            DarkNumericUpDown nud = null;
+            Label lbl = null;
+            if (comboBox == cmbNpcHpComp)
+            {
+                nud = nudNpcHp;
+                lbl = lblHpPerc;
+            }
+            else if (comboBox == cmbNpcManaComp)
+            {
+                nud = nudNpcMana;
+                lbl = lblManaPerc;
+            }
+            else if (comboBox == cmbNpcAttackComp)
+            {
+                nud = nudNpcAttack;
+                lbl = lblAttackPerc;
+            }
+            else if (comboBox == cmbNpcMagicComp)
+            {
+                nud = nudNpcMagic;
+                lbl = lblMagicPerc;
+            }
+            else if (comboBox == cmbNpcDefenseComp)
+            {
+                nud = nudNpcDefense;
+                lbl = lblDefensePerc;
+            }
+            else if (comboBox == cmbNpcMRComp)
+            {
+                nud = nudNpcMR;
+                lbl = lblMRPerc;
+            }
+            else if (comboBox == cmbNpcSpeedComp)
+            {
+                nud = nudNpcSpeed;
+                lbl = lblSpeedPerc;
+            }
+            if (nud != null)
+            {
+                if (comboBox.SelectedIndex > 0)
+                {
+                    nud.Enabled = true;
+                    lbl.ForeColor = System.Drawing.Color.Gainsboro;
+                }
+                else
+                {
+                    nud.Enabled = false;
+                    lbl.ForeColor = System.Drawing.Color.Gray;
                 }
             }
         }
@@ -1268,7 +1406,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             }
         }
 
-        private void SetupFormValues(FightingNPC condition)
+        private void SetupFormValues(FightingNPCPhase condition)
         {
             if (cmbFightNpc.Items.Count > 0)
             {
@@ -1304,6 +1442,61 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             }
         }
 
+        private void SetupFormValues(FightingNPCStats condition)
+        {
+            if (cmbStatsNpc.Items.Count > 0)
+            {
+                if (condition.NpcId == Guid.Empty)
+                {
+                    cmbStatsNpc.SelectedIndex = 0;
+                }
+                else
+                {
+                    cmbStatsNpc.SelectedIndex = NpcBase.ListIndex(condition.NpcId) + 1;
+                }
+            }
+            cmbNpcHpComp.SelectedIndex = 0;
+            cmbNpcManaComp.SelectedIndex = 0;
+            cmbNpcAttackComp.SelectedIndex = 0;
+            cmbNpcMagicComp.SelectedIndex = 0;
+            cmbNpcDefenseComp.SelectedIndex = 0;
+            cmbNpcMRComp.SelectedIndex = 0;
+            cmbNpcSpeedComp.SelectedIndex = 0;
+            foreach (var perc in condition.Percents)
+            {
+                switch((PhaseStats)perc.Key)
+                {
+                    case PhaseStats.Health:
+                        nudNpcHp.Value = perc.Value[0];
+                        cmbNpcHpComp.SelectedIndex = perc.Value[1] + 1;
+                        break;
+                    case PhaseStats.Mana:
+                        nudNpcMana.Value = perc.Value[0];
+                        cmbNpcManaComp.SelectedIndex = perc.Value[1] + 1;
+                        break;
+                    case PhaseStats.Attack:
+                        nudNpcAttack.Value = perc.Value[0];
+                        cmbNpcAttackComp.SelectedIndex = perc.Value[1] + 1;
+                        break;
+                    case PhaseStats.AbilityPower:
+                        nudNpcMagic.Value = perc.Value[0];
+                        cmbNpcMagicComp.SelectedIndex = perc.Value[1] + 1;
+                        break;
+                    case PhaseStats.Defense:
+                        nudNpcDefense.Value = perc.Value[0];
+                        cmbNpcDefenseComp.SelectedIndex = perc.Value[1] + 1;
+                        break;
+                    case PhaseStats.MagicResist:
+                        nudNpcMR.Value = perc.Value[0];
+                        cmbNpcMRComp.SelectedIndex = perc.Value[1] + 1;
+                        break;
+                    case PhaseStats.Speed:
+                        nudNpcSpeed.Value = perc.Value[0];
+                        cmbNpcSpeedComp.SelectedIndex = perc.Value[1] + 1;
+                        break;
+                }
+            }
+        }
 
         #endregion
 
@@ -1459,7 +1652,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             }
         }
 
-        private void SaveFormValues(FightingNPC condition)
+        private void SaveFormValues(FightingNPCPhase condition)
         {
             condition.NpcId = Guid.Empty;
             condition.Progress = (NpcPhasesProgressState)cmbIsOnPhase.SelectedIndex;
@@ -1478,6 +1671,44 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                         }
                     }
                 }
+            }
+        }
+
+        private void SaveFormValues(FightingNPCStats condition)
+        {
+            condition.NpcId = Guid.Empty;
+            condition.Percents.Clear();
+            if (cmbStatsNpc.SelectedIndex > 0)
+            {
+                condition.NpcId = NpcBase.IdFromList(cmbStatsNpc.SelectedIndex - 1);
+            }
+            if (cmbNpcHpComp.SelectedIndex > 0)
+            {
+                condition.Percents.Add((int)PhaseStats.Health, new int[2] { (int)nudNpcHp.Value, cmbNpcHpComp.SelectedIndex - 1 });
+            }
+            if (cmbNpcManaComp.SelectedIndex > 0)
+            {
+                condition.Percents.Add((int)PhaseStats.Mana, new int[2] { (int)nudNpcMana.Value, cmbNpcManaComp.SelectedIndex - 1 });
+            }
+            if (cmbNpcAttackComp.SelectedIndex > 0)
+            {
+                condition.Percents.Add((int)PhaseStats.Attack, new int[2] { (int)nudNpcAttack.Value, cmbNpcAttackComp.SelectedIndex - 1 });
+            }
+            if (cmbNpcMagicComp.SelectedIndex > 0)
+            {
+                condition.Percents.Add((int)PhaseStats.AbilityPower, new int[2] { (int)nudNpcMagic.Value, cmbNpcMagicComp.SelectedIndex - 1 });
+            }
+            if (cmbNpcDefenseComp.SelectedIndex > 0)
+            {
+                condition.Percents.Add((int)PhaseStats.Defense, new int[2] { (int)nudNpcDefense.Value, cmbNpcDefenseComp.SelectedIndex - 1 });
+            }
+            if (cmbNpcMRComp.SelectedIndex > 0)
+            {
+                condition.Percents.Add((int)PhaseStats.MagicResist, new int[2] { (int)nudNpcMR.Value, cmbNpcMRComp.SelectedIndex - 1 });
+            }
+            if (cmbNpcSpeedComp.SelectedIndex > 0)
+            {
+                condition.Percents.Add((int)PhaseStats.Speed, new int[2] { (int)nudNpcSpeed.Value, cmbNpcSpeedComp.SelectedIndex - 1 });
             }
         }
 
