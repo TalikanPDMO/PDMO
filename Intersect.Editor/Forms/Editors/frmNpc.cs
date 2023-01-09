@@ -586,7 +586,7 @@ namespace Intersect.Editor.Forms.Editors
             var npcPhase = new NpcPhase(Guid.NewGuid());
             npcPhase.EditingEvent = new EventBase(npcPhase.Id, Guid.Empty, 0, 0, false);
             mEditorItem.AddEvents.Add(npcPhase.Id);
-            if (OpenPhaseEditor(npcPhase))
+            if (OpenPhaseEditor(npcPhase, true))
             {
                 mEditorItem.NpcPhases.Add(npcPhase);
                 ListNpcPhases();
@@ -613,13 +613,16 @@ namespace Intersect.Editor.Forms.Editors
             lstPhases.Items.Clear();
             foreach (var phase in mEditorItem.NpcPhases)
             {
-                lstPhases.Items.Add(phase?.Name);
+                if (phase != null)
+                {
+                    lstPhases.Items.Add(Strings.NpcEditor.displayphase.ToString(mEditorItem.GetPhaseIndex(phase.Id)+1 , phase.Name));
+                }
             }
         }
 
-        private bool OpenPhaseEditor(NpcPhase phase)
+        private bool OpenPhaseEditor(NpcPhase phase, bool isAddPhase = false)
         {
-            var cmdWindow = new NpcPhaseEditor(mEditorItem, phase);
+            var cmdWindow = new NpcPhaseEditor(mEditorItem, phase, isAddPhase);
             var frm = new Form
             {
                 Text = Strings.NpcPhaseEditor.title

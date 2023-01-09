@@ -215,8 +215,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpConditional.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpConditional.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpConditional.Controls.Add(this.grpFightingStats);
             this.grpConditional.Controls.Add(this.grpFightingNPC);
+            this.grpConditional.Controls.Add(this.grpFightingStats);
             this.grpConditional.Controls.Add(this.grpMapZoneType);
             this.grpConditional.Controls.Add(this.grpInGuild);
             this.grpConditional.Controls.Add(this.chkHasElse);
@@ -731,9 +731,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbNpcPhase.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbNpcPhase.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbNpcPhase.FormattingEnabled = true;
-            this.cmbNpcPhase.Location = new System.Drawing.Point(92, 72);
+            this.cmbNpcPhase.Location = new System.Drawing.Point(60, 72);
             this.cmbNpcPhase.Name = "cmbNpcPhase";
-            this.cmbNpcPhase.Size = new System.Drawing.Size(162, 21);
+            this.cmbNpcPhase.Size = new System.Drawing.Size(190, 21);
             this.cmbNpcPhase.TabIndex = 8;
             this.cmbNpcPhase.Text = null;
             this.cmbNpcPhase.TextPadding = new System.Windows.Forms.Padding(2);
@@ -760,9 +760,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbIsOnPhase.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbIsOnPhase.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbIsOnPhase.FormattingEnabled = true;
-            this.cmbIsOnPhase.Location = new System.Drawing.Point(92, 45);
+            this.cmbIsOnPhase.Location = new System.Drawing.Point(60, 45);
             this.cmbIsOnPhase.Name = "cmbIsOnPhase";
-            this.cmbIsOnPhase.Size = new System.Drawing.Size(162, 21);
+            this.cmbIsOnPhase.Size = new System.Drawing.Size(190, 21);
             this.cmbIsOnPhase.TabIndex = 6;
             this.cmbIsOnPhase.Text = null;
             this.cmbIsOnPhase.TextPadding = new System.Windows.Forms.Padding(2);
@@ -790,9 +790,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbFightNpc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbFightNpc.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbFightNpc.FormattingEnabled = true;
-            this.cmbFightNpc.Location = new System.Drawing.Point(92, 18);
+            this.cmbFightNpc.Location = new System.Drawing.Point(60, 18);
             this.cmbFightNpc.Name = "cmbFightNpc";
-            this.cmbFightNpc.Size = new System.Drawing.Size(162, 21);
+            this.cmbFightNpc.Size = new System.Drawing.Size(190, 21);
             this.cmbFightNpc.TabIndex = 3;
             this.cmbFightNpc.Text = null;
             this.cmbFightNpc.TextPadding = new System.Windows.Forms.Padding(2);

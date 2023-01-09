@@ -766,7 +766,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 {
                     foreach (var phase in npc.NpcPhases)
                     {
-                        cmbNpcPhase.Items.Add(phase.Name);
+                        cmbNpcPhase.Items.Add(Strings.EventConditional.displayphase.ToString(npc.GetPhaseIndex(phase.Id)+1, phase.Name));
                     }
 
                     if (cmbNpcPhase.Items.Count > 0)

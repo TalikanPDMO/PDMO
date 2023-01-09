@@ -26,7 +26,7 @@ namespace Intersect.Editor.Forms.Editors
         private NpcPhase mMyPhase;
         public string mEventBackup = null;
         public string mPhaseBackup = null;
-        public NpcPhaseEditor(NpcBase refNpc, NpcPhase refPhase)
+        public NpcPhaseEditor(NpcBase refNpc, NpcPhase refPhase, bool isAddPhase = false)
         {
             if (refNpc == null)
             {
@@ -44,6 +44,14 @@ namespace Intersect.Editor.Forms.Editors
             InitLocalization();
             if (mMyPhase != null)
             {
+                if (isAddPhase)
+                {
+                    lblIndex.Text = Strings.NpcPhaseEditor.phaseindex.ToString(mMyNpc.NpcPhases.Count + 1);
+                }
+                else
+                {
+                    lblIndex.Text = Strings.NpcPhaseEditor.phaseindex.ToString(mMyNpc?.GetPhaseIndex(mMyPhase.Id) + 1);
+                }
                 txtName.Text = mMyPhase.Name;
                 cmbSprite.Items.Clear();
                 cmbSprite.Items.Add(Strings.General.none);
@@ -59,6 +67,7 @@ namespace Intersect.Editor.Forms.Editors
                     nudRgbaG.Value = mMyPhase.Color?.G ?? 255;
                     nudRgbaB.Value = mMyPhase.Color?.B ?? 255;
                     nudRgbaA.Value = mMyPhase.Color?.A ?? 255;
+                    cmbSprite.Enabled = true;
                     nudRgbaR.Enabled = true;
                     nudRgbaG.Enabled = true;
                     nudRgbaB.Enabled = true;
@@ -72,6 +81,7 @@ namespace Intersect.Editor.Forms.Editors
                     nudRgbaG.Value = mMyNpc.Color.G;
                     nudRgbaB.Value = mMyNpc.Color.B;
                     nudRgbaA.Value = mMyNpc.Color.A;
+                    cmbSprite.Enabled = false;
                     nudRgbaR.Enabled = false;
                     nudRgbaG.Enabled = false;
                     nudRgbaB.Enabled = false;
