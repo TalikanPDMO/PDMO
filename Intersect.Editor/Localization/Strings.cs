@@ -4252,7 +4252,17 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString name = @"Name:";
 
-            public static LocalizedString desc = @"Desc:";
+            public static LocalizedString sprite = @"Sprite Modifier";
+
+            public static LocalizedString red = @"Red:";
+
+            public static LocalizedString green = @"Green:";
+
+            public static LocalizedString blue = @"Blue:";
+
+            public static LocalizedString alpha = @"Alpha:";
+
+            public static LocalizedString changesprite = @"Replace base?";
 
             public static LocalizedString spells = @"Spells Modifier";
 

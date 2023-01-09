@@ -42,9 +42,23 @@ namespace Intersect.Editor.Forms.Editors
             this.btnEditBeginEvent = new DarkUI.Controls.DarkButton();
             this.txtName = new DarkUI.Controls.DarkTextBox();
             this.lblName = new System.Windows.Forms.Label();
-            this.lblDesc = new System.Windows.Forms.Label();
-            this.txtDesc = new DarkUI.Controls.DarkTextBox();
             this.grpEditor = new DarkUI.Controls.DarkGroupBox();
+            this.grpSprite = new DarkUI.Controls.DarkGroupBox();
+            this.lblAlpha = new System.Windows.Forms.Label();
+            this.nudRgbaA = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblGreen = new System.Windows.Forms.Label();
+            this.nudRgbaG = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblBlue = new System.Windows.Forms.Label();
+            this.nudRgbaB = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblRed = new System.Windows.Forms.Label();
+            this.nudRgbaR = new DarkUI.Controls.DarkNumericUpDown();
+            this.cmbSprite = new DarkUI.Controls.DarkComboBox();
+            this.picNpc = new System.Windows.Forms.PictureBox();
+            this.chkChangeSprite = new DarkUI.Controls.DarkCheckBox();
+            this.grpDuration = new DarkUI.Controls.DarkGroupBox();
+            this.chkDurationEnable = new DarkUI.Controls.DarkCheckBox();
+            this.nudDuration = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblDurationMs = new System.Windows.Forms.Label();
             this.grpAttackSpeed = new DarkUI.Controls.DarkGroupBox();
             this.chkChangeAttackSpeed = new DarkUI.Controls.DarkCheckBox();
             this.nudAttackSpeedValue = new DarkUI.Controls.DarkNumericUpDown();
@@ -90,15 +104,19 @@ namespace Intersect.Editor.Forms.Editors
             this.lblMag = new System.Windows.Forms.Label();
             this.lblStr = new System.Windows.Forms.Label();
             this.grpPhaseBegin = new DarkUI.Controls.DarkGroupBox();
-            this.btnEditConditions = new DarkUI.Controls.DarkButton();
-            this.cmbBeginAnimation = new DarkUI.Controls.DarkComboBox();
             this.lblBeginAnimation = new System.Windows.Forms.Label();
-            this.grpDuration = new DarkUI.Controls.DarkGroupBox();
-            this.chkDurationEnable = new DarkUI.Controls.DarkCheckBox();
-            this.nudDuration = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblDurationMs = new System.Windows.Forms.Label();
+            this.cmbBeginAnimation = new DarkUI.Controls.DarkComboBox();
+            this.btnEditConditions = new DarkUI.Controls.DarkButton();
             this.grpSpells.SuspendLayout();
             this.grpEditor.SuspendLayout();
+            this.grpSprite.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRgbaA)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRgbaG)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRgbaB)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRgbaR)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picNpc)).BeginInit();
+            this.grpDuration.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDuration)).BeginInit();
             this.grpAttackSpeed.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudAttackSpeedValue)).BeginInit();
             this.grpCombat.SuspendLayout();
@@ -116,8 +134,6 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMagPercentage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStrPercentage)).BeginInit();
             this.grpPhaseBegin.SuspendLayout();
-            this.grpDuration.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudDuration)).BeginInit();
             this.SuspendLayout();
             // 
             // grpSpells
@@ -131,7 +147,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpells.Controls.Add(this.btnAddSpell);
             this.grpSpells.Controls.Add(this.lstSpells);
             this.grpSpells.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpSpells.Location = new System.Drawing.Point(4, 123);
+            this.grpSpells.Location = new System.Drawing.Point(4, 153);
             this.grpSpells.Name = "grpSpells";
             this.grpSpells.Size = new System.Drawing.Size(203, 185);
             this.grpSpells.TabIndex = 28;
@@ -211,7 +227,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(86, 524);
+            this.btnCancel.Location = new System.Drawing.Point(86, 554);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -221,7 +237,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(5, 524);
+            this.btnSave.Location = new System.Drawing.Point(5, 554);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(75, 23);
@@ -258,40 +274,17 @@ namespace Intersect.Editor.Forms.Editors
             this.lblName.TabIndex = 34;
             this.lblName.Text = "Name:";
             // 
-            // lblDesc
-            // 
-            this.lblDesc.AutoSize = true;
-            this.lblDesc.Location = new System.Drawing.Point(154, 22);
-            this.lblDesc.Name = "lblDesc";
-            this.lblDesc.Size = new System.Drawing.Size(35, 13);
-            this.lblDesc.TabIndex = 36;
-            this.lblDesc.Text = "Desc:";
-            // 
-            // txtDesc
-            // 
-            this.txtDesc.AcceptsReturn = true;
-            this.txtDesc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtDesc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtDesc.Location = new System.Drawing.Point(195, 20);
-            this.txtDesc.Multiline = true;
-            this.txtDesc.Name = "txtDesc";
-            this.txtDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtDesc.Size = new System.Drawing.Size(173, 47);
-            this.txtDesc.TabIndex = 37;
-            // 
             // grpEditor
             // 
             this.grpEditor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEditor.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEditor.Controls.Add(this.grpSprite);
             this.grpEditor.Controls.Add(this.grpDuration);
             this.grpEditor.Controls.Add(this.grpAttackSpeed);
             this.grpEditor.Controls.Add(this.grpCombat);
             this.grpEditor.Controls.Add(this.grpRegen);
             this.grpEditor.Controls.Add(this.grpStats);
             this.grpEditor.Controls.Add(this.grpPhaseBegin);
-            this.grpEditor.Controls.Add(this.txtDesc);
-            this.grpEditor.Controls.Add(this.lblDesc);
             this.grpEditor.Controls.Add(this.lblName);
             this.grpEditor.Controls.Add(this.txtName);
             this.grpEditor.Controls.Add(this.btnSave);
@@ -300,10 +293,245 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEditor.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpEditor.Location = new System.Drawing.Point(0, 2);
             this.grpEditor.Name = "grpEditor";
-            this.grpEditor.Size = new System.Drawing.Size(373, 554);
+            this.grpEditor.Size = new System.Drawing.Size(373, 583);
             this.grpEditor.TabIndex = 18;
             this.grpEditor.TabStop = false;
             this.grpEditor.Text = "Phase Editor";
+            // 
+            // grpSprite
+            // 
+            this.grpSprite.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpSprite.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpSprite.Controls.Add(this.lblAlpha);
+            this.grpSprite.Controls.Add(this.nudRgbaA);
+            this.grpSprite.Controls.Add(this.lblGreen);
+            this.grpSprite.Controls.Add(this.nudRgbaG);
+            this.grpSprite.Controls.Add(this.lblBlue);
+            this.grpSprite.Controls.Add(this.nudRgbaB);
+            this.grpSprite.Controls.Add(this.lblRed);
+            this.grpSprite.Controls.Add(this.nudRgbaR);
+            this.grpSprite.Controls.Add(this.cmbSprite);
+            this.grpSprite.Controls.Add(this.picNpc);
+            this.grpSprite.Controls.Add(this.chkChangeSprite);
+            this.grpSprite.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpSprite.Location = new System.Drawing.Point(144, 7);
+            this.grpSprite.Name = "grpSprite";
+            this.grpSprite.Size = new System.Drawing.Size(224, 97);
+            this.grpSprite.TabIndex = 66;
+            this.grpSprite.TabStop = false;
+            this.grpSprite.Text = "Sprite Modifier";
+            // 
+            // lblAlpha
+            // 
+            this.lblAlpha.AutoSize = true;
+            this.lblAlpha.Location = new System.Drawing.Point(141, 75);
+            this.lblAlpha.Name = "lblAlpha";
+            this.lblAlpha.Size = new System.Drawing.Size(37, 13);
+            this.lblAlpha.TabIndex = 83;
+            this.lblAlpha.Text = "Alpha:";
+            // 
+            // nudRgbaA
+            // 
+            this.nudRgbaA.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudRgbaA.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudRgbaA.Location = new System.Drawing.Point(180, 73);
+            this.nudRgbaA.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudRgbaA.Name = "nudRgbaA";
+            this.nudRgbaA.Size = new System.Drawing.Size(42, 20);
+            this.nudRgbaA.TabIndex = 82;
+            this.nudRgbaA.Value = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudRgbaA.ValueChanged += new System.EventHandler(this.DrawNpcSprite);
+            // 
+            // lblGreen
+            // 
+            this.lblGreen.AutoSize = true;
+            this.lblGreen.Location = new System.Drawing.Point(141, 52);
+            this.lblGreen.Name = "lblGreen";
+            this.lblGreen.Size = new System.Drawing.Size(39, 13);
+            this.lblGreen.TabIndex = 81;
+            this.lblGreen.Text = "Green:";
+            // 
+            // nudRgbaG
+            // 
+            this.nudRgbaG.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudRgbaG.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudRgbaG.Location = new System.Drawing.Point(180, 50);
+            this.nudRgbaG.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudRgbaG.Name = "nudRgbaG";
+            this.nudRgbaG.Size = new System.Drawing.Size(42, 20);
+            this.nudRgbaG.TabIndex = 80;
+            this.nudRgbaG.Value = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudRgbaG.ValueChanged += new System.EventHandler(this.DrawNpcSprite);
+            // 
+            // lblBlue
+            // 
+            this.lblBlue.AutoSize = true;
+            this.lblBlue.Location = new System.Drawing.Point(67, 75);
+            this.lblBlue.Name = "lblBlue";
+            this.lblBlue.Size = new System.Drawing.Size(31, 13);
+            this.lblBlue.TabIndex = 79;
+            this.lblBlue.Text = "Blue:";
+            // 
+            // nudRgbaB
+            // 
+            this.nudRgbaB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudRgbaB.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudRgbaB.Location = new System.Drawing.Point(98, 73);
+            this.nudRgbaB.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudRgbaB.Name = "nudRgbaB";
+            this.nudRgbaB.Size = new System.Drawing.Size(42, 20);
+            this.nudRgbaB.TabIndex = 78;
+            this.nudRgbaB.Value = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudRgbaB.ValueChanged += new System.EventHandler(this.DrawNpcSprite);
+            // 
+            // lblRed
+            // 
+            this.lblRed.AutoSize = true;
+            this.lblRed.Location = new System.Drawing.Point(67, 52);
+            this.lblRed.Name = "lblRed";
+            this.lblRed.Size = new System.Drawing.Size(30, 13);
+            this.lblRed.TabIndex = 77;
+            this.lblRed.Text = "Red:";
+            // 
+            // nudRgbaR
+            // 
+            this.nudRgbaR.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudRgbaR.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudRgbaR.Location = new System.Drawing.Point(98, 50);
+            this.nudRgbaR.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudRgbaR.Name = "nudRgbaR";
+            this.nudRgbaR.Size = new System.Drawing.Size(42, 20);
+            this.nudRgbaR.TabIndex = 76;
+            this.nudRgbaR.Value = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudRgbaR.ValueChanged += new System.EventHandler(this.DrawNpcSprite);
+            // 
+            // cmbSprite
+            // 
+            this.cmbSprite.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbSprite.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbSprite.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbSprite.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbSprite.DrawDropdownHoverOutline = false;
+            this.cmbSprite.DrawFocusRectangle = false;
+            this.cmbSprite.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbSprite.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSprite.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbSprite.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbSprite.FormattingEnabled = true;
+            this.cmbSprite.Items.AddRange(new object[] {
+            "None"});
+            this.cmbSprite.Location = new System.Drawing.Point(69, 26);
+            this.cmbSprite.Name = "cmbSprite";
+            this.cmbSprite.Size = new System.Drawing.Size(153, 21);
+            this.cmbSprite.TabIndex = 67;
+            this.cmbSprite.Text = "None";
+            this.cmbSprite.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbSprite.SelectedIndexChanged += new System.EventHandler(this.DrawNpcSprite);
+            this.cmbSprite.EnabledChanged += new System.EventHandler(this.comboBoxes_EnableChanged);
+            // 
+            // picNpc
+            // 
+            this.picNpc.BackColor = System.Drawing.Color.Black;
+            this.picNpc.Location = new System.Drawing.Point(3, 26);
+            this.picNpc.Name = "picNpc";
+            this.picNpc.Size = new System.Drawing.Size(64, 64);
+            this.picNpc.TabIndex = 52;
+            this.picNpc.TabStop = false;
+            // 
+            // chkChangeSprite
+            // 
+            this.chkChangeSprite.AutoSize = true;
+            this.chkChangeSprite.Location = new System.Drawing.Point(124, 8);
+            this.chkChangeSprite.Name = "chkChangeSprite";
+            this.chkChangeSprite.Size = new System.Drawing.Size(98, 17);
+            this.chkChangeSprite.TabIndex = 51;
+            this.chkChangeSprite.Text = "Replace base?";
+            this.chkChangeSprite.CheckedChanged += new System.EventHandler(this.chkChangeSprite_CheckedChanged);
+            // 
+            // grpDuration
+            // 
+            this.grpDuration.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpDuration.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDuration.Controls.Add(this.chkDurationEnable);
+            this.grpDuration.Controls.Add(this.nudDuration);
+            this.grpDuration.Controls.Add(this.lblDurationMs);
+            this.grpDuration.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpDuration.Location = new System.Drawing.Point(168, 543);
+            this.grpDuration.Name = "grpDuration";
+            this.grpDuration.Size = new System.Drawing.Size(200, 38);
+            this.grpDuration.TabIndex = 65;
+            this.grpDuration.TabStop = false;
+            this.grpDuration.Text = "Phase Duration";
+            // 
+            // chkDurationEnable
+            // 
+            this.chkDurationEnable.AutoSize = true;
+            this.chkDurationEnable.Location = new System.Drawing.Point(5, 16);
+            this.chkDurationEnable.Name = "chkDurationEnable";
+            this.chkDurationEnable.Size = new System.Drawing.Size(59, 17);
+            this.chkDurationEnable.TabIndex = 51;
+            this.chkDurationEnable.Text = "Enable";
+            this.chkDurationEnable.CheckedChanged += new System.EventHandler(this.chkDurationEnable_CheckedChanged);
+            // 
+            // nudDuration
+            // 
+            this.nudDuration.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudDuration.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudDuration.Location = new System.Drawing.Point(64, 15);
+            this.nudDuration.Maximum = new decimal(new int[] {
+            999999999,
+            0,
+            0,
+            0});
+            this.nudDuration.Name = "nudDuration";
+            this.nudDuration.Size = new System.Drawing.Size(109, 20);
+            this.nudDuration.TabIndex = 56;
+            this.nudDuration.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // lblDurationMs
+            // 
+            this.lblDurationMs.AutoSize = true;
+            this.lblDurationMs.Location = new System.Drawing.Point(173, 19);
+            this.lblDurationMs.Name = "lblDurationMs";
+            this.lblDurationMs.Size = new System.Drawing.Size(26, 13);
+            this.lblDurationMs.TabIndex = 29;
+            this.lblDurationMs.Text = "(ms)";
             // 
             // grpAttackSpeed
             // 
@@ -315,7 +543,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAttackSpeed.Controls.Add(this.cmbAttackSpeedModifier);
             this.grpAttackSpeed.Controls.Add(this.lblAttackSpeedModifier);
             this.grpAttackSpeed.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpAttackSpeed.Location = new System.Drawing.Point(218, 371);
+            this.grpAttackSpeed.Location = new System.Drawing.Point(218, 401);
             this.grpAttackSpeed.Name = "grpAttackSpeed";
             this.grpAttackSpeed.Size = new System.Drawing.Size(150, 88);
             this.grpAttackSpeed.TabIndex = 64;
@@ -411,7 +639,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCombat.Controls.Add(this.lblAttackAnimation);
             this.grpCombat.Controls.Add(this.lblDamage);
             this.grpCombat.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpCombat.Location = new System.Drawing.Point(4, 310);
+            this.grpCombat.Location = new System.Drawing.Point(4, 340);
             this.grpCombat.Name = "grpCombat";
             this.grpCombat.Size = new System.Drawing.Size(203, 202);
             this.grpCombat.TabIndex = 53;
@@ -650,7 +878,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpRegen.Controls.Add(this.lblHpRegen);
             this.grpRegen.Controls.Add(this.lblManaRegen);
             this.grpRegen.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpRegen.Location = new System.Drawing.Point(218, 291);
+            this.grpRegen.Location = new System.Drawing.Point(218, 321);
             this.grpRegen.Margin = new System.Windows.Forms.Padding(2);
             this.grpRegen.Name = "grpRegen";
             this.grpRegen.Padding = new System.Windows.Forms.Padding(2);
@@ -737,7 +965,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpStats.Controls.Add(this.lblMag);
             this.grpStats.Controls.Add(this.lblStr);
             this.grpStats.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpStats.Location = new System.Drawing.Point(218, 123);
+            this.grpStats.Location = new System.Drawing.Point(218, 153);
             this.grpStats.Name = "grpStats";
             this.grpStats.Size = new System.Drawing.Size(150, 163);
             this.grpStats.TabIndex = 51;
@@ -978,22 +1206,21 @@ namespace Intersect.Editor.Forms.Editors
             this.grpPhaseBegin.Controls.Add(this.btnEditConditions);
             this.grpPhaseBegin.Controls.Add(this.btnEditBeginEvent);
             this.grpPhaseBegin.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpPhaseBegin.Location = new System.Drawing.Point(4, 67);
+            this.grpPhaseBegin.Location = new System.Drawing.Point(4, 101);
             this.grpPhaseBegin.Name = "grpPhaseBegin";
             this.grpPhaseBegin.Size = new System.Drawing.Size(364, 50);
             this.grpPhaseBegin.TabIndex = 38;
             this.grpPhaseBegin.TabStop = false;
             this.grpPhaseBegin.Text = "Phase Beginning";
             // 
-            // btnEditConditions
+            // lblBeginAnimation
             // 
-            this.btnEditConditions.Location = new System.Drawing.Point(5, 22);
-            this.btnEditConditions.Name = "btnEditConditions";
-            this.btnEditConditions.Padding = new System.Windows.Forms.Padding(5);
-            this.btnEditConditions.Size = new System.Drawing.Size(109, 23);
-            this.btnEditConditions.TabIndex = 0;
-            this.btnEditConditions.Text = "Trigger Conditions";
-            this.btnEditConditions.Click += new System.EventHandler(this.btnEditConditions_Click);
+            this.lblBeginAnimation.AutoSize = true;
+            this.lblBeginAnimation.Location = new System.Drawing.Point(150, 10);
+            this.lblBeginAnimation.Name = "lblBeginAnimation";
+            this.lblBeginAnimation.Size = new System.Drawing.Size(81, 13);
+            this.lblBeginAnimation.TabIndex = 66;
+            this.lblBeginAnimation.Text = "NPC Animation:";
             // 
             // cmbBeginAnimation
             // 
@@ -1015,67 +1242,15 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbBeginAnimation.Text = null;
             this.cmbBeginAnimation.TextPadding = new System.Windows.Forms.Padding(2);
             // 
-            // lblBeginAnimation
+            // btnEditConditions
             // 
-            this.lblBeginAnimation.AutoSize = true;
-            this.lblBeginAnimation.Location = new System.Drawing.Point(150, 10);
-            this.lblBeginAnimation.Name = "lblBeginAnimation";
-            this.lblBeginAnimation.Size = new System.Drawing.Size(81, 13);
-            this.lblBeginAnimation.TabIndex = 66;
-            this.lblBeginAnimation.Text = "NPC Animation:";
-            // 
-            // grpDuration
-            // 
-            this.grpDuration.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpDuration.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpDuration.Controls.Add(this.chkDurationEnable);
-            this.grpDuration.Controls.Add(this.nudDuration);
-            this.grpDuration.Controls.Add(this.lblDurationMs);
-            this.grpDuration.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpDuration.Location = new System.Drawing.Point(168, 513);
-            this.grpDuration.Name = "grpDuration";
-            this.grpDuration.Size = new System.Drawing.Size(200, 38);
-            this.grpDuration.TabIndex = 65;
-            this.grpDuration.TabStop = false;
-            this.grpDuration.Text = "Phase Duration";
-            // 
-            // chkDurationEnable
-            // 
-            this.chkDurationEnable.AutoSize = true;
-            this.chkDurationEnable.Location = new System.Drawing.Point(5, 16);
-            this.chkDurationEnable.Name = "chkDurationEnable";
-            this.chkDurationEnable.Size = new System.Drawing.Size(59, 17);
-            this.chkDurationEnable.TabIndex = 51;
-            this.chkDurationEnable.Text = "Enable";
-            this.chkDurationEnable.CheckedChanged += new System.EventHandler(this.chkDurationEnable_CheckedChanged);
-            // 
-            // nudDuration
-            // 
-            this.nudDuration.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudDuration.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudDuration.Location = new System.Drawing.Point(64, 15);
-            this.nudDuration.Maximum = new decimal(new int[] {
-            999999999,
-            0,
-            0,
-            0});
-            this.nudDuration.Name = "nudDuration";
-            this.nudDuration.Size = new System.Drawing.Size(109, 20);
-            this.nudDuration.TabIndex = 56;
-            this.nudDuration.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            // 
-            // lblDurationMs
-            // 
-            this.lblDurationMs.AutoSize = true;
-            this.lblDurationMs.Location = new System.Drawing.Point(173, 19);
-            this.lblDurationMs.Name = "lblDurationMs";
-            this.lblDurationMs.Size = new System.Drawing.Size(26, 13);
-            this.lblDurationMs.TabIndex = 29;
-            this.lblDurationMs.Text = "(ms)";
+            this.btnEditConditions.Location = new System.Drawing.Point(5, 22);
+            this.btnEditConditions.Name = "btnEditConditions";
+            this.btnEditConditions.Padding = new System.Windows.Forms.Padding(5);
+            this.btnEditConditions.Size = new System.Drawing.Size(109, 23);
+            this.btnEditConditions.TabIndex = 0;
+            this.btnEditConditions.Text = "Trigger Conditions";
+            this.btnEditConditions.Click += new System.EventHandler(this.btnEditConditions_Click);
             // 
             // NpcPhaseEditor
             // 
@@ -1084,11 +1259,21 @@ namespace Intersect.Editor.Forms.Editors
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpEditor);
             this.Name = "NpcPhaseEditor";
-            this.Size = new System.Drawing.Size(376, 560);
+            this.Size = new System.Drawing.Size(399, 588);
             this.grpSpells.ResumeLayout(false);
             this.grpSpells.PerformLayout();
             this.grpEditor.ResumeLayout(false);
             this.grpEditor.PerformLayout();
+            this.grpSprite.ResumeLayout(false);
+            this.grpSprite.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRgbaA)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRgbaG)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRgbaB)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRgbaR)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picNpc)).EndInit();
+            this.grpDuration.ResumeLayout(false);
+            this.grpDuration.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDuration)).EndInit();
             this.grpAttackSpeed.ResumeLayout(false);
             this.grpAttackSpeed.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudAttackSpeedValue)).EndInit();
@@ -1111,9 +1296,6 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudStrPercentage)).EndInit();
             this.grpPhaseBegin.ResumeLayout(false);
             this.grpPhaseBegin.PerformLayout();
-            this.grpDuration.ResumeLayout(false);
-            this.grpDuration.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudDuration)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1131,8 +1313,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkButton btnEditBeginEvent;
         private DarkTextBox txtName;
         private System.Windows.Forms.Label lblName;
-        private System.Windows.Forms.Label lblDesc;
-        private DarkTextBox txtDesc;
         private DarkGroupBox grpEditor;
         private DarkButton btnEditConditions;
         private DarkCheckBox chkReplaceSpells;
@@ -1187,5 +1367,17 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkDurationEnable;
         private DarkNumericUpDown nudDuration;
         private System.Windows.Forms.Label lblDurationMs;
+        private DarkGroupBox grpSprite;
+        private DarkCheckBox chkChangeSprite;
+        private System.Windows.Forms.PictureBox picNpc;
+        private DarkComboBox cmbSprite;
+        private System.Windows.Forms.Label lblBlue;
+        private DarkNumericUpDown nudRgbaB;
+        private System.Windows.Forms.Label lblRed;
+        private DarkNumericUpDown nudRgbaR;
+        private System.Windows.Forms.Label lblAlpha;
+        private DarkNumericUpDown nudRgbaA;
+        private System.Windows.Forms.Label lblGreen;
+        private DarkNumericUpDown nudRgbaG;
     }
 }

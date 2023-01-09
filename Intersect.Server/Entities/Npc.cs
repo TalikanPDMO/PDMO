@@ -878,6 +878,8 @@ namespace Intersect.Server.Entities
                     if (CurrentPhase?.Duration != null && Globals.Timing.Milliseconds > CurrentPhaseTimer)
                     {
                         EndCurrentPhase();
+                        PacketSender.SendEntityStats(this);
+                        PacketSender.SendEntityDataToProximity(this);
                     }
 
                     var fleeing = IsFleeing();
@@ -1398,6 +1400,7 @@ namespace Intersect.Server.Entities
             LootMapCache = Array.Empty<Guid>();
             EndCurrentPhase();
             PacketSender.SendEntityStats(this);
+            PacketSender.SendEntityDataToProximity(this);
             if (clearLocation)
             {
                 mPathFinder.SetTarget(null);
@@ -1848,9 +1851,9 @@ namespace Intersect.Server.Entities
                 if (phase.Id != CurrentPhase?.Id && Conditions.MeetsConditionLists(phase.ConditionLists, player, null))
                 {
                     EndCurrentPhase();
-
                     SetCurrentPhase(phase);
                     PacketSender.SendEntityStats(this);
+                    PacketSender.SendEntityDataToProximity(this);
                     if (phase.BeginAnimationId != null && phase.BeginAnimationId != Guid.Empty)
                     {
                         PacketSender.SendAnimationToProximity((Guid)phase.BeginAnimationId, 1, Id, MapId, 0, 0, (sbyte)Dir);
@@ -1889,6 +1892,8 @@ namespace Intersect.Server.Entities
                 {
                     BaseStats[i] = Base.Stats[i];
                 }
+                Sprite = Base.Sprite;
+                Color = Base.Color;
             }
             CurrentPhase = null;
             CurrentPhaseTimer = 0;
@@ -1924,6 +1929,11 @@ namespace Intersect.Server.Entities
                 {
                     BaseStats[i] = (int)(BaseStats[i] * phase.BaseStatsDiff[i]);
                 }
+            }
+            if (phase.Sprite != null)
+            {
+                Sprite = phase.Sprite;
+                Color = phase.Color;
             }
             CurrentPhase = phase;
             CurrentPhaseTimer = (phase.Duration?? 0) + Globals.Timing.Milliseconds;

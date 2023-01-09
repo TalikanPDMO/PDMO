@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 using DarkUI.Controls;
+using Intersect.Editor.Content;
 using Intersect.Editor.Forms.Editors.Events;
 using Intersect.Editor.General;
 using Intersect.Editor.Localization;
@@ -10,6 +13,7 @@ using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.Logging;
 using Intersect.Models;
+using Intersect.Utilities;
 
 namespace Intersect.Editor.Forms.Editors
 {
@@ -41,7 +45,39 @@ namespace Intersect.Editor.Forms.Editors
             if (mMyPhase != null)
             {
                 txtName.Text = mMyPhase.Name;
-                txtDesc.Text = mMyPhase.Description;
+                cmbSprite.Items.Clear();
+                cmbSprite.Items.Add(Strings.General.none);
+                cmbSprite.Items.AddRange(
+                    GameContentManager.GetSmartSortedTextureNames(GameContentManager.TextureType.Entity)
+                );
+                
+                if (mMyPhase.Sprite != null)
+                {
+                    chkChangeSprite.Checked = true;
+                    cmbSprite.SelectedIndex = cmbSprite.FindString(TextUtils.NullToNone(mMyPhase.Sprite));
+                    nudRgbaR.Value = mMyPhase.Color?.R ?? 255;
+                    nudRgbaG.Value = mMyPhase.Color?.G ?? 255;
+                    nudRgbaB.Value = mMyPhase.Color?.B ?? 255;
+                    nudRgbaA.Value = mMyPhase.Color?.A ?? 255;
+                    nudRgbaR.Enabled = true;
+                    nudRgbaG.Enabled = true;
+                    nudRgbaB.Enabled = true;
+                    nudRgbaA.Enabled = true;
+                }
+                else
+                {
+                    chkChangeSprite.Checked = false;
+                    cmbSprite.SelectedIndex = cmbSprite.FindString(TextUtils.NullToNone(mMyNpc.Sprite));
+                    nudRgbaR.Value = mMyNpc.Color.R;
+                    nudRgbaG.Value = mMyNpc.Color.G;
+                    nudRgbaB.Value = mMyNpc.Color.B;
+                    nudRgbaA.Value = mMyNpc.Color.A;
+                    nudRgbaR.Enabled = false;
+                    nudRgbaG.Enabled = false;
+                    nudRgbaB.Enabled = false;
+                    nudRgbaA.Enabled = false;
+                }
+
                 chkReplaceSpells.Checked = mMyPhase.ReplaceSpells;
                 cmbBeginAnimation.Items.Clear();
                 cmbBeginAnimation.Items.Add(Strings.General.none);
@@ -161,8 +197,7 @@ namespace Intersect.Editor.Forms.Editors
                     nudDuration.Enabled = false;
                 }
             }
-            
-            
+            DrawNpcSprite(null, null);
             UpdateFormElements();
         }
 
@@ -171,7 +206,13 @@ namespace Intersect.Editor.Forms.Editors
             grpEditor.Text = Strings.NpcPhaseEditor.editor;
 
             lblName.Text = Strings.NpcPhaseEditor.name;
-            lblDesc.Text = Strings.NpcPhaseEditor.desc;
+
+            grpSprite.Text = Strings.NpcPhaseEditor.sprite;
+            lblRed.Text = Strings.NpcPhaseEditor.red;
+            lblGreen.Text = Strings.NpcPhaseEditor.green;
+            lblBlue.Text = Strings.NpcPhaseEditor.blue;
+            lblAlpha.Text = Strings.NpcPhaseEditor.alpha;
+            chkChangeSprite.Text = Strings.NpcPhaseEditor.changesprite;
 
             grpPhaseBegin.Text = Strings.NpcPhaseEditor.phaseconditions;
             btnEditConditions.Text = Strings.NpcPhaseEditor.editconditions;
@@ -269,7 +310,21 @@ namespace Intersect.Editor.Forms.Editors
         private void btnSave_Click(object sender, EventArgs e)
         {
             mMyPhase.Name = txtName.Text;
-            mMyPhase.Description = txtDesc.Text;
+            if (chkChangeSprite.Checked)
+            {
+                mMyPhase.Color = new Color();
+                mMyPhase.Sprite =  (cmbSprite.SelectedIndex == 0 ? "" : cmbSprite.Text);
+                mMyPhase.Color.R = (byte)nudRgbaR.Value;
+                mMyPhase.Color.G = (byte)nudRgbaG.Value;
+                mMyPhase.Color.B = (byte)nudRgbaB.Value;
+                mMyPhase.Color.A = (byte)nudRgbaA.Value;
+            }
+            else
+            {
+                mMyPhase.Sprite = null;
+                mMyPhase.Color = null;
+            }
+            
             mMyPhase.ReplaceSpells = chkReplaceSpells.Checked;
             mMyPhase.BeginAnimation = (cmbBeginAnimation.SelectedIndex == 0 ? null :
                 AnimationBase.Get(AnimationBase.IdFromList(cmbBeginAnimation.SelectedIndex - 1))); 
@@ -485,6 +540,34 @@ namespace Intersect.Editor.Forms.Editors
             }
         }
 
+        private void chkChangeSprite_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkChangeSprite.Checked)
+            {
+                nudRgbaR.Enabled = true;
+                nudRgbaG.Enabled = true;
+                nudRgbaB.Enabled = true;
+                nudRgbaA.Enabled = true;
+                cmbSprite.Enabled = true;
+            }
+            else
+            {
+                nudRgbaR.Enabled = false;
+                nudRgbaG.Enabled = false;
+                nudRgbaB.Enabled = false;
+                nudRgbaA.Enabled = false;
+                cmbSprite.Enabled = false;
+                if (mMyNpc != null)
+                {
+                    cmbSprite.SelectedIndex = cmbSprite.FindString(TextUtils.NullToNone(mMyNpc.Sprite));
+                    nudRgbaR.Value = mMyNpc.Color.R;
+                    nudRgbaG.Value = mMyNpc.Color.G;
+                    nudRgbaB.Value = mMyNpc.Color.B;
+                    nudRgbaA.Value = mMyNpc.Color.A;
+                }
+            }
+        }
+
         private void cmbAttackSpeedModifier_SelectedIndexChanged(object sender, EventArgs e)
         {
             nudAttackSpeedValue.Enabled = cmbAttackSpeedModifier.SelectedIndex > 0;
@@ -493,6 +576,44 @@ namespace Intersect.Editor.Forms.Editors
         private void chkDurationEnable_CheckedChanged(object sender, EventArgs e)
         {
             nudDuration.Enabled = chkDurationEnable.Checked;
+        }
+
+        private void DrawNpcSprite(object sender, EventArgs e)
+        {
+            var picSpriteBmp = new Bitmap(picNpc.Width, picNpc.Height);
+            var gfx = Graphics.FromImage(picSpriteBmp);
+            gfx.FillRectangle(Brushes.Black, new Rectangle(0, 0, picNpc.Width, picNpc.Height));
+            if (cmbSprite.SelectedIndex > 0)
+            {
+                var img = Image.FromFile(GameContentManager.GraphResFolder + "/entities/" + cmbSprite.Text);
+                var imgAttributes = new ImageAttributes();
+
+                // Microsoft, what the heck is this crap?
+                imgAttributes.SetColorMatrix(
+                    new ColorMatrix(
+                        new float[][]
+                        {
+                            new float[] { (float)nudRgbaR.Value / 255,  0,  0,  0, 0},  // Modify the red space
+                            new float[] {0, (float)nudRgbaG.Value / 255,  0,  0, 0},    // Modify the green space
+                            new float[] {0,  0, (float)nudRgbaB.Value / 255,  0, 0},    // Modify the blue space
+                            new float[] {0,  0,  0, (float)nudRgbaA.Value / 255, 0},    // Modify the alpha space
+                            new float[] {0, 0, 0, 0, 1}                                 // We're not adding any non-linear changes. Value of 1 at the end is a dummy value!
+                        }
+                    )
+                );
+
+                gfx.DrawImage(
+                    img, new Rectangle(0, 0, img.Width / Options.Instance.Sprites.NormalFrames, img.Height / Options.Instance.Sprites.Directions),
+                    0, 0, img.Width / Options.Instance.Sprites.NormalFrames, img.Height / Options.Instance.Sprites.Directions, GraphicsUnit.Pixel, imgAttributes
+                );
+
+                img.Dispose();
+                imgAttributes.Dispose();
+            }
+
+            gfx.Dispose();
+
+            picNpc.BackgroundImage = picSpriteBmp;
         }
     }
 

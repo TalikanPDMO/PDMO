@@ -374,7 +374,17 @@ namespace Intersect.GameObjects
         }
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; } = "";
+        public string Sprite { get; set; } = null;
+
+        [Column("Color")]
+        [JsonIgnore]
+        public string JsonColor
+        {
+            get => JsonConvert.SerializeObject(Color);
+            set => Color = JsonConvert.DeserializeObject<Color>(value);
+        }
+        [NotMapped]
+        public Color Color { get; set; } = null;
 
         //Spells
         [NotMapped]
