@@ -97,14 +97,18 @@ namespace Intersect.Editor.Forms.Editors
                 //Stats diff
                 if (mMyPhase.BaseStatsDiff != null)
                 {
-                    nudStrPercentage.Value = (decimal)mMyPhase.BaseStatsDiff[(int)Stats.Attack];
-                    nudDefPercentage.Value = (decimal)mMyPhase.BaseStatsDiff[(int)Stats.Defense];
-                    nudMagPercentage.Value = (decimal)mMyPhase.BaseStatsDiff[(int)Stats.AbilityPower];
-                    nudMRPercentage.Value = (decimal)mMyPhase.BaseStatsDiff[(int)Stats.MagicResist];
-                    nudSpdPercentage.Value = (decimal)mMyPhase.BaseStatsDiff[(int)Stats.Speed];
+                    nudHealthPercentage.Value = (decimal)mMyPhase.BaseStatsDiff[(int)PhaseStats.Health];
+                    nudManaPercentage.Value = (decimal)mMyPhase.BaseStatsDiff[(int)PhaseStats.Mana];
+                    nudStrPercentage.Value = (decimal)mMyPhase.BaseStatsDiff[(int)PhaseStats.Attack];
+                    nudDefPercentage.Value = (decimal)mMyPhase.BaseStatsDiff[(int)PhaseStats.Defense];
+                    nudMagPercentage.Value = (decimal)mMyPhase.BaseStatsDiff[(int)PhaseStats.AbilityPower];
+                    nudMRPercentage.Value = (decimal)mMyPhase.BaseStatsDiff[(int)PhaseStats.MagicResist];
+                    nudSpdPercentage.Value = (decimal)mMyPhase.BaseStatsDiff[(int)PhaseStats.Speed];
                 }
                 else
                 {
+                    nudHealthPercentage.Value = 1;
+                    nudManaPercentage.Value = 1;
                     nudStrPercentage.Value = 1;
                     nudDefPercentage.Value = 1;
                     nudMagPercentage.Value = 1;
@@ -245,7 +249,11 @@ namespace Intersect.Editor.Forms.Editors
             lblX3.Text = Strings.NpcPhaseEditor.x;
             lblX4.Text = Strings.NpcPhaseEditor.x;
             lblX5.Text = Strings.NpcPhaseEditor.x;
+            lblX6.Text = Strings.NpcPhaseEditor.x;
+            lblX7.Text = Strings.NpcPhaseEditor.x;
 
+            lblHealth.Text = Strings.NpcPhaseEditor.health;
+            lblMana.Text = Strings.NpcPhaseEditor.mana;
             lblStr.Text = Strings.NpcPhaseEditor.str;
             lblMag.Text = Strings.NpcPhaseEditor.mag;
             lblDef.Text = Strings.NpcPhaseEditor.def;
@@ -339,12 +347,14 @@ namespace Intersect.Editor.Forms.Editors
             mMyPhase.BeginAnimation = (cmbBeginAnimation.SelectedIndex == 0 ? null :
                 AnimationBase.Get(AnimationBase.IdFromList(cmbBeginAnimation.SelectedIndex - 1))); 
 
-            mMyPhase.BaseStatsDiff = new double[(int)Stats.StatCount];
-            mMyPhase.BaseStatsDiff[(int)Stats.Attack] = (double)nudStrPercentage.Value;
-            mMyPhase.BaseStatsDiff[(int)Stats.Defense] = (double)nudDefPercentage.Value;
-            mMyPhase.BaseStatsDiff[(int)Stats.AbilityPower] = (double)nudMagPercentage.Value;
-            mMyPhase.BaseStatsDiff[(int)Stats.MagicResist] = (double)nudMRPercentage.Value;
-            mMyPhase.BaseStatsDiff[(int)Stats.Speed] = (double)nudSpdPercentage.Value;
+            mMyPhase.BaseStatsDiff = new double[(int)PhaseStats.PhaseStatCount];
+            mMyPhase.BaseStatsDiff[(int)PhaseStats.Health] = (double)nudHealthPercentage.Value;
+            mMyPhase.BaseStatsDiff[(int)PhaseStats.Mana] = (double)nudManaPercentage.Value;
+            mMyPhase.BaseStatsDiff[(int)PhaseStats.Attack] = (double)nudStrPercentage.Value;
+            mMyPhase.BaseStatsDiff[(int)PhaseStats.Defense] = (double)nudDefPercentage.Value;
+            mMyPhase.BaseStatsDiff[(int)PhaseStats.AbilityPower] = (double)nudMagPercentage.Value;
+            mMyPhase.BaseStatsDiff[(int)PhaseStats.MagicResist] = (double)nudMRPercentage.Value;
+            mMyPhase.BaseStatsDiff[(int)PhaseStats.Speed] = (double)nudSpdPercentage.Value;
             bool allOne = true;
             for (var i =0; i< mMyPhase.BaseStatsDiff.Length; i++)
             {

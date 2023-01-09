@@ -1887,7 +1887,14 @@ namespace Intersect.Server.Entities
                     // Forget all spell related to the phase
                     Spells.RemoveRange(Base.Spells.Count, CurrentPhase.Spells.Count);
                 }
-
+                for (var i = 0; i < (int)Vitals.VitalCount; i++)
+                {
+                    if (CurrentPhase.BaseStatsDiff[i] != 1.0)
+                    {
+                        SetMaxVital(i, Base.MaxVital[i]);
+                        RestoreVital((Vitals)i);
+                    }
+                }
                 for (var i = 0; i < (int)Stats.StatCount; i++)
                 {
                     BaseStats[i] = Base.Stats[i];
@@ -1925,9 +1932,18 @@ namespace Intersect.Server.Entities
             }
             if (phase.BaseStatsDiff != null)
             {
+                int vitalcount = (int)Vitals.VitalCount;
+                for (var i = 0; i < vitalcount; i++)
+                {
+                    if (phase.BaseStatsDiff[i] != 1.0)
+                    {
+                        SetMaxVital(i, (int)(Base.MaxVital[i] * phase.BaseStatsDiff[i]));
+                        RestoreVital((Vitals)i);
+                    }
+                }
                 for (var i = 0; i < (int)Stats.StatCount; i++)
                 {
-                    BaseStats[i] = (int)(BaseStats[i] * phase.BaseStatsDiff[i]);
+                    BaseStats[i] = (int)(BaseStats[i] * phase.BaseStatsDiff[i + vitalcount]);
                 }
             }
             if (phase.Sprite != null)
