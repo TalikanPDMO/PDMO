@@ -494,14 +494,14 @@ namespace Intersect.Server.Entities.Events
                     switch (condition.Progress)
                     {
                         case NpcPhasesProgressState.OnNoneOrAnyPhase:
-                            return true;
+                            return player.FightingListNpcs.Values.Any(npcs => npcs.Keys.Any(npc => !npc.IsDead()));
                             break;
                         case NpcPhasesProgressState.OnNonePhase:
                             foreach (var npcs in player.FightingListNpcs.Values)
                             {
-                                foreach (var npc in npcs)
+                                foreach (var npc in npcs.Keys)
                                 {
-                                    if (npc.CurrentPhase == null)
+                                    if (npc.CurrentPhase == null && !npc.IsDead())
                                     {
                                         return true;
                                     }
@@ -511,9 +511,9 @@ namespace Intersect.Server.Entities.Events
                         case NpcPhasesProgressState.OnAnyPhase:
                             foreach (var npcs in player.FightingListNpcs.Values)
                             {
-                                foreach (var npc in npcs)
+                                foreach (var npc in npcs.Keys)
                                 {
-                                    if (npc.CurrentPhase != null)
+                                    if (npc.CurrentPhase != null && !npc.IsDead())
                                     {
                                         return true;
                                     }
@@ -533,30 +533,30 @@ namespace Intersect.Server.Entities.Events
                         switch (condition.Progress)
                         {
                             case NpcPhasesProgressState.OnNoneOrAnyPhase:
-                                return true;
+                                return npcs.Keys.Any(npc => !npc.IsDead());
                                 break;
                             case NpcPhasesProgressState.OnNonePhase:
-                                foreach (var npc in npcs)
+                                foreach (var npc in npcs.Keys)
                                 {
-                                    if (npc.CurrentPhase == null)
+                                    if (npc.CurrentPhase == null && !npc.IsDead())
                                     {
                                         return true;
                                     }
                                 }
                                 break;
                             case NpcPhasesProgressState.OnAnyPhase:
-                                foreach (var npc in npcs)
+                                foreach (var npc in npcs.Keys)
                                 {
-                                    if (npc.CurrentPhase != null)
+                                    if (npc.CurrentPhase != null && !npc.IsDead())
                                     {
                                         return true;
                                     }
                                 }
                                 break;
                             case NpcPhasesProgressState.BeforePhase:
-                                foreach (var npc in npcs)
+                                foreach (var npc in npcs.Keys)
                                 {
-                                    if (npc.CurrentPhase != null)
+                                    if (npc.CurrentPhase != null && !npc.IsDead())
                                     {
                                         phaseIndex = npc.Base.GetPhaseIndex(condition.PhaseId);
                                         return npc.Base.GetPhaseIndex(npc.CurrentPhase.Id) < phaseIndex;
@@ -564,9 +564,9 @@ namespace Intersect.Server.Entities.Events
                                 }
                                 break;
                             case NpcPhasesProgressState.AfterPhase:
-                                foreach (var npc in npcs)
+                                foreach (var npc in npcs.Keys)
                                 {
-                                    if (npc.CurrentPhase != null)
+                                    if (npc.CurrentPhase != null && !npc.IsDead())
                                     {
                                         phaseIndex = npc.Base.GetPhaseIndex(condition.PhaseId);
                                         return npc.Base.GetPhaseIndex(npc.CurrentPhase.Id) > phaseIndex;
@@ -574,9 +574,9 @@ namespace Intersect.Server.Entities.Events
                                 }
                                 break;
                             case NpcPhasesProgressState.OnPhase:
-                                foreach (var npc in npcs)
+                                foreach (var npc in npcs.Keys)
                                 {
-                                    if (npc.CurrentPhase != null)
+                                    if (npc.CurrentPhase != null && !npc.IsDead())
                                     {
                                         phaseIndex = npc.Base.GetPhaseIndex(condition.PhaseId);
                                         return npc.Base.GetPhaseIndex(npc.CurrentPhase.Id) == phaseIndex;
@@ -603,46 +603,54 @@ namespace Intersect.Server.Entities.Events
                 {
                     foreach (var npcs in player.FightingListNpcs.Values)
                     {
-                        foreach (var npc in npcs)
+                        foreach (var npc in npcs.Keys)
                         {
-                            bool test = true;
-                            foreach (var perc in condition.Percents)
+                            if (npc.IsDead())
                             {
-                                double value = 0;
-                                if (perc.Key < (int)Vitals.VitalCount)
-                                {
-                                    value = npc.GetVital(perc.Key) * 100.0 / (double)npc.GetMaxVital(perc.Key);
-                                }
-                                else
-                                {
-                                    int s = perc.Key - (int)Vitals.VitalCount;
-                                    value = npc.Stat[s].Value() * 100.0 / (double)npc.BaseStats[s];
-                                }
-                                switch ((VariableComparators)perc.Value[1]) //Comparator
-                                {
-                                    case VariableComparators.Equal:
-                                        test &= (value == perc.Value[0]);
-                                        break;
-                                    case VariableComparators.GreaterOrEqual:
-                                        test &= (value >= perc.Value[0]);
-                                        break;
-                                    case VariableComparators.LesserOrEqual:
-                                        test &= (value <= perc.Value[0]);
-                                        break;
-                                    case VariableComparators.Greater:
-                                        test &= (value > perc.Value[0]);
-                                        break;
-                                    case VariableComparators.Less:
-                                        test &= (value < perc.Value[0]);
-                                        break;
-                                    case VariableComparators.NotEqual:
-                                        test &= (value != perc.Value[0]);
-                                        break;
-                                }
+                                // Ignore if npc is dead, go to next iteration
+                                continue;
                             }
-                            if (test)
+                            else
                             {
-                                return true;
+                                bool test = true;
+                                foreach (var perc in condition.Percents)
+                                {
+                                    double value = 0;
+                                    if (perc.Key < (int)Vitals.VitalCount)
+                                    {
+                                        value = npc.GetVital(perc.Key) * 100.0 / (double)npc.GetMaxVital(perc.Key);
+                                    }
+                                    else
+                                    {
+                                        int s = perc.Key - (int)Vitals.VitalCount;
+                                        value = npc.Stat[s].Value() * 100.0 / (double)npc.BaseStats[s];
+                                    }
+                                    switch ((VariableComparators)perc.Value[1]) //Comparator
+                                    {
+                                        case VariableComparators.Equal:
+                                            test &= (value == perc.Value[0]);
+                                            break;
+                                        case VariableComparators.GreaterOrEqual:
+                                            test &= (value >= perc.Value[0]);
+                                            break;
+                                        case VariableComparators.LesserOrEqual:
+                                            test &= (value <= perc.Value[0]);
+                                            break;
+                                        case VariableComparators.Greater:
+                                            test &= (value > perc.Value[0]);
+                                            break;
+                                        case VariableComparators.Less:
+                                            test &= (value < perc.Value[0]);
+                                            break;
+                                        case VariableComparators.NotEqual:
+                                            test &= (value != perc.Value[0]);
+                                            break;
+                                    }
+                                }
+                                if (test)
+                                {
+                                    return true;
+                                }
                             }
                         }
                     }
@@ -654,46 +662,54 @@ namespace Intersect.Server.Entities.Events
                 {
                     if (player.FightingListNpcs.TryGetValue(condition.NpcId, out var npcs))
                     {
-                        foreach (var npc in npcs)
-                        {
-                            bool test = true;
-                            foreach (var perc in condition.Percents)
+                        foreach (var npc in npcs.Keys)
+                        { 
+                            if (npc.IsDead())
                             {
-                                double value = 0;
-                                if (perc.Key < (int)Vitals.VitalCount)
-                                {
-                                    value = npc.GetVital(perc.Key) * 100.0 / (double)npc.GetMaxVital(perc.Key);
-                                }
-                                else
-                                {
-                                    int s = perc.Key - (int)Vitals.VitalCount;
-                                    value = npc.Stat[s].Value() * 100.0 / (double)npc.BaseStats[s];
-                                }
-                                switch ((VariableComparators)perc.Value[1]) //Comparator
-                                {
-                                    case VariableComparators.Equal:
-                                        test &= (value == perc.Value[0]);
-                                        break;
-                                    case VariableComparators.GreaterOrEqual:
-                                        test &= (value >= perc.Value[0]);
-                                        break;
-                                    case VariableComparators.LesserOrEqual:
-                                        test &= (value <= perc.Value[0]);
-                                        break;
-                                    case VariableComparators.Greater:
-                                        test &= (value > perc.Value[0]);
-                                        break;
-                                    case VariableComparators.Less:
-                                        test &= (value < perc.Value[0]);
-                                        break;
-                                    case VariableComparators.NotEqual:
-                                        test &= (value != perc.Value[0]);
-                                        break;
-                                }
+                                // Ignore if npc is dead, go to next iteration
+                                continue;
                             }
-                            if (test)
+                            else
                             {
-                                return true;
+                                bool test = true;
+                                foreach (var perc in condition.Percents)
+                                {
+                                    double value = 0;
+                                    if (perc.Key < (int)Vitals.VitalCount)
+                                    {
+                                        value = npc.GetVital(perc.Key) * 100.0 / (double)npc.GetMaxVital(perc.Key);
+                                    }
+                                    else
+                                    {
+                                        int s = perc.Key - (int)Vitals.VitalCount;
+                                        value = npc.Stat[s].Value() * 100.0 / (double)npc.BaseStats[s];
+                                    }
+                                    switch ((VariableComparators)perc.Value[1]) //Comparator
+                                    {
+                                        case VariableComparators.Equal:
+                                            test &= (value == perc.Value[0]);
+                                            break;
+                                        case VariableComparators.GreaterOrEqual:
+                                            test &= (value >= perc.Value[0]);
+                                            break;
+                                        case VariableComparators.LesserOrEqual:
+                                            test &= (value <= perc.Value[0]);
+                                            break;
+                                        case VariableComparators.Greater:
+                                            test &= (value > perc.Value[0]);
+                                            break;
+                                        case VariableComparators.Less:
+                                            test &= (value < perc.Value[0]);
+                                            break;
+                                        case VariableComparators.NotEqual:
+                                            test &= (value != perc.Value[0]);
+                                            break;
+                                    }
+                                }
+                                if (test)
+                                {
+                                    return true;
+                                }
                             }
                         }
                     }

@@ -406,6 +406,12 @@ namespace Intersect.Server.Entities
             //https://www.ascensiongamedev.com/community/bug_tracker/intersect/npc-set-at-0-attack-damage-still-damages-player-by-1-initially-r915/
             if (AttackTimer < Globals.Timing.Milliseconds)
             {
+                if (target is Player penemy)
+                {
+                    penemy.FightingNpcBaseIds.AddOrUpdate(Base.Id, CombatTimer, (guid, t) => CombatTimer);
+                    var npclist = penemy.FightingListNpcs.GetOrAdd(Base.Id, new ConcurrentDictionary<Npc, AttackInfo>());
+                    npclist.AddOrUpdate(this, npc => null, (npc, info) => info);
+                }
                 if (CurrentPhase != null)
                 {
                     // if any members of CurrentPhase is null using ??, we use the base member instead
@@ -1887,17 +1893,20 @@ namespace Intersect.Server.Entities
                     // Forget all spell related to the phase
                     Spells.RemoveRange(Base.Spells.Count, CurrentPhase.Spells.Count);
                 }
-                for (var i = 0; i < (int)Vitals.VitalCount; i++)
+                if (CurrentPhase.BaseStatsDiff != null)
                 {
-                    if (CurrentPhase.BaseStatsDiff[i] != 1.0)
+                    for (var i = 0; i < (int)Vitals.VitalCount; i++)
                     {
-                        SetMaxVital(i, Base.MaxVital[i]);
-                        RestoreVital((Vitals)i);
+                        if (CurrentPhase.BaseStatsDiff[i] != 1.0)
+                        {
+                            SetMaxVital(i, Base.MaxVital[i]);
+                            RestoreVital((Vitals)i);
+                        }
                     }
-                }
-                for (var i = 0; i < (int)Stats.StatCount; i++)
-                {
-                    BaseStats[i] = Base.Stats[i];
+                    for (var i = 0; i < (int)Stats.StatCount; i++)
+                    {
+                        BaseStats[i] = Base.Stats[i];
+                    }
                 }
                 Sprite = Base.Sprite;
                 Color = Base.Color;

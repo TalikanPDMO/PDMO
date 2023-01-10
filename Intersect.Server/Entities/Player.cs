@@ -57,7 +57,7 @@ namespace Intersect.Server.Entities
         [NotMapped, JsonIgnore] public ConcurrentDictionary<Guid, long> FightingNpcBaseIds = new ConcurrentDictionary<Guid, long>();
 
         //HashSet to contains only 1 reference for each npc, no order
-        [NotMapped, JsonIgnore] public ConcurrentDictionary<Guid, HashSet<Npc>> FightingListNpcs = new ConcurrentDictionary<Guid, HashSet<Npc>>();
+        [NotMapped, JsonIgnore] public ConcurrentDictionary<Guid, ConcurrentDictionary<Npc, AttackInfo>> FightingListNpcs = new ConcurrentDictionary<Guid, ConcurrentDictionary<Npc, AttackInfo>>();
 
         #region Quests
 
@@ -1387,7 +1387,21 @@ namespace Intersect.Server.Entities
                 }
                 return;
             }
-
+            var classBase = ClassBase.Get(ClassId);
+            ItemBase weapon = null;
+            if (Options.WeaponIndex > -1 &&
+                Options.WeaponIndex < Equipment.Length &&
+                Equipment[Options.WeaponIndex] >= 0)
+            {
+                weapon = ItemBase.Get(Items[Equipment[Options.WeaponIndex]].ItemId);
+            }
+            if (target is Npc npcenemy)
+            {
+                this.FightingNpcBaseIds.AddOrUpdate(npcenemy.Base.Id, CombatTimer, (guid, t) => CombatTimer);
+                var npclist = this.FightingListNpcs.GetOrAdd(npcenemy.Base.Id, new ConcurrentDictionary<Npc, AttackInfo>());
+                var attackinfo = new AttackInfo((DamageType)(weapon?.DamageType ?? classBase.DamageType), AttackType.Basic);
+                npclist.AddOrUpdate(npcenemy, attackinfo, (npc, info) => attackinfo);
+            }
             if (!CanAttack(target, null))
             {
                 //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
@@ -1395,20 +1409,17 @@ namespace Intersect.Server.Entities
                 {
                     PacketSender.SendChatMsg(this, Strings.Combat.cantAttack + target.Name, ChatMessageType.Combat);
                 }
+                if (target is Npc enemy)
+                {
+                    // Try to trigger possible phase related to the basic attack
+                    enemy.HandlePhases(this);
+                }     
                 return;
             }
 
             if (target is EventPage)
             {
                 return;
-            }
-
-            ItemBase weapon = null;
-            if (Options.WeaponIndex > -1 &&
-                Options.WeaponIndex < Equipment.Length &&
-                Equipment[Options.WeaponIndex] >= 0)
-            {
-                weapon = ItemBase.Get(Items[Equipment[Options.WeaponIndex]].ItemId);
             }
 
             //If Entity is resource, check for the correct tool and make sure its not a spell cast.
@@ -1459,7 +1470,6 @@ namespace Intersect.Server.Entities
             }
             else
             {
-                var classBase = ClassBase.Get(ClassId);
                 if (classBase != null)
                 {
                     base.TryAttack(

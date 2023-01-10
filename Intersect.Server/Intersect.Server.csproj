@@ -485,6 +485,7 @@
     <Compile Include="Entities\BankInterface.cs" />
     <Compile Include="Entities\Combat\Buff.cs" />
     <Compile Include="Entities\Combat\Dash.cs" />
+    <Compile Include="Entities\Combat\AttackInfo.cs" />
     <Compile Include="Entities\Combat\DoT.cs" />
     <Compile Include="Entities\Events\ConditionHandlerRegistry.cs" />
     <Compile Include="Entities\Events\Conditions.cs" />
