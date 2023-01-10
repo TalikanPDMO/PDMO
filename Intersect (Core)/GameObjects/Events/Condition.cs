@@ -308,9 +308,11 @@ namespace Intersect.GameObjects.Events
 
         public Guid NpcId { get; set; }
 
-        public NpcPhasesProgressState Progress { get; set; } = NpcPhasesProgressState.OnNoneOrAnyPhase;
+        public NpcPhasesProgressState Progress { get; set; } = NpcPhasesProgressState.OnNonePhase;
 
         public Guid PhaseId { get; set; }
+
+        public bool OrNone { get; set; } = false;
     }
 
     public class FightingNPCStats : Condition

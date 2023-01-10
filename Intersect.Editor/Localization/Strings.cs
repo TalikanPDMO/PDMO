@@ -302,10 +302,7 @@ namespace Intersect.Editor.Localization
                 npcname = TextUtils.FormatEditorName(npc.Name, npc.EditorName);
             }
             switch (condition.Progress)
-            {
-                case NpcPhasesProgressState.OnNonePhase:
-                    return Strings.EventConditionDesc.fightingphase.ToString(npcname, Strings.EventConditionDesc.onnonephase);
-                    break;
+            {  
                 case NpcPhasesProgressState.OnAnyPhase:
                     return Strings.EventConditionDesc.fightingphase.ToString(npcname, Strings.EventConditionDesc.onanyphase);
                     break;
@@ -322,7 +319,8 @@ namespace Intersect.Editor.Localization
                         .ToString(npc.GetPhaseIndex(condition.PhaseId) + 1));
                     break;
                 default:
-                    return Strings.EventConditionDesc.fightingphase.ToString(npcname, Strings.EventConditionDesc.onnoneoranyphase);
+                    return Strings.EventConditionDesc.fightingphase.ToString(npcname, Strings.EventConditionDesc.onnonephase);
+                    break;
             }
         }
 
@@ -2347,18 +2345,19 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString isonphase = @"Is:";
 
+            public static LocalizedString includenone = @"Include None Phase?";
+
             public static LocalizedString npcphase = @"Phase:";
 
             public static LocalizedString displayphase = @"Phase {00}: {01}";
 
             public static Dictionary<int, LocalizedString> phasecomparators = new Dictionary<int, LocalizedString>
             {
-                {0, @"On None or Any Phase"},
-                {1, @"On None Phase"},
-                {2, @"On Any Phase"},
-                {3, @"Before Phase..."},
-                {4, @"After Phase..."},
-                {5, @"On Phase..."},
+                {0, @"On None Phase"},
+                {1, @"On Any Phase"},
+                {2, @"Before Phase..."},
+                {3, @"After Phase..."},
+                {4, @"On Phase..."},
             };
 
             public static LocalizedString fightingstats = @"Player is fighting npc with Stats:";
@@ -2489,8 +2488,6 @@ Tick timer saved in server config.json.";
             public static LocalizedString True = @"True";
 
             public static LocalizedString fightingphase = @"Player is fighting npc {00} {01}";
-
-            public static LocalizedString onnoneoranyphase = @"on None or Any Phase";
 
             public static LocalizedString onnonephase = @"on None Phase";
 

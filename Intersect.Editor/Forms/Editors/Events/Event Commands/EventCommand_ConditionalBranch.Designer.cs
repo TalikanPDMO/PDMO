@@ -31,6 +31,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpConditional = new DarkUI.Controls.DarkGroupBox();
+            this.grpFightingNPC = new DarkUI.Controls.DarkGroupBox();
+            this.lblNpcPhase = new System.Windows.Forms.Label();
+            this.cmbNpcPhase = new DarkUI.Controls.DarkComboBox();
+            this.lblIsOnPhase = new System.Windows.Forms.Label();
+            this.cmbIsOnPhase = new DarkUI.Controls.DarkComboBox();
+            this.lblFightNpc = new System.Windows.Forms.Label();
+            this.cmbFightNpc = new DarkUI.Controls.DarkComboBox();
             this.grpFightingStats = new DarkUI.Controls.DarkGroupBox();
             this.lblSpeedPerc = new System.Windows.Forms.Label();
             this.nudNpcSpeed = new DarkUI.Controls.DarkNumericUpDown();
@@ -62,13 +69,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbNpcHpComp = new DarkUI.Controls.DarkComboBox();
             this.lblNpcStats = new System.Windows.Forms.Label();
             this.cmbStatsNpc = new DarkUI.Controls.DarkComboBox();
-            this.grpFightingNPC = new DarkUI.Controls.DarkGroupBox();
-            this.lblNpcPhase = new System.Windows.Forms.Label();
-            this.cmbNpcPhase = new DarkUI.Controls.DarkComboBox();
-            this.lblIsOnPhase = new System.Windows.Forms.Label();
-            this.cmbIsOnPhase = new DarkUI.Controls.DarkComboBox();
-            this.lblFightNpc = new System.Windows.Forms.Label();
-            this.cmbFightNpc = new DarkUI.Controls.DarkComboBox();
             this.grpMapZoneType = new DarkUI.Controls.DarkGroupBox();
             this.lblMapZoneType = new System.Windows.Forms.Label();
             this.cmbMapZoneType = new DarkUI.Controls.DarkComboBox();
@@ -173,7 +173,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.rdoManual = new DarkUI.Controls.DarkRadioButton();
             this.cmbItem = new DarkUI.Controls.DarkComboBox();
             this.lblItem = new System.Windows.Forms.Label();
+            this.chkPhaseNone = new DarkUI.Controls.DarkCheckBox();
             this.grpConditional.SuspendLayout();
+            this.grpFightingNPC.SuspendLayout();
             this.grpFightingStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudNpcSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudNpcMR)).BeginInit();
@@ -182,7 +184,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             ((System.ComponentModel.ISupportInitialize)(this.nudNpcAttack)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudNpcMana)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudNpcHp)).BeginInit();
-            this.grpFightingNPC.SuspendLayout();
             this.grpMapZoneType.SuspendLayout();
             this.grpInGuild.SuspendLayout();
             this.grpQuestCompleted.SuspendLayout();
@@ -246,6 +247,115 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpConditional.TabIndex = 17;
             this.grpConditional.TabStop = false;
             this.grpConditional.Text = "Conditional";
+            // 
+            // grpFightingNPC
+            // 
+            this.grpFightingNPC.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpFightingNPC.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpFightingNPC.Controls.Add(this.chkPhaseNone);
+            this.grpFightingNPC.Controls.Add(this.lblNpcPhase);
+            this.grpFightingNPC.Controls.Add(this.cmbNpcPhase);
+            this.grpFightingNPC.Controls.Add(this.lblIsOnPhase);
+            this.grpFightingNPC.Controls.Add(this.cmbIsOnPhase);
+            this.grpFightingNPC.Controls.Add(this.lblFightNpc);
+            this.grpFightingNPC.Controls.Add(this.cmbFightNpc);
+            this.grpFightingNPC.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpFightingNPC.Location = new System.Drawing.Point(8, 39);
+            this.grpFightingNPC.Name = "grpFightingNPC";
+            this.grpFightingNPC.Size = new System.Drawing.Size(262, 121);
+            this.grpFightingNPC.TabIndex = 59;
+            this.grpFightingNPC.TabStop = false;
+            this.grpFightingNPC.Text = "Player is fighting NPC on Phase:";
+            this.grpFightingNPC.Visible = false;
+            // 
+            // lblNpcPhase
+            // 
+            this.lblNpcPhase.AutoSize = true;
+            this.lblNpcPhase.Location = new System.Drawing.Point(9, 95);
+            this.lblNpcPhase.Name = "lblNpcPhase";
+            this.lblNpcPhase.Size = new System.Drawing.Size(40, 13);
+            this.lblNpcPhase.TabIndex = 9;
+            this.lblNpcPhase.Text = "Phase:";
+            // 
+            // cmbNpcPhase
+            // 
+            this.cmbNpcPhase.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbNpcPhase.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbNpcPhase.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbNpcPhase.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbNpcPhase.DrawDropdownHoverOutline = false;
+            this.cmbNpcPhase.DrawFocusRectangle = false;
+            this.cmbNpcPhase.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbNpcPhase.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbNpcPhase.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbNpcPhase.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbNpcPhase.FormattingEnabled = true;
+            this.cmbNpcPhase.Location = new System.Drawing.Point(60, 89);
+            this.cmbNpcPhase.Name = "cmbNpcPhase";
+            this.cmbNpcPhase.Size = new System.Drawing.Size(190, 21);
+            this.cmbNpcPhase.TabIndex = 8;
+            this.cmbNpcPhase.Text = null;
+            this.cmbNpcPhase.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lblIsOnPhase
+            // 
+            this.lblIsOnPhase.AutoSize = true;
+            this.lblIsOnPhase.Location = new System.Drawing.Point(8, 51);
+            this.lblIsOnPhase.Name = "lblIsOnPhase";
+            this.lblIsOnPhase.Size = new System.Drawing.Size(18, 13);
+            this.lblIsOnPhase.TabIndex = 7;
+            this.lblIsOnPhase.Text = "Is:";
+            // 
+            // cmbIsOnPhase
+            // 
+            this.cmbIsOnPhase.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbIsOnPhase.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbIsOnPhase.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbIsOnPhase.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbIsOnPhase.DrawDropdownHoverOutline = false;
+            this.cmbIsOnPhase.DrawFocusRectangle = false;
+            this.cmbIsOnPhase.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbIsOnPhase.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbIsOnPhase.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbIsOnPhase.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbIsOnPhase.FormattingEnabled = true;
+            this.cmbIsOnPhase.Location = new System.Drawing.Point(60, 45);
+            this.cmbIsOnPhase.Name = "cmbIsOnPhase";
+            this.cmbIsOnPhase.Size = new System.Drawing.Size(190, 21);
+            this.cmbIsOnPhase.TabIndex = 6;
+            this.cmbIsOnPhase.Text = null;
+            this.cmbIsOnPhase.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbIsOnPhase.SelectedIndexChanged += new System.EventHandler(this.cmbIsOnPhase_SelectedIndexChanged);
+            // 
+            // lblFightNpc
+            // 
+            this.lblFightNpc.AutoSize = true;
+            this.lblFightNpc.Location = new System.Drawing.Point(6, 21);
+            this.lblFightNpc.Name = "lblFightNpc";
+            this.lblFightNpc.Size = new System.Drawing.Size(32, 13);
+            this.lblFightNpc.TabIndex = 5;
+            this.lblFightNpc.Text = "NPC:";
+            // 
+            // cmbFightNpc
+            // 
+            this.cmbFightNpc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbFightNpc.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbFightNpc.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbFightNpc.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbFightNpc.DrawDropdownHoverOutline = false;
+            this.cmbFightNpc.DrawFocusRectangle = false;
+            this.cmbFightNpc.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbFightNpc.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbFightNpc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbFightNpc.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbFightNpc.FormattingEnabled = true;
+            this.cmbFightNpc.Location = new System.Drawing.Point(60, 18);
+            this.cmbFightNpc.Name = "cmbFightNpc";
+            this.cmbFightNpc.Size = new System.Drawing.Size(190, 21);
+            this.cmbFightNpc.TabIndex = 3;
+            this.cmbFightNpc.Text = null;
+            this.cmbFightNpc.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbFightNpc.SelectedIndexChanged += new System.EventHandler(this.cmbFightingNpc_SelectedIndexChanged);
             // 
             // grpFightingStats
             // 
@@ -689,114 +799,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbStatsNpc.TabIndex = 3;
             this.cmbStatsNpc.Text = null;
             this.cmbStatsNpc.TextPadding = new System.Windows.Forms.Padding(2);
-            // 
-            // grpFightingNPC
-            // 
-            this.grpFightingNPC.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpFightingNPC.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpFightingNPC.Controls.Add(this.lblNpcPhase);
-            this.grpFightingNPC.Controls.Add(this.cmbNpcPhase);
-            this.grpFightingNPC.Controls.Add(this.lblIsOnPhase);
-            this.grpFightingNPC.Controls.Add(this.cmbIsOnPhase);
-            this.grpFightingNPC.Controls.Add(this.lblFightNpc);
-            this.grpFightingNPC.Controls.Add(this.cmbFightNpc);
-            this.grpFightingNPC.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpFightingNPC.Location = new System.Drawing.Point(8, 39);
-            this.grpFightingNPC.Name = "grpFightingNPC";
-            this.grpFightingNPC.Size = new System.Drawing.Size(262, 108);
-            this.grpFightingNPC.TabIndex = 59;
-            this.grpFightingNPC.TabStop = false;
-            this.grpFightingNPC.Text = "Player is fighting NPC on Phase:";
-            this.grpFightingNPC.Visible = false;
-            // 
-            // lblNpcPhase
-            // 
-            this.lblNpcPhase.AutoSize = true;
-            this.lblNpcPhase.Location = new System.Drawing.Point(9, 78);
-            this.lblNpcPhase.Name = "lblNpcPhase";
-            this.lblNpcPhase.Size = new System.Drawing.Size(40, 13);
-            this.lblNpcPhase.TabIndex = 9;
-            this.lblNpcPhase.Text = "Phase:";
-            // 
-            // cmbNpcPhase
-            // 
-            this.cmbNpcPhase.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbNpcPhase.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbNpcPhase.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbNpcPhase.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbNpcPhase.DrawDropdownHoverOutline = false;
-            this.cmbNpcPhase.DrawFocusRectangle = false;
-            this.cmbNpcPhase.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbNpcPhase.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbNpcPhase.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbNpcPhase.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbNpcPhase.FormattingEnabled = true;
-            this.cmbNpcPhase.Location = new System.Drawing.Point(60, 72);
-            this.cmbNpcPhase.Name = "cmbNpcPhase";
-            this.cmbNpcPhase.Size = new System.Drawing.Size(190, 21);
-            this.cmbNpcPhase.TabIndex = 8;
-            this.cmbNpcPhase.Text = null;
-            this.cmbNpcPhase.TextPadding = new System.Windows.Forms.Padding(2);
-            // 
-            // lblIsOnPhase
-            // 
-            this.lblIsOnPhase.AutoSize = true;
-            this.lblIsOnPhase.Location = new System.Drawing.Point(8, 51);
-            this.lblIsOnPhase.Name = "lblIsOnPhase";
-            this.lblIsOnPhase.Size = new System.Drawing.Size(18, 13);
-            this.lblIsOnPhase.TabIndex = 7;
-            this.lblIsOnPhase.Text = "Is:";
-            // 
-            // cmbIsOnPhase
-            // 
-            this.cmbIsOnPhase.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbIsOnPhase.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbIsOnPhase.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbIsOnPhase.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbIsOnPhase.DrawDropdownHoverOutline = false;
-            this.cmbIsOnPhase.DrawFocusRectangle = false;
-            this.cmbIsOnPhase.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbIsOnPhase.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbIsOnPhase.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbIsOnPhase.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbIsOnPhase.FormattingEnabled = true;
-            this.cmbIsOnPhase.Location = new System.Drawing.Point(60, 45);
-            this.cmbIsOnPhase.Name = "cmbIsOnPhase";
-            this.cmbIsOnPhase.Size = new System.Drawing.Size(190, 21);
-            this.cmbIsOnPhase.TabIndex = 6;
-            this.cmbIsOnPhase.Text = null;
-            this.cmbIsOnPhase.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbIsOnPhase.SelectedIndexChanged += new System.EventHandler(this.cmbIsOnPhase_SelectedIndexChanged);
-            // 
-            // lblFightNpc
-            // 
-            this.lblFightNpc.AutoSize = true;
-            this.lblFightNpc.Location = new System.Drawing.Point(6, 21);
-            this.lblFightNpc.Name = "lblFightNpc";
-            this.lblFightNpc.Size = new System.Drawing.Size(32, 13);
-            this.lblFightNpc.TabIndex = 5;
-            this.lblFightNpc.Text = "NPC:";
-            // 
-            // cmbFightNpc
-            // 
-            this.cmbFightNpc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbFightNpc.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbFightNpc.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbFightNpc.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbFightNpc.DrawDropdownHoverOutline = false;
-            this.cmbFightNpc.DrawFocusRectangle = false;
-            this.cmbFightNpc.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbFightNpc.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbFightNpc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbFightNpc.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbFightNpc.FormattingEnabled = true;
-            this.cmbFightNpc.Location = new System.Drawing.Point(60, 18);
-            this.cmbFightNpc.Name = "cmbFightNpc";
-            this.cmbFightNpc.Size = new System.Drawing.Size(190, 21);
-            this.cmbFightNpc.TabIndex = 3;
-            this.cmbFightNpc.Text = null;
-            this.cmbFightNpc.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbFightNpc.SelectedIndexChanged += new System.EventHandler(this.cmbFightingNpc_SelectedIndexChanged);
             // 
             // grpMapZoneType
             // 
@@ -2309,6 +2311,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblItem.TabIndex = 2;
             this.lblItem.Text = "Item:";
             // 
+            // chkPhaseNone
+            // 
+            this.chkPhaseNone.Location = new System.Drawing.Point(122, 67);
+            this.chkPhaseNone.Name = "chkPhaseNone";
+            this.chkPhaseNone.Size = new System.Drawing.Size(130, 17);
+            this.chkPhaseNone.TabIndex = 61;
+            this.chkPhaseNone.Text = "Include None Phase?";
+            // 
             // EventCommandConditionalBranch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2320,6 +2330,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.Size = new System.Drawing.Size(285, 345);
             this.grpConditional.ResumeLayout(false);
             this.grpConditional.PerformLayout();
+            this.grpFightingNPC.ResumeLayout(false);
+            this.grpFightingNPC.PerformLayout();
             this.grpFightingStats.ResumeLayout(false);
             this.grpFightingStats.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudNpcSpeed)).EndInit();
@@ -2329,8 +2341,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             ((System.ComponentModel.ISupportInitialize)(this.nudNpcAttack)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudNpcMana)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudNpcHp)).EndInit();
-            this.grpFightingNPC.ResumeLayout(false);
-            this.grpFightingNPC.PerformLayout();
             this.grpMapZoneType.ResumeLayout(false);
             this.grpMapZoneType.PerformLayout();
             this.grpInGuild.ResumeLayout(false);
@@ -2527,5 +2537,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkNumericUpDown nudNpcAttack;
         private System.Windows.Forms.Label lblNpcAttack;
         private DarkComboBox cmbNpcAttackComp;
+        private DarkCheckBox chkPhaseNone;
     }
 }

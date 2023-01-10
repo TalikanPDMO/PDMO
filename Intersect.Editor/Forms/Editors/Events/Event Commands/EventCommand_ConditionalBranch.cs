@@ -250,6 +250,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             grpFightingNPC.Text = Strings.EventConditional.fightingnpc;
             lblFightNpc.Text = Strings.EventConditional.fightnpc;
             cmbFightNpc.Items.Clear();
+            chkPhaseNone.Text = Strings.EventConditional.includenone;
             lblIsOnPhase.Text = Strings.EventConditional.isonphase;
             cmbIsOnPhase.Items.Clear();
             for (var i = 0; i < Strings.EventConditional.phasecomparators.Count; i++)
@@ -445,7 +446,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     {
                         cmbFightNpc.SelectedIndex = 0;
                     }
-
+                    chkPhaseNone.Checked = false;
                     cmbIsOnPhase.SelectedIndex = 0;
 
                     break;
@@ -1426,6 +1427,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 cmbIsOnPhase.SelectedIndex = 0;
             }
 
+            chkPhaseNone.Checked = condition.OrNone;
+
             if (cmbFightNpc.SelectedIndex > 0 && cmbIsOnPhase.SelectedIndex > (int) NpcPhasesProgressState.OnAnyPhase)
             {
                 var npc = NpcBase.Get(NpcBase.IdFromList(cmbFightNpc.SelectedIndex - 1));
@@ -1657,6 +1660,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             condition.NpcId = Guid.Empty;
             condition.Progress = (NpcPhasesProgressState)cmbIsOnPhase.SelectedIndex;
             condition.PhaseId = Guid.Empty;
+            condition.OrNone = chkPhaseNone.Checked;
             if (cmbFightNpc.SelectedIndex > 0)
             {
                 condition.NpcId = NpcBase.IdFromList(cmbFightNpc.SelectedIndex - 1);

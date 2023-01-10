@@ -493,9 +493,6 @@ namespace Intersect.Server.Entities.Events
                 {
                     switch (condition.Progress)
                     {
-                        case NpcPhasesProgressState.OnNoneOrAnyPhase:
-                            return player.FightingListNpcs.Values.Any(npcs => npcs.Keys.Any(npc => !npc.IsDead()));
-                            break;
                         case NpcPhasesProgressState.OnNonePhase:
                             foreach (var npcs in player.FightingListNpcs.Values)
                             {
@@ -509,13 +506,20 @@ namespace Intersect.Server.Entities.Events
                             }
                             break;
                         case NpcPhasesProgressState.OnAnyPhase:
-                            foreach (var npcs in player.FightingListNpcs.Values)
+                            if (condition.OrNone)
                             {
-                                foreach (var npc in npcs.Keys)
+                                return player.FightingListNpcs.Values.Any(npcs => npcs.Keys.Any(npc => !npc.IsDead()));
+                            }
+                            else
+                            {
+                                foreach (var npcs in player.FightingListNpcs.Values)
                                 {
-                                    if (npc.CurrentPhase != null && !npc.IsDead())
+                                    foreach (var npc in npcs.Keys)
                                     {
-                                        return true;
+                                        if (npc.CurrentPhase != null && !npc.IsDead())
+                                        {
+                                            return true;
+                                        }
                                     }
                                 }
                             }
@@ -532,9 +536,6 @@ namespace Intersect.Server.Entities.Events
                         int phaseIndex = -1;
                         switch (condition.Progress)
                         {
-                            case NpcPhasesProgressState.OnNoneOrAnyPhase:
-                                return npcs.Keys.Any(npc => !npc.IsDead());
-                                break;
                             case NpcPhasesProgressState.OnNonePhase:
                                 foreach (var npc in npcs.Keys)
                                 {
@@ -545,46 +546,82 @@ namespace Intersect.Server.Entities.Events
                                 }
                                 break;
                             case NpcPhasesProgressState.OnAnyPhase:
-                                foreach (var npc in npcs.Keys)
+                                if (condition.OrNone)
                                 {
-                                    if (npc.CurrentPhase != null && !npc.IsDead())
+                                    return npcs.Keys.Any(npc => !npc.IsDead());
+                                }
+                                else
+                                {
+                                    foreach (var npc in npcs.Keys)
                                     {
-                                        return true;
+                                        if (npc.CurrentPhase != null && !npc.IsDead())
+                                        {
+                                            return true;
+                                        }
                                     }
                                 }
                                 break;
                             case NpcPhasesProgressState.BeforePhase:
                                 foreach (var npc in npcs.Keys)
                                 {
-                                    if (npc.CurrentPhase != null && !npc.IsDead())
+                                    if (!npc.IsDead())
                                     {
-                                        phaseIndex = npc.Base.GetPhaseIndex(condition.PhaseId);
-                                        return npc.Base.GetPhaseIndex(npc.CurrentPhase.Id) < phaseIndex;
+                                        if (npc.CurrentPhase != null)
+                                        {
+                                            phaseIndex = npc.Base.GetPhaseIndex(condition.PhaseId);
+                                            if (npc.Base.GetPhaseIndex(npc.CurrentPhase.Id) < phaseIndex)
+                                            {
+                                                return true;
+                                            }
+                                        }
+                                        else if (condition.OrNone)
+                                        {
+                                            return true;
+                                        }
                                     }
                                 }
                                 break;
                             case NpcPhasesProgressState.AfterPhase:
                                 foreach (var npc in npcs.Keys)
                                 {
-                                    if (npc.CurrentPhase != null && !npc.IsDead())
+                                    if (!npc.IsDead())
                                     {
-                                        phaseIndex = npc.Base.GetPhaseIndex(condition.PhaseId);
-                                        return npc.Base.GetPhaseIndex(npc.CurrentPhase.Id) > phaseIndex;
+                                        if (npc.CurrentPhase != null)
+                                        {
+                                            phaseIndex = npc.Base.GetPhaseIndex(condition.PhaseId);
+                                            if (npc.Base.GetPhaseIndex(npc.CurrentPhase.Id) > phaseIndex)
+                                            {
+                                                return true;
+                                            }
+                                        }
+                                        else if (condition.OrNone)
+                                        {
+                                            return true;
+                                        }
                                     }
                                 }
                                 break;
                             case NpcPhasesProgressState.OnPhase:
                                 foreach (var npc in npcs.Keys)
                                 {
-                                    if (npc.CurrentPhase != null && !npc.IsDead())
+                                    if (!npc.IsDead())
                                     {
-                                        phaseIndex = npc.Base.GetPhaseIndex(condition.PhaseId);
-                                        return npc.Base.GetPhaseIndex(npc.CurrentPhase.Id) == phaseIndex;
+                                        if (npc.CurrentPhase != null)
+                                        {
+                                            phaseIndex = npc.Base.GetPhaseIndex(condition.PhaseId);
+                                            if (npc.Base.GetPhaseIndex(npc.CurrentPhase.Id) == phaseIndex)
+                                            {
+                                                return true;
+                                            }
+                                        }
+                                        else if (condition.OrNone)
+                                        {
+                                            return true;
+                                        }
                                     }
                                 }
                                 break;
-                        }
-                        
+                        }  
                     }
                 }
             }

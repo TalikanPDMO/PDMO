@@ -346,18 +346,15 @@ namespace Intersect.GameObjects
 
     public enum NpcPhasesProgressState
     {
-        OnNoneOrAnyPhase = 0,
+        OnNonePhase = 0,
 
-        OnNonePhase = 1,
+        OnAnyPhase = 1,
 
-        OnAnyPhase = 2,
+        BeforePhase = 2,
 
-        BeforePhase = 3,
+        AfterPhase = 3,
 
-        AfterPhase = 4,
-
-        OnPhase = 5,
-
+        OnPhase = 4,
     }
 
     public class NpcPhase
