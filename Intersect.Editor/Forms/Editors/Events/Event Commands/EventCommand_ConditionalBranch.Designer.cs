@@ -31,14 +31,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpConditional = new DarkUI.Controls.DarkGroupBox();
-            this.grpFightingNPC = new DarkUI.Controls.DarkGroupBox();
-            this.lblNpcPhase = new System.Windows.Forms.Label();
-            this.cmbNpcPhase = new DarkUI.Controls.DarkComboBox();
-            this.lblIsOnPhase = new System.Windows.Forms.Label();
-            this.cmbIsOnPhase = new DarkUI.Controls.DarkComboBox();
-            this.lblFightNpc = new System.Windows.Forms.Label();
-            this.cmbFightNpc = new DarkUI.Controls.DarkComboBox();
+            this.grpFightingAttackType = new DarkUI.Controls.DarkGroupBox();
+            this.chkOnlyTriggerAttackType = new DarkUI.Controls.DarkCheckBox();
+            this.lblNpcAttackTypeIs = new System.Windows.Forms.Label();
+            this.cmbNpcAttackTypeIs = new DarkUI.Controls.DarkComboBox();
+            this.lblNpcAttackType = new System.Windows.Forms.Label();
+            this.cmbNpcAttackType = new DarkUI.Controls.DarkComboBox();
+            this.lblFightNpcAttackType = new System.Windows.Forms.Label();
+            this.cmbFightAttackTypeNpc = new DarkUI.Controls.DarkComboBox();
             this.grpFightingStats = new DarkUI.Controls.DarkGroupBox();
+            this.chkOnlyTriggerStat = new DarkUI.Controls.DarkCheckBox();
             this.lblSpeedPerc = new System.Windows.Forms.Label();
             this.nudNpcSpeed = new DarkUI.Controls.DarkNumericUpDown();
             this.lblNpcSpeed = new System.Windows.Forms.Label();
@@ -69,6 +71,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbNpcHpComp = new DarkUI.Controls.DarkComboBox();
             this.lblNpcStats = new System.Windows.Forms.Label();
             this.cmbStatsNpc = new DarkUI.Controls.DarkComboBox();
+            this.grpFightingNPC = new DarkUI.Controls.DarkGroupBox();
+            this.chkOnlyTriggerPhase = new DarkUI.Controls.DarkCheckBox();
+            this.chkPhaseNone = new DarkUI.Controls.DarkCheckBox();
+            this.lblNpcPhase = new System.Windows.Forms.Label();
+            this.cmbNpcPhase = new DarkUI.Controls.DarkComboBox();
+            this.lblIsOnPhase = new System.Windows.Forms.Label();
+            this.cmbIsOnPhase = new DarkUI.Controls.DarkComboBox();
+            this.lblFightNpc = new System.Windows.Forms.Label();
+            this.cmbFightNpc = new DarkUI.Controls.DarkComboBox();
             this.grpMapZoneType = new DarkUI.Controls.DarkGroupBox();
             this.lblMapZoneType = new System.Windows.Forms.Label();
             this.cmbMapZoneType = new DarkUI.Controls.DarkComboBox();
@@ -173,9 +184,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.rdoManual = new DarkUI.Controls.DarkRadioButton();
             this.cmbItem = new DarkUI.Controls.DarkComboBox();
             this.lblItem = new System.Windows.Forms.Label();
-            this.chkPhaseNone = new DarkUI.Controls.DarkCheckBox();
             this.grpConditional.SuspendLayout();
-            this.grpFightingNPC.SuspendLayout();
+            this.grpFightingAttackType.SuspendLayout();
             this.grpFightingStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudNpcSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudNpcMR)).BeginInit();
@@ -184,6 +194,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             ((System.ComponentModel.ISupportInitialize)(this.nudNpcAttack)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudNpcMana)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudNpcHp)).BeginInit();
+            this.grpFightingNPC.SuspendLayout();
             this.grpMapZoneType.SuspendLayout();
             this.grpInGuild.SuspendLayout();
             this.grpQuestCompleted.SuspendLayout();
@@ -216,8 +227,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpConditional.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpConditional.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpConditional.Controls.Add(this.grpFightingNPC);
+            this.grpConditional.Controls.Add(this.grpFightingAttackType);
             this.grpConditional.Controls.Add(this.grpFightingStats);
+            this.grpConditional.Controls.Add(this.grpFightingNPC);
             this.grpConditional.Controls.Add(this.grpMapZoneType);
             this.grpConditional.Controls.Add(this.grpInGuild);
             this.grpConditional.Controls.Add(this.chkHasElse);
@@ -248,119 +260,128 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpConditional.TabStop = false;
             this.grpConditional.Text = "Conditional";
             // 
-            // grpFightingNPC
+            // grpFightingAttackType
             // 
-            this.grpFightingNPC.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpFightingNPC.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpFightingNPC.Controls.Add(this.chkPhaseNone);
-            this.grpFightingNPC.Controls.Add(this.lblNpcPhase);
-            this.grpFightingNPC.Controls.Add(this.cmbNpcPhase);
-            this.grpFightingNPC.Controls.Add(this.lblIsOnPhase);
-            this.grpFightingNPC.Controls.Add(this.cmbIsOnPhase);
-            this.grpFightingNPC.Controls.Add(this.lblFightNpc);
-            this.grpFightingNPC.Controls.Add(this.cmbFightNpc);
-            this.grpFightingNPC.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpFightingNPC.Location = new System.Drawing.Point(8, 39);
-            this.grpFightingNPC.Name = "grpFightingNPC";
-            this.grpFightingNPC.Size = new System.Drawing.Size(262, 121);
-            this.grpFightingNPC.TabIndex = 59;
-            this.grpFightingNPC.TabStop = false;
-            this.grpFightingNPC.Text = "Player is fighting NPC on Phase:";
-            this.grpFightingNPC.Visible = false;
+            this.grpFightingAttackType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpFightingAttackType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpFightingAttackType.Controls.Add(this.chkOnlyTriggerAttackType);
+            this.grpFightingAttackType.Controls.Add(this.lblNpcAttackTypeIs);
+            this.grpFightingAttackType.Controls.Add(this.cmbNpcAttackTypeIs);
+            this.grpFightingAttackType.Controls.Add(this.lblNpcAttackType);
+            this.grpFightingAttackType.Controls.Add(this.cmbNpcAttackType);
+            this.grpFightingAttackType.Controls.Add(this.lblFightNpcAttackType);
+            this.grpFightingAttackType.Controls.Add(this.cmbFightAttackTypeNpc);
+            this.grpFightingAttackType.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpFightingAttackType.Location = new System.Drawing.Point(8, 40);
+            this.grpFightingAttackType.Name = "grpFightingAttackType";
+            this.grpFightingAttackType.Size = new System.Drawing.Size(264, 139);
+            this.grpFightingAttackType.TabIndex = 62;
+            this.grpFightingAttackType.TabStop = false;
+            this.grpFightingAttackType.Text = "Fighting npc with Attack Type";
+            this.grpFightingAttackType.Visible = false;
             // 
-            // lblNpcPhase
+            // chkOnlyTriggerAttackType
             // 
-            this.lblNpcPhase.AutoSize = true;
-            this.lblNpcPhase.Location = new System.Drawing.Point(9, 95);
-            this.lblNpcPhase.Name = "lblNpcPhase";
-            this.lblNpcPhase.Size = new System.Drawing.Size(40, 13);
-            this.lblNpcPhase.TabIndex = 9;
-            this.lblNpcPhase.Text = "Phase:";
+            this.chkOnlyTriggerAttackType.Location = new System.Drawing.Point(122, 42);
+            this.chkOnlyTriggerAttackType.Name = "chkOnlyTriggerAttackType";
+            this.chkOnlyTriggerAttackType.Size = new System.Drawing.Size(130, 17);
+            this.chkOnlyTriggerAttackType.TabIndex = 61;
+            this.chkOnlyTriggerAttackType.Text = "Only triggering NPC ?";
             // 
-            // cmbNpcPhase
+            // lblNpcAttackTypeIs
             // 
-            this.cmbNpcPhase.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbNpcPhase.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbNpcPhase.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbNpcPhase.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbNpcPhase.DrawDropdownHoverOutline = false;
-            this.cmbNpcPhase.DrawFocusRectangle = false;
-            this.cmbNpcPhase.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbNpcPhase.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbNpcPhase.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbNpcPhase.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbNpcPhase.FormattingEnabled = true;
-            this.cmbNpcPhase.Location = new System.Drawing.Point(60, 89);
-            this.cmbNpcPhase.Name = "cmbNpcPhase";
-            this.cmbNpcPhase.Size = new System.Drawing.Size(190, 21);
-            this.cmbNpcPhase.TabIndex = 8;
-            this.cmbNpcPhase.Text = null;
-            this.cmbNpcPhase.TextPadding = new System.Windows.Forms.Padding(2);
+            this.lblNpcAttackTypeIs.AutoSize = true;
+            this.lblNpcAttackTypeIs.Location = new System.Drawing.Point(4, 93);
+            this.lblNpcAttackTypeIs.Name = "lblNpcAttackTypeIs";
+            this.lblNpcAttackTypeIs.Size = new System.Drawing.Size(18, 13);
+            this.lblNpcAttackTypeIs.TabIndex = 26;
+            this.lblNpcAttackTypeIs.Text = "Is:";
             // 
-            // lblIsOnPhase
+            // cmbNpcAttackTypeIs
             // 
-            this.lblIsOnPhase.AutoSize = true;
-            this.lblIsOnPhase.Location = new System.Drawing.Point(8, 51);
-            this.lblIsOnPhase.Name = "lblIsOnPhase";
-            this.lblIsOnPhase.Size = new System.Drawing.Size(18, 13);
-            this.lblIsOnPhase.TabIndex = 7;
-            this.lblIsOnPhase.Text = "Is:";
+            this.cmbNpcAttackTypeIs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbNpcAttackTypeIs.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbNpcAttackTypeIs.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbNpcAttackTypeIs.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbNpcAttackTypeIs.DrawDropdownHoverOutline = false;
+            this.cmbNpcAttackTypeIs.DrawFocusRectangle = false;
+            this.cmbNpcAttackTypeIs.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbNpcAttackTypeIs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbNpcAttackTypeIs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbNpcAttackTypeIs.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbNpcAttackTypeIs.FormattingEnabled = true;
+            this.cmbNpcAttackTypeIs.Location = new System.Drawing.Point(74, 89);
+            this.cmbNpcAttackTypeIs.Name = "cmbNpcAttackTypeIs";
+            this.cmbNpcAttackTypeIs.Size = new System.Drawing.Size(130, 21);
+            this.cmbNpcAttackTypeIs.TabIndex = 25;
+            this.cmbNpcAttackTypeIs.Text = "Any";
+            this.cmbNpcAttackTypeIs.TextPadding = new System.Windows.Forms.Padding(1, 2, 0, 2);
             // 
-            // cmbIsOnPhase
+            // lblNpcAttackType
             // 
-            this.cmbIsOnPhase.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbIsOnPhase.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbIsOnPhase.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbIsOnPhase.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbIsOnPhase.DrawDropdownHoverOutline = false;
-            this.cmbIsOnPhase.DrawFocusRectangle = false;
-            this.cmbIsOnPhase.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbIsOnPhase.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbIsOnPhase.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbIsOnPhase.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbIsOnPhase.FormattingEnabled = true;
-            this.cmbIsOnPhase.Location = new System.Drawing.Point(60, 45);
-            this.cmbIsOnPhase.Name = "cmbIsOnPhase";
-            this.cmbIsOnPhase.Size = new System.Drawing.Size(190, 21);
-            this.cmbIsOnPhase.TabIndex = 6;
-            this.cmbIsOnPhase.Text = null;
-            this.cmbIsOnPhase.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbIsOnPhase.SelectedIndexChanged += new System.EventHandler(this.cmbIsOnPhase_SelectedIndexChanged);
+            this.lblNpcAttackType.AutoSize = true;
+            this.lblNpcAttackType.Location = new System.Drawing.Point(4, 69);
+            this.lblNpcAttackType.Name = "lblNpcAttackType";
+            this.lblNpcAttackType.Size = new System.Drawing.Size(68, 13);
+            this.lblNpcAttackType.TabIndex = 7;
+            this.lblNpcAttackType.Text = "Attack Type:";
             // 
-            // lblFightNpc
+            // cmbNpcAttackType
             // 
-            this.lblFightNpc.AutoSize = true;
-            this.lblFightNpc.Location = new System.Drawing.Point(6, 21);
-            this.lblFightNpc.Name = "lblFightNpc";
-            this.lblFightNpc.Size = new System.Drawing.Size(32, 13);
-            this.lblFightNpc.TabIndex = 5;
-            this.lblFightNpc.Text = "NPC:";
+            this.cmbNpcAttackType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbNpcAttackType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbNpcAttackType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbNpcAttackType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbNpcAttackType.DrawDropdownHoverOutline = false;
+            this.cmbNpcAttackType.DrawFocusRectangle = false;
+            this.cmbNpcAttackType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbNpcAttackType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbNpcAttackType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbNpcAttackType.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbNpcAttackType.FormattingEnabled = true;
+            this.cmbNpcAttackType.Location = new System.Drawing.Point(74, 65);
+            this.cmbNpcAttackType.Name = "cmbNpcAttackType";
+            this.cmbNpcAttackType.Size = new System.Drawing.Size(130, 21);
+            this.cmbNpcAttackType.TabIndex = 6;
+            this.cmbNpcAttackType.Text = "Any";
+            this.cmbNpcAttackType.TextPadding = new System.Windows.Forms.Padding(1, 2, 0, 2); 
+            this.cmbNpcAttackType.SelectedIndexChanged += new System.EventHandler(this.cmbNpcAttackType_SelectedIndexChanged);
             // 
-            // cmbFightNpc
+            // lblFightNpcAttackType
             // 
-            this.cmbFightNpc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbFightNpc.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbFightNpc.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbFightNpc.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbFightNpc.DrawDropdownHoverOutline = false;
-            this.cmbFightNpc.DrawFocusRectangle = false;
-            this.cmbFightNpc.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbFightNpc.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbFightNpc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbFightNpc.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbFightNpc.FormattingEnabled = true;
-            this.cmbFightNpc.Location = new System.Drawing.Point(60, 18);
-            this.cmbFightNpc.Name = "cmbFightNpc";
-            this.cmbFightNpc.Size = new System.Drawing.Size(190, 21);
-            this.cmbFightNpc.TabIndex = 3;
-            this.cmbFightNpc.Text = null;
-            this.cmbFightNpc.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbFightNpc.SelectedIndexChanged += new System.EventHandler(this.cmbFightingNpc_SelectedIndexChanged);
+            this.lblFightNpcAttackType.AutoSize = true;
+            this.lblFightNpcAttackType.Location = new System.Drawing.Point(5, 21);
+            this.lblFightNpcAttackType.Name = "lblFightNpcAttackType";
+            this.lblFightNpcAttackType.Size = new System.Drawing.Size(32, 13);
+            this.lblFightNpcAttackType.TabIndex = 5;
+            this.lblFightNpcAttackType.Text = "NPC:";
+            // 
+            // cmbFightAttackTypeNpc
+            // 
+            this.cmbFightAttackTypeNpc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbFightAttackTypeNpc.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbFightAttackTypeNpc.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbFightAttackTypeNpc.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbFightAttackTypeNpc.DrawDropdownHoverOutline = false;
+            this.cmbFightAttackTypeNpc.DrawFocusRectangle = false;
+            this.cmbFightAttackTypeNpc.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbFightAttackTypeNpc.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbFightAttackTypeNpc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbFightAttackTypeNpc.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbFightAttackTypeNpc.FormattingEnabled = true;
+            this.cmbFightAttackTypeNpc.Location = new System.Drawing.Point(43, 20);
+            this.cmbFightAttackTypeNpc.Name = "cmbFightAttackTypeNpc";
+            this.cmbFightAttackTypeNpc.Size = new System.Drawing.Size(211, 21);
+            this.cmbFightAttackTypeNpc.TabIndex = 3;
+            this.cmbFightAttackTypeNpc.Text = null;
+            this.cmbFightAttackTypeNpc.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbFightAttackTypeNpc.SelectedIndexChanged += new System.EventHandler(this.cmbFightAttackTypeNpc_SelectedIndexChanged);
             // 
             // grpFightingStats
             // 
             this.grpFightingStats.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpFightingStats.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpFightingStats.Controls.Add(this.chkOnlyTriggerStat);
             this.grpFightingStats.Controls.Add(this.lblSpeedPerc);
             this.grpFightingStats.Controls.Add(this.nudNpcSpeed);
             this.grpFightingStats.Controls.Add(this.lblNpcSpeed);
@@ -394,16 +415,24 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpFightingStats.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpFightingStats.Location = new System.Drawing.Point(8, 40);
             this.grpFightingStats.Name = "grpFightingStats";
-            this.grpFightingStats.Size = new System.Drawing.Size(264, 218);
+            this.grpFightingStats.Size = new System.Drawing.Size(264, 235);
             this.grpFightingStats.TabIndex = 60;
             this.grpFightingStats.TabStop = false;
-            this.grpFightingStats.Text = "Player is fighting NPC with Stats";
+            this.grpFightingStats.Text = "Fighting NPC with Stats";
             this.grpFightingStats.Visible = false;
+            // 
+            // chkOnlyTriggerStat
+            // 
+            this.chkOnlyTriggerStat.Location = new System.Drawing.Point(122, 42);
+            this.chkOnlyTriggerStat.Name = "chkOnlyTriggerStat";
+            this.chkOnlyTriggerStat.Size = new System.Drawing.Size(130, 17);
+            this.chkOnlyTriggerStat.TabIndex = 61;
+            this.chkOnlyTriggerStat.Text = "Only triggering NPC ?";
             // 
             // lblSpeedPerc
             // 
             this.lblSpeedPerc.AutoSize = true;
-            this.lblSpeedPerc.Location = new System.Drawing.Point(247, 195);
+            this.lblSpeedPerc.Location = new System.Drawing.Point(247, 213);
             this.lblSpeedPerc.Name = "lblSpeedPerc";
             this.lblSpeedPerc.Size = new System.Drawing.Size(15, 13);
             this.lblSpeedPerc.TabIndex = 48;
@@ -413,7 +442,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.nudNpcSpeed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudNpcSpeed.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudNpcSpeed.Location = new System.Drawing.Point(207, 192);
+            this.nudNpcSpeed.Location = new System.Drawing.Point(207, 210);
             this.nudNpcSpeed.Name = "nudNpcSpeed";
             this.nudNpcSpeed.Size = new System.Drawing.Size(40, 20);
             this.nudNpcSpeed.TabIndex = 47;
@@ -426,7 +455,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblNpcSpeed
             // 
             this.lblNpcSpeed.AutoSize = true;
-            this.lblNpcSpeed.Location = new System.Drawing.Point(3, 195);
+            this.lblNpcSpeed.Location = new System.Drawing.Point(3, 213);
             this.lblNpcSpeed.Name = "lblNpcSpeed";
             this.lblNpcSpeed.Size = new System.Drawing.Size(41, 13);
             this.lblNpcSpeed.TabIndex = 46;
@@ -445,7 +474,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbNpcSpeedComp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbNpcSpeedComp.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbNpcSpeedComp.FormattingEnabled = true;
-            this.cmbNpcSpeedComp.Location = new System.Drawing.Point(74, 191);
+            this.cmbNpcSpeedComp.Location = new System.Drawing.Point(74, 209);
             this.cmbNpcSpeedComp.Name = "cmbNpcSpeedComp";
             this.cmbNpcSpeedComp.Size = new System.Drawing.Size(130, 21);
             this.cmbNpcSpeedComp.TabIndex = 45;
@@ -456,7 +485,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblMRPerc
             // 
             this.lblMRPerc.AutoSize = true;
-            this.lblMRPerc.Location = new System.Drawing.Point(247, 171);
+            this.lblMRPerc.Location = new System.Drawing.Point(247, 189);
             this.lblMRPerc.Name = "lblMRPerc";
             this.lblMRPerc.Size = new System.Drawing.Size(15, 13);
             this.lblMRPerc.TabIndex = 44;
@@ -466,7 +495,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.nudNpcMR.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudNpcMR.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudNpcMR.Location = new System.Drawing.Point(207, 168);
+            this.nudNpcMR.Location = new System.Drawing.Point(207, 186);
             this.nudNpcMR.Name = "nudNpcMR";
             this.nudNpcMR.Size = new System.Drawing.Size(40, 20);
             this.nudNpcMR.TabIndex = 43;
@@ -479,7 +508,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblNpcMR
             // 
             this.lblNpcMR.AutoSize = true;
-            this.lblNpcMR.Location = new System.Drawing.Point(3, 171);
+            this.lblNpcMR.Location = new System.Drawing.Point(3, 189);
             this.lblNpcMR.Name = "lblNpcMR";
             this.lblNpcMR.Size = new System.Drawing.Size(71, 13);
             this.lblNpcMR.TabIndex = 42;
@@ -498,7 +527,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbNpcMRComp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbNpcMRComp.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbNpcMRComp.FormattingEnabled = true;
-            this.cmbNpcMRComp.Location = new System.Drawing.Point(74, 167);
+            this.cmbNpcMRComp.Location = new System.Drawing.Point(74, 185);
             this.cmbNpcMRComp.Name = "cmbNpcMRComp";
             this.cmbNpcMRComp.Size = new System.Drawing.Size(130, 21);
             this.cmbNpcMRComp.TabIndex = 41;
@@ -509,7 +538,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblDefensePerc
             // 
             this.lblDefensePerc.AutoSize = true;
-            this.lblDefensePerc.Location = new System.Drawing.Point(247, 147);
+            this.lblDefensePerc.Location = new System.Drawing.Point(247, 165);
             this.lblDefensePerc.Name = "lblDefensePerc";
             this.lblDefensePerc.Size = new System.Drawing.Size(15, 13);
             this.lblDefensePerc.TabIndex = 40;
@@ -519,7 +548,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.nudNpcDefense.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudNpcDefense.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudNpcDefense.Location = new System.Drawing.Point(207, 144);
+            this.nudNpcDefense.Location = new System.Drawing.Point(207, 162);
             this.nudNpcDefense.Name = "nudNpcDefense";
             this.nudNpcDefense.Size = new System.Drawing.Size(40, 20);
             this.nudNpcDefense.TabIndex = 39;
@@ -532,7 +561,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblNpcDefense
             // 
             this.lblNpcDefense.AutoSize = true;
-            this.lblNpcDefense.Location = new System.Drawing.Point(3, 147);
+            this.lblNpcDefense.Location = new System.Drawing.Point(3, 165);
             this.lblNpcDefense.Name = "lblNpcDefense";
             this.lblNpcDefense.Size = new System.Drawing.Size(50, 13);
             this.lblNpcDefense.TabIndex = 38;
@@ -551,7 +580,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbNpcDefenseComp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbNpcDefenseComp.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbNpcDefenseComp.FormattingEnabled = true;
-            this.cmbNpcDefenseComp.Location = new System.Drawing.Point(74, 143);
+            this.cmbNpcDefenseComp.Location = new System.Drawing.Point(74, 161);
             this.cmbNpcDefenseComp.Name = "cmbNpcDefenseComp";
             this.cmbNpcDefenseComp.Size = new System.Drawing.Size(130, 21);
             this.cmbNpcDefenseComp.TabIndex = 37;
@@ -562,7 +591,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblMagicPerc
             // 
             this.lblMagicPerc.AutoSize = true;
-            this.lblMagicPerc.Location = new System.Drawing.Point(248, 123);
+            this.lblMagicPerc.Location = new System.Drawing.Point(248, 141);
             this.lblMagicPerc.Name = "lblMagicPerc";
             this.lblMagicPerc.Size = new System.Drawing.Size(15, 13);
             this.lblMagicPerc.TabIndex = 36;
@@ -572,7 +601,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.nudNpcMagic.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudNpcMagic.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudNpcMagic.Location = new System.Drawing.Point(208, 120);
+            this.nudNpcMagic.Location = new System.Drawing.Point(208, 138);
             this.nudNpcMagic.Name = "nudNpcMagic";
             this.nudNpcMagic.Size = new System.Drawing.Size(40, 20);
             this.nudNpcMagic.TabIndex = 35;
@@ -585,7 +614,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblNpcMagic
             // 
             this.lblNpcMagic.AutoSize = true;
-            this.lblNpcMagic.Location = new System.Drawing.Point(4, 123);
+            this.lblNpcMagic.Location = new System.Drawing.Point(4, 141);
             this.lblNpcMagic.Name = "lblNpcMagic";
             this.lblNpcMagic.Size = new System.Drawing.Size(39, 13);
             this.lblNpcMagic.TabIndex = 34;
@@ -604,7 +633,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbNpcMagicComp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbNpcMagicComp.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbNpcMagicComp.FormattingEnabled = true;
-            this.cmbNpcMagicComp.Location = new System.Drawing.Point(74, 119);
+            this.cmbNpcMagicComp.Location = new System.Drawing.Point(74, 137);
             this.cmbNpcMagicComp.Name = "cmbNpcMagicComp";
             this.cmbNpcMagicComp.Size = new System.Drawing.Size(130, 21);
             this.cmbNpcMagicComp.TabIndex = 33;
@@ -615,7 +644,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblAttackPerc
             // 
             this.lblAttackPerc.AutoSize = true;
-            this.lblAttackPerc.Location = new System.Drawing.Point(248, 99);
+            this.lblAttackPerc.Location = new System.Drawing.Point(248, 117);
             this.lblAttackPerc.Name = "lblAttackPerc";
             this.lblAttackPerc.Size = new System.Drawing.Size(15, 13);
             this.lblAttackPerc.TabIndex = 32;
@@ -625,7 +654,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.nudNpcAttack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudNpcAttack.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudNpcAttack.Location = new System.Drawing.Point(208, 96);
+            this.nudNpcAttack.Location = new System.Drawing.Point(208, 114);
             this.nudNpcAttack.Name = "nudNpcAttack";
             this.nudNpcAttack.Size = new System.Drawing.Size(40, 20);
             this.nudNpcAttack.TabIndex = 31;
@@ -638,7 +667,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblNpcAttack
             // 
             this.lblNpcAttack.AutoSize = true;
-            this.lblNpcAttack.Location = new System.Drawing.Point(4, 99);
+            this.lblNpcAttack.Location = new System.Drawing.Point(4, 117);
             this.lblNpcAttack.Name = "lblNpcAttack";
             this.lblNpcAttack.Size = new System.Drawing.Size(41, 13);
             this.lblNpcAttack.TabIndex = 30;
@@ -657,7 +686,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbNpcAttackComp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbNpcAttackComp.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbNpcAttackComp.FormattingEnabled = true;
-            this.cmbNpcAttackComp.Location = new System.Drawing.Point(74, 95);
+            this.cmbNpcAttackComp.Location = new System.Drawing.Point(74, 113);
             this.cmbNpcAttackComp.Name = "cmbNpcAttackComp";
             this.cmbNpcAttackComp.Size = new System.Drawing.Size(130, 21);
             this.cmbNpcAttackComp.TabIndex = 29;
@@ -668,7 +697,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblManaPerc
             // 
             this.lblManaPerc.AutoSize = true;
-            this.lblManaPerc.Location = new System.Drawing.Point(248, 75);
+            this.lblManaPerc.Location = new System.Drawing.Point(248, 93);
             this.lblManaPerc.Name = "lblManaPerc";
             this.lblManaPerc.Size = new System.Drawing.Size(15, 13);
             this.lblManaPerc.TabIndex = 28;
@@ -678,7 +707,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.nudNpcMana.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudNpcMana.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudNpcMana.Location = new System.Drawing.Point(208, 72);
+            this.nudNpcMana.Location = new System.Drawing.Point(208, 90);
             this.nudNpcMana.Name = "nudNpcMana";
             this.nudNpcMana.Size = new System.Drawing.Size(40, 20);
             this.nudNpcMana.TabIndex = 27;
@@ -691,7 +720,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblNpcMana
             // 
             this.lblNpcMana.AutoSize = true;
-            this.lblNpcMana.Location = new System.Drawing.Point(4, 75);
+            this.lblNpcMana.Location = new System.Drawing.Point(4, 93);
             this.lblNpcMana.Name = "lblNpcMana";
             this.lblNpcMana.Size = new System.Drawing.Size(37, 13);
             this.lblNpcMana.TabIndex = 26;
@@ -710,7 +739,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbNpcManaComp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbNpcManaComp.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbNpcManaComp.FormattingEnabled = true;
-            this.cmbNpcManaComp.Location = new System.Drawing.Point(74, 71);
+            this.cmbNpcManaComp.Location = new System.Drawing.Point(74, 89);
             this.cmbNpcManaComp.Name = "cmbNpcManaComp";
             this.cmbNpcManaComp.Size = new System.Drawing.Size(130, 21);
             this.cmbNpcManaComp.TabIndex = 25;
@@ -721,7 +750,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblHpPerc
             // 
             this.lblHpPerc.AutoSize = true;
-            this.lblHpPerc.Location = new System.Drawing.Point(248, 51);
+            this.lblHpPerc.Location = new System.Drawing.Point(248, 69);
             this.lblHpPerc.Name = "lblHpPerc";
             this.lblHpPerc.Size = new System.Drawing.Size(15, 13);
             this.lblHpPerc.TabIndex = 24;
@@ -731,7 +760,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.nudNpcHp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudNpcHp.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudNpcHp.Location = new System.Drawing.Point(208, 48);
+            this.nudNpcHp.Location = new System.Drawing.Point(208, 66);
             this.nudNpcHp.Name = "nudNpcHp";
             this.nudNpcHp.Size = new System.Drawing.Size(40, 20);
             this.nudNpcHp.TabIndex = 23;
@@ -744,7 +773,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblNpcHp
             // 
             this.lblNpcHp.AutoSize = true;
-            this.lblNpcHp.Location = new System.Drawing.Point(4, 51);
+            this.lblNpcHp.Location = new System.Drawing.Point(4, 69);
             this.lblNpcHp.Name = "lblNpcHp";
             this.lblNpcHp.Size = new System.Drawing.Size(25, 13);
             this.lblNpcHp.TabIndex = 7;
@@ -763,7 +792,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbNpcHpComp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbNpcHpComp.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbNpcHpComp.FormattingEnabled = true;
-            this.cmbNpcHpComp.Location = new System.Drawing.Point(74, 47);
+            this.cmbNpcHpComp.Location = new System.Drawing.Point(74, 65);
             this.cmbNpcHpComp.Name = "cmbNpcHpComp";
             this.cmbNpcHpComp.Size = new System.Drawing.Size(130, 21);
             this.cmbNpcHpComp.TabIndex = 6;
@@ -793,12 +822,139 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbStatsNpc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbStatsNpc.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbStatsNpc.FormattingEnabled = true;
-            this.cmbStatsNpc.Location = new System.Drawing.Point(43, 18);
+            this.cmbStatsNpc.Location = new System.Drawing.Point(43, 20);
             this.cmbStatsNpc.Name = "cmbStatsNpc";
             this.cmbStatsNpc.Size = new System.Drawing.Size(211, 21);
             this.cmbStatsNpc.TabIndex = 3;
             this.cmbStatsNpc.Text = null;
             this.cmbStatsNpc.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbStatsNpc.SelectedIndexChanged += new System.EventHandler(this.cmbStatsNpc_SelectedIndexChanged);
+            // 
+            // grpFightingNPC
+            // 
+            this.grpFightingNPC.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpFightingNPC.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpFightingNPC.Controls.Add(this.chkOnlyTriggerPhase);
+            this.grpFightingNPC.Controls.Add(this.chkPhaseNone);
+            this.grpFightingNPC.Controls.Add(this.lblNpcPhase);
+            this.grpFightingNPC.Controls.Add(this.cmbNpcPhase);
+            this.grpFightingNPC.Controls.Add(this.lblIsOnPhase);
+            this.grpFightingNPC.Controls.Add(this.cmbIsOnPhase);
+            this.grpFightingNPC.Controls.Add(this.lblFightNpc);
+            this.grpFightingNPC.Controls.Add(this.cmbFightNpc);
+            this.grpFightingNPC.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpFightingNPC.Location = new System.Drawing.Point(8, 39);
+            this.grpFightingNPC.Name = "grpFightingNPC";
+            this.grpFightingNPC.Size = new System.Drawing.Size(262, 141);
+            this.grpFightingNPC.TabIndex = 59;
+            this.grpFightingNPC.TabStop = false;
+            this.grpFightingNPC.Text = "Fighting NPC on Phase:";
+            this.grpFightingNPC.Visible = false;
+            // 
+            // chkOnlyTriggerPhase
+            // 
+            this.chkOnlyTriggerPhase.Location = new System.Drawing.Point(122, 42);
+            this.chkOnlyTriggerPhase.Name = "chkOnlyTriggerPhase";
+            this.chkOnlyTriggerPhase.Size = new System.Drawing.Size(130, 17);
+            this.chkOnlyTriggerPhase.TabIndex = 62;
+            this.chkOnlyTriggerPhase.Text = "Only triggering NPC ?";
+            // 
+            // chkPhaseNone
+            // 
+            this.chkPhaseNone.Location = new System.Drawing.Point(122, 89);
+            this.chkPhaseNone.Name = "chkPhaseNone";
+            this.chkPhaseNone.Size = new System.Drawing.Size(130, 17);
+            this.chkPhaseNone.TabIndex = 61;
+            this.chkPhaseNone.Text = "Include None Phase ?";
+            // 
+            // lblNpcPhase
+            // 
+            this.lblNpcPhase.AutoSize = true;
+            this.lblNpcPhase.Location = new System.Drawing.Point(9, 119);
+            this.lblNpcPhase.Name = "lblNpcPhase";
+            this.lblNpcPhase.Size = new System.Drawing.Size(40, 13);
+            this.lblNpcPhase.TabIndex = 9;
+            this.lblNpcPhase.Text = "Phase:";
+            // 
+            // cmbNpcPhase
+            // 
+            this.cmbNpcPhase.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbNpcPhase.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbNpcPhase.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbNpcPhase.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbNpcPhase.DrawDropdownHoverOutline = false;
+            this.cmbNpcPhase.DrawFocusRectangle = false;
+            this.cmbNpcPhase.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbNpcPhase.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbNpcPhase.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbNpcPhase.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbNpcPhase.FormattingEnabled = true;
+            this.cmbNpcPhase.Location = new System.Drawing.Point(60, 113);
+            this.cmbNpcPhase.Name = "cmbNpcPhase";
+            this.cmbNpcPhase.Size = new System.Drawing.Size(190, 21);
+            this.cmbNpcPhase.TabIndex = 8;
+            this.cmbNpcPhase.Text = null;
+            this.cmbNpcPhase.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lblIsOnPhase
+            // 
+            this.lblIsOnPhase.AutoSize = true;
+            this.lblIsOnPhase.Location = new System.Drawing.Point(8, 73);
+            this.lblIsOnPhase.Name = "lblIsOnPhase";
+            this.lblIsOnPhase.Size = new System.Drawing.Size(18, 13);
+            this.lblIsOnPhase.TabIndex = 7;
+            this.lblIsOnPhase.Text = "Is:";
+            // 
+            // cmbIsOnPhase
+            // 
+            this.cmbIsOnPhase.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbIsOnPhase.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbIsOnPhase.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbIsOnPhase.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbIsOnPhase.DrawDropdownHoverOutline = false;
+            this.cmbIsOnPhase.DrawFocusRectangle = false;
+            this.cmbIsOnPhase.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbIsOnPhase.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbIsOnPhase.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbIsOnPhase.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbIsOnPhase.FormattingEnabled = true;
+            this.cmbIsOnPhase.Location = new System.Drawing.Point(60, 67);
+            this.cmbIsOnPhase.Name = "cmbIsOnPhase";
+            this.cmbIsOnPhase.Size = new System.Drawing.Size(190, 21);
+            this.cmbIsOnPhase.TabIndex = 6;
+            this.cmbIsOnPhase.Text = null;
+            this.cmbIsOnPhase.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbIsOnPhase.SelectedIndexChanged += new System.EventHandler(this.cmbIsOnPhase_SelectedIndexChanged);
+            // 
+            // lblFightNpc
+            // 
+            this.lblFightNpc.AutoSize = true;
+            this.lblFightNpc.Location = new System.Drawing.Point(6, 23);
+            this.lblFightNpc.Name = "lblFightNpc";
+            this.lblFightNpc.Size = new System.Drawing.Size(32, 13);
+            this.lblFightNpc.TabIndex = 5;
+            this.lblFightNpc.Text = "NPC:";
+            // 
+            // cmbFightNpc
+            // 
+            this.cmbFightNpc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbFightNpc.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbFightNpc.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbFightNpc.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbFightNpc.DrawDropdownHoverOutline = false;
+            this.cmbFightNpc.DrawFocusRectangle = false;
+            this.cmbFightNpc.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbFightNpc.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbFightNpc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbFightNpc.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbFightNpc.FormattingEnabled = true;
+            this.cmbFightNpc.Location = new System.Drawing.Point(60, 20);
+            this.cmbFightNpc.Name = "cmbFightNpc";
+            this.cmbFightNpc.Size = new System.Drawing.Size(190, 21);
+            this.cmbFightNpc.TabIndex = 3;
+            this.cmbFightNpc.Text = null;
+            this.cmbFightNpc.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbFightNpc.SelectedIndexChanged += new System.EventHandler(this.cmbFightingNpc_SelectedIndexChanged);
             // 
             // grpMapZoneType
             // 
@@ -2311,14 +2467,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblItem.TabIndex = 2;
             this.lblItem.Text = "Item:";
             // 
-            // chkPhaseNone
-            // 
-            this.chkPhaseNone.Location = new System.Drawing.Point(122, 67);
-            this.chkPhaseNone.Name = "chkPhaseNone";
-            this.chkPhaseNone.Size = new System.Drawing.Size(130, 17);
-            this.chkPhaseNone.TabIndex = 61;
-            this.chkPhaseNone.Text = "Include None Phase?";
-            // 
             // EventCommandConditionalBranch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2330,8 +2478,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.Size = new System.Drawing.Size(285, 345);
             this.grpConditional.ResumeLayout(false);
             this.grpConditional.PerformLayout();
-            this.grpFightingNPC.ResumeLayout(false);
-            this.grpFightingNPC.PerformLayout();
+            this.grpFightingAttackType.ResumeLayout(false);
+            this.grpFightingAttackType.PerformLayout();
             this.grpFightingStats.ResumeLayout(false);
             this.grpFightingStats.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudNpcSpeed)).EndInit();
@@ -2341,6 +2489,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             ((System.ComponentModel.ISupportInitialize)(this.nudNpcAttack)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudNpcMana)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudNpcHp)).EndInit();
+            this.grpFightingNPC.ResumeLayout(false);
+            this.grpFightingNPC.PerformLayout();
             this.grpMapZoneType.ResumeLayout(false);
             this.grpMapZoneType.PerformLayout();
             this.grpInGuild.ResumeLayout(false);
@@ -2538,5 +2688,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private System.Windows.Forms.Label lblNpcAttack;
         private DarkComboBox cmbNpcAttackComp;
         private DarkCheckBox chkPhaseNone;
+        private DarkCheckBox chkOnlyTriggerPhase;
+        private DarkCheckBox chkOnlyTriggerStat;
+        private DarkGroupBox grpFightingAttackType;
+        private DarkCheckBox chkOnlyTriggerAttackType;
+        private System.Windows.Forms.Label lblNpcAttackTypeIs;
+        private DarkComboBox cmbNpcAttackTypeIs;
+        private System.Windows.Forms.Label lblNpcAttackType;
+        private DarkComboBox cmbNpcAttackType;
+        private System.Windows.Forms.Label lblFightNpcAttackType;
+        private DarkComboBox cmbFightAttackTypeNpc;
     }
 }

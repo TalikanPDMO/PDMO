@@ -39,7 +39,7 @@ namespace Intersect.Server.Entities
 
         public NpcPhase CurrentPhase = null;
         public long CurrentPhaseTimer;
-
+        public AttackInfo LastPlayerTryAttackInfo = null;
 
         /// <summary>
         /// Returns the entity that ranks the highest on this NPC's damage map.
@@ -1467,7 +1467,7 @@ namespace Intersect.Server.Entities
 
             //If not then check and see if player meets the conditions to attack the npc...
             if (Base.PlayerCanAttackConditions.Lists.Count == 0 ||
-                Conditions.MeetsConditionLists(Base.PlayerCanAttackConditions, en, null))
+                Conditions.MeetsConditionLists(Base.PlayerCanAttackConditions, en, null, true, null, this))
             {
                 return true;
             }
@@ -1485,7 +1485,7 @@ namespace Intersect.Server.Entities
 
             //If not then check and see if player meets the conditions to attack the npc with a spell...
             if (Base.PlayerCanSpellConditions.Lists.Count == 0 ||
-                Conditions.MeetsConditionLists(Base.PlayerCanSpellConditions, en, null))
+                Conditions.MeetsConditionLists(Base.PlayerCanSpellConditions, en, null, true, null, this))
             {
                 return true;
             }
@@ -1503,7 +1503,7 @@ namespace Intersect.Server.Entities
 
             //If not then check and see if player meets the conditions to attack the npc with a projectile...
             if (Base.PlayerCanProjectileConditions.Lists.Count == 0 ||
-                Conditions.MeetsConditionLists(Base.PlayerCanProjectileConditions, en, null))
+                Conditions.MeetsConditionLists(Base.PlayerCanProjectileConditions, en, null, true, null, this))
             {
                 return true;
             }
@@ -1524,7 +1524,7 @@ namespace Intersect.Server.Entities
                         return false;
                     }
 
-                    return Conditions.MeetsConditionLists(conditionLists, otherPlayer, null);
+                    return Conditions.MeetsConditionLists(conditionLists, otherPlayer, null, true, null, this);
                 default:
                     return base.IsAllyOf(otherEntity);
             }
@@ -1540,7 +1540,7 @@ namespace Intersect.Server.Entities
             if (Base.Aggressive)
             {
                 if (Base.AttackOnSightConditions.Lists.Count > 0 &&
-                    Conditions.MeetsConditionLists(Base.AttackOnSightConditions, en, null))
+                    Conditions.MeetsConditionLists(Base.AttackOnSightConditions, en, null, true, null, this))
                 {
                     return false;
                 }
@@ -1550,7 +1550,7 @@ namespace Intersect.Server.Entities
             else
             {
                 if (Base.AttackOnSightConditions.Lists.Count > 0 &&
-                    Conditions.MeetsConditionLists(Base.AttackOnSightConditions, en, null))
+                    Conditions.MeetsConditionLists(Base.AttackOnSightConditions, en, null, true, null, this))
                 {
                     return true;
                 }
@@ -1854,7 +1854,7 @@ namespace Intersect.Server.Entities
         {
             foreach(var phase in Base.NpcPhases)
             {
-                if (phase.Id != CurrentPhase?.Id && Conditions.MeetsConditionLists(phase.ConditionLists, player, null))
+                if (phase.Id != CurrentPhase?.Id && Conditions.MeetsConditionLists(phase.ConditionLists, player, null, true, null, this))
                 {
                     EndCurrentPhase();
                     SetCurrentPhase(phase);

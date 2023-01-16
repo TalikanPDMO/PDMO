@@ -50,6 +50,8 @@ namespace Intersect.Editor.Forms.Editors
 
         private ConditionLists mSourceLists;
 
+        private RequirementType mRequirementType;
+
         public FrmDynamicRequirements(ConditionLists lists, RequirementType type)
         {
             InitializeComponent();
@@ -57,7 +59,7 @@ namespace Intersect.Editor.Forms.Editors
             mEdittingLists = new ConditionLists(lists.Data());
             UpdateLists();
             InitLocalization(type);
-
+            mRequirementType = type;
             this.Icon = Properties.Resources.Icon;
         }
 
@@ -224,6 +226,18 @@ namespace Intersect.Editor.Forms.Editors
         private Condition OpenConditionEditor(Condition condition)
         {
             var cmdWindow = new EventCommandConditionalBranch(condition, null, null, null);
+            switch(mRequirementType)
+            {
+                case RequirementType.NpcFriend:
+                case RequirementType.NpcAttackOnSight:
+                case RequirementType.NpcDontAttackOnSight:
+                case RequirementType.NpcCanBeAttacked:
+                case RequirementType.NpcCanBeSpelled:
+                case RequirementType.NpcCanBeProjectiled:
+                case RequirementType.NpcPhase:
+                    cmdWindow.SetupFromNpc();
+                    break;
+            }
             var frm = new Form
             {
                 Text = Strings.DynamicRequirements.conditioneditor,

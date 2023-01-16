@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using DarkUI.Controls;
@@ -7,6 +8,7 @@ using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
+using Intersect.Utilities;
 
 namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 {
@@ -23,6 +25,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private EventPage mCurrentPage;
 
         private ConditionalBranchCommand mEventCommand;
+
+        public bool FromNpc = false;
+
+        private List<Guid> mAttackIdList = new List<Guid>();
 
         private bool mLoading = false;
 
@@ -249,6 +255,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // Fighting NPC Phase
             grpFightingNPC.Text = Strings.EventConditional.fightingnpc;
             lblFightNpc.Text = Strings.EventConditional.fightnpc;
+            chkOnlyTriggerPhase.Text = Strings.EventConditional.onlytrigger;
+           
             cmbFightNpc.Items.Clear();
             chkPhaseNone.Text = Strings.EventConditional.includenone;
             lblIsOnPhase.Text = Strings.EventConditional.isonphase;
@@ -262,6 +270,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // Fighting NPC Stats
             grpFightingStats.Text = Strings.EventConditional.fightingstats;
             lblNpcStats.Text = Strings.EventConditional.statsnpc;
+            chkOnlyTriggerStat.Text = Strings.EventConditional.onlytrigger;
             cmbStatsNpc.Items.Clear();
 
             lblNpcHp.Text = Strings.EventConditional.npchp;
@@ -309,7 +318,27 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 cmbNpcMRComp.Items.Add(Strings.EventConditional.comparators[i]);
                 cmbNpcSpeedComp.Items.Add(Strings.EventConditional.comparators[i]);
             }
-            
+
+            // Fighting NPC AttackType
+            grpFightingAttackType.Text = Strings.EventConditional.fightingattacktype;
+            lblFightNpcAttackType.Text = Strings.EventConditional.attacktypenpc;
+            chkOnlyTriggerAttackType.Text = Strings.EventConditional.onlytrigger;
+
+            cmbFightAttackTypeNpc.Items.Clear();
+            lblNpcAttackType.Text = Strings.EventConditional.npcattacktype;
+            cmbNpcAttackType.Items.Clear();
+            cmbNpcAttackType.Items.Add(Strings.EventConditional.any);
+            for (var i = 0; i < Strings.EventConditional.attacktypes.Count; i++)
+            {
+                cmbNpcAttackType.Items.Add(Strings.EventConditional.attacktypes[i]);
+            }
+
+            cmbNpcAttackTypeIs.Items.Clear();
+            cmbNpcAttackTypeIs.Items.Add(Strings.EventConditional.any);
+            mAttackIdList.Clear();
+            mAttackIdList.Add(Guid.Empty);
+            lblNpcAttackTypeIs.Text = Strings.EventConditional.isattacktype;
+
             btnSave.Text = Strings.EventConditional.okay;
             btnCancel.Text = Strings.EventConditional.cancel;
         }
@@ -446,15 +475,27 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     {
                         cmbFightNpc.SelectedIndex = 0;
                     }
+
+                    if (FromNpc)
+                    {
+                        chkOnlyTriggerPhase.Checked = false;
+                        chkOnlyTriggerPhase.Enabled = false;
+                        chkOnlyTriggerPhase.Show();
+                    }
                     chkPhaseNone.Checked = false;
                     cmbIsOnPhase.SelectedIndex = 0;
-
                     break;
                 case ConditionTypes.FightingNPCStats:
                     Condition = new FightingNPCStats();
                     if (cmbStatsNpc.Items.Count > 0)
                     {
                         cmbStatsNpc.SelectedIndex = 0;
+                    }
+                    if (FromNpc)
+                    {
+                        chkOnlyTriggerStat.Checked = false;
+                        chkOnlyTriggerStat.Enabled = false;
+                        chkOnlyTriggerStat.Show();
                     }
                     nudNpcHp.Value = 100;
                     nudNpcMana.Value = 100;
@@ -472,6 +513,21 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     cmbNpcMRComp.SelectedIndex = 0;
                     cmbNpcSpeedComp.SelectedIndex = 0;
 
+                    break;
+                case ConditionTypes.FightingNPCAttackType:
+                    Condition = new FightingNPCAttackType();
+                    if (cmbFightAttackTypeNpc.Items.Count > 0)
+                    {
+                        cmbFightAttackTypeNpc.SelectedIndex = 0;
+                    }
+                    if (FromNpc)
+                    {
+                        chkOnlyTriggerAttackType.Checked = false;
+                        chkOnlyTriggerAttackType.Enabled = false;
+                        chkOnlyTriggerAttackType.Show();
+                    }
+                    cmbNpcAttackType.SelectedIndex = 0;
+                    cmbNpcAttackTypeIs.SelectedIndex = 0;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -498,6 +554,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             grpMapZoneType.Hide();
             grpFightingNPC.Hide();
             grpFightingStats.Hide();
+            grpFightingAttackType.Hide();
             switch (type)
             {
                 case ConditionTypes.VariableIs:
@@ -617,17 +674,25 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     break;
                 case ConditionTypes.FightingNPCPhase:
                     grpFightingNPC.Show();
+                    chkOnlyTriggerPhase.Hide();
                     cmbFightNpc.Items.Clear();
                     cmbFightNpc.Items.Add(Strings.EventConditional.anynpc);
                     cmbFightNpc.Items.AddRange(NpcBase.EditorFormatNames);
-
                     break;
                 case ConditionTypes.FightingNPCStats:
                     grpFightingStats.Show();
+                    chkOnlyTriggerStat.Hide();
                     cmbStatsNpc.Items.Clear();
                     cmbStatsNpc.Items.Add(Strings.EventConditional.anynpc);
                     cmbStatsNpc.Items.AddRange(NpcBase.EditorFormatNames);
 
+                    break;
+                case ConditionTypes.FightingNPCAttackType:
+                    grpFightingAttackType.Show();
+                    chkOnlyTriggerAttackType.Hide();
+                    cmbFightAttackTypeNpc.Items.Clear();
+                    cmbFightAttackTypeNpc.Items.Add(Strings.EventConditional.anynpc);
+                    cmbFightAttackTypeNpc.Items.AddRange(NpcBase.EditorFormatNames);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -741,6 +806,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbIsOnPhase.Items.Clear();
             if (cmbFightNpc.SelectedIndex == 0)
             {
+                chkOnlyTriggerPhase.Checked = false;
+                chkOnlyTriggerPhase.Enabled = false;
                 for (var i = 0; i < (int)NpcPhasesProgressState.BeforePhase; i++)
                 {
                     cmbIsOnPhase.Items.Add(Strings.EventConditional.phasecomparators[i]);
@@ -757,6 +824,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             }
             else
             {
+                chkOnlyTriggerPhase.Enabled = true;
                 for (var i = 0; i < Strings.EventConditional.phasecomparators.Count; i++)
                 {
                     cmbIsOnPhase.Items.Add(Strings.EventConditional.phasecomparators[i]);
@@ -780,6 +848,92 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     }
                 }
             }
+        }
+
+        private void cmbStatsNpc_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbStatsNpc.SelectedIndex == 0)
+            {
+                chkOnlyTriggerStat.Checked = false;
+                chkOnlyTriggerStat.Enabled = false;
+            }
+            else
+            {
+                chkOnlyTriggerStat.Enabled = true;
+            }
+        }
+
+        private void cmbFightAttackTypeNpc_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbFightAttackTypeNpc.SelectedIndex == 0)
+            {
+                chkOnlyTriggerAttackType.Checked = false;
+                chkOnlyTriggerAttackType.Enabled = false;
+            }
+            else
+            {
+                chkOnlyTriggerAttackType.Enabled = true;
+            }
+        }
+
+        private void cmbNpcAttackType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            cmbNpcAttackTypeIs.Items.Clear();
+            cmbNpcAttackTypeIs.Items.Add(Strings.EventConditional.any);
+            mAttackIdList.Clear();
+            mAttackIdList.Add(Guid.Empty);
+            if (cmbNpcAttackType.SelectedIndex > 0)
+            {
+                switch ((AttackType)(cmbNpcAttackType.SelectedIndex - 1))
+                {
+                    case AttackType.Basic:
+                        var basiclist = ItemBase.Lookup.Where(pair => ((ItemBase)pair.Value)?.EquipmentSlot == Options.WeaponIndex)
+                            .OrderBy(p => p.Value?.Name)
+                            .Select(pair => pair.Value)
+                            .ToList();
+                        foreach (var basic in basiclist)
+                        {
+                            cmbNpcAttackTypeIs.Items.Add(TextUtils.FormatEditorName(basic?.Name, ((ItemBase)basic)?.EditorName) ?? ItemBase.Deleted);
+                            mAttackIdList.Add(basic.Id);
+                        }
+
+                        break;
+                    case AttackType.Projectile:
+                        //Retrieve all spells that are projectiles
+                        var projspelllist = SpellBase.Lookup.Where(pair => ((SpellBase)pair.Value)?.Combat?.ProjectileId != Guid.Empty)
+                            .OrderBy(p => p.Value?.Name)
+                            .Select(pair => pair.Value)
+                            .ToList();
+                        foreach (var projspell in projspelllist)
+                        {
+                            cmbNpcAttackTypeIs.Items.Add(TextUtils.FormatEditorName(projspell?.Name, ((SpellBase)projspell)?.EditorName) ?? SpellBase.Deleted);
+                            mAttackIdList.Add(projspell.Id);
+                        }
+                        //Retrieve all items that are projectiles
+                        var projitemlist = ItemBase.Lookup.Where(pair => ((ItemBase)pair.Value)?.ProjectileId != Guid.Empty)
+                            .OrderBy(p => p.Value?.Name)
+                            .Select(pair => pair.Value)
+                            .ToList();
+                        foreach (var projitem in projitemlist)
+                        {
+                            cmbNpcAttackTypeIs.Items.Add(TextUtils.FormatEditorName(projitem?.Name, ((ItemBase)projitem)?.EditorName) ?? ItemBase.Deleted);
+                            mAttackIdList.Add(projitem.Id);
+                        }
+                        break;
+                    case AttackType.Spell:
+                        var spelllist = SpellBase.Lookup.Where(pair => ((SpellBase)pair.Value)?.Combat?.ProjectileId == Guid.Empty)
+                            .OrderBy(p => p.Value?.Name)
+                            .Select(pair => pair.Value)
+                            .ToList();
+                        foreach (var spell in spelllist)
+                        {
+                            cmbNpcAttackTypeIs.Items.Add(TextUtils.FormatEditorName(spell?.Name, ((SpellBase)spell)?.EditorName) ?? SpellBase.Deleted);
+                            mAttackIdList.Add(spell.Id);
+                        }
+                        break;
+                }
+            } 
+            cmbNpcAttackTypeIs.SelectedIndex = 0;
         }
 
         private void cmbAnyPhaseStat_SelectedIndexChanged(object sender, EventArgs e)
@@ -1420,6 +1574,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     cmbFightNpc.SelectedIndex = NpcBase.ListIndex(condition.NpcId) + 1;
                 }
             }
+            if (cmbFightNpc.SelectedIndex > 0)
+            {
+                chkOnlyTriggerPhase.Checked = !condition.Any;
+                chkOnlyTriggerPhase.Enabled = true;
+            }
+            else
+            {
+                chkOnlyTriggerPhase.Checked = false;
+                chkOnlyTriggerPhase.Enabled = false;
+            }
 
             cmbIsOnPhase.SelectedIndex = (int)condition.Progress;
             if (cmbIsOnPhase.SelectedIndex == -1)
@@ -1457,6 +1621,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 {
                     cmbStatsNpc.SelectedIndex = NpcBase.ListIndex(condition.NpcId) + 1;
                 }
+            }
+            if (cmbStatsNpc.SelectedIndex > 0)
+            {
+                chkOnlyTriggerStat.Checked = !condition.Any;
+                chkOnlyTriggerStat.Enabled = true;
+            }
+            else
+            {
+                chkOnlyTriggerStat.Checked = false;
+                chkOnlyTriggerStat.Enabled = false;
             }
             cmbNpcHpComp.SelectedIndex = 0;
             cmbNpcManaComp.SelectedIndex = 0;
@@ -1498,6 +1672,47 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                         cmbNpcSpeedComp.SelectedIndex = perc.Value[1] + 1;
                         break;
                 }
+            }
+        }
+
+        private void SetupFormValues(FightingNPCAttackType condition)
+        {
+            if (cmbFightAttackTypeNpc.Items.Count > 0)
+            {
+                if (condition.NpcId == Guid.Empty)
+                {
+                    cmbFightAttackTypeNpc.SelectedIndex = 0;
+                }
+                else
+                {
+                    cmbFightAttackTypeNpc.SelectedIndex = NpcBase.ListIndex(condition.NpcId) + 1;
+                }
+            }
+            if (cmbFightAttackTypeNpc.SelectedIndex > 0)
+            {
+                chkOnlyTriggerAttackType.Checked = !condition.Any;
+                chkOnlyTriggerAttackType.Enabled = true;
+            }
+            else
+            {
+                chkOnlyTriggerAttackType.Checked = false;
+                chkOnlyTriggerAttackType.Enabled = false;
+            }
+
+            cmbNpcAttackType.SelectedIndex = condition.AttackType + 1;
+            if (cmbNpcAttackType.SelectedIndex == -1)
+            {
+                cmbNpcAttackType.SelectedIndex = 0;
+            }
+
+            cmbNpcAttackType_SelectedIndexChanged(null, null);
+            if (condition.AttackId == null || condition.AttackId == Guid.Empty)
+            {
+                cmbNpcAttackTypeIs.SelectedIndex = 0;
+            }
+            else
+            {
+                cmbNpcAttackTypeIs.SelectedIndex = mAttackIdList.IndexOf(condition.AttackId);
             }
         }
 
@@ -1661,6 +1876,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             condition.Progress = (NpcPhasesProgressState)cmbIsOnPhase.SelectedIndex;
             condition.PhaseId = Guid.Empty;
             condition.OrNone = chkPhaseNone.Checked;
+            if (FromNpc)
+            {
+                condition.Any = !chkOnlyTriggerPhase.Checked;
+            }
+            else
+            {
+                condition.Any = false;
+            }
             if (cmbFightNpc.SelectedIndex > 0)
             {
                 condition.NpcId = NpcBase.IdFromList(cmbFightNpc.SelectedIndex - 1);
@@ -1682,6 +1905,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             condition.NpcId = Guid.Empty;
             condition.Percents.Clear();
+            if (FromNpc)
+            {
+                condition.Any = !chkOnlyTriggerStat.Checked;
+            }
+            else
+            {
+                condition.Any = false;
+            }
             if (cmbStatsNpc.SelectedIndex > 0)
             {
                 condition.NpcId = NpcBase.IdFromList(cmbStatsNpc.SelectedIndex - 1);
@@ -1714,6 +1945,33 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             {
                 condition.Percents.Add((int)PhaseStats.Speed, new int[2] { (int)nudNpcSpeed.Value, cmbNpcSpeedComp.SelectedIndex - 1 });
             }
+        }
+
+        private void SaveFormValues(FightingNPCAttackType condition)
+        {
+            condition.NpcId = Guid.Empty;
+            condition.AttackType = cmbNpcAttackType.SelectedIndex - 1;
+            condition.AttackId = mAttackIdList[cmbNpcAttackTypeIs.SelectedIndex];
+            if (FromNpc)
+            {
+                condition.Any = !chkOnlyTriggerAttackType.Checked;
+            }
+            else
+            {
+                condition.Any = false;
+            }
+            if (cmbFightAttackTypeNpc.SelectedIndex > 0)
+            {
+                condition.NpcId = NpcBase.IdFromList(cmbFightAttackTypeNpc.SelectedIndex - 1);
+            }
+        }
+
+        public void SetupFromNpc()
+        {
+            FromNpc = true;
+            chkOnlyTriggerPhase.Show();
+            chkOnlyTriggerStat.Show();
+            chkOnlyTriggerAttackType.Show();
         }
 
         #endregion

@@ -1399,7 +1399,15 @@ namespace Intersect.Server.Entities
             {
                 this.FightingNpcBaseIds.AddOrUpdate(npcenemy.Base.Id, CombatTimer, (guid, t) => CombatTimer);
                 var npclist = this.FightingListNpcs.GetOrAdd(npcenemy.Base.Id, new ConcurrentDictionary<Npc, AttackInfo>());
-                var attackinfo = new AttackInfo((DamageType)(weapon?.DamageType ?? classBase.DamageType), AttackType.Basic);
+                AttackInfo attackinfo;
+                if (weapon != null)
+                {
+                    attackinfo = new AttackInfo((DamageType)weapon.DamageType, AttackType.Basic, weapon.Id);
+                }
+                else
+                {
+                    attackinfo = new AttackInfo((DamageType)classBase.DamageType, AttackType.Basic, Guid.Empty);
+                }
                 npclist.AddOrUpdate(npcenemy, attackinfo, (npc, info) => attackinfo);
             }
             if (!CanAttack(target, null))
@@ -4500,12 +4508,6 @@ namespace Intersect.Server.Entities
                     PacketSender.SendChatMsg(this, Strings.Combat.dynamicreq, ChatMessageType.Spells);
                 }
 
-                return false;
-            }
-
-
-            if (!CanAttack(target, spell))
-            {
                 return false;
             }
 

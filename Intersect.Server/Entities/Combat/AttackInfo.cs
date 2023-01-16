@@ -1,4 +1,5 @@
 ﻿using Intersect.Enums;
+using System;
 
 namespace Intersect.Server.Entities.Combat
 {
@@ -9,10 +10,13 @@ namespace Intersect.Server.Entities.Combat
 
         public AttackType AttackType;
 
-        public AttackInfo(DamageType damageType, AttackType attackType)
+        public Guid AttackId;
+
+        public AttackInfo(DamageType damageType, AttackType attackType, Guid attackId)
         {
             DamageType = damageType;
             AttackType = attackType;
+            AttackId = attackId;
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Intersect.Enums;
 
 namespace Intersect.GameObjects.Events
@@ -46,7 +47,9 @@ namespace Intersect.GameObjects.Events
 
         FightingNPCPhase,
 
-        FightingNPCStats
+        FightingNPCStats,
+
+        FightingNPCAttackType
 
     }
 
@@ -313,6 +316,9 @@ namespace Intersect.GameObjects.Events
         public Guid PhaseId { get; set; }
 
         public bool OrNone { get; set; } = false;
+
+        public bool Any { get; set; } = false;
+
     }
 
     public class FightingNPCStats : Condition
@@ -325,6 +331,26 @@ namespace Intersect.GameObjects.Events
         public Guid NpcId { get; set; }
 
         public Dictionary<int, int[]> Percents { get; set; } = new Dictionary<int, int[]>();
+
+        public bool Any { get; set; } = false;
+
+    }
+
+    public class FightingNPCAttackType : Condition
+    {
+        /// <summary>
+        /// Defines the type of condition.
+        /// </summary>
+        public override ConditionTypes Type { get; } = ConditionTypes.FightingNPCAttackType;
+
+        public Guid NpcId { get; set; }
+
+        [DefaultValue(-1)]
+        public int AttackType { get; set; } = -1;
+
+        public bool Any { get; set; } = false;
+
+        public Guid AttackId { get; set; }
 
     }
 
