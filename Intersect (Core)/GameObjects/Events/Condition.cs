@@ -352,6 +352,8 @@ namespace Intersect.GameObjects.Events
 
         public Guid AttackId { get; set; }
 
+        [DefaultValue(-1)]
+        public int DamageType { get; set; } = -1;
     }
 
     public class VariableCompaison
