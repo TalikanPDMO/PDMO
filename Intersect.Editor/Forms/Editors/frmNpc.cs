@@ -236,6 +236,7 @@ namespace Intersect.Editor.Forms.Editors
             lblHpRegen.Text = Strings.NpcEditor.hpregen;
             lblManaRegen.Text = Strings.NpcEditor.mpregen;
             lblRegenHint.Text = Strings.NpcEditor.regenhint;
+            chkRegenReset.Text = Strings.NpcEditor.regenreset;
 
             grpSpells.Text = Strings.NpcEditor.spells;
             lblSpell.Text = Strings.NpcEditor.spell;
@@ -388,6 +389,7 @@ namespace Intersect.Editor.Forms.Editors
                 //Regen
                 nudHpRegen.Value = mEditorItem.VitalRegen[(int) Vitals.Health];
                 nudMpRegen.Value = mEditorItem.VitalRegen[(int) Vitals.Mana];
+                chkRegenReset.Checked = mEditorItem.RegenReset;
 
                 // Add the spells to the list
                 lstSpells.Items.Clear();
@@ -1070,6 +1072,11 @@ namespace Intersect.Editor.Forms.Editors
         private void nudMpRegen_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.VitalRegen[(int) Vitals.Mana] = (int) nudMpRegen.Value;
+        }
+
+        private void chkRegenReset_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.RegenReset = chkRegenReset.Checked;
         }
 
         private void chkAggressive_CheckedChanged(object sender, EventArgs e)

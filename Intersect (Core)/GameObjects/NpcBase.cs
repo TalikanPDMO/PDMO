@@ -118,6 +118,7 @@ namespace Intersect.GameObjects
 
         public int MaxRandomMove { get; set; } = 3;
 
+
         //Conditions
         [Column("PlayerFriendConditions")]
         [JsonIgnore]
@@ -171,6 +172,8 @@ namespace Intersect.GameObjects
         public int AttackSpeedModifier { get; set; }
 
         public int AttackSpeedValue { get; set; }
+
+        public bool RegenReset { get; set; } = true;
 
         //Common Events
         [Column("OnDeathEvent")]
@@ -359,8 +362,6 @@ namespace Intersect.GameObjects
 
     public class NpcPhase
     {
-        //TODOPDMO Remove id and useless fields ?
-
         [NotMapped] [JsonIgnore] public EventBase EditingEvent;
 
         public NpcPhase(Guid id)

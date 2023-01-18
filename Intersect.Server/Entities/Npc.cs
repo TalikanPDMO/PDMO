@@ -39,7 +39,6 @@ namespace Intersect.Server.Entities
 
         public NpcPhase CurrentPhase = null;
         public long CurrentPhaseTimer;
-        public AttackInfo LastPlayerTryAttackInfo = null;
 
         /// <summary>
         /// Returns the entity that ranks the highest on this NPC's damage map.
@@ -88,6 +87,7 @@ namespace Intersect.Server.Entities
         private int mResetCounter = 0;
         private int mResetMax = 100;
         private bool mResetting = false;
+        private bool mResetPhase = false;
 
         /// <summary>
         /// The map on which this NPC was "aggro'd" and started chasing a target.
@@ -170,12 +170,27 @@ namespace Intersect.Server.Entities
         public override void Die(bool generateLoot = true, Entity killer = null)
         {
             lock (EntityLock) {
+
+                // Do it before base.Die because we need the damagemap to be not cleared
+                foreach (var en in DamageMap.Keys)
+                {
+                    if (en is Player p && p.FightingListNpcs.TryGetValue(Base.Id, out var npcs))
+                    {
+                        if (npcs.TryRemove(this, out _) && npcs.Count == 0)
+                        {
+                            p.FightingListNpcs.TryRemove(Base.Id, out var removed);
+                            p.FightingNpcBaseIds.TryRemove(Base.Id, out _);
+                        }
+                    }
+                }
+
                 base.Die(generateLoot, killer);
 
                 AggroCenterMap = null;
                 AggroCenterX = 0;
                 AggroCenterY = 0;
                 AggroCenterZ = 0;
+
 
                 MapInstance.Get(MapId).RemoveEntity(this);
                 PacketSender.SendEntityDie(this);
@@ -284,6 +299,7 @@ namespace Intersect.Server.Entities
             if (Target != oldTarget)
             {
                 CombatTimer = Timing.Global.Milliseconds + Options.CombatTime;
+                mResetPhase = false;
                 PacketSender.SendNpcAggressionToProximity(this);
             }
             mTargetFailCounter = 0;
@@ -927,6 +943,21 @@ namespace Intersect.Server.Entities
                                 AggroCenterZ = 0;
                                 mPathFinder?.SetTarget(null);
                                 mResetting = false;
+
+                                // Reset the current phase when reaching our reset destination and we are full vitals or if our regen is 0
+                                if ((IsFullVital(Vitals.Health) && IsFullVital(Vitals.Mana))
+                                    || (CurrentPhase?.VitalRegen != null && CurrentPhase.VitalRegen.Contains(0))
+                                    || (CurrentPhase == null && Base.VitalRegen.Contains(0)))
+                                {
+                                    EndCurrentPhase();
+                                    PacketSender.SendEntityStats(this);
+                                    PacketSender.SendEntityDataToProximity(this);
+                                    mResetPhase = false;
+                                }
+                                else
+                                {
+                                    mResetPhase = true;
+                                }
                             }
 
                             ResetNpc(Options.Instance.NpcOpts.ContinuouslyResetVitalsAndStatuses);
@@ -1125,6 +1156,21 @@ namespace Intersect.Server.Entities
                                                     AggroCenterZ = 0;
                                                     mPathFinder?.SetTarget(null);
                                                     mResetting = false;
+
+                                                    // Reset the current phase when reaching our reset destination and we are full vitals
+                                                    if ((IsFullVital(Vitals.Health) && IsFullVital(Vitals.Mana))
+                                                        || (CurrentPhase?.VitalRegen != null && CurrentPhase.VitalRegen.Contains(0))
+                                                        || (CurrentPhase == null && Base.VitalRegen.Contains(0)))
+                                                    {
+                                                        EndCurrentPhase();
+                                                        PacketSender.SendEntityStats(this);
+                                                        PacketSender.SendEntityDataToProximity(this);
+                                                        mResetPhase = false;
+                                                    }
+                                                    else
+                                                    {
+                                                        mResetPhase = true;
+                                                    }
                                                 }
                                             }  
                                         }
@@ -1390,6 +1436,10 @@ namespace Intersect.Server.Entities
 
                 // Try and move back to where we came from before we started chasing something.
                 mResetting = true;
+                if (Base.RegenReset)
+                {
+                    CombatTimer = 0; // Added to allow regen when starting resetting for npc
+                }
                 mPathFinder.SetTarget(new PathfinderTarget(AggroCenterMap.Id, AggroCenterX, AggroCenterY, AggroCenterZ));
                 return true;
             }
@@ -1404,9 +1454,6 @@ namespace Intersect.Server.Entities
             DamageMap.Clear();
             LootMap.Clear();
             LootMapCache = Array.Empty<Guid>();
-            EndCurrentPhase();
-            PacketSender.SendEntityStats(this);
-            PacketSender.SendEntityDataToProximity(this);
             if (clearLocation)
             {
                 mPathFinder.SetTarget(null);
@@ -1727,7 +1774,6 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
-
             foreach (Vitals vital in Enum.GetValues(typeof(Vitals)))
             {
                 if (vital >= Vitals.VitalCount)
@@ -1752,6 +1798,14 @@ namespace Intersect.Server.Entities
                                  Math.Abs(Math.Sign(vitalRegenRate));
 
                 AddVital(vital, regenValue);
+            }
+            // Reset the current phase when reaching our reset destination and we are full vitals
+            if (mResetPhase && IsFullVital(Vitals.Health) && IsFullVital(Vitals.Mana))
+            {
+                EndCurrentPhase();
+                PacketSender.SendEntityStats(this);
+                PacketSender.SendEntityDataToProximity(this);
+                mResetPhase = false;
             }
         }
 
