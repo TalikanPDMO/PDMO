@@ -87,7 +87,7 @@ namespace Intersect.Server.Entities
         private int mResetCounter = 0;
         private int mResetMax = 100;
         private bool mResetting = false;
-        private bool mResetPhase = false;
+        private byte mResetPhase = 0; //0 for no reset, 1 when reset destination is reached, 2 when we are waiting our regen to end before reset phase
 
         /// <summary>
         /// The map on which this NPC was "aggro'd" and started chasing a target.
@@ -299,7 +299,7 @@ namespace Intersect.Server.Entities
             if (Target != oldTarget)
             {
                 CombatTimer = Timing.Global.Milliseconds + Options.CombatTime;
-                mResetPhase = false;
+                mResetPhase = 0;
                 PacketSender.SendNpcAggressionToProximity(this);
             }
             mTargetFailCounter = 0;
@@ -913,6 +913,24 @@ namespace Intersect.Server.Entities
                         var targetY = 0;
                         var targetZ = 0;
 
+                        // Reset the current phase when we reached our reset destination and we are full vitals or if our regen is 0
+                        if (mResetPhase == 1)
+                        {
+                            if ((IsFullVital(Vitals.Health) && IsFullVital(Vitals.Mana))
+                            || (CurrentPhase?.VitalRegen != null && CurrentPhase.VitalRegen.Contains(0))
+                            || (CurrentPhase == null && Base.VitalRegen.Contains(0)))
+                            {
+                                EndCurrentPhase();
+                                PacketSender.SendEntityStats(this);
+                                PacketSender.SendEntityDataToProximity(this);
+                                mResetPhase = 0;
+                            }
+                            else
+                            {
+                                mResetPhase = 2;
+                            }
+                        }
+
                         //TODO Clear Damage Map if out of combat (target is null and combat timer is to the point that regen has started)
                         if (tempTarget != null && Timing.Global.Milliseconds > CombatTimer)
                         {
@@ -943,21 +961,7 @@ namespace Intersect.Server.Entities
                                 AggroCenterZ = 0;
                                 mPathFinder?.SetTarget(null);
                                 mResetting = false;
-
-                                // Reset the current phase when reaching our reset destination and we are full vitals or if our regen is 0
-                                if ((IsFullVital(Vitals.Health) && IsFullVital(Vitals.Mana))
-                                    || (CurrentPhase?.VitalRegen != null && CurrentPhase.VitalRegen.Contains(0))
-                                    || (CurrentPhase == null && Base.VitalRegen.Contains(0)))
-                                {
-                                    EndCurrentPhase();
-                                    PacketSender.SendEntityStats(this);
-                                    PacketSender.SendEntityDataToProximity(this);
-                                    mResetPhase = false;
-                                }
-                                else
-                                {
-                                    mResetPhase = true;
-                                }
+                                mResetPhase = 1;      
                             }
 
                             ResetNpc(Options.Instance.NpcOpts.ContinuouslyResetVitalsAndStatuses);
@@ -1156,21 +1160,7 @@ namespace Intersect.Server.Entities
                                                     AggroCenterZ = 0;
                                                     mPathFinder?.SetTarget(null);
                                                     mResetting = false;
-
-                                                    // Reset the current phase when reaching our reset destination and we are full vitals
-                                                    if ((IsFullVital(Vitals.Health) && IsFullVital(Vitals.Mana))
-                                                        || (CurrentPhase?.VitalRegen != null && CurrentPhase.VitalRegen.Contains(0))
-                                                        || (CurrentPhase == null && Base.VitalRegen.Contains(0)))
-                                                    {
-                                                        EndCurrentPhase();
-                                                        PacketSender.SendEntityStats(this);
-                                                        PacketSender.SendEntityDataToProximity(this);
-                                                        mResetPhase = false;
-                                                    }
-                                                    else
-                                                    {
-                                                        mResetPhase = true;
-                                                    }
+                                                    mResetPhase = 1;
                                                 }
                                             }  
                                         }
@@ -1800,12 +1790,12 @@ namespace Intersect.Server.Entities
                 AddVital(vital, regenValue);
             }
             // Reset the current phase when reaching our reset destination and we are full vitals
-            if (mResetPhase && IsFullVital(Vitals.Health) && IsFullVital(Vitals.Mana))
+            if (mResetPhase == 2 && IsFullVital(Vitals.Health) && IsFullVital(Vitals.Mana))
             {
                 EndCurrentPhase();
                 PacketSender.SendEntityStats(this);
                 PacketSender.SendEntityDataToProximity(this);
-                mResetPhase = false;
+                mResetPhase = 0;
             }
         }
 
@@ -1918,6 +1908,10 @@ namespace Intersect.Server.Entities
                     {
                         PacketSender.SendAnimationToProximity((Guid)phase.BeginAnimationId, 1, Id, MapId, 0, 0, (sbyte)Dir);
                         //Target Type 1 will be global entity
+                    }
+                    if (phase.BeginSpellId != null && phase.BeginSpellId != Guid.Empty)
+                    {
+                        CastSpell((Guid)phase.BeginSpellId);
                     }
                     player.StartCommonEvent(phase.BeginEvent);
                     break; // Exit the loop, only one phase can be triggered

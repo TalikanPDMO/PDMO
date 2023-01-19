@@ -456,6 +456,17 @@ namespace Intersect.GameObjects
             set => BeginEventId = value.Id;
         }
 
+        [Column("BeginSpell")]
+        public Guid? BeginSpellId { get; set; } = null;
+
+        [NotMapped]
+        [JsonIgnore]
+        public SpellBase BeginSpell
+        {
+            get => SpellBase.Get(BeginSpellId ?? Guid.Empty);
+            set => BeginSpellId = value?.Id;
+        }
+
         [Column("BeginAnimation")]
         public Guid? BeginAnimationId { get; set; } = null;
 

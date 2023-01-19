@@ -94,6 +94,12 @@ namespace Intersect.Editor.Forms.Editors
                 cmbBeginAnimation.Items.AddRange(AnimationBase.Names);
                 cmbBeginAnimation.SelectedIndex = AnimationBase.ListIndex(mMyPhase.BeginAnimationId ?? Guid.Empty) + 1;
 
+                cmbBeginSpell.Items.Clear();
+                cmbBeginSpell.Items.Add(Strings.General.none);
+                cmbBeginSpell.Items.AddRange(SpellBase.EditorFormatNames);
+                cmbBeginSpell.SelectedIndex = SpellBase.ListIndex(mMyPhase.BeginSpellId ?? Guid.Empty) + 1;
+
+
                 //Stats diff
                 if (mMyPhase.BaseStatsDiff != null)
                 {
@@ -232,6 +238,7 @@ namespace Intersect.Editor.Forms.Editors
             btnEditConditions.Text = Strings.NpcPhaseEditor.editconditions;
             btnEditBeginEvent.Text = Strings.NpcPhaseEditor.editbeginevent;
             lblBeginAnimation.Text = Strings.NpcPhaseEditor.beginanimation;
+            lblBeginSpell.Text = Strings.NpcPhaseEditor.beginspell;
 
             grpSpells.Text = Strings.NpcPhaseEditor.spells;
             chkReplaceSpells.Text = Strings.NpcPhaseEditor.replacespells;
@@ -345,7 +352,9 @@ namespace Intersect.Editor.Forms.Editors
             
             mMyPhase.ReplaceSpells = chkReplaceSpells.Checked;
             mMyPhase.BeginAnimation = (cmbBeginAnimation.SelectedIndex == 0 ? null :
-                AnimationBase.Get(AnimationBase.IdFromList(cmbBeginAnimation.SelectedIndex - 1))); 
+                AnimationBase.Get(AnimationBase.IdFromList(cmbBeginAnimation.SelectedIndex - 1)));
+            mMyPhase.BeginSpell = (cmbBeginSpell.SelectedIndex == 0 ? null :
+               SpellBase.Get(SpellBase.IdFromList(cmbBeginSpell.SelectedIndex - 1)));
 
             mMyPhase.BaseStatsDiff = new double[(int)PhaseStats.PhaseStatCount];
             mMyPhase.BaseStatsDiff[(int)PhaseStats.Health] = (double)nudHealthPercentage.Value;

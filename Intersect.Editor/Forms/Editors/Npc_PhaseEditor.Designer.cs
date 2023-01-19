@@ -89,6 +89,12 @@ namespace Intersect.Editor.Forms.Editors
             this.lblHpRegen = new System.Windows.Forms.Label();
             this.lblManaRegen = new System.Windows.Forms.Label();
             this.grpStats = new DarkUI.Controls.DarkGroupBox();
+            this.lblX6 = new System.Windows.Forms.Label();
+            this.lblX7 = new System.Windows.Forms.Label();
+            this.nudManaPercentage = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudHealthPercentage = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblMana = new System.Windows.Forms.Label();
+            this.lblHealth = new System.Windows.Forms.Label();
             this.lblX5 = new System.Windows.Forms.Label();
             this.lblX4 = new System.Windows.Forms.Label();
             this.lblX3 = new System.Windows.Forms.Label();
@@ -108,12 +114,8 @@ namespace Intersect.Editor.Forms.Editors
             this.lblBeginAnimation = new System.Windows.Forms.Label();
             this.cmbBeginAnimation = new DarkUI.Controls.DarkComboBox();
             this.btnEditConditions = new DarkUI.Controls.DarkButton();
-            this.lblX6 = new System.Windows.Forms.Label();
-            this.lblX7 = new System.Windows.Forms.Label();
-            this.nudManaPercentage = new DarkUI.Controls.DarkNumericUpDown();
-            this.nudHealthPercentage = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblMana = new System.Windows.Forms.Label();
-            this.lblHealth = new System.Windows.Forms.Label();
+            this.lblBeginSpell = new System.Windows.Forms.Label();
+            this.cmbBeginSpell = new DarkUI.Controls.DarkComboBox();
             this.grpSpells.SuspendLayout();
             this.grpEditor.SuspendLayout();
             this.grpSprite.SuspendLayout();
@@ -135,14 +137,14 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMpRegen)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHpRegen)).BeginInit();
             this.grpStats.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudManaPercentage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudHealthPercentage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpdPercentage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMRPercentage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDefPercentage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMagPercentage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStrPercentage)).BeginInit();
             this.grpPhaseBegin.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudManaPercentage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudHealthPercentage)).BeginInit();
             this.SuspendLayout();
             // 
             // grpSpells
@@ -256,7 +258,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnEditBeginEvent
             // 
-            this.btnEditBeginEvent.Location = new System.Drawing.Point(281, 22);
+            this.btnEditBeginEvent.Location = new System.Drawing.Point(5, 22);
             this.btnEditBeginEvent.Name = "btnEditBeginEvent";
             this.btnEditBeginEvent.Padding = new System.Windows.Forms.Padding(5);
             this.btnEditBeginEvent.Size = new System.Drawing.Size(77, 23);
@@ -289,6 +291,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEditor.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.grpEditor.Controls.Add(this.lblIndex);
             this.grpEditor.Controls.Add(this.grpSprite);
+            this.grpEditor.Controls.Add(this.btnEditConditions);
             this.grpEditor.Controls.Add(this.grpDuration);
             this.grpEditor.Controls.Add(this.grpAttackSpeed);
             this.grpEditor.Controls.Add(this.grpCombat);
@@ -997,6 +1000,96 @@ namespace Intersect.Editor.Forms.Editors
             this.grpStats.TabStop = false;
             this.grpStats.Text = "Stats Multiplier";
             // 
+            // lblX6
+            // 
+            this.lblX6.AutoSize = true;
+            this.lblX6.Location = new System.Drawing.Point(74, 52);
+            this.lblX6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblX6.Name = "lblX6";
+            this.lblX6.Size = new System.Drawing.Size(12, 13);
+            this.lblX6.TabIndex = 73;
+            this.lblX6.Text = "x";
+            // 
+            // lblX7
+            // 
+            this.lblX7.AutoSize = true;
+            this.lblX7.Location = new System.Drawing.Point(74, 23);
+            this.lblX7.Margin = new System.Windows.Forms.Padding(0);
+            this.lblX7.Name = "lblX7";
+            this.lblX7.Size = new System.Drawing.Size(12, 13);
+            this.lblX7.TabIndex = 72;
+            this.lblX7.Text = "x";
+            // 
+            // nudManaPercentage
+            // 
+            this.nudManaPercentage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudManaPercentage.DecimalPlaces = 2;
+            this.nudManaPercentage.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudManaPercentage.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.nudManaPercentage.Location = new System.Drawing.Point(86, 49);
+            this.nudManaPercentage.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudManaPercentage.Name = "nudManaPercentage";
+            this.nudManaPercentage.Size = new System.Drawing.Size(55, 20);
+            this.nudManaPercentage.TabIndex = 71;
+            this.nudManaPercentage.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // nudHealthPercentage
+            // 
+            this.nudHealthPercentage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudHealthPercentage.DecimalPlaces = 2;
+            this.nudHealthPercentage.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudHealthPercentage.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.nudHealthPercentage.Location = new System.Drawing.Point(86, 21);
+            this.nudHealthPercentage.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudHealthPercentage.Name = "nudHealthPercentage";
+            this.nudHealthPercentage.Size = new System.Drawing.Size(55, 20);
+            this.nudHealthPercentage.TabIndex = 70;
+            this.nudHealthPercentage.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblMana
+            // 
+            this.lblMana.AutoSize = true;
+            this.lblMana.Location = new System.Drawing.Point(8, 53);
+            this.lblMana.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblMana.Name = "lblMana";
+            this.lblMana.Size = new System.Drawing.Size(37, 13);
+            this.lblMana.TabIndex = 69;
+            this.lblMana.Text = "Mana:";
+            // 
+            // lblHealth
+            // 
+            this.lblHealth.AutoSize = true;
+            this.lblHealth.Location = new System.Drawing.Point(8, 25);
+            this.lblHealth.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblHealth.Name = "lblHealth";
+            this.lblHealth.Size = new System.Drawing.Size(41, 13);
+            this.lblHealth.TabIndex = 68;
+            this.lblHealth.Text = "Health:";
+            // 
             // lblX5
             // 
             this.lblX5.AutoSize = true;
@@ -1226,9 +1319,10 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpPhaseBegin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpPhaseBegin.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpPhaseBegin.Controls.Add(this.lblBeginSpell);
+            this.grpPhaseBegin.Controls.Add(this.cmbBeginSpell);
             this.grpPhaseBegin.Controls.Add(this.lblBeginAnimation);
             this.grpPhaseBegin.Controls.Add(this.cmbBeginAnimation);
-            this.grpPhaseBegin.Controls.Add(this.btnEditConditions);
             this.grpPhaseBegin.Controls.Add(this.btnEditBeginEvent);
             this.grpPhaseBegin.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpPhaseBegin.Location = new System.Drawing.Point(4, 101);
@@ -1241,11 +1335,11 @@ namespace Intersect.Editor.Forms.Editors
             // lblBeginAnimation
             // 
             this.lblBeginAnimation.AutoSize = true;
-            this.lblBeginAnimation.Location = new System.Drawing.Point(150, 10);
+            this.lblBeginAnimation.Location = new System.Drawing.Point(115, 9);
             this.lblBeginAnimation.Name = "lblBeginAnimation";
-            this.lblBeginAnimation.Size = new System.Drawing.Size(81, 13);
+            this.lblBeginAnimation.Size = new System.Drawing.Size(86, 13);
             this.lblBeginAnimation.TabIndex = 66;
-            this.lblBeginAnimation.Text = "NPC Animation:";
+            this.lblBeginAnimation.Text = "Begin Animation:";
             // 
             // cmbBeginAnimation
             // 
@@ -1260,112 +1354,51 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbBeginAnimation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbBeginAnimation.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbBeginAnimation.FormattingEnabled = true;
-            this.cmbBeginAnimation.Location = new System.Drawing.Point(121, 24);
+            this.cmbBeginAnimation.Location = new System.Drawing.Point(86, 23);
             this.cmbBeginAnimation.Name = "cmbBeginAnimation";
-            this.cmbBeginAnimation.Size = new System.Drawing.Size(153, 21);
+            this.cmbBeginAnimation.Size = new System.Drawing.Size(135, 21);
             this.cmbBeginAnimation.TabIndex = 65;
             this.cmbBeginAnimation.Text = null;
             this.cmbBeginAnimation.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // btnEditConditions
             // 
-            this.btnEditConditions.Location = new System.Drawing.Point(5, 22);
+            this.btnEditConditions.Location = new System.Drawing.Point(8, 74);
             this.btnEditConditions.Name = "btnEditConditions";
             this.btnEditConditions.Padding = new System.Windows.Forms.Padding(5);
-            this.btnEditConditions.Size = new System.Drawing.Size(109, 23);
+            this.btnEditConditions.Size = new System.Drawing.Size(130, 23);
             this.btnEditConditions.TabIndex = 0;
             this.btnEditConditions.Text = "Trigger Conditions";
             this.btnEditConditions.Click += new System.EventHandler(this.btnEditConditions_Click);
             // 
-            // lblX6
+            // lblBeginSpell
             // 
-            this.lblX6.AutoSize = true;
-            this.lblX6.Location = new System.Drawing.Point(74, 52);
-            this.lblX6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblX6.Name = "lblX6";
-            this.lblX6.Size = new System.Drawing.Size(12, 13);
-            this.lblX6.TabIndex = 73;
-            this.lblX6.Text = "x";
+            this.lblBeginSpell.AutoSize = true;
+            this.lblBeginSpell.Location = new System.Drawing.Point(260, 9);
+            this.lblBeginSpell.Name = "lblBeginSpell";
+            this.lblBeginSpell.Size = new System.Drawing.Size(63, 13);
+            this.lblBeginSpell.TabIndex = 68;
+            this.lblBeginSpell.Text = "Begin Spell:";
             // 
-            // lblX7
+            // cmbBeginSpell
             // 
-            this.lblX7.AutoSize = true;
-            this.lblX7.Location = new System.Drawing.Point(74, 23);
-            this.lblX7.Margin = new System.Windows.Forms.Padding(0);
-            this.lblX7.Name = "lblX7";
-            this.lblX7.Size = new System.Drawing.Size(12, 13);
-            this.lblX7.TabIndex = 72;
-            this.lblX7.Text = "x";
-            // 
-            // nudManaPercentage
-            // 
-            this.nudManaPercentage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudManaPercentage.DecimalPlaces = 2;
-            this.nudManaPercentage.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudManaPercentage.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.nudManaPercentage.Location = new System.Drawing.Point(86, 49);
-            this.nudManaPercentage.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.nudManaPercentage.Name = "nudManaPercentage";
-            this.nudManaPercentage.Size = new System.Drawing.Size(55, 20);
-            this.nudManaPercentage.TabIndex = 71;
-            this.nudManaPercentage.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // nudHealthPercentage
-            // 
-            this.nudHealthPercentage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudHealthPercentage.DecimalPlaces = 2;
-            this.nudHealthPercentage.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudHealthPercentage.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.nudHealthPercentage.Location = new System.Drawing.Point(86, 21);
-            this.nudHealthPercentage.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.nudHealthPercentage.Name = "nudHealthPercentage";
-            this.nudHealthPercentage.Size = new System.Drawing.Size(55, 20);
-            this.nudHealthPercentage.TabIndex = 70;
-            this.nudHealthPercentage.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // lblMana
-            // 
-            this.lblMana.AutoSize = true;
-            this.lblMana.Location = new System.Drawing.Point(8, 53);
-            this.lblMana.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblMana.Name = "lblMana";
-            this.lblMana.Size = new System.Drawing.Size(37, 13);
-            this.lblMana.TabIndex = 69;
-            this.lblMana.Text = "Mana:";
-            // 
-            // lblHealth
-            // 
-            this.lblHealth.AutoSize = true;
-            this.lblHealth.Location = new System.Drawing.Point(8, 25);
-            this.lblHealth.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblHealth.Name = "lblHealth";
-            this.lblHealth.Size = new System.Drawing.Size(41, 13);
-            this.lblHealth.TabIndex = 68;
-            this.lblHealth.Text = "Health:";
+            this.cmbBeginSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbBeginSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbBeginSpell.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbBeginSpell.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbBeginSpell.DrawDropdownHoverOutline = false;
+            this.cmbBeginSpell.DrawFocusRectangle = false;
+            this.cmbBeginSpell.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbBeginSpell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbBeginSpell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbBeginSpell.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbBeginSpell.FormattingEnabled = true;
+            this.cmbBeginSpell.Location = new System.Drawing.Point(225, 23);
+            this.cmbBeginSpell.Name = "cmbBeginSpell";
+            this.cmbBeginSpell.Size = new System.Drawing.Size(135, 21);
+            this.cmbBeginSpell.TabIndex = 67;
+            this.cmbBeginSpell.Text = null;
+            this.cmbBeginSpell.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // NpcPhaseEditor
             // 
@@ -1404,6 +1437,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudHpRegen)).EndInit();
             this.grpStats.ResumeLayout(false);
             this.grpStats.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudManaPercentage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudHealthPercentage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpdPercentage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMRPercentage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDefPercentage)).EndInit();
@@ -1411,8 +1446,6 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudStrPercentage)).EndInit();
             this.grpPhaseBegin.ResumeLayout(false);
             this.grpPhaseBegin.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudManaPercentage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudHealthPercentage)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1503,5 +1536,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkNumericUpDown nudHealthPercentage;
         private System.Windows.Forms.Label lblMana;
         private System.Windows.Forms.Label lblHealth;
+        private System.Windows.Forms.Label lblBeginSpell;
+        private DarkComboBox cmbBeginSpell;
     }
 }
