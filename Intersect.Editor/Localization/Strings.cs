@@ -7,7 +7,7 @@ using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.Localization;
-
+using Intersect.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -287,6 +287,91 @@ namespace Intersect.Editor.Localization
         public static string GetEventConditionalDesc(MapZoneTypeIs condition)
         {
             return Strings.EventConditionDesc.MapZoneTypeIs.ToString(Strings.MapProperties.zones[(int)condition.ZoneType]);
+        }
+
+        public static string GetEventConditionalDesc(FightingNPCPhase condition)
+        {
+            string npcname = "";
+            var npc = NpcBase.Get(condition.NpcId);
+            if (!condition.Any)
+            {
+                npcname = Strings.EventConditional.triggeringnpc;
+            }
+            else if (condition.NpcId == Guid.Empty)
+            {
+                npcname = Strings.EventConditional.anynpc;
+            }
+            else
+            {
+                npcname = TextUtils.FormatEditorName(npc.Name, npc.EditorName);
+            }
+            switch (condition.Progress)
+            {  
+                case NpcPhasesProgressState.OnAnyPhase:
+                    return Strings.EventConditionDesc.fightingphase.ToString(npcname, Strings.EventConditionDesc.onanyphase);
+                case NpcPhasesProgressState.BeforePhase:
+                    return Strings.EventConditionDesc.fightingphase.ToString(npcname, Strings.EventConditionDesc.beforephase
+                        .ToString(npc.GetPhaseIndex(condition.PhaseId) + 1));
+                case NpcPhasesProgressState.AfterPhase:
+                    return Strings.EventConditionDesc.fightingphase.ToString(npcname, Strings.EventConditionDesc.afterphase
+                        .ToString(npc.GetPhaseIndex(condition.PhaseId) + 1));
+                case NpcPhasesProgressState.OnPhase:
+                    return Strings.EventConditionDesc.fightingphase.ToString(npcname, Strings.EventConditionDesc.onphase
+                        .ToString(npc.GetPhaseIndex(condition.PhaseId) + 1));
+                default:
+                    return Strings.EventConditionDesc.fightingphase.ToString(npcname, Strings.EventConditionDesc.onnonephase);
+            }
+        }
+
+        public static string GetEventConditionalDesc(FightingNPCStats condition)
+        {
+            string npcname = "";
+            if (!condition.Any)
+            {
+                npcname = Strings.EventConditional.triggeringnpc;
+            }
+            else if (condition.NpcId == Guid.Empty)
+            {
+                npcname = Strings.EventConditional.anynpc;
+            }
+            else
+            {
+                var npc = NpcBase.Get(condition.NpcId);
+                npcname = TextUtils.FormatEditorName(npc.Name, npc.EditorName);
+            }
+            return Strings.EventConditionDesc.fightingstats.ToString(npcname);
+        }
+        public static string GetEventConditionalDesc(FightingNPCAttackType condition)
+        {
+            string npcname = "";
+            if (!condition.Any)
+            {
+                npcname = Strings.EventConditional.triggeringnpc;
+            }
+            else if (condition.NpcId == Guid.Empty)
+            {
+                npcname = Strings.EventConditional.anynpc;
+            }
+            else
+            {
+                var npc = NpcBase.Get(condition.NpcId);
+                npcname = TextUtils.FormatEditorName(npc.Name, npc.EditorName);
+            }
+            if (condition.AttackType < 0)
+            {
+                return Strings.EventConditionDesc.fightingattacktype.ToString(npcname, Strings.EventConditionDesc.anyattack);
+            }
+            switch ((AttackType)condition.AttackType)
+            {
+                case AttackType.Basic:
+                    return Strings.EventConditionDesc.fightingattacktype.ToString(npcname, Strings.EventConditionDesc.basicattack);
+                case AttackType.Spell:
+                    return Strings.EventConditionDesc.fightingattacktype.ToString(npcname, Strings.EventConditionDesc.spellattack);
+                case AttackType.Projectile:
+                    return Strings.EventConditionDesc.fightingattacktype.ToString(npcname, Strings.EventConditionDesc.projectileattack);
+                default:
+                    return Strings.EventConditionDesc.fightingattacktype.ToString(npcname, Strings.EventConditionDesc.anyattack);
+            }
         }
 
         public static string GetVariableComparisonString(VariableCompaison comparison)
@@ -1280,6 +1365,9 @@ Tick timer saved in server config.json.";
             public static LocalizedString instructionsspell =
                 @"Below are condition lists. If conditions are met on any of the lists then the player can use cast the spell.";
 
+            public static LocalizedString instructionsnpcphase =
+              @"Below are condition lists. If conditions are met on any of the lists when the npc is attacked by a player, then it will start the phase (mainly use 'Player is fighting NPC...')";
+
             public static LocalizedString listname = @"Desc:";
 
             public static LocalizedString removecondition = @"Remove Condition";
@@ -2136,7 +2224,10 @@ Tick timer saved in server config.json.";
                 {17, @"Item Equipped is..."},
                 {18, @"Has X free Inventory slots..." },
                 {19, @"In Guild With At Least Rank..." },
-                {20, @"Map Zone Type is..." }
+                {20, @"Map Zone Type is..." },
+                {21, @"Player fighting NPC on Phase..." },
+                {22, @"Player fighting NPC when Stats..." },
+                {23, @"Player fighting NPC with AttackType..." }
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2281,6 +2372,72 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString MapZoneTypeLabel = @"Zone Type:";
+
+            public static LocalizedString fightingnpc = @"Fighting npc on Phase";
+
+            public static LocalizedString fightnpc = @"NPC:";
+
+            public static LocalizedString triggeringnpc = @"Triggering NPC";
+
+            public static LocalizedString anynpc = @"[ANY NPC]";
+
+            public static LocalizedString onlytrigger = @"Only triggering NPC ?";
+
+            public static LocalizedString isonphase = @"Is:";
+
+            public static LocalizedString includenone = @"Include None Phase ?";
+
+            public static LocalizedString npcphase = @"Phase:";
+
+            public static LocalizedString displayphase = @"Phase {00}: {01}";
+
+            public static Dictionary<int, LocalizedString> phasecomparators = new Dictionary<int, LocalizedString>
+            {
+                {0, @"On None Phase"},
+                {1, @"On Any Phase"},
+                {2, @"Before Phase..."},
+                {3, @"After Phase..."},
+                {4, @"On Phase..."},
+            };
+
+            public static LocalizedString fightingstats = @"Fighting npc when Stats:";
+
+            public static LocalizedString statsnpc = @"NPC:";
+
+            public static LocalizedString any = @"Any";
+
+            public static LocalizedString percent = @"%";
+
+            public static LocalizedString npchp = @"HP:";
+
+            public static LocalizedString npcmana = @"Mana:";
+
+            public static LocalizedString npcattack = @"Attack:";
+
+            public static LocalizedString npcmagic = @"Magic:";
+
+            public static LocalizedString npcdefense = @"Defense:";
+
+            public static LocalizedString npcmr = @"Magic Resist:";
+
+            public static LocalizedString npcspeed = @"Speed:";
+
+            public static LocalizedString fightingattacktype = @"Fighting npc with Attack Type:";
+
+            public static LocalizedString attacktypenpc = @"NPC:";
+
+            public static LocalizedString npcattacktype = @"Attack Type:";
+
+            public static LocalizedString isattacktype = @"Is:";
+
+            public static Dictionary<int, LocalizedString> attacktypes = new Dictionary<int, LocalizedString>
+            {
+                {0, @"BasicAttack"},
+                {1, @"Spell"},
+                {2, @"Projectile"},
+            };
+
+            public static LocalizedString dmgtype = @"Damage Type:";
         }
 
         public struct EventConditionDesc
@@ -2383,6 +2540,30 @@ Tick timer saved in server config.json.";
             public static LocalizedString timeinvalid = @"invalid";
 
             public static LocalizedString True = @"True";
+
+            public static LocalizedString fightingphase = @"Player is fighting npc {00} {01}";
+
+            public static LocalizedString onnonephase = @"on None Phase";
+
+            public static LocalizedString onanyphase = @"on Any Phase";
+
+            public static LocalizedString beforephase = @"Before Phase {00}...";
+
+            public static LocalizedString afterphase = @"After Phase {00}...";
+
+            public static LocalizedString onphase = @"On Phase {00}...";
+
+            public static LocalizedString fightingstats = @"Player fighting npc {00} when Vitals/Stats ...";
+
+            public static LocalizedString fightingattacktype = @"Player fighting npc {00} {01}";
+
+            public static LocalizedString basicattack = @"with BasicAttack";
+
+            public static LocalizedString spellattack = @"with Spell";
+
+            public static LocalizedString projectileattack = @"with Projectile";
+
+            public static LocalizedString anyattack = @"with Any attack";
 
         }
 
@@ -4000,6 +4181,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString hpregen = @"HP (%);";
 
+            public static LocalizedString regenreset = @"Start when Reset start?";
+
             public static LocalizedString individualizedloot = @"Spawn loot for all attackers?";
 
             public static LocalizedString magicresist = @"Magic Resist:";
@@ -4120,8 +4303,128 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString undotitle = @"Undo Changes";
 
+            public static LocalizedString phases = @"Phases";
+
+            public static LocalizedString addphase = @"Add";
+
+            public static LocalizedString removephase = @"Remove";
+
+            public static LocalizedString displayphase = @"Phase {00} : {01}";
         }
 
+        public struct NpcPhaseEditor
+        {
+            public static LocalizedString title = @"Add/Edit Phase";
+
+            public static LocalizedString editor = @"Phase Editor";
+
+            public static LocalizedString phaseindex = @"Phase Index: {00}";
+
+            public static LocalizedString name = @"Name:";
+
+            public static LocalizedString sprite = @"Sprite Modifier";
+
+            public static LocalizedString red = @"Red:";
+
+            public static LocalizedString green = @"Green:";
+
+            public static LocalizedString blue = @"Blue:";
+
+            public static LocalizedString alpha = @"Alpha:";
+
+            public static LocalizedString changesprite = @"Replace base?";
+
+            public static LocalizedString spells = @"Spells Modifier";
+
+            public static LocalizedString spell = @"Spell";
+
+            public static LocalizedString replacespells = @"Replace all known spells?";
+
+            public static LocalizedString addspell = @"Add";
+
+            public static LocalizedString removespell = @"Remove";
+
+            public static LocalizedString stats = @"Stats Multiplier";
+
+            public static LocalizedString x = @"x";
+
+            public static LocalizedString health = @"Health:";
+
+            public static LocalizedString mana = @"Mana:";
+
+            public static LocalizedString str = @"Strength:";
+
+            public static LocalizedString mag = @"Magic:";
+
+            public static LocalizedString def = @"Defense:";
+
+            public static LocalizedString MR = @"Mag. resist:";
+
+            public static LocalizedString spd = @"Speed:";
+
+            public static LocalizedString regen = @"Regen";
+
+            public static LocalizedString changeregen = @"Replace base?";
+
+            public static LocalizedString hpregen = @"HP: (%)";
+
+            public static LocalizedString manaregen = @"Mana: (%)";
+
+            public static LocalizedString combat = @"Combat Modifier";
+
+            public static LocalizedString changecombat = @"Replace base?";
+
+            public static LocalizedString basedamage = @"Base Damage:";
+
+            public static LocalizedString critchance = @"Crit Chance (%):";
+
+            public static LocalizedString critmultiplier = @"Crit Multiplier:";
+
+            public static LocalizedString damagetype = @"Damage Type:";
+
+            public static LocalizedString scalingstat = @"Scaling Stat:";
+
+            public static LocalizedString scalingamount = @"Scaling Amount:";
+
+            public static LocalizedString attackanimation = @"Attack Animation:";
+
+            public static LocalizedString attackspeed = @"AttackSpeed Modifier";
+
+            public static LocalizedString changeattackspeed = @"Replace base?";
+
+            public static LocalizedString modifier = @"Modifier:";
+
+            public static LocalizedString value = @"Value:";
+
+            public static Dictionary<int, LocalizedString> attackspeedmodifiers = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Disabled"},
+                {1, @"Static (ms)"},
+            };
+
+            public static LocalizedString phaseconditions = @"Phase Beginning";
+
+            public static LocalizedString editconditions = @"Trigger Conditions";
+
+            public static LocalizedString editbeginevent = @"Begin Event";
+
+            public static LocalizedString beginanimation = @"Begin Animation:";
+
+            public static LocalizedString beginspell = @"Begin Spell:";
+
+            public static LocalizedString beginevent = @"NPC {00} - Begin Phase {01}";
+
+            public static LocalizedString duration = @"Phase Duration";
+
+            public static LocalizedString durationenable = @"Enable";
+
+            public static LocalizedString durationms = @"(ms)";
+
+
+            public static LocalizedString ok = @"Ok";
+
+            public static LocalizedString cancel = @"Cancel";
+        }
         public struct NpcSpawns
         {
 

@@ -1449,9 +1449,32 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
-            if (target is Npc npctarget && this is Player && !npctarget.CanPlayerProjectile((Player)this))
+            if (this is Player p && target is Npc npcenemy)
             {
-                return;
+                p.FightingNpcBaseIds.AddOrUpdate(npcenemy.Base.Id, CombatTimer, (guid, t) => CombatTimer);
+                var npclist = p.FightingListNpcs.GetOrAdd(npcenemy.Base.Id, new ConcurrentDictionary<Npc, AttackInfo>());
+                AttackInfo attackinfo;
+                if (parentSpell != null)
+                {
+                    attackinfo = new AttackInfo((DamageType)parentSpell.Combat.DamageType, AttackType.Projectile, parentSpell.Id);
+                }
+                else
+                {
+                    attackinfo = new AttackInfo((DamageType)parentItem.DamageType, AttackType.Projectile, parentItem.Id);
+                }
+                npclist.AddOrUpdate(npcenemy, attackinfo, (npc, info) => attackinfo);
+                if(!npcenemy.CanPlayerProjectile(p))
+                {
+                    // Try to trigger possible phase related to projectile
+                    npcenemy.HandlePhases(p);
+                    return;
+                }
+            }
+            else if (this is Npc n && target is Player penemy)
+            {
+                penemy.FightingNpcBaseIds.AddOrUpdate(n.Base.Id, CombatTimer, (guid, t) => CombatTimer);
+                var npclist = penemy.FightingListNpcs.GetOrAdd(n.Base.Id, new ConcurrentDictionary<Npc, AttackInfo>());
+                npclist.AddOrUpdate(n, npc => null, (npc, info) => info);
             }
 
             //Check for taunt status and trying to attack a target that has not taunted you.
@@ -1580,10 +1603,30 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
-            if (target is Npc npctarget && this is Player && !fromProjectile && !npctarget.CanPlayerSpell((Player)this))
+            if (!fromProjectile)
             {
-                return;
+                // Projectile are already managed at this point
+                if (this is Player p && target is Npc npcenemy)
+                {
+                    p.FightingNpcBaseIds.AddOrUpdate(npcenemy.Base.Id, CombatTimer, (guid, t) => CombatTimer);
+                    var npclist = p.FightingListNpcs.GetOrAdd(npcenemy.Base.Id, new ConcurrentDictionary<Npc, AttackInfo>());
+                    var attackinfo = new AttackInfo((DamageType)spellBase.Combat.DamageType, AttackType.Spell, spellBase.Id);
+                    npclist.AddOrUpdate(npcenemy, attackinfo, (npc, info) => attackinfo);
+                    if (!npcenemy.CanPlayerSpell(p))
+                    {
+                        // Try to trigger possible phase related to spell
+                        npcenemy.HandlePhases(p);
+                        return;
+                    }
+                }
+                else if (this is Npc n && target is Player penemy)
+                {
+                    penemy.FightingNpcBaseIds.AddOrUpdate(n.Base.Id, CombatTimer, (guid, t) => CombatTimer);
+                    var npclist = penemy.FightingListNpcs.GetOrAdd(n.Base.Id, new ConcurrentDictionary<Npc, AttackInfo>());
+                    npclist.AddOrUpdate(n, npc => null, (npc, info) => info);
+                }
             }
+           
 
             //Check for taunt status and trying to attack a target that has not taunted you.
             if (!trapTrigger) //Traps ignore taunts.
@@ -2346,6 +2389,15 @@ namespace Intersect.Server.Entities
             if (GetType() == typeof(Npc))
             {
                 ((Npc) this).MoveTimer = Globals.Timing.Milliseconds + (long) GetMovementTime();
+            }
+
+            if (this is Player && enemy is Npc)
+            {
+                ((Npc)enemy).HandlePhases((Player)this);
+            }
+            else if (this is Npc && enemy is Player)
+            {
+                ((Npc)this).HandlePhases((Player)enemy);
             }
             return isCrit;
         }

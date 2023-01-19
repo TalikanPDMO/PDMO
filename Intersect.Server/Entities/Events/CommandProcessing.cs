@@ -190,7 +190,7 @@ namespace Intersect.Server.Entities.Events
             Stack<CommandInstance> callStack
         )
         {
-            var success = Conditions.MeetsCondition(command.Condition, player, instance, null);
+            var success = Conditions.MeetsCondition(command.Condition, player, instance, null, null);
 
             List<EventCommand> newCommandList = null;
             if (success && stackInfo.Page.CommandLists.ContainsKey(command.BranchIds[0]))

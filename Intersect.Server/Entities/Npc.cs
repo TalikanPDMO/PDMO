@@ -37,6 +37,9 @@ namespace Intersect.Server.Entities
 
         public Guid[] LootMapCache = Array.Empty<Guid>();
 
+        public NpcPhase CurrentPhase = null;
+        public long CurrentPhaseTimer;
+
         /// <summary>
         /// Returns the entity that ranks the highest on this NPC's damage map.
         /// </summary>
@@ -84,6 +87,7 @@ namespace Intersect.Server.Entities
         private int mResetCounter = 0;
         private int mResetMax = 100;
         private bool mResetting = false;
+        private byte mResetPhase = 0; //0 for no reset, 1 when reset destination is reached, 2 when we are waiting our regen to end before reset phase
 
         /// <summary>
         /// The map on which this NPC was "aggro'd" and started chasing a target.
@@ -166,12 +170,27 @@ namespace Intersect.Server.Entities
         public override void Die(bool generateLoot = true, Entity killer = null)
         {
             lock (EntityLock) {
+
+                // Do it before base.Die because we need the damagemap to be not cleared
+                foreach (var en in DamageMap.Keys)
+                {
+                    if (en is Player p && p.FightingListNpcs.TryGetValue(Base.Id, out var npcs))
+                    {
+                        if (npcs.TryRemove(this, out _) && npcs.Count == 0)
+                        {
+                            p.FightingListNpcs.TryRemove(Base.Id, out var removed);
+                            p.FightingNpcBaseIds.TryRemove(Base.Id, out _);
+                        }
+                    }
+                }
+
                 base.Die(generateLoot, killer);
 
                 AggroCenterMap = null;
                 AggroCenterX = 0;
                 AggroCenterY = 0;
                 AggroCenterZ = 0;
+
 
                 MapInstance.Get(MapId).RemoveEntity(this);
                 PacketSender.SendEntityDie(this);
@@ -280,6 +299,7 @@ namespace Intersect.Server.Entities
             if (Target != oldTarget)
             {
                 CombatTimer = Timing.Global.Milliseconds + Options.CombatTime;
+                mResetPhase = 0;
                 PacketSender.SendNpcAggressionToProximity(this);
             }
             mTargetFailCounter = 0;
@@ -297,10 +317,21 @@ namespace Intersect.Server.Entities
 
         public override int CalculateAttackTime()
         {
-            if (Base.AttackSpeedModifier == 1) //Static
+            if (CurrentPhase != null)
             {
-                return Base.AttackSpeedValue;
+                if ((CurrentPhase.AttackSpeedModifier ?? Base.AttackSpeedModifier) == 1) //Static
+                {
+                    return CurrentPhase.AttackSpeedValue ?? Base.AttackSpeedValue;
+                }
             }
+            else
+            {
+                if (Base.AttackSpeedModifier == 1) //Static
+                {
+                    return Base.AttackSpeedValue;
+                }
+            }
+            
 
             return base.CalculateAttackTime();
         }
@@ -391,18 +422,41 @@ namespace Intersect.Server.Entities
             //https://www.ascensiongamedev.com/community/bug_tracker/intersect/npc-set-at-0-attack-damage-still-damages-player-by-1-initially-r915/
             if (AttackTimer < Globals.Timing.Milliseconds)
             {
-                if (Base.AttackAnimation != null)
+                if (target is Player penemy)
                 {
-                    PacketSender.SendAnimationToProximity(
-                        Base.AttackAnimationId, -1, Guid.Empty, target.MapId, (byte) target.X, (byte) target.Y,
-                        (sbyte) Dir
-                    );
+                    penemy.FightingNpcBaseIds.AddOrUpdate(Base.Id, CombatTimer, (guid, t) => CombatTimer);
+                    var npclist = penemy.FightingListNpcs.GetOrAdd(Base.Id, new ConcurrentDictionary<Npc, AttackInfo>());
+                    npclist.AddOrUpdate(this, npc => null, (npc, info) => info);
                 }
-
-                base.TryAttack(
-                    target, Base.Damage, (DamageType) Base.DamageType, (Stats) Base.ScalingStat, Base.Scaling,
-                    Base.CritChance, Base.CritMultiplier, deadAnimations, aliveAnimations
-                );
+                if (CurrentPhase != null)
+                {
+                    // if any members of CurrentPhase is null using ??, we use the base member instead
+                    if ((CurrentPhase.AttackAnimation ?? Base.AttackAnimation) != null)
+                    {
+                        PacketSender.SendAnimationToProximity(
+                            CurrentPhase.AttackAnimationId ?? Base.AttackAnimationId, -1, Guid.Empty, target.MapId, (byte)target.X, (byte)target.Y,
+                            (sbyte)Dir
+                        );
+                    }
+                    base.TryAttack(
+                        target, CurrentPhase.Damage ?? Base.Damage, (DamageType)(CurrentPhase.DamageType ?? Base.DamageType),
+                        (Stats)(CurrentPhase.ScalingStat ?? Base.ScalingStat), CurrentPhase.Scaling ?? Base.Scaling,
+                        CurrentPhase.CritChance ?? Base.CritChance, CurrentPhase.CritMultiplier ?? Base.CritMultiplier,
+                        deadAnimations, aliveAnimations);
+                }
+                else
+                {
+                    if (Base.AttackAnimation != null)
+                    {
+                        PacketSender.SendAnimationToProximity(
+                            Base.AttackAnimationId, -1, Guid.Empty, target.MapId, (byte)target.X, (byte)target.Y,
+                            (sbyte)Dir
+                        );
+                    }
+                    base.TryAttack(
+                        target, Base.Damage, (DamageType)Base.DamageType, (Stats)Base.ScalingStat, Base.Scaling,
+                        Base.CritChance, Base.CritMultiplier, deadAnimations, aliveAnimations);
+                }
 
                 PacketSender.SendEntityAttack(this, CalculateAttackTime());
             }
@@ -607,14 +661,15 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (Base.Spells == null || Base.Spells.Count <= 0)
+            if (Base.Spells == null || Base.Spells.Count <= 0 || Spells.Count <= 0)
             {
                 return;
             }
 
             // Pick a random spell
             var spellIndex = Randomization.Next(0, Spells.Count);
-            var spellId = Base.Spells[spellIndex];
+            //var spellId = Base.Spells[spellIndex];
+            var spellId = Spells[spellIndex].SpellId;
             var spellBase = SpellBase.Get(spellId);
             if (spellBase == null)
             {
@@ -842,6 +897,13 @@ namespace Intersect.Server.Entities
                         }
                     }
 
+                    if (CurrentPhase?.Duration != null && Globals.Timing.Milliseconds > CurrentPhaseTimer)
+                    {
+                        EndCurrentPhase();
+                        PacketSender.SendEntityStats(this);
+                        PacketSender.SendEntityDataToProximity(this);
+                    }
+
                     var fleeing = IsFleeing();
 
                     if (MoveTimer < Globals.Timing.Milliseconds)
@@ -850,6 +912,24 @@ namespace Intersect.Server.Entities
                         var targetX = 0;
                         var targetY = 0;
                         var targetZ = 0;
+
+                        // Reset the current phase when we reached our reset destination and we are full vitals or if our regen is 0
+                        if (mResetPhase == 1)
+                        {
+                            if ((IsFullVital(Vitals.Health) && IsFullVital(Vitals.Mana))
+                            || (CurrentPhase?.VitalRegen != null && CurrentPhase.VitalRegen.Contains(0))
+                            || (CurrentPhase == null && Base.VitalRegen.Contains(0)))
+                            {
+                                EndCurrentPhase();
+                                PacketSender.SendEntityStats(this);
+                                PacketSender.SendEntityDataToProximity(this);
+                                mResetPhase = 0;
+                            }
+                            else
+                            {
+                                mResetPhase = 2;
+                            }
+                        }
 
                         //TODO Clear Damage Map if out of combat (target is null and combat timer is to the point that regen has started)
                         if (tempTarget != null && Timing.Global.Milliseconds > CombatTimer)
@@ -881,6 +961,7 @@ namespace Intersect.Server.Entities
                                 AggroCenterZ = 0;
                                 mPathFinder?.SetTarget(null);
                                 mResetting = false;
+                                mResetPhase = 1;      
                             }
 
                             ResetNpc(Options.Instance.NpcOpts.ContinuouslyResetVitalsAndStatuses);
@@ -1079,6 +1160,7 @@ namespace Intersect.Server.Entities
                                                     AggroCenterZ = 0;
                                                     mPathFinder?.SetTarget(null);
                                                     mResetting = false;
+                                                    mResetPhase = 1;
                                                 }
                                             }  
                                         }
@@ -1344,6 +1426,10 @@ namespace Intersect.Server.Entities
 
                 // Try and move back to where we came from before we started chasing something.
                 mResetting = true;
+                if (Base.RegenReset)
+                {
+                    CombatTimer = 0; // Added to allow regen when starting resetting for npc
+                }
                 mPathFinder.SetTarget(new PathfinderTarget(AggroCenterMap.Id, AggroCenterX, AggroCenterY, AggroCenterZ));
                 return true;
             }
@@ -1358,7 +1444,6 @@ namespace Intersect.Server.Entities
             DamageMap.Clear();
             LootMap.Clear();
             LootMapCache = Array.Empty<Guid>();
-
             if (clearLocation)
             {
                 mPathFinder.SetTarget(null);
@@ -1419,7 +1504,7 @@ namespace Intersect.Server.Entities
 
             //If not then check and see if player meets the conditions to attack the npc...
             if (Base.PlayerCanAttackConditions.Lists.Count == 0 ||
-                Conditions.MeetsConditionLists(Base.PlayerCanAttackConditions, en, null))
+                Conditions.MeetsConditionLists(Base.PlayerCanAttackConditions, en, null, true, null, this))
             {
                 return true;
             }
@@ -1437,7 +1522,7 @@ namespace Intersect.Server.Entities
 
             //If not then check and see if player meets the conditions to attack the npc with a spell...
             if (Base.PlayerCanSpellConditions.Lists.Count == 0 ||
-                Conditions.MeetsConditionLists(Base.PlayerCanSpellConditions, en, null))
+                Conditions.MeetsConditionLists(Base.PlayerCanSpellConditions, en, null, true, null, this))
             {
                 return true;
             }
@@ -1455,7 +1540,7 @@ namespace Intersect.Server.Entities
 
             //If not then check and see if player meets the conditions to attack the npc with a projectile...
             if (Base.PlayerCanProjectileConditions.Lists.Count == 0 ||
-                Conditions.MeetsConditionLists(Base.PlayerCanProjectileConditions, en, null))
+                Conditions.MeetsConditionLists(Base.PlayerCanProjectileConditions, en, null, true, null, this))
             {
                 return true;
             }
@@ -1476,7 +1561,7 @@ namespace Intersect.Server.Entities
                         return false;
                     }
 
-                    return Conditions.MeetsConditionLists(conditionLists, otherPlayer, null);
+                    return Conditions.MeetsConditionLists(conditionLists, otherPlayer, null, true, null, this);
                 default:
                     return base.IsAllyOf(otherEntity);
             }
@@ -1492,7 +1577,7 @@ namespace Intersect.Server.Entities
             if (Base.Aggressive)
             {
                 if (Base.AttackOnSightConditions.Lists.Count > 0 &&
-                    Conditions.MeetsConditionLists(Base.AttackOnSightConditions, en, null))
+                    Conditions.MeetsConditionLists(Base.AttackOnSightConditions, en, null, true, null, this))
                 {
                     return false;
                 }
@@ -1502,7 +1587,7 @@ namespace Intersect.Server.Entities
             else
             {
                 if (Base.AttackOnSightConditions.Lists.Count > 0 &&
-                    Conditions.MeetsConditionLists(Base.AttackOnSightConditions, en, null))
+                    Conditions.MeetsConditionLists(Base.AttackOnSightConditions, en, null, true, null, this))
                 {
                     return true;
                 }
@@ -1679,7 +1764,6 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
-
             foreach (Vitals vital in Enum.GetValues(typeof(Vitals)))
             {
                 if (vital >= Vitals.VitalCount)
@@ -1694,12 +1778,24 @@ namespace Intersect.Server.Entities
                 {
                     continue;
                 }
-
                 var vitalRegenRate = Base.VitalRegen[vitalId] / 100f;
+                if (CurrentPhase?.VitalRegen != null)
+                {
+                    vitalRegenRate = CurrentPhase.VitalRegen[vitalId] / 100f;
+                }
+                
                 var regenValue = (int) Math.Max(1, maxVitalValue * vitalRegenRate) *
                                  Math.Abs(Math.Sign(vitalRegenRate));
 
                 AddVital(vital, regenValue);
+            }
+            // Reset the current phase when reaching our reset destination and we are full vitals
+            if (mResetPhase == 2 && IsFullVital(Vitals.Health) && IsFullVital(Vitals.Mana))
+            {
+                EndCurrentPhase();
+                PacketSender.SendEntityStats(this);
+                PacketSender.SendEntityDataToProximity(this);
+                mResetPhase = 0;
             }
         }
 
@@ -1796,6 +1892,124 @@ namespace Intersect.Server.Entities
             pkt.Aggression = GetAggression(forPlayer);
 
             return pkt;
+        }
+
+        public void HandlePhases(Player player)
+        {
+            foreach(var phase in Base.NpcPhases)
+            {
+                if (phase.Id != CurrentPhase?.Id && Conditions.MeetsConditionLists(phase.ConditionLists, player, null, true, null, this))
+                {
+                    EndCurrentPhase();
+                    SetCurrentPhase(phase);
+                    PacketSender.SendEntityStats(this);
+                    PacketSender.SendEntityDataToProximity(this);
+                    if (phase.BeginAnimationId != null && phase.BeginAnimationId != Guid.Empty)
+                    {
+                        PacketSender.SendAnimationToProximity((Guid)phase.BeginAnimationId, 1, Id, MapId, 0, 0, (sbyte)Dir);
+                        //Target Type 1 will be global entity
+                    }
+                    if (phase.BeginSpellId != null && phase.BeginSpellId != Guid.Empty)
+                    {
+                        CastSpell((Guid)phase.BeginSpellId);
+                    }
+                    player.StartCommonEvent(phase.BeginEvent);
+                    break; // Exit the loop, only one phase can be triggered
+                }
+            }
+        }
+
+        private void EndCurrentPhase()
+        {
+            if (CurrentPhase != null)
+            {
+                // Put back the base spells
+                if (CurrentPhase.ReplaceSpells)
+                {
+                    Spells.Clear();
+                    var spellSlot = 0;
+                    for (var I = 0; I < Base.Spells.Count; I++)
+                    {
+                        var slot = new SpellSlot(spellSlot);
+                        slot.Set(new Spell(Base.Spells[I]));
+                        Spells.Add(slot);
+                        spellSlot++;
+                    }
+                }
+                else if (CurrentPhase.Spells != null)
+                {
+                    // Forget all spell related to the phase
+                    Spells.RemoveRange(Base.Spells.Count, CurrentPhase.Spells.Count);
+                }
+                if (CurrentPhase.BaseStatsDiff != null)
+                {
+                    for (var i = 0; i < (int)Vitals.VitalCount; i++)
+                    {
+                        if (CurrentPhase.BaseStatsDiff[i] != 1.0)
+                        {
+                            SetMaxVital(i, Base.MaxVital[i]);
+                            RestoreVital((Vitals)i);
+                        }
+                    }
+                    for (var i = 0; i < (int)Stats.StatCount; i++)
+                    {
+                        BaseStats[i] = Base.Stats[i];
+                    }
+                }
+                Sprite = Base.Sprite;
+                Color = Base.Color;
+            }
+            CurrentPhase = null;
+            CurrentPhaseTimer = 0;
+        }
+
+        private void SetCurrentPhase(NpcPhase phase)
+        {
+            var spellSlot = 0;
+            if (phase.ReplaceSpells)
+            {
+                // Forget all the base spells and replace it after by the phase spells
+                Spells.Clear();
+            }
+            else
+            {
+                // Add phase spells to the known base spells
+                spellSlot = Base.Spells.Count;
+            }
+            SpellSlot slot;
+            if (phase.Spells != null)
+            {
+                foreach (var phaseSpell in phase.Spells)
+                {
+                    slot = new SpellSlot(spellSlot);
+                    slot.Set(new Spell(phaseSpell));
+                    Spells.Add(slot);
+                    spellSlot++;
+                }
+            }
+            if (phase.BaseStatsDiff != null)
+            {
+                int vitalcount = (int)Vitals.VitalCount;
+                for (var i = 0; i < vitalcount; i++)
+                {
+                    if (phase.BaseStatsDiff[i] != 1.0)
+                    {
+                        SetMaxVital(i, (int)(Base.MaxVital[i] * phase.BaseStatsDiff[i]));
+                        RestoreVital((Vitals)i);
+                    }
+                }
+                for (var i = 0; i < (int)Stats.StatCount; i++)
+                {
+                    BaseStats[i] = (int)(BaseStats[i] * phase.BaseStatsDiff[i + vitalcount]);
+                }
+            }
+            if (phase.Sprite != null)
+            {
+                Sprite = phase.Sprite;
+                Color = phase.Color;
+            }
+            CurrentPhase = phase;
+            CurrentPhaseTimer = (phase.Duration?? 0) + Globals.Timing.Milliseconds;
         }
 
     }

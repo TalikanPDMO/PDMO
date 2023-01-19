@@ -34,6 +34,15 @@ namespace Intersect.GameObjects
 
         [NotMapped] public int[] VitalRegen = new int[(int) Vitals.VitalCount];
 
+        [NotMapped] public List<Guid> AddEvents = new List<Guid>(); //Events that need to be added for the quest, int is task id
+
+        [NotMapped] public List<Guid> RemoveEvents = new List<Guid>(); //Events that need to be removed for the quest
+
+        //Editor Only
+        [NotMapped]
+        [JsonIgnore]
+        public Dictionary<Guid, Guid> OriginalPhaseEventIds { get; set; } = new Dictionary<Guid, Guid>();
+
         public string EditorName { get; set; } = "";
         public static string[] EditorFormatNames => Lookup.OrderBy(p => p.Value?.Name)
             .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((NpcBase)pair.Value)?.EditorName) ?? Deleted)
@@ -109,6 +118,7 @@ namespace Intersect.GameObjects
 
         public int MaxRandomMove { get; set; } = 3;
 
+
         //Conditions
         [Column("PlayerFriendConditions")]
         [JsonIgnore]
@@ -162,6 +172,8 @@ namespace Intersect.GameObjects
         public int AttackSpeedModifier { get; set; }
 
         public int AttackSpeedValue { get; set; }
+
+        public bool RegenReset { get; set; } = true;
 
         //Common Events
         [Column("OnDeathEvent")]
@@ -278,6 +290,20 @@ namespace Intersect.GameObjects
         /// <inheritdoc />
         public string Folder { get; set; } = "";
 
+        //Phases
+        [NotMapped] public List<NpcPhase> NpcPhases = new List<NpcPhase>();
+
+        [Column("NpcPhases")]
+        [JsonIgnore]
+        public string NpcPhasesJson
+        {
+            get => JsonConvert.SerializeObject(NpcPhases, Formatting.None, new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
+            set => NpcPhases = JsonConvert.DeserializeObject<List<NpcPhase>>(value);
+        }
+
         public SpellBase GetRandomSpell(Random random)
         {
             if (Spells == null || Spells.Count == 0)
@@ -289,6 +315,19 @@ namespace Intersect.GameObjects
             var spellId = Spells[spellIndex];
 
             return SpellBase.Get(spellId);
+        }
+
+        public int GetPhaseIndex(Guid phaseId)
+        {
+            for (var i = 0; i < NpcPhases.Count; i++)
+            {
+                if (NpcPhases[i].Id == phaseId)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
         }
 
     }
@@ -305,6 +344,166 @@ namespace Intersect.GameObjects
         public bool Random = false;
 
         public bool Iterative = false;
+
+    }
+
+    public enum NpcPhasesProgressState
+    {
+        OnNonePhase = 0,
+
+        OnAnyPhase = 1,
+
+        BeforePhase = 2,
+
+        AfterPhase = 3,
+
+        OnPhase = 4,
+    }
+
+    public class NpcPhase
+    {
+        [NotMapped] [JsonIgnore] public EventBase EditingEvent;
+
+        public NpcPhase(Guid id)
+        {
+            Id = id;
+            Name = "New Name";
+            ReplaceSpells = false;
+        }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Sprite { get; set; } = null;
+
+        [Column("Color")]
+        [JsonIgnore]
+        public string JsonColor
+        {
+            get => JsonConvert.SerializeObject(Color);
+            set => Color = JsonConvert.DeserializeObject<Color>(value);
+        }
+        [NotMapped]
+        public Color Color { get; set; } = null;
+
+        //Spells
+        [NotMapped]
+        public DbList<SpellBase> Spells { get; set; } = null;
+ 
+        [Column("Spells")]
+        [JsonIgnore]
+        public string JsonSpells
+        {
+            get => JsonConvert.SerializeObject(Spells, Formatting.None);
+            protected set => Spells = JsonConvert.DeserializeObject<DbList<SpellBase>>(value);
+        }
+
+        public bool ReplaceSpells { get; set; }
+
+        [Column("BaseStatsDiff")]
+        [JsonIgnore]
+        public string JsonBaseStatsDiff
+        {
+            get => JsonConvert.SerializeObject(BaseStatsDiff);
+            set => BaseStatsDiff = JsonConvert.DeserializeObject<double[]>(value);
+        }
+
+        [NotMapped]
+        public double[] BaseStatsDiff { get; set; } = null;
+
+        [NotMapped] public int[] VitalRegen = null;
+        //Vital Regen %
+        [JsonIgnore]
+        [Column("VitalRegen")]
+        public string JsonVitalRegen
+        {
+            get => JsonConvert.SerializeObject(VitalRegen);
+            set => VitalRegen = JsonConvert.DeserializeObject<int[]>(value);
+        }
+
+        public int? Damage { get; set; } = null;
+
+        public int? DamageType { get; set; } = null;
+        public int? Scaling { get; set; } = null;
+
+        public int? ScalingStat { get; set; } = null;
+
+        public int? CritChance { get; set; } = null;
+
+        public double? CritMultiplier { get; set; } = null;
+
+        public int? AttackSpeedModifier { get; set; } = null;
+
+        public int? AttackSpeedValue { get; set; } = null;
+
+        [Column("AttackAnimation")]
+        public Guid? AttackAnimationId { get; set; } = null;
+
+        [NotMapped]
+        [JsonIgnore]
+        public AnimationBase AttackAnimation
+        {
+            get => AnimationBase.Get(AttackAnimationId?? Guid.Empty);
+            set => AttackAnimationId = value?.Id;
+        }
+
+        public ConditionLists ConditionLists { get; set; } = new ConditionLists();
+
+        public Guid BeginEventId { get; set; }
+
+        [JsonIgnore]
+        public EventBase BeginEvent
+        {
+            get => EventBase.Get(BeginEventId);
+            set => BeginEventId = value.Id;
+        }
+
+        [Column("BeginSpell")]
+        public Guid? BeginSpellId { get; set; } = null;
+
+        [NotMapped]
+        [JsonIgnore]
+        public SpellBase BeginSpell
+        {
+            get => SpellBase.Get(BeginSpellId ?? Guid.Empty);
+            set => BeginSpellId = value?.Id;
+        }
+
+        [Column("BeginAnimation")]
+        public Guid? BeginAnimationId { get; set; } = null;
+
+        [NotMapped]
+        [JsonIgnore]
+        public AnimationBase BeginAnimation
+        {
+            get => AnimationBase.Get(BeginAnimationId ?? Guid.Empty);
+            set => BeginAnimationId = value?.Id;
+        }
+
+        public int? Duration { get; set; } = null;
+
+        [JsonIgnore]
+        [NotMapped]
+        public string JsonData => JsonConvert.SerializeObject(
+            this, Formatting.Indented,
+            new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.Auto,
+                DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+                ObjectCreationHandling = ObjectCreationHandling.Replace
+            }
+        );
+
+        public void Load(string json)
+        {
+            JsonConvert.PopulateObject(
+                json, this,
+                new JsonSerializerSettings()
+                {
+                    TypeNameHandling = TypeNameHandling.Auto,
+                    DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+                    ObjectCreationHandling = ObjectCreationHandling.Replace
+                }
+            );
+        }
 
     }
 

@@ -54,6 +54,11 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore] public long LastChatTime = -1;
 
+        [NotMapped, JsonIgnore] public ConcurrentDictionary<Guid, long> FightingNpcBaseIds = new ConcurrentDictionary<Guid, long>();
+
+        //HashSet to contains only 1 reference for each npc, no order
+        [NotMapped, JsonIgnore] public ConcurrentDictionary<Guid, ConcurrentDictionary<Npc, AttackInfo>> FightingListNpcs = new ConcurrentDictionary<Guid, ConcurrentDictionary<Npc, AttackInfo>>();
+
         #region Quests
 
         [NotMapped, JsonIgnore] public List<Guid> QuestOffers = new List<Guid>();
@@ -476,6 +481,11 @@ namespace Intersect.Server.Entities
                             }
                             SaveTimer = Globals.Timing.Milliseconds + Options.Instance.Processing.PlayerSaveInterval;
                         }
+                        if (CombatTimer < Globals.Timing.Milliseconds && FightingNpcBaseIds.Count > 0)
+                        {
+                            FightingNpcBaseIds.Clear();
+                            FightingListNpcs.Clear();
+                        }
                     }
 
                     if (CraftingTableId != Guid.Empty && CraftId != Guid.Empty)
@@ -775,7 +785,8 @@ namespace Intersect.Server.Entities
             CachedStatuses = new Status[0];
 
             CombatTimer = 0;
-
+            FightingNpcBaseIds.Clear();
+            FightingListNpcs.Clear();
             // Bypass classic respawn when Stadium kill
             if (PvpStadiumUnit.CurrentMatchPlayers.TryGetValue(this.Id, out var playerUnit) &&
                 (playerUnit.StadiumState == PvpStadiumState.MatchOnGoing || playerUnit.StadiumState == PvpStadiumState.MatchEnded))
@@ -1376,7 +1387,29 @@ namespace Intersect.Server.Entities
                 }
                 return;
             }
-
+            var classBase = ClassBase.Get(ClassId);
+            ItemBase weapon = null;
+            if (Options.WeaponIndex > -1 &&
+                Options.WeaponIndex < Equipment.Length &&
+                Equipment[Options.WeaponIndex] >= 0)
+            {
+                weapon = ItemBase.Get(Items[Equipment[Options.WeaponIndex]].ItemId);
+            }
+            if (target is Npc npcenemy)
+            {
+                this.FightingNpcBaseIds.AddOrUpdate(npcenemy.Base.Id, CombatTimer, (guid, t) => CombatTimer);
+                var npclist = this.FightingListNpcs.GetOrAdd(npcenemy.Base.Id, new ConcurrentDictionary<Npc, AttackInfo>());
+                AttackInfo attackinfo;
+                if (weapon != null)
+                {
+                    attackinfo = new AttackInfo((DamageType)weapon.DamageType, AttackType.Basic, weapon.Id);
+                }
+                else
+                {
+                    attackinfo = new AttackInfo((DamageType)classBase.DamageType, AttackType.Basic, Guid.Empty);
+                }
+                npclist.AddOrUpdate(npcenemy, attackinfo, (npc, info) => attackinfo);
+            }
             if (!CanAttack(target, null))
             {
                 //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
@@ -1384,20 +1417,17 @@ namespace Intersect.Server.Entities
                 {
                     PacketSender.SendChatMsg(this, Strings.Combat.cantAttack + target.Name, ChatMessageType.Combat);
                 }
+                if (target is Npc enemy)
+                {
+                    // Try to trigger possible phase related to the basic attack
+                    enemy.HandlePhases(this);
+                }     
                 return;
             }
 
             if (target is EventPage)
             {
                 return;
-            }
-
-            ItemBase weapon = null;
-            if (Options.WeaponIndex > -1 &&
-                Options.WeaponIndex < Equipment.Length &&
-                Equipment[Options.WeaponIndex] >= 0)
-            {
-                weapon = ItemBase.Get(Items[Equipment[Options.WeaponIndex]].ItemId);
             }
 
             //If Entity is resource, check for the correct tool and make sure its not a spell cast.
@@ -1448,7 +1478,6 @@ namespace Intersect.Server.Entities
             }
             else
             {
-                var classBase = ClassBase.Get(ClassId);
                 if (classBase != null)
                 {
                     base.TryAttack(
@@ -4479,12 +4508,6 @@ namespace Intersect.Server.Entities
                     PacketSender.SendChatMsg(this, Strings.Combat.dynamicreq, ChatMessageType.Spells);
                 }
 
-                return false;
-            }
-
-
-            if (!CanAttack(target, spell))
-            {
                 return false;
             }
 
