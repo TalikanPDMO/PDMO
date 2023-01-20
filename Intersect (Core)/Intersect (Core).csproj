@@ -271,6 +271,7 @@
     <Compile Include="Enums\ChatboxTab.cs" />
     <Compile Include="Enums\ChatMessageType.cs" />
     <Compile Include="Enums\AttackType.cs" />
+    <Compile Include="Enums\ElementalType.cs" />
     <Compile Include="Enums\PvpStadiumState.cs" />
     <Compile Include="Enums\EventTargetType.cs" />
     <Compile Include="Enums\PopupLayoutParams.cs" />
