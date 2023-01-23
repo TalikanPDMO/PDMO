@@ -176,6 +176,11 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.mnuExpGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.btnExpPaste = new System.Windows.Forms.ToolStripMenuItem();
+            this.grpTypes = new DarkUI.Controls.DarkGroupBox();
+            this.cmbType1 = new DarkUI.Controls.DarkComboBox();
+            this.lblType1 = new System.Windows.Forms.Label();
+            this.cmbType2 = new DarkUI.Controls.DarkComboBox();
+            this.lblType2 = new System.Windows.Forms.Label();
             this.grpClasses.SuspendLayout();
             this.grpBaseStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBaseMana)).BeginInit();
@@ -225,6 +230,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudStrengthIncrease)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.mnuExpGrid.SuspendLayout();
+            this.grpTypes.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpClasses
@@ -305,11 +311,11 @@ namespace Intersect.Editor.Forms.Editors
             this.grpBaseStats.Controls.Add(this.lblMag);
             this.grpBaseStats.Controls.Add(this.lblAttack);
             this.grpBaseStats.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpBaseStats.Location = new System.Drawing.Point(2, 167);
+            this.grpBaseStats.Location = new System.Drawing.Point(2, 164);
             this.grpBaseStats.Margin = new System.Windows.Forms.Padding(2);
             this.grpBaseStats.Name = "grpBaseStats";
             this.grpBaseStats.Padding = new System.Windows.Forms.Padding(2);
-            this.grpBaseStats.Size = new System.Drawing.Size(183, 177);
+            this.grpBaseStats.Size = new System.Drawing.Size(183, 180);
             this.grpBaseStats.TabIndex = 17;
             this.grpBaseStats.TabStop = false;
             this.grpBaseStats.Text = "Base Stats:";
@@ -789,11 +795,11 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpells.Controls.Add(this.btnAddSpell);
             this.grpSpells.Controls.Add(this.lstSpells);
             this.grpSpells.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpSpells.Location = new System.Drawing.Point(189, 169);
+            this.grpSpells.Location = new System.Drawing.Point(189, 205);
             this.grpSpells.Margin = new System.Windows.Forms.Padding(2);
             this.grpSpells.Name = "grpSpells";
             this.grpSpells.Padding = new System.Windows.Forms.Padding(2);
-            this.grpSpells.Size = new System.Drawing.Size(227, 175);
+            this.grpSpells.Size = new System.Drawing.Size(227, 139);
             this.grpSpells.TabIndex = 21;
             this.grpSpells.TabStop = false;
             this.grpSpells.Text = "Spells";
@@ -1045,6 +1051,7 @@ namespace Intersect.Editor.Forms.Editors
             // pnlContainer
             // 
             this.pnlContainer.AutoScroll = true;
+            this.pnlContainer.Controls.Add(this.grpTypes);
             this.pnlContainer.Controls.Add(this.grpSpawnItems);
             this.pnlContainer.Controls.Add(this.grpCombat);
             this.pnlContainer.Controls.Add(this.grpRegen);
@@ -1192,7 +1199,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCombat.Controls.Add(this.lblAttackAnimation);
             this.grpCombat.Controls.Add(this.lblDamage);
             this.grpCombat.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpCombat.Location = new System.Drawing.Point(537, 169);
+            this.grpCombat.Location = new System.Drawing.Point(537, 164);
             this.grpCombat.Name = "grpCombat";
             this.grpCombat.Size = new System.Drawing.Size(226, 405);
             this.grpCombat.TabIndex = 30;
@@ -1490,11 +1497,11 @@ namespace Intersect.Editor.Forms.Editors
             this.grpRegen.Controls.Add(this.lblManaRegen);
             this.grpRegen.Controls.Add(this.lblRegenHint);
             this.grpRegen.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpRegen.Location = new System.Drawing.Point(420, 169);
+            this.grpRegen.Location = new System.Drawing.Point(420, 164);
             this.grpRegen.Margin = new System.Windows.Forms.Padding(2);
             this.grpRegen.Name = "grpRegen";
             this.grpRegen.Padding = new System.Windows.Forms.Padding(2);
-            this.grpRegen.Size = new System.Drawing.Size(112, 175);
+            this.grpRegen.Size = new System.Drawing.Size(112, 180);
             this.grpRegen.TabIndex = 19;
             this.grpRegen.TabStop = false;
             this.grpRegen.Text = "Regen";
@@ -2268,6 +2275,86 @@ namespace Intersect.Editor.Forms.Editors
             this.btnExpPaste.Text = "Paste";
             this.btnExpPaste.Click += new System.EventHandler(this.btnPaste_Click);
             // 
+            // grpTypes
+            // 
+            this.grpTypes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpTypes.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTypes.Controls.Add(this.cmbType2);
+            this.grpTypes.Controls.Add(this.lblType2);
+            this.grpTypes.Controls.Add(this.cmbType1);
+            this.grpTypes.Controls.Add(this.lblType1);
+            this.grpTypes.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpTypes.Location = new System.Drawing.Point(189, 164);
+            this.grpTypes.Margin = new System.Windows.Forms.Padding(2);
+            this.grpTypes.Name = "grpTypes";
+            this.grpTypes.Padding = new System.Windows.Forms.Padding(2);
+            this.grpTypes.Size = new System.Drawing.Size(227, 40);
+            this.grpTypes.TabIndex = 28;
+            this.grpTypes.TabStop = false;
+            this.grpTypes.Text = "Elemental Types";
+            // 
+            // cmbType1
+            // 
+            this.cmbType1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbType1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbType1.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbType1.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbType1.DrawDropdownHoverOutline = false;
+            this.cmbType1.DrawFocusRectangle = false;
+            this.cmbType1.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbType1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbType1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbType1.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbType1.FormattingEnabled = true;
+            this.cmbType1.Location = new System.Drawing.Point(38, 16);
+            this.cmbType1.Name = "cmbType1";
+            this.cmbType1.Size = new System.Drawing.Size(75, 21);
+            this.cmbType1.TabIndex = 26;
+            this.cmbType1.Text = null;
+            this.cmbType1.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbType1.SelectedIndexChanged += new System.EventHandler(this.cmbType1_SelectedIndexChanged);
+            // 
+            // lblType1
+            // 
+            this.lblType1.AutoSize = true;
+            this.lblType1.Location = new System.Drawing.Point(1, 19);
+            this.lblType1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblType1.Name = "lblType1";
+            this.lblType1.Size = new System.Drawing.Size(40, 13);
+            this.lblType1.TabIndex = 23;
+            this.lblType1.Text = "Type1:";
+            // 
+            // cmbType2
+            // 
+            this.cmbType2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbType2.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbType2.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbType2.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbType2.DrawDropdownHoverOutline = false;
+            this.cmbType2.DrawFocusRectangle = false;
+            this.cmbType2.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbType2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbType2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbType2.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbType2.FormattingEnabled = true;
+            this.cmbType2.Location = new System.Drawing.Point(150, 16);
+            this.cmbType2.Name = "cmbType2";
+            this.cmbType2.Size = new System.Drawing.Size(75, 21);
+            this.cmbType2.TabIndex = 28;
+            this.cmbType2.Text = null;
+            this.cmbType2.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbType2.SelectedIndexChanged += new System.EventHandler(this.cmbType2_SelectedIndexChanged);
+            // 
+            // lblType2
+            // 
+            this.lblType2.AutoSize = true;
+            this.lblType2.Location = new System.Drawing.Point(113, 19);
+            this.lblType2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblType2.Name = "lblType2";
+            this.lblType2.Size = new System.Drawing.Size(40, 13);
+            this.lblType2.TabIndex = 27;
+            this.lblType2.Text = "Type2:";
+            // 
             // FrmClass
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2353,6 +2440,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.mnuExpGrid.ResumeLayout(false);
+            this.grpTypes.ResumeLayout(false);
+            this.grpTypes.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -2500,5 +2589,10 @@ namespace Intersect.Editor.Forms.Editors
         private Controls.GameObjectList lstGameObjects;
         private System.Windows.Forms.Label lblDesc;
         private DarkTextBox txtDesc;
+        private DarkGroupBox grpTypes;
+        private DarkComboBox cmbType2;
+        private System.Windows.Forms.Label lblType2;
+        private DarkComboBox cmbType1;
+        private System.Windows.Forms.Label lblType1;
     }
 }

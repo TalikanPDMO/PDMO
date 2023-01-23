@@ -167,6 +167,9 @@ namespace Intersect.Editor.Forms.Editors
 
                 cmbFolder.Text = mEditorItem.Folder;
 
+                cmbType1.SelectedIndex = mEditorItem.ElementalTypes[0];
+                cmbType2.SelectedIndex = mEditorItem.ElementalTypes[1];
+
                 //Combat
                 nudDamage.Value = mEditorItem.Damage;
                 nudCritChance.Value = mEditorItem.CritChance;
@@ -374,6 +377,17 @@ namespace Intersect.Editor.Forms.Editors
             lblLevel.Text = Strings.ClassEditor.spelllevel;
             btnAddSpell.Text = Strings.ClassEditor.addspell;
             btnRemoveSpell.Text = Strings.ClassEditor.removespell;
+
+            grpTypes.Text = Strings.ClassEditor.elementaltypes;
+            lblType1.Text = Strings.ClassEditor.type1;
+            lblType2.Text = Strings.ClassEditor.type2;
+            cmbType1.Items.Clear();
+            cmbType2.Items.Clear();
+            for (var i = 0; i < Strings.Combat.elementaltypes.Count; i++)
+            {
+                cmbType1.Items.Add(Strings.Combat.elementaltypes[i]);
+                cmbType2.Items.Add(Strings.Combat.elementaltypes[i]);
+            }
 
             grpRegen.Text = Strings.ClassEditor.regen;
             lblHpRegen.Text = Strings.ClassEditor.hpregen;
@@ -914,6 +928,15 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbDamageType_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.DamageType = cmbDamageType.SelectedIndex;
+        }
+        private void cmbType1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ElementalTypes[0] = cmbType1.SelectedIndex;
+        }
+
+        private void cmbType2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ElementalTypes[1] = cmbType2.SelectedIndex;
         }
 
         private void cmbScalingStat_SelectedIndexChanged(object sender, EventArgs e)

@@ -1060,6 +1060,12 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString undotitle = @"Undo Changes";
 
+            public static LocalizedString elementaltypes = @"Elemental Types";
+
+            public static LocalizedString type1 = @"Type1:";
+
+            public static LocalizedString type2 = @"Type2:";
+
         }
 
         public struct Colors
@@ -1109,6 +1115,28 @@ Tick timer saved in server config.json.";
                 {1, @"Mana"},
             };
 
+            public static Dictionary<int, LocalizedString> elementaltypes = new Dictionary<int, LocalizedString>
+            {
+                {0, @"None"},
+                {1, @"Steel"},
+                {2, @"Fighting"},
+                {3, @"Dragon"},
+                {4, @"Water"},
+                {5, @"Electric"},
+                {6, @"Fairy"},
+                {7, @"Fire"},
+                {8, @"Ice"},
+                {9, @"Bug"},
+                {10, @"Normal"},
+                {11, @"Grass"},
+                {12, @"Poison"},
+                {13, @"Psychic"},
+                {14, @"Rock"},
+                {15, @"Ground"},
+                {16, @"Ghost"},
+                {17, @"Dark"},
+                {18, @"Flying"}
+            };
         }
 
         public struct CommonEventEditor
