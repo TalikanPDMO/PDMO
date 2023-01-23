@@ -15,12 +15,13 @@ namespace Intersect.GameObjects
 
     public class NpcBase : DatabaseObject<NpcBase>, IFolderable
     {
+        public const byte NPC_MAX_ELEMENTAL_TYPES = 2;
 
         [NotMapped] public ConditionLists AttackOnSightConditions = new ConditionLists();
 
         [NotMapped] public List<NpcDrop> Drops = new List<NpcDrop>();
 
-        [NotMapped] public int[] MaxVital = new int[(int) Vitals.VitalCount];
+        [NotMapped] public int[] MaxVital = new int[(int)Vitals.VitalCount];
 
         [NotMapped] public ConditionLists PlayerCanAttackConditions = new ConditionLists();
 
@@ -30,9 +31,11 @@ namespace Intersect.GameObjects
 
         [NotMapped] public ConditionLists PlayerFriendConditions = new ConditionLists();
 
-        [NotMapped] public int[] Stats = new int[(int) Enums.Stats.StatCount];
+        [NotMapped] public int[] Stats = new int[(int)Enums.Stats.StatCount];
 
-        [NotMapped] public int[] VitalRegen = new int[(int) Vitals.VitalCount];
+        [NotMapped] public int[] VitalRegen = new int[(int)Vitals.VitalCount];
+
+        [NotMapped] public int[] ElementalTypes = new int[NPC_MAX_ELEMENTAL_TYPES];
 
         [NotMapped] public List<Guid> AddEvents = new List<Guid>(); //Events that need to be added for the quest, int is task id
 
@@ -221,8 +224,8 @@ namespace Intersect.GameObjects
         [JsonIgnore]
         public string JsonMaxVital
         {
-            get => DatabaseUtils.SaveIntArray(MaxVital, (int) Vitals.VitalCount);
-            set => DatabaseUtils.LoadIntArray(ref MaxVital, value, (int) Vitals.VitalCount);
+            get => DatabaseUtils.SaveIntArray(MaxVital, (int)Vitals.VitalCount);
+            set => DatabaseUtils.LoadIntArray(ref MaxVital, value, (int)Vitals.VitalCount);
         }
 
         //NPC vs NPC Combat
@@ -274,8 +277,16 @@ namespace Intersect.GameObjects
         [JsonIgnore]
         public string JsonStat
         {
-            get => DatabaseUtils.SaveIntArray(Stats, (int) Enums.Stats.StatCount);
-            set => DatabaseUtils.LoadIntArray(ref Stats, value, (int) Enums.Stats.StatCount);
+            get => DatabaseUtils.SaveIntArray(Stats, (int)Enums.Stats.StatCount);
+            set => DatabaseUtils.LoadIntArray(ref Stats, value, (int)Enums.Stats.StatCount);
+        }
+
+        [Column("ElementalTypes")]
+        [JsonIgnore]
+        public string JsonElementalTypes
+        {
+            get => DatabaseUtils.SaveIntArray(ElementalTypes, NPC_MAX_ELEMENTAL_TYPES);
+            set => ElementalTypes = DatabaseUtils.LoadIntArray(value, NPC_MAX_ELEMENTAL_TYPES);
         }
 
         //Vital Regen %
@@ -283,8 +294,8 @@ namespace Intersect.GameObjects
         [Column("VitalRegen")]
         public string RegenJson
         {
-            get => DatabaseUtils.SaveIntArray(VitalRegen, (int) Vitals.VitalCount);
-            set => VitalRegen = DatabaseUtils.LoadIntArray(value, (int) Vitals.VitalCount);
+            get => DatabaseUtils.SaveIntArray(VitalRegen, (int)Vitals.VitalCount);
+            set => VitalRegen = DatabaseUtils.LoadIntArray(value, (int)Vitals.VitalCount);
         }
 
         /// <inheritdoc />
@@ -387,7 +398,7 @@ namespace Intersect.GameObjects
         //Spells
         [NotMapped]
         public DbList<SpellBase> Spells { get; set; } = null;
- 
+
         [Column("Spells")]
         [JsonIgnore]
         public string JsonSpells
@@ -441,7 +452,7 @@ namespace Intersect.GameObjects
         [JsonIgnore]
         public AnimationBase AttackAnimation
         {
-            get => AnimationBase.Get(AttackAnimationId?? Guid.Empty);
+            get => AnimationBase.Get(AttackAnimationId ?? Guid.Empty);
             set => AttackAnimationId = value?.Id;
         }
 

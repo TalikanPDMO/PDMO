@@ -689,6 +689,10 @@
     <Compile Include="Migrations\Game\20230118125534_AddingRegenResetToNpcs.designer.cs">
       <DependentUpon>20230118125534_AddingRegenResetToNpcs.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230123144229_AddingElementalTypesToResourcesClassesNpcsItemsSpells.cs" />
+    <Compile Include="Migrations\Game\20230123144229_AddingElementalTypesToResourcesClassesNpcsItemsSpells.designer.cs">
+      <DependentUpon>20230123144229_AddingElementalTypesToResourcesClassesNpcsItemsSpells.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

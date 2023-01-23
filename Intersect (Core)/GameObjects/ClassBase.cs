@@ -20,6 +20,8 @@ namespace Intersect.GameObjects
 
         public const long DEFAULT_EXPERIENCE_INCREASE = 50;
 
+        public const byte CLASS_MAX_ELEMENTAL_TYPES = 2;
+
         [NotMapped] public int[] BaseStat = new int[(int) Stats.StatCount];
 
         [NotMapped] public int[] BaseVital = new int[(int) Vitals.VitalCount];
@@ -41,6 +43,8 @@ namespace Intersect.GameObjects
         [NotMapped] public int[] VitalIncrease = new int[(int) Vitals.VitalCount];
 
         [NotMapped] public int[] VitalRegen = new int[(int) Vitals.VitalCount];
+
+        [NotMapped] public int[] ElementalTypes = new int[CLASS_MAX_ELEMENTAL_TYPES];
 
         [JsonConstructor]
         public ClassBase(Guid id) : base(id)
@@ -218,6 +222,14 @@ namespace Intersect.GameObjects
         {
             get => DatabaseUtils.SaveIntArray(VitalRegen, (int) Vitals.VitalCount);
             set => VitalRegen = DatabaseUtils.LoadIntArray(value, (int) Vitals.VitalCount);
+        }
+
+        [Column("ElementalTypes")]
+        [JsonIgnore]
+        public string JsonElementalTypes
+        {
+            get => DatabaseUtils.SaveIntArray(ElementalTypes, CLASS_MAX_ELEMENTAL_TYPES);
+            set => ElementalTypes = DatabaseUtils.LoadIntArray(value, CLASS_MAX_ELEMENTAL_TYPES);
         }
 
         [JsonIgnore]
