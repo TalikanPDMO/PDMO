@@ -4812,6 +4812,12 @@ Tick timer saved in server config.json.";
 
 Tick timer saved in server config.json.";
 
+            public static LocalizedString elementaltypes = @"Elemental Types";
+
+            public static LocalizedString type1 = @"Type1:";
+
+            public static LocalizedString type2 = @"Type2:";
+
             public static LocalizedString requirementsgroup = @"Requirements";
 
             public static LocalizedString requirements = @"Harvesting Requirements";

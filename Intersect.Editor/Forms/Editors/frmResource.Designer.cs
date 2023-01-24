@@ -37,6 +37,7 @@ namespace Intersect.Editor.Forms.Editors
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
+            this.chkUndashable = new DarkUI.Controls.DarkCheckBox();
             this.btnAddFolder = new DarkUI.Controls.DarkButton();
             this.lblFolder = new System.Windows.Forms.Label();
             this.cmbFolder = new DarkUI.Controls.DarkComboBox();
@@ -103,7 +104,11 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.chkUndashable = new DarkUI.Controls.DarkCheckBox();
+            this.grpTypes = new DarkUI.Controls.DarkGroupBox();
+            this.cmbType1 = new DarkUI.Controls.DarkComboBox();
+            this.lblType1 = new System.Windows.Forms.Label();
+            this.cmbType2 = new DarkUI.Controls.DarkComboBox();
+            this.lblType2 = new System.Windows.Forms.Label();
             this.grpResources.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxHp)).BeginInit();
@@ -123,6 +128,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudDropAmount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDropChance)).BeginInit();
             this.toolStrip.SuspendLayout();
+            this.grpTypes.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpResources
@@ -209,6 +215,15 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.TabIndex = 15;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
+            // 
+            // chkUndashable
+            // 
+            this.chkUndashable.Location = new System.Drawing.Point(6, 252);
+            this.chkUndashable.Name = "chkUndashable";
+            this.chkUndashable.Size = new System.Drawing.Size(211, 17);
+            this.chkUndashable.TabIndex = 53;
+            this.chkUndashable.Text = "Undashable?";
+            this.chkUndashable.CheckedChanged += new System.EventHandler(this.chkUndashable_CheckedChanged);
             // 
             // btnAddFolder
             // 
@@ -616,9 +631,10 @@ namespace Intersect.Editor.Forms.Editors
             // pnlContainer
             // 
             this.pnlContainer.AutoScroll = true;
+            this.pnlContainer.Controls.Add(this.grpTypes);
+            this.pnlContainer.Controls.Add(this.grpRegen);
             this.pnlContainer.Controls.Add(this.grpRequirements);
             this.pnlContainer.Controls.Add(this.grpCommonEvent);
-            this.pnlContainer.Controls.Add(this.grpRegen);
             this.pnlContainer.Controls.Add(this.grpDrops);
             this.pnlContainer.Controls.Add(this.grpGeneral);
             this.pnlContainer.Controls.Add(this.grpGraphics);
@@ -636,7 +652,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpRequirements.Controls.Add(this.btnRequirements);
             this.grpRequirements.Controls.Add(this.txtCannotHarvest);
             this.grpRequirements.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpRequirements.Location = new System.Drawing.Point(462, 189);
+            this.grpRequirements.Location = new System.Drawing.Point(462, 190);
             this.grpRequirements.Margin = new System.Windows.Forms.Padding(2);
             this.grpRequirements.Name = "grpRequirements";
             this.grpRequirements.Padding = new System.Windows.Forms.Padding(2);
@@ -672,7 +688,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCommonEvent.Controls.Add(this.cmbEvent);
             this.grpCommonEvent.Controls.Add(this.lblEvent);
             this.grpCommonEvent.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpCommonEvent.Location = new System.Drawing.Point(462, 116);
+            this.grpCommonEvent.Location = new System.Drawing.Point(462, 117);
             this.grpCommonEvent.Margin = new System.Windows.Forms.Padding(2);
             this.grpCommonEvent.Name = "grpCommonEvent";
             this.grpCommonEvent.Padding = new System.Windows.Forms.Padding(2);
@@ -723,7 +739,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpRegen.Margin = new System.Windows.Forms.Padding(2);
             this.grpRegen.Name = "grpRegen";
             this.grpRegen.Padding = new System.Windows.Forms.Padding(2);
-            this.grpRegen.Size = new System.Drawing.Size(244, 110);
+            this.grpRegen.Size = new System.Drawing.Size(244, 64);
             this.grpRegen.TabIndex = 32;
             this.grpRegen.TabStop = false;
             this.grpRegen.Text = "Regen";
@@ -755,9 +771,9 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // lblRegenHint
             // 
-            this.lblRegenHint.Location = new System.Drawing.Point(102, 28);
+            this.lblRegenHint.Location = new System.Drawing.Point(102, 8);
             this.lblRegenHint.Name = "lblRegenHint";
-            this.lblRegenHint.Size = new System.Drawing.Size(137, 72);
+            this.lblRegenHint.Size = new System.Drawing.Size(137, 55);
             this.lblRegenHint.TabIndex = 0;
             this.lblRegenHint.Text = "% of HP to restore per tick.\r\n\r\nTick timer saved in server config.json.";
             // 
@@ -775,9 +791,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDrops.Controls.Add(this.lblDropChance);
             this.grpDrops.Controls.Add(this.lblDropItem);
             this.grpDrops.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpDrops.Location = new System.Drawing.Point(231, 0);
+            this.grpDrops.Location = new System.Drawing.Point(231, 2);
             this.grpDrops.Name = "grpDrops";
-            this.grpDrops.Size = new System.Drawing.Size(226, 281);
+            this.grpDrops.Size = new System.Drawing.Size(226, 280);
             this.grpDrops.TabIndex = 31;
             this.grpDrops.TabStop = false;
             this.grpDrops.Text = "Drops";
@@ -1045,14 +1061,85 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // chkUndashable
+            // grpTypes
             // 
-            this.chkUndashable.Location = new System.Drawing.Point(6, 252);
-            this.chkUndashable.Name = "chkUndashable";
-            this.chkUndashable.Size = new System.Drawing.Size(211, 17);
-            this.chkUndashable.TabIndex = 53;
-            this.chkUndashable.Text = "Undashable?";
-            this.chkUndashable.CheckedChanged += new System.EventHandler(this.chkUndashable_CheckedChanged);
+            this.grpTypes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpTypes.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTypes.Controls.Add(this.cmbType1);
+            this.grpTypes.Controls.Add(this.lblType1);
+            this.grpTypes.Controls.Add(this.cmbType2);
+            this.grpTypes.Controls.Add(this.lblType2);
+            this.grpTypes.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpTypes.Location = new System.Drawing.Point(462, 69);
+            this.grpTypes.Margin = new System.Windows.Forms.Padding(2);
+            this.grpTypes.Name = "grpTypes";
+            this.grpTypes.Padding = new System.Windows.Forms.Padding(2);
+            this.grpTypes.Size = new System.Drawing.Size(244, 45);
+            this.grpTypes.TabIndex = 110;
+            this.grpTypes.TabStop = false;
+            this.grpTypes.Text = "Elemental Types";
+            // 
+            // cmbType1
+            // 
+            this.cmbType1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbType1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbType1.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbType1.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbType1.DrawDropdownHoverOutline = false;
+            this.cmbType1.DrawFocusRectangle = false;
+            this.cmbType1.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbType1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbType1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbType1.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbType1.FormattingEnabled = true;
+            this.cmbType1.Location = new System.Drawing.Point(41, 19);
+            this.cmbType1.Name = "cmbType1";
+            this.cmbType1.Size = new System.Drawing.Size(75, 21);
+            this.cmbType1.TabIndex = 106;
+            this.cmbType1.Text = null;
+            this.cmbType1.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbType1.SelectedIndexChanged += new System.EventHandler(this.cmbType1_SelectedIndexChanged);
+            // 
+            // lblType1
+            // 
+            this.lblType1.AutoSize = true;
+            this.lblType1.Location = new System.Drawing.Point(3, 22);
+            this.lblType1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblType1.Name = "lblType1";
+            this.lblType1.Size = new System.Drawing.Size(40, 13);
+            this.lblType1.TabIndex = 105;
+            this.lblType1.Text = "Type1:";
+            // 
+            // cmbType2
+            // 
+            this.cmbType2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbType2.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbType2.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbType2.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbType2.DrawDropdownHoverOutline = false;
+            this.cmbType2.DrawFocusRectangle = false;
+            this.cmbType2.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbType2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbType2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbType2.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbType2.FormattingEnabled = true;
+            this.cmbType2.Location = new System.Drawing.Point(162, 19);
+            this.cmbType2.Name = "cmbType2";
+            this.cmbType2.Size = new System.Drawing.Size(75, 21);
+            this.cmbType2.TabIndex = 108;
+            this.cmbType2.Text = null;
+            this.cmbType2.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbType2.SelectedIndexChanged += new System.EventHandler(this.cmbType2_SelectedIndexChanged);
+            // 
+            // lblType2
+            // 
+            this.lblType2.AutoSize = true;
+            this.lblType2.Location = new System.Drawing.Point(124, 22);
+            this.lblType2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblType2.Name = "lblType2";
+            this.lblType2.Size = new System.Drawing.Size(40, 13);
+            this.lblType2.TabIndex = 107;
+            this.lblType2.Text = "Type2:";
             // 
             // FrmResource
             // 
@@ -1102,6 +1189,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudDropChance)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.grpTypes.ResumeLayout(false);
+            this.grpTypes.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1180,5 +1269,10 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblCannotHarvest;
         private DarkTextBox txtCannotHarvest;
         private DarkCheckBox chkUndashable;
+        private DarkGroupBox grpTypes;
+        private DarkComboBox cmbType1;
+        private System.Windows.Forms.Label lblType1;
+        private DarkComboBox cmbType2;
+        private System.Windows.Forms.Label lblType2;
     }
 }
