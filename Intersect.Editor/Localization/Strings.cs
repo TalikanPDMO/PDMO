@@ -3628,6 +3628,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString twohanded = @"2 Hand";
 
+            public static LocalizedString elementaltype = @"Elemental Type:";
+
             public static LocalizedString type = @"Type:";
 
             public static Dictionary<int, LocalizedString> types = new Dictionary<int, LocalizedString>
@@ -5049,7 +5051,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString deletetitle = @"Delete Spell";
 
-            public static LocalizedString description = @"Desc:";
+            public static LocalizedString description = @"Description:";
 
             public static LocalizedString duration = @"Duration: (ms)";
 
@@ -5115,6 +5117,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString steal = @"Steal (%):";
 
             public static LocalizedString icon = @"Icon:";
+
+            public static LocalizedString elementaltype = @"Elemental Type:";
 
             public static LocalizedString ignoreactiveresources = @"Active Resources";
 

@@ -172,6 +172,12 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             lblIcon.Text = Strings.SpellEditor.icon;
+            lblElementalType.Text = Strings.SpellEditor.elementaltype;
+            cmbElementalType.Items.Clear();
+            for (var i = 0; i < Strings.Combat.elementaltypes.Count; i++)
+            {
+                cmbElementalType.Items.Add(Strings.Combat.elementaltypes[i]);
+            }
             lblDesc.Text = Strings.SpellEditor.description;
             lblCastAnimation.Text = Strings.SpellEditor.castanimation;
             lblHitAnimation.Text = Strings.SpellEditor.hitanimation;
@@ -298,6 +304,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbFolder.Text = mEditorItem.Folder;
                 txtDesc.Text = mEditorItem.Description;
                 cmbType.SelectedIndex = (int) mEditorItem.SpellType;
+                cmbElementalType.SelectedIndex = mEditorItem.ElementalType;
 
                 nudCastDuration.Value = mEditorItem.CastDuration;
                 nudCooldownDuration.Value = mEditorItem.CooldownDuration;
@@ -559,6 +566,11 @@ namespace Intersect.Editor.Forms.Editors
         private void txtDesc_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.Description = txtDesc.Text;
+        }
+
+        private void cmbElementalType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ElementalType = cmbElementalType.SelectedIndex;
         }
 
         private void cmbExtraEffect_SelectedIndexChanged(object sender, EventArgs e)
