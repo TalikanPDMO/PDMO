@@ -430,6 +430,16 @@ namespace Intersect.GameObjects
             set => VitalRegen = JsonConvert.DeserializeObject<int[]>(value);
         }
 
+        [NotMapped] public int[] ElementalTypes = null;
+        //Elemental types
+        [JsonIgnore]
+        [Column("ElementalTypes")]
+        public string JsonElementalTypes
+        {
+            get => JsonConvert.SerializeObject(ElementalTypes);
+            set => ElementalTypes = JsonConvert.DeserializeObject<int[]>(value);
+        }
+
         public int? Damage { get; set; } = null;
 
         public int? DamageType { get; set; } = null;

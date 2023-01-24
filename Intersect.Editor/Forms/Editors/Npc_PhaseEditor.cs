@@ -148,6 +148,27 @@ namespace Intersect.Editor.Forms.Editors
                     mMyPhase.Spells = new DbList<SpellBase>();
                 }
 
+                //Elemental Types
+                if (mMyPhase.ElementalTypes == null)
+                {
+                    chkChangeElementalTypes.Checked = false;
+                    cmbType1.Enabled = false;
+                    cmbType2.Enabled = false;
+                    if (mMyNpc != null)
+                    {
+                        cmbType1.SelectedIndex = mMyNpc.ElementalTypes[0];
+                        cmbType2.SelectedIndex = mMyNpc.ElementalTypes[1];
+                    }
+                }
+                else
+                {
+                    chkChangeElementalTypes.Checked = true;
+                    cmbType1.SelectedIndex = mMyPhase.ElementalTypes[0];
+                    cmbType2.SelectedIndex = mMyPhase.ElementalTypes[1];
+                    cmbType1.Enabled = true;
+                    cmbType2.Enabled = true;
+                }
+
                 //Combat
                 nudDamage.Value = mMyPhase.Damage?? mMyNpc.Damage;
                 nudCritChance.Value = mMyPhase.CritChance ?? mMyNpc.CritChance;
@@ -272,6 +293,18 @@ namespace Intersect.Editor.Forms.Editors
             lblHpRegen.Text = Strings.NpcPhaseEditor.hpregen;
             lblManaRegen.Text = Strings.NpcPhaseEditor.manaregen;
 
+            grpTypes.Text = Strings.NpcPhaseEditor.types;
+            chkChangeElementalTypes.Text = Strings.NpcPhaseEditor.changetypes;
+            lblType1.Text = Strings.NpcPhaseEditor.type1;
+            lblType2.Text = Strings.NpcPhaseEditor.type2;
+            cmbType1.Items.Clear();
+            cmbType2.Items.Clear();
+            for (var i = 0; i < Strings.Combat.elementaltypes.Count; i++)
+            {
+                cmbType1.Items.Add(Strings.Combat.elementaltypes[i]);
+                cmbType2.Items.Add(Strings.Combat.elementaltypes[i]);
+            }
+
             //Combat
             grpCombat.Text = Strings.NpcPhaseEditor.combat;
             chkChangeCombat.Text = Strings.NpcPhaseEditor.changecombat;
@@ -388,6 +421,17 @@ namespace Intersect.Editor.Forms.Editors
                 mMyPhase.VitalRegen = null;
             }
 
+            if (chkChangeElementalTypes.Checked)
+            {
+                mMyPhase.ElementalTypes = new int[NpcBase.NPC_MAX_ELEMENTAL_TYPES];
+                mMyPhase.ElementalTypes[0] = cmbType1.SelectedIndex;
+                mMyPhase.ElementalTypes[1] = cmbType2.SelectedIndex;
+            }
+            else
+            {
+                mMyPhase.ElementalTypes = null;
+            }
+
             if (mMyPhase.Spells.Count == 0)
             {
                 mMyPhase.Spells = null;
@@ -499,6 +543,25 @@ namespace Intersect.Editor.Forms.Editors
                 {
                     nudHpRegen.Value = mMyNpc.VitalRegen[(int)Vitals.Health];
                     nudMpRegen.Value = mMyNpc.VitalRegen[(int)Vitals.Mana];
+                }
+            }
+        }
+
+        private void chkChangeElementalTypes_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkChangeElementalTypes.Checked)
+            {
+                cmbType1.Enabled = true;
+                cmbType2.Enabled = true;
+            }
+            else
+            {
+                cmbType1.Enabled = false;
+                cmbType2.Enabled = false;
+                if (mMyNpc != null)
+                {
+                    cmbType1.SelectedIndex = mMyNpc.ElementalTypes[0];
+                    cmbType2.SelectedIndex = mMyNpc.ElementalTypes[1];
                 }
             }
         }

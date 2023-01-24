@@ -4304,6 +4304,12 @@ Tick timer saved in server config.json.";
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString Alpha = @"Alpha:";
 
+            public static LocalizedString elementaltypes = @"Elemental Types";
+
+            public static LocalizedString type1 = @"Type1:";
+
+            public static LocalizedString type2 = @"Type2:";
+
             public static LocalizedString stats = @"Stats:";
 
             public static LocalizedString swarm = @"Swarm";
@@ -4397,6 +4403,14 @@ Tick timer saved in server config.json.";
             public static LocalizedString hpregen = @"HP: (%)";
 
             public static LocalizedString manaregen = @"Mana: (%)";
+
+            public static LocalizedString types = @"Types Modifier";
+
+            public static LocalizedString changetypes = @"Replace base?";
+
+            public static LocalizedString type1 = @"Type1:";
+
+            public static LocalizedString type2 = @"Type2:";
 
             public static LocalizedString combat = @"Combat Modifier";
 
