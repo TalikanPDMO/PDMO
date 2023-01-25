@@ -35,13 +35,11 @@ namespace Intersect.GameObjects
 
     public class ResourceBase : DatabaseObject<ResourceBase>, IFolderable
     {
-        public const byte RESOURCE_MAX_ELEMENTAL_TYPES = 2;
-
         [NotMapped] public List<ResourceDrop> Drops = new List<ResourceDrop>();
 
         [NotMapped] public ConditionLists HarvestingRequirements = new ConditionLists();
 
-        [NotMapped] public int[] ElementalTypes = new int[RESOURCE_MAX_ELEMENTAL_TYPES];
+        [NotMapped] public int[] ElementalTypes = new int[MAX_ELEMENTAL_TYPES];
 
         public string CannotHarvestMessage { get; set; } = "";
 
@@ -99,8 +97,8 @@ namespace Intersect.GameObjects
         [JsonIgnore]
         public string JsonElementalTypes
         {
-            get => DatabaseUtils.SaveIntArray(ElementalTypes, RESOURCE_MAX_ELEMENTAL_TYPES);
-            set => ElementalTypes = DatabaseUtils.LoadIntArray(value, RESOURCE_MAX_ELEMENTAL_TYPES);
+            get => DatabaseUtils.SaveIntArray(ElementalTypes, MAX_ELEMENTAL_TYPES);
+            set => ElementalTypes = DatabaseUtils.LoadIntArray(value, MAX_ELEMENTAL_TYPES);
         }
 
         [Column("Event")]

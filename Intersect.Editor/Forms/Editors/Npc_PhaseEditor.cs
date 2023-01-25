@@ -423,7 +423,7 @@ namespace Intersect.Editor.Forms.Editors
 
             if (chkChangeElementalTypes.Checked)
             {
-                mMyPhase.ElementalTypes = new int[NpcBase.NPC_MAX_ELEMENTAL_TYPES];
+                mMyPhase.ElementalTypes = new int[NpcBase.MAX_ELEMENTAL_TYPES];
                 mMyPhase.ElementalTypes[0] = cmbType1.SelectedIndex;
                 mMyPhase.ElementalTypes[1] = cmbType2.SelectedIndex;
             }

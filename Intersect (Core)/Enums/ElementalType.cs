@@ -40,7 +40,9 @@ namespace Intersect.Enums
 
         Dark,
 
-        Flying
+        Flying,
+
+        ElementalTypeCount
     }
 
 }

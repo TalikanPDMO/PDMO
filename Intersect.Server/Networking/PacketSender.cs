@@ -88,6 +88,14 @@ namespace Intersect.Server.Networking
                 var player = client.Entity;
                 player.RecalculateStatsAndPoints();
                 player.UnequipInvalidItems();
+                var classBase = ClassBase.Get(player.ClassId);
+                if (classBase != null)
+                {
+                    for (var i = 0; i < ClassBase.MAX_ELEMENTAL_TYPES; i++)
+                    {
+                        player.ElementalTypes[i] = (ElementalType)classBase.ElementalTypes[i];
+                    }
+                }
                 player.InGame = true;
 
                 SendTimeTo(client);

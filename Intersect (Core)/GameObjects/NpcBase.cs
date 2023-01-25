@@ -15,8 +15,6 @@ namespace Intersect.GameObjects
 
     public class NpcBase : DatabaseObject<NpcBase>, IFolderable
     {
-        public const byte NPC_MAX_ELEMENTAL_TYPES = 2;
-
         [NotMapped] public ConditionLists AttackOnSightConditions = new ConditionLists();
 
         [NotMapped] public List<NpcDrop> Drops = new List<NpcDrop>();
@@ -35,7 +33,7 @@ namespace Intersect.GameObjects
 
         [NotMapped] public int[] VitalRegen = new int[(int)Vitals.VitalCount];
 
-        [NotMapped] public int[] ElementalTypes = new int[NPC_MAX_ELEMENTAL_TYPES];
+        [NotMapped] public int[] ElementalTypes = new int[MAX_ELEMENTAL_TYPES];
 
         [NotMapped] public List<Guid> AddEvents = new List<Guid>(); //Events that need to be added for the quest, int is task id
 
@@ -285,8 +283,8 @@ namespace Intersect.GameObjects
         [JsonIgnore]
         public string JsonElementalTypes
         {
-            get => DatabaseUtils.SaveIntArray(ElementalTypes, NPC_MAX_ELEMENTAL_TYPES);
-            set => ElementalTypes = DatabaseUtils.LoadIntArray(value, NPC_MAX_ELEMENTAL_TYPES);
+            get => DatabaseUtils.SaveIntArray(ElementalTypes, MAX_ELEMENTAL_TYPES);
+            set => ElementalTypes = DatabaseUtils.LoadIntArray(value, MAX_ELEMENTAL_TYPES);
         }
 
         //Vital Regen %

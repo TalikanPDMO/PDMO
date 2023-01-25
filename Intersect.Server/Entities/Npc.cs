@@ -123,6 +123,10 @@ namespace Intersect.Server.Entities
                 BaseStats[i] = myBase.Stats[i];
                 Stat[i] = new Stat((Stats) i, this);
             }
+            for (var i = 0; i < NpcBase.MAX_ELEMENTAL_TYPES; i++)
+            {
+                ElementalTypes[i] = (ElementalType)Base.ElementalTypes[i];
+            }
 
             var spellSlot = 0;
             for (var I = 0; I < Base.Spells.Count; I++)
@@ -1941,6 +1945,7 @@ namespace Intersect.Server.Entities
                     // Forget all spell related to the phase
                     Spells.RemoveRange(Base.Spells.Count, CurrentPhase.Spells.Count);
                 }
+
                 if (CurrentPhase.BaseStatsDiff != null)
                 {
                     for (var i = 0; i < (int)Vitals.VitalCount; i++)
@@ -1954,6 +1959,14 @@ namespace Intersect.Server.Entities
                     for (var i = 0; i < (int)Stats.StatCount; i++)
                     {
                         BaseStats[i] = Base.Stats[i];
+                    }
+                }
+
+                if (CurrentPhase.ElementalTypes != null)
+                {
+                    for (var i = 0; i < NpcBase.MAX_ELEMENTAL_TYPES; i++)
+                    {
+                        ElementalTypes[i] = (ElementalType)Base.ElementalTypes[i];
                     }
                 }
                 Sprite = Base.Sprite;
@@ -2007,6 +2020,13 @@ namespace Intersect.Server.Entities
             {
                 Sprite = phase.Sprite;
                 Color = phase.Color;
+            }
+            if (phase.ElementalTypes != null)
+            {
+                for (var i = 0; i < NpcBase.MAX_ELEMENTAL_TYPES; i++)
+                {
+                    ElementalTypes[i] = (ElementalType)phase.ElementalTypes[i];
+                }
             }
             CurrentPhase = phase;
             CurrentPhaseTimer = (phase.Duration?? 0) + Globals.Timing.Milliseconds;

@@ -16,6 +16,8 @@ namespace Intersect.Models
 
         public const string Deleted = "ERR_DELETED";
 
+        public const byte MAX_ELEMENTAL_TYPES = 2;
+
         private string mBackup;
 
         protected DatabaseObject() : this(Guid.Empty)
