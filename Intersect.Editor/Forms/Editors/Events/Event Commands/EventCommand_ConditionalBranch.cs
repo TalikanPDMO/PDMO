@@ -338,7 +338,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbNpcAttackTypeIs.Items.Add(Strings.EventConditional.any);
             mAttackIdList.Clear();
             mAttackIdList.Add(Guid.Empty);
-            
 
             lblNpcDmgType.Text = Strings.EventConditional.dmgtype;
             cmbNpcDmgType.Items.Clear();
@@ -346,7 +345,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             for (var i = 0; i < Strings.Combat.damagetypes.Count; i++)
             {
                 cmbNpcDmgType.Items.Add(Strings.Combat.damagetypes[i]);
-            }   
+            }
+
+            lblNpcElementalType.Text = Strings.EventConditional.elementaltype;
+            cmbNpcElementalType.Items.Clear();
+            cmbNpcElementalType.Items.Add(Strings.EventConditional.any);
+            for (var i = 0; i < Strings.Combat.elementaltypes.Count; i++)
+            {
+                cmbNpcElementalType.Items.Add(Strings.Combat.elementaltypes[i]);
+            }
 
             btnSave.Text = Strings.EventConditional.okay;
             btnCancel.Text = Strings.EventConditional.cancel;
@@ -538,6 +545,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     cmbNpcAttackType.SelectedIndex = 0;
                     cmbNpcAttackTypeIs.SelectedIndex = 0;
                     cmbNpcDmgType.SelectedIndex = 0;
+                    cmbNpcElementalType.SelectedIndex = 0;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -954,12 +962,21 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 cmbNpcDmgType.Enabled = false;
                 lblNpcDmgType.ForeColor = ForeColor = System.Drawing.Color.Gray;
                 cmbNpcDmgType.ForeColor = System.Drawing.Color.Gray;
+
+                cmbNpcElementalType.SelectedIndex = 0;
+                cmbNpcElementalType.Enabled = false;
+                lblNpcElementalType.ForeColor = ForeColor = System.Drawing.Color.Gray;
+                cmbNpcElementalType.ForeColor = System.Drawing.Color.Gray;
             }
             else
             {
                 cmbNpcDmgType.Enabled = true;
                 lblNpcDmgType.ForeColor = ForeColor = System.Drawing.Color.Gainsboro;
                 cmbNpcDmgType.ForeColor = System.Drawing.Color.Gainsboro;
+
+                cmbNpcElementalType.Enabled = true;
+                lblNpcElementalType.ForeColor = ForeColor = System.Drawing.Color.Gainsboro;
+                cmbNpcElementalType.ForeColor = System.Drawing.Color.Gainsboro;
             }
         }
 
@@ -1747,6 +1764,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             {
                 cmbNpcDmgType.SelectedIndex = 0;
             }
+
+            cmbNpcElementalType.SelectedIndex = condition.ElementalType + 1;
+            if (cmbNpcElementalType.SelectedIndex == -1)
+            {
+                cmbNpcElementalType.SelectedIndex = 0;
+            }
+
         }
 
         #endregion
@@ -1986,6 +2010,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             condition.AttackType = cmbNpcAttackType.SelectedIndex - 1;
             condition.AttackId = mAttackIdList[cmbNpcAttackTypeIs.SelectedIndex];
             condition.DamageType = cmbNpcDmgType.SelectedIndex - 1;
+            condition.ElementalType = cmbNpcElementalType.SelectedIndex - 1;
             if (FromNpc)
             {
                 condition.Any = !chkOnlyTriggerAttackType.Checked;

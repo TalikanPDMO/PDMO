@@ -2466,6 +2466,8 @@ Tick timer saved in server config.json.";
             };
 
             public static LocalizedString dmgtype = @"Damage Type:";
+
+            public static LocalizedString elementaltype = @"Elemental Type:";
         }
 
         public struct EventConditionDesc

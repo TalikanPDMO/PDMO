@@ -354,6 +354,9 @@ namespace Intersect.GameObjects.Events
 
         [DefaultValue(-1)]
         public int DamageType { get; set; } = -1;
+
+        [DefaultValue(-1)]
+        public int ElementalType { get; set; } = -1;
     }
 
     public class VariableCompaison

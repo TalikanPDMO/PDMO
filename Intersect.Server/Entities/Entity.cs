@@ -1456,11 +1456,13 @@ namespace Intersect.Server.Entities
                 AttackInfo attackinfo;
                 if (parentSpell != null)
                 {
-                    attackinfo = new AttackInfo((DamageType)parentSpell.Combat.DamageType, AttackType.Projectile, parentSpell.Id);
+                    attackinfo = new AttackInfo((DamageType)parentSpell.Combat.DamageType, AttackType.Projectile,
+                        (ElementalType)parentSpell.ElementalType, parentSpell.Id);
                 }
                 else
                 {
-                    attackinfo = new AttackInfo((DamageType)parentItem.DamageType, AttackType.Projectile, parentItem.Id);
+                    attackinfo = new AttackInfo((DamageType)parentItem.DamageType, AttackType.Projectile,
+                        (ElementalType)parentItem.ElementalType, parentItem.Id);
                 }
                 npclist.AddOrUpdate(npcenemy, attackinfo, (npc, info) => attackinfo);
                 if(!npcenemy.CanPlayerProjectile(p))
@@ -1610,7 +1612,8 @@ namespace Intersect.Server.Entities
                 {
                     p.FightingNpcBaseIds.AddOrUpdate(npcenemy.Base.Id, CombatTimer, (guid, t) => CombatTimer);
                     var npclist = p.FightingListNpcs.GetOrAdd(npcenemy.Base.Id, new ConcurrentDictionary<Npc, AttackInfo>());
-                    var attackinfo = new AttackInfo((DamageType)spellBase.Combat.DamageType, AttackType.Spell, spellBase.Id);
+                    var attackinfo = new AttackInfo((DamageType)spellBase.Combat.DamageType, AttackType.Spell,
+                        (ElementalType) spellBase.ElementalType, spellBase.Id);
                     npclist.AddOrUpdate(npcenemy, attackinfo, (npc, info) => attackinfo);
                     if (!npcenemy.CanPlayerSpell(p))
                     {
