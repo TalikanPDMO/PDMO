@@ -4292,7 +4292,15 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString spell = @"Spell:";
 
+            public static LocalizedString beforespell = @"Before (ms):";
+
+            public static LocalizedString priority = @"Priority:";
+
+            public static LocalizedString afterspell = @"After (ms):";
+
             public static LocalizedString spells = @"Spells";
+
+            public static LocalizedString spellandrule = @"{00}ms << {01} >> {02}ms :: P{03}";
 
             public static LocalizedString sprite = @"Sprite";
 
@@ -4381,6 +4389,14 @@ Tick timer saved in server config.json.";
             public static LocalizedString addspell = @"Add";
 
             public static LocalizedString removespell = @"Remove";
+
+            public static LocalizedString beforespell = @"Before (ms):";
+
+            public static LocalizedString priority = @"Priority:";
+
+            public static LocalizedString afterspell = @"After (ms):";
+
+            public static LocalizedString spellandrule = @"{00}ms << {01} >> {02}ms :: P{03}";
 
             public static LocalizedString stats = @"Stats Multiplier";
 

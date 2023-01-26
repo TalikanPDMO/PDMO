@@ -251,6 +251,10 @@ namespace Intersect.Editor.Forms.Editors
 
             grpSpells.Text = Strings.NpcEditor.spells;
             lblSpell.Text = Strings.NpcEditor.spell;
+            lblBeforeSpell.Text = Strings.NpcEditor.beforespell;
+            lblPrioritySpell.Text = Strings.NpcEditor.priority;
+            lblAfterSpell.Text = Strings.NpcEditor.afterspell;
+
             btnAdd.Text = Strings.NpcEditor.addspell;
             btnRemove.Text = Strings.NpcEditor.removespell;
             lblFreq.Text = Strings.NpcEditor.frequency;
@@ -405,13 +409,21 @@ namespace Intersect.Editor.Forms.Editors
                 nudMpRegen.Value = mEditorItem.VitalRegen[(int) Vitals.Mana];
                 chkRegenReset.Checked = mEditorItem.RegenReset;
 
+                //For compatibility when the feature NpcRule is added
+                var needInitRules = mEditorItem.Spells.Count > 0 && mEditorItem.SpellRules.Count == 0;
                 // Add the spells to the list
                 lstSpells.Items.Clear();
                 for (var i = 0; i < mEditorItem.Spells.Count; i++)
                 {
+                    if (needInitRules)
+                    {
+                        mEditorItem.SpellRules.Add(new NpcSpellRule());
+                    }
                     if (mEditorItem.Spells[i] != Guid.Empty)
                     {
-                        lstSpells.Items.Add(SpellBase.GetName(mEditorItem.Spells[i]));
+                        lstSpells.Items.Add(Strings.NpcEditor.spellandrule.ToString(
+                            mEditorItem.SpellRules[i].MinBeforeTimer, SpellBase.GetName(mEditorItem.Spells[i]),
+                            mEditorItem.SpellRules[i].MinAfterTimer, mEditorItem.SpellRules[i].Priority));
                     }
                     else
                     {
@@ -423,6 +435,10 @@ namespace Intersect.Editor.Forms.Editors
                 {
                     lstSpells.SelectedIndex = 0;
                     cmbSpell.SelectedIndex = SpellBase.ListIndex(mEditorItem.Spells[lstSpells.SelectedIndex]);
+                    var spellRule = mEditorItem.SpellRules[lstSpells.SelectedIndex];
+                    nudBeforeSpell.Value = spellRule.MinBeforeTimer;
+                    nudSpellPriority.Value = spellRule.Priority;
+                    nudAfterSpell.Value = spellRule.MinAfterTimer;
                 }
 
                 cmbFreq.SelectedIndex = mEditorItem.SpellFrequency;
@@ -574,17 +590,28 @@ namespace Intersect.Editor.Forms.Editors
             Globals.CurrentEditor = -1;
         }
 
-        private void btnAdd_Click(object sender, EventArgs e)
+        private void lstSpells_Refresh()
         {
-            mEditorItem.Spells.Add(SpellBase.IdFromList(cmbSpell.SelectedIndex));
             var n = lstSpells.SelectedIndex;
             lstSpells.Items.Clear();
             for (var i = 0; i < mEditorItem.Spells.Count; i++)
             {
-                lstSpells.Items.Add(SpellBase.GetName(mEditorItem.Spells[i]));
+                lstSpells.Items.Add(Strings.NpcEditor.spellandrule.ToString(mEditorItem.SpellRules[i].MinBeforeTimer,
+                    SpellBase.GetName(mEditorItem.Spells[i]), mEditorItem.SpellRules[i].MinAfterTimer, mEditorItem.SpellRules[i].Priority));
             }
 
             lstSpells.SelectedIndex = n;
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            mEditorItem.Spells.Add(SpellBase.IdFromList(cmbSpell.SelectedIndex));
+            var spellRule = new NpcSpellRule();
+            spellRule.MinBeforeTimer = (int)nudBeforeSpell.Value;
+            spellRule.Priority = (int)nudSpellPriority.Value;
+            spellRule.MinAfterTimer = (int)nudAfterSpell.Value;
+            mEditorItem.SpellRules.Add(spellRule);
+            lstSpells_Refresh();
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
@@ -594,6 +621,7 @@ namespace Intersect.Editor.Forms.Editors
                 var i = lstSpells.SelectedIndex;
                 lstSpells.Items.RemoveAt(i);
                 mEditorItem.Spells.RemoveAt(i);
+                mEditorItem.SpellRules.RemoveAt(i);
             }
         }
 
@@ -890,6 +918,9 @@ namespace Intersect.Editor.Forms.Editors
             if (lstSpells.SelectedIndex > -1)
             {
                 cmbSpell.SelectedIndex = SpellBase.ListIndex(mEditorItem.Spells[lstSpells.SelectedIndex]);
+                nudBeforeSpell.Value = mEditorItem.SpellRules[lstSpells.SelectedIndex].MinBeforeTimer;
+                nudSpellPriority.Value = mEditorItem.SpellRules[lstSpells.SelectedIndex].Priority;
+                nudAfterSpell.Value = mEditorItem.SpellRules[lstSpells.SelectedIndex].MinAfterTimer;
             }
         }
 
@@ -899,15 +930,33 @@ namespace Intersect.Editor.Forms.Editors
             {
                 mEditorItem.Spells[lstSpells.SelectedIndex] = SpellBase.IdFromList(cmbSpell.SelectedIndex);
             }
-
-            var n = lstSpells.SelectedIndex;
-            lstSpells.Items.Clear();
-            for (var i = 0; i < mEditorItem.Spells.Count; i++)
+            lstSpells_Refresh();
+        }
+        private void nudBeforeSpell_ValueChanged(object sender, EventArgs e)
+        { 
+            if (lstSpells.SelectedIndex > -1 && lstSpells.SelectedIndex < mEditorItem.Spells.Count)
             {
-                lstSpells.Items.Add(SpellBase.GetName(mEditorItem.Spells[i]));
+                mEditorItem.SpellRules[lstSpells.SelectedIndex].MinBeforeTimer = (int)nudBeforeSpell.Value;
             }
+            lstSpells_Refresh();
+        }
 
-            lstSpells.SelectedIndex = n;
+        private void nudSpellPriority_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstSpells.SelectedIndex > -1 && lstSpells.SelectedIndex < mEditorItem.Spells.Count)
+            {
+                mEditorItem.SpellRules[lstSpells.SelectedIndex].Priority = (int)nudSpellPriority.Value;
+            }
+            lstSpells_Refresh();
+        }
+
+        private void nudAfterSpell_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstSpells.SelectedIndex > -1 && lstSpells.SelectedIndex < mEditorItem.Spells.Count)
+            {
+                mEditorItem.SpellRules[lstSpells.SelectedIndex].MinAfterTimer = (int)nudAfterSpell.Value;
+            }
+            lstSpells_Refresh();
         }
 
         private void nudScaling_ValueChanged(object sender, EventArgs e)
