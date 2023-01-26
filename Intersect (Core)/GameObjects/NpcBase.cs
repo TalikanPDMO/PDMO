@@ -252,6 +252,16 @@ namespace Intersect.GameObjects
         [NotMapped]
         public DbList<SpellBase> Spells { get; set; } = new DbList<SpellBase>();
 
+        //Spell Rules
+        [Column("SpellRules")]
+        [JsonIgnore]
+        public string JsonSpellRules
+        {
+            get => JsonConvert.SerializeObject(SpellRules);
+            set => SpellRules = JsonConvert.DeserializeObject<List<NpcSpellRule>>(value);
+        }
+        [NotMapped] public List<NpcSpellRule> SpellRules = new List<NpcSpellRule>();
+
         public string Sprite { get; set; } = "";
 
         /// <summary>
@@ -356,6 +366,18 @@ namespace Intersect.GameObjects
 
     }
 
+    public class NpcSpellRule
+    {
+
+        public int MinBeforeTimer = 0;
+
+        public int MinAfterTimer = 0;
+
+        public int Priority = 0;
+
+    }
+
+
     public enum NpcPhasesProgressState
     {
         OnNonePhase = 0,
@@ -406,6 +428,16 @@ namespace Intersect.GameObjects
         }
 
         public bool ReplaceSpells { get; set; }
+
+        //Spell Rules
+        [Column("SpellRules")]
+        [JsonIgnore]
+        public string JsonSpellRules
+        {
+            get => JsonConvert.SerializeObject(SpellRules, Formatting.None);
+            set => SpellRules = JsonConvert.DeserializeObject<List<NpcSpellRule>>(value);
+        }
+        [NotMapped] public List<NpcSpellRule> SpellRules { get; set; } = null;
 
         [Column("BaseStatsDiff")]
         [JsonIgnore]

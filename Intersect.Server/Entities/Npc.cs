@@ -28,6 +28,8 @@ namespace Intersect.Server.Entities
         //Spell casting
         public long CastFreq;
 
+        public List<NpcSpellRule> SpellRules = new List<NpcSpellRule>();
+
         /// <summary>
         /// Damage Map - Keep track of who is doing the most damage to this npc and focus accordingly
         /// </summary>
