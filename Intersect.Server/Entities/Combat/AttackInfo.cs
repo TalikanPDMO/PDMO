@@ -10,12 +10,15 @@ namespace Intersect.Server.Entities.Combat
 
         public AttackType AttackType;
 
+        public ElementalType ElementalType;
+
         public Guid AttackId;
 
-        public AttackInfo(DamageType damageType, AttackType attackType, Guid attackId)
+        public AttackInfo(DamageType damageType, AttackType attackType, ElementalType elementalType, Guid attackId)
         {
             DamageType = damageType;
             AttackType = attackType;
+            ElementalType = elementalType;
             AttackId = attackId;
         }
     }

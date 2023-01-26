@@ -27,6 +27,7 @@ using Newtonsoft.Json;
 
 //Ajoute par Moussmous
 using Intersect.Network;
+using Intersect.Models;
 
 namespace Intersect.Server.Entities
 {
@@ -40,6 +41,8 @@ namespace Intersect.Server.Entities
         [JsonProperty("MaxVitals"), NotMapped] private int[] _maxVital = new int[(int) Vitals.VitalCount];
 
         [NotMapped, JsonIgnore] public Stat[] Stat = new Stat[(int) Stats.StatCount];
+
+        [NotMapped, JsonIgnore] public ElementalType[] ElementalTypes = new ElementalType[NpcBase.MAX_ELEMENTAL_TYPES];
 
         [NotMapped, JsonIgnore] public Entity Target { get; set; } = null;
 
@@ -1456,11 +1459,13 @@ namespace Intersect.Server.Entities
                 AttackInfo attackinfo;
                 if (parentSpell != null)
                 {
-                    attackinfo = new AttackInfo((DamageType)parentSpell.Combat.DamageType, AttackType.Projectile, parentSpell.Id);
+                    attackinfo = new AttackInfo((DamageType)parentSpell.Combat.DamageType, AttackType.Projectile,
+                        (ElementalType)parentSpell.ElementalType, parentSpell.Id);
                 }
                 else
                 {
-                    attackinfo = new AttackInfo((DamageType)parentItem.DamageType, AttackType.Projectile, parentItem.Id);
+                    attackinfo = new AttackInfo((DamageType)parentItem.DamageType, AttackType.Projectile,
+                        (ElementalType)parentItem.ElementalType, parentItem.Id);
                 }
                 npclist.AddOrUpdate(npcenemy, attackinfo, (npc, info) => attackinfo);
                 if(!npcenemy.CanPlayerProjectile(p))
@@ -1531,7 +1536,7 @@ namespace Intersect.Server.Entities
                 var damageHealth = parentItem.Damage;
                 var damageMana = 0;
                 isCrit = Attack(
-                    target, ref damageHealth, ref damageMana, 0, 0, (DamageType) parentItem.DamageType, (Stats) parentItem.ScalingStat,
+                    target, ref damageHealth, ref damageMana, 0, 0, (ElementalType)parentItem.ElementalType, (DamageType) parentItem.DamageType, (Stats) parentItem.ScalingStat,
                     parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, parentItem.Name, null, null, true, parentItem.CritEffectSpellReplace, alreadyCrit
                 ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
             }
@@ -1610,7 +1615,8 @@ namespace Intersect.Server.Entities
                 {
                     p.FightingNpcBaseIds.AddOrUpdate(npcenemy.Base.Id, CombatTimer, (guid, t) => CombatTimer);
                     var npclist = p.FightingListNpcs.GetOrAdd(npcenemy.Base.Id, new ConcurrentDictionary<Npc, AttackInfo>());
-                    var attackinfo = new AttackInfo((DamageType)spellBase.Combat.DamageType, AttackType.Spell, spellBase.Id);
+                    var attackinfo = new AttackInfo((DamageType)spellBase.Combat.DamageType, AttackType.Spell,
+                        (ElementalType) spellBase.ElementalType, spellBase.Id);
                     npclist.AddOrUpdate(npcenemy, attackinfo, (npc, info) => attackinfo);
                     if (!npcenemy.CanPlayerSpell(p))
                     {
@@ -1746,7 +1752,7 @@ namespace Intersect.Server.Entities
             {
                 isCrit = Attack(
                     target, ref damageHealth, ref damageMana, spellBase.Combat.VitalSteal[(int)Vitals.Health], spellBase.Combat.VitalSteal[(int)Vitals.Mana],
-                    (DamageType) spellBase.Combat.DamageType, (Stats) spellBase.Combat.ScalingStat, spellBase.Combat.Scaling, spellBase.Combat.CritChance,
+                    (ElementalType)spellBase.ElementalType, (DamageType) spellBase.Combat.DamageType, (Stats) spellBase.Combat.ScalingStat, spellBase.Combat.Scaling, spellBase.Combat.CritChance,
                     spellBase.Combat.CritMultiplier, spellBase.Name, deadAnimations, aliveAnimations, false, spellBase.Combat.CritEffectSpellReplace, alreadyCrit, reUseValues, spellBase.Combat.HoTDoT
                 ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
             }
@@ -1984,7 +1990,7 @@ namespace Intersect.Server.Entities
             if (weapon == null)
             {
                 isCrit = Attack(
-                    target, ref damageHealth, ref damageMana, 0, 0,
+                    target, ref damageHealth, ref damageMana, 0, 0, ElementalType.None,
                     damageType, scalingStat, scaling, critChance, critMultiplier, null, deadAnimations,
                     aliveAnimations, true
                 ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
@@ -1992,7 +1998,7 @@ namespace Intersect.Server.Entities
             else
             {
                 isCrit = Attack(
-                    target, ref damageHealth, ref damageMana, 0, 0,
+                    target, ref damageHealth, ref damageMana, 0, 0, (ElementalType)weapon.ElementalType,
                     damageType, scalingStat, scaling, critChance, critMultiplier, weapon.Name, deadAnimations,
                     aliveAnimations, true, weapon.CritEffectSpellReplace, alreadyCrit
                 ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)
@@ -2012,6 +2018,7 @@ namespace Intersect.Server.Entities
             ref int secondaryDamage,
             int stealBase,
             int stealSecondary,
+            ElementalType elementalType,
             DamageType damageType,
             Stats scalingStat,
             int scaling,
@@ -2131,7 +2138,7 @@ namespace Intersect.Server.Entities
                 else
                 {
                     baseDamage = Formulas.CalculateDamage(
-                    baseDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy
+                    baseDamage, elementalType, damageType, scalingStat, scaling, critMultiplier, this, enemy
                 );
                 }
                 
@@ -2267,7 +2274,7 @@ namespace Intersect.Server.Entities
                 else // Scale if not fixed damage
                 {
                     secondaryDamage = Formulas.CalculateDamage(
-                        secondaryDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy);
+                        secondaryDamage, elementalType, damageType, scalingStat, scaling, critMultiplier, this, enemy);
                 }
                 if (secondaryDamage < 0 && damagingAttack)
                 {

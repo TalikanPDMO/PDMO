@@ -162,6 +162,8 @@ namespace Intersect.GameObjects
 
         public int DamageType { get; set; }
 
+        public int ElementalType { get; set; } = 0;
+
         public int AttackSpeedModifier { get; set; }
 
         public int AttackSpeedValue { get; set; }

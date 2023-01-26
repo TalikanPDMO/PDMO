@@ -239,6 +239,12 @@ namespace Intersect.Editor.Forms.Editors
 
             grpWeaponProperties.Text = Strings.ItemEditor.weaponproperties;
             chk2Hand.Text = Strings.ItemEditor.twohanded;
+            lblElementalType.Text = Strings.ItemEditor.elementaltype;
+            cmbElementalType.Items.Clear();
+            for (var i = 0; i < Strings.Combat.elementaltypes.Count; i++)
+            {
+                cmbElementalType.Items.Add(Strings.Combat.elementaltypes[i]);
+            }
             lblDamage.Text = Strings.ItemEditor.basedamage;
             lblCritChance.Text = Strings.ItemEditor.critchance;
             lblCritMultiplier.Text = Strings.ItemEditor.critmultiplier;
@@ -423,6 +429,7 @@ namespace Intersect.Editor.Forms.Editors
                     DrawItemPaperdoll(Gender.Female);
                 }
 
+                cmbElementalType.SelectedIndex = mEditorItem.ElementalType;
                 cmbDamageType.SelectedIndex = mEditorItem.DamageType;
                 cmbScalingStat.SelectedIndex = mEditorItem.ScalingStat;
 
@@ -775,6 +782,11 @@ namespace Intersect.Editor.Forms.Editors
         {
             mEditorItem.AttackAnimation =
                 AnimationBase.Get(AnimationBase.IdFromList(cmbAttackAnimation.SelectedIndex - 1));
+        }
+
+        private void cmbElementalType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ElementalType = cmbElementalType.SelectedIndex;
         }
 
         private void cmbDamageType_SelectedIndexChanged(object sender, EventArgs e)

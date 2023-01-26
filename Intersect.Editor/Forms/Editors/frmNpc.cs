@@ -187,6 +187,17 @@ namespace Intersect.Editor.Forms.Editors
             lblBlue.Text = Strings.NpcEditor.Blue;
             lblAlpha.Text = Strings.NpcEditor.Alpha;
 
+            grpTypes.Text = Strings.NpcEditor.elementaltypes;
+            lblType1.Text = Strings.NpcEditor.type1;
+            lblType2.Text = Strings.NpcEditor.type2;
+            cmbType1.Items.Clear();
+            cmbType2.Items.Clear();
+            for (var i = 0; i < Strings.Combat.elementaltypes.Count; i++)
+            {
+                cmbType1.Items.Add(Strings.Combat.elementaltypes[i]);
+                cmbType2.Items.Add(Strings.Combat.elementaltypes[i]);
+            }
+
             lblSpawnDuration.Text = Strings.NpcEditor.spawnduration;
 
             //Behavior
@@ -317,6 +328,9 @@ namespace Intersect.Editor.Forms.Editors
                 nudRgbaG.Value = mEditorItem.Color.G;
                 nudRgbaB.Value = mEditorItem.Color.B;
                 nudRgbaA.Value = mEditorItem.Color.A;
+
+                cmbType1.SelectedIndex = mEditorItem.ElementalTypes[0];
+                cmbType2.SelectedIndex = mEditorItem.ElementalTypes[1];
 
                 nudLevel.Value = mEditorItem.Level;
                 nudSpawnDuration.Value = mEditorItem.SpawnDuration;
@@ -1363,6 +1377,16 @@ namespace Intersect.Editor.Forms.Editors
         private void nudMaxMove_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.MaxRandomMove = (int)nudMaxMove.Value;
+        }
+
+        private void cmbType1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ElementalTypes[0] = cmbType1.SelectedIndex;
+        }
+
+        private void cmbType2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ElementalTypes[1] = cmbType2.SelectedIndex;
         }
     }
 

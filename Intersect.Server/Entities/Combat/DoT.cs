@@ -107,7 +107,7 @@ namespace Intersect.Server.Entities.Combat
 
             Attacker?.Attack(
                 Target, ref damageHealth, ref damageMana, SpellBase.Combat.VitalSteal[(int)Vitals.Health], SpellBase.Combat.VitalSteal[(int)Vitals.Mana],
-                (DamageType) SpellBase.Combat.DamageType, (Stats) SpellBase.Combat.ScalingStat,
+                (ElementalType)SpellBase.ElementalType, (DamageType) SpellBase.Combat.DamageType, (Stats) SpellBase.Combat.ScalingStat,
                 SpellBase.Combat.Scaling, SpellBase.Combat.CritChance, SpellBase.Combat.CritMultiplier, SpellBase.Name, deadAnimations,
                 aliveAnimations, false
             ); //L'appel de la méthode a été modifié par Moussmous pour décrire les actions de combats dans le chat (ajout du nom de l'attaque utilisée)

@@ -32,6 +32,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             this.grpConditional = new DarkUI.Controls.DarkGroupBox();
             this.grpFightingAttackType = new DarkUI.Controls.DarkGroupBox();
+            this.lblNpcDmgType = new System.Windows.Forms.Label();
+            this.cmbNpcDmgType = new DarkUI.Controls.DarkComboBox();
             this.chkOnlyTriggerAttackType = new DarkUI.Controls.DarkCheckBox();
             this.lblNpcAttackTypeIs = new System.Windows.Forms.Label();
             this.cmbNpcAttackTypeIs = new DarkUI.Controls.DarkComboBox();
@@ -184,8 +186,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.rdoManual = new DarkUI.Controls.DarkRadioButton();
             this.cmbItem = new DarkUI.Controls.DarkComboBox();
             this.lblItem = new System.Windows.Forms.Label();
-            this.lblNpcDmgType = new System.Windows.Forms.Label();
-            this.cmbNpcDmgType = new DarkUI.Controls.DarkComboBox();
+            this.lblNpcElementalType = new System.Windows.Forms.Label();
+            this.cmbNpcElementalType = new DarkUI.Controls.DarkComboBox();
             this.grpConditional.SuspendLayout();
             this.grpFightingAttackType.SuspendLayout();
             this.grpFightingStats.SuspendLayout();
@@ -266,6 +268,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpFightingAttackType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpFightingAttackType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpFightingAttackType.Controls.Add(this.lblNpcElementalType);
+            this.grpFightingAttackType.Controls.Add(this.cmbNpcElementalType);
             this.grpFightingAttackType.Controls.Add(this.lblNpcDmgType);
             this.grpFightingAttackType.Controls.Add(this.cmbNpcDmgType);
             this.grpFightingAttackType.Controls.Add(this.chkOnlyTriggerAttackType);
@@ -278,11 +282,40 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpFightingAttackType.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpFightingAttackType.Location = new System.Drawing.Point(8, 40);
             this.grpFightingAttackType.Name = "grpFightingAttackType";
-            this.grpFightingAttackType.Size = new System.Drawing.Size(264, 154);
+            this.grpFightingAttackType.Size = new System.Drawing.Size(264, 173);
             this.grpFightingAttackType.TabIndex = 62;
             this.grpFightingAttackType.TabStop = false;
             this.grpFightingAttackType.Text = "Fighting npc with Attack Type";
             this.grpFightingAttackType.Visible = false;
+            // 
+            // lblNpcDmgType
+            // 
+            this.lblNpcDmgType.AutoSize = true;
+            this.lblNpcDmgType.Location = new System.Drawing.Point(4, 117);
+            this.lblNpcDmgType.Name = "lblNpcDmgType";
+            this.lblNpcDmgType.Size = new System.Drawing.Size(77, 13);
+            this.lblNpcDmgType.TabIndex = 63;
+            this.lblNpcDmgType.Text = "Damage Type:";
+            // 
+            // cmbNpcDmgType
+            // 
+            this.cmbNpcDmgType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbNpcDmgType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbNpcDmgType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbNpcDmgType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbNpcDmgType.DrawDropdownHoverOutline = false;
+            this.cmbNpcDmgType.DrawFocusRectangle = false;
+            this.cmbNpcDmgType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbNpcDmgType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbNpcDmgType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbNpcDmgType.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbNpcDmgType.FormattingEnabled = true;
+            this.cmbNpcDmgType.Location = new System.Drawing.Point(90, 113);
+            this.cmbNpcDmgType.Name = "cmbNpcDmgType";
+            this.cmbNpcDmgType.Size = new System.Drawing.Size(130, 21);
+            this.cmbNpcDmgType.TabIndex = 62;
+            this.cmbNpcDmgType.Text = "Any";
+            this.cmbNpcDmgType.TextPadding = new System.Windows.Forms.Padding(1, 2, 0, 2);
             // 
             // chkOnlyTriggerAttackType
             // 
@@ -314,7 +347,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbNpcAttackTypeIs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbNpcAttackTypeIs.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbNpcAttackTypeIs.FormattingEnabled = true;
-            this.cmbNpcAttackTypeIs.Location = new System.Drawing.Point(83, 89);
+            this.cmbNpcAttackTypeIs.Location = new System.Drawing.Point(90, 89);
             this.cmbNpcAttackTypeIs.Name = "cmbNpcAttackTypeIs";
             this.cmbNpcAttackTypeIs.Size = new System.Drawing.Size(130, 21);
             this.cmbNpcAttackTypeIs.TabIndex = 25;
@@ -344,7 +377,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbNpcAttackType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbNpcAttackType.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbNpcAttackType.FormattingEnabled = true;
-            this.cmbNpcAttackType.Location = new System.Drawing.Point(83, 65);
+            this.cmbNpcAttackType.Location = new System.Drawing.Point(90, 65);
             this.cmbNpcAttackType.Name = "cmbNpcAttackType";
             this.cmbNpcAttackType.Size = new System.Drawing.Size(130, 21);
             this.cmbNpcAttackType.TabIndex = 6;
@@ -2472,34 +2505,34 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblItem.TabIndex = 2;
             this.lblItem.Text = "Item:";
             // 
-            // lblNpcDmgType
+            // lblNpcElementalType
             // 
-            this.lblNpcDmgType.AutoSize = true;
-            this.lblNpcDmgType.Location = new System.Drawing.Point(4, 117);
-            this.lblNpcDmgType.Name = "lblNpcDmgType";
-            this.lblNpcDmgType.Size = new System.Drawing.Size(77, 13);
-            this.lblNpcDmgType.TabIndex = 63;
-            this.lblNpcDmgType.Text = "Damage Type:";
+            this.lblNpcElementalType.AutoSize = true;
+            this.lblNpcElementalType.Location = new System.Drawing.Point(4, 141);
+            this.lblNpcElementalType.Name = "lblNpcElementalType";
+            this.lblNpcElementalType.Size = new System.Drawing.Size(83, 13);
+            this.lblNpcElementalType.TabIndex = 65;
+            this.lblNpcElementalType.Text = "Elemental Type:";
             // 
-            // cmbNpcDmgType
+            // cmbNpcElementalType
             // 
-            this.cmbNpcDmgType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbNpcDmgType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbNpcDmgType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbNpcDmgType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbNpcDmgType.DrawDropdownHoverOutline = false;
-            this.cmbNpcDmgType.DrawFocusRectangle = false;
-            this.cmbNpcDmgType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbNpcDmgType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbNpcDmgType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbNpcDmgType.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbNpcDmgType.FormattingEnabled = true;
-            this.cmbNpcDmgType.Location = new System.Drawing.Point(83, 113);
-            this.cmbNpcDmgType.Name = "cmbNpcDmgType";
-            this.cmbNpcDmgType.Size = new System.Drawing.Size(130, 21);
-            this.cmbNpcDmgType.TabIndex = 62;
-            this.cmbNpcDmgType.Text = "Any";
-            this.cmbNpcDmgType.TextPadding = new System.Windows.Forms.Padding(1, 2, 0, 2);
+            this.cmbNpcElementalType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbNpcElementalType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbNpcElementalType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbNpcElementalType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbNpcElementalType.DrawDropdownHoverOutline = false;
+            this.cmbNpcElementalType.DrawFocusRectangle = false;
+            this.cmbNpcElementalType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbNpcElementalType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbNpcElementalType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbNpcElementalType.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbNpcElementalType.FormattingEnabled = true;
+            this.cmbNpcElementalType.Location = new System.Drawing.Point(90, 137);
+            this.cmbNpcElementalType.Name = "cmbNpcElementalType";
+            this.cmbNpcElementalType.Size = new System.Drawing.Size(130, 21);
+            this.cmbNpcElementalType.TabIndex = 64;
+            this.cmbNpcElementalType.Text = "Any";
+            this.cmbNpcElementalType.TextPadding = new System.Windows.Forms.Padding(1, 2, 0, 2);
             // 
             // EventCommandConditionalBranch
             // 
@@ -2734,5 +2767,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkComboBox cmbFightAttackTypeNpc;
         private System.Windows.Forms.Label lblNpcDmgType;
         private DarkComboBox cmbNpcDmgType;
+        private System.Windows.Forms.Label lblNpcElementalType;
+        private DarkComboBox cmbNpcElementalType;
     }
 }

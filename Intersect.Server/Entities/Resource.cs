@@ -38,6 +38,10 @@ namespace Intersect.Server.Entities
             RestoreVital(Vitals.Health);
             Passable = resource.WalkableBefore;
             HideName = true;
+            for (var i = 0; i < ResourceBase.MAX_ELEMENTAL_TYPES; i++)
+            {
+                ElementalTypes[i] = (ElementalType)Base.ElementalTypes[i];
+            }
         }
 
         public void Destroy(bool dropItems = false, Entity killer = null)

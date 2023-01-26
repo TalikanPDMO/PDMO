@@ -218,6 +218,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.toolStripItemRelations = new System.Windows.Forms.ToolStripButton();
+            this.lblElementalType = new System.Windows.Forms.Label();
+            this.cmbElementalType = new DarkUI.Controls.DarkComboBox();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxLossOnDeath)).BeginInit();
@@ -2060,6 +2062,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpWeaponProperties.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpWeaponProperties.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpWeaponProperties.Controls.Add(this.cmbElementalType);
+            this.grpWeaponProperties.Controls.Add(this.lblElementalType);
             this.grpWeaponProperties.Controls.Add(this.chkReplaceCritEffectSpell);
             this.grpWeaponProperties.Controls.Add(this.cmbCritEffectSpell);
             this.grpWeaponProperties.Controls.Add(this.lblCritEffectSpell);
@@ -2084,7 +2088,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpWeaponProperties.Controls.Add(this.lblProjectile);
             this.grpWeaponProperties.Controls.Add(this.lblDamage);
             this.grpWeaponProperties.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpWeaponProperties.Location = new System.Drawing.Point(221, 14);
+            this.grpWeaponProperties.Location = new System.Drawing.Point(221, 15);
             this.grpWeaponProperties.Name = "grpWeaponProperties";
             this.grpWeaponProperties.Size = new System.Drawing.Size(207, 574);
             this.grpWeaponProperties.TabIndex = 39;
@@ -2094,7 +2098,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // chkReplaceCritEffectSpell
             // 
-            this.chkReplaceCritEffectSpell.Location = new System.Drawing.Point(21, 176);
+            this.chkReplaceCritEffectSpell.Location = new System.Drawing.Point(20, 220);
             this.chkReplaceCritEffectSpell.Name = "chkReplaceCritEffectSpell";
             this.chkReplaceCritEffectSpell.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.chkReplaceCritEffectSpell.Size = new System.Drawing.Size(162, 20);
@@ -2117,7 +2121,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbCritEffectSpell.FormattingEnabled = true;
             this.cmbCritEffectSpell.Items.AddRange(new object[] {
             "None"});
-            this.cmbCritEffectSpell.Location = new System.Drawing.Point(17, 153);
+            this.cmbCritEffectSpell.Location = new System.Drawing.Point(16, 197);
             this.cmbCritEffectSpell.Name = "cmbCritEffectSpell";
             this.cmbCritEffectSpell.Size = new System.Drawing.Size(179, 21);
             this.cmbCritEffectSpell.TabIndex = 68;
@@ -2128,7 +2132,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblCritEffectSpell
             // 
             this.lblCritEffectSpell.AutoSize = true;
-            this.lblCritEffectSpell.Location = new System.Drawing.Point(14, 136);
+            this.lblCritEffectSpell.Location = new System.Drawing.Point(13, 180);
             this.lblCritEffectSpell.Name = "lblCritEffectSpell";
             this.lblCritEffectSpell.Size = new System.Drawing.Size(82, 13);
             this.lblCritEffectSpell.TabIndex = 67;
@@ -2144,7 +2148,7 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0,
             131072});
-            this.nudCritMultiplier.Location = new System.Drawing.Point(15, 111);
+            this.nudCritMultiplier.Location = new System.Drawing.Point(15, 155);
             this.nudCritMultiplier.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -2163,7 +2167,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblCritMultiplier
             // 
             this.lblCritMultiplier.AutoSize = true;
-            this.lblCritMultiplier.Location = new System.Drawing.Point(12, 97);
+            this.lblCritMultiplier.Location = new System.Drawing.Point(12, 141);
             this.lblCritMultiplier.Name = "lblCritMultiplier";
             this.lblCritMultiplier.Size = new System.Drawing.Size(135, 13);
             this.lblCritMultiplier.TabIndex = 57;
@@ -2178,7 +2182,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAttackSpeed.Controls.Add(this.cmbAttackSpeedModifier);
             this.grpAttackSpeed.Controls.Add(this.lblAttackSpeedModifier);
             this.grpAttackSpeed.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpAttackSpeed.Location = new System.Drawing.Point(15, 441);
+            this.grpAttackSpeed.Location = new System.Drawing.Point(15, 485);
             this.grpAttackSpeed.Name = "grpAttackSpeed";
             this.grpAttackSpeed.Size = new System.Drawing.Size(180, 86);
             this.grpAttackSpeed.TabIndex = 56;
@@ -2248,7 +2252,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudScaling.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudScaling.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudScaling.Location = new System.Drawing.Point(15, 299);
+            this.nudScaling.Location = new System.Drawing.Point(15, 343);
             this.nudScaling.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -2268,7 +2272,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudCritChance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudCritChance.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudCritChance.Location = new System.Drawing.Point(15, 73);
+            this.nudCritChance.Location = new System.Drawing.Point(15, 117);
             this.nudCritChance.Name = "nudCritChance";
             this.nudCritChance.Size = new System.Drawing.Size(180, 20);
             this.nudCritChance.TabIndex = 54;
@@ -2283,7 +2287,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudDamage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudDamage.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudDamage.Location = new System.Drawing.Point(15, 36);
+            this.nudDamage.Location = new System.Drawing.Point(15, 80);
             this.nudDamage.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -2312,7 +2316,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbProjectile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbProjectile.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbProjectile.FormattingEnabled = true;
-            this.cmbProjectile.Location = new System.Drawing.Point(15, 335);
+            this.cmbProjectile.Location = new System.Drawing.Point(15, 379);
             this.cmbProjectile.Name = "cmbProjectile";
             this.cmbProjectile.Size = new System.Drawing.Size(180, 21);
             this.cmbProjectile.TabIndex = 47;
@@ -2333,7 +2337,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbScalingStat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbScalingStat.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbScalingStat.FormattingEnabled = true;
-            this.cmbScalingStat.Location = new System.Drawing.Point(16, 258);
+            this.cmbScalingStat.Location = new System.Drawing.Point(16, 302);
             this.cmbScalingStat.Name = "cmbScalingStat";
             this.cmbScalingStat.Size = new System.Drawing.Size(180, 21);
             this.cmbScalingStat.TabIndex = 46;
@@ -2344,7 +2348,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblScalingStat
             // 
             this.lblScalingStat.AutoSize = true;
-            this.lblScalingStat.Location = new System.Drawing.Point(13, 241);
+            this.lblScalingStat.Location = new System.Drawing.Point(13, 285);
             this.lblScalingStat.Name = "lblScalingStat";
             this.lblScalingStat.Size = new System.Drawing.Size(67, 13);
             this.lblScalingStat.TabIndex = 45;
@@ -2353,7 +2357,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblScalingAmount
             // 
             this.lblScalingAmount.AutoSize = true;
-            this.lblScalingAmount.Location = new System.Drawing.Point(12, 284);
+            this.lblScalingAmount.Location = new System.Drawing.Point(12, 328);
             this.lblScalingAmount.Name = "lblScalingAmount";
             this.lblScalingAmount.Size = new System.Drawing.Size(84, 13);
             this.lblScalingAmount.TabIndex = 44;
@@ -2376,7 +2380,7 @@ namespace Intersect.Editor.Forms.Editors
             "Physical",
             "Magic",
             "True"});
-            this.cmbDamageType.Location = new System.Drawing.Point(16, 217);
+            this.cmbDamageType.Location = new System.Drawing.Point(16, 261);
             this.cmbDamageType.Name = "cmbDamageType";
             this.cmbDamageType.Size = new System.Drawing.Size(180, 21);
             this.cmbDamageType.TabIndex = 42;
@@ -2387,7 +2391,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblDamageType
             // 
             this.lblDamageType.AutoSize = true;
-            this.lblDamageType.Location = new System.Drawing.Point(13, 200);
+            this.lblDamageType.Location = new System.Drawing.Point(13, 244);
             this.lblDamageType.Name = "lblDamageType";
             this.lblDamageType.Size = new System.Drawing.Size(77, 13);
             this.lblDamageType.TabIndex = 41;
@@ -2396,7 +2400,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblCritChance
             // 
             this.lblCritChance.AutoSize = true;
-            this.lblCritChance.Location = new System.Drawing.Point(12, 59);
+            this.lblCritChance.Location = new System.Drawing.Point(12, 103);
             this.lblCritChance.Name = "lblCritChance";
             this.lblCritChance.Size = new System.Drawing.Size(82, 13);
             this.lblCritChance.TabIndex = 40;
@@ -2415,7 +2419,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbAttackAnimation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbAttackAnimation.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbAttackAnimation.FormattingEnabled = true;
-            this.cmbAttackAnimation.Location = new System.Drawing.Point(15, 373);
+            this.cmbAttackAnimation.Location = new System.Drawing.Point(15, 417);
             this.cmbAttackAnimation.Name = "cmbAttackAnimation";
             this.cmbAttackAnimation.Size = new System.Drawing.Size(180, 21);
             this.cmbAttackAnimation.TabIndex = 38;
@@ -2426,7 +2430,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblAttackAnimation
             // 
             this.lblAttackAnimation.AutoSize = true;
-            this.lblAttackAnimation.Location = new System.Drawing.Point(12, 358);
+            this.lblAttackAnimation.Location = new System.Drawing.Point(12, 402);
             this.lblAttackAnimation.Name = "lblAttackAnimation";
             this.lblAttackAnimation.Size = new System.Drawing.Size(90, 13);
             this.lblAttackAnimation.TabIndex = 37;
@@ -2445,7 +2449,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblToolType
             // 
             this.lblToolType.AutoSize = true;
-            this.lblToolType.Location = new System.Drawing.Point(13, 400);
+            this.lblToolType.Location = new System.Drawing.Point(13, 444);
             this.lblToolType.Name = "lblToolType";
             this.lblToolType.Size = new System.Drawing.Size(58, 13);
             this.lblToolType.TabIndex = 26;
@@ -2464,7 +2468,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbToolType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbToolType.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbToolType.FormattingEnabled = true;
-            this.cmbToolType.Location = new System.Drawing.Point(16, 414);
+            this.cmbToolType.Location = new System.Drawing.Point(16, 458);
             this.cmbToolType.Name = "cmbToolType";
             this.cmbToolType.Size = new System.Drawing.Size(180, 21);
             this.cmbToolType.TabIndex = 27;
@@ -2475,7 +2479,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblProjectile
             // 
             this.lblProjectile.AutoSize = true;
-            this.lblProjectile.Location = new System.Drawing.Point(12, 319);
+            this.lblProjectile.Location = new System.Drawing.Point(12, 363);
             this.lblProjectile.Name = "lblProjectile";
             this.lblProjectile.Size = new System.Drawing.Size(53, 13);
             this.lblProjectile.TabIndex = 33;
@@ -2484,7 +2488,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblDamage
             // 
             this.lblDamage.AutoSize = true;
-            this.lblDamage.Location = new System.Drawing.Point(12, 19);
+            this.lblDamage.Location = new System.Drawing.Point(12, 63);
             this.lblDamage.Name = "lblDamage";
             this.lblDamage.Size = new System.Drawing.Size(77, 13);
             this.lblDamage.TabIndex = 11;
@@ -2928,6 +2932,36 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemRelations.Text = "Relations";
             this.toolStripItemRelations.Click += new System.EventHandler(this.toolStripItemRelations_Click);
             // 
+            // lblElementalType
+            // 
+            this.lblElementalType.AutoSize = true;
+            this.lblElementalType.Location = new System.Drawing.Point(12, 21);
+            this.lblElementalType.Name = "lblElementalType";
+            this.lblElementalType.Size = new System.Drawing.Size(83, 13);
+            this.lblElementalType.TabIndex = 69;
+            this.lblElementalType.Text = "Elemental Type:";
+            // 
+            // cmbElementalType
+            // 
+            this.cmbElementalType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbElementalType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbElementalType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbElementalType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbElementalType.DrawDropdownHoverOutline = false;
+            this.cmbElementalType.DrawFocusRectangle = false;
+            this.cmbElementalType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbElementalType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbElementalType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbElementalType.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbElementalType.FormattingEnabled = true;
+            this.cmbElementalType.Location = new System.Drawing.Point(15, 38);
+            this.cmbElementalType.Name = "cmbElementalType";
+            this.cmbElementalType.Size = new System.Drawing.Size(180, 21);
+            this.cmbElementalType.TabIndex = 70;
+            this.cmbElementalType.Text = "Physical";
+            this.cmbElementalType.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbElementalType.SelectedIndexChanged += new System.EventHandler(this.cmbElementalType_SelectedIndexChanged);
+            // 
             // FrmItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3207,5 +3241,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkNumericUpDown nudMinLossOnDeath;
         private Label lblLossOnDeath;
         public ToolStripButton toolStripItemRelations;
+        private DarkComboBox cmbElementalType;
+        private Label lblElementalType;
     }
 }

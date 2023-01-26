@@ -211,6 +211,18 @@ namespace Intersect.Editor.Forms.Editors
             lblHpRegen.Text = Strings.ResourceEditor.hpregen;
             lblRegenHint.Text = Strings.ResourceEditor.regenhint;
 
+            grpTypes.Text = Strings.ResourceEditor.elementaltypes;
+            lblType1.Text = Strings.ResourceEditor.type1;
+            lblType2.Text = Strings.ResourceEditor.type2;
+            cmbType1.Items.Clear();
+            cmbType2.Items.Clear();
+            for (var i = 0; i < Strings.Combat.elementaltypes.Count; i++)
+            {
+                cmbType1.Items.Add(Strings.Combat.elementaltypes[i]);
+                cmbType2.Items.Add(Strings.Combat.elementaltypes[i]);
+            }
+
+
             grpGraphics.Text = Strings.ResourceEditor.graphics;
             lblPic.Text = Strings.ResourceEditor.initialgraphic;
             lblPic2.Text = Strings.ResourceEditor.exhaustedgraphic;
@@ -261,6 +273,11 @@ namespace Intersect.Editor.Forms.Editors
 
                 //Regen
                 nudHpRegen.Value = mEditorItem.VitalRegen;
+
+                //Elemental Types
+                cmbType1.SelectedIndex = mEditorItem.ElementalTypes[0];
+                cmbType2.SelectedIndex = mEditorItem.ElementalTypes[1];
+
                 PopulateInitialGraphicList();
                 PopulateExhaustedGraphicList();
                 UpdateDropValues();
@@ -858,6 +875,15 @@ namespace Intersect.Editor.Forms.Editors
         private void nudHpRegen_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.VitalRegen = (int) nudHpRegen.Value;
+        }
+        private void cmbType1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ElementalTypes[0] = cmbType1.SelectedIndex;
+        }
+
+        private void cmbType2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ElementalTypes[1] = cmbType2.SelectedIndex;
         }
 
         private void cmbEvent_SelectedIndexChanged(object sender, EventArgs e)

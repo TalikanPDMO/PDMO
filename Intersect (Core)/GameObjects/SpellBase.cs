@@ -104,6 +104,8 @@ namespace Intersect.GameObjects
         //Combat Info
         public SpellCombatData Combat { get; set; } = new SpellCombatData();
 
+        public int ElementalType { get; set; } = 0;
+
         //Warp Info
         public SpellWarpData Warp { get; set; } = new SpellWarpData();
 

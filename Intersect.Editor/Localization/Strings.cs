@@ -1060,6 +1060,12 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString undotitle = @"Undo Changes";
 
+            public static LocalizedString elementaltypes = @"Elemental Types";
+
+            public static LocalizedString type1 = @"Type1:";
+
+            public static LocalizedString type2 = @"Type2:";
+
         }
 
         public struct Colors
@@ -1109,6 +1115,28 @@ Tick timer saved in server config.json.";
                 {1, @"Mana"},
             };
 
+            public static Dictionary<int, LocalizedString> elementaltypes = new Dictionary<int, LocalizedString>
+            {
+                {0, @"None"},
+                {1, @"Steel"},
+                {2, @"Fighting"},
+                {3, @"Dragon"},
+                {4, @"Water"},
+                {5, @"Electric"},
+                {6, @"Fairy"},
+                {7, @"Fire"},
+                {8, @"Ice"},
+                {9, @"Bug"},
+                {10, @"Normal"},
+                {11, @"Grass"},
+                {12, @"Poison"},
+                {13, @"Psychic"},
+                {14, @"Rock"},
+                {15, @"Ground"},
+                {16, @"Ghost"},
+                {17, @"Dark"},
+                {18, @"Flying"}
+            };
         }
 
         public struct CommonEventEditor
@@ -2438,6 +2466,8 @@ Tick timer saved in server config.json.";
             };
 
             public static LocalizedString dmgtype = @"Damage Type:";
+
+            public static LocalizedString elementaltype = @"Elemental Type:";
         }
 
         public struct EventConditionDesc
@@ -3600,6 +3630,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString twohanded = @"2 Hand";
 
+            public static LocalizedString elementaltype = @"Elemental Type:";
+
             public static LocalizedString type = @"Type:";
 
             public static Dictionary<int, LocalizedString> types = new Dictionary<int, LocalizedString>
@@ -4276,6 +4308,12 @@ Tick timer saved in server config.json.";
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString Alpha = @"Alpha:";
 
+            public static LocalizedString elementaltypes = @"Elemental Types";
+
+            public static LocalizedString type1 = @"Type1:";
+
+            public static LocalizedString type2 = @"Type2:";
+
             public static LocalizedString stats = @"Stats:";
 
             public static LocalizedString swarm = @"Swarm";
@@ -4369,6 +4407,14 @@ Tick timer saved in server config.json.";
             public static LocalizedString hpregen = @"HP: (%)";
 
             public static LocalizedString manaregen = @"Mana: (%)";
+
+            public static LocalizedString types = @"Types Modifier";
+
+            public static LocalizedString changetypes = @"Replace base?";
+
+            public static LocalizedString type1 = @"Type1:";
+
+            public static LocalizedString type2 = @"Type2:";
 
             public static LocalizedString combat = @"Combat Modifier";
 
@@ -4770,6 +4816,12 @@ Tick timer saved in server config.json.";
 
 Tick timer saved in server config.json.";
 
+            public static LocalizedString elementaltypes = @"Elemental Types";
+
+            public static LocalizedString type1 = @"Type1:";
+
+            public static LocalizedString type2 = @"Type2:";
+
             public static LocalizedString requirementsgroup = @"Requirements";
 
             public static LocalizedString requirements = @"Harvesting Requirements";
@@ -5001,7 +5053,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString deletetitle = @"Delete Spell";
 
-            public static LocalizedString description = @"Desc:";
+            public static LocalizedString description = @"Description:";
 
             public static LocalizedString duration = @"Duration: (ms)";
 
@@ -5067,6 +5119,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString steal = @"Steal (%):";
 
             public static LocalizedString icon = @"Icon:";
+
+            public static LocalizedString elementaltype = @"Elemental Type:";
 
             public static LocalizedString ignoreactiveresources = @"Active Resources";
 

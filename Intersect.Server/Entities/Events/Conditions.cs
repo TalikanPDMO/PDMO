@@ -851,17 +851,17 @@ namespace Intersect.Server.Entities.Events
                 }
                 if (condition.AttackType < 0)
                 {
-                    if (condition.DamageType < 0)
+                    if (condition.DamageType < 0 && condition.ElementalType < 0)
                     {
-                        // No check needed
                         return true;
                     }
                     else
                     {
-                        // Only need to check DamageType because AttackType < 0 means that there is no AttackId to check
+                        // need to check DamageType and ElementType because AttackType < 0 means that there is no AttackId to check
                         return player.FightingListNpcs.TryGetValue(npcEnemy.Base.Id, out var npcs)
                             && npcs.TryGetValue(npcEnemy, out var attackInfo)
-                            && attackInfo?.DamageType == (DamageType)condition.DamageType;
+                            && (condition.DamageType < 0 || attackInfo?.DamageType == (DamageType)condition.DamageType)
+                            && (condition.ElementalType < 0 || attackInfo?.ElementalType == (ElementalType)condition.ElementalType);
                     }
                 }
                 else
@@ -876,21 +876,11 @@ namespace Intersect.Server.Entities.Events
                     }
                     else
                     {
-                        if (condition.DamageType < 0)
-                        {
-                            // Only need check attack AttackType
-                            return player.FightingListNpcs.TryGetValue(npcEnemy.Base.Id, out var npcs)
-                                && npcs.TryGetValue(npcEnemy, out var attackInfo)
-                                && attackInfo?.AttackType == (AttackType)condition.AttackType;
-                        }
-                        else
-                        {
-                            // Only need to check AttackType and DamageType
-                            return player.FightingListNpcs.TryGetValue(npcEnemy.Base.Id, out var npcs)
+                        return player.FightingListNpcs.TryGetValue(npcEnemy.Base.Id, out var npcs)
                                 && npcs.TryGetValue(npcEnemy, out var attackInfo)
                                 && attackInfo?.AttackType == (AttackType)condition.AttackType
-                                && attackInfo?.DamageType == (DamageType)condition.DamageType;
-                        }
+                                && (condition.DamageType < 0 || attackInfo?.DamageType == (DamageType)condition.DamageType)
+                                && (condition.ElementalType < 0 || attackInfo?.ElementalType == (ElementalType)condition.ElementalType);
                     }
                 }
             }
@@ -900,7 +890,7 @@ namespace Intersect.Server.Entities.Events
                 {
                     if (player.FightingNpcBaseIds.Count > 0 && Globals.Timing.Milliseconds < player.CombatTimer)
                     {
-                        if (condition.AttackType < 0 && condition.DamageType < 0)
+                        if (condition.AttackType < 0 && condition.DamageType < 0 && condition.ElementalType < 0)
                         {
                             return player.FightingListNpcs.Values.Any(npcs => npcs.Keys.Any(npc => !npc.IsDead()));
                         }
@@ -913,6 +903,7 @@ namespace Intersect.Server.Entities.Events
                                     if (npc.Value?.AttackType == (AttackType)condition.AttackType
                                         && (condition.AttackId == Guid.Empty || condition.AttackId == npc.Value?.AttackId)
                                         && (condition.DamageType < 0 || (DamageType)condition.DamageType == npc.Value.DamageType)
+                                        && (condition.ElementalType < 0 || (ElementalType)condition.ElementalType == npc.Value.ElementalType)
                                         && !npc.Key.IsDead())
                                     {
                                         return true;
@@ -928,7 +919,7 @@ namespace Intersect.Server.Entities.Events
                     {
                         if (player.FightingListNpcs.TryGetValue(condition.NpcId, out var npcs))
                         {
-                            if (condition.AttackType < 0 && condition.DamageType < 0)
+                            if (condition.AttackType < 0 && condition.DamageType < 0 && condition.ElementalType < 0)
                             {
                                 return npcs.Keys.Any(npc => !npc.IsDead());
                             }
@@ -939,6 +930,7 @@ namespace Intersect.Server.Entities.Events
                                     if (npc.Value?.AttackType == (AttackType)condition.AttackType
                                         && (condition.AttackId == Guid.Empty || condition.AttackId == npc.Value?.AttackId)
                                         && (condition.DamageType < 0 || (DamageType)condition.DamageType == npc.Value.DamageType)
+                                        && (condition.ElementalType < 0 || (ElementalType)condition.ElementalType == npc.Value.ElementalType)
                                         && !npc.Key.IsDead())
                                     {
                                         return true;

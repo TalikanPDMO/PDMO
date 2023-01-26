@@ -1402,11 +1402,13 @@ namespace Intersect.Server.Entities
                 AttackInfo attackinfo;
                 if (weapon != null)
                 {
-                    attackinfo = new AttackInfo((DamageType)weapon.DamageType, AttackType.Basic, weapon.Id);
+                    attackinfo = new AttackInfo((DamageType)weapon.DamageType, AttackType.Basic,
+                        (ElementalType)weapon.ElementalType, weapon.Id);
                 }
                 else
                 {
-                    attackinfo = new AttackInfo((DamageType)classBase.DamageType, AttackType.Basic, Guid.Empty);
+                    attackinfo = new AttackInfo((DamageType)classBase.DamageType, AttackType.Basic,
+                        ElementalType.None, Guid.Empty);
                 }
                 npclist.AddOrUpdate(npcenemy, attackinfo, (npc, info) => attackinfo);
             }
