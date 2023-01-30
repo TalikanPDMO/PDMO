@@ -27,7 +27,7 @@ namespace Intersect.Server.Entities
 
         //Spell casting
         public long CastFreq;
-
+        public long LastCastTimer = 0;
         public List<NpcSpellRule> SpellRules = new List<NpcSpellRule>();
 
         /// <summary>
@@ -131,12 +131,21 @@ namespace Intersect.Server.Entities
             }
 
             var spellSlot = 0;
+            bool needRules = Base.SpellRules.Count == 0;
             for (var I = 0; I < Base.Spells.Count; I++)
             {
                 var slot = new SpellSlot(spellSlot);
                 slot.Set(new Spell(Base.Spells[I]));
                 Spells.Add(slot);
                 spellSlot++;
+                if (needRules)
+                {
+                    SpellRules.Add(new NpcSpellRule());
+                }
+                else
+                {
+                    SpellRules.Add(Base.SpellRules[I]);
+                }  
             }
 
             //Give NPC Drops
@@ -635,126 +644,131 @@ namespace Intersect.Server.Entities
             return canMove;
         }
 
-        private void TryCastSpells()
+        private bool TryCastSpells()
         {
             var target = Target;
 
             if (target == null || mPathFinder.GetTarget() == null)
             {
-                return;
+                return false;
             }
 
             // Check if NPC is stunned/sleeping
             if (IsStunnedOrSleeping)
             {
-                return;
+                return false;
             }
 
             //Check if NPC is casting a spell
             if (CastTime > Globals.Timing.Milliseconds)
             {
-                return; //can't move while casting
+                return false; //can't move while casting
             }
 
             if (CastFreq >= Globals.Timing.Milliseconds)
             {
-                return;
+                return false;
             }
 
             // Check if the NPC is able to cast spells
             if (IsUnableToCastSpells)
             {
-                return;
+                return false;
             }
 
             if (Base.Spells == null || Base.Spells.Count <= 0 || Spells.Count <= 0)
             {
-                return;
+                return false;
             }
 
-            // Pick a random spell
-            var spellIndex = Randomization.Next(0, Spells.Count);
-            //var spellId = Base.Spells[spellIndex];
-            var spellId = Spells[spellIndex].SpellId;
-            var spellBase = SpellBase.Get(spellId);
-            if (spellBase == null)
+            if (Globals.Timing.Milliseconds < LastCastTimer + SpellRules[SpellCastSlot].MinAfterTimer)
             {
-                return;
+                return false;
             }
 
-            if (spellBase.Combat == null)
+            var maxPriority = 0;
+            var availableSpells = new List<SpellSlot>();
+            var neededDirs = new List<int>();
+            for (var i = 0; i < Spells.Count; i++)
             {
-                Log.Warn($"Combat data missing for {spellBase.Id}.");
-            }
-
-            var range = spellBase.Combat?.CastRange ?? 0;
-            var targetType = spellBase.Combat?.TargetType ?? SpellTargetTypes.Single;
-            var projectileBase = spellBase.Combat?.Projectile;
-
-            if (spellBase.SpellType == SpellTypes.CombatSpell &&
-                targetType == SpellTargetTypes.Projectile &&
-                projectileBase != null)
-            {
-                range = projectileBase.Range;
-                var dirsToHitTarget = ProjectileInRange(target, projectileBase);
-                if (dirsToHitTarget.Count == 0)
+                int neededDir = -1;
+                if (Globals.Timing.Milliseconds > LastCastTimer + SpellRules[i].MinBeforeTimer && SpellRules[i].Priority >= maxPriority)
                 {
-                    // Target is unreachable with the projectile in any possible directions
-                    return;
-                }
-                if (!dirsToHitTarget.Contains(Dir))
-                {
-                    if (LastRandomMove >= Globals.Timing.Milliseconds)
+                    if (SpellCooldowns.ContainsKey(Spells[i].SpellId) && SpellCooldowns[Spells[i].SpellId] >= Globals.Timing.MillisecondsUTC)
                     {
-                        return;
+                        continue;
+                    }
+                    var spellBase = SpellBase.Get(Spells[i].SpellId);
+                    if (spellBase == null || spellBase.VitalCost == null)
+                    {
+                        continue;
                     }
 
-                    //Face the target -- next frame fire -- then go on with life
-                    ChangeDir(dirsToHitTarget[0]); // Gotta get dir to enemy
-                    LastRandomMove = Globals.Timing.Milliseconds + Randomization.Next(1000, 3000);
-                    RandomMoveValue = -1;
+                    //Max mana to 0 means that the npc has unlimited mana
+                    if (GetMaxVital(Vitals.Mana) != 0 && spellBase.VitalCost[(int)Vitals.Mana] > GetVital(Vitals.Mana)
+                        || spellBase.VitalCost[(int)Vitals.Health] > GetVital(Vitals.Health))
+                    {
+                        continue;
+                    }
 
-                    return;
+                    var range = spellBase.Combat?.CastRange ?? 0;
+                    var targetType = spellBase.Combat?.TargetType ?? SpellTargetTypes.Single;
+                    var projectileBase = spellBase.Combat?.Projectile;
+
+                    if (targetType == SpellTargetTypes.AoE && !InRangeOf(target, spellBase.Combat.HitRadius, spellBase.Combat.SquareHitRadius))
+                    {
+                        continue;
+                    }
+                    else if (targetType == SpellTargetTypes.Single && !InRangeOf(target, range, spellBase.Combat.SquareRange))
+                    {
+                        // ReSharper disable once SwitchStatementMissingSomeCases
+                        continue;
+                    }
+                    else if (targetType == SpellTargetTypes.Projectile && spellBase.SpellType == SpellTypes.CombatSpell && projectileBase != null)
+                    {
+                        //range = projectileBase.Range;
+                        var dirsToHitTarget = ProjectileInRange(target, projectileBase);
+                        if (dirsToHitTarget.Count == 0)
+                        {
+                            // Target is unreachable with the projectile in any possible directions
+                            continue;
+                        }
+                        else if (!dirsToHitTarget.Contains(Dir))
+                        {
+                            // Need to change dir for the projectile
+                            neededDir = dirsToHitTarget[0];
+                        }
+                    }
+
+                    if (SpellRules[i].Priority == maxPriority)
+                    {
+                        availableSpells.Add(Spells[i]);
+                        neededDirs.Add(neededDir);
+                    }
+                    else if (SpellRules[i].Priority > maxPriority)
+                    {
+                        maxPriority = SpellRules[i].Priority;
+                        availableSpells.Clear();
+                        availableSpells.Add(Spells[i]);
+                        neededDirs.Clear();
+                        neededDirs.Add(neededDir);
+                    }
                 }
             }
 
-            if (spellBase.VitalCost == null)
+            if (availableSpells.Count == 0)
             {
-                return;
+                return false;
             }
 
-            //Max mana to 0 means that the npc has unlimited mana
-            if (GetMaxVital(Vitals.Mana) != 0 && spellBase.VitalCost[(int) Vitals.Mana] > GetVital(Vitals.Mana))
-            {
-                return;
-            }
 
-            if (spellBase.VitalCost[(int) Vitals.Health] > GetVital(Vitals.Health))
-            {
-                return;
-            }
+            // Pick a random spell
+            var randomIndex = Randomization.Next(0, availableSpells.Count);
+            var randomSpellId = availableSpells[randomIndex].SpellId;
+            var randomSpellBase = SpellBase.Get(randomSpellId);
 
-            var spell = Spells[spellIndex];
-            if (spell == null)
-            {
-                return;
-            }
-
-            if (SpellCooldowns.ContainsKey(spell.SpellId) && SpellCooldowns[spell.SpellId] >= Globals.Timing.MillisecondsUTC)
-            {
-                return;
-            }
-            if (targetType == SpellTargetTypes.AoE && !InRangeOf(target, spellBase.Combat.HitRadius, spellBase.Combat.SquareHitRadius))
-            {
-                return;
-            }
-            else if (targetType == SpellTargetTypes.Single && !InRangeOf(target, range, spellBase.Combat.SquareRange))
-            {
-                // ReSharper disable once SwitchStatementMissingSomeCases
-                return;
-            }
-
-            CastTime = Globals.Timing.Milliseconds + spellBase.CastDuration;
+            CastTime = Globals.Timing.Milliseconds + randomSpellBase.CastDuration;
+            LastCastTimer = CastTime;
 
             /*if (spellBase.VitalCost[(int) Vitals.Mana] > 0)
             {
@@ -774,7 +788,7 @@ namespace Intersect.Server.Entities
                 AddVital(Vitals.Health, -spellBase.VitalCost[(int) Vitals.Health]);
             }*/
 
-            if ((spellBase.Combat?.Friendly ?? false) && spellBase.SpellType != SpellTypes.WarpTo)
+            if ((randomSpellBase.Combat?.Friendly ?? false) && randomSpellBase.SpellType != SpellTypes.WarpTo)
             {
                 CastTarget = this;
             }
@@ -783,44 +797,23 @@ namespace Intersect.Server.Entities
                 CastTarget = target;
             }
 
-            switch (Base.SpellFrequency)
+            CastFreq = Globals.Timing.Milliseconds + Options.Npc.SpellCastFrequencyCheck;
+
+            SpellCastSlot = availableSpells[randomIndex].Slot;
+
+            ChangeDir(neededDirs[randomIndex]);
+            //LastRandomMove = Globals.Timing.Milliseconds + Randomization.Next(1000, 3000);
+            //RandomMoveValue = -1;
+
+            if (randomSpellBase.CastAnimationId != Guid.Empty)
             {
-                case 0:
-                    CastFreq = Globals.Timing.Milliseconds + 30000;
-
-                    break;
-
-                case 1:
-                    CastFreq = Globals.Timing.Milliseconds + 15000;
-
-                    break;
-
-                case 2:
-                    CastFreq = Globals.Timing.Milliseconds + 8000;
-
-                    break;
-
-                case 3:
-                    CastFreq = Globals.Timing.Milliseconds + 4000;
-
-                    break;
-
-                case 4:
-                    CastFreq = Globals.Timing.Milliseconds + 2000;
-
-                    break;
-            }
-
-            SpellCastSlot = spellIndex;
-
-            if (spellBase.CastAnimationId != Guid.Empty)
-            {
-                PacketSender.SendAnimationToProximity(spellBase.CastAnimationId, 1, Id, MapId, 0, 0, (sbyte) Dir);
+                PacketSender.SendAnimationToProximity(randomSpellBase.CastAnimationId, 1, Id, MapId, 0, 0, (sbyte) Dir);
 
                 //Target Type 1 will be global entity
             }
 
-            PacketSender.SendEntityCastTime(this, spellId);
+            PacketSender.SendEntityCastTime(this, randomSpellId);
+            return true;
         }
 
         // Return the direction needed to hit the target, -1 if the target is unreachable
@@ -1071,12 +1064,12 @@ namespace Intersect.Server.Entities
                             }
 
                         }
-
+                        bool hasFoundSpell = false;
                         if (mPathFinder.GetTarget() != null && Base.Movement != (int)NpcMovement.Static)
                         {
                             if (!fleeing || Base.AttackOnFlee)
                             {
-                                TryCastSpells();
+                                hasFoundSpell = TryCastSpells();
                             }
                             // TODO: Make resetting mobs actually return to their starting location.
                             if ((!mResetting && !IsOneBlockAway(
@@ -1276,7 +1269,7 @@ namespace Intersect.Server.Entities
                                             }
                                             else
                                             {
-                                                if (CanAttack(tempTarget, null))
+                                                if (!hasFoundSpell)
                                                 {
                                                     TryAttack(tempTarget);
                                                 }
