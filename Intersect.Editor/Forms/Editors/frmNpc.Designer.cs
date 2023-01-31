@@ -178,7 +178,6 @@ namespace Intersect.Editor.Forms.Editors
             this.nudBeforeSpell = new DarkUI.Controls.DarkNumericUpDown();
             this.lblBeforeSpell = new System.Windows.Forms.Label();
             this.cmbSpell = new DarkUI.Controls.DarkComboBox();
-            this.cmbFreq = new DarkUI.Controls.DarkComboBox();
             this.lblFreq = new System.Windows.Forms.Label();
             this.lblSpell = new System.Windows.Forms.Label();
             this.btnRemove = new DarkUI.Controls.DarkButton();
@@ -199,6 +198,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.toolStripItemRelations = new System.Windows.Forms.ToolStripButton();
             this.searchableDarkTreeView1 = new Intersect.Editor.Forms.Controls.SearchableDarkTreeView();
+            this.nudSpellFrequency = new DarkUI.Controls.DarkNumericUpDown();
             this.grpNpcs.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpTypes.SuspendLayout();
@@ -247,6 +247,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudAfterSpell)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBeforeSpell)).BeginInit();
             this.toolStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSpellFrequency)).BeginInit();
             this.SuspendLayout();
             // 
             // grpNpcs
@@ -2222,6 +2223,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpSpells.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpSpells.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpSpells.Controls.Add(this.nudSpellFrequency);
             this.grpSpells.Controls.Add(this.nudSpellPriority);
             this.grpSpells.Controls.Add(this.lblPrioritySpell);
             this.grpSpells.Controls.Add(this.nudAfterSpell);
@@ -2229,7 +2231,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpells.Controls.Add(this.nudBeforeSpell);
             this.grpSpells.Controls.Add(this.lblBeforeSpell);
             this.grpSpells.Controls.Add(this.cmbSpell);
-            this.grpSpells.Controls.Add(this.cmbFreq);
             this.grpSpells.Controls.Add(this.lblFreq);
             this.grpSpells.Controls.Add(this.lblSpell);
             this.grpSpells.Controls.Add(this.btnRemove);
@@ -2351,41 +2352,14 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbSpell.TextPadding = new System.Windows.Forms.Padding(2);
             this.cmbSpell.SelectedIndexChanged += new System.EventHandler(this.cmbSpell_SelectedIndexChanged);
             // 
-            // cmbFreq
-            // 
-            this.cmbFreq.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbFreq.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbFreq.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbFreq.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbFreq.DrawDropdownHoverOutline = false;
-            this.cmbFreq.DrawFocusRectangle = false;
-            this.cmbFreq.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbFreq.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbFreq.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbFreq.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbFreq.FormattingEnabled = true;
-            this.cmbFreq.Items.AddRange(new object[] {
-            "Not Very Often",
-            "Not Often",
-            "Normal",
-            "Often",
-            "Very Often"});
-            this.cmbFreq.Location = new System.Drawing.Point(47, 14);
-            this.cmbFreq.Name = "cmbFreq";
-            this.cmbFreq.Size = new System.Drawing.Size(145, 21);
-            this.cmbFreq.TabIndex = 42;
-            this.cmbFreq.Text = "Not Very Often";
-            this.cmbFreq.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbFreq.SelectedIndexChanged += new System.EventHandler(this.cmbFreq_SelectedIndexChanged);
-            // 
             // lblFreq
             // 
             this.lblFreq.AutoSize = true;
-            this.lblFreq.Location = new System.Drawing.Point(10, 17);
+            this.lblFreq.Location = new System.Drawing.Point(7, 20);
             this.lblFreq.Name = "lblFreq";
-            this.lblFreq.Size = new System.Drawing.Size(31, 13);
+            this.lblFreq.Size = new System.Drawing.Size(149, 13);
             this.lblFreq.TabIndex = 41;
-            this.lblFreq.Text = "Freq:";
+            this.lblFreq.Text = "Use spells when available (%):";
             // 
             // lblSpell
             // 
@@ -2596,6 +2570,21 @@ namespace Intersect.Editor.Forms.Editors
             this.searchableDarkTreeView1.TabIndex = 46;
             this.searchableDarkTreeView1.Visible = false;
             // 
+            // nudSpellFrequency
+            // 
+            this.nudSpellFrequency.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSpellFrequency.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSpellFrequency.Location = new System.Drawing.Point(158, 17);
+            this.nudSpellFrequency.Name = "nudSpellFrequency";
+            this.nudSpellFrequency.Size = new System.Drawing.Size(45, 20);
+            this.nudSpellFrequency.TabIndex = 63;
+            this.nudSpellFrequency.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudSpellFrequency.ValueChanged += new System.EventHandler(this.nudSpellFrequency_ValueChanged);
+            // 
             // FrmNpc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2680,6 +2669,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudBeforeSpell)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSpellFrequency)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2706,7 +2696,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkButton btnAdd;
         private System.Windows.Forms.ListBox lstSpells;
         private System.Windows.Forms.Label lblSpell;
-        private DarkComboBox cmbFreq;
         private System.Windows.Forms.Label lblFreq;
         private DarkGroupBox grpNpcVsNpc;
         private System.Windows.Forms.Label lblNPC;
@@ -2852,5 +2841,6 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblAfterSpell;
         private DarkNumericUpDown nudBeforeSpell;
         private System.Windows.Forms.Label lblBeforeSpell;
+        private DarkNumericUpDown nudSpellFrequency;
     }
 }

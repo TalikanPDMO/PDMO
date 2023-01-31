@@ -4196,16 +4196,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString folderprompt = @"Enter a name for the folder you'd like to add:";
 
-            public static LocalizedString frequency = @"Freq:";
-
-            public static Dictionary<int, LocalizedString> frequencies = new Dictionary<int, LocalizedString>
-            {
-                {0, @"Not Very Often"},
-                {1, @"Not Often"},
-                {2, @"Normal"},
-                {3, @"Often"},
-                {4, @"Very Often"},
-            };
+            public static LocalizedString frequency = @"Use spells when available (%):";
 
             public static LocalizedString general = @"General";
 

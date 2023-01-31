@@ -258,11 +258,6 @@ namespace Intersect.Editor.Forms.Editors
             btnAdd.Text = Strings.NpcEditor.addspell;
             btnRemove.Text = Strings.NpcEditor.removespell;
             lblFreq.Text = Strings.NpcEditor.frequency;
-            cmbFreq.Items.Clear();
-            for (var i = 0; i < Strings.NpcEditor.frequencies.Count; i++)
-            {
-                cmbFreq.Items.Add(Strings.NpcEditor.frequencies[i]);
-            }
 
             grpAttackSpeed.Text = Strings.NpcEditor.attackspeed;
             lblAttackSpeedModifier.Text = Strings.NpcEditor.attackspeedmodifier;
@@ -441,7 +436,7 @@ namespace Intersect.Editor.Forms.Editors
                     nudAfterSpell.Value = spellRule.MinAfterTimer;
                 }
 
-                cmbFreq.SelectedIndex = mEditorItem.SpellFrequency;
+                nudSpellFrequency.Value = mEditorItem.SpellFrequency;
 
                 // Add the phases to the list
                 ListNpcPhases();
@@ -700,9 +695,9 @@ namespace Intersect.Editor.Forms.Editors
             }
         }
 
-        private void cmbFreq_SelectedIndexChanged(object sender, EventArgs e)
+        private void nudSpellFrequency_ValueChanged(object sender, EventArgs e)
         {
-            mEditorItem.SpellFrequency = cmbFreq.SelectedIndex;
+            mEditorItem.SpellFrequency = (int)nudSpellFrequency.Value;
         }
 
         private void chkEnabled_CheckedChanged(object sender, EventArgs e)

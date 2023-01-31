@@ -238,7 +238,7 @@ namespace Intersect.GameObjects
         //Basic Info
         public int SpawnDuration { get; set; }
 
-        public int SpellFrequency { get; set; } = 2;
+        public int SpellFrequency { get; set; } = 100;
 
         //Spells
         [JsonIgnore]

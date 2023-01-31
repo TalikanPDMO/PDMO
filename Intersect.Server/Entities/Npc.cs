@@ -435,7 +435,8 @@ namespace Intersect.Server.Entities
 
             //We were forcing at LEAST 1hp base damage.. but then you can't have guards that won't hurt the player.
             //https://www.ascensiongamedev.com/community/bug_tracker/intersect/npc-set-at-0-attack-damage-still-damages-player-by-1-initially-r915/
-            if (AttackTimer < Globals.Timing.Milliseconds)
+            if (AttackTimer < Globals.Timing.Milliseconds && 
+                (SpellRules.Count == 0 || Globals.Timing.Milliseconds > LastCastTimer + SpellRules[SpellCastSlot].MinAfterTimer))
             {
                 if (target is Player penemy)
                 {
@@ -472,8 +473,9 @@ namespace Intersect.Server.Entities
                         target, Base.Damage, (DamageType)Base.DamageType, (Stats)Base.ScalingStat, Base.Scaling,
                         Base.CritChance, Base.CritMultiplier, deadAnimations, aliveAnimations);
                 }
-
-                PacketSender.SendEntityAttack(this, CalculateAttackTime());
+                var attackTime = CalculateAttackTime();
+                CastFreq = Globals.Timing.Milliseconds + attackTime;
+                PacketSender.SendEntityAttack(this, attackTime);
             }
         }
 
@@ -648,30 +650,9 @@ namespace Intersect.Server.Entities
         {
             var target = Target;
 
-            if (target == null || mPathFinder.GetTarget() == null)
-            {
-                return false;
-            }
-
-            // Check if NPC is stunned/sleeping
-            if (IsStunnedOrSleeping)
-            {
-                return false;
-            }
-
-            //Check if NPC is casting a spell
-            if (CastTime > Globals.Timing.Milliseconds)
-            {
-                return false; //can't move while casting
-            }
-
-            if (CastFreq >= Globals.Timing.Milliseconds)
-            {
-                return false;
-            }
-
-            // Check if the NPC is able to cast spells
-            if (IsUnableToCastSpells)
+            if (target == null || mPathFinder.GetTarget() == null
+                || AttackTimer > Globals.Timing.Milliseconds || CastTime > Globals.Timing.Milliseconds
+                || CastFreq > Globals.Timing.Milliseconds || Base.SpellFrequency == 0)
             {
                 return false;
             }
@@ -681,8 +662,23 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
+            // Check if NPC is stunned/sleeping or unable to cast spells
+            if (IsStunnedOrSleeping || IsUnableToCastSpells)
+            {
+                return false;
+            }
+
+            //Update the frequency check only after basic verifications unrelated to cooldowns or rules
+            CastFreq = Globals.Timing.Milliseconds + Options.Npc.SpellCastFrequencyCheck;
+
             if (Globals.Timing.Milliseconds < LastCastTimer + SpellRules[SpellCastSlot].MinAfterTimer)
             {
+                // Last spell don't allow to cast yet, come back here in the next frequency check
+                return false;
+            }
+            if (Randomization.Next(1, 101) > Base.SpellFrequency)
+            {
+                // Our % chance don't allow to cast a spell this time, so we use a basic attack if possible. If not, we come back here in the next check
                 return false;
             }
 
@@ -796,8 +792,6 @@ namespace Intersect.Server.Entities
             {
                 CastTarget = target;
             }
-
-            CastFreq = Globals.Timing.Milliseconds + Options.Npc.SpellCastFrequencyCheck;
 
             SpellCastSlot = availableSpells[randomIndex].Slot;
 
