@@ -4196,16 +4196,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString folderprompt = @"Enter a name for the folder you'd like to add:";
 
-            public static LocalizedString frequency = @"Freq:";
-
-            public static Dictionary<int, LocalizedString> frequencies = new Dictionary<int, LocalizedString>
-            {
-                {0, @"Not Very Often"},
-                {1, @"Not Often"},
-                {2, @"Normal"},
-                {3, @"Often"},
-                {4, @"Very Often"},
-            };
+            public static LocalizedString frequency = @"Use spells when available (%):";
 
             public static LocalizedString general = @"General";
 
@@ -4292,7 +4283,15 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString spell = @"Spell:";
 
+            public static LocalizedString beforespell = @"Before (ms):";
+
+            public static LocalizedString priority = @"Priority:";
+
+            public static LocalizedString afterspell = @"After (ms):";
+
             public static LocalizedString spells = @"Spells";
+
+            public static LocalizedString spellandrule = @"{00}ms << {01} >> {02}ms :: P{03}";
 
             public static LocalizedString sprite = @"Sprite";
 
@@ -4378,9 +4377,19 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString replacespells = @"Replace all known spells?";
 
+            public static LocalizedString spellfrequency = @"Use spells when available (%):";
+
             public static LocalizedString addspell = @"Add";
 
             public static LocalizedString removespell = @"Remove";
+
+            public static LocalizedString beforespell = @"Before (ms):";
+
+            public static LocalizedString priority = @"Priority:";
+
+            public static LocalizedString afterspell = @"After (ms):";
+
+            public static LocalizedString spellandrule = @"{00}ms << {01} >> {02}ms :: P{03}";
 
             public static LocalizedString stats = @"Stats Multiplier";
 

@@ -238,7 +238,7 @@ namespace Intersect.GameObjects
         //Basic Info
         public int SpawnDuration { get; set; }
 
-        public int SpellFrequency { get; set; } = 2;
+        public int SpellFrequency { get; set; } = 100;
 
         //Spells
         [JsonIgnore]
@@ -251,6 +251,16 @@ namespace Intersect.GameObjects
 
         [NotMapped]
         public DbList<SpellBase> Spells { get; set; } = new DbList<SpellBase>();
+
+        //Spell Rules
+        [Column("SpellRules")]
+        [JsonIgnore]
+        public string JsonSpellRules
+        {
+            get => JsonConvert.SerializeObject(SpellRules);
+            set => SpellRules = JsonConvert.DeserializeObject<List<NpcSpellRule>>(value);
+        }
+        [NotMapped] public List<NpcSpellRule> SpellRules = new List<NpcSpellRule>();
 
         public string Sprite { get; set; } = "";
 
@@ -356,6 +366,18 @@ namespace Intersect.GameObjects
 
     }
 
+    public class NpcSpellRule
+    {
+
+        public int MinBeforeTimer = 0;
+
+        public int MinAfterTimer = 0;
+
+        public int Priority = 0;
+
+    }
+
+
     public enum NpcPhasesProgressState
     {
         OnNonePhase = 0,
@@ -407,6 +429,16 @@ namespace Intersect.GameObjects
 
         public bool ReplaceSpells { get; set; }
 
+        //Spell Rules
+        [Column("SpellRules")]
+        [JsonIgnore]
+        public string JsonSpellRules
+        {
+            get => JsonConvert.SerializeObject(SpellRules, Formatting.None);
+            set => SpellRules = JsonConvert.DeserializeObject<List<NpcSpellRule>>(value);
+        }
+        [NotMapped] public List<NpcSpellRule> SpellRules { get; set; } = null;
+
         [Column("BaseStatsDiff")]
         [JsonIgnore]
         public string JsonBaseStatsDiff
@@ -437,6 +469,8 @@ namespace Intersect.GameObjects
             get => JsonConvert.SerializeObject(ElementalTypes);
             set => ElementalTypes = JsonConvert.DeserializeObject<int[]>(value);
         }
+
+        public int? SpellFrequency { get; set; } = null;
 
         public int? Damage { get; set; } = null;
 

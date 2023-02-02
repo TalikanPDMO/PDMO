@@ -44,6 +44,8 @@
         /// </summary>
         public bool ShowLevelByName = false;
 
+        public int SpellCastFrequencyCheck = 1000;
+
     }
 
 }

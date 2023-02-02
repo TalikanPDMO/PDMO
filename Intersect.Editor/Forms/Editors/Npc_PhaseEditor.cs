@@ -147,6 +147,10 @@ namespace Intersect.Editor.Forms.Editors
                 {
                     mMyPhase.Spells = new DbList<SpellBase>();
                 }
+                if (mMyPhase.SpellRules == null)
+                {
+                    mMyPhase.SpellRules = new List<NpcSpellRule>();
+                }
 
                 //Elemental Types
                 if (mMyPhase.ElementalTypes == null)
@@ -263,10 +267,14 @@ namespace Intersect.Editor.Forms.Editors
 
             grpSpells.Text = Strings.NpcPhaseEditor.spells;
             chkReplaceSpells.Text = Strings.NpcPhaseEditor.replacespells;
+            lblFreq.Text = Strings.NpcPhaseEditor.spellfrequency;
             lblSpell.Text = Strings.NpcPhaseEditor.spell;
             lstSpells.Items.Clear();
             cmbSpell.Items.Clear();
             cmbSpell.Items.AddRange(SpellBase.EditorFormatNames);
+            lblBeforeSpell.Text = Strings.NpcPhaseEditor.beforespell;
+            lblPrioritySpell.Text = Strings.NpcPhaseEditor.priority;
+            lblAfterSpell.Text = Strings.NpcPhaseEditor.afterspell;
             btnAddSpell.Text = Strings.NpcPhaseEditor.addspell;
             btnRemoveSpell.Text = Strings.NpcPhaseEditor.removespell;
 
@@ -344,13 +352,24 @@ namespace Intersect.Editor.Forms.Editors
 
         private void UpdateFormElements()
         {
+            nudSpellFrequency.Value = mMyPhase.SpellFrequency ?? mMyNpc.SpellFrequency;
+
+            //For compatibility when the feature NpcRule is added
+            var needInitRules = mMyPhase.Spells.Count > 0 && mMyPhase.SpellRules.Count == 0;
+
             // Add the spells to the list
             lstSpells.Items.Clear();
             for (var i = 0; i < mMyPhase.Spells.Count; i++)
             {
+                if (needInitRules)
+                {
+                    mMyPhase.SpellRules.Add(new NpcSpellRule());
+                }
                 if (mMyPhase.Spells[i] != Guid.Empty)
                 {
-                    lstSpells.Items.Add(SpellBase.GetName(mMyPhase.Spells[i]));
+                    lstSpells.Items.Add(Strings.NpcEditor.spellandrule.ToString(
+                            mMyPhase.SpellRules[i].MinBeforeTimer, SpellBase.GetName(mMyPhase.Spells[i]),
+                            mMyPhase.SpellRules[i].MinAfterTimer, mMyPhase.SpellRules[i].Priority));
                 }
                 else
                 {
@@ -362,6 +381,10 @@ namespace Intersect.Editor.Forms.Editors
             {
                 lstSpells.SelectedIndex = 0;
                 cmbSpell.SelectedIndex = SpellBase.ListIndex(mMyPhase.Spells[lstSpells.SelectedIndex]);
+                var spellRule = mMyPhase.SpellRules[lstSpells.SelectedIndex];
+                nudBeforeSpell.Value = spellRule.MinBeforeTimer;
+                nudSpellPriority.Value = spellRule.Priority;
+                nudAfterSpell.Value = spellRule.MinAfterTimer;
             }
         }
 
@@ -383,7 +406,6 @@ namespace Intersect.Editor.Forms.Editors
                 mMyPhase.Color = null;
             }
             
-            mMyPhase.ReplaceSpells = chkReplaceSpells.Checked;
             mMyPhase.BeginAnimation = (cmbBeginAnimation.SelectedIndex == 0 ? null :
                 AnimationBase.Get(AnimationBase.IdFromList(cmbBeginAnimation.SelectedIndex - 1)));
             mMyPhase.BeginSpell = (cmbBeginSpell.SelectedIndex == 0 ? null :
@@ -432,9 +454,12 @@ namespace Intersect.Editor.Forms.Editors
                 mMyPhase.ElementalTypes = null;
             }
 
+            mMyPhase.SpellFrequency = (mMyNpc.SpellFrequency == nudSpellFrequency.Value ? null : (int?)nudSpellFrequency.Value);
+            mMyPhase.ReplaceSpells = chkReplaceSpells.Checked;
             if (mMyPhase.Spells.Count == 0)
             {
                 mMyPhase.Spells = null;
+                mMyPhase.SpellRules = null;
             }
             mMyPhase.Damage = (mMyNpc.Damage == nudDamage.Value ? null : (int?)nudDamage.Value);
             mMyPhase.CritChance = (mMyNpc.CritChance == nudCritChance.Value ? null : (int?)nudCritChance.Value);
@@ -479,18 +504,27 @@ namespace Intersect.Editor.Forms.Editors
             var editForm = new FrmDynamicRequirements(mMyPhase.ConditionLists, RequirementType.NpcPhase);
             editForm.ShowDialog();
         }
-
-        private void btnAddSpell_Click(object sender, EventArgs e)
+        private void lstSpells_Refresh()
         {
-            mMyPhase.Spells.Add(SpellBase.IdFromList(cmbSpell.SelectedIndex));
             var n = lstSpells.SelectedIndex;
             lstSpells.Items.Clear();
             for (var i = 0; i < mMyPhase.Spells.Count; i++)
             {
-                lstSpells.Items.Add(SpellBase.GetName(mMyPhase.Spells[i]));
+                lstSpells.Items.Add(Strings.NpcEditor.spellandrule.ToString(mMyPhase.SpellRules[i].MinBeforeTimer,
+                    SpellBase.GetName(mMyPhase.Spells[i]), mMyPhase.SpellRules[i].MinAfterTimer, mMyPhase.SpellRules[i].Priority));
             }
-
             lstSpells.SelectedIndex = n;
+        }
+
+        private void btnAddSpell_Click(object sender, EventArgs e)
+        {
+            mMyPhase.Spells.Add(SpellBase.IdFromList(cmbSpell.SelectedIndex));
+            var spellRule = new NpcSpellRule();
+            spellRule.MinBeforeTimer = (int)nudBeforeSpell.Value;
+            spellRule.Priority = (int)nudSpellPriority.Value;
+            spellRule.MinAfterTimer = (int)nudAfterSpell.Value;
+            mMyPhase.SpellRules.Add(spellRule);
+            lstSpells_Refresh();
         }
 
         private void btnRemoveSpell_Click(object sender, EventArgs e)
@@ -500,6 +534,7 @@ namespace Intersect.Editor.Forms.Editors
                 var i = lstSpells.SelectedIndex;
                 lstSpells.Items.RemoveAt(i);
                 mMyPhase.Spells.RemoveAt(i);
+                mMyPhase.SpellRules.RemoveAt(i);
             }
         }
 
@@ -508,6 +543,9 @@ namespace Intersect.Editor.Forms.Editors
             if (lstSpells.SelectedIndex > -1)
             {
                 cmbSpell.SelectedIndex = SpellBase.ListIndex(mMyPhase.Spells[lstSpells.SelectedIndex]);
+                nudBeforeSpell.Value = mMyPhase.SpellRules[lstSpells.SelectedIndex].MinBeforeTimer;
+                nudSpellPriority.Value = mMyPhase.SpellRules[lstSpells.SelectedIndex].Priority;
+                nudAfterSpell.Value = mMyPhase.SpellRules[lstSpells.SelectedIndex].MinAfterTimer;
             }
         }
 
@@ -517,15 +555,34 @@ namespace Intersect.Editor.Forms.Editors
             {
                 mMyPhase.Spells[lstSpells.SelectedIndex] = SpellBase.IdFromList(cmbSpell.SelectedIndex);
             }
+            lstSpells_Refresh();
+        }
 
-            var n = lstSpells.SelectedIndex;
-            lstSpells.Items.Clear();
-            for (var i = 0; i < mMyPhase.Spells.Count; i++)
+        private void nudBeforeSpell_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstSpells.SelectedIndex > -1 && lstSpells.SelectedIndex < mMyPhase.Spells.Count)
             {
-                lstSpells.Items.Add(SpellBase.GetName(mMyPhase.Spells[i]));
+                mMyPhase.SpellRules[lstSpells.SelectedIndex].MinBeforeTimer = (int)nudBeforeSpell.Value;
             }
+            lstSpells_Refresh();
+        }
 
-            lstSpells.SelectedIndex = n;
+        private void nudSpellPriority_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstSpells.SelectedIndex > -1 && lstSpells.SelectedIndex < mMyPhase.Spells.Count)
+            {
+                mMyPhase.SpellRules[lstSpells.SelectedIndex].Priority = (int)nudSpellPriority.Value;
+            }
+            lstSpells_Refresh();
+        }
+
+        private void nudAfterSpell_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstSpells.SelectedIndex > -1 && lstSpells.SelectedIndex < mMyPhase.Spells.Count)
+            {
+                mMyPhase.SpellRules[lstSpells.SelectedIndex].MinAfterTimer = (int)nudAfterSpell.Value;
+            }
+            lstSpells_Refresh();
         }
 
         private void chkChangeRegen_CheckedChanged(object sender, EventArgs e)
