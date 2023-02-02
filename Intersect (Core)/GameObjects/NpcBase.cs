@@ -470,6 +470,8 @@ namespace Intersect.GameObjects
             set => ElementalTypes = JsonConvert.DeserializeObject<int[]>(value);
         }
 
+        public int? SpellFrequency { get; set; } = null;
+
         public int? Damage { get; set; } = null;
 
         public int? DamageType { get; set; } = null;

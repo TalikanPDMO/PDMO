@@ -267,6 +267,7 @@ namespace Intersect.Editor.Forms.Editors
 
             grpSpells.Text = Strings.NpcPhaseEditor.spells;
             chkReplaceSpells.Text = Strings.NpcPhaseEditor.replacespells;
+            lblFreq.Text = Strings.NpcPhaseEditor.spellfrequency;
             lblSpell.Text = Strings.NpcPhaseEditor.spell;
             lstSpells.Items.Clear();
             cmbSpell.Items.Clear();
@@ -351,6 +352,8 @@ namespace Intersect.Editor.Forms.Editors
 
         private void UpdateFormElements()
         {
+            nudSpellFrequency.Value = mMyPhase.SpellFrequency ?? mMyNpc.SpellFrequency;
+
             //For compatibility when the feature NpcRule is added
             var needInitRules = mMyPhase.Spells.Count > 0 && mMyPhase.SpellRules.Count == 0;
 
@@ -403,7 +406,6 @@ namespace Intersect.Editor.Forms.Editors
                 mMyPhase.Color = null;
             }
             
-            mMyPhase.ReplaceSpells = chkReplaceSpells.Checked;
             mMyPhase.BeginAnimation = (cmbBeginAnimation.SelectedIndex == 0 ? null :
                 AnimationBase.Get(AnimationBase.IdFromList(cmbBeginAnimation.SelectedIndex - 1)));
             mMyPhase.BeginSpell = (cmbBeginSpell.SelectedIndex == 0 ? null :
@@ -452,6 +454,8 @@ namespace Intersect.Editor.Forms.Editors
                 mMyPhase.ElementalTypes = null;
             }
 
+            mMyPhase.SpellFrequency = (mMyNpc.SpellFrequency == nudSpellFrequency.Value ? null : (int?)nudSpellFrequency.Value);
+            mMyPhase.ReplaceSpells = chkReplaceSpells.Checked;
             if (mMyPhase.Spells.Count == 0)
             {
                 mMyPhase.Spells = null;

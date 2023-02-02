@@ -652,7 +652,7 @@ namespace Intersect.Server.Entities
 
             if (target == null || mPathFinder.GetTarget() == null
                 || AttackTimer > Globals.Timing.Milliseconds || CastTime > Globals.Timing.Milliseconds
-                || CastFreq > Globals.Timing.Milliseconds || Base.SpellFrequency == 0)
+                || CastFreq > Globals.Timing.Milliseconds)
             {
                 return false;
             }
@@ -668,6 +668,11 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
+            var frequency = (CurrentPhase == null ? Base.SpellFrequency : (CurrentPhase.SpellFrequency ?? Base.SpellFrequency));
+            if (frequency == 0)
+            {
+                return false;
+            }
             //Update the frequency check only after basic verifications unrelated to cooldowns or rules
             CastFreq = Globals.Timing.Milliseconds + Options.Npc.SpellCastFrequencyCheck;
 
@@ -676,7 +681,7 @@ namespace Intersect.Server.Entities
                 // Last spell don't allow to cast yet, come back here in the next frequency check
                 return false;
             }
-            if (Randomization.Next(1, 101) > Base.SpellFrequency)
+            if (Randomization.Next(1, 101) > frequency)
             {
                 // Our % chance don't allow to cast a spell this time, so we use a basic attack if possible. If not, we come back here in the next check
                 return false;
@@ -1920,20 +1925,35 @@ namespace Intersect.Server.Entities
                 if (CurrentPhase.ReplaceSpells)
                 {
                     Spells.Clear();
+                    SpellRules.Clear();
                     var spellSlot = 0;
+                    bool needRules = Base.SpellRules.Count == 0;
                     for (var I = 0; I < Base.Spells.Count; I++)
                     {
                         var slot = new SpellSlot(spellSlot);
                         slot.Set(new Spell(Base.Spells[I]));
                         Spells.Add(slot);
                         spellSlot++;
+                        if (needRules)
+                        {
+                            SpellRules.Add(new NpcSpellRule());
+                        }
+                        else
+                        {
+                            SpellRules.Add(Base.SpellRules[I]);
+                        }
                     }
                 }
                 else if (CurrentPhase.Spells != null)
                 {
                     // Forget all spell related to the phase
                     Spells.RemoveRange(Base.Spells.Count, CurrentPhase.Spells.Count);
+                    SpellRules.RemoveRange(Base.Spells.Count, CurrentPhase.Spells.Count);
                 }
+                //Reset current cast if any
+                SpellCastSlot = 0;
+                CastTime = 0;
+                LastCastTimer = 0;
 
                 if (CurrentPhase.BaseStatsDiff != null)
                 {
@@ -1972,6 +1992,7 @@ namespace Intersect.Server.Entities
             {
                 // Forget all the base spells and replace it after by the phase spells
                 Spells.Clear();
+                SpellRules.Clear();
             }
             else
             {
@@ -1981,11 +2002,12 @@ namespace Intersect.Server.Entities
             SpellSlot slot;
             if (phase.Spells != null)
             {
-                foreach (var phaseSpell in phase.Spells)
+                for (var i = 0; i<phase.Spells.Count; i++)
                 {
                     slot = new SpellSlot(spellSlot);
-                    slot.Set(new Spell(phaseSpell));
+                    slot.Set(new Spell(phase.Spells[i]));
                     Spells.Add(slot);
+                    SpellRules.Add(phase.SpellRules[i]);
                     spellSlot++;
                 }
             }

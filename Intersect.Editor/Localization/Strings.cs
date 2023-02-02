@@ -4377,6 +4377,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString replacespells = @"Replace all known spells?";
 
+            public static LocalizedString spellfrequency = @"Use spells when available (%):";
+
             public static LocalizedString addspell = @"Add";
 
             public static LocalizedString removespell = @"Remove";
