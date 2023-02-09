@@ -2360,7 +2360,7 @@ namespace Intersect.Client.Entities
             foreach (var target in targets)
             {
                 // Draw each target found in the FindTargets()
-                target.Item1.DrawTarget((int)target.Item2);
+                target.Item1.DrawTarget((int)target.Item2, this);
             }
         }
 

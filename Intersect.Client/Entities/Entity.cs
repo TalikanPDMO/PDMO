@@ -1785,7 +1785,7 @@ namespace Intersect.Client.Entities
         }
 
         //
-        public void DrawTarget(int priority)
+        public void DrawTarget(int priority, Player player)
         {
             if (GetType() == typeof(Projectile))
             {
@@ -1798,23 +1798,43 @@ namespace Intersect.Client.Entities
                 return;
             }
 
-            var srcRectangle = new FloatRect();
+            FloatRect srcRectangle;
             var destRectangle = new FloatRect();
-            var targetTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "target.png");
+            GameTexture targetTex = null;
+            var gameView = Graphics.Renderer.GetView();
+            //if (WorldPos.IntersectsWithInclusive(gameView))
+            targetTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "target.png");
             if (targetTex != null)
             {
-                destRectangle.X = GetCenterPos().X - (int) targetTex.GetWidth() / 4;
-                destRectangle.Y = GetCenterPos().Y - (int) targetTex.GetHeight() / 2;
+                destRectangle.X = GetCenterPos().X - (int)targetTex.GetWidth() / 4;
+                destRectangle.Y = GetCenterPos().Y - (int)targetTex.GetHeight() / 2;
 
                 srcRectangle = new FloatRect(
-                    priority * (int) targetTex.GetWidth() / 2, 0, (int) targetTex.GetWidth() / 2,
-                    (int) targetTex.GetHeight()
+                    priority * (int)targetTex.GetWidth() / 2, 0, (int)targetTex.GetWidth() / 2,
+                    (int)targetTex.GetHeight()
                 );
 
                 destRectangle.Width = srcRectangle.Width;
                 destRectangle.Height = srcRectangle.Height;
-
-                Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                if (destRectangle.IntersectsWith(gameView) && WorldPos.IntersectsWith(gameView))
+                {
+                    Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                }
+                else if (priority > 0) // Only for selected targets
+                {
+                    targetTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "targetlocalisator.png");
+                    if (targetTex != null)
+                    {
+                        var angleRad = Math.Atan2(WorldPos.Y - player.WorldPos.Y, WorldPos.X - player.WorldPos.X);
+                        var angleDeg = angleRad * (180 / Math.PI);
+                        destRectangle.X = player.WorldPos.X + targetTex.Width * 0.5f * (float)Math.Cos(angleRad);
+                        destRectangle.Y = player.WorldPos.Y + targetTex.Height * 0.5f * (float)Math.Sin(angleRad);
+                        srcRectangle = new FloatRect(0, 0, targetTex.Width, targetTex.Height);
+                        destRectangle.Width = srcRectangle.Width;
+                        destRectangle.Height = srcRectangle.Height;
+                        Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Color.White, null, GameBlendModes.None, null, (float)angleDeg);
+                    }
+                }
             }
         }
 
