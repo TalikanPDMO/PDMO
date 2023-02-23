@@ -1802,7 +1802,6 @@ namespace Intersect.Client.Entities
             var destRectangle = new FloatRect();
             GameTexture targetTex = null;
             var gameView = Graphics.Renderer.GetView();
-            //if (WorldPos.IntersectsWithInclusive(gameView))
             targetTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "target.png");
             if (targetTex != null)
             {

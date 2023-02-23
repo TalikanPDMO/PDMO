@@ -24,6 +24,7 @@ using Intersect.Client.Items;
 using Intersect.Client.Interface.Game.Chat;
 using Intersect.Config.Guilds;
 using Intersect.Client.Framework.File_Management;
+using Intersect.Client.Framework.Graphics;
 
 namespace Intersect.Client.Entities
 {
@@ -2353,6 +2354,40 @@ namespace Intersect.Client.Entities
                 }
             }
             return targets;
+        }
+
+        public void DrawPartyLocalisators()
+        {
+            var map = MapInstance.Get(CurrentMap);
+            if (map == null)
+            {
+                return;
+            }
+            //var gameView = Graphics.Renderer.GetView();
+            var targetTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "partylocalisator.png");
+            if (targetTex != null)
+            {
+                var destRectangle = new FloatRect();
+                var srcRectangle = new FloatRect(0, 0, targetTex.Width, targetTex.Height);
+                destRectangle.Width = srcRectangle.Width;
+                destRectangle.Height = srcRectangle.Height;
+                foreach (var pmember in Party)
+                {
+                    if (pmember.Id != Id && Globals.Entities.TryGetValue(pmember.Id, out var entity))
+                    {
+                        if (entity.WorldPos.Y == WorldPos.Y && entity.WorldPos.X == WorldPos.X)
+                        {
+                            // Don't draw if same location
+                            return;
+                        }
+                        var angleRad = Math.Atan2(entity.WorldPos.Y - WorldPos.Y, entity.WorldPos.X - WorldPos.X);
+                        var angleDeg = angleRad * (180 / Math.PI);
+                        destRectangle.X = WorldPos.X + targetTex.Width * 0.5f * (float)Math.Cos(angleRad);
+                        destRectangle.Y = WorldPos.Y + targetTex.Height * 0.5f * (float)Math.Sin(angleRad);
+                        Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Color.White, null, GameBlendModes.None, null, (float)angleDeg);
+                    }
+                }
+            }
         }
 
         public void DrawTargets(List<Tuple<Entity, TargetTypes>> targets)
