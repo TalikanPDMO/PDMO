@@ -81,7 +81,7 @@ namespace Intersect.Client.Framework.GenericClasses
             return !(Left >= rect.Right || Right <= rect.Left || Top >= rect.Bottom || Bottom <= rect.Top);
         }
 
-        private bool IntersectsWithInclusive(FloatRect r)
+        public bool IntersectsWithInclusive(FloatRect r)
         {
             return !(Left > r.Right || Right < r.Left || Top > r.Bottom || Bottom < r.Top);
         }

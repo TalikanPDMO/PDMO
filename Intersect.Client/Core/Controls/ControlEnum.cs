@@ -72,6 +72,8 @@
 
         Running,
 
+        PartyLocate
+
     }
 
 }
