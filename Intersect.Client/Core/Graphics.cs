@@ -349,12 +349,11 @@ namespace Intersect.Client.Core
                 }
             }
 
-            //Draw the players targets
-            Globals.Me.DrawTargets(targets);
-
             //Draw the party localisators if needed
             Globals.Me.DrawPartyLocalisators();
 
+            //Draw the players targets
+            Globals.Me.DrawTargets(targets);
             DrawOverlay();
 
             GenerateLightMap();

@@ -96,6 +96,7 @@ namespace Intersect.Client.Core.Controls
             CreateControlMap(Control.OpenAdminPanel, Keys.Insert, Keys.None);
             CreateControlMap(Control.ToggleGui, Keys.F11, Keys.None);
             CreateControlMap(Control.Running, Keys.Shift, Keys.None);
+            CreateControlMap(Control.PartyLocate, Keys.W, Keys.None);
         }
 
         public void SaveKeyboard()

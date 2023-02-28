@@ -584,7 +584,8 @@ namespace Intersect.Client.Localization
                 {"opendebugger", @"Open Debugger:"},
                 {"openadminpanel", @"Open Admin Panel:"},
                 {"togglegui", @"Toggle Interface:"},
-                {"running", @"Running:"}
+                {"running", @"Running:"},
+                {"partylocate", @"Locate Party Members:"}
             };
 
             public static LocalizedString edit = @"Edit Controls";
@@ -1319,6 +1320,14 @@ namespace Intersect.Client.Localization
             public static LocalizedString leave = @"Leave Party";
 
             public static LocalizedString leavetip = @"Leave Tip";
+
+            public static LocalizedString locate = @"Auto-locate party members";
+
+            public static LocalizedString locatetip = @"Locate Tip";
+
+            public static LocalizedString unlocate = @"Do not auto-locate party members";
+
+            public static LocalizedString unlocatetip = @"No locate Tip";
 
             public static LocalizedString name = @"{00} - Lv. {01}";
 
