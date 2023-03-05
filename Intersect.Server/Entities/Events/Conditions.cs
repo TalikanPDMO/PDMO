@@ -943,8 +943,90 @@ namespace Intersect.Server.Entities.Events
             }
             return false;
         }
-        //Variable Comparison Processing
 
+        public static bool MeetsCondition(
+            InPartyWithRole condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase,
+            Npc npcEnemy)
+        {
+            var partySize = 1;
+            if (player?.Party?.Count > 1)
+            {
+                partySize = player.Party.Count;
+
+                // Check party role only if there is a party
+                switch (condition.Role)
+                {
+                    //0 is for Any role, nothing to check
+                    case 1:
+                        // Role is Member
+                        if (player.Party[0].Id == player.Id)
+                        {
+                            return false;
+                        }
+                        break;
+                    case 2:
+                        // Role is Leader
+                        if (player.Party[0].Id != player.Id)
+                        {
+                            return false;
+                        }
+                        break;
+                }
+            }            
+
+            switch (condition.Comparator) //Comparator
+            {
+                case VariableComparators.Equal:
+                    if (partySize == condition.Size)
+                    {
+                        return true;
+                    }
+
+                    break;
+                case VariableComparators.GreaterOrEqual:
+                    if (partySize >= condition.Size)
+                    {
+                        return true;
+                    }
+
+                    break;
+                case VariableComparators.LesserOrEqual:
+                    if (partySize <= condition.Size)
+                    {
+                        return true;
+                    }
+
+                    break;
+                case VariableComparators.Greater:
+                    if (partySize > condition.Size)
+                    {
+                        return true;
+                    }
+
+                    break;
+                case VariableComparators.Less:
+                    if (partySize < condition.Size)
+                    {
+                        return true;
+                    }
+
+                    break;
+                case VariableComparators.NotEqual:
+                    if (partySize != condition.Size)
+                    {
+                        return true;
+                    }
+
+                    break;
+            }
+
+            return false;
+        }
+
+        //Variable Comparison Processing
         public static bool CheckVariableComparison(
             VariableValue currentValue,
             VariableCompaison comparison,

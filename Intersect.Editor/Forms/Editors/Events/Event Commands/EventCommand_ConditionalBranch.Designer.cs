@@ -32,6 +32,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             this.grpConditional = new DarkUI.Controls.DarkGroupBox();
             this.grpFightingAttackType = new DarkUI.Controls.DarkGroupBox();
+            this.lblNpcElementalType = new System.Windows.Forms.Label();
+            this.cmbNpcElementalType = new DarkUI.Controls.DarkComboBox();
             this.lblNpcDmgType = new System.Windows.Forms.Label();
             this.cmbNpcDmgType = new DarkUI.Controls.DarkComboBox();
             this.chkOnlyTriggerAttackType = new DarkUI.Controls.DarkCheckBox();
@@ -186,8 +188,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.rdoManual = new DarkUI.Controls.DarkRadioButton();
             this.cmbItem = new DarkUI.Controls.DarkComboBox();
             this.lblItem = new System.Windows.Forms.Label();
-            this.lblNpcElementalType = new System.Windows.Forms.Label();
-            this.cmbNpcElementalType = new DarkUI.Controls.DarkComboBox();
+            this.grpInParty = new DarkUI.Controls.DarkGroupBox();
+            this.nudPartySize = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblPartySize = new System.Windows.Forms.Label();
+            this.cmbPartyComparator = new DarkUI.Controls.DarkComboBox();
+            this.lblPartyComparator = new System.Windows.Forms.Label();
+            this.cmbPartyRole = new DarkUI.Controls.DarkComboBox();
+            this.lblPartyRole = new System.Windows.Forms.Label();
             this.grpConditional.SuspendLayout();
             this.grpFightingAttackType.SuspendLayout();
             this.grpFightingStats.SuspendLayout();
@@ -225,12 +232,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpManualAmount.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudItemAmount)).BeginInit();
             this.grpAmountType.SuspendLayout();
+            this.grpInParty.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPartySize)).BeginInit();
             this.SuspendLayout();
             // 
             // grpConditional
             // 
             this.grpConditional.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpConditional.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpConditional.Controls.Add(this.grpInParty);
             this.grpConditional.Controls.Add(this.grpFightingAttackType);
             this.grpConditional.Controls.Add(this.grpFightingStats);
             this.grpConditional.Controls.Add(this.grpFightingNPC);
@@ -251,7 +261,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpConditional.Controls.Add(this.grpSelfSwitch);
             this.grpConditional.Controls.Add(this.grpSpell);
             this.grpConditional.Controls.Add(this.grpClass);
-            this.grpConditional.Controls.Add(this.grpLevelStat);
             this.grpConditional.Controls.Add(this.grpMapIs);
             this.grpConditional.Controls.Add(this.grpGender);
             this.grpConditional.Controls.Add(this.grpEquippedItem);
@@ -279,6 +288,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpFightingAttackType.Controls.Add(this.cmbNpcAttackType);
             this.grpFightingAttackType.Controls.Add(this.lblFightNpcAttackType);
             this.grpFightingAttackType.Controls.Add(this.cmbFightAttackTypeNpc);
+            this.grpFightingAttackType.Controls.Add(this.grpLevelStat);
             this.grpFightingAttackType.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpFightingAttackType.Location = new System.Drawing.Point(8, 40);
             this.grpFightingAttackType.Name = "grpFightingAttackType";
@@ -287,6 +297,35 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpFightingAttackType.TabStop = false;
             this.grpFightingAttackType.Text = "Fighting npc with Attack Type";
             this.grpFightingAttackType.Visible = false;
+            // 
+            // lblNpcElementalType
+            // 
+            this.lblNpcElementalType.AutoSize = true;
+            this.lblNpcElementalType.Location = new System.Drawing.Point(4, 141);
+            this.lblNpcElementalType.Name = "lblNpcElementalType";
+            this.lblNpcElementalType.Size = new System.Drawing.Size(83, 13);
+            this.lblNpcElementalType.TabIndex = 65;
+            this.lblNpcElementalType.Text = "Elemental Type:";
+            // 
+            // cmbNpcElementalType
+            // 
+            this.cmbNpcElementalType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbNpcElementalType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbNpcElementalType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbNpcElementalType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbNpcElementalType.DrawDropdownHoverOutline = false;
+            this.cmbNpcElementalType.DrawFocusRectangle = false;
+            this.cmbNpcElementalType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbNpcElementalType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbNpcElementalType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbNpcElementalType.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbNpcElementalType.FormattingEnabled = true;
+            this.cmbNpcElementalType.Location = new System.Drawing.Point(90, 137);
+            this.cmbNpcElementalType.Name = "cmbNpcElementalType";
+            this.cmbNpcElementalType.Size = new System.Drawing.Size(130, 21);
+            this.cmbNpcElementalType.TabIndex = 64;
+            this.cmbNpcElementalType.Text = "Any";
+            this.cmbNpcElementalType.TextPadding = new System.Windows.Forms.Padding(1, 2, 0, 2);
             // 
             // lblNpcDmgType
             // 
@@ -2095,7 +2134,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpLevelStat.Controls.Add(this.cmbLevelComparator);
             this.grpLevelStat.Controls.Add(this.lblLevelComparator);
             this.grpLevelStat.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpLevelStat.Location = new System.Drawing.Point(9, 40);
+            this.grpLevelStat.Location = new System.Drawing.Point(1, 0);
             this.grpLevelStat.Name = "grpLevelStat";
             this.grpLevelStat.Size = new System.Drawing.Size(262, 140);
             this.grpLevelStat.TabIndex = 28;
@@ -2505,34 +2544,114 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblItem.TabIndex = 2;
             this.lblItem.Text = "Item:";
             // 
-            // lblNpcElementalType
+            // grpInParty
             // 
-            this.lblNpcElementalType.AutoSize = true;
-            this.lblNpcElementalType.Location = new System.Drawing.Point(4, 141);
-            this.lblNpcElementalType.Name = "lblNpcElementalType";
-            this.lblNpcElementalType.Size = new System.Drawing.Size(83, 13);
-            this.lblNpcElementalType.TabIndex = 65;
-            this.lblNpcElementalType.Text = "Elemental Type:";
+            this.grpInParty.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpInParty.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpInParty.Controls.Add(this.cmbPartyRole);
+            this.grpInParty.Controls.Add(this.lblPartyRole);
+            this.grpInParty.Controls.Add(this.nudPartySize);
+            this.grpInParty.Controls.Add(this.lblPartySize);
+            this.grpInParty.Controls.Add(this.cmbPartyComparator);
+            this.grpInParty.Controls.Add(this.lblPartyComparator);
+            this.grpInParty.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpInParty.Location = new System.Drawing.Point(9, 39);
+            this.grpInParty.Name = "grpInParty";
+            this.grpInParty.Size = new System.Drawing.Size(262, 114);
+            this.grpInParty.TabIndex = 63;
+            this.grpInParty.TabStop = false;
+            this.grpInParty.Text = "In Party with Role ...";
             // 
-            // cmbNpcElementalType
+            // nudPartySize
             // 
-            this.cmbNpcElementalType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbNpcElementalType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbNpcElementalType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbNpcElementalType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbNpcElementalType.DrawDropdownHoverOutline = false;
-            this.cmbNpcElementalType.DrawFocusRectangle = false;
-            this.cmbNpcElementalType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbNpcElementalType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbNpcElementalType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbNpcElementalType.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbNpcElementalType.FormattingEnabled = true;
-            this.cmbNpcElementalType.Location = new System.Drawing.Point(90, 137);
-            this.cmbNpcElementalType.Name = "cmbNpcElementalType";
-            this.cmbNpcElementalType.Size = new System.Drawing.Size(130, 21);
-            this.cmbNpcElementalType.TabIndex = 64;
-            this.cmbNpcElementalType.Text = "Any";
-            this.cmbNpcElementalType.TextPadding = new System.Windows.Forms.Padding(1, 2, 0, 2);
+            this.nudPartySize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudPartySize.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudPartySize.Location = new System.Drawing.Point(79, 49);
+            this.nudPartySize.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.nudPartySize.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudPartySize.Name = "nudPartySize";
+            this.nudPartySize.Size = new System.Drawing.Size(178, 20);
+            this.nudPartySize.TabIndex = 8;
+            this.nudPartySize.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblPartySize
+            // 
+            this.lblPartySize.AutoSize = true;
+            this.lblPartySize.Location = new System.Drawing.Point(8, 51);
+            this.lblPartySize.Name = "lblPartySize";
+            this.lblPartySize.Size = new System.Drawing.Size(57, 13);
+            this.lblPartySize.TabIndex = 4;
+            this.lblPartySize.Text = "Party Size:";
+            // 
+            // cmbPartyComparator
+            // 
+            this.cmbPartyComparator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbPartyComparator.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbPartyComparator.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbPartyComparator.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbPartyComparator.DrawDropdownHoverOutline = false;
+            this.cmbPartyComparator.DrawFocusRectangle = false;
+            this.cmbPartyComparator.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbPartyComparator.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbPartyComparator.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbPartyComparator.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbPartyComparator.FormattingEnabled = true;
+            this.cmbPartyComparator.Location = new System.Drawing.Point(79, 21);
+            this.cmbPartyComparator.Name = "cmbPartyComparator";
+            this.cmbPartyComparator.Size = new System.Drawing.Size(177, 21);
+            this.cmbPartyComparator.TabIndex = 3;
+            this.cmbPartyComparator.Text = null;
+            this.cmbPartyComparator.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lblPartyComparator
+            // 
+            this.lblPartyComparator.AutoSize = true;
+            this.lblPartyComparator.Location = new System.Drawing.Point(7, 23);
+            this.lblPartyComparator.Name = "lblPartyComparator";
+            this.lblPartyComparator.Size = new System.Drawing.Size(64, 13);
+            this.lblPartyComparator.TabIndex = 2;
+            this.lblPartyComparator.Text = "Comparator:";
+            // 
+            // cmbPartyRole
+            // 
+            this.cmbPartyRole.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbPartyRole.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbPartyRole.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbPartyRole.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbPartyRole.DrawDropdownHoverOutline = false;
+            this.cmbPartyRole.DrawFocusRectangle = false;
+            this.cmbPartyRole.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbPartyRole.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbPartyRole.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbPartyRole.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbPartyRole.FormattingEnabled = true;
+            this.cmbPartyRole.Location = new System.Drawing.Point(79, 83);
+            this.cmbPartyRole.Name = "cmbPartyRole";
+            this.cmbPartyRole.Size = new System.Drawing.Size(177, 21);
+            this.cmbPartyRole.TabIndex = 10;
+            this.cmbPartyRole.Text = null;
+            this.cmbPartyRole.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lblPartyRole
+            // 
+            this.lblPartyRole.AutoSize = true;
+            this.lblPartyRole.Location = new System.Drawing.Point(7, 85);
+            this.lblPartyRole.Name = "lblPartyRole";
+            this.lblPartyRole.Size = new System.Drawing.Size(59, 13);
+            this.lblPartyRole.TabIndex = 9;
+            this.lblPartyRole.Text = "Party Role:";
             // 
             // EventCommandConditionalBranch
             // 
@@ -2605,6 +2724,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             ((System.ComponentModel.ISupportInitialize)(this.nudItemAmount)).EndInit();
             this.grpAmountType.ResumeLayout(false);
             this.grpAmountType.PerformLayout();
+            this.grpInParty.ResumeLayout(false);
+            this.grpInParty.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPartySize)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2769,5 +2891,12 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkComboBox cmbNpcDmgType;
         private System.Windows.Forms.Label lblNpcElementalType;
         private DarkComboBox cmbNpcElementalType;
+        private DarkGroupBox grpInParty;
+        private DarkNumericUpDown nudPartySize;
+        private System.Windows.Forms.Label lblPartySize;
+        private DarkComboBox cmbPartyComparator;
+        private System.Windows.Forms.Label lblPartyComparator;
+        private DarkComboBox cmbPartyRole;
+        private System.Windows.Forms.Label lblPartyRole;
     }
 }

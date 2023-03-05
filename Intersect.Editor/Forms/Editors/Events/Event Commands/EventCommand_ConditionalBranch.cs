@@ -355,6 +355,26 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 cmbNpcElementalType.Items.Add(Strings.Combat.elementaltypes[i]);
             }
 
+            // In Party with role
+            grpInParty.Text = Strings.EventConditional.inparty;
+            lblPartyComparator.Text = Strings.EventConditional.comparator;
+            lblPartySize.Text = Strings.EventConditional.partysize;
+
+            cmbPartyComparator.Items.Clear();
+            for (var i = 0; i < Strings.EventConditional.comparators.Count; i++)
+            {
+                cmbPartyComparator.Items.Add(Strings.EventConditional.comparators[i]);
+            }
+
+            lblPartyRole.Text = Strings.EventConditional.partyrole;
+            cmbPartyRole.Items.Clear();
+            for (var i = 0; i < Strings.EventConditional.partyroles.Count; i++)
+            {
+                cmbPartyRole.Items.Add(Strings.EventConditional.partyroles[i]);
+            }
+
+
+            // Save/Cancel buttons
             btnSave.Text = Strings.EventConditional.okay;
             btnCancel.Text = Strings.EventConditional.cancel;
         }
@@ -547,6 +567,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     cmbNpcDmgType.SelectedIndex = 0;
                     cmbNpcElementalType.SelectedIndex = 0;
                     break;
+                case ConditionTypes.InPartyWithRole:
+                    Condition = new InPartyWithRole();
+                    cmbPartyComparator.SelectedIndex = 0;
+                    nudPartySize.Value = 0;
+                    cmbPartyRole.SelectedIndex = 0;
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -573,6 +600,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             grpFightingNPC.Hide();
             grpFightingStats.Hide();
             grpFightingAttackType.Hide();
+            grpInParty.Hide();
             switch (type)
             {
                 case ConditionTypes.VariableIs:
@@ -711,6 +739,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     cmbFightAttackTypeNpc.Items.Clear();
                     cmbFightAttackTypeNpc.Items.Add(Strings.EventConditional.anynpc);
                     cmbFightAttackTypeNpc.Items.AddRange(NpcBase.EditorFormatNames);
+                    break;
+                case ConditionTypes.InPartyWithRole:
+                    grpInParty.Show();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -1773,6 +1804,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
         }
 
+        private void SetupFormValues(InPartyWithRole condition)
+        {
+            cmbPartyComparator.SelectedIndex = (int)condition.Comparator;
+            nudPartySize.Value = condition.Size;
+            cmbPartyRole.SelectedIndex = condition.Role;
+        }
+
         #endregion
 
         #region "SaveFormValues"
@@ -2023,6 +2061,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             {
                 condition.NpcId = NpcBase.IdFromList(cmbFightAttackTypeNpc.SelectedIndex - 1);
             }
+        }
+
+        private void SaveFormValues(InPartyWithRole condition)
+        {
+            condition.Comparator = (VariableComparators)cmbPartyComparator.SelectedIndex;
+            condition.Size = (int)nudPartySize.Value;
+            condition.Role = cmbPartyRole.SelectedIndex;
         }
 
         public void SetupFromNpc()
