@@ -49,7 +49,9 @@ namespace Intersect.GameObjects.Events
 
         FightingNPCStats,
 
-        FightingNPCAttackType
+        FightingNPCAttackType,
+
+        InPartyWithRole
 
     }
 
@@ -357,6 +359,23 @@ namespace Intersect.GameObjects.Events
 
         [DefaultValue(-1)]
         public int ElementalType { get; set; } = -1;
+    }
+
+    /// <summary>
+    /// Defines the condition class used when checking whether a player is in a party with a specific size and a specific role (leader, member, other ??)
+    /// </summary>
+    public class InPartyWithRole : Condition
+    {
+        /// <summary>
+        /// Defines the type of condition
+        /// </summary>
+        public override ConditionTypes Type { get; } = ConditionTypes.InPartyWithRole;
+
+        public VariableComparators Comparator { get; set; } = VariableComparators.Equal;
+
+        public int Size { get; set; } = 1;
+
+        public int Role { get; set; } = 0;
     }
 
     public class VariableCompaison

@@ -374,6 +374,44 @@ namespace Intersect.Editor.Localization
             }
         }
 
+        public static string GetEventConditionalDesc(InPartyWithRole condition)
+        {
+            var pSize = "";
+            switch (condition.Comparator)
+            {
+                case VariableComparators.Equal:
+                    pSize = Strings.EventConditionDesc.equal.ToString(condition.Size);
+
+                    break;
+                case VariableComparators.GreaterOrEqual:
+                    pSize = Strings.EventConditionDesc.greaterequal.ToString(condition.Size);
+
+                    break;
+                case VariableComparators.LesserOrEqual:
+                    pSize = Strings.EventConditionDesc.lessthanequal.ToString(condition.Size);
+
+                    break;
+                case VariableComparators.Greater:
+                    pSize = Strings.EventConditionDesc.greater.ToString(condition.Size);
+
+                    break;
+                case VariableComparators.Less:
+                    pSize = Strings.EventConditionDesc.lessthan.ToString(condition.Size);
+
+                    break;
+                case VariableComparators.NotEqual:
+                    pSize = Strings.EventConditionDesc.notequal.ToString(condition.Size);
+
+                    break;
+            }
+            var pRole = "";
+            if (condition.Role > 0)
+            {
+                pRole = Strings.EventConditionDesc.partyrole.ToString(Strings.EventConditional.partyroles[condition.Role]);
+            }
+            return Strings.EventConditionDesc.inparty.ToString(pSize, pRole);
+        }
+
         public static string GetVariableComparisonString(VariableCompaison comparison)
         {
             return "";
@@ -2233,6 +2271,13 @@ Tick timer saved in server config.json.";
                 {5, @"Does Not Equal"}
             };
 
+            public static Dictionary<int, LocalizedString> partyroles = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Any"},
+                {1, @"Member"},
+                {2, @"Leader"}
+            };
+
             public static Dictionary<int, LocalizedString> conditions = new Dictionary<int, LocalizedString>
             {
                 {0, @"Variable Is..."},
@@ -2255,7 +2300,8 @@ Tick timer saved in server config.json.";
                 {20, @"Map Zone Type is..." },
                 {21, @"Player fighting NPC on Phase..." },
                 {22, @"Player fighting NPC when Stats..." },
-                {23, @"Player fighting NPC with AttackType..." }
+                {23, @"Player fighting NPC with AttackType..." },
+                {24, @"In Party with Role..." }
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2468,6 +2514,12 @@ Tick timer saved in server config.json.";
             public static LocalizedString dmgtype = @"Damage Type:";
 
             public static LocalizedString elementaltype = @"Elemental Type:";
+
+            public static LocalizedString inparty = @"In Party with Role...";
+
+            public static LocalizedString partysize = @"Party Size:";
+
+            public static LocalizedString partyrole = @"Party Role:";
         }
 
         public struct EventConditionDesc
@@ -2594,6 +2646,10 @@ Tick timer saved in server config.json.";
             public static LocalizedString projectileattack = @"with Projectile";
 
             public static LocalizedString anyattack = @"with Any attack";
+
+            public static LocalizedString inparty = @"In Party with Size {00} {01}";
+
+            public static LocalizedString partyrole = @"and Role is {00}";
 
         }
 

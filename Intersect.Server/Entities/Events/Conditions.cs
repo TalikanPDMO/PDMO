@@ -943,8 +943,18 @@ namespace Intersect.Server.Entities.Events
             }
             return false;
         }
-        //Variable Comparison Processing
 
+        public static bool MeetsCondition(
+            InPartyWithRole condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase,
+            Npc npcEnemy)
+        {
+            return player.Party?.Count > 0;
+        }
+
+        //Variable Comparison Processing
         public static bool CheckVariableComparison(
             VariableValue currentValue,
             VariableCompaison comparison,
