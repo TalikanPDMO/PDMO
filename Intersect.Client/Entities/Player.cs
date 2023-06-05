@@ -2453,7 +2453,7 @@ namespace Intersect.Client.Entities
                         case SpellTypes.CombatSpell:
                             switch (spellBase.Combat.TargetType)
                             {
-                                case SpellTargetTypes.Single:
+                                case SpellTargetTypes.Targeted:
                                     // First display the range preview taking into account square range or not
                                     if (spellBase.Combat.SquareRange)
                                     {
@@ -2524,18 +2524,20 @@ namespace Intersect.Client.Entities
                                         }
                                     }
                                     break;
-                                case SpellTargetTypes.AoE:
+                                case SpellTargetTypes.Anchored:
                                     if (targetTex != null)
                                     {
-                                        // For AOE spell, there is no range and target is always the caster (center of the AOE)
+                                        var aoeX = WorldPos.X + Projectile.GetRangeX(Dir, range) * Options.TileWidth;
+                                        var aoeY = WorldPos.Y + Projectile.GetRangeY(Dir, range) * Options.TileHeight;
+
                                         if (spellBase.Combat.SquareHitRadius)
                                         {
                                             for (int w = -radius; w <= radius; w++)
                                             {
                                                 for (int h = -radius; h <= radius; h++)
                                                 {
-                                                    destRectangle.X = WorldPos.X + Options.TileWidth * w;
-                                                    destRectangle.Y = WorldPos.Y + Options.TileHeight * h;
+                                                    destRectangle.X = aoeX + Options.TileWidth * w;
+                                                    destRectangle.Y = aoeY + Options.TileHeight * h;
                                                     Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
                                                 }
                                             }
@@ -2548,8 +2550,8 @@ namespace Intersect.Client.Entities
                                                 {
                                                     if (Math.Abs(w) + Math.Abs(h) <= radius)
                                                     {
-                                                        destRectangle.X = WorldPos.X + Options.TileWidth * w;
-                                                        destRectangle.Y = WorldPos.Y + Options.TileHeight * h;
+                                                        destRectangle.X = aoeX + Options.TileWidth * w;
+                                                        destRectangle.Y = aoeY + Options.TileHeight * h;
                                                         Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
                                                     }
                                                 }

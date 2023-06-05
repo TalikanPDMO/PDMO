@@ -5245,8 +5245,8 @@ Tick timer saved in server config.json.";
             public static Dictionary<int, LocalizedString> targettypes = new Dictionary<int, LocalizedString>
             {
                 {0, @"Self"},
-                {1, @"Single Target (includes self)"},
-                {2, @"AOE"},
+                {1, @"Targeted (includes self)"},
+                {2, @"Anchored (on a tile)"},
                 {3, @"Linear (projectile)"},
                 {4, @"On Hit"},
                 {5, @"Trap"}

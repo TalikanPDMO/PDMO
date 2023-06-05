@@ -2447,7 +2447,7 @@ namespace Intersect.Server.Entities
                 return true;
             }
 
-            if (spellCombat.TargetType == SpellTargetTypes.Single)
+            if (spellCombat.TargetType == SpellTargetTypes.Targeted)
             {
                 return target == null || InRangeOf(target, spellCombat.CastRange, spellCombat.SquareRange);
             }
@@ -2513,7 +2513,7 @@ namespace Intersect.Server.Entities
                             TryAttack(this, spellBase, false, false, alreadyCrit, sourceSpellName, false, isNextSpell, reUseValues, baseDamage, secondaryDamage);
 
                             break;
-                        case SpellTargetTypes.Single:
+                        case SpellTargetTypes.Targeted:
                             if (baseTarget == null)
                             {
                                 return;
@@ -2541,9 +2541,19 @@ namespace Intersect.Server.Entities
                             }
 
                             break;
-                        case SpellTargetTypes.AoE:
-                            HandleAoESpell(spellId, spellBase.Combat.HitRadius, MapId, X, Y, null, alreadyCrit, sourceSpellName, isNextSpell, reUseValues, baseDamage, secondaryDamage);
-
+                        case SpellTargetTypes.Anchored:
+                            if (spellBase.Combat.CastRange > 0)
+                            {
+                                var tile = new TileHelper(MapId, X, Y);
+                                if (tile.Translate(Projectile.GetRangeX(Dir, spellBase.Combat.CastRange), Projectile.GetRangeY(Dir, spellBase.Combat.CastRange)))
+                                {
+                                    HandleAoESpell(spellId, spellBase.Combat.HitRadius, tile.GetMapId(), tile.GetX(), tile.GetY(), null, alreadyCrit, sourceSpellName, isNextSpell, reUseValues, baseDamage, secondaryDamage);
+                                }
+                            }
+                            else
+                            {
+                                HandleAoESpell(spellId, spellBase.Combat.HitRadius, MapId, X, Y, null, alreadyCrit, sourceSpellName, isNextSpell, reUseValues, baseDamage, secondaryDamage);
+                            }
                             break;
                         case SpellTargetTypes.Projectile:
                             var projectileBase = spellBase.Combat.Projectile;

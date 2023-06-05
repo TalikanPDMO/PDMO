@@ -71,8 +71,8 @@ namespace Intersect.Client.Interface.Game
             
 
             if (spell.SpellType == (int) SpellTypes.CombatSpell &&
-                (spell.Combat.TargetType == SpellTargetTypes.AoE ||
-                 spell.Combat.TargetType == SpellTargetTypes.Single) &&
+                (spell.Combat.TargetType == SpellTargetTypes.Anchored ||
+                 spell.Combat.TargetType == SpellTargetTypes.Targeted) &&
                 spell.Combat.HitRadius > 0)
             {
                 spellStats.AddText(

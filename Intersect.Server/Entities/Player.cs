@@ -1498,7 +1498,7 @@ namespace Intersect.Server.Entities
         {
             // If self-cast, AoE, Projectile or Dash.. always accept.
             if (spell?.Combat.TargetType == SpellTargetTypes.Self ||
-                spell?.Combat.TargetType == SpellTargetTypes.AoE ||
+                spell?.Combat.TargetType == SpellTargetTypes.Anchored ||
                 spell?.Combat.TargetType == SpellTargetTypes.Projectile ||
                 spell?.SpellType == SpellTypes.Dash
                 )
@@ -4618,7 +4618,7 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            var singleTargetSpell = (spell.SpellType == SpellTypes.CombatSpell && spell.Combat.TargetType == SpellTargetTypes.Single) || spell.SpellType == SpellTypes.WarpTo;
+            var singleTargetSpell = (spell.SpellType == SpellTypes.CombatSpell && spell.Combat.TargetType == SpellTargetTypes.Targeted) || spell.SpellType == SpellTypes.WarpTo;
 
             if (target == null && singleTargetSpell)
             {

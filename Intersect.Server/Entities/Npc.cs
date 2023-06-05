@@ -713,14 +713,15 @@ namespace Intersect.Server.Entities
                     }
 
                     var range = spellBase.Combat?.CastRange ?? 0;
-                    var targetType = spellBase.Combat?.TargetType ?? SpellTargetTypes.Single;
+                    var targetType = spellBase.Combat?.TargetType ?? SpellTargetTypes.Targeted;
                     var projectileBase = spellBase.Combat?.Projectile;
 
-                    if (targetType == SpellTargetTypes.AoE && !InRangeOf(target, spellBase.Combat.HitRadius, spellBase.Combat.SquareHitRadius))
+                    //TODO Improve here for new AoE spells
+                    if (targetType == SpellTargetTypes.Anchored && !InRangeOf(target, spellBase.Combat.HitRadius + spellBase.Combat.CastRange, spellBase.Combat.SquareRange))
                     {
                         continue;
                     }
-                    else if (targetType == SpellTargetTypes.Single && !InRangeOf(target, range, spellBase.Combat.SquareRange))
+                    else if (targetType == SpellTargetTypes.Targeted && !InRangeOf(target, range, spellBase.Combat.SquareRange))
                     {
                         // ReSharper disable once SwitchStatementMissingSomeCases
                         continue;

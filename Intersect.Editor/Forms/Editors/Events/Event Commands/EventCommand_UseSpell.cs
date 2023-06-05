@@ -122,7 +122,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     case SpellTypes.CombatSpell:
                         switch (spell.Combat.TargetType)
                         {
-                            case SpellTargetTypes.AoE:
+                            case SpellTargetTypes.Anchored:
                             case SpellTargetTypes.Projectile:
                                 if (spell.Combat.Friendly)
                                 {
