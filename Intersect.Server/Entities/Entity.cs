@@ -1888,7 +1888,8 @@ namespace Intersect.Server.Entities
                     // Do not reuse values on crit because it's a new additional effect
                     CastSpell(spellBase.Combat.CritEffectSpellId, -1, true, spellBase.Name, target, isNextSpell);
                 }
-                if (spellBase.Combat.NextEffectSpellId != Guid.Empty && Randomization.Next(1, 101) <= spellBase.Combat.NextEffectSpellChance)
+                // Next effect for projectile is excluded because handled when the projectile is created
+                if (spellBase.Combat.NextEffectSpellId != Guid.Empty && !fromProjectile && Randomization.Next(1, 101) <= spellBase.Combat.NextEffectSpellChance)
                 {
                     var nextIsCrit = isCrit || alreadyCrit;
                     // TODO Check if we reuse crit everytime or not

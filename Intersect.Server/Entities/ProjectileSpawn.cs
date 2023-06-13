@@ -105,19 +105,40 @@ namespace Intersect.Server.Entities
 
             if (targetEntity != null && targetEntity != Parent.Owner && targetEntity != Parent.Target)
             {
-
-                // Have we collided with this entity before? If so, cancel out.
-                if (mEntitiesCollided.Contains(en.Id))
+                // Have we collided with this entity or a linked spawn before? If so, cancel out.
+                if (ProjectileBase.LinkedSpawns)
                 {
-                    if (!Parent.Base.PierceTarget)
+                    for (var s = 0; s < Parent.LinkedSpawns.GetLength(1); s++)
                     {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
+                        var linkSpawn = Parent.LinkedSpawns[LinkedSpawnIndex, s];
+                        if (linkSpawn != null && linkSpawn.mEntitiesCollided.Contains(en.Id))
+                        {
+                            if (!linkSpawn.Parent.Base.PierceTarget)
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
                     }
                 }
+                else
+                {
+                    if (mEntitiesCollided.Contains(en.Id))
+                    {
+                        if (!Parent.Base.PierceTarget)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+                
                 mEntitiesCollided.Add(en.Id);
 
                 if (targetEntity.GetType() == typeof(Player)) //Player
