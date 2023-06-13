@@ -506,11 +506,6 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0,
             0});
-            this.nudSpeed.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             this.nudSpeed.Name = "nudSpeed";
             this.nudSpeed.Size = new System.Drawing.Size(69, 20);
             this.nudSpeed.TabIndex = 41;

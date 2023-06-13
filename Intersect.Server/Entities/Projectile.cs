@@ -5,6 +5,7 @@ using System.Linq;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Maps;
+using Intersect.Logging;
 using Intersect.Network.Packets.Server;
 using Intersect.Server.Entities.Combat;
 using Intersect.Server.General;
@@ -76,7 +77,8 @@ namespace Intersect.Server.Entities
             Spell = parentSpell;
             Item = parentItem;
 
-            Passable = true;
+            //Static projectiles are passable only if Pierciable
+            Passable = Base.Speed>0 || Base.PierceTarget;
             HideName = true;
             for (var x = 0; x < ProjectileBase.SPAWN_LOCATIONS_WIDTH; x++)
             {
@@ -421,10 +423,18 @@ namespace Intersect.Server.Entities
                             var killSpawn = false;
                             if (!spawn.Dead)
                             {
-                                killSpawn = MoveFragment(spawn);
-                                if (!killSpawn && (x != spawn.X || y != spawn.Y || map != spawn.MapId))
+                                if (Base.Speed > 0)
+                                {
+                                    killSpawn = MoveFragment(spawn);
+                                    if (!killSpawn && (x != spawn.X || y != spawn.Y || map != spawn.MapId))
+                                    {
+                                        killSpawn = CheckForCollision(spawn);
+                                    }
+                                }
+                                else
                                 {
                                     killSpawn = CheckForCollision(spawn);
+                                    spawn.TransmittionTimer = Globals.Timing.Milliseconds + spawn.ProjectileBase.Delay;
                                 }
                             }
 
@@ -520,33 +530,39 @@ namespace Intersect.Server.Entities
                 {
                     killSpawn = true;
                 }
-            }
 
+                // Check for areas (static projectiles) not piercible
+                foreach (var proj in map.MapProjectilesCached)
+                {
+                    if (proj != null && proj != this && !proj.Passable && proj.X == spawn.X && proj.Y == spawn.Y && proj.Z == spawn.Z)
+                    {
+                        // Try to move in an area not pierceable, so we block
+                        killSpawn = true;
+                    }
+                }
+            }
             if (!killSpawn && map != null)
             {
                 var entities = map.GetEntities();
-                for (var z = 0; z < entities.Count; z++)
+                if (entities.Count > 0)
                 {
-                    if (entities[z] != null &&
-                        (entities[z].X == Math.Round(spawn.X) || entities[z].X == Math.Ceiling(spawn.X) || entities[z].X == Math.Floor(spawn.X)) &&
-                        (entities[z].Y == Math.Round(spawn.Y) || entities[z].Y == Math.Ceiling(spawn.Y) || entities[z].Y == Math.Floor(spawn.Y)) &&
-                        entities[z].Z == spawn.Z)
+                    for (var z = 0; z < entities.Count; z++)
                     {
-                        killSpawn = spawn.HitEntity(entities[z]);
-                        if (killSpawn && !spawn.ProjectileBase.PierceTarget)
+                        if (entities[z] != null &&
+                            (entities[z].X == Math.Round(spawn.X) || entities[z].X == Math.Ceiling(spawn.X) || entities[z].X == Math.Floor(spawn.X)) &&
+                            (entities[z].Y == Math.Round(spawn.Y) || entities[z].Y == Math.Ceiling(spawn.Y) || entities[z].Y == Math.Floor(spawn.Y)) &&
+                            entities[z].Z == spawn.Z)
                         {
-                            return killSpawn;
-                        }
-                    }
-                    else
-                    {
-                        if (z == entities.Count - 1)
-                        {       
-                            if (spawn.Distance >= Base.Range)
+                            killSpawn = spawn.HitEntity(entities[z]);
+                            if (killSpawn && !spawn.ProjectileBase.PierceTarget)
                             {
-                                killSpawn = true;
+                                return killSpawn;
                             }
                         }
+                    }
+                    if ((Base.Speed == 0 && mSpawnTime > 0 && Globals.Timing.Milliseconds > mSpawnTime) || (Base.Speed > 0 && spawn.Distance >= Base.Range))
+                    {
+                        killSpawn = true;
                     }
                 }
             }

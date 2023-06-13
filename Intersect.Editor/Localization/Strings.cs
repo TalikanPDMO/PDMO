@@ -5213,7 +5213,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString paste = @"Paste Spell";
 
-            public static LocalizedString projectile = @"Projectile:";
+            public static LocalizedString projectile = @"Projectile/Area:";
 
             public static LocalizedString requirements = @"Casting Requirements";
 

@@ -2529,30 +2529,50 @@ namespace Intersect.Client.Entities
                                     {
                                         var aoeX = WorldPos.X + Projectile.GetRangeX(Dir, range) * Options.TileWidth;
                                         var aoeY = WorldPos.Y + Projectile.GetRangeY(Dir, range) * Options.TileHeight;
-
-                                        if (spellBase.Combat.SquareHitRadius)
+                                        if (spellBase.Combat.Projectile?.Speed == 0)
                                         {
-                                            for (int w = -radius; w <= radius; w++)
+                                            for (byte x = 0; x < ProjectileBase.SPAWN_LOCATIONS_WIDTH; x++)
                                             {
-                                                for (int h = -radius; h <= radius; h++)
+                                                for (byte y = 0; y < ProjectileBase.SPAWN_LOCATIONS_HEIGHT; y++)
                                                 {
-                                                    destRectangle.X = aoeX + Options.TileWidth * w;
-                                                    destRectangle.Y = aoeY + Options.TileHeight * h;
-                                                    Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                                    for (byte d = 0; d < ProjectileBase.MAX_PROJECTILE_DIRECTIONS; d++)
+                                                    {
+                                                        if (spellBase.Combat.Projectile.SpawnLocations[x, y].Directions[d])
+                                                        {
+                                                            destRectangle.X = aoeX + Projectile.FindProjectileRotationX(Dir, x - 2, y - 2) * Options.TileWidth;
+                                                            destRectangle.Y = aoeY + Projectile.FindProjectileRotationY(Dir, x - 2, y - 2) * Options.TileHeight;
+                                                            Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
                                         else
                                         {
-                                            for (int w = -radius; w <= radius; w++)
+                                            if (spellBase.Combat.SquareHitRadius)
                                             {
-                                                for (int h = -radius; h <= radius; h++)
+                                                for (int w = -radius; w <= radius; w++)
                                                 {
-                                                    if (Math.Abs(w) + Math.Abs(h) <= radius)
+                                                    for (int h = -radius; h <= radius; h++)
                                                     {
                                                         destRectangle.X = aoeX + Options.TileWidth * w;
                                                         destRectangle.Y = aoeY + Options.TileHeight * h;
                                                         Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                for (int w = -radius; w <= radius; w++)
+                                                {
+                                                    for (int h = -radius; h <= radius; h++)
+                                                    {
+                                                        if (Math.Abs(w) + Math.Abs(h) <= radius)
+                                                        {
+                                                            destRectangle.X = aoeX + Options.TileWidth * w;
+                                                            destRectangle.Y = aoeY + Options.TileHeight * h;
+                                                            Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                                                        }
                                                     }
                                                 }
                                             }

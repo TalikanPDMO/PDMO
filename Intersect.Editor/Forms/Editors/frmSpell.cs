@@ -95,6 +95,7 @@ namespace Intersect.Editor.Forms.Editors
         private void frmSpell_Load(object sender, EventArgs e)
         {
             cmbProjectile.Items.Clear();
+            cmbProjectile.Items.Add(Strings.General.none);
             cmbProjectile.Items.AddRange(ProjectileBase.Names);
             cmbCastAnimation.Items.Clear();
             cmbCastAnimation.Items.Add(Strings.General.none);
@@ -494,6 +495,11 @@ namespace Intersect.Editor.Forms.Editors
                 chkSquareRadius.Show();
                 nudHitRadius.Value = mEditorItem.Combat.HitRadius;
                 chkSquareRadius.Checked = mEditorItem.Combat.SquareHitRadius;
+
+                //Static projectile to design custom area of effect
+                lblProjectile.Show();
+                cmbProjectile.Show();
+                cmbProjectile.SelectedIndex = ProjectileBase.ListIndex(mEditorItem.Combat.ProjectileId) + 1;
             }
 
             if (cmbTargetType.SelectedIndex < (int) SpellTargetTypes.Self)
@@ -509,7 +515,7 @@ namespace Intersect.Editor.Forms.Editors
             {
                 lblProjectile.Show();
                 cmbProjectile.Show();
-                cmbProjectile.SelectedIndex = ProjectileBase.ListIndex(mEditorItem.Combat.ProjectileId);
+                cmbProjectile.SelectedIndex = ProjectileBase.ListIndex(mEditorItem.Combat.ProjectileId) + 1;
             }
 
             if (cmbTargetType.SelectedIndex == (int) SpellTargetTypes.OnHit)
@@ -842,7 +848,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private void cmbProjectile_SelectedIndexChanged(object sender, EventArgs e)
         {
-            mEditorItem.Combat.ProjectileId = ProjectileBase.IdFromList(cmbProjectile.SelectedIndex);
+            mEditorItem.Combat.ProjectileId = ProjectileBase.IdFromList(cmbProjectile.SelectedIndex - 1);
         }
 
         private void cmbEvent_SelectedIndexChanged(object sender, EventArgs e)

@@ -1014,11 +1014,11 @@ namespace Intersect.Editor.Forms.Editors
             // lblProjectile
             // 
             this.lblProjectile.AutoSize = true;
-            this.lblProjectile.Location = new System.Drawing.Point(6, 59);
+            this.lblProjectile.Location = new System.Drawing.Point(6, 143);
             this.lblProjectile.Name = "lblProjectile";
-            this.lblProjectile.Size = new System.Drawing.Size(53, 13);
+            this.lblProjectile.Size = new System.Drawing.Size(80, 13);
             this.lblProjectile.TabIndex = 18;
-            this.lblProjectile.Text = "Projectile:";
+            this.lblProjectile.Text = "Projectile/Area:";
             // 
             // cmbProjectile
             // 
@@ -1033,7 +1033,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbProjectile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbProjectile.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbProjectile.FormattingEnabled = true;
-            this.cmbProjectile.Location = new System.Drawing.Point(9, 75);
+            this.cmbProjectile.Location = new System.Drawing.Point(9, 159);
             this.cmbProjectile.Name = "cmbProjectile";
             this.cmbProjectile.Size = new System.Drawing.Size(206, 21);
             this.cmbProjectile.TabIndex = 19;

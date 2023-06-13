@@ -48,8 +48,6 @@ namespace Intersect.Client.Entities.Projectiles
             Vital[(int) Vitals.Health] = 1;
             MaxVital[(int) Vitals.Health] = 1;
             HideName = true;
-            Passable = true;
-            IsMoving = true;
         }
 
         public override void Load(EntityPacket packet)
@@ -84,7 +82,8 @@ namespace Intersect.Client.Entities.Projectiles
 
                 mTotalSpawns *= mMyBase.Quantity;
             }
-
+            IsMoving = mMyBase.Speed > 0;
+            Passable = mMyBase.Speed > 0 || mMyBase.PierceTarget;
             Spawns = new ProjectileSpawns[mTotalSpawns];
             mLoaded = true;
         }
@@ -528,9 +527,34 @@ namespace Intersect.Client.Entities.Projectiles
                             Spawns[s].Anim.Update();
                         }
                     }
+                    CheckForCollision();
                 }
+                else
+                {
+                    for (var s = 0; s < mSpawnedAmount; s++)
+                    {
+                        // If not moving, only update the frames, not the position
+                        if (Spawns[s] != null && MapInstance.Get(Spawns[s].SpawnMapId) != null)
+                        {
+                            Spawns[s].OffsetX = GetRangeX(Spawns[s].Dir, 0);
+                            Spawns[s].OffsetY = GetRangeY(Spawns[s].Dir, 0);
+                            Spawns[s]
+                                .Anim.SetPosition(
+                                    MapInstance.Get(Spawns[s].SpawnMapId).GetX() +
+                                    Spawns[s].SpawnX * Options.TileWidth +
+                                    Spawns[s].OffsetX +
+                                    Options.TileWidth / 2,
+                                    MapInstance.Get(Spawns[s].SpawnMapId).GetY() +
+                                    Spawns[s].SpawnY * Options.TileHeight +
+                                    Spawns[s].OffsetY +
+                                    Options.TileHeight / 2, X, Y, CurrentMap, Spawns[s].AutoRotate ? Spawns[s].Dir : 0,
+                                    Spawns[s].Z
+                                );
 
-                CheckForCollision();
+                            Spawns[s].Anim.Update();
+                        }
+                    }
+                }
             }
 
             return true;
@@ -652,7 +676,7 @@ namespace Intersect.Client.Entities.Projectiles
                                                           (long)((float)mMyBase.Speed / (float)mMyBase.Range);
                             } 
 
-                            if (Spawns[i].Distance >= mMyBase.Range)
+                            if (mMyBase.Speed > 0 && Spawns[i].Distance >= mMyBase.Range)
                             {
                                 killSpawn = true;
                             }

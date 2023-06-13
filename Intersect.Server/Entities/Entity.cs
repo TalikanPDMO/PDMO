@@ -499,7 +499,6 @@ namespace Intersect.Server.Entities
             {
                 return -5; //Out of Bounds
             }
-
             if (!Passable)
             {
                 var targetMap = mapInstance;
@@ -538,6 +537,15 @@ namespace Intersect.Server.Entities
                                 return (int)EntityTypes.Resource;
                             }
                         }
+                    }
+                }
+
+                foreach(var proj in mapInstance.MapProjectilesCached)
+                {
+                    if (proj != null && !proj.Passable && proj.X == tileX && proj.Y == tileY && proj.Z == Z)
+                    {
+                        // Try to move in an area not pierceable, so we block
+                        return (int)EntityTypes.Projectile;
                     }
                 }
 
@@ -2547,12 +2555,36 @@ namespace Intersect.Server.Entities
                                 var tile = new TileHelper(MapId, X, Y);
                                 if (tile.Translate(Projectile.GetRangeX(Dir, spellBase.Combat.CastRange), Projectile.GetRangeY(Dir, spellBase.Combat.CastRange)))
                                 {
-                                    HandleAoESpell(spellId, spellBase.Combat.HitRadius, tile.GetMapId(), tile.GetX(), tile.GetY(), null, alreadyCrit, sourceSpellName, isNextSpell, reUseValues, baseDamage, secondaryDamage);
+                                    if (spellBase.Combat.Projectile?.Speed == 0)
+                                    {
+                                        // Projectile with speed equal to 0 is a custom Area
+                                        MapInstance.Get(tile.GetMapId())
+                                            .SpawnMapProjectile(
+                                                this, spellBase.Combat.Projectile, spellBase, null, tile.GetMapId(), tile.GetX(), tile.GetY(), (byte)Z,
+                                                (byte)Dir, null, alreadyCrit
+                                            );
+                                    }
+                                    else
+                                    {
+                                        HandleAoESpell(spellId, spellBase.Combat.HitRadius, tile.GetMapId(), tile.GetX(), tile.GetY(), null, alreadyCrit, sourceSpellName, isNextSpell, reUseValues, baseDamage, secondaryDamage);
+                                    }
                                 }
                             }
                             else
                             {
-                                HandleAoESpell(spellId, spellBase.Combat.HitRadius, MapId, X, Y, null, alreadyCrit, sourceSpellName, isNextSpell, reUseValues, baseDamage, secondaryDamage);
+                                if (spellBase.Combat.Projectile?.Speed == 0)
+                                {
+                                    // Projectile with speed equal to 0 is a custom Area
+                                    MapInstance.Get(MapId)
+                                        .SpawnMapProjectile(
+                                            this, spellBase.Combat.Projectile, spellBase, null, MapId, (byte)X, (byte)Y, (byte)Z,
+                                            (byte)Dir, null, alreadyCrit
+                                        );
+                                }
+                                else
+                                {
+                                    HandleAoESpell(spellId, spellBase.Combat.HitRadius, MapId, X, Y, null, alreadyCrit, sourceSpellName, isNextSpell, reUseValues, baseDamage, secondaryDamage);
+                                }  
                             }
                             break;
                         case SpellTargetTypes.Projectile:

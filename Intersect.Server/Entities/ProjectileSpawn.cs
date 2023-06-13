@@ -64,14 +64,21 @@ namespace Intersect.Server.Entities
             SpawnIndex = spawnIndex;
             LinkedSpawnIndex = linkedSpawnIndex;
             LinkedSpawnNumber = linkedSpawnNumber;
-            if (ProjectileBase.Range == 0)
+            if (ProjectileBase.Speed == 0)
             {
-                TransmittionTimer = Globals.Timing.Milliseconds + ProjectileBase.Speed;
+                TransmittionTimer = Globals.Timing.Milliseconds + ProjectileBase.Delay;
             }
             else
             {
-                TransmittionTimer = Globals.Timing.Milliseconds +
-                                (long)((float)ProjectileBase.Speed / (float)ProjectileBase.Range);
+                if (ProjectileBase.Range == 0)
+                {
+                    TransmittionTimer = Globals.Timing.Milliseconds + ProjectileBase.Speed;
+                }
+                else
+                {
+                    TransmittionTimer = Globals.Timing.Milliseconds +
+                                    (long)((float)ProjectileBase.Speed / (float)ProjectileBase.Range);
+                }
             }
         }
 

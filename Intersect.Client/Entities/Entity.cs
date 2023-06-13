@@ -2108,48 +2108,55 @@ namespace Intersect.Client.Entities
                             en.Value.Y == tmpY &&
                             en.Value.Z == Z)
                         {
-                            if (en.Value.GetType() != typeof(Projectile))
+                            if (en.Value.GetType() == typeof(Projectile))
                             {
-                                if (en.Value.GetType() == typeof(Resource))
+                                if(((Projectile)en.Value).Passable)
                                 {
-                                    var resourceBase = ((Resource)en.Value).GetResourceBase();
-                                    if (resourceBase != null)
-                                    {
-                                        if (!ignoreAliveResources && !((Resource)en.Value).IsDead && !resourceBase.WalkableBefore)
-                                        {
-                                            blockedBy = en.Value;
-
-                                            return -6;
-                                        }
-
-                                        if (!ignoreDeadResources && ((Resource)en.Value).IsDead && !resourceBase.WalkableAfter)
-                                        {
-                                            blockedBy = en.Value;
-
-                                            return -6;
-                                        }
-
-                                        if (resourceBase.WalkableAfter && ((Resource)en.Value).IsDead ||
-                                            resourceBase.WalkableBefore && !((Resource)en.Value).IsDead)
-                                        {
-                                            continue;
-                                        }
-                                    }
+                                    return -1;
                                 }
-                                else if (en.Value.GetType() == typeof(Player))
+                                else
                                 {
-                                    //Return the entity key as this should block the player.  Only exception is if the MapZone this entity is on is passable.
-                                    var entityMap = MapInstance.Get(en.Value.CurrentMap);
-                                    if (Options.Instance.Passability.Passable[(int)entityMap.ZoneType])
+                                    blockedBy = en.Value;
+                                    return -6;
+                                }
+                            }
+                            else if (en.Value.GetType() == typeof(Resource))
+                            {
+                                var resourceBase = ((Resource)en.Value).GetResourceBase();
+                                if (resourceBase != null)
+                                {
+                                    if (!ignoreAliveResources && !((Resource)en.Value).IsDead && !resourceBase.WalkableBefore)
+                                    {
+                                        blockedBy = en.Value;
+
+                                        return -6;
+                                    }
+
+                                    if (!ignoreDeadResources && ((Resource)en.Value).IsDead && !resourceBase.WalkableAfter)
+                                    {
+                                        blockedBy = en.Value;
+
+                                        return -6;
+                                    }
+
+                                    if (resourceBase.WalkableAfter && ((Resource)en.Value).IsDead ||
+                                        resourceBase.WalkableBefore && !((Resource)en.Value).IsDead)
                                     {
                                         continue;
                                     }
                                 }
-
-                                blockedBy = en.Value;
-
-                                return -6;
                             }
+                            else if (en.Value.GetType() == typeof(Player))
+                            {
+                                //Return the entity key as this should block the player.  Only exception is if the MapZone this entity is on is passable.
+                                var entityMap = MapInstance.Get(en.Value.CurrentMap);
+                                if (Options.Instance.Passability.Passable[(int)entityMap.ZoneType])
+                                {
+                                    continue;
+                                }
+                            }
+                            blockedBy = en.Value;
+                            return -6;
                         }
                     }
                 }

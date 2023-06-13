@@ -2100,7 +2100,7 @@
     "editorname": "Editor Name:",
     "new": "New Spell",
     "paste": "Paste Spell",
-    "projectile": "Projectile:",
+    "projectile": "Projectile/Area:",
     "requirements": "Casting Requirements",
     "cannotcast": "Cannot Cast Message:",
     "requirementsbutton": "Edit Casting Requirements",

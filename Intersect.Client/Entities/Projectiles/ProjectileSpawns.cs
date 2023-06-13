@@ -74,7 +74,6 @@ namespace Intersect.Client.Entities.Projectiles
                 TransmittionTimer = Globals.System.GetTimeMs() +
                                 (long)((float)ProjectileBase.Speed / (float)ProjectileBase.Range);
             }
-            
         }
 
         public void Dispose()

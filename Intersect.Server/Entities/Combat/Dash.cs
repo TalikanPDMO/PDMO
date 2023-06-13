@@ -127,7 +127,7 @@ namespace Intersect.Server.Entities.Combat
                 }*/
                 
                 //Check for players and solid events
-                if (n == (int) EntityTypes.Player || n == (int) EntityTypes.Event)
+                if (n == (int) EntityTypes.Player || n == (int) EntityTypes.Event || n == (int)EntityTypes.Projectile)
                 {
                     return;
                 }
