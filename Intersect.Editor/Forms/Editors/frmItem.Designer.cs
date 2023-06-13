@@ -220,6 +220,11 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemRelations = new System.Windows.Forms.ToolStripButton();
             this.lblElementalType = new System.Windows.Forms.Label();
             this.cmbElementalType = new DarkUI.Controls.DarkComboBox();
+
+            // Active Equipment 
+            this.grpActiveEquipment = new DarkUI.Controls.DarkGroupBox();
+            this.cmbActiveEquipment = new DarkUI.Controls.DarkComboBox();
+
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxLossOnDeath)).BeginInit();
@@ -1189,6 +1194,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEquipment.Controls.Add(this.lblMalePaperdoll);
             this.grpEquipment.Controls.Add(this.picMalePaperdoll);
             this.grpEquipment.Controls.Add(this.grpWeaponProperties);
+            // Active Equipment 
+            this.grpEquipment.Controls.Add(this.grpActiveEquipment);
+
             this.grpEquipment.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpEquipment.Location = new System.Drawing.Point(2, 435);
             this.grpEquipment.Name = "grpEquipment";
@@ -3054,6 +3062,46 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
 
+
+            // 
+            // grpActiveEquipment
+            // 
+            this.grpActiveEquipment.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpActiveEquipment.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            //this.grpActiveEquipment.Controls.Add(this.nudNextSpellChance);
+            //this.grpActiveEquipment.Controls.Add(this.chkReUseValues);
+            this.grpActiveEquipment.Controls.Add(this.cmbActiveEquipment);
+            this.grpActiveEquipment.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpActiveEquipment.Location = new System.Drawing.Point(200 + 100, 420-400);
+            this.grpActiveEquipment.Name = "grpActiveEquipment";
+            this.grpActiveEquipment.Size = new System.Drawing.Size(234, 62);
+            this.grpActiveEquipment.TabIndex = 54;
+            this.grpActiveEquipment.TabStop = false;
+            this.grpActiveEquipment.Text = "Active Spell";
+
+            //
+            // cmbActiveEquipment
+            //
+            this.cmbActiveEquipment.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbActiveEquipment.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbActiveEquipment.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbActiveEquipment.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbActiveEquipment.DrawDropdownHoverOutline = false;
+            this.cmbActiveEquipment.DrawFocusRectangle = false;
+            this.cmbActiveEquipment.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbActiveEquipment.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbActiveEquipment.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbActiveEquipment.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbActiveEquipment.FormattingEnabled = true;
+            this.cmbActiveEquipment.Items.AddRange(new object[] {
+            "None"});
+            this.cmbActiveEquipment.Location = new System.Drawing.Point(10, 24);
+            this.cmbActiveEquipment.Name = "cmbActiveEquipment";
+            this.cmbActiveEquipment.Size = new System.Drawing.Size(223, 21);
+            this.cmbActiveEquipment.TabIndex = 66;
+            this.cmbActiveEquipment.Text = "None";
+            this.cmbActiveEquipment.TextPadding = new System.Windows.Forms.Padding(2);
+            //this.cmbActiveEquipment.SelectedIndexChanged += new System.EventHandler(this.cmbActiveEquipment_SelectedIndexChanged);
         }
 
         #endregion
@@ -3243,5 +3291,10 @@ namespace Intersect.Editor.Forms.Editors
         public ToolStripButton toolStripItemRelations;
         private DarkComboBox cmbElementalType;
         private Label lblElementalType;
+
+        // Active Equipment
+        private DarkGroupBox grpActiveEquipment;
+        private DarkComboBox cmbActiveEquipment;
+
     }
 }

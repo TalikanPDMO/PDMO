@@ -383,7 +383,7 @@ namespace Intersect.GameObjects
 
         public ConsumableType Type { get; set; }
 
-        public int Value { get; set; }
+        public int Value { get; set; } 
 
         public int Percentage { get; set; }
 
@@ -398,5 +398,7 @@ namespace Intersect.GameObjects
         public int Percentage { get; set; }
 
     }
+
+
 
 }

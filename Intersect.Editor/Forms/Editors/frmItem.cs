@@ -1277,7 +1277,21 @@ namespace Intersect.Editor.Forms.Editors
 
             picPaperdoll.BackgroundImage = picItemBmp;
         }
-
+        
+        // Active Equipment
+        /*
+        private void cmbActiveEquipment_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbActiveEquipment.SelectedIndex > 0)
+            {
+                mEditorItem.ActiveEquipment = SpellBase.Get(SpellBase.IdFromList(cmbActiveEquipment.SelectedIndex - 1));
+            }
+            else
+            {
+                mEditorItem.ActiveEquipment = null;
+            }
+        }
+        */
         private void txtCannotUse_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.CannotUseMessage = txtCannotUse.Text;
