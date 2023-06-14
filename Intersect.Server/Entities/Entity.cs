@@ -1460,35 +1460,6 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
-            if (this is Player p && target is Npc npcenemy)
-            {
-                p.FightingNpcBaseIds.AddOrUpdate(npcenemy.Base.Id, CombatTimer, (guid, t) => CombatTimer);
-                var npclist = p.FightingListNpcs.GetOrAdd(npcenemy.Base.Id, new ConcurrentDictionary<Npc, AttackInfo>());
-                AttackInfo attackinfo;
-                if (parentSpell != null)
-                {
-                    attackinfo = new AttackInfo((DamageType)parentSpell.Combat.DamageType, AttackType.Projectile,
-                        (ElementalType)parentSpell.ElementalType, parentSpell.Id);
-                }
-                else
-                {
-                    attackinfo = new AttackInfo((DamageType)parentItem.DamageType, AttackType.Projectile,
-                        (ElementalType)parentItem.ElementalType, parentItem.Id);
-                }
-                npclist.AddOrUpdate(npcenemy, attackinfo, (npc, info) => attackinfo);
-                if(!npcenemy.CanPlayerProjectile(p))
-                {
-                    // Try to trigger possible phase related to projectile
-                    npcenemy.HandlePhases(p);
-                    return;
-                }
-            }
-            else if (this is Npc n && target is Player penemy)
-            {
-                penemy.FightingNpcBaseIds.AddOrUpdate(n.Base.Id, CombatTimer, (guid, t) => CombatTimer);
-                var npclist = penemy.FightingListNpcs.GetOrAdd(n.Base.Id, new ConcurrentDictionary<Npc, AttackInfo>());
-                npclist.AddOrUpdate(n, npc => null, (npc, info) => info);
-            }
 
             //Check for taunt status and trying to attack a target that has not taunted you.
             foreach (var status in CachedStatuses)
@@ -1504,9 +1475,43 @@ namespace Intersect.Server.Entities
                 }
             }
 
+            // AttackInfos for static projectile are handled after in TryAttack(spell)
+            if (projectile?.Speed > 0)
+            {
+                if (this is Player p && target is Npc npcenemy)
+                {
+                    p.FightingNpcBaseIds.AddOrUpdate(npcenemy.Base.Id, CombatTimer, (guid, t) => CombatTimer);
+                    var npclist = p.FightingListNpcs.GetOrAdd(npcenemy.Base.Id, new ConcurrentDictionary<Npc, AttackInfo>());
+                    AttackInfo attackinfo;
+                    if (parentSpell != null)
+                    {
+                        attackinfo = new AttackInfo((DamageType)parentSpell.Combat.DamageType, AttackType.Projectile,
+                            (ElementalType)parentSpell.ElementalType, parentSpell.Id);
+                    }
+                    else
+                    {
+                        attackinfo = new AttackInfo((DamageType)parentItem.DamageType, AttackType.Projectile,
+                            (ElementalType)parentItem.ElementalType, parentItem.Id);
+                    }
+                    npclist.AddOrUpdate(npcenemy, attackinfo, (npc, info) => attackinfo);
+                    if (!npcenemy.CanPlayerProjectile(p))
+                    {
+                        // Try to trigger possible phase related to projectile
+                        npcenemy.HandlePhases(p);
+                        return;
+                    }
+                }
+                else if (this is Npc n && target is Player penemy)
+                {
+                    penemy.FightingNpcBaseIds.AddOrUpdate(n.Base.Id, CombatTimer, (guid, t) => CombatTimer);
+                    var npclist = penemy.FightingListNpcs.GetOrAdd(n.Base.Id, new ConcurrentDictionary<Npc, AttackInfo>());
+                    npclist.AddOrUpdate(n, npc => null, (npc, info) => info);
+                }
+            }
+
             if (parentSpell != null)
             {
-                TryAttack(target, parentSpell, false, false, alreadyCrit, "", true);
+                TryAttack(target, parentSpell, false, false, alreadyCrit, "", projectile?.Speed > 0, projectile?.Speed == 0);
             }
 
             var targetPlayer = target as Player;
@@ -1604,7 +1609,8 @@ namespace Intersect.Server.Entities
             bool isNextSpell = false,
             bool reUseValues = false,
             int baseDamage = 0,
-            int secondaryDamage = 0
+            int secondaryDamage = 0,
+            bool isAnchored = false
         )
         {
             if (target is Resource)
@@ -1888,8 +1894,8 @@ namespace Intersect.Server.Entities
                     // Do not reuse values on crit because it's a new additional effect
                     CastSpell(spellBase.Combat.CritEffectSpellId, -1, true, spellBase.Name, target, isNextSpell);
                 }
-                // Next effect for projectile is excluded because handled when the projectile is created
-                if (spellBase.Combat.NextEffectSpellId != Guid.Empty && !fromProjectile && Randomization.Next(1, 101) <= spellBase.Combat.NextEffectSpellChance)
+                // Next effect for projectile and area is excluded because handled when they are created
+                if (spellBase.Combat.NextEffectSpellId != Guid.Empty && !fromProjectile && !isAnchored && Randomization.Next(1, 101) <= spellBase.Combat.NextEffectSpellChance)
                 {
                     var nextIsCrit = isCrit || alreadyCrit;
                     // TODO Check if we reuse crit everytime or not
@@ -2553,7 +2559,17 @@ namespace Intersect.Server.Entities
                         case SpellTargetTypes.Anchored:
                             if (spellBase.Combat.CastRange > 0)
                             {
-                                var tile = new TileHelper(MapId, X, Y);
+                                TileHelper tile = new TileHelper(MapId, X, Y);
+                                byte z = (byte)Z;
+                                if (specificTarget == null)
+                                {
+                                    tile = new TileHelper(MapId, X, Y);
+                                }
+                                else
+                                {
+                                    tile = new TileHelper(specificTarget.MapId, specificTarget.X, specificTarget.Y);
+                                    z = (byte)specificTarget.Z;
+                                }
                                 if (tile.Translate(Projectile.GetRangeX(Dir, spellBase.Combat.CastRange), Projectile.GetRangeY(Dir, spellBase.Combat.CastRange)))
                                 {
                                     if (spellBase.Combat.Projectile?.Speed == 0)
@@ -2561,8 +2577,8 @@ namespace Intersect.Server.Entities
                                         // Projectile with speed equal to 0 is a custom Area
                                         MapInstance.Get(tile.GetMapId())
                                             .SpawnMapProjectile(
-                                                this, spellBase.Combat.Projectile, spellBase, null, tile.GetMapId(), tile.GetX(), tile.GetY(), (byte)Z,
-                                                (byte)Dir, null, alreadyCrit
+                                                this, spellBase.Combat.Projectile, spellBase, null, tile.GetMapId(), tile.GetX(), tile.GetY(), z,
+                                                (byte)Dir, specificTarget, alreadyCrit
                                             );
                                     }
                                     else
@@ -2576,16 +2592,51 @@ namespace Intersect.Server.Entities
                                 if (spellBase.Combat.Projectile?.Speed == 0)
                                 {
                                     // Projectile with speed equal to 0 is a custom Area
-                                    MapInstance.Get(MapId)
+                                    if (specificTarget == null)
+                                    {
+                                        MapInstance.Get(MapId)
                                         .SpawnMapProjectile(
                                             this, spellBase.Combat.Projectile, spellBase, null, MapId, (byte)X, (byte)Y, (byte)Z,
                                             (byte)Dir, null, alreadyCrit
                                         );
+                                    }
+                                    else
+                                    {
+                                        MapInstance.Get(MapId)
+                                        .SpawnMapProjectile(
+                                            this, spellBase.Combat.Projectile, spellBase, null, specificTarget.MapId, (byte)specificTarget.X, (byte)specificTarget.Y, (byte)specificTarget.Z,
+                                            (byte)Dir, specificTarget, alreadyCrit
+                                        );
+                                    }
                                 }
                                 else
                                 {
-                                    HandleAoESpell(spellId, spellBase.Combat.HitRadius, MapId, X, Y, null, alreadyCrit, sourceSpellName, isNextSpell, reUseValues, baseDamage, secondaryDamage);
-                                }  
+                                    if (specificTarget == null)
+                                    {
+                                        HandleAoESpell(spellId, spellBase.Combat.HitRadius, MapId, X, Y, null, alreadyCrit, sourceSpellName, isNextSpell, reUseValues, baseDamage, secondaryDamage, true);
+                                    }
+                                    else
+                                    {
+                                        HandleAoESpell(spellId, spellBase.Combat.HitRadius, specificTarget.MapId, specificTarget.X, specificTarget.Y, null, alreadyCrit, sourceSpellName, isNextSpell, reUseValues, baseDamage, secondaryDamage, true);
+                                    }    
+                                }
+
+                                if (spellBase.Combat.NextEffectSpellId != Guid.Empty && Randomization.Next(1, 101) <= spellBase.Combat.NextEffectSpellChance)
+                                {
+                                    var damageHealth = baseDamage;
+                                    var damageMana = secondaryDamage;
+                                    // Can not reuse value for projectile because it is calculated on impact
+                                    if (isNextSpell)
+                                    {
+                                        // Transmit the originals base and secondary damage
+                                        CastSpell(spellBase.Combat.NextEffectSpellId, -1, alreadyCrit, sourceSpellName, specificTarget, true, reUseValues, damageHealth, damageMana);
+                                    }
+                                    else
+                                    {
+                                        // Re-calculte base and secondary damage for the next spell
+                                        CastSpell(spellBase.Combat.NextEffectSpellId, -1, alreadyCrit, sourceSpellName, specificTarget, true, false, damageHealth, damageMana);
+                                    }
+                                }
                             }
                             break;
                         case SpellTargetTypes.Projectile:
@@ -2715,7 +2766,7 @@ namespace Intersect.Server.Entities
             Entity spellTarget,
             bool alreadyCrit = false,
             string sourceSpellName = "",
-            bool isNextSpell = false, bool reUseValues = false, int baseDamage = 0, int secondaryDamage = 0
+            bool isNextSpell = false, bool reUseValues = false, int baseDamage = 0, int secondaryDamage = 0, bool isAnchored = false
         )
         {
             var spellBase = SpellBase.Get(spellId);
@@ -2752,7 +2803,7 @@ namespace Intersect.Server.Entities
                                             }
                                         }
 
-                                        TryAttack(entity, spellBase, false, false, alreadyCrit, sourceSpellName, false, isNextSpell, reUseValues, baseDamage, secondaryDamage); //Handle damage
+                                        TryAttack(entity, spellBase, false, false, alreadyCrit, sourceSpellName, false, isNextSpell, reUseValues, baseDamage, secondaryDamage, isAnchored); //Handle damage
                                     }
                                 }
                             }

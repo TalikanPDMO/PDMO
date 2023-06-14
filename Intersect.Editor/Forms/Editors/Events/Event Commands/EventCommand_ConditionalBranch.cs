@@ -949,7 +949,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                         break;
                     case AttackType.Projectile:
                         //Retrieve all spells that are projectiles
-                        var projspelllist = SpellBase.Lookup.Where(pair => ((SpellBase)pair.Value)?.Combat?.ProjectileId != Guid.Empty)
+                        var projspelllist = SpellBase.Lookup.Where(pair => ((SpellBase)pair.Value)?.Combat?.TargetType == SpellTargetTypes.Projectile)
                             .OrderBy(p => p.Value?.Name)
                             .Select(pair => pair.Value)
                             .ToList();
@@ -970,7 +970,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                         }
                         break;
                     case AttackType.Spell:
-                        var spelllist = SpellBase.Lookup.Where(pair => ((SpellBase)pair.Value)?.Combat?.ProjectileId == Guid.Empty)
+                        var spelllist = SpellBase.Lookup.Where(pair => ((SpellBase)pair.Value)?.Combat?.TargetType != SpellTargetTypes.Projectile)
                             .OrderBy(p => p.Value?.Name)
                             .Select(pair => pair.Value)
                             .ToList();
