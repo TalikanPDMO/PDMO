@@ -86,6 +86,16 @@ namespace Intersect.Editor.Forms.Editors
             this.nudCastRange = new DarkUI.Controls.DarkNumericUpDown();
             this.lblProjectile = new System.Windows.Forms.Label();
             this.cmbProjectile = new DarkUI.Controls.DarkComboBox();
+            this.grpWarp = new DarkUI.Controls.DarkGroupBox();
+            this.nudWarpY = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudWarpX = new DarkUI.Controls.DarkNumericUpDown();
+            this.btnVisualMapSelector = new DarkUI.Controls.DarkButton();
+            this.cmbWarpMap = new DarkUI.Controls.DarkComboBox();
+            this.cmbDirection = new DarkUI.Controls.DarkComboBox();
+            this.lblWarpDir = new System.Windows.Forms.Label();
+            this.lblY = new System.Windows.Forms.Label();
+            this.lblX = new System.Windows.Forms.Label();
+            this.lblMap = new System.Windows.Forms.Label();
             this.grpEvent = new DarkUI.Controls.DarkGroupBox();
             this.cmbEvent = new DarkUI.Controls.DarkComboBox();
             this.grpCombat = new DarkUI.Controls.DarkGroupBox();
@@ -172,16 +182,6 @@ namespace Intersect.Editor.Forms.Editors
             this.chkIgnoreActiveResources = new DarkUI.Controls.DarkCheckBox();
             this.lblRange = new System.Windows.Forms.Label();
             this.scrlRange = new DarkUI.Controls.DarkScrollBar();
-            this.grpWarp = new DarkUI.Controls.DarkGroupBox();
-            this.nudWarpY = new DarkUI.Controls.DarkNumericUpDown();
-            this.nudWarpX = new DarkUI.Controls.DarkNumericUpDown();
-            this.btnVisualMapSelector = new DarkUI.Controls.DarkButton();
-            this.cmbWarpMap = new DarkUI.Controls.DarkComboBox();
-            this.cmbDirection = new DarkUI.Controls.DarkComboBox();
-            this.lblWarpDir = new System.Windows.Forms.Label();
-            this.lblY = new System.Windows.Forms.Label();
-            this.lblX = new System.Windows.Forms.Label();
-            this.lblMap = new System.Windows.Forms.Label();
             this.toolStrip = new DarkUI.Controls.DarkToolStrip();
             this.toolStripItemNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -213,6 +213,9 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudDuration)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHitRadius)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCastRange)).BeginInit();
+            this.grpWarp.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWarpY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWarpX)).BeginInit();
             this.grpEvent.SuspendLayout();
             this.grpCombat.SuspendLayout();
             this.grpNextSpell.SuspendLayout();
@@ -250,9 +253,6 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudHPDamage)).BeginInit();
             this.grpDash.SuspendLayout();
             this.grpDashCollisions.SuspendLayout();
-            this.grpWarp.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudWarpY)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudWarpX)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.grpSpells.SuspendLayout();
             this.SuspendLayout();
@@ -264,10 +264,10 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Controls.Add(this.grpSpellCost);
             this.pnlContainer.Controls.Add(this.grpRequirements);
             this.pnlContainer.Controls.Add(this.grpTargetInfo);
+            this.pnlContainer.Controls.Add(this.grpWarp);
             this.pnlContainer.Controls.Add(this.grpEvent);
             this.pnlContainer.Controls.Add(this.grpCombat);
             this.pnlContainer.Controls.Add(this.grpDash);
-            this.pnlContainer.Controls.Add(this.grpWarp);
             this.pnlContainer.Location = new System.Drawing.Point(221, 40);
             this.pnlContainer.Name = "pnlContainer";
             this.pnlContainer.Size = new System.Drawing.Size(460, 527);
@@ -401,7 +401,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.chkBound.AutoSize = true;
             this.chkBound.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkBound.Location = new System.Drawing.Point(9, 329);
+            this.chkBound.Location = new System.Drawing.Point(142, 190);
             this.chkBound.Name = "chkBound";
             this.chkBound.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.chkBound.Size = new System.Drawing.Size(63, 17);
@@ -1041,6 +1041,152 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbProjectile.TextPadding = new System.Windows.Forms.Padding(2);
             this.cmbProjectile.Visible = false;
             this.cmbProjectile.SelectedIndexChanged += new System.EventHandler(this.cmbProjectile_SelectedIndexChanged);
+            // 
+            // grpWarp
+            // 
+            this.grpWarp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpWarp.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpWarp.Controls.Add(this.nudWarpY);
+            this.grpWarp.Controls.Add(this.nudWarpX);
+            this.grpWarp.Controls.Add(this.btnVisualMapSelector);
+            this.grpWarp.Controls.Add(this.cmbWarpMap);
+            this.grpWarp.Controls.Add(this.cmbDirection);
+            this.grpWarp.Controls.Add(this.lblWarpDir);
+            this.grpWarp.Controls.Add(this.lblY);
+            this.grpWarp.Controls.Add(this.lblX);
+            this.grpWarp.Controls.Add(this.lblMap);
+            this.grpWarp.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpWarp.Location = new System.Drawing.Point(215, 105);
+            this.grpWarp.Name = "grpWarp";
+            this.grpWarp.Size = new System.Drawing.Size(225, 192);
+            this.grpWarp.TabIndex = 35;
+            this.grpWarp.TabStop = false;
+            this.grpWarp.Text = "Warp Caster:";
+            this.grpWarp.Visible = false;
+            // 
+            // nudWarpY
+            // 
+            this.nudWarpY.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudWarpY.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudWarpY.Location = new System.Drawing.Point(30, 91);
+            this.nudWarpY.Name = "nudWarpY";
+            this.nudWarpY.Size = new System.Drawing.Size(190, 20);
+            this.nudWarpY.TabIndex = 35;
+            this.nudWarpY.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudWarpY.ValueChanged += new System.EventHandler(this.nudWarpY_ValueChanged);
+            // 
+            // nudWarpX
+            // 
+            this.nudWarpX.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudWarpX.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudWarpX.Location = new System.Drawing.Point(30, 63);
+            this.nudWarpX.Name = "nudWarpX";
+            this.nudWarpX.Size = new System.Drawing.Size(190, 20);
+            this.nudWarpX.TabIndex = 34;
+            this.nudWarpX.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudWarpX.ValueChanged += new System.EventHandler(this.nudWarpX_ValueChanged);
+            // 
+            // btnVisualMapSelector
+            // 
+            this.btnVisualMapSelector.Location = new System.Drawing.Point(3, 151);
+            this.btnVisualMapSelector.Name = "btnVisualMapSelector";
+            this.btnVisualMapSelector.Padding = new System.Windows.Forms.Padding(5);
+            this.btnVisualMapSelector.Size = new System.Drawing.Size(220, 23);
+            this.btnVisualMapSelector.TabIndex = 33;
+            this.btnVisualMapSelector.Text = "Open Visual Interface";
+            this.btnVisualMapSelector.Click += new System.EventHandler(this.btnVisualMapSelector_Click);
+            // 
+            // cmbWarpMap
+            // 
+            this.cmbWarpMap.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbWarpMap.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbWarpMap.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbWarpMap.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbWarpMap.DrawDropdownHoverOutline = false;
+            this.cmbWarpMap.DrawFocusRectangle = false;
+            this.cmbWarpMap.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbWarpMap.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbWarpMap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbWarpMap.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbWarpMap.FormattingEnabled = true;
+            this.cmbWarpMap.Location = new System.Drawing.Point(3, 34);
+            this.cmbWarpMap.Name = "cmbWarpMap";
+            this.cmbWarpMap.Size = new System.Drawing.Size(220, 21);
+            this.cmbWarpMap.TabIndex = 30;
+            this.cmbWarpMap.Text = null;
+            this.cmbWarpMap.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbWarpMap.SelectedIndexChanged += new System.EventHandler(this.cmbWarpMap_SelectedIndexChanged);
+            // 
+            // cmbDirection
+            // 
+            this.cmbDirection.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbDirection.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbDirection.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbDirection.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbDirection.DrawDropdownHoverOutline = false;
+            this.cmbDirection.DrawFocusRectangle = false;
+            this.cmbDirection.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbDirection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDirection.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbDirection.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbDirection.FormattingEnabled = true;
+            this.cmbDirection.Items.AddRange(new object[] {
+            "Retain Direction",
+            "Up",
+            "Down",
+            "Left",
+            "Right"});
+            this.cmbDirection.Location = new System.Drawing.Point(30, 122);
+            this.cmbDirection.Name = "cmbDirection";
+            this.cmbDirection.Size = new System.Drawing.Size(189, 21);
+            this.cmbDirection.TabIndex = 32;
+            this.cmbDirection.Text = "Retain Direction";
+            this.cmbDirection.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbDirection.SelectedIndexChanged += new System.EventHandler(this.cmbDirection_SelectedIndexChanged);
+            // 
+            // lblWarpDir
+            // 
+            this.lblWarpDir.AutoSize = true;
+            this.lblWarpDir.Location = new System.Drawing.Point(6, 125);
+            this.lblWarpDir.Name = "lblWarpDir";
+            this.lblWarpDir.Size = new System.Drawing.Size(23, 13);
+            this.lblWarpDir.TabIndex = 31;
+            this.lblWarpDir.Text = "Dir:";
+            // 
+            // lblY
+            // 
+            this.lblY.AutoSize = true;
+            this.lblY.Location = new System.Drawing.Point(7, 93);
+            this.lblY.Name = "lblY";
+            this.lblY.Size = new System.Drawing.Size(17, 13);
+            this.lblY.TabIndex = 29;
+            this.lblY.Text = "Y:";
+            // 
+            // lblX
+            // 
+            this.lblX.AutoSize = true;
+            this.lblX.Location = new System.Drawing.Point(7, 65);
+            this.lblX.Name = "lblX";
+            this.lblX.Size = new System.Drawing.Size(17, 13);
+            this.lblX.TabIndex = 28;
+            this.lblX.Text = "X:";
+            // 
+            // lblMap
+            // 
+            this.lblMap.AutoSize = true;
+            this.lblMap.Location = new System.Drawing.Point(6, 18);
+            this.lblMap.Name = "lblMap";
+            this.lblMap.Size = new System.Drawing.Size(31, 13);
+            this.lblMap.TabIndex = 27;
+            this.lblMap.Text = "Map:";
             // 
             // grpEvent
             // 
@@ -2377,152 +2523,6 @@ namespace Intersect.Editor.Forms.Editors
             this.scrlRange.TabIndex = 39;
             this.scrlRange.ValueChanged += new System.EventHandler<DarkUI.Controls.ScrollValueEventArgs>(this.scrlRange_Scroll);
             // 
-            // grpWarp
-            // 
-            this.grpWarp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpWarp.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpWarp.Controls.Add(this.nudWarpY);
-            this.grpWarp.Controls.Add(this.nudWarpX);
-            this.grpWarp.Controls.Add(this.btnVisualMapSelector);
-            this.grpWarp.Controls.Add(this.cmbWarpMap);
-            this.grpWarp.Controls.Add(this.cmbDirection);
-            this.grpWarp.Controls.Add(this.lblWarpDir);
-            this.grpWarp.Controls.Add(this.lblY);
-            this.grpWarp.Controls.Add(this.lblX);
-            this.grpWarp.Controls.Add(this.lblMap);
-            this.grpWarp.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpWarp.Location = new System.Drawing.Point(215, 105);
-            this.grpWarp.Name = "grpWarp";
-            this.grpWarp.Size = new System.Drawing.Size(225, 182);
-            this.grpWarp.TabIndex = 35;
-            this.grpWarp.TabStop = false;
-            this.grpWarp.Text = "Warp Caster:";
-            this.grpWarp.Visible = false;
-            // 
-            // nudWarpY
-            // 
-            this.nudWarpY.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudWarpY.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudWarpY.Location = new System.Drawing.Point(42, 91);
-            this.nudWarpY.Name = "nudWarpY";
-            this.nudWarpY.Size = new System.Drawing.Size(190, 20);
-            this.nudWarpY.TabIndex = 35;
-            this.nudWarpY.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudWarpY.ValueChanged += new System.EventHandler(this.nudWarpY_ValueChanged);
-            // 
-            // nudWarpX
-            // 
-            this.nudWarpX.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudWarpX.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudWarpX.Location = new System.Drawing.Point(42, 63);
-            this.nudWarpX.Name = "nudWarpX";
-            this.nudWarpX.Size = new System.Drawing.Size(190, 20);
-            this.nudWarpX.TabIndex = 34;
-            this.nudWarpX.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudWarpX.ValueChanged += new System.EventHandler(this.nudWarpX_ValueChanged);
-            // 
-            // btnVisualMapSelector
-            // 
-            this.btnVisualMapSelector.Location = new System.Drawing.Point(9, 151);
-            this.btnVisualMapSelector.Name = "btnVisualMapSelector";
-            this.btnVisualMapSelector.Padding = new System.Windows.Forms.Padding(5);
-            this.btnVisualMapSelector.Size = new System.Drawing.Size(222, 23);
-            this.btnVisualMapSelector.TabIndex = 33;
-            this.btnVisualMapSelector.Text = "Open Visual Interface";
-            this.btnVisualMapSelector.Click += new System.EventHandler(this.btnVisualMapSelector_Click);
-            // 
-            // cmbWarpMap
-            // 
-            this.cmbWarpMap.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbWarpMap.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbWarpMap.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbWarpMap.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbWarpMap.DrawDropdownHoverOutline = false;
-            this.cmbWarpMap.DrawFocusRectangle = false;
-            this.cmbWarpMap.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbWarpMap.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbWarpMap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbWarpMap.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbWarpMap.FormattingEnabled = true;
-            this.cmbWarpMap.Location = new System.Drawing.Point(10, 34);
-            this.cmbWarpMap.Name = "cmbWarpMap";
-            this.cmbWarpMap.Size = new System.Drawing.Size(221, 21);
-            this.cmbWarpMap.TabIndex = 30;
-            this.cmbWarpMap.Text = null;
-            this.cmbWarpMap.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbWarpMap.SelectedIndexChanged += new System.EventHandler(this.cmbWarpMap_SelectedIndexChanged);
-            // 
-            // cmbDirection
-            // 
-            this.cmbDirection.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbDirection.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbDirection.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbDirection.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbDirection.DrawDropdownHoverOutline = false;
-            this.cmbDirection.DrawFocusRectangle = false;
-            this.cmbDirection.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbDirection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbDirection.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbDirection.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbDirection.FormattingEnabled = true;
-            this.cmbDirection.Items.AddRange(new object[] {
-            "Retain Direction",
-            "Up",
-            "Down",
-            "Left",
-            "Right"});
-            this.cmbDirection.Location = new System.Drawing.Point(42, 122);
-            this.cmbDirection.Name = "cmbDirection";
-            this.cmbDirection.Size = new System.Drawing.Size(189, 21);
-            this.cmbDirection.TabIndex = 32;
-            this.cmbDirection.Text = "Retain Direction";
-            this.cmbDirection.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbDirection.SelectedIndexChanged += new System.EventHandler(this.cmbDirection_SelectedIndexChanged);
-            // 
-            // lblWarpDir
-            // 
-            this.lblWarpDir.AutoSize = true;
-            this.lblWarpDir.Location = new System.Drawing.Point(6, 125);
-            this.lblWarpDir.Name = "lblWarpDir";
-            this.lblWarpDir.Size = new System.Drawing.Size(23, 13);
-            this.lblWarpDir.TabIndex = 31;
-            this.lblWarpDir.Text = "Dir:";
-            // 
-            // lblY
-            // 
-            this.lblY.AutoSize = true;
-            this.lblY.Location = new System.Drawing.Point(7, 93);
-            this.lblY.Name = "lblY";
-            this.lblY.Size = new System.Drawing.Size(17, 13);
-            this.lblY.TabIndex = 29;
-            this.lblY.Text = "Y:";
-            // 
-            // lblX
-            // 
-            this.lblX.AutoSize = true;
-            this.lblX.Location = new System.Drawing.Point(7, 65);
-            this.lblX.Name = "lblX";
-            this.lblX.Size = new System.Drawing.Size(17, 13);
-            this.lblX.TabIndex = 28;
-            this.lblX.Text = "X:";
-            // 
-            // lblMap
-            // 
-            this.lblMap.AutoSize = true;
-            this.lblMap.Location = new System.Drawing.Point(6, 18);
-            this.lblMap.Name = "lblMap";
-            this.lblMap.Size = new System.Drawing.Size(31, 13);
-            this.lblMap.TabIndex = 27;
-            this.lblMap.Text = "Map:";
-            // 
             // toolStrip
             // 
             this.toolStrip.AutoSize = false;
@@ -2772,6 +2772,10 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudDuration)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHitRadius)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCastRange)).EndInit();
+            this.grpWarp.ResumeLayout(false);
+            this.grpWarp.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWarpY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWarpX)).EndInit();
             this.grpEvent.ResumeLayout(false);
             this.grpCombat.ResumeLayout(false);
             this.grpNextSpell.ResumeLayout(false);
@@ -2817,10 +2821,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDash.PerformLayout();
             this.grpDashCollisions.ResumeLayout(false);
             this.grpDashCollisions.PerformLayout();
-            this.grpWarp.ResumeLayout(false);
-            this.grpWarp.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudWarpY)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudWarpX)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.grpSpells.ResumeLayout(false);
