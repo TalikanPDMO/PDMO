@@ -716,10 +716,19 @@ namespace Intersect.Server.Entities
                     var targetType = spellBase.Combat?.TargetType ?? SpellTargetTypes.Targeted;
                     var projectileBase = spellBase.Combat?.Projectile;
 
-                    //TODO Improve here for new AoE spells
-                    if (targetType == SpellTargetTypes.Anchored && !InRangeOf(target, spellBase.Combat.HitRadius + spellBase.Combat.CastRange, spellBase.Combat.SquareRange))
+                    if (targetType == SpellTargetTypes.Anchored && spellBase.SpellType == SpellTypes.CombatSpell)
                     {
-                        continue;
+                        var dirsToHitTarget = AreaInRange(target, spellBase);
+                        if (dirsToHitTarget.Count == 0)
+                        {
+                            // Target is unreachable with the projectile in any possible directions
+                            continue;
+                        }
+                        else if (!dirsToHitTarget.Contains(Dir))
+                        {
+                            // Need to change dir for the projectile
+                            neededDir = dirsToHitTarget[0];
+                        }
                     }
                     else if (targetType == SpellTargetTypes.Targeted && !InRangeOf(target, range, spellBase.Combat.SquareRange))
                     {
@@ -728,7 +737,6 @@ namespace Intersect.Server.Entities
                     }
                     else if (targetType == SpellTargetTypes.Projectile && spellBase.SpellType == SpellTypes.CombatSpell && projectileBase != null)
                     {
-                        //range = projectileBase.Range;
                         var dirsToHitTarget = ProjectileInRange(target, projectileBase);
                         if (dirsToHitTarget.Count == 0)
                         {
@@ -807,9 +815,35 @@ namespace Intersect.Server.Entities
 
             if (randomSpellBase.CastAnimationId != Guid.Empty)
             {
-                PacketSender.SendAnimationToProximity(randomSpellBase.CastAnimationId, 1, Id, MapId, 0, 0, (sbyte) Dir);
-
                 //Target Type 1 will be global entity
+                PacketSender.SendAnimationToProximity(randomSpellBase.CastAnimationId, 1, Id, MapId, 0, 0, (sbyte) Dir);
+            }
+
+            if (randomSpellBase.CastTargetAnimationId != Guid.Empty)
+            {
+                if (randomSpellBase.SpellType == SpellTypes.CombatSpell)
+                {
+                    // Play casttarget animation only for Targeted and Anchored CombatSpells
+                    if (randomSpellBase.Combat.TargetType == SpellTargetTypes.Anchored)
+                    {
+                        TileHelper tile = new TileHelper(MapId, X, Y);
+                        if (tile.Translate(Projectile.GetRangeX(Dir, randomSpellBase.Combat.CastRange), Projectile.GetRangeY(Dir, randomSpellBase.Combat.CastRange)))
+                        {
+                            //Target Type -1 will be a tile
+                            PacketSender.SendAnimationToProximity(randomSpellBase.CastTargetAnimationId, -1, Guid.Empty, tile.GetMapId(), (byte)tile.GetX(), (byte)tile.GetY(), (sbyte)Directions.Up);
+                        }
+                    }
+                    else if (randomSpellBase.Combat.TargetType == SpellTargetTypes.Targeted)
+                    {
+                        //Target Type 1 will be global entity
+                        PacketSender.SendAnimationToProximity(randomSpellBase.CastTargetAnimationId, 1, CastTarget.Id, CastTarget.MapId, 0, 0, (sbyte)Directions.Up);
+                    }
+                }
+                else if (randomSpellBase.SpellType == SpellTypes.WarpTo)
+                {
+                    //Target Type 1 will be global entity
+                    PacketSender.SendAnimationToProximity(randomSpellBase.CastTargetAnimationId, 1, CastTarget.Id, CastTarget.MapId, 0, 0, (sbyte)Directions.Up);
+                }
             }
 
             PacketSender.SendEntityCastTime(this, randomSpellId);
@@ -856,6 +890,126 @@ namespace Intersect.Server.Entities
                         }
                     }
                 }
+            }
+            return directions;
+        }
+
+        // Return the direction needed to hit the target, -1 if the target is unreachable
+        public List<int> AreaInRange(Entity target, SpellBase spellBase)
+        {
+            //Calculate World Tile of Me
+            var xMe = X + Map.MapGridX * Options.MapWidth;
+            var yMe = Y + Map.MapGridY * Options.MapHeight;
+
+            //Calculate world tile of target
+            var xTarget = target.X + target.Map.MapGridX * Options.MapWidth;
+            var yTarget = target.Y + target.Map.MapGridY * Options.MapHeight;
+
+            var radius = spellBase.Combat.HitRadius;
+
+            List<int> directions = new List<int>();
+            if (spellBase.Combat.Projectile?.Speed == 0)
+            {
+                var projectileBase = spellBase.Combat.Projectile;
+                for (byte x = 0; x < ProjectileBase.SPAWN_LOCATIONS_WIDTH; x++)
+                {
+                    for (byte y = 0; y < ProjectileBase.SPAWN_LOCATIONS_HEIGHT; y++)
+                    {
+                        for (byte d = 0; d < ProjectileBase.MAX_PROJECTILE_DIRECTIONS; d++)
+                        {
+                            if (projectileBase.SpawnLocations[x, y].Directions[d])
+                            {
+                                // Check for each possible directions : 0 1 2 3
+                                for (byte npc_d = 0; npc_d < 4; npc_d++)
+                                {
+                                    var areaPosX = xMe + Projectile.FindProjectileRotationX(npc_d, x - 2, y - 2)
+                                        + (int)Projectile.GetRangeX(Projectile.FindProjectileRotationDir(npc_d, d), spellBase.Combat.CastRange);
+
+                                    var areaPosY = yMe + Projectile.FindProjectileRotationY(npc_d, x - 2, y - 2)
+                                        + (int)Projectile.GetRangeY(Projectile.FindProjectileRotationDir(npc_d, d), spellBase.Combat.CastRange);
+                                    if (areaPosX == xTarget && areaPosY == yTarget)
+                                    {
+                                        directions.Add(npc_d);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (spellBase.Combat.CastRange == 0)
+            {
+                // Baisc AoE on self, no need to turn so we keep our Dir and only verify target is in range
+                if (InRangeOf(target, spellBase.Combat.HitRadius, spellBase.Combat.SquareHitRadius))
+                {
+                    directions.Add(Dir);
+                }
+            }
+            else
+            {
+                for (byte npc_d = 0; npc_d < 4; npc_d++)
+                {
+                    var areaPosX = xMe + Projectile.GetRangeX(npc_d, spellBase.Combat.CastRange);
+                    var areaPosY = yMe + Projectile.GetRangeY(npc_d, spellBase.Combat.CastRange);
+                    if (spellBase.Combat.SquareHitRadius)
+                    {
+                        for (int w = -radius; w <= radius; w++)
+                        {
+                            for (int h = -radius; h <= radius; h++)
+                            {
+                                if (areaPosX + w == xTarget && areaPosY + h == yTarget)
+                                {
+                                    directions.Add(npc_d);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int w = -radius; w <= radius; w++)
+                        {
+                            for (int h = -radius; h <= radius; h++)
+                            {
+                                if (Math.Abs(w) + Math.Abs(h) <= radius && areaPosX + w == xTarget && areaPosY + h == yTarget)
+                                {
+                                    directions.Add(npc_d);
+                                }
+                            }
+                        }
+                    }
+                    /*var npcTile = new TileHelper(MapId, X, Y);
+                    if (npcTile.Translate(Projectile.GetRangeX(npc_d, spellBase.Combat.CastRange), Projectile.GetRangeY(npc_d, spellBase.Combat.CastRange)))
+                    {
+                        if (spellBase.Combat.SquareHitRadius)
+                        {
+                            for (int w = -radius; w <= radius; w++)
+                            {
+                                for (int h = -radius; h <= radius; h++)
+                                {
+                                    var areaTile = new TileHelper(npcTile.GetMapId(), npcTile.GetX(), npcTile.GetY());
+                                    if (areaTile.Translate(w, h) && npcTile.GetX() == xTarget && npcTile.GetY() == yTarget)
+                                    {
+                                        PacketSender.SendAnimationToProximity(spellBase.TilesAnimationId, -1, Guid.Empty, tile.GetMapId(), tile.GetX(), tile.GetY(), (sbyte)Directions.Up);
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            for (int w = -radius; w <= radius; w++)
+                            {
+                                for (int h = -radius; h <= radius; h++)
+                                {
+                                    tile = new TileHelper(startMapId, startX, startY);
+                                    if (Math.Abs(w) + Math.Abs(h) <= radius && tile.Translate(w, h))
+                                    {
+                                        PacketSender.SendAnimationToProximity(spellBase.TilesAnimationId, -1, Guid.Empty, tile.GetMapId(), tile.GetX(), tile.GetY(), (sbyte)Directions.Up);
+                                    }
+                                }
+                            }
+                        }
+                    }*/
+                }    
             }
             return directions;
         }

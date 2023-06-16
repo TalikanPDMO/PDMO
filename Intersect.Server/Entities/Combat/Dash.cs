@@ -1,6 +1,8 @@
 ﻿using Intersect.Enums;
+using Intersect.GameObjects;
 using Intersect.Server.General;
 using Intersect.Server.Networking;
+using System;
 
 namespace Intersect.Server.Entities.Combat
 {
@@ -18,6 +20,8 @@ namespace Intersect.Server.Entities.Combat
 
         public long TransmittionTimer;
 
+        public SpellBase Spell;
+
         public Dash(
             Entity en,
             int range,
@@ -25,12 +29,14 @@ namespace Intersect.Server.Entities.Combat
             bool blockPass = false,
             bool activeResourcePass = false,
             bool deadResourcePass = false,
-            bool zdimensionPass = false
+            bool zdimensionPass = false,
+            SpellBase spellBase = null
         )
         {
             DistanceTraveled = 0;
             Direction = direction;
             Facing = (byte) en.Dir;
+            Spell = spellBase;
 
             CalculateRange(en, range, blockPass, activeResourcePass, deadResourcePass, zdimensionPass);
             if (Range <= 0)
@@ -65,6 +71,12 @@ namespace Intersect.Server.Entities.Combat
                 en, en.MapId, (byte) en.X, (byte) en.Y, (int) (Options.MaxDashSpeed * (Range / 10f)),
                 Direction == Facing ? (sbyte) Direction : (sbyte) -1
             );
+
+            // Play the animation on the dash end tile
+            if (Spell?.ImpactAnimation != null)
+            {
+                PacketSender.SendAnimationToProximity(Spell.ImpactAnimationId, -1, Guid.Empty, en.MapId, (byte)en.X, (byte)en.Y, (sbyte)Directions.Up);
+            }
 
             en.MoveTimer = Globals.Timing.Milliseconds + Options.MaxDashSpeed;
         }
@@ -116,22 +128,17 @@ namespace Intersect.Server.Entities.Combat
                         return;
                     }
                 }
-/*                if (n == (int) EntityTypes.Resource && activeResourcePass == false)
-                {
-                    return;
-                } //Check for dead resources
-
-                if (n == (int) EntityTypes.Resource && deadResourcePass == false)
-                {
-                    return;
-                }*/
                 
                 //Check for players and solid events
                 if (n == (int) EntityTypes.Player || n == (int) EntityTypes.Event || n == (int)EntityTypes.Projectile)
                 {
                     return;
                 }
-
+                // Play the tile animation (if any) on the entity tile during the dash
+                if (Spell?.TilesAnimation != null)
+                {
+                    PacketSender.SendAnimationToProximity(Spell.TilesAnimationId, -1, Guid.Empty, en.MapId, (byte)en.X, (byte)en.Y, (sbyte)Directions.Up);
+                }
                 en.Move(Direction, null, true, false, true);
                 en.Dir = Facing;
 

@@ -53,6 +53,39 @@ namespace Intersect.GameObjects
             set => CastAnimationId = value?.Id ?? Guid.Empty;
         }
 
+        [Column("CastTargetAnimation")]
+        public Guid CastTargetAnimationId { get; set; }
+
+        [NotMapped]
+        [JsonIgnore]
+        public AnimationBase CastTargetAnimation
+        {
+            get => AnimationBase.Get(CastTargetAnimationId);
+            set => CastTargetAnimationId = value?.Id ?? Guid.Empty;
+        }
+
+        [Column("ImpactAnimation")]
+        public Guid ImpactAnimationId { get; set; }
+
+        [NotMapped]
+        [JsonIgnore]
+        public AnimationBase ImpactAnimation
+        {
+            get => AnimationBase.Get(ImpactAnimationId);
+            set => ImpactAnimationId = value?.Id ?? Guid.Empty;
+        }
+
+        [Column("TilesAnimation")]
+        public Guid TilesAnimationId { get; set; }
+
+        [NotMapped]
+        [JsonIgnore]
+        public AnimationBase TilesAnimation
+        {
+            get => AnimationBase.Get(TilesAnimationId);
+            set => TilesAnimationId = value?.Id ?? Guid.Empty;
+        }
+
         [Column("HitAnimation")]
         public Guid HitAnimationId { get; set; }
 

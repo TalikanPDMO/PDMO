@@ -4712,23 +4712,49 @@ namespace Intersect.Server.Entities
                     SpellCastSlot = spellSlot;
                     CastTarget = Target;
 
-                    //Check if the caster has the right ammunition if a projectile
-                    if (spell.SpellType == SpellTypes.CombatSpell &&
-                        spell.Combat.TargetType == SpellTargetTypes.Projectile &&
-                        spell.Combat.ProjectileId != Guid.Empty)
-                    {
-                        var projectileBase = spell.Combat.Projectile;
-                        if (projectileBase != null && projectileBase.AmmoItemId != Guid.Empty)
-                        {
-                            TryTakeItem(projectileBase.AmmoItemId, projectileBase.AmmoRequired);
-                        }
-                    }
-
                     if (spell.CastAnimationId != Guid.Empty)
                     {
                         PacketSender.SendAnimationToProximity(
-                            spell.CastAnimationId, 1, base.Id, MapId, 0, 0, (sbyte) Dir
+                            spell.CastAnimationId, 1, base.Id, MapId, 0, 0, (sbyte)Dir
                         ); //Target Type 1 will be global entity
+                    }
+
+                   
+                    if (spell.SpellType == SpellTypes.CombatSpell)
+                    {
+                        if (spell.Combat.TargetType == SpellTargetTypes.Projectile &&
+                        spell.Combat.ProjectileId != Guid.Empty)
+                        {
+                            //Check if the caster has the right ammunition if a projectile
+                            var projectileBase = spell.Combat.Projectile;
+                            if (projectileBase != null && projectileBase.AmmoItemId != Guid.Empty)
+                            {
+                                TryTakeItem(projectileBase.AmmoItemId, projectileBase.AmmoRequired);
+                            }
+                        }
+                        else if (spell.CastTargetAnimationId != Guid.Empty)
+                        {
+                            // Play casttarget animation only for Targeted and Anchored CombatSpells
+                            if (spell.Combat.TargetType == SpellTargetTypes.Anchored)
+                            {
+                                TileHelper tile = new TileHelper(MapId, X, Y);
+                                if (tile.Translate(Projectile.GetRangeX(Dir, spell.Combat.CastRange), Projectile.GetRangeY(Dir, spell.Combat.CastRange)))
+                                {
+                                    //Target Type -1 will be a tile
+                                    PacketSender.SendAnimationToProximity(spell.CastTargetAnimationId, -1, Guid.Empty, tile.GetMapId(), (byte)tile.GetX(), (byte)tile.GetY(), (sbyte)Directions.Up);
+                                }
+                            }
+                            else if (spell.Combat.TargetType == SpellTargetTypes.Targeted)
+                            {
+                                //Target Type 1 will be global entity
+                                PacketSender.SendAnimationToProximity(spell.CastTargetAnimationId, 1, CastTarget.Id, CastTarget.MapId, 0, 0, (sbyte)Directions.Up);
+                            }
+                        }
+                    }
+                    else if (spell.SpellType == SpellTypes.WarpTo && spell.CastTargetAnimationId != Guid.Empty)
+                    {
+                        //Target Type 1 will be global entity
+                        PacketSender.SendAnimationToProximity(spell.CastTargetAnimationId, 1, CastTarget.Id, CastTarget.MapId, 0, 0, (sbyte)Directions.Up);
                     }
 
                     //Check if cast should be instance

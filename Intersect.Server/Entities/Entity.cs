@@ -1899,7 +1899,7 @@ namespace Intersect.Server.Entities
                 {
                     var nextIsCrit = isCrit || alreadyCrit;
                     // TODO Check if we reuse crit everytime or not
-                    CastSpell(spellBase.Combat.NextEffectSpellId, -1, nextIsCrit, spellBase.Name, null, true, spellBase.Combat.NextEffectSpellReUseValues, damageHealth, damageMana);
+                    CastSpell(spellBase.Combat.NextEffectSpellId, -1, nextIsCrit, spellBase.Name, target, true, spellBase.Combat.NextEffectSpellReUseValues, damageHealth, damageMana);
                 }
             }
             //TODO Put nextspell here if we want to handle even with critreplace enabled
@@ -2517,14 +2517,15 @@ namespace Intersect.Server.Entities
                     switch (spellBase.Combat.TargetType)
                     {
                         case SpellTargetTypes.Self:
-                            // No need because we play animation in the Attack() function
-                            /*if (spellBase.HitAnimationId != Guid.Empty && spellBase.Combat.Effect != StatusTypes.OnHit)
+                            // Play the impact and tiles animation on the caster current tile
+                            if (spellBase.ImpactAnimation != null)
                             {
-                                PacketSender.SendAnimationToProximity(
-                                    spellBase.HitAnimationId, 1, Id, MapId, 0, 0, (sbyte) Dir
-                                ); //Target Type 1 will be global entity
-                            }*/
-
+                                PacketSender.SendAnimationToProximity(spellBase.ImpactAnimationId, -1, Guid.Empty, MapId, (byte)X, (byte)Y, (sbyte)Directions.Up);
+                            }
+                            if (spellBase.TilesAnimation != null)
+                            {
+                                PacketSender.SendAnimationToProximity(spellBase.TilesAnimationId, -1, Guid.Empty, MapId, (byte)X, (byte)Y, (sbyte)Directions.Up);
+                            }
                             TryAttack(this, spellBase, false, false, alreadyCrit, sourceSpellName, false, isNextSpell, reUseValues, baseDamage, secondaryDamage);
 
                             break;
@@ -2543,6 +2544,12 @@ namespace Intersect.Server.Entities
                                 }
                             }
 
+                            // Play the impact animation on the target tile
+                            if (spellBase.ImpactAnimation != null)
+                            {
+                                PacketSender.SendAnimationToProximity(spellBase.ImpactAnimationId, -1, Guid.Empty, baseTarget.MapId, (byte)baseTarget.X, (byte)baseTarget.Y, (sbyte)Directions.Up);
+                            }
+
                             if (spellBase.Combat.HitRadius > 0) //Single target spells with AoE hit radius'
                             {
                                 HandleAoESpell(
@@ -2552,6 +2559,11 @@ namespace Intersect.Server.Entities
                             }
                             else
                             {
+                                // Play the tile animation on the target tile
+                                if (spellBase.TilesAnimation != null)
+                                {
+                                    PacketSender.SendAnimationToProximity(spellBase.TilesAnimationId, -1, Guid.Empty, baseTarget.MapId, (byte)baseTarget.X, (byte)baseTarget.Y, (sbyte)Directions.Up);
+                                }
                                 TryAttack(baseTarget, spellBase, false, false, alreadyCrit, sourceSpellName, false, isNextSpell, reUseValues, baseDamage, secondaryDamage);
                             }
 
@@ -2559,7 +2571,7 @@ namespace Intersect.Server.Entities
                         case SpellTargetTypes.Anchored:
                             if (spellBase.Combat.CastRange > 0)
                             {
-                                TileHelper tile = new TileHelper(MapId, X, Y);
+                                TileHelper tile;
                                 byte z = (byte)Z;
                                 if (specificTarget == null)
                                 {
@@ -2572,6 +2584,12 @@ namespace Intersect.Server.Entities
                                 }
                                 if (tile.Translate(Projectile.GetRangeX(Dir, spellBase.Combat.CastRange), Projectile.GetRangeY(Dir, spellBase.Combat.CastRange)))
                                 {
+                                    // Play the impact animation on the center tile
+                                    if (spellBase.ImpactAnimation != null)
+                                    {
+                                        PacketSender.SendAnimationToProximity(spellBase.ImpactAnimationId, -1, Guid.Empty, tile.GetMapId(), tile.GetX(), tile.GetY(), (sbyte)Directions.Up);
+                                    }
+
                                     if (spellBase.Combat.Projectile?.Speed == 0)
                                     {
                                         // Projectile with speed equal to 0 is a custom Area
@@ -2589,36 +2607,30 @@ namespace Intersect.Server.Entities
                             }
                             else
                             {
+                                var areaLocation = specificTarget;
+                                if (areaLocation == null)
+                                {
+                                    areaLocation = this;
+                                }
+
+                                // Play the impact animation on the center tile
+                                if (spellBase.ImpactAnimation != null)
+                                {
+                                    PacketSender.SendAnimationToProximity(spellBase.ImpactAnimationId, -1, Guid.Empty, areaLocation.MapId, (byte)areaLocation.X, (byte)areaLocation.Y, (sbyte)Directions.Up);
+                                }
+
                                 if (spellBase.Combat.Projectile?.Speed == 0)
                                 {
                                     // Projectile with speed equal to 0 is a custom Area
-                                    if (specificTarget == null)
-                                    {
-                                        MapInstance.Get(MapId)
+                                    MapInstance.Get(MapId)
                                         .SpawnMapProjectile(
-                                            this, spellBase.Combat.Projectile, spellBase, null, MapId, (byte)X, (byte)Y, (byte)Z,
-                                            (byte)Dir, null, alreadyCrit
-                                        );
-                                    }
-                                    else
-                                    {
-                                        MapInstance.Get(MapId)
-                                        .SpawnMapProjectile(
-                                            this, spellBase.Combat.Projectile, spellBase, null, specificTarget.MapId, (byte)specificTarget.X, (byte)specificTarget.Y, (byte)specificTarget.Z,
+                                            this, spellBase.Combat.Projectile, spellBase, null, areaLocation.MapId, (byte)areaLocation.X, (byte)areaLocation.Y, (byte)areaLocation.Z,
                                             (byte)Dir, specificTarget, alreadyCrit
                                         );
-                                    }
                                 }
                                 else
                                 {
-                                    if (specificTarget == null)
-                                    {
-                                        HandleAoESpell(spellId, spellBase.Combat.HitRadius, MapId, X, Y, null, alreadyCrit, sourceSpellName, isNextSpell, reUseValues, baseDamage, secondaryDamage, true);
-                                    }
-                                    else
-                                    {
-                                        HandleAoESpell(spellId, spellBase.Combat.HitRadius, specificTarget.MapId, specificTarget.X, specificTarget.Y, null, alreadyCrit, sourceSpellName, isNextSpell, reUseValues, baseDamage, secondaryDamage, true);
-                                    }    
+                                    HandleAoESpell(spellId, spellBase.Combat.HitRadius, areaLocation.MapId, areaLocation.X, areaLocation.Y, null, alreadyCrit, sourceSpellName, isNextSpell, reUseValues, baseDamage, secondaryDamage, true);
                                 }
 
                                 if (spellBase.Combat.NextEffectSpellId != Guid.Empty && Randomization.Next(1, 101) <= spellBase.Combat.NextEffectSpellChance)
@@ -2643,22 +2655,16 @@ namespace Intersect.Server.Entities
                             var projectileBase = spellBase.Combat.Projectile;
                             if (projectileBase != null)
                             {
-                                if (specificTarget == null)
+                                var projStart = specificTarget;
+                                if (projStart == null)
                                 {
-                                    MapInstance.Get(MapId)
-                                    .SpawnMapProjectile(
-                                        this, projectileBase, spellBase, null, MapId, (byte)X, (byte)Y, (byte)Z,
-                                        (byte)Dir, null, alreadyCrit
-                                    );
+                                    projStart = this;
                                 }
-                                else
-                                {
-                                    MapInstance.Get(MapId)
+                                MapInstance.Get(MapId)
                                     .SpawnMapProjectile(
-                                        this, projectileBase, spellBase, null, specificTarget.MapId, (byte)specificTarget.X, (byte)specificTarget.Y, (byte)specificTarget.Z,
+                                        this, projectileBase, spellBase, null, projStart.MapId, (byte)projStart.X, (byte)projStart.Y, (byte)projStart.Z,
                                         (byte)Dir, specificTarget, alreadyCrit
                                     );
-                                }
                                 if (spellBase.Combat.NextEffectSpellId != Guid.Empty && Randomization.Next(1, 101) <= spellBase.Combat.NextEffectSpellChance)
                                 {
                                     var damageHealth = baseDamage;
@@ -2691,6 +2697,12 @@ namespace Intersect.Server.Entities
                                     spellBase.Combat.TransformSprite, sourceStatusName
                                 );
 
+                                // Play the impact animation on our current tile
+                                if (spellBase.ImpactAnimation != null)
+                                {
+                                    PacketSender.SendAnimationToProximity(spellBase.ImpactAnimationId, -1, Guid.Empty, MapId, (byte)X, (byte)Y, (sbyte)Directions.Up);
+                                }
+
                                 PacketSender.SendActionMsg(
                                     this, Strings.Combat.status[(int) spellBase.Combat.Effect],
                                     CustomColors.Combat.Status
@@ -2698,6 +2710,11 @@ namespace Intersect.Server.Entities
                             }
                             break;
                         case SpellTargetTypes.Trap:
+                            // Play the impact animation on our current tile
+                            if (spellBase.ImpactAnimation != null)
+                            {
+                                PacketSender.SendAnimationToProximity(spellBase.ImpactAnimationId, -1, Guid.Empty, MapId, (byte)X, (byte)Y, (sbyte)Directions.Up);
+                            }
                             MapInstance.Get(MapId).SpawnTrap(this, spellBase, (byte) X, (byte) Y, (byte) Z);
 
                             break;
@@ -2709,16 +2726,34 @@ namespace Intersect.Server.Entities
                 case SpellTypes.Warp:
                     if (this is Player)
                     {
+                        // Play the impact animation on our current tile before warp
+                        if (spellBase.ImpactAnimation != null)
+                        {
+                            PacketSender.SendAnimationToProximity(spellBase.ImpactAnimationId, -1, Guid.Empty, MapId, (byte)X, (byte)Y, (sbyte)Directions.Up);
+                        }
+
                         Warp(
                             spellBase.Warp.MapId, spellBase.Warp.X, spellBase.Warp.Y,
                             spellBase.Warp.Dir - 1 == -1 ? (byte) this.Dir : (byte) (spellBase.Warp.Dir - 1)
                         );
+
+                        // Play the tile animation on the new player tile
+                        if (spellBase.TilesAnimation != null)
+                        {
+                            PacketSender.SendAnimationToProximity(spellBase.TilesAnimationId, -1, Guid.Empty, spellBase.Warp.MapId, (byte)spellBase.Warp.X, (byte)spellBase.Warp.Y, (sbyte)Directions.Up);
+                        }
                     }
 
                     break;
                 case SpellTypes.WarpTo:
                     if (baseTarget != null)
                     {
+                        // Play the impact animation on our current tile
+                        // TODO change the effect of WarpTo spells
+                        if (spellBase.ImpactAnimation != null)
+                        {
+                            PacketSender.SendAnimationToProximity(spellBase.ImpactAnimationId, -1, Guid.Empty, MapId, (byte)X, (byte)Y, (sbyte)Directions.Up);
+                        }
                         HandleAoESpell(spellId, spellBase.Combat.CastRange, MapId, X, Y, baseTarget, alreadyCrit, sourceSpellName, isNextSpell, reUseValues, baseDamage, secondaryDamage);
                     }
                     break;
@@ -2728,7 +2763,8 @@ namespace Intersect.Server.Entities
                         this, spellBase.Combat.CastRange, (byte) Dir, Convert.ToBoolean(spellBase.Dash.IgnoreMapBlocks),
                         Convert.ToBoolean(spellBase.Dash.IgnoreActiveResources),
                         Convert.ToBoolean(spellBase.Dash.IgnoreInactiveResources),
-                        Convert.ToBoolean(spellBase.Dash.IgnoreZDimensionAttributes)
+                        Convert.ToBoolean(spellBase.Dash.IgnoreZDimensionAttributes),
+                        spellBase
                     );
 
                     break;
@@ -2777,9 +2813,44 @@ namespace Intersect.Server.Entities
                 {
                     isSquare = spellBase.Combat.SquareRange;
                 }
+
                 var startMap = MapInstance.Get(startMapId);
                 if (startMap != null)
                 {
+                    // Play the tiles animation on each tile covered by the area
+                    if (spellBase.TilesAnimation != null)
+                    {
+                        TileHelper tile;
+                        if (spellBase.Combat.SquareHitRadius)
+                        {
+                            for (int w = -range; w <= range; w++)
+                            {
+                                for (int h = -range; h <= range; h++)
+                                {
+                                    tile = new TileHelper(startMapId, startX, startY);
+                                    if (tile.Translate(w, h))
+                                    {
+                                         PacketSender.SendAnimationToProximity(spellBase.TilesAnimationId, -1, Guid.Empty, tile.GetMapId(), tile.GetX(), tile.GetY(), (sbyte)Directions.Up);
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            for (int w = -range; w <= range; w++)
+                            {
+                                for (int h = -range; h <= range; h++)
+                                {
+                                    tile = new TileHelper(startMapId, startX, startY);
+                                    if (Math.Abs(w) + Math.Abs(h) <= range && tile.Translate(w, h))
+                                    {
+                                        PacketSender.SendAnimationToProximity(spellBase.TilesAnimationId, -1, Guid.Empty, tile.GetMapId(), tile.GetX(), tile.GetY(), (sbyte)Directions.Up);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     var surroundingMaps = startMap.GetSurroundingMaps(true);
                     foreach (var map in surroundingMaps)
                     {

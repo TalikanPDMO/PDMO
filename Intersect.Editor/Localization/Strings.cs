@@ -5060,7 +5060,9 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString cancel = @"Cancel";
 
-            public static LocalizedString castanimation = @"Cast Animation:";
+            public static LocalizedString castanimation = @"Caster Anim:";
+
+            public static LocalizedString casttargetanimation = @"Target Anim:";
 
             public static LocalizedString castrange = @"Cast Range (tiles):";
 
@@ -5159,7 +5161,11 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString general = @"General";
 
-            public static LocalizedString hitanimation = @"Hit Animation:";
+            public static LocalizedString impactanimation = @"Impact Anim:";
+
+            public static LocalizedString tilesanimation = @"Tiles Anim:";
+
+            public static LocalizedString hitanimation = @"Hits Anim:";
 
             public static LocalizedString bound = @"Bound?";
 

@@ -125,6 +125,12 @@ namespace Intersect.Server.Entities
                             {
                                 s.Dead = true;
                             }
+
+                            // Play the impact animation on the first tile for each spawn
+                            if (Spell?.ImpactAnimation != null)
+                            {
+                                PacketSender.SendAnimationToProximity(Spell.ImpactAnimationId, -1, Guid.Empty, s.MapId, (byte)s.X, (byte)s.Y, (sbyte)Directions.Up);
+                            }  
                         }
                     }
                 }
@@ -424,10 +430,15 @@ namespace Intersect.Server.Entities
                             if (!spawn.Dead)
                             {
                                 if (Base.Speed > 0)
-                                {
+                                {   
                                     killSpawn = MoveFragment(spawn);
                                     if (!killSpawn && (x != spawn.X || y != spawn.Y || map != spawn.MapId))
                                     {
+                                        // Play the tile animation on the current projectilespawn tile
+                                        if (Spell?.TilesAnimation != null)
+                                        {
+                                            PacketSender.SendAnimationToProximity(Spell.TilesAnimationId, -1, Guid.Empty, spawn.MapId, (byte)spawn.X, (byte)spawn.Y, (sbyte)Directions.Up);
+                                        }
                                         killSpawn = CheckForCollision(spawn);
                                     }
                                 }
