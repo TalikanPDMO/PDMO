@@ -135,13 +135,17 @@ namespace Intersect.Editor.Forms.Editors
             btnAdd.Text = Strings.ProjectileEditor.addanimation;
             btnRemove.Text = Strings.ProjectileEditor.removeanimation;
 
-            grpCollisions.Text = Strings.ProjectileEditor.collisions;
+            grpIgnoreCollisions.Text = Strings.ProjectileEditor.collisions;
             chkIgnoreMapBlocks.Text = Strings.ProjectileEditor.ignoreblocks;
             chkIgnoreActiveResources.Text = Strings.ProjectileEditor.ignoreactiveresources;
             chkIgnoreInactiveResources.Text = Strings.ProjectileEditor.ignoreinactiveresources;
             chkIgnoreZDimensionBlocks.Text = Strings.ProjectileEditor.ignorezdimension;
-            chkPierce.Text = Strings.ProjectileEditor.piercetarget;
+
+            grpCollisionOptions.Text = Strings.ProjectileEditor.collisionoptions;
             chkLinkedSpawns.Text = Strings.ProjectileEditor.linkedspawns;
+            chkPierceTarget.Text = Strings.ProjectileEditor.piercetarget;
+            chkBlockTarget.Text = Strings.ProjectileEditor.blocktarget;
+            chkStopProjectiles.Text = Strings.ProjectileEditor.stopprojectiles;
 
             grpAmmo.Text = Strings.ProjectileEditor.ammo;
             lblAmmoItem.Text = Strings.ProjectileEditor.ammoitem;
@@ -177,8 +181,10 @@ namespace Intersect.Editor.Forms.Editors
                 chkIgnoreInactiveResources.Checked = mEditorItem.IgnoreExhaustedResources;
                 chkIgnoreZDimensionBlocks.Checked = mEditorItem.IgnoreZDimension;
                 chkGrapple.Checked = mEditorItem.GrappleHook;
-                chkPierce.Checked = mEditorItem.PierceTarget;
+                chkPierceTarget.Checked = mEditorItem.PierceTarget;
                 chkLinkedSpawns.Checked = mEditorItem.LinkedSpawns;
+                chkBlockTarget.Checked = mEditorItem.BlockTarget;
+                chkStopProjectiles.Checked = mEditorItem.StopProjectiles;
                 cmbItem.SelectedIndex = ItemBase.ListIndex(mEditorItem.AmmoItemId) + 1;
                 nudConsume.Value = mEditorItem.AmmoRequired;
 
@@ -576,7 +582,17 @@ namespace Intersect.Editor.Forms.Editors
 
         private void chkPierce_CheckedChanged(object sender, EventArgs e)
         {
-            mEditorItem.PierceTarget = chkPierce.Checked;
+            mEditorItem.PierceTarget = chkPierceTarget.Checked;
+        }
+
+        private void chkBlockTarget_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.BlockTarget = chkBlockTarget.Checked;
+        }
+
+        private void chkStopProjectiles_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StopProjectiles = chkStopProjectiles.Checked;
         }
 
         private void chkGrapple_CheckedChanged(object sender, EventArgs e)

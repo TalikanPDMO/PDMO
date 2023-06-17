@@ -77,8 +77,8 @@ namespace Intersect.Server.Entities
             Spell = parentSpell;
             Item = parentItem;
 
-            //Static projectiles are passable only if Pierciable
-            Passable = Base.Speed>0 || Base.PierceTarget;
+            //Static projectiles are passable only if not blocking
+            Passable = Base.Speed>0 || !Base.BlockTarget;
             HideName = true;
             for (var x = 0; x < ProjectileBase.SPAWN_LOCATIONS_WIDTH; x++)
             {
@@ -542,13 +542,24 @@ namespace Intersect.Server.Entities
                     killSpawn = true;
                 }
 
-                // Check for areas (static projectiles) not piercible
+                // Check for stop projectiles (mainly static projs like wall etc ...)
                 foreach (var proj in map.MapProjectilesCached)
                 {
-                    if (proj != null && proj != this && !proj.Passable && proj.X == spawn.X && proj.Y == spawn.Y && proj.Z == spawn.Z)
+                    if (proj != null && proj != this && proj.Base.StopProjectiles && proj.Spawns != null)
                     {
-                        // Try to move in an area not pierceable, so we block
-                        killSpawn = true;
+                        foreach (var stopSpawn in proj.Spawns)
+                        {
+                            if (stopSpawn != null && !stopSpawn.Dead && stopSpawn.IsAtLocation(spawn.MapId, (int)spawn.X, (int)spawn.Y, spawn.Z))
+                            {
+                                if (this.Base.StopProjectiles)
+                                {
+                                    // If both are stopping projectiles, we need to kill also the one we collide
+                                    stopSpawn.Dead = true;
+                                }
+                                //No need to check others, we directly exit with true to gain time
+                                return true;
+                            }
+                        }
                     }
                 }
             }

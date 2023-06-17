@@ -84,6 +84,10 @@ namespace Intersect.GameObjects
 
         public bool PierceTarget { get; set; }
 
+        public bool BlockTarget { get; set; }
+
+        public bool StopProjectiles { get; set; }
+
         public bool LinkedSpawns { get; set; } = false;
 
         public int Knockback { get; set; }

@@ -4658,6 +4658,12 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString linkedspawns = @"Linked Spawns?";
 
+            public static LocalizedString collisionoptions = @"Collision Options:";
+
+            public static LocalizedString blocktarget = @"Block Target?";
+
+            public static LocalizedString stopprojectiles = @"Stop Projectiles?";
+
             public static LocalizedString knockback = @"Knockback:";
 
             public static LocalizedString name = @"Name:";

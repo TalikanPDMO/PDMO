@@ -83,7 +83,7 @@ namespace Intersect.Client.Entities.Projectiles
                 mTotalSpawns *= mMyBase.Quantity;
             }
             IsMoving = mMyBase.Speed > 0;
-            Passable = mMyBase.Speed > 0 || mMyBase.PierceTarget;
+            Passable = mMyBase.Speed > 0 || !mMyBase.BlockTarget;
             Spawns = new ProjectileSpawns[mTotalSpawns];
             mLoaded = true;
         }

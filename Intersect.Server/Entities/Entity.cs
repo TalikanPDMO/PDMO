@@ -544,7 +544,7 @@ namespace Intersect.Server.Entities
                 {
                     if (proj != null && !proj.Passable && proj.X == tileX && proj.Y == tileY && proj.Z == Z)
                     {
-                        // Try to move in an area not pierceable, so we block
+                        // Try to move in an area not passable, so we block
                         return (int)EntityTypes.Projectile;
                     }
                 }
