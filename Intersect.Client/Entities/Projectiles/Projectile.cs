@@ -161,12 +161,14 @@ namespace Intersect.Client.Entities.Projectiles
                         if (mMyBase.SpawnLocations[x, y].Directions[d] == true)
                         {
                             ProjectileSpawns s = null;
+                            var spawnX = X + FindProjectileRotationX(Dir, x - 2, y - 2);
+                            var spawnY = Y + FindProjectileRotationY(Dir, x - 2, y - 2);
+                            var spawnMapId = FindProjectileSpawnMapId(CurrentMap, ref spawnX, ref spawnY); 
                             if (animPos == null)
                             {
                                 // Each spawn has an animation
                                 s = new ProjectileSpawns(
-                                    FindProjectileRotationDir(Dir, d), X + FindProjectileRotationX(Dir, x - 2, y - 2),
-                                    Y + FindProjectileRotationY(Dir, x - 2, y - 2), Z, CurrentMap, animBase,
+                                    FindProjectileRotationDir(Dir, d), spawnX, spawnY, Z , spawnMapId, animBase,
                                     mMyBase.Animations[spawn].AutoRotate, mMyBase, this
                                 );
                             }
@@ -177,8 +179,7 @@ namespace Intersect.Client.Entities.Projectiles
                                 {
                                     // The spawn with animation
                                     s = new ProjectileSpawns(
-                                        FindProjectileRotationDir(Dir, d), X + FindProjectileRotationX(Dir, x - 2, y - 2),
-                                        Y + FindProjectileRotationY(Dir, x - 2, y - 2), Z, CurrentMap, animBase,
+                                        FindProjectileRotationDir(Dir, d), spawnX, spawnY, Z, spawnMapId, animBase,
                                         mMyBase.Animations[spawn].AutoRotate, mMyBase, this
                                     );
                                 }
@@ -186,8 +187,7 @@ namespace Intersect.Client.Entities.Projectiles
                                 {
                                     // No animation for the others spawns
                                     s = new ProjectileSpawns(
-                                        FindProjectileRotationDir(Dir, d), X + FindProjectileRotationX(Dir, x - 2, y - 2),
-                                        Y + FindProjectileRotationY(Dir, x - 2, y - 2), Z, CurrentMap, null,
+                                        FindProjectileRotationDir(Dir, d), spawnX, spawnY, Z, spawnMapId, null,
                                         mMyBase.Animations[spawn].AutoRotate, mMyBase, this
                                     );
                                 }
@@ -217,6 +217,7 @@ namespace Intersect.Client.Entities.Projectiles
             mQuantity++;
             mSpawnTime = Globals.System.GetTimeMs() + mMyBase.Delay;
         }
+
 
         public static int FindProjectileRotationX(int direction, int x, int y)
         {
@@ -433,6 +434,58 @@ namespace Intersect.Client.Entities.Projectiles
             }
         }
 
+        public Guid FindProjectileSpawnMapId(Guid projMapId, ref int x, ref int y)
+        {
+            var mapInstance = MapInstance.Get(projMapId);
+            if (mapInstance == null)
+            {
+                return projMapId;
+            }
+
+            var gridX = mapInstance.MapGridX;
+            var gridY = mapInstance.MapGridY;
+            try
+            {
+                var tmpX = x;
+                var tmpY = y;
+                if (x < 0)
+                {
+                    gridX--;
+                    tmpX = Options.MapWidth - x * -1;
+                }
+
+                if (y < 0)
+                {
+                    gridY--;
+                    tmpY = Options.MapHeight - y * -1;
+                }
+
+                if (x > Options.MapWidth - 1)
+                {
+                    gridX++;
+                    tmpX = x - Options.MapWidth;
+                }
+
+                if (y > Options.MapHeight - 1)
+                {
+                    gridY++;
+                    tmpY = y - Options.MapHeight;
+                }
+
+                if (gridX < 0 || gridY < 0 || gridX >= Globals.MapGridWidth || gridY >= Globals.MapGridHeight)
+                {
+                    return projMapId;
+                }
+
+                x = tmpX;
+                y = tmpY;
+                return Globals.MapGrid[gridX, gridY];
+            }
+            catch
+            {
+                return projMapId;
+            }
+        }
         public static float GetRangeX(int direction, float range)
         {
             //Left, UpLeft, DownLeft
@@ -532,7 +585,7 @@ namespace Intersect.Client.Entities.Projectiles
                             Spawns[s].Anim.Update();
                         }
                     }
-                    CheckForCollision();
+                    CheckForDespawn();
                 }
                 else
                 {
@@ -565,141 +618,149 @@ namespace Intersect.Client.Entities.Projectiles
             return true;
         }
 
-        public void CheckForCollision()
+        public void CheckForDespawn()
         {
             if (mSpawnCount != 0 || mQuantity < mMyBase.Quantity)
             {
                 for (var i = 0; i < mSpawnedAmount; i++)
                 {
-                    if (Spawns[i] != null && Globals.System.GetTimeMs() > Spawns[i].TransmittionTimer)
+                    var killSpawn = false;
+                    if (Spawns[i] != null)
                     {
-                        var spawnMap = MapInstance.Get(Spawns[i].MapId);
-                        if (spawnMap != null)
+                        if (mMyBase.Speed > 0)
                         {
-                            var newx = Spawns[i].X + (int) GetRangeX(Spawns[i].Dir, 1);
-                            var newy = Spawns[i].Y + (int) GetRangeY(Spawns[i].Dir, 1);
-                            var newMapId = Spawns[i].MapId;
-                            var killSpawn = false;
-
-                            Spawns[i].Distance++;
-
-                            if (newx < 0)
+                            //Check collision with environment or entities if moving projectiles
+                            var spawnMap = MapInstance.Get(Spawns[i].MapId);
+                            if (spawnMap != null && Globals.System.GetTimeMs() > Spawns[i].TransmittionTimer)
                             {
-                                if (MapInstance.Get(spawnMap.Left) != null)
-                                {
-                                    newMapId = spawnMap.Left;
-                                    newx = Options.MapWidth - 1;
-                                }
-                                else
-                                {
-                                    killSpawn = true;
-                                }
-                            }
+                                var newx = Spawns[i].X + (int)GetRangeX(Spawns[i].Dir, 1);
+                                var newy = Spawns[i].Y + (int)GetRangeY(Spawns[i].Dir, 1);
+                                var newMapId = Spawns[i].MapId;
 
-                            if (newx > Options.MapWidth - 1)
-                            {
-                                if (MapInstance.Get(spawnMap.Right) != null)
-                                {
-                                    newMapId = spawnMap.Right;
-                                    newx = 0;
-                                }
-                                else
-                                {
-                                    killSpawn = true;
-                                }
-                            }
+                                Spawns[i].Distance++;
 
-                            if (newy < 0)
-                            {
-                                if (MapInstance.Get(spawnMap.Up) != null)
+                                if (newx < 0)
                                 {
-                                    newMapId = spawnMap.Up;
-                                    newy = Options.MapHeight - 1;
-                                }
-                                else
-                                {
-                                    killSpawn = true;
-                                }
-                            }
-
-                            if (newy > Options.MapHeight - 1)
-                            {
-                                if (MapInstance.Get(spawnMap.Down) != null)
-                                {
-                                    newMapId = spawnMap.Down;
-                                    newy = 0;
-                                }
-                                else
-                                {
-                                    killSpawn = true;
-                                }
-                            }
-
-                            if (killSpawn)
-                            {
-                                Spawns[i].Dispose();
-                                if (Globals.Me.CollidedSpawn == Spawns[i])
-                                {
-                                    Globals.Me.CollidedSpawn = null;
-                                }
-                                Spawns[i] = null;
-                                mSpawnCount--;
-
-                                continue;
-                            }
-
-                            Spawns[i].X = newx;
-                            Spawns[i].Y = newy;
-                            Spawns[i].MapId = newMapId;
-                            var newMap = MapInstance.Get(newMapId);
-
-                            //Check for Z-Dimension
-                            if (newMap.Attributes[Spawns[i].X, Spawns[i].Y] != null)
-                            {
-                                if (newMap.Attributes[Spawns[i].X, Spawns[i].Y].Type == MapAttributes.ZDimension)
-                                {
-                                    if (((MapZDimensionAttribute) newMap.Attributes[Spawns[i].X, Spawns[i].Y])
-                                        .GatewayTo >
-                                        0)
+                                    if (MapInstance.Get(spawnMap.Left) != null)
                                     {
-                                        Spawns[i].Z =
-                                            ((MapZDimensionAttribute) newMap.Attributes[Spawns[i].X, Spawns[i].Y])
-                                            .GatewayTo -
-                                            1;
+                                        newMapId = spawnMap.Left;
+                                        newx = Options.MapWidth - 1;
+                                    }
+                                    else
+                                    {
+                                        killSpawn = true;
                                     }
                                 }
-                            }
 
-                            if (killSpawn == false)
-                            {
-                                killSpawn = Collided(i);
-                            }
-
-                            if (mMyBase.Range == 0)
-                            {
-                                Spawns[i].TransmittionTimer = Globals.System.GetTimeMs() + mMyBase.Speed;
-                            }
-                            else
-                            {
-                                Spawns[i].TransmittionTimer = Globals.System.GetTimeMs() +
-                                                          (long)((float)mMyBase.Speed / (float)mMyBase.Range);
-                            } 
-
-                            if (mMyBase.Speed > 0 && Spawns[i].Distance >= mMyBase.Range)
-                            {
-                                killSpawn = true;
-                            }
-
-                            if (killSpawn)
-                            {
-                                Spawns[i].Dispose();
-                                if (Globals.Me.CollidedSpawn == Spawns[i])
+                                if (newx > Options.MapWidth - 1)
                                 {
-                                    Globals.Me.CollidedSpawn = null;
+                                    if (MapInstance.Get(spawnMap.Right) != null)
+                                    {
+                                        newMapId = spawnMap.Right;
+                                        newx = 0;
+                                    }
+                                    else
+                                    {
+                                        killSpawn = true;
+                                    }
                                 }
-                                Spawns[i] = null;
-                                mSpawnCount--;
+
+                                if (newy < 0)
+                                {
+                                    if (MapInstance.Get(spawnMap.Up) != null)
+                                    {
+                                        newMapId = spawnMap.Up;
+                                        newy = Options.MapHeight - 1;
+                                    }
+                                    else
+                                    {
+                                        killSpawn = true;
+                                    }
+                                }
+
+                                if (newy > Options.MapHeight - 1)
+                                {
+                                    if (MapInstance.Get(spawnMap.Down) != null)
+                                    {
+                                        newMapId = spawnMap.Down;
+                                        newy = 0;
+                                    }
+                                    else
+                                    {
+                                        killSpawn = true;
+                                    }
+                                }
+
+                                if (killSpawn)
+                                {
+                                    Spawns[i].Dispose();
+                                    if (Globals.Me.CollidedSpawn == Spawns[i])
+                                    {
+                                        Globals.Me.CollidedSpawn = null;
+                                    }
+                                    Spawns[i] = null;
+                                    mSpawnCount--;
+
+                                    continue;
+                                }
+
+                                Spawns[i].X = newx;
+                                Spawns[i].Y = newy;
+                                Spawns[i].MapId = newMapId;
+                                var newMap = MapInstance.Get(newMapId);
+
+                                //Check for Z-Dimension
+                                if (newMap.Attributes[Spawns[i].X, Spawns[i].Y] != null)
+                                {
+                                    if (newMap.Attributes[Spawns[i].X, Spawns[i].Y].Type == MapAttributes.ZDimension)
+                                    {
+                                        if (((MapZDimensionAttribute)newMap.Attributes[Spawns[i].X, Spawns[i].Y])
+                                            .GatewayTo >
+                                            0)
+                                        {
+                                            Spawns[i].Z =
+                                                ((MapZDimensionAttribute)newMap.Attributes[Spawns[i].X, Spawns[i].Y])
+                                                .GatewayTo -
+                                                1;
+                                        }
+                                    }
+                                }
+
+                                if (killSpawn == false)
+                                {
+                                    killSpawn = Collided(i);
+                                }
+
+                                if (mMyBase.Range == 0)
+                                {
+                                    Spawns[i].TransmittionTimer = Globals.System.GetTimeMs() + mMyBase.Speed;
+                                }
+                                else
+                                {
+                                    Spawns[i].TransmittionTimer = Globals.System.GetTimeMs() +
+                                                              (long)((float)mMyBase.Speed / (float)mMyBase.Range);
+                                }
+                                if (Spawns[i].Distance >= mMyBase.Range)
+                                {
+                                    killSpawn = true;
+                                }
                             }
+                        }
+                        else if (Globals.System.GetTimeMs() > mSpawnTime)
+                        {
+                            // Speed == 0 so static projectile, we kill if spawnTime is reached
+                            killSpawn = true;
+                        }
+
+                        if (killSpawn)
+                        {
+                            Spawns[i].Dispose();
+                            if (Globals.Me.CollidedSpawn == Spawns[i])
+                            {
+                                Globals.Me.CollidedSpawn = null;
+                            }
+                            Spawns[i] = null;
+                            mSpawnCount--;
                         }
                     }
                 }
@@ -742,7 +803,14 @@ namespace Intersect.Client.Entities.Projectiles
                             {
                                 if (blockedBy == Globals.Me)
                                 {
-                                    blockedBy.CollidedSpawn = Spawns[i];
+                                    if (IsMoving)
+                                    {
+                                        blockedBy.CollidedSpawn = Spawns[i];
+                                    }
+                                    else
+                                    {
+                                        blockedBy.CollidedTimer = Globals.System.GetTimeMs() + Options.MaxDashSpeed;
+                                    }
                                 }
                                 blockedBy.StopMovement();
                             }

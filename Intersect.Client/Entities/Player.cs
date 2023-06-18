@@ -210,7 +210,7 @@ namespace Intersect.Client.Entities
             }
 
 
-            if (!IsBusy() && CollidedSpawn == null)
+            if (!IsBusy() && (CollidedSpawn == null || Globals.System.GetTimeMs() > CollidedTimer)) 
             {
                 if (this == Globals.Me && IsMoving == false)
                 {

@@ -74,6 +74,8 @@ namespace Intersect.Client.Entities
 
         public ProjectileSpawns CollidedSpawn = null;
 
+        public long CollidedTimer = 0;
+
         //Extras
         public string Face = "";
 

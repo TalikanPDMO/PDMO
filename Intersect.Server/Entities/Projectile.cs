@@ -110,10 +110,12 @@ namespace Intersect.Server.Entities
                     {
                         if (Base.SpawnLocations[x, y].Directions[d] == true && mSpawnedAmount < Spawns.Length)
                         {
+                            var tile = new TileHelper(MapId, X, Y);
+                            tile.Translate(FindProjectileRotationX(Dir, x - 2, y - 2), FindProjectileRotationY(Dir, x - 2, y - 2));
                             var s = new ProjectileSpawn(
                                 FindProjectileRotationDir(Dir, d),
-                                (byte) (X + FindProjectileRotationX(Dir, x - 2, y - 2)),
-                                (byte) (Y + FindProjectileRotationY(Dir, x - 2, y - 2)), (byte) Z, MapId, Base, this,
+                                (byte) tile.GetX(),
+                                (byte) tile.GetY(), (byte) Z, tile.GetMapId(), Base, this,
                                 (byte)mSpawnedAmount, (byte)mQuantity, (byte)i
                             );
 
@@ -136,9 +138,8 @@ namespace Intersect.Server.Entities
                     }
                 }
             }
-
-            mQuantity++;
             mSpawnTime = Globals.Timing.Milliseconds + Base.Delay;
+            mQuantity++;
         }
 
         public static int FindProjectileRotationX(int direction, int x, int y)
@@ -593,10 +594,11 @@ namespace Intersect.Server.Entities
                             }
                         }
                     }
-                    if ((Base.Speed == 0 && mSpawnTime > 0 && Globals.Timing.Milliseconds > mSpawnTime) || (Base.Speed > 0 && spawn.Distance >= Base.Range))
-                    {
-                        killSpawn = true;
-                    }
+                }
+
+                if ((Base.Speed == 0 && Globals.Timing.Milliseconds > spawn.TransmittionTimer) || (Base.Speed > 0 && spawn.Distance >= Base.Range))
+                {
+                    killSpawn = true;
                 }
             }
 
