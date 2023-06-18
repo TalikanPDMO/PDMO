@@ -72,6 +72,8 @@ namespace Intersect.Client.Entities
 
         public Animation[] EquipmentAnimations = new Animation[Options.EquipmentSlots.Count];
 
+        public ProjectileSpawns CollidedSpawn = null;
+
         //Extras
         public string Face = "";
 
@@ -547,6 +549,14 @@ namespace Intersect.Client.Entities
                         {
                             WalkFrame = 0;
                         }
+                        if (Running)
+                        {
+                            mWalkTimer = Globals.System.GetTimeMs() + 2 * (Options.Instance.Sprites.RunningFrameDuration - Stat[(int)Stats.Speed]);
+                        }
+                        else
+                        {
+                            mWalkTimer = Globals.System.GetTimeMs() + Options.Instance.Sprites.MovingFrameDuration;
+                        }
                     }
                     else
                     {
@@ -558,14 +568,6 @@ namespace Intersect.Client.Entities
                         {
                             WalkFrame = 0;
                         }
-                    }
-                    if (Running)
-                    {
-                        mWalkTimer = Globals.System.GetTimeMs() + 2*(Options.Instance.Sprites.RunningFrameDuration - Stat[(int)Stats.Speed]);
-                    }
-                    else
-                    {
-                        mWalkTimer = Globals.System.GetTimeMs() + Options.Instance.Sprites.MovingFrameDuration;
                     }
                 }
             }
@@ -838,6 +840,11 @@ namespace Intersect.Client.Entities
                                     (float) Options.MaxStatValue)));
         }
 
+        public void StopMovement()
+        {
+            IsMoving = false;
+            mWalkTimer = 0;
+        }
         public virtual bool IsStealthed()
         {
             //If the entity has transformed, apply that sprite instead.
@@ -2097,30 +2104,42 @@ namespace Intersect.Client.Entities
                         continue;
                     }
 
-                    if (en.Value == Globals.Me)
+                    // Supressed for blocking projectiles. need to be carefull here and watch if it breaks something in the future
+                    // Insteaded of continue and returning -1, we return -6 as a global entity
+                    /*if (en.Value == Globals.Me)
                     {
                         continue;
-                    }
-                    else
+                    }*/
+                    if (en.Value.GetType() == typeof(Projectile))
                     {
-                        if (en.Value.CurrentMap == tmpMapId &&
-                            en.Value.X == tmpX &&
-                            en.Value.Y == tmpY &&
-                            en.Value.Z == Z)
+                        var proj = (Projectile)en.Value;
+                        if (proj.Passable)
                         {
-                            if (en.Value.GetType() == typeof(Projectile))
+                            return -1;
+                        }
+                        else
+                        {
+                            foreach (var blockSpawn in proj.Spawns)
                             {
-                                if(((Projectile)en.Value).Passable)
-                                {
-                                    return -1;
-                                }
-                                else
+                                if (blockSpawn != null && blockSpawn.MapId == tmpMapId &&
+                                    blockSpawn.X == tmpX &&
+                                    blockSpawn.Y == tmpY &&
+                                    blockSpawn.Z == Z)
                                 {
                                     blockedBy = en.Value;
                                     return -6;
                                 }
                             }
-                            else if (en.Value.GetType() == typeof(Resource))
+                        }
+                    }
+                    else {
+                        if (en.Value.CurrentMap == tmpMapId &&
+                            en.Value.X == tmpX &&
+                            en.Value.Y == tmpY &&
+                            en.Value.Z == Z)
+                        {
+                            
+                            if (en.Value.GetType() == typeof(Resource))
                             {
                                 var resourceBase = ((Resource)en.Value).GetResourceBase();
                                 if (resourceBase != null)

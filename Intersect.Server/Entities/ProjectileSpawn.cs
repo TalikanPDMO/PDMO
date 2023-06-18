@@ -113,13 +113,14 @@ namespace Intersect.Server.Entities
                         var linkSpawn = Parent.LinkedSpawns[LinkedSpawnIndex, s];
                         if (linkSpawn != null && linkSpawn.mEntitiesCollided.Contains(en.Id))
                         {
-                            if (!linkSpawn.Parent.Base.PierceTarget)
+                            // Don't destroy the projectile if pierce or block
+                            if (linkSpawn.Parent.Base.PierceTarget || linkSpawn.Parent.Base.BlockTarget)
                             {
-                                return true;
+                                return false;
                             }
                             else
                             {
-                                return false;
+                                return true;
                             }
                         }
                     }
@@ -128,13 +129,14 @@ namespace Intersect.Server.Entities
                 {
                     if (mEntitiesCollided.Contains(en.Id))
                     {
-                        if (!Parent.Base.PierceTarget)
+                        // Don't destroy the projectile if pierce or block
+                        if (Parent.Base.PierceTarget || Parent.Base.BlockTarget)
                         {
-                            return true;
+                            return false;
                         }
                         else
                         {
-                            return false;
+                            return true;
                         }
                     }
                 }
@@ -158,7 +160,12 @@ namespace Intersect.Server.Entities
                             );
                         }
 
-                        if (!Parent.Base.PierceTarget)
+                        // Don't destroy the projectile if pierce or block
+                        if (Parent.Base.PierceTarget || Parent.Base.BlockTarget)
+                        {
+                            return false;
+                        }
+                        else
                         {
                             return true;
                         }
@@ -209,7 +216,12 @@ namespace Intersect.Server.Entities
                             );
                         }
 
-                        if (!Parent.Base.PierceTarget)
+                        // Don't destroy the projectile if pierce or block
+                        if (Parent.Base.PierceTarget || Parent.Base.BlockTarget)
+                        {
+                            return false;
+                        }
+                        else
                         {
                             return true;
                         }

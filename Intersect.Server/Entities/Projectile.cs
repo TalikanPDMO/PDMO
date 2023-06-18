@@ -9,6 +9,7 @@ using Intersect.Logging;
 using Intersect.Network.Packets.Server;
 using Intersect.Server.Entities.Combat;
 using Intersect.Server.General;
+using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 
@@ -78,7 +79,7 @@ namespace Intersect.Server.Entities
             Item = parentItem;
 
             //Static projectiles are passable only if not blocking
-            Passable = Base.Speed>0 || !Base.BlockTarget;
+            Passable = !Base.BlockTarget;
             HideName = true;
             for (var x = 0; x < ProjectileBase.SPAWN_LOCATIONS_WIDTH; x++)
             {
@@ -579,6 +580,16 @@ namespace Intersect.Server.Entities
                             if (killSpawn && !spawn.ProjectileBase.PierceTarget)
                             {
                                 return killSpawn;
+                            }
+                            else if (spawn.Parent.Base.BlockTarget)
+                            {
+                                var dashspeed = spawn.Parent.Base.Speed;
+                                if (spawn.Parent.Base.Range > 0 && spawn.Parent.Base.Speed > 0)
+                                {
+                                    //dashRange = spawn.Parent.Base.Range - spawn.Distance + 1;
+                                    dashspeed = (int)((float)spawn.Parent.Base.Speed / (float)(spawn.Parent.Base.Range + 1));
+                                }
+                                new Dash(entities[z], 1, spawn.Dir, false, false, false, false, null, dashspeed);
                             }
                         }
                     }

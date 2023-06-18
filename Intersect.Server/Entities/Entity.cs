@@ -542,10 +542,16 @@ namespace Intersect.Server.Entities
 
                 foreach(var proj in mapInstance.MapProjectilesCached)
                 {
-                    if (proj != null && !proj.Passable && proj.X == tileX && proj.Y == tileY && proj.Z == Z)
+                    if (proj != null && !proj.Passable && proj.Spawns != null)
                     {
-                        // Try to move in an area not passable, so we block
-                        return (int)EntityTypes.Projectile;
+                        foreach (var blockSpawn in proj.Spawns)
+                        {
+                            if (blockSpawn != null && !blockSpawn.Dead && blockSpawn.IsAtLocation(tile.GetMapId(), tileX, tileY, Z))
+                            {
+                                // Try to move in an area not passable, so we block
+                                return (int)EntityTypes.Projectile;
+                            }
+                        }
                     }
                 }
 
@@ -1087,9 +1093,22 @@ namespace Intersect.Server.Entities
                                             continue;
                                         }
 
-                                        if (spawn.IsAtLocation(MapId, X, Y, Z) && spawn.HitEntity(this))
+                                        if (spawn.IsAtLocation(MapId, X, Y, Z))
                                         {
-                                            spawn.Dead = true;
+                                            if (spawn.HitEntity(this))
+                                            {
+                                                spawn.Dead = true;
+                                            }
+                                            else if (projectile.Base.BlockTarget)
+                                            {
+                                                var dashspeed = projectile.Base.Speed;
+                                                if (projectile.Base.Range > 0 && projectile.Base.Speed > 0)
+                                                {
+                                                    //dashRange = spawn.Parent.Base.Range - spawn.Distance + 1;
+                                                    dashspeed = (int)((float)projectile.Base.Speed / (float)(spawn.Parent.Base.Range + 1));
+                                                }
+                                                new Dash(this, 1, spawn.Dir, false, false, false, false, null, dashspeed);
+                                            }
                                         }
                                     }
                                 }

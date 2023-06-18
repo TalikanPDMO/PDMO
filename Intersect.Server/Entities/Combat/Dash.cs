@@ -30,7 +30,8 @@ namespace Intersect.Server.Entities.Combat
             bool activeResourcePass = false,
             bool deadResourcePass = false,
             bool zdimensionPass = false,
-            SpellBase spellBase = null
+            SpellBase spellBase = null,
+            int dashTime = 0
         )
         {
             DistanceTraveled = 0;
@@ -65,10 +66,13 @@ namespace Intersect.Server.Entities.Combat
                     }
                 }
             }
-            
+            if (dashTime == 0)
+            {
+                dashTime = (int)(Options.MaxDashSpeed * (Range / 10f));
+            }
             TransmittionTimer = Globals.Timing.Milliseconds + (long) ((float) Options.MaxDashSpeed / (float) Range);
             PacketSender.SendEntityDash(
-                en, en.MapId, (byte) en.X, (byte) en.Y, (int) (Options.MaxDashSpeed * (Range / 10f)),
+                en, en.MapId, (byte) en.X, (byte) en.Y, dashTime,
                 Direction == Facing ? (sbyte) Direction : (sbyte) -1
             );
 

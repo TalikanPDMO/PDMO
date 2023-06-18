@@ -5,6 +5,7 @@ using Intersect.Client.Maps;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Maps;
+using Intersect.Logging;
 using Intersect.Network.Packets.Server;
 
 namespace Intersect.Client.Entities.Projectiles
@@ -83,7 +84,7 @@ namespace Intersect.Client.Entities.Projectiles
                 mTotalSpawns *= mMyBase.Quantity;
             }
             IsMoving = mMyBase.Speed > 0;
-            Passable = mMyBase.Speed > 0 || !mMyBase.BlockTarget;
+            Passable = !mMyBase.BlockTarget;
             Spawns = new ProjectileSpawns[mTotalSpawns];
             mLoaded = true;
         }
@@ -198,6 +199,10 @@ namespace Intersect.Client.Entities.Projectiles
                             if (Collided(mSpawnedAmount))
                             {
                                 Spawns[mSpawnedAmount].Dispose();
+                                if (Globals.Me.CollidedSpawn == Spawns[mSpawnedAmount])
+                                {
+                                    Globals.Me.CollidedSpawn = null;
+                                }
                                 Spawns[mSpawnedAmount] = null;
                                 mSpawnCount--;
                             }
@@ -633,6 +638,10 @@ namespace Intersect.Client.Entities.Projectiles
                             if (killSpawn)
                             {
                                 Spawns[i].Dispose();
+                                if (Globals.Me.CollidedSpawn == Spawns[i])
+                                {
+                                    Globals.Me.CollidedSpawn = null;
+                                }
                                 Spawns[i] = null;
                                 mSpawnCount--;
 
@@ -684,6 +693,10 @@ namespace Intersect.Client.Entities.Projectiles
                             if (killSpawn)
                             {
                                 Spawns[i].Dispose();
+                                if (Globals.Me.CollidedSpawn == Spawns[i])
+                                {
+                                    Globals.Me.CollidedSpawn = null;
+                                }
                                 Spawns[i] = null;
                                 mSpawnCount--;
                             }
@@ -708,43 +721,53 @@ namespace Intersect.Client.Entities.Projectiles
 
             if (tileBlocked != -1)
             {
-                if (tileBlocked == -6 &&
-                    blockedBy != null &&
-                    blockedBy.Id != mOwner &&
-                    Globals.Entities.ContainsKey(blockedBy.Id))
+                if (tileBlocked == -6)
                 {
-                    // Check if ressource should be ignore or not
-                    if (blockedBy.GetType() == typeof(Resource) &&
-                        ((!Spawns[i].ProjectileBase.IgnoreActiveResources && !((Resource)blockedBy).IsDead && !((Resource)blockedBy).BaseResource.WalkableBefore)
-                            ||
-                        (!Spawns[i].ProjectileBase.IgnoreExhaustedResources && ((Resource)blockedBy).IsDead)) && !((Resource)blockedBy).BaseResource.WalkableAfter)
+                    if (blockedBy != null &&
+                        blockedBy.Id != mOwner &&
+                        blockedBy.Id != this.Id &&
+                        Globals.Entities.ContainsKey(blockedBy.Id))
+                    {
+                        // Check if ressource should be ignore or not
+                        if (blockedBy.GetType() == typeof(Resource) &&
+                            ((!Spawns[i].ProjectileBase.IgnoreActiveResources && !((Resource)blockedBy).IsDead && !((Resource)blockedBy).BaseResource.WalkableBefore)
+                                ||
+                            (!Spawns[i].ProjectileBase.IgnoreExhaustedResources && ((Resource)blockedBy).IsDead)) && !((Resource)blockedBy).BaseResource.WalkableAfter)
+                        {
+                            killSpawn = true;
+                        }
+                        else
+                        {
+                            if (!Passable)
+                            {
+                                if (blockedBy == Globals.Me)
+                                {
+                                    blockedBy.CollidedSpawn = Spawns[i];
+                                }
+                                blockedBy.StopMovement();
+                            }
+                        }
+                    }
+                }
+                else if (tileBlocked == -2)
+                {
+                    if (!Spawns[i].ProjectileBase.IgnoreMapBlocks)
                     {
                         killSpawn = true;
                     }
                 }
-                else
+                else if (tileBlocked == -3)
                 {
-                    if (tileBlocked == -2)
-                    {
-                        if (!Spawns[i].ProjectileBase.IgnoreMapBlocks)
-                        {
-                            killSpawn = true;
-                        }
-                    }
-                    else if (tileBlocked == -3)
-                    {
-                        if (!Spawns[i].ProjectileBase.IgnoreZDimension)
-                        {
-                            killSpawn = true;
-                        }
-                    }
-                    else if (tileBlocked == -5)
+                    if (!Spawns[i].ProjectileBase.IgnoreZDimension)
                     {
                         killSpawn = true;
                     }
                 }
+                else if (tileBlocked == -5)
+                {
+                    killSpawn = true;
+                }          
             }
-
             return killSpawn;
         }
 
@@ -764,6 +787,10 @@ namespace Intersect.Client.Entities.Projectiles
             if (spawnIndex < mSpawnedAmount && Spawns[spawnIndex] != null)
             {
                 Spawns[spawnIndex].Dispose();
+                if (Globals.Me.CollidedSpawn == Spawns[spawnIndex])
+                {
+                    Globals.Me.CollidedSpawn = null;
+                }
                 Spawns[spawnIndex] = null;
             }
         }
