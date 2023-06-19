@@ -1010,7 +1010,7 @@ namespace Intersect.Server.Entities
 
 
                 var tile = new TileHelper(MapId, X, Y);
-
+                var oldtile = new TileHelper(MapId, X, Y);
                 // ReSharper disable once InvertIf
                 if (tile.Translate(xOffset, yOffset))
                 {
@@ -1129,6 +1129,15 @@ namespace Intersect.Server.Entities
                         foreach (var trap in currentMap.MapTrapsCached)
                         {
                             trap.CheckEntityHasDetonatedTrap(this);
+                        }
+                    }
+
+                    //Check for on hit tiles animations
+                    foreach (var status in CachedStatuses)
+                    {
+                        if (status.Type == StatusTypes.OnHit && status.Spell?.TilesAnimation != null)
+                        {
+                            PacketSender.SendAnimationToProximity(status.Spell.TilesAnimationId, -1, Guid.Empty, oldtile.GetMapId(), (byte)oldtile.GetX(), (byte)oldtile.GetY(), (sbyte)Directions.Up);
                         }
                     }
 
@@ -2451,6 +2460,10 @@ namespace Intersect.Server.Entities
                 {
                     if (status.Type == StatusTypes.OnHit)
                     {
+                        if (status.Spell?.ImpactAnimation != null)
+                        {
+                            PacketSender.SendAnimationToProximity(status.Spell.ImpactAnimationId, -1, Guid.Empty, enemy.MapId, (byte)enemy.X, (byte)enemy.Y, (sbyte)Directions.Up);
+                        }
                         TryAttack(enemy, status.Spell, true);
                         status.RemoveStatus();
                     }
@@ -2615,7 +2628,7 @@ namespace Intersect.Server.Entities
                                         MapInstance.Get(tile.GetMapId())
                                             .SpawnMapProjectile(
                                                 this, spellBase.Combat.Projectile, spellBase, null, tile.GetMapId(), tile.GetX(), tile.GetY(), z,
-                                                (byte)Dir, specificTarget, alreadyCrit
+                                                (byte)Dir, null, alreadyCrit
                                             );
                                     }
                                     else
@@ -2644,7 +2657,7 @@ namespace Intersect.Server.Entities
                                     MapInstance.Get(MapId)
                                         .SpawnMapProjectile(
                                             this, spellBase.Combat.Projectile, spellBase, null, areaLocation.MapId, (byte)areaLocation.X, (byte)areaLocation.Y, (byte)areaLocation.Z,
-                                            (byte)Dir, specificTarget, alreadyCrit
+                                            (byte)Dir, null, alreadyCrit
                                         );
                                 }
                                 else
@@ -2682,7 +2695,7 @@ namespace Intersect.Server.Entities
                                 MapInstance.Get(MapId)
                                     .SpawnMapProjectile(
                                         this, projectileBase, spellBase, null, projStart.MapId, (byte)projStart.X, (byte)projStart.Y, (byte)projStart.Z,
-                                        (byte)Dir, specificTarget, alreadyCrit
+                                        (byte)Dir, null, alreadyCrit
                                     );
                                 if (spellBase.Combat.NextEffectSpellId != Guid.Empty && Randomization.Next(1, 101) <= spellBase.Combat.NextEffectSpellChance)
                                 {
