@@ -2117,7 +2117,7 @@ namespace Intersect.Client.Entities
                         var proj = (Projectile)en.Value;
                         if (proj.Passable)
                         {
-                            return -1;
+                            continue;
                         }
                         else
                         {
