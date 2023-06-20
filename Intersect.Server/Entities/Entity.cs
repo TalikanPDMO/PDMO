@@ -2586,7 +2586,7 @@ namespace Intersect.Server.Entities
                             {
                                 HandleAoESpell(
                                     spellId, spellBase.Combat.HitRadius, baseTarget.MapId, baseTarget.X, baseTarget.Y,
-                                    null, alreadyCrit, sourceSpellName, isNextSpell, reUseValues, baseDamage, secondaryDamage
+                                    alreadyCrit, sourceSpellName, isNextSpell, reUseValues, baseDamage, secondaryDamage
                                 );
                             }
                             else
@@ -2633,7 +2633,7 @@ namespace Intersect.Server.Entities
                                     }
                                     else
                                     {
-                                        HandleAoESpell(spellId, spellBase.Combat.HitRadius, tile.GetMapId(), tile.GetX(), tile.GetY(), null, alreadyCrit, sourceSpellName, isNextSpell, reUseValues, baseDamage, secondaryDamage);
+                                        HandleAoESpell(spellId, spellBase.Combat.HitRadius, tile.GetMapId(), tile.GetX(), tile.GetY(), alreadyCrit, sourceSpellName, isNextSpell, reUseValues, baseDamage, secondaryDamage);
                                     }
                                 }
                             }
@@ -2662,7 +2662,7 @@ namespace Intersect.Server.Entities
                                 }
                                 else
                                 {
-                                    HandleAoESpell(spellId, spellBase.Combat.HitRadius, areaLocation.MapId, areaLocation.X, areaLocation.Y, null, alreadyCrit, sourceSpellName, isNextSpell, reUseValues, baseDamage, secondaryDamage, true);
+                                    HandleAoESpell(spellId, spellBase.Combat.HitRadius, areaLocation.MapId, areaLocation.X, areaLocation.Y, alreadyCrit, sourceSpellName, isNextSpell, reUseValues, baseDamage, secondaryDamage, true);
                                 }
 
                                 if (spellBase.Combat.NextEffectSpellId != Guid.Empty && Randomization.Next(1, 101) <= spellBase.Combat.NextEffectSpellChance)
@@ -2758,10 +2758,10 @@ namespace Intersect.Server.Entities
                 case SpellTypes.Warp:
                     if (this is Player)
                     {
-                        // Play the impact animation on our current tile before warp
-                        if (spellBase.ImpactAnimation != null)
+                        // Play the tile animation on our tile before tp
+                        if (spellBase.TilesAnimation != null)
                         {
-                            PacketSender.SendAnimationToProximity(spellBase.ImpactAnimationId, -1, Guid.Empty, MapId, (byte)X, (byte)Y, (sbyte)Directions.Up);
+                            PacketSender.SendAnimationToProximity(spellBase.TilesAnimationId, -1, Guid.Empty, MapId, (byte)X, (byte)Y, (sbyte)Directions.Up);
                         }
 
                         Warp(
@@ -2769,10 +2769,10 @@ namespace Intersect.Server.Entities
                             spellBase.Warp.Dir - 1 == -1 ? (byte) this.Dir : (byte) (spellBase.Warp.Dir - 1)
                         );
 
-                        // Play the tile animation on the new player tile
-                        if (spellBase.TilesAnimation != null)
+                        // Play the impact animation on our new tile after tp
+                        if (spellBase.ImpactAnimation != null)
                         {
-                            PacketSender.SendAnimationToProximity(spellBase.TilesAnimationId, -1, Guid.Empty, spellBase.Warp.MapId, (byte)spellBase.Warp.X, (byte)spellBase.Warp.Y, (sbyte)Directions.Up);
+                            PacketSender.SendAnimationToProximity(spellBase.ImpactAnimationId, -1, Guid.Empty, spellBase.Warp.MapId, (byte)spellBase.Warp.X, (byte)spellBase.Warp.Y, (sbyte)Directions.Up);
                         }
                     }
 
@@ -2780,13 +2780,23 @@ namespace Intersect.Server.Entities
                 case SpellTypes.WarpTo:
                     if (baseTarget != null)
                     {
-                        // Play the impact animation on our current tile
-                        // TODO change the effect of WarpTo spells
+                        if (spellBase.TilesAnimation != null)
+                        {
+                            // Play the tile animation on our tile before tp
+                            PacketSender.SendAnimationToProximity(spellBase.TilesAnimationId, -1, Guid.Empty, MapId, (byte)X, (byte)Y, (sbyte)Directions.Up);
+                        }
+
+                        int[] position = GetPositionNearTarget(baseTarget.MapId, baseTarget.X, baseTarget.Y);
+                        Warp(baseTarget.MapId, (byte)position[0], (byte)position[1], (byte)Dir);
+                        ChangeDir(DirToEnemy(baseTarget));
+
                         if (spellBase.ImpactAnimation != null)
                         {
+                            // Play the impact animation on our new tile after tp
                             PacketSender.SendAnimationToProximity(spellBase.ImpactAnimationId, -1, Guid.Empty, MapId, (byte)X, (byte)Y, (sbyte)Directions.Up);
                         }
-                        HandleAoESpell(spellId, spellBase.Combat.CastRange, MapId, X, Y, baseTarget, alreadyCrit, sourceSpellName, isNextSpell, reUseValues, baseDamage, secondaryDamage);
+                        //HandleAoESpell(spellId, spellBase.Combat.CastRange, MapId, X, Y, baseTarget, alreadyCrit, sourceSpellName, isNextSpell, reUseValues, baseDamage, secondaryDamage);
+                        TryAttack(baseTarget, spellBase, false, false, alreadyCrit, sourceSpellName, false, isNextSpell, reUseValues, baseDamage, secondaryDamage);
                     }
                     break;
                 case SpellTypes.Dash:
@@ -2831,7 +2841,6 @@ namespace Intersect.Server.Entities
             Guid startMapId,
             int startX,
             int startY,
-            Entity spellTarget,
             bool alreadyCrit = false,
             string sourceSpellName = "",
             bool isNextSpell = false, bool reUseValues = false, int baseDamage = 0, int secondaryDamage = 0, bool isAnchored = false
@@ -2890,24 +2899,9 @@ namespace Intersect.Server.Entities
                         {
                             if (entity != null && (entity is Player || entity is Npc))
                             {
-                                if (spellTarget == null || spellTarget == entity)
+                                if (entity.GetDistanceTo(startMap, startX, startY, isSquare) <= range)
                                 {
-                                    if (entity.GetDistanceTo(startMap,startX,startY, isSquare) <= range)
-                                    {
-                                        //Check to handle a warp to spell
-                                        if (spellBase.SpellType == SpellTypes.WarpTo)
-                                        {
-                                            if (spellTarget != null)
-                                            {
-                                                //Spelltarget used to be Target. I don't know if this is correct or not.
-                                                int[] position = GetPositionNearTarget(spellTarget.MapId, spellTarget.X, spellTarget.Y);
-                                                Warp(spellTarget.MapId, (byte)position[0], (byte)position[1], (byte)Dir);
-                                                ChangeDir(DirToEnemy(spellTarget));
-                                            }
-                                        }
-
-                                        TryAttack(entity, spellBase, false, false, alreadyCrit, sourceSpellName, false, isNextSpell, reUseValues, baseDamage, secondaryDamage, isAnchored); //Handle damage
-                                    }
+                                    TryAttack(entity, spellBase, false, false, alreadyCrit, sourceSpellName, false, isNextSpell, reUseValues, baseDamage, secondaryDamage, isAnchored); //Handle damage
                                 }
                             }
                         }
