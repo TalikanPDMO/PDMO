@@ -2437,8 +2437,10 @@ namespace Intersect.Client.Entities
             if (previewTex != null)
             {
                 var spellBase = SpellBase.Get(previewSpellId);
-                while (spellBase != null)
+                byte countnext = 0;
+                while (spellBase != null && countnext < Options.Combat.MaxDisplayNextSpells)
                 {
+                    countnext++;
                     var srcRectangle = new FloatRect(0, 0, Options.TileWidth, Options.TileHeight);
                     var destRectangle = new FloatRect();
                     destRectangle.Width = Options.TileWidth;

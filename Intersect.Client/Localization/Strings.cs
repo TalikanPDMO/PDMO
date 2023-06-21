@@ -1586,12 +1586,22 @@ namespace Intersect.Client.Localization
             public static Dictionary<int, LocalizedString> targettypes = new Dictionary<int, LocalizedString>
             {
                 {0, @"Self Cast"},
-                {1, @"Targetted - Range: {00}"},
-                {2, @"AOE"},
+                {1, @"Targeted - Range: {00} - Zone: {01}"},
+                {2, @"Anchored - Range: {00} - Zone: {01}"},
                 {3, @"Projectile - Range: {00}"},
                 {4, @"On Hit"},
                 {5, @"Trap"},
             };
+
+            public static LocalizedString zonenone = @"None";
+            public static LocalizedString zonecircle = @"Circle {00}";
+            public static LocalizedString zonesquare = @"Square {00}";
+            public static LocalizedString zonecustom = @"Custom";
+
+            public static LocalizedString onsiteanchored = @"On Site - Zone: {00}";
+            public static LocalizedString meleeanchored = @"Melee - Zone: {00}";
+            public static LocalizedString anchoredhits = @" - Hits: {00}";
+
 
             public static LocalizedString meleeprojectile = @"Melee";
             public static LocalizedString meleeprojectilehits = @" - Hits: {00}";

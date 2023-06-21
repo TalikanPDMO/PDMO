@@ -679,7 +679,7 @@ namespace Intersect.Editor.Localization
 
             public static LocalizedString items = @"ITEMS: ";
 
-            public static LocalizedString projectiles = @"PROJECTILES: ";
+            public static LocalizedString projectiles = @"PROJECTILES/AREAS: ";
 
             public static LocalizedString maps = @"MAPS (ONLY LOADED): ";
 
@@ -3851,7 +3851,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString postquestion = @"Post Question";
 
-            public static LocalizedString projectileeditor = @"Projectile Editor";
+            public static LocalizedString projectileeditor = @"Projectile/Area Editor";
 
             public static LocalizedString questeditor = @"Quest Editor";
 
@@ -4629,14 +4629,22 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString collisions = @"Ignore Collision:";
 
-            public static LocalizedString copy = @"Copy Projectile";
+            public static LocalizedString copy = @"Copy Projectile/Area";
 
-            public static LocalizedString delete = @"Delete Projectile";
+            public static LocalizedString delete = @"Delete Projectile/Area";
 
             public static LocalizedString deleteprompt =
                 @"Are you sure you want to delete this projectile? This action cannot be reverted!";
 
-            public static LocalizedString deletetitle = @"Delete Projectile";
+            public static LocalizedString deletetitle = @"Delete Projectile/Area";
+
+            public static LocalizedString editingprojectile = @"You are now editing a Moving Projectile (Speed is more than 0)";
+
+            public static LocalizedString editingarea = @"You are now editing a Static Area (Speed is 0, Range is Disabled)";
+
+            public static LocalizedString editingprojectiletitle = @"Projectile Editing";
+
+            public static LocalizedString editingareatitle = @"Static Area Editing";
 
             public static LocalizedString folderlabel = @"Folder:";
 
@@ -4668,11 +4676,11 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString name = @"Name:";
 
-            public static LocalizedString New = @"New Projectile";
+            public static LocalizedString New = @"New Projectile/Area";
 
-            public static LocalizedString paste = @"Paste Projectile";
+            public static LocalizedString paste = @"Paste Projectile/Area";
 
-            public static LocalizedString projectiles = @"Projectiles";
+            public static LocalizedString projectiles = @"Projectiles/Areas";
 
             public static LocalizedString properties = @"Properties";
 
@@ -4691,9 +4699,13 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString spawndelay = @"Spawn Delay (ms):";
 
+            public static LocalizedString spawntime = @"Spawn Time (ms):";
+
             public static LocalizedString spawnrange = @"Spawn Range: {00} - {01}";
 
             public static LocalizedString spawns = @"Projectile Spawns";
+
+            public static LocalizedString areaspawns = @"Area Spawns";
 
             public static LocalizedString speed = @"Speed (ms):";
 

@@ -164,9 +164,10 @@ namespace Intersect.Client.Interface.Game
 
             var currentSpell = spell;
             int e = spell.Combat?.NextEffectSpellId != Guid.Empty ? 1 : 0;
-
-            while (currentSpell != null)
+            byte countnext = 0;
+            while (currentSpell != null && countnext < Options.Combat.MaxDisplayNextSpells)
             {
+                countnext++;
                 if (currentSpell.SpellType == (int)SpellTypes.CombatSpell)
                 {
                     var typeText = "";
@@ -192,10 +193,61 @@ namespace Intersect.Client.Interface.Game
                             }
                         }
                     }
+                    else if (currentSpell.Combat.TargetType == SpellTargetTypes.Anchored)
+                    {
+                        var txtZone = Strings.SpellDesc.zonenone;
+                        var customArea = currentSpell.Combat.Projectile;
+                        if (customArea?.Speed == 0)
+                        {
+                            txtZone = Strings.SpellDesc.zonecustom;
+                            if (customArea.Quantity > 1)
+                            {
+                                txtZone += Strings.SpellDesc.anchoredhits
+                                    .ToString(customArea.Quantity);
+                            }
+                        }
+                        else if (currentSpell.Combat.HitRadius > 0)
+                        {
+                            if (currentSpell.Combat.SquareHitRadius)
+                            {
+                                txtZone = Strings.SpellDesc.zonesquare.ToString(currentSpell.Combat.HitRadius);
+                            }
+                            else
+                            {
+                                txtZone = Strings.SpellDesc.zonecircle.ToString(currentSpell.Combat.HitRadius);
+                            }
+                        }
+                        
+                        if (currentSpell.Combat.CastRange == 0)
+                        {
+                            typeText = Strings.SpellDesc.onsiteanchored.ToString(txtZone);
+                        }
+                        else if (currentSpell.Combat.CastRange == 1)
+                        {
+                            typeText = Strings.SpellDesc.meleeanchored.ToString(txtZone);
+                        }
+                        else
+                        {
+                            typeText = Strings.SpellDesc.targettypes[(int)SpellTargetTypes.Anchored]
+                                .ToString(currentSpell.Combat.CastRange, txtZone);
+                        }
+                    }
                     else
                     {
+                        var txtZone = Strings.SpellDesc.zonenone;
+                        if (currentSpell.Combat?.HitRadius > 0)
+                        {
+                            if (currentSpell.Combat.SquareHitRadius)
+                            {
+                                txtZone = Strings.SpellDesc.zonesquare.ToString(currentSpell.Combat.HitRadius);
+                            }
+                            else
+                            {
+                                txtZone = Strings.SpellDesc.zonecircle.ToString(currentSpell.Combat.HitRadius);
+                            }
+                        }
                         typeText = Strings.SpellDesc.targettypes[(int)currentSpell.Combat.TargetType]
-                            .ToString(currentSpell.Combat.CastRange, currentSpell.Combat.HitRadius);
+                            .ToString(currentSpell.Combat?.CastRange, txtZone);
                     }
                     if (e > 0)
                     {

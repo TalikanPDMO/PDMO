@@ -171,6 +171,8 @@ namespace Intersect.Editor.Forms.Editors
                 txtName.Text = mEditorItem.Name;
                 cmbFolder.Text = mEditorItem.Folder;
                 nudSpeed.Value = mEditorItem.Speed;
+                // Try to trigger the warning window if needed
+                ToggleProjectileArea(true);
                 nudSpawn.Value = mEditorItem.Delay;
                 nudAmount.Value = mEditorItem.Quantity;
                 nudRange.Value = mEditorItem.Range;
@@ -767,7 +769,32 @@ namespace Intersect.Editor.Forms.Editors
 
         private void nudSpeed_ValueChanged(object sender, EventArgs e)
         {
-            mEditorItem.Speed = (int) nudSpeed.Value;
+            ToggleProjectileArea(false);
+            mEditorItem.Speed = (int)nudSpeed.Value;
+        }
+
+        private void ToggleProjectileArea(bool fromSelection)
+        {
+            if ((fromSelection && mEditorItem.Speed == 0) || (mEditorItem.Speed > 0 && nudSpeed.Value == 0))
+            {
+                nudRange.Enabled = false;
+                lblSpawn.Text = Strings.ProjectileEditor.spawntime;
+                grpSpawns.Text = Strings.ProjectileEditor.areaspawns;
+                DarkMessageBox.ShowWarning(
+                        Strings.ProjectileEditor.editingarea, Strings.ProjectileEditor.editingareatitle,
+                        DarkDialogButton.Ok, Properties.Resources.Icon
+                    );
+            }
+            else if ((fromSelection && mEditorItem.Speed > 0) || (mEditorItem.Speed == 0 && nudSpeed.Value > 0))
+            {
+                nudRange.Enabled = true;
+                lblSpawn.Text = Strings.ProjectileEditor.spawndelay;
+                grpSpawns.Text = Strings.ProjectileEditor.spawns;
+                DarkMessageBox.ShowWarning(
+                        Strings.ProjectileEditor.editingprojectile, Strings.ProjectileEditor.editingprojectiletitle,
+                        DarkDialogButton.Ok, Properties.Resources.Icon
+                    );
+            }
         }
 
         private void nudSpawnDelay_ValueChanged(object sender, EventArgs e)
