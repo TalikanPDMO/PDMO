@@ -25,6 +25,7 @@ namespace Intersect.Client.Interface.Game
         private Label mInfos;
         private Label mWins;
         private Label mLosses;
+        private Label mWinrate;
 
         //Init
         public PvpStadiumWindow(Canvas gameCanvas)
@@ -48,6 +49,8 @@ namespace Intersect.Client.Interface.Game
             mWins = new Label(mStadiumWindow, "WinsLabel");
 
             mLosses = new Label(mStadiumWindow, "LossesLabel");
+
+            mWinrate = new Label(mStadiumWindow, "WinrateLabel");
 
             mStadiumWindow.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
@@ -106,6 +109,8 @@ namespace Intersect.Client.Interface.Game
             mStatus.SetText(Strings.PvpStadium.status.ToString(Strings.PvpStadium.stadiumstates[(int)Globals.Me.StadiumState]));
             mWins.SetText(Strings.PvpStadium.wins.ToString(Globals.Me.StadiumWins));
             mLosses.SetText(Strings.PvpStadium.losses.ToString(Globals.Me.StadiumLosses));
+            var winrate = ((float)(Globals.Me.StadiumWins * 100)) / ((float)(Globals.Me.StadiumWins + Globals.Me.StadiumLosses));
+            mWinrate.SetText(Strings.PvpStadium.winrate.ToString(Math.Round(winrate, 2)));
         }
 
         void toggleRegistrationButton_Clicked(Base sender, ClickedEventArgs arguments)

@@ -1799,6 +1799,8 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString losses = @"Losses: {00}";
 
+            public static LocalizedString winrate = @"Winrate: {00}%";
+
             public static LocalizedString matchmaking_title = @"PokeStadium Match found";
 
             public static LocalizedString matchmaking_message = @"You and your opponent have {00} seconds to accept the match. If you decline or exceed this duration, you will be kick from the PokeStadium queue";
