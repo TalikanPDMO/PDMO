@@ -64,14 +64,21 @@ namespace Intersect.Server.Entities
             SpawnIndex = spawnIndex;
             LinkedSpawnIndex = linkedSpawnIndex;
             LinkedSpawnNumber = linkedSpawnNumber;
-            if (ProjectileBase.Range == 0)
+            if (ProjectileBase.Speed == 0)
             {
-                TransmittionTimer = Globals.Timing.Milliseconds + ProjectileBase.Speed;
+                TransmittionTimer = Globals.Timing.Milliseconds + ProjectileBase.Delay;
             }
             else
             {
-                TransmittionTimer = Globals.Timing.Milliseconds +
-                                (long)((float)ProjectileBase.Speed / (float)ProjectileBase.Range);
+                if (ProjectileBase.Range == 0)
+                {
+                    TransmittionTimer = Globals.Timing.Milliseconds + ProjectileBase.Speed;
+                }
+                else
+                {
+                    TransmittionTimer = Globals.Timing.Milliseconds +
+                                    (long)((float)ProjectileBase.Speed / (float)ProjectileBase.Range);
+                }
             }
         }
 
@@ -98,19 +105,42 @@ namespace Intersect.Server.Entities
 
             if (targetEntity != null && targetEntity != Parent.Owner && targetEntity != Parent.Target)
             {
-
-                // Have we collided with this entity before? If so, cancel out.
-                if (mEntitiesCollided.Contains(en.Id))
+                // Have we collided with this entity or a linked spawn before? If so, cancel out.
+                if (ProjectileBase.LinkedSpawns)
                 {
-                    if (!Parent.Base.PierceTarget)
+                    for (var s = 0; s < Parent.LinkedSpawns.GetLength(1); s++)
                     {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
+                        var linkSpawn = Parent.LinkedSpawns[LinkedSpawnIndex, s];
+                        if (linkSpawn != null && linkSpawn.mEntitiesCollided.Contains(en.Id))
+                        {
+                            // Don't destroy the projectile if pierce or block
+                            if (linkSpawn.Parent.Base.PierceTarget || linkSpawn.Parent.Base.BlockTarget)
+                            {
+                                return false;
+                            }
+                            else
+                            {
+                                return true;
+                            }
+                        }
                     }
                 }
+                else
+                {
+                    if (mEntitiesCollided.Contains(en.Id))
+                    {
+                        // Don't destroy the projectile if pierce or block
+                        if (Parent.Base.PierceTarget || Parent.Base.BlockTarget)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                }
+                
                 mEntitiesCollided.Add(en.Id);
 
                 if (targetEntity.GetType() == typeof(Player)) //Player
@@ -130,7 +160,12 @@ namespace Intersect.Server.Entities
                             );
                         }
 
-                        if (!Parent.Base.PierceTarget)
+                        // Don't destroy the projectile if pierce or block
+                        if (Parent.Base.PierceTarget || Parent.Base.BlockTarget)
+                        {
+                            return false;
+                        }
+                        else
                         {
                             return true;
                         }
@@ -181,7 +216,12 @@ namespace Intersect.Server.Entities
                             );
                         }
 
-                        if (!Parent.Base.PierceTarget)
+                        // Don't destroy the projectile if pierce or block
+                        if (Parent.Base.PierceTarget || Parent.Base.BlockTarget)
+                        {
+                            return false;
+                        }
+                        else
                         {
                             return true;
                         }

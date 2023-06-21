@@ -697,6 +697,14 @@
     <Compile Include="Migrations\Game\20230126134655_AddingSpellRulesToNpcsAndNpcPhases.designer.cs">
       <DependentUpon>20230126134655_AddingSpellRulesToNpcsAndNpcPhases.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230615125656_AddingSeveralAnimationsToSpells.cs" />
+    <Compile Include="Migrations\Game\20230615125656_AddingSeveralAnimationsToSpells.designer.cs">
+      <DependentUpon>20230615125656_AddingSeveralAnimationsToSpells.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230616185117_AddingBlockingPropertiesToProjectiles.cs" />
+    <Compile Include="Migrations\Game\20230616185117_AddingBlockingPropertiesToProjectiles.designer.cs">
+      <DependentUpon>20230616185117_AddingBlockingPropertiesToProjectiles.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

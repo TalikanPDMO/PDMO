@@ -1,10 +1,11 @@
 ﻿using System;
-
+using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.Server.Entities;
 using Intersect.Server.Entities.Events;
 using Intersect.Server.General;
 using Intersect.Server.Maps;
+using Intersect.Server.Networking;
 
 namespace Intersect.Server.Classes.Maps
 {
@@ -63,6 +64,11 @@ namespace Intersect.Server.Classes.Maps
                         return;
                     }
 
+                    // Play the tile animation on the trap tile
+                    if (ParentSpell.TilesAnimation != null)
+                    {
+                        PacketSender.SendAnimationToProximity(ParentSpell.TilesAnimationId, -1, Guid.Empty, MapId, X, Y, (sbyte)Directions.Up);
+                    }
                     Owner.TryAttack(entity, ParentSpell, false, true);
                     Triggered = true;
                 }

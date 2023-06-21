@@ -24,6 +24,8 @@ namespace Intersect.Config
 
         //Spells
 
+        public int MaxDisplayNextSpells = 10; // To avoid infinite loop when displaying if design errors 
+
         /// <summary>
         /// If enabled this allows spell casts to stop/be canceled if the player tries to move around (WASD)
         /// </summary>

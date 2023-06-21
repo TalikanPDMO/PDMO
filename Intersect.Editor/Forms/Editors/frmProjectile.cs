@@ -135,13 +135,17 @@ namespace Intersect.Editor.Forms.Editors
             btnAdd.Text = Strings.ProjectileEditor.addanimation;
             btnRemove.Text = Strings.ProjectileEditor.removeanimation;
 
-            grpCollisions.Text = Strings.ProjectileEditor.collisions;
+            grpIgnoreCollisions.Text = Strings.ProjectileEditor.collisions;
             chkIgnoreMapBlocks.Text = Strings.ProjectileEditor.ignoreblocks;
             chkIgnoreActiveResources.Text = Strings.ProjectileEditor.ignoreactiveresources;
             chkIgnoreInactiveResources.Text = Strings.ProjectileEditor.ignoreinactiveresources;
             chkIgnoreZDimensionBlocks.Text = Strings.ProjectileEditor.ignorezdimension;
-            chkPierce.Text = Strings.ProjectileEditor.piercetarget;
+
+            grpCollisionOptions.Text = Strings.ProjectileEditor.collisionoptions;
             chkLinkedSpawns.Text = Strings.ProjectileEditor.linkedspawns;
+            chkPierceTarget.Text = Strings.ProjectileEditor.piercetarget;
+            chkBlockTarget.Text = Strings.ProjectileEditor.blocktarget;
+            chkStopProjectiles.Text = Strings.ProjectileEditor.stopprojectiles;
 
             grpAmmo.Text = Strings.ProjectileEditor.ammo;
             lblAmmoItem.Text = Strings.ProjectileEditor.ammoitem;
@@ -167,6 +171,8 @@ namespace Intersect.Editor.Forms.Editors
                 txtName.Text = mEditorItem.Name;
                 cmbFolder.Text = mEditorItem.Folder;
                 nudSpeed.Value = mEditorItem.Speed;
+                // Try to trigger the warning window if needed
+                ToggleProjectileArea(true);
                 nudSpawn.Value = mEditorItem.Delay;
                 nudAmount.Value = mEditorItem.Quantity;
                 nudRange.Value = mEditorItem.Range;
@@ -177,8 +183,10 @@ namespace Intersect.Editor.Forms.Editors
                 chkIgnoreInactiveResources.Checked = mEditorItem.IgnoreExhaustedResources;
                 chkIgnoreZDimensionBlocks.Checked = mEditorItem.IgnoreZDimension;
                 chkGrapple.Checked = mEditorItem.GrappleHook;
-                chkPierce.Checked = mEditorItem.PierceTarget;
+                chkPierceTarget.Checked = mEditorItem.PierceTarget;
                 chkLinkedSpawns.Checked = mEditorItem.LinkedSpawns;
+                chkBlockTarget.Checked = mEditorItem.BlockTarget;
+                chkStopProjectiles.Checked = mEditorItem.StopProjectiles;
                 cmbItem.SelectedIndex = ItemBase.ListIndex(mEditorItem.AmmoItemId) + 1;
                 nudConsume.Value = mEditorItem.AmmoRequired;
 
@@ -576,7 +584,17 @@ namespace Intersect.Editor.Forms.Editors
 
         private void chkPierce_CheckedChanged(object sender, EventArgs e)
         {
-            mEditorItem.PierceTarget = chkPierce.Checked;
+            mEditorItem.PierceTarget = chkPierceTarget.Checked;
+        }
+
+        private void chkBlockTarget_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.BlockTarget = chkBlockTarget.Checked;
+        }
+
+        private void chkStopProjectiles_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StopProjectiles = chkStopProjectiles.Checked;
         }
 
         private void chkGrapple_CheckedChanged(object sender, EventArgs e)
@@ -751,7 +769,32 @@ namespace Intersect.Editor.Forms.Editors
 
         private void nudSpeed_ValueChanged(object sender, EventArgs e)
         {
-            mEditorItem.Speed = (int) nudSpeed.Value;
+            ToggleProjectileArea(false);
+            mEditorItem.Speed = (int)nudSpeed.Value;
+        }
+
+        private void ToggleProjectileArea(bool fromSelection)
+        {
+            if ((fromSelection && mEditorItem.Speed == 0) || (mEditorItem.Speed > 0 && nudSpeed.Value == 0))
+            {
+                nudRange.Enabled = false;
+                lblSpawn.Text = Strings.ProjectileEditor.spawntime;
+                grpSpawns.Text = Strings.ProjectileEditor.areaspawns;
+                DarkMessageBox.ShowWarning(
+                        Strings.ProjectileEditor.editingarea, Strings.ProjectileEditor.editingareatitle,
+                        DarkDialogButton.Ok, Properties.Resources.Icon
+                    );
+            }
+            else if ((fromSelection && mEditorItem.Speed > 0) || (mEditorItem.Speed == 0 && nudSpeed.Value > 0))
+            {
+                nudRange.Enabled = true;
+                lblSpawn.Text = Strings.ProjectileEditor.spawndelay;
+                grpSpawns.Text = Strings.ProjectileEditor.spawns;
+                DarkMessageBox.ShowWarning(
+                        Strings.ProjectileEditor.editingprojectile, Strings.ProjectileEditor.editingprojectiletitle,
+                        DarkDialogButton.Ok, Properties.Resources.Icon
+                    );
+            }
         }
 
         private void nudSpawnDelay_ValueChanged(object sender, EventArgs e)

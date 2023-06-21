@@ -3,14 +3,16 @@ using System;
 using Intersect.Server.Database.GameData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Intersect.Server.Migrations.Game
 {
     [DbContext(typeof(GameContext))]
-    partial class GameContextModelSnapshot : ModelSnapshot
+    [Migration("20230615125656_AddingSeveralAnimationsToSpells")]
+    partial class AddingSeveralAnimationsToSpells
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -527,8 +529,6 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<string>("AnimationsJson")
                         .HasColumnName("Animations");
 
-                    b.Property<bool>("BlockTarget");
-
                     b.Property<int>("Delay");
 
                     b.Property<string>("Folder");
@@ -562,8 +562,6 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<Guid>("SpellId")
                         .HasColumnName("Spell");
-
-                    b.Property<bool>("StopProjectiles");
 
                     b.Property<long>("TimeCreated");
 

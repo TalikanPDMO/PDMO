@@ -78,9 +78,9 @@ namespace Intersect.Editor.Forms.Editors
             this.lstAnimations = new System.Windows.Forms.ListBox();
             this.lblSpawnRange = new System.Windows.Forms.Label();
             this.scrlSpawnRange = new DarkUI.Controls.DarkScrollBar();
-            this.grpCollisions = new DarkUI.Controls.DarkGroupBox();
+            this.grpIgnoreCollisions = new DarkUI.Controls.DarkGroupBox();
             this.chkLinkedSpawns = new DarkUI.Controls.DarkCheckBox();
-            this.chkPierce = new DarkUI.Controls.DarkCheckBox();
+            this.chkPierceTarget = new DarkUI.Controls.DarkCheckBox();
             this.chkIgnoreInactiveResources = new DarkUI.Controls.DarkCheckBox();
             this.chkIgnoreZDimensionBlocks = new DarkUI.Controls.DarkCheckBox();
             this.chkIgnoreMapBlocks = new DarkUI.Controls.DarkCheckBox();
@@ -105,6 +105,9 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.toolStripItemRelations = new System.Windows.Forms.ToolStripButton();
+            this.grpCollisionOptions = new DarkUI.Controls.DarkGroupBox();
+            this.chkStopProjectiles = new DarkUI.Controls.DarkCheckBox();
+            this.chkBlockTarget = new DarkUI.Controls.DarkCheckBox();
             this.grpProjectiles.SuspendLayout();
             this.grpSpawns.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSpawns)).BeginInit();
@@ -115,11 +118,12 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudSpawn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpeed)).BeginInit();
             this.grpAnimations.SuspendLayout();
-            this.grpCollisions.SuspendLayout();
+            this.grpIgnoreCollisions.SuspendLayout();
             this.pnlContainer.SuspendLayout();
             this.grpAmmo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudConsume)).BeginInit();
             this.toolStrip.SuspendLayout();
+            this.grpCollisionOptions.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpProjectiles
@@ -506,11 +510,6 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0,
             0});
-            this.nudSpeed.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             this.nudSpeed.Name = "nudSpeed";
             this.nudSpeed.Size = new System.Drawing.Size(69, 20);
             this.nudSpeed.TabIndex = 41;
@@ -751,28 +750,26 @@ namespace Intersect.Editor.Forms.Editors
             this.scrlSpawnRange.Value = 1;
             this.scrlSpawnRange.ValueChanged += new System.EventHandler<DarkUI.Controls.ScrollValueEventArgs>(this.scrlSpawnRange_Scroll);
             // 
-            // grpCollisions
+            // grpIgnoreCollisions
             // 
-            this.grpCollisions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpCollisions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpCollisions.Controls.Add(this.chkLinkedSpawns);
-            this.grpCollisions.Controls.Add(this.chkPierce);
-            this.grpCollisions.Controls.Add(this.chkIgnoreInactiveResources);
-            this.grpCollisions.Controls.Add(this.chkIgnoreZDimensionBlocks);
-            this.grpCollisions.Controls.Add(this.chkIgnoreMapBlocks);
-            this.grpCollisions.Controls.Add(this.chkIgnoreActiveResources);
-            this.grpCollisions.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpCollisions.Location = new System.Drawing.Point(192, 259);
-            this.grpCollisions.Name = "grpCollisions";
-            this.grpCollisions.Size = new System.Drawing.Size(273, 107);
-            this.grpCollisions.TabIndex = 29;
-            this.grpCollisions.TabStop = false;
-            this.grpCollisions.Text = "Ignore Collision:";
+            this.grpIgnoreCollisions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpIgnoreCollisions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpIgnoreCollisions.Controls.Add(this.chkIgnoreInactiveResources);
+            this.grpIgnoreCollisions.Controls.Add(this.chkIgnoreZDimensionBlocks);
+            this.grpIgnoreCollisions.Controls.Add(this.chkIgnoreMapBlocks);
+            this.grpIgnoreCollisions.Controls.Add(this.chkIgnoreActiveResources);
+            this.grpIgnoreCollisions.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpIgnoreCollisions.Location = new System.Drawing.Point(192, 259);
+            this.grpIgnoreCollisions.Name = "grpIgnoreCollisions";
+            this.grpIgnoreCollisions.Size = new System.Drawing.Size(135, 107);
+            this.grpIgnoreCollisions.TabIndex = 29;
+            this.grpIgnoreCollisions.TabStop = false;
+            this.grpIgnoreCollisions.Text = "Ignore Collision:";
             // 
             // chkLinkedSpawns
             // 
             this.chkLinkedSpawns.AutoSize = true;
-            this.chkLinkedSpawns.Location = new System.Drawing.Point(160, 39);
+            this.chkLinkedSpawns.Location = new System.Drawing.Point(6, 16);
             this.chkLinkedSpawns.Name = "chkLinkedSpawns";
             this.chkLinkedSpawns.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.chkLinkedSpawns.Size = new System.Drawing.Size(105, 17);
@@ -780,16 +777,16 @@ namespace Intersect.Editor.Forms.Editors
             this.chkLinkedSpawns.Text = "Linked Spawns?";
             this.chkLinkedSpawns.CheckedChanged += new System.EventHandler(this.chkLinkedSpawns_CheckedChanged);
             // 
-            // chkPierce
+            // chkPierceTarget
             // 
-            this.chkPierce.AutoSize = true;
-            this.chkPierce.Location = new System.Drawing.Point(160, 16);
-            this.chkPierce.Name = "chkPierce";
-            this.chkPierce.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.chkPierce.Size = new System.Drawing.Size(96, 17);
-            this.chkPierce.TabIndex = 39;
-            this.chkPierce.Text = "Pierce Target?";
-            this.chkPierce.CheckedChanged += new System.EventHandler(this.chkPierce_CheckedChanged);
+            this.chkPierceTarget.AutoSize = true;
+            this.chkPierceTarget.Location = new System.Drawing.Point(6, 39);
+            this.chkPierceTarget.Name = "chkPierceTarget";
+            this.chkPierceTarget.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.chkPierceTarget.Size = new System.Drawing.Size(96, 17);
+            this.chkPierceTarget.TabIndex = 39;
+            this.chkPierceTarget.Text = "Pierce Target?";
+            this.chkPierceTarget.CheckedChanged += new System.EventHandler(this.chkPierce_CheckedChanged);
             // 
             // chkIgnoreInactiveResources
             // 
@@ -833,8 +830,9 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // pnlContainer
             // 
+            this.pnlContainer.Controls.Add(this.grpCollisionOptions);
             this.pnlContainer.Controls.Add(this.grpAmmo);
-            this.pnlContainer.Controls.Add(this.grpCollisions);
+            this.pnlContainer.Controls.Add(this.grpIgnoreCollisions);
             this.pnlContainer.Controls.Add(this.grpProperties);
             this.pnlContainer.Controls.Add(this.grpAnimations);
             this.pnlContainer.Controls.Add(this.grpSpawns);
@@ -1074,6 +1072,42 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemRelations.Text = "Relations";
             this.toolStripItemRelations.Click += new System.EventHandler(this.toolStripItemRelations_Click);
             // 
+            // grpCollisionOptions
+            // 
+            this.grpCollisionOptions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpCollisionOptions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpCollisionOptions.Controls.Add(this.chkLinkedSpawns);
+            this.grpCollisionOptions.Controls.Add(this.chkStopProjectiles);
+            this.grpCollisionOptions.Controls.Add(this.chkBlockTarget);
+            this.grpCollisionOptions.Controls.Add(this.chkPierceTarget);
+            this.grpCollisionOptions.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpCollisionOptions.Location = new System.Drawing.Point(331, 259);
+            this.grpCollisionOptions.Name = "grpCollisionOptions";
+            this.grpCollisionOptions.Size = new System.Drawing.Size(135, 107);
+            this.grpCollisionOptions.TabIndex = 39;
+            this.grpCollisionOptions.TabStop = false;
+            this.grpCollisionOptions.Text = "Collision Options:";
+            // 
+            // chkStopProjectiles
+            // 
+            this.chkStopProjectiles.AutoSize = true;
+            this.chkStopProjectiles.Location = new System.Drawing.Point(6, 85);
+            this.chkStopProjectiles.Name = "chkStopProjectiles";
+            this.chkStopProjectiles.Size = new System.Drawing.Size(105, 17);
+            this.chkStopProjectiles.TabIndex = 33;
+            this.chkStopProjectiles.Text = "Stop Projectiles?";
+            this.chkStopProjectiles.CheckedChanged += new System.EventHandler(this.chkStopProjectiles_CheckedChanged);
+            // 
+            // chkBlockTarget
+            // 
+            this.chkBlockTarget.AutoSize = true;
+            this.chkBlockTarget.Location = new System.Drawing.Point(6, 62);
+            this.chkBlockTarget.Name = "chkBlockTarget";
+            this.chkBlockTarget.Size = new System.Drawing.Size(93, 17);
+            this.chkBlockTarget.TabIndex = 36;
+            this.chkBlockTarget.Text = "Block Target?";
+            this.chkBlockTarget.CheckedChanged += new System.EventHandler(this.chkBlockTarget_CheckedChanged);
+            // 
             // FrmProjectile
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1108,14 +1142,16 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudSpeed)).EndInit();
             this.grpAnimations.ResumeLayout(false);
             this.grpAnimations.PerformLayout();
-            this.grpCollisions.ResumeLayout(false);
-            this.grpCollisions.PerformLayout();
+            this.grpIgnoreCollisions.ResumeLayout(false);
+            this.grpIgnoreCollisions.PerformLayout();
             this.pnlContainer.ResumeLayout(false);
             this.grpAmmo.ResumeLayout(false);
             this.grpAmmo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudConsume)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.grpCollisionOptions.ResumeLayout(false);
+            this.grpCollisionOptions.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1139,7 +1175,7 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.ListBox lstAnimations;
         private System.Windows.Forms.Label lblSpawnRange;
         private DarkScrollBar scrlSpawnRange;
-        private DarkGroupBox grpCollisions;
+        private DarkGroupBox grpIgnoreCollisions;
         private DarkCheckBox chkIgnoreInactiveResources;
         private DarkCheckBox chkIgnoreZDimensionBlocks;
         private DarkCheckBox chkIgnoreMapBlocks;
@@ -1179,7 +1215,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkComboBox cmbFolder;
         private System.Windows.Forms.ToolStripButton btnAlphabetical;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private DarkCheckBox chkPierce;
+        private DarkCheckBox chkPierceTarget;
         private Controls.GameObjectList lstGameObjects;
         private DarkComboBox cmbUniqueAnimation;
         private System.Windows.Forms.Label lblUniqueAnimation;
@@ -1195,5 +1231,8 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label label6;
         private DarkCheckBox chkLinkedSpawns;
         public System.Windows.Forms.ToolStripButton toolStripItemRelations;
+        private DarkGroupBox grpCollisionOptions;
+        private DarkCheckBox chkStopProjectiles;
+        private DarkCheckBox chkBlockTarget;
     }
 }

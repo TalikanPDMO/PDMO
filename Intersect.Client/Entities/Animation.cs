@@ -34,9 +34,9 @@ namespace Intersect.Client.Entities
 
         private int mRenderDir;
 
-        private float mRenderX;
+        public float mRenderX;
 
-        private float mRenderY;
+        public float mRenderY;
 
         private bool mShowLower = true;
 

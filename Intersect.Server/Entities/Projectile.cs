@@ -5,9 +5,11 @@ using System.Linq;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Maps;
+using Intersect.Logging;
 using Intersect.Network.Packets.Server;
 using Intersect.Server.Entities.Combat;
 using Intersect.Server.General;
+using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 
@@ -76,7 +78,8 @@ namespace Intersect.Server.Entities
             Spell = parentSpell;
             Item = parentItem;
 
-            Passable = true;
+            //Static projectiles are passable only if not blocking
+            Passable = !Base.BlockTarget;
             HideName = true;
             for (var x = 0; x < ProjectileBase.SPAWN_LOCATIONS_WIDTH; x++)
             {
@@ -107,10 +110,12 @@ namespace Intersect.Server.Entities
                     {
                         if (Base.SpawnLocations[x, y].Directions[d] == true && mSpawnedAmount < Spawns.Length)
                         {
+                            var tile = new TileHelper(MapId, X, Y);
+                            tile.Translate(FindProjectileRotationX(Dir, x - 2, y - 2), FindProjectileRotationY(Dir, x - 2, y - 2));
                             var s = new ProjectileSpawn(
                                 FindProjectileRotationDir(Dir, d),
-                                (byte) (X + FindProjectileRotationX(Dir, x - 2, y - 2)),
-                                (byte) (Y + FindProjectileRotationY(Dir, x - 2, y - 2)), (byte) Z, MapId, Base, this,
+                                (byte) tile.GetX(),
+                                (byte) tile.GetY(), (byte) Z, tile.GetMapId(), Base, this,
                                 (byte)mSpawnedAmount, (byte)mQuantity, (byte)i
                             );
 
@@ -123,13 +128,18 @@ namespace Intersect.Server.Entities
                             {
                                 s.Dead = true;
                             }
+
+                            // Play the impact animation on the first tile for each spawn
+                            if (Spell?.ImpactAnimation != null)
+                            {
+                                PacketSender.SendAnimationToProximity(Spell.ImpactAnimationId, -1, Guid.Empty, s.MapId, (byte)s.X, (byte)s.Y, (sbyte)Directions.Up);
+                            }  
                         }
                     }
                 }
             }
-
-            mQuantity++;
             mSpawnTime = Globals.Timing.Milliseconds + Base.Delay;
+            mQuantity++;
         }
 
         public static int FindProjectileRotationX(int direction, int x, int y)
@@ -421,10 +431,23 @@ namespace Intersect.Server.Entities
                             var killSpawn = false;
                             if (!spawn.Dead)
                             {
-                                killSpawn = MoveFragment(spawn);
-                                if (!killSpawn && (x != spawn.X || y != spawn.Y || map != spawn.MapId))
+                                if (Base.Speed > 0)
+                                {   
+                                    killSpawn = MoveFragment(spawn);
+                                    if (!killSpawn && (x != spawn.X || y != spawn.Y || map != spawn.MapId))
+                                    {
+                                        // Play the tile animation on the current projectilespawn tile
+                                        if (Spell?.TilesAnimation != null)
+                                        {
+                                            PacketSender.SendAnimationToProximity(Spell.TilesAnimationId, -1, Guid.Empty, spawn.MapId, (byte)spawn.X, (byte)spawn.Y, (sbyte)Directions.Up);
+                                        }
+                                        killSpawn = CheckForCollision(spawn);
+                                    }
+                                }
+                                else
                                 {
                                     killSpawn = CheckForCollision(spawn);
+                                    spawn.TransmittionTimer = Globals.Timing.Milliseconds + spawn.ProjectileBase.Delay;
                                 }
                             }
 
@@ -520,34 +543,62 @@ namespace Intersect.Server.Entities
                 {
                     killSpawn = true;
                 }
-            }
 
-            if (!killSpawn && map != null)
-            {
-                var entities = map.GetEntities();
-                for (var z = 0; z < entities.Count; z++)
+                // Check for stop projectiles (mainly static projs like wall etc ...)
+                foreach (var proj in map.MapProjectilesCached)
                 {
-                    if (entities[z] != null &&
-                        (entities[z].X == Math.Round(spawn.X) || entities[z].X == Math.Ceiling(spawn.X) || entities[z].X == Math.Floor(spawn.X)) &&
-                        (entities[z].Y == Math.Round(spawn.Y) || entities[z].Y == Math.Ceiling(spawn.Y) || entities[z].Y == Math.Floor(spawn.Y)) &&
-                        entities[z].Z == spawn.Z)
+                    if (proj != null && proj != this && proj.Base.StopProjectiles && proj.Spawns != null)
                     {
-                        killSpawn = spawn.HitEntity(entities[z]);
-                        if (killSpawn && !spawn.ProjectileBase.PierceTarget)
+                        foreach (var stopSpawn in proj.Spawns)
                         {
-                            return killSpawn;
-                        }
-                    }
-                    else
-                    {
-                        if (z == entities.Count - 1)
-                        {       
-                            if (spawn.Distance >= Base.Range)
+                            if (stopSpawn != null && !stopSpawn.Dead && stopSpawn.IsAtLocation(spawn.MapId, (int)spawn.X, (int)spawn.Y, spawn.Z))
                             {
-                                killSpawn = true;
+                                if (this.Base.StopProjectiles)
+                                {
+                                    // If both are stopping projectiles, we need to kill also the one we collide
+                                    stopSpawn.Dead = true;
+                                }
+                                //No need to check others, we directly exit with true to gain time
+                                return true;
                             }
                         }
                     }
+                }
+            }
+            if (!killSpawn && map != null)
+            {
+                var entities = map.GetEntities();
+                if (entities.Count > 0)
+                {
+                    for (var z = 0; z < entities.Count; z++)
+                    {
+                        if (entities[z] != null &&
+                            (entities[z].X == Math.Round(spawn.X) || entities[z].X == Math.Ceiling(spawn.X) || entities[z].X == Math.Floor(spawn.X)) &&
+                            (entities[z].Y == Math.Round(spawn.Y) || entities[z].Y == Math.Ceiling(spawn.Y) || entities[z].Y == Math.Floor(spawn.Y)) &&
+                            entities[z].Z == spawn.Z)
+                        {
+                            killSpawn = spawn.HitEntity(entities[z]);
+                            if (killSpawn && !spawn.ProjectileBase.PierceTarget)
+                            {
+                                return killSpawn;
+                            }
+                            else if (spawn.Parent.Base.BlockTarget)
+                            {
+                                var dashspeed = spawn.Parent.Base.Speed;
+                                if (spawn.Parent.Base.Range > 0 && spawn.Parent.Base.Speed > 0)
+                                {
+                                    //dashRange = spawn.Parent.Base.Range - spawn.Distance + 1;
+                                    dashspeed = (int)((float)spawn.Parent.Base.Speed / (float)(spawn.Parent.Base.Range + 1));
+                                }
+                                new Dash(entities[z], 1, spawn.Dir, false, false, false, false, null, dashspeed);
+                            }
+                        }
+                    }
+                }
+
+                if ((Base.Speed == 0 && Globals.Timing.Milliseconds > spawn.TransmittionTimer) || (Base.Speed > 0 && spawn.Distance >= Base.Range))
+                {
+                    killSpawn = true;
                 }
             }
 

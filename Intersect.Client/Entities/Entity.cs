@@ -72,6 +72,10 @@ namespace Intersect.Client.Entities
 
         public Animation[] EquipmentAnimations = new Animation[Options.EquipmentSlots.Count];
 
+        public ProjectileSpawns CollidedSpawn = null;
+
+        public long CollidedTimer = 0;
+
         //Extras
         public string Face = "";
 
@@ -547,6 +551,14 @@ namespace Intersect.Client.Entities
                         {
                             WalkFrame = 0;
                         }
+                        if (Running)
+                        {
+                            mWalkTimer = Globals.System.GetTimeMs() + 2 * (Options.Instance.Sprites.RunningFrameDuration - Stat[(int)Stats.Speed]);
+                        }
+                        else
+                        {
+                            mWalkTimer = Globals.System.GetTimeMs() + Options.Instance.Sprites.MovingFrameDuration;
+                        }
                     }
                     else
                     {
@@ -558,14 +570,6 @@ namespace Intersect.Client.Entities
                         {
                             WalkFrame = 0;
                         }
-                    }
-                    if (Running)
-                    {
-                        mWalkTimer = Globals.System.GetTimeMs() + 2*(Options.Instance.Sprites.RunningFrameDuration - Stat[(int)Stats.Speed]);
-                    }
-                    else
-                    {
-                        mWalkTimer = Globals.System.GetTimeMs() + Options.Instance.Sprites.MovingFrameDuration;
                     }
                 }
             }
@@ -838,6 +842,11 @@ namespace Intersect.Client.Entities
                                     (float) Options.MaxStatValue)));
         }
 
+        public void StopMovement()
+        {
+            IsMoving = false;
+            mWalkTimer = 0;
+        }
         public virtual bool IsStealthed()
         {
             //If the entity has transformed, apply that sprite instead.
@@ -2097,59 +2106,78 @@ namespace Intersect.Client.Entities
                         continue;
                     }
 
-                    if (en.Value == Globals.Me)
+                    // Supressed for blocking projectiles. need to be carefull here and watch if it breaks something in the future
+                    // Insteaded of continue and returning -1, we return -6 as a global entity
+                    /*if (en.Value == Globals.Me)
                     {
                         continue;
-                    }
-                    else
+                    }*/
+                    if (en.Value.GetType() == typeof(Projectile))
                     {
+                        var proj = (Projectile)en.Value;
+                        if (proj.Passable)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            foreach (var blockSpawn in proj.Spawns)
+                            {
+                                if (blockSpawn != null && blockSpawn.MapId == tmpMapId &&
+                                    blockSpawn.X == tmpX &&
+                                    blockSpawn.Y == tmpY &&
+                                    blockSpawn.Z == Z)
+                                {
+                                    blockedBy = en.Value;
+                                    return -6;
+                                }
+                            }
+                        }
+                    }
+                    else {
                         if (en.Value.CurrentMap == tmpMapId &&
                             en.Value.X == tmpX &&
                             en.Value.Y == tmpY &&
                             en.Value.Z == Z)
                         {
-                            if (en.Value.GetType() != typeof(Projectile))
+                            
+                            if (en.Value.GetType() == typeof(Resource))
                             {
-                                if (en.Value.GetType() == typeof(Resource))
+                                var resourceBase = ((Resource)en.Value).GetResourceBase();
+                                if (resourceBase != null)
                                 {
-                                    var resourceBase = ((Resource)en.Value).GetResourceBase();
-                                    if (resourceBase != null)
+                                    if (!ignoreAliveResources && !((Resource)en.Value).IsDead && !resourceBase.WalkableBefore)
                                     {
-                                        if (!ignoreAliveResources && !((Resource)en.Value).IsDead && !resourceBase.WalkableBefore)
-                                        {
-                                            blockedBy = en.Value;
+                                        blockedBy = en.Value;
 
-                                            return -6;
-                                        }
-
-                                        if (!ignoreDeadResources && ((Resource)en.Value).IsDead && !resourceBase.WalkableAfter)
-                                        {
-                                            blockedBy = en.Value;
-
-                                            return -6;
-                                        }
-
-                                        if (resourceBase.WalkableAfter && ((Resource)en.Value).IsDead ||
-                                            resourceBase.WalkableBefore && !((Resource)en.Value).IsDead)
-                                        {
-                                            continue;
-                                        }
+                                        return -6;
                                     }
-                                }
-                                else if (en.Value.GetType() == typeof(Player))
-                                {
-                                    //Return the entity key as this should block the player.  Only exception is if the MapZone this entity is on is passable.
-                                    var entityMap = MapInstance.Get(en.Value.CurrentMap);
-                                    if (Options.Instance.Passability.Passable[(int)entityMap.ZoneType])
+
+                                    if (!ignoreDeadResources && ((Resource)en.Value).IsDead && !resourceBase.WalkableAfter)
+                                    {
+                                        blockedBy = en.Value;
+
+                                        return -6;
+                                    }
+
+                                    if (resourceBase.WalkableAfter && ((Resource)en.Value).IsDead ||
+                                        resourceBase.WalkableBefore && !((Resource)en.Value).IsDead)
                                     {
                                         continue;
                                     }
                                 }
-
-                                blockedBy = en.Value;
-
-                                return -6;
                             }
+                            else if (en.Value.GetType() == typeof(Player))
+                            {
+                                //Return the entity key as this should block the player.  Only exception is if the MapZone this entity is on is passable.
+                                var entityMap = MapInstance.Get(en.Value.CurrentMap);
+                                if (Options.Instance.Passability.Passable[(int)entityMap.ZoneType])
+                                {
+                                    continue;
+                                }
+                            }
+                            blockedBy = en.Value;
+                            return -6;
                         }
                     }
                 }

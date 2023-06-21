@@ -38,7 +38,6 @@ namespace Intersect.Network.Packets.Server
 
         [Key(5)]
         public sbyte Direction { get; set; }
-
     }
 
 }
