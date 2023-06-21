@@ -225,7 +225,7 @@ namespace Intersect.Editor.Forms.Editors
             "10 minutes"});
             this.cmbIntervals.Location = new System.Drawing.Point(62, 17);
             this.cmbIntervals.Name = "cmbIntervals";
-            this.cmbIntervals.Size = new System.Drawing.Size(109, 21);
+            this.cmbIntervals.Size = new System.Drawing.Size(197, 21);
             this.cmbIntervals.TabIndex = 1;
             this.cmbIntervals.Text = "24 hours";
             this.cmbIntervals.TextPadding = new System.Windows.Forms.Padding(2);

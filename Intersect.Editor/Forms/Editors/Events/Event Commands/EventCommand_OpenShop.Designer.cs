@@ -49,7 +49,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpShop.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpShop.Location = new System.Drawing.Point(3, 3);
             this.grpShop.Name = "grpShop";
-            this.grpShop.Size = new System.Drawing.Size(176, 126);
+            this.grpShop.Size = new System.Drawing.Size(320, 126);
             this.grpShop.TabIndex = 17;
             this.grpShop.TabStop = false;
             this.grpShop.Text = "Open Shop";
@@ -59,19 +59,25 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbShop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.cmbShop.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.cmbShop.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbShop.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbShop.DrawDropdownHoverOutline = false;
+            this.cmbShop.DrawFocusRectangle = false;
             this.cmbShop.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cmbShop.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbShop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbShop.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbShop.FormattingEnabled = true;
-            this.cmbShop.Location = new System.Drawing.Point(47, 19);
+            this.cmbShop.Location = new System.Drawing.Point(47, 29);
             this.cmbShop.Name = "cmbShop";
-            this.cmbShop.Size = new System.Drawing.Size(117, 21);
+            this.cmbShop.Size = new System.Drawing.Size(267, 21);
             this.cmbShop.TabIndex = 22;
+            this.cmbShop.Text = null;
+            this.cmbShop.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // lblShop
             // 
             this.lblShop.AutoSize = true;
-            this.lblShop.Location = new System.Drawing.Point(4, 22);
+            this.lblShop.Location = new System.Drawing.Point(4, 32);
             this.lblShop.Name = "lblShop";
             this.lblShop.Size = new System.Drawing.Size(35, 13);
             this.lblShop.TabIndex = 21;
@@ -97,7 +103,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // EventCommand_OpenShop
+            // EventCommandOpenShop
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -105,7 +111,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpShop);
             this.Name = "EventCommandOpenShop";
-            this.Size = new System.Drawing.Size(182, 132);
+            this.Size = new System.Drawing.Size(330, 132);
             this.grpShop.ResumeLayout(false);
             this.grpShop.PerformLayout();
             this.ResumeLayout(false);

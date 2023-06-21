@@ -30,7 +30,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EventCommandOpenCraftingTable));
             this.grpTable = new DarkUI.Controls.DarkGroupBox();
             this.cmbTable = new DarkUI.Controls.DarkComboBox();
             this.lblTable = new System.Windows.Forms.Label();
@@ -50,7 +49,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpTable.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpTable.Location = new System.Drawing.Point(3, 3);
             this.grpTable.Name = "grpTable";
-            this.grpTable.Size = new System.Drawing.Size(176, 126);
+            this.grpTable.Size = new System.Drawing.Size(320, 126);
             this.grpTable.TabIndex = 17;
             this.grpTable.TabStop = false;
             this.grpTable.Text = "Open Crafting";
@@ -68,9 +67,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbTable.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbTable.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbTable.FormattingEnabled = true;
-            this.cmbTable.Location = new System.Drawing.Point(47, 19);
+            this.cmbTable.Location = new System.Drawing.Point(47, 31);
             this.cmbTable.Name = "cmbTable";
-            this.cmbTable.Size = new System.Drawing.Size(117, 21);
+            this.cmbTable.Size = new System.Drawing.Size(267, 21);
             this.cmbTable.TabIndex = 22;
             this.cmbTable.Text = null;
             this.cmbTable.TextPadding = new System.Windows.Forms.Padding(2);
@@ -78,7 +77,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblTable
             // 
             this.lblTable.AutoSize = true;
-            this.lblTable.Location = new System.Drawing.Point(4, 22);
+            this.lblTable.Location = new System.Drawing.Point(4, 34);
             this.lblTable.Name = "lblTable";
             this.lblTable.Size = new System.Drawing.Size(37, 13);
             this.lblTable.TabIndex = 21;
@@ -112,7 +111,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpTable);
             this.Name = "EventCommandOpenCraftingTable";
-            this.Size = new System.Drawing.Size(182, 132);
+            this.Size = new System.Drawing.Size(330, 132);
             this.grpTable.ResumeLayout(false);
             this.grpTable.PerformLayout();
             this.ResumeLayout(false);

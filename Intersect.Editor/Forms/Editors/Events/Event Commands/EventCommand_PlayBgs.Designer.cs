@@ -49,7 +49,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpPlayBGS.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpPlayBGS.Location = new System.Drawing.Point(3, 3);
             this.grpPlayBGS.Name = "grpPlayBGS";
-            this.grpPlayBGS.Size = new System.Drawing.Size(176, 126);
+            this.grpPlayBGS.Size = new System.Drawing.Size(320, 126);
             this.grpPlayBGS.TabIndex = 17;
             this.grpPlayBGS.TabStop = false;
             this.grpPlayBGS.Text = "Play Sound";
@@ -59,20 +59,26 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbSound.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.cmbSound.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.cmbSound.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbSound.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbSound.DrawDropdownHoverOutline = false;
+            this.cmbSound.DrawFocusRectangle = false;
             this.cmbSound.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cmbSound.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSound.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbSound.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbSound.FormattingEnabled = true;
-            this.cmbSound.Location = new System.Drawing.Point(47, 19);
+            this.cmbSound.Location = new System.Drawing.Point(47, 27);
             this.cmbSound.Name = "cmbSound";
-            this.cmbSound.Size = new System.Drawing.Size(117, 21);
+            this.cmbSound.Size = new System.Drawing.Size(267, 21);
             this.cmbSound.TabIndex = 22;
+            this.cmbSound.Text = null;
+            this.cmbSound.TextPadding = new System.Windows.Forms.Padding(2);
             this.cmbSound.SelectedIndexChanged += new System.EventHandler(this.cmbSprite_SelectedIndexChanged);
             // 
             // lblSound
             // 
             this.lblSound.AutoSize = true;
-            this.lblSound.Location = new System.Drawing.Point(4, 22);
+            this.lblSound.Location = new System.Drawing.Point(4, 30);
             this.lblSound.Name = "lblSound";
             this.lblSound.Size = new System.Drawing.Size(41, 13);
             this.lblSound.TabIndex = 21;
@@ -98,7 +104,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // EventCommand_PlayBgs
+            // EventCommandPlayBgs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -106,7 +112,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpPlayBGS);
             this.Name = "EventCommandPlayBgs";
-            this.Size = new System.Drawing.Size(182, 132);
+            this.Size = new System.Drawing.Size(326, 132);
             this.grpPlayBGS.ResumeLayout(false);
             this.grpPlayBGS.PerformLayout();
             this.ResumeLayout(false);

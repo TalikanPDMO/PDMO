@@ -32,6 +32,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             this.grpSetVariable = new DarkUI.Controls.DarkGroupBox();
             this.grpSelectVariable = new DarkUI.Controls.DarkGroupBox();
+            this.chkSyncOffline = new DarkUI.Controls.DarkCheckBox();
+            this.lblSync = new System.Windows.Forms.Label();
             this.chkSyncAll = new DarkUI.Controls.DarkCheckBox();
             this.chkSyncGuild = new DarkUI.Controls.DarkCheckBox();
             this.chkSyncParty = new DarkUI.Controls.DarkCheckBox();
@@ -81,8 +83,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.optBooleanClonePlayerVar = new DarkUI.Controls.DarkRadioButton();
             this.optBooleanTrue = new DarkUI.Controls.DarkRadioButton();
             this.optBooleanFalse = new DarkUI.Controls.DarkRadioButton();
-            this.lblSync = new System.Windows.Forms.Label();
-            this.chkSyncOffline = new DarkUI.Controls.DarkCheckBox();
             this.grpSetVariable.SuspendLayout();
             this.grpSelectVariable.SuspendLayout();
             this.grpNumericVariable.SuspendLayout();
@@ -110,7 +110,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpSetVariable.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpSetVariable.Location = new System.Drawing.Point(3, 3);
             this.grpSetVariable.Name = "grpSetVariable";
-            this.grpSetVariable.Size = new System.Drawing.Size(308, 339);
+            this.grpSetVariable.Size = new System.Drawing.Size(320, 339);
             this.grpSetVariable.TabIndex = 17;
             this.grpSetVariable.TabStop = false;
             this.grpSetVariable.Text = "Set Variable";
@@ -130,10 +130,29 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpSelectVariable.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpSelectVariable.Location = new System.Drawing.Point(6, 19);
             this.grpSelectVariable.Name = "grpSelectVariable";
-            this.grpSelectVariable.Size = new System.Drawing.Size(296, 90);
+            this.grpSelectVariable.Size = new System.Drawing.Size(308, 90);
             this.grpSelectVariable.TabIndex = 40;
             this.grpSelectVariable.TabStop = false;
             this.grpSelectVariable.Text = "Select Variable";
+            // 
+            // chkSyncOffline
+            // 
+            this.chkSyncOffline.AutoSize = true;
+            this.chkSyncOffline.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.chkSyncOffline.Location = new System.Drawing.Point(205, 67);
+            this.chkSyncOffline.Name = "chkSyncOffline";
+            this.chkSyncOffline.Size = new System.Drawing.Size(81, 17);
+            this.chkSyncOffline.TabIndex = 44;
+            this.chkSyncOffline.Text = "+ Offline /!\\";
+            // 
+            // lblSync
+            // 
+            this.lblSync.AutoSize = true;
+            this.lblSync.Location = new System.Drawing.Point(6, 69);
+            this.lblSync.Name = "lblSync";
+            this.lblSync.Size = new System.Drawing.Size(49, 13);
+            this.lblSync.TabIndex = 43;
+            this.lblSync.Text = "Synchro:";
             // 
             // chkSyncAll
             // 
@@ -192,7 +211,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbVariable.FormattingEnabled = true;
             this.cmbVariable.Location = new System.Drawing.Point(6, 42);
             this.cmbVariable.Name = "cmbVariable";
-            this.cmbVariable.Size = new System.Drawing.Size(284, 21);
+            this.cmbVariable.Size = new System.Drawing.Size(296, 21);
             this.cmbVariable.TabIndex = 22;
             this.cmbVariable.Text = null;
             this.cmbVariable.TextPadding = new System.Windows.Forms.Padding(2);
@@ -246,7 +265,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpNumericVariable.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpNumericVariable.Location = new System.Drawing.Point(6, 115);
             this.grpNumericVariable.Name = "grpNumericVariable";
-            this.grpNumericVariable.Size = new System.Drawing.Size(296, 183);
+            this.grpNumericVariable.Size = new System.Drawing.Size(308, 183);
             this.grpNumericVariable.TabIndex = 36;
             this.grpNumericVariable.TabStop = false;
             this.grpNumericVariable.Text = "Numeric Variable:";
@@ -353,7 +372,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpNumericValues.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpNumericValues.Location = new System.Drawing.Point(6, 71);
             this.grpNumericValues.Name = "grpNumericValues";
-            this.grpNumericValues.Size = new System.Drawing.Size(284, 100);
+            this.grpNumericValues.Size = new System.Drawing.Size(296, 100);
             this.grpNumericValues.TabIndex = 37;
             this.grpNumericValues.TabStop = false;
             // 
@@ -373,7 +392,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             -1,
             -2147483648});
             this.nudNumericValue.Name = "nudNumericValue";
-            this.nudNumericValue.Size = new System.Drawing.Size(125, 20);
+            this.nudNumericValue.Size = new System.Drawing.Size(147, 20);
             this.nudNumericValue.TabIndex = 47;
             this.nudNumericValue.Value = new decimal(new int[] {
             0,
@@ -396,7 +415,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbNumericCloneGlobalVar.FormattingEnabled = true;
             this.cmbNumericCloneGlobalVar.Location = new System.Drawing.Point(143, 70);
             this.cmbNumericCloneGlobalVar.Name = "cmbNumericCloneGlobalVar";
-            this.cmbNumericCloneGlobalVar.Size = new System.Drawing.Size(125, 21);
+            this.cmbNumericCloneGlobalVar.Size = new System.Drawing.Size(147, 21);
             this.cmbNumericCloneGlobalVar.TabIndex = 45;
             this.cmbNumericCloneGlobalVar.Text = null;
             this.cmbNumericCloneGlobalVar.TextPadding = new System.Windows.Forms.Padding(2);
@@ -416,7 +435,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbNumericClonePlayerVar.FormattingEnabled = true;
             this.cmbNumericClonePlayerVar.Location = new System.Drawing.Point(143, 38);
             this.cmbNumericClonePlayerVar.Name = "cmbNumericClonePlayerVar";
-            this.cmbNumericClonePlayerVar.Size = new System.Drawing.Size(125, 21);
+            this.cmbNumericClonePlayerVar.Size = new System.Drawing.Size(147, 21);
             this.cmbNumericClonePlayerVar.TabIndex = 44;
             this.cmbNumericClonePlayerVar.Text = null;
             this.cmbNumericClonePlayerVar.TextPadding = new System.Windows.Forms.Padding(2);
@@ -546,7 +565,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpStringVariable.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpStringVariable.Location = new System.Drawing.Point(6, 115);
             this.grpStringVariable.Name = "grpStringVariable";
-            this.grpStringVariable.Size = new System.Drawing.Size(296, 183);
+            this.grpStringVariable.Size = new System.Drawing.Size(308, 183);
             this.grpStringVariable.TabIndex = 51;
             this.grpStringVariable.TabStop = false;
             this.grpStringVariable.Text = "String Variable:";
@@ -685,7 +704,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpBooleanVariable.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpBooleanVariable.Location = new System.Drawing.Point(6, 115);
             this.grpBooleanVariable.Name = "grpBooleanVariable";
-            this.grpBooleanVariable.Size = new System.Drawing.Size(296, 183);
+            this.grpBooleanVariable.Size = new System.Drawing.Size(308, 183);
             this.grpBooleanVariable.TabIndex = 40;
             this.grpBooleanVariable.TabStop = false;
             this.grpBooleanVariable.Text = "Boolean Variable:";
@@ -705,7 +724,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbBooleanCloneGlobalVar.FormattingEnabled = true;
             this.cmbBooleanCloneGlobalVar.Location = new System.Drawing.Point(146, 103);
             this.cmbBooleanCloneGlobalVar.Name = "cmbBooleanCloneGlobalVar";
-            this.cmbBooleanCloneGlobalVar.Size = new System.Drawing.Size(138, 21);
+            this.cmbBooleanCloneGlobalVar.Size = new System.Drawing.Size(156, 21);
             this.cmbBooleanCloneGlobalVar.TabIndex = 49;
             this.cmbBooleanCloneGlobalVar.Text = null;
             this.cmbBooleanCloneGlobalVar.TextPadding = new System.Windows.Forms.Padding(2);
@@ -725,7 +744,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbBooleanClonePlayerVar.FormattingEnabled = true;
             this.cmbBooleanClonePlayerVar.Location = new System.Drawing.Point(146, 71);
             this.cmbBooleanClonePlayerVar.Name = "cmbBooleanClonePlayerVar";
-            this.cmbBooleanClonePlayerVar.Size = new System.Drawing.Size(138, 21);
+            this.cmbBooleanClonePlayerVar.Size = new System.Drawing.Size(156, 21);
             this.cmbBooleanClonePlayerVar.TabIndex = 48;
             this.cmbBooleanClonePlayerVar.Text = null;
             this.cmbBooleanClonePlayerVar.TextPadding = new System.Windows.Forms.Padding(2);
@@ -766,25 +785,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.optBooleanFalse.TabIndex = 25;
             this.optBooleanFalse.Text = "False";
             // 
-            // lblSync
-            // 
-            this.lblSync.AutoSize = true;
-            this.lblSync.Location = new System.Drawing.Point(6, 69);
-            this.lblSync.Name = "lblSync";
-            this.lblSync.Size = new System.Drawing.Size(49, 13);
-            this.lblSync.TabIndex = 43;
-            this.lblSync.Text = "Synchro:";
-            // 
-            // chkSyncOffline
-            // 
-            this.chkSyncOffline.AutoSize = true;
-            this.chkSyncOffline.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.chkSyncOffline.Location = new System.Drawing.Point(205, 67);
-            this.chkSyncOffline.Name = "chkSyncOffline";
-            this.chkSyncOffline.Size = new System.Drawing.Size(81, 17);
-            this.chkSyncOffline.TabIndex = 44;
-            this.chkSyncOffline.Text = "+ Offline /!\\";
-            // 
             // EventCommandVariable
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -793,7 +793,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpSetVariable);
             this.Name = "EventCommandVariable";
-            this.Size = new System.Drawing.Size(315, 350);
+            this.Size = new System.Drawing.Size(326, 350);
             this.grpSetVariable.ResumeLayout(false);
             this.grpSelectVariable.ResumeLayout(false);
             this.grpSelectVariable.PerformLayout();

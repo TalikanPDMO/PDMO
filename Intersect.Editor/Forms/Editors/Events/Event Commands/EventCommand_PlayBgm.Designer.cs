@@ -49,7 +49,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpBGM.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpBGM.Location = new System.Drawing.Point(3, 3);
             this.grpBGM.Name = "grpBGM";
-            this.grpBGM.Size = new System.Drawing.Size(176, 126);
+            this.grpBGM.Size = new System.Drawing.Size(320, 126);
             this.grpBGM.TabIndex = 17;
             this.grpBGM.TabStop = false;
             this.grpBGM.Text = "Play BGM";
@@ -59,20 +59,26 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbBgm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.cmbBgm.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.cmbBgm.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbBgm.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbBgm.DrawDropdownHoverOutline = false;
+            this.cmbBgm.DrawFocusRectangle = false;
             this.cmbBgm.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cmbBgm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbBgm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbBgm.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbBgm.FormattingEnabled = true;
-            this.cmbBgm.Location = new System.Drawing.Point(47, 19);
+            this.cmbBgm.Location = new System.Drawing.Point(47, 34);
             this.cmbBgm.Name = "cmbBgm";
-            this.cmbBgm.Size = new System.Drawing.Size(117, 21);
+            this.cmbBgm.Size = new System.Drawing.Size(253, 21);
             this.cmbBgm.TabIndex = 22;
+            this.cmbBgm.Text = null;
+            this.cmbBgm.TextPadding = new System.Windows.Forms.Padding(2);
             this.cmbBgm.SelectedIndexChanged += new System.EventHandler(this.cmbSprite_SelectedIndexChanged);
             // 
             // lblBGM
             // 
             this.lblBGM.AutoSize = true;
-            this.lblBGM.Location = new System.Drawing.Point(4, 22);
+            this.lblBGM.Location = new System.Drawing.Point(4, 37);
             this.lblBGM.Name = "lblBGM";
             this.lblBGM.Size = new System.Drawing.Size(31, 13);
             this.lblBGM.TabIndex = 21;
@@ -98,7 +104,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // EventCommand_PlayBgm
+            // EventCommandPlayBgm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -106,7 +112,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpBGM);
             this.Name = "EventCommandPlayBgm";
-            this.Size = new System.Drawing.Size(182, 132);
+            this.Size = new System.Drawing.Size(326, 132);
             this.grpBGM.ResumeLayout(false);
             this.grpBGM.PerformLayout();
             this.ResumeLayout(false);

@@ -30,7 +30,6 @@ namespace Intersect.Editor.Forms.Editors.Quest
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(QuestTaskEditor));
             this.grpEditor = new DarkUI.Controls.DarkGroupBox();
             this.btnEditTaskEvent = new DarkUI.Controls.DarkButton();
             this.txtStartDesc = new DarkUI.Controls.DarkTextBox();
@@ -68,9 +67,9 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpEditor.Controls.Add(this.cmbTaskType);
             this.grpEditor.Controls.Add(this.lblType);
             this.grpEditor.Controls.Add(this.btnCancel);
-            this.grpEditor.Controls.Add(this.grpKillNpcs);
             this.grpEditor.Controls.Add(this.grpGatherItems);
             this.grpEditor.Controls.Add(this.lblEventDriven);
+            this.grpEditor.Controls.Add(this.grpKillNpcs);
             this.grpEditor.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpEditor.Location = new System.Drawing.Point(-1, 2);
             this.grpEditor.Name = "grpEditor";
@@ -198,7 +197,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             0,
             0});
             this.nudNpcQuantity.Name = "nudNpcQuantity";
-            this.nudNpcQuantity.Size = new System.Drawing.Size(116, 20);
+            this.nudNpcQuantity.Size = new System.Drawing.Size(126, 20);
             this.nudNpcQuantity.TabIndex = 64;
             this.nudNpcQuantity.Value = new decimal(new int[] {
             1,
@@ -219,10 +218,11 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.cmbNpc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbNpc.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbNpc.FormattingEnabled = true;
-            this.cmbNpc.Location = new System.Drawing.Point(104, 21);
+            this.cmbNpc.Location = new System.Drawing.Point(57, 21);
             this.cmbNpc.Name = "cmbNpc";
-            this.cmbNpc.Size = new System.Drawing.Size(116, 21);
+            this.cmbNpc.Size = new System.Drawing.Size(172, 21);
             this.cmbNpc.TabIndex = 3;
+            this.cmbNpc.Text = null;
             this.cmbNpc.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // lblNpc
@@ -230,9 +230,9 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.lblNpc.AutoSize = true;
             this.lblNpc.Location = new System.Drawing.Point(7, 24);
             this.lblNpc.Name = "lblNpc";
-            this.lblNpc.Size = new System.Drawing.Size(29, 13);
+            this.lblNpc.Size = new System.Drawing.Size(32, 13);
             this.lblNpc.TabIndex = 2;
-            this.lblNpc.Text = "NPC";
+            this.lblNpc.Text = "NPC:";
             // 
             // lblNpcQuantity
             // 
@@ -276,7 +276,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             0,
             0});
             this.nudItemAmount.Name = "nudItemAmount";
-            this.nudItemAmount.Size = new System.Drawing.Size(116, 20);
+            this.nudItemAmount.Size = new System.Drawing.Size(126, 20);
             this.nudItemAmount.TabIndex = 63;
             this.nudItemAmount.Value = new decimal(new int[] {
             1,
@@ -297,9 +297,9 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.cmbItem.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbItem.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbItem.FormattingEnabled = true;
-            this.cmbItem.Location = new System.Drawing.Point(104, 18);
+            this.cmbItem.Location = new System.Drawing.Point(58, 18);
             this.cmbItem.Name = "cmbItem";
-            this.cmbItem.Size = new System.Drawing.Size(116, 21);
+            this.cmbItem.Size = new System.Drawing.Size(172, 21);
             this.cmbItem.TabIndex = 3;
             this.cmbItem.Text = "Equal To";
             this.cmbItem.TextPadding = new System.Windows.Forms.Padding(2);

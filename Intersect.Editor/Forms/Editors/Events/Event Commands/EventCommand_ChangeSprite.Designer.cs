@@ -51,14 +51,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpChangeSprite.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpChangeSprite.Location = new System.Drawing.Point(3, 3);
             this.grpChangeSprite.Name = "grpChangeSprite";
-            this.grpChangeSprite.Size = new System.Drawing.Size(259, 126);
+            this.grpChangeSprite.Size = new System.Drawing.Size(320, 126);
             this.grpChangeSprite.TabIndex = 17;
             this.grpChangeSprite.TabStop = false;
             this.grpChangeSprite.Text = "Change Sprite:";
             // 
             // pnlPreview
             // 
-            this.pnlPreview.Location = new System.Drawing.Point(170, 19);
+            this.pnlPreview.Location = new System.Drawing.Point(234, 19);
             this.pnlPreview.Name = "pnlPreview";
             this.pnlPreview.Size = new System.Drawing.Size(83, 101);
             this.pnlPreview.TabIndex = 23;
@@ -68,20 +68,26 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbSprite.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.cmbSprite.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.cmbSprite.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbSprite.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbSprite.DrawDropdownHoverOutline = false;
+            this.cmbSprite.DrawFocusRectangle = false;
             this.cmbSprite.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cmbSprite.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSprite.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbSprite.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbSprite.FormattingEnabled = true;
-            this.cmbSprite.Location = new System.Drawing.Point(47, 19);
+            this.cmbSprite.Location = new System.Drawing.Point(47, 30);
             this.cmbSprite.Name = "cmbSprite";
-            this.cmbSprite.Size = new System.Drawing.Size(117, 21);
+            this.cmbSprite.Size = new System.Drawing.Size(181, 21);
             this.cmbSprite.TabIndex = 22;
+            this.cmbSprite.Text = null;
+            this.cmbSprite.TextPadding = new System.Windows.Forms.Padding(2);
             this.cmbSprite.SelectedIndexChanged += new System.EventHandler(this.cmbSprite_SelectedIndexChanged);
             // 
             // lblSprite
             // 
             this.lblSprite.AutoSize = true;
-            this.lblSprite.Location = new System.Drawing.Point(4, 22);
+            this.lblSprite.Location = new System.Drawing.Point(4, 33);
             this.lblSprite.Name = "lblSprite";
             this.lblSprite.Size = new System.Drawing.Size(37, 13);
             this.lblSprite.TabIndex = 21;
@@ -107,7 +113,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // EventCommand_ChangeSprite
+            // EventCommandChangeSprite
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -115,7 +121,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpChangeSprite);
             this.Name = "EventCommandChangeSprite";
-            this.Size = new System.Drawing.Size(268, 132);
+            this.Size = new System.Drawing.Size(326, 132);
             this.grpChangeSprite.ResumeLayout(false);
             this.grpChangeSprite.PerformLayout();
             this.ResumeLayout(false);

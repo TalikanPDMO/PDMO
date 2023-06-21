@@ -51,7 +51,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpStartQuest.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpStartQuest.Location = new System.Drawing.Point(3, 3);
             this.grpStartQuest.Name = "grpStartQuest";
-            this.grpStartQuest.Size = new System.Drawing.Size(281, 126);
+            this.grpStartQuest.Size = new System.Drawing.Size(320, 126);
             this.grpStartQuest.TabIndex = 17;
             this.grpStartQuest.TabStop = false;
             this.grpStartQuest.Text = "Start Quest";
@@ -80,7 +80,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbQuests.FormattingEnabled = true;
             this.cmbQuests.Location = new System.Drawing.Point(47, 19);
             this.cmbQuests.Name = "cmbQuests";
-            this.cmbQuests.Size = new System.Drawing.Size(228, 21);
+            this.cmbQuests.Size = new System.Drawing.Size(267, 21);
             this.cmbQuests.TabIndex = 22;
             this.cmbQuests.Text = null;
             this.cmbQuests.TextPadding = new System.Windows.Forms.Padding(2);
@@ -122,7 +122,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpStartQuest);
             this.Name = "EventCommandStartQuest";
-            this.Size = new System.Drawing.Size(287, 132);
+            this.Size = new System.Drawing.Size(326, 132);
             this.grpStartQuest.ResumeLayout(false);
             this.grpStartQuest.PerformLayout();
             this.ResumeLayout(false);

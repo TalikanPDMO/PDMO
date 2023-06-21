@@ -53,7 +53,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpSelfSwitch.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpSelfSwitch.Location = new System.Drawing.Point(3, 3);
             this.grpSelfSwitch.Name = "grpSelfSwitch";
-            this.grpSelfSwitch.Size = new System.Drawing.Size(292, 82);
+            this.grpSelfSwitch.Size = new System.Drawing.Size(320, 82);
             this.grpSelfSwitch.TabIndex = 17;
             this.grpSelfSwitch.TabStop = false;
             this.grpSelfSwitch.Text = "Set Self Switch";
@@ -63,19 +63,25 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbSetSwitchVal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.cmbSetSwitchVal.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.cmbSetSwitchVal.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbSetSwitchVal.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbSetSwitchVal.DrawDropdownHoverOutline = false;
+            this.cmbSetSwitchVal.DrawFocusRectangle = false;
             this.cmbSetSwitchVal.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cmbSetSwitchVal.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSetSwitchVal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbSetSwitchVal.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbSetSwitchVal.FormattingEnabled = true;
-            this.cmbSetSwitchVal.Location = new System.Drawing.Point(205, 19);
+            this.cmbSetSwitchVal.Location = new System.Drawing.Point(245, 19);
             this.cmbSetSwitchVal.Name = "cmbSetSwitchVal";
             this.cmbSetSwitchVal.Size = new System.Drawing.Size(71, 21);
             this.cmbSetSwitchVal.TabIndex = 24;
+            this.cmbSetSwitchVal.Text = null;
+            this.cmbSetSwitchVal.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(185, 22);
+            this.label15.Location = new System.Drawing.Point(227, 22);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(16, 13);
             this.label15.TabIndex = 23;
@@ -86,14 +92,20 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbSetSwitch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.cmbSetSwitch.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.cmbSetSwitch.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbSetSwitch.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbSetSwitch.DrawDropdownHoverOutline = false;
+            this.cmbSetSwitch.DrawFocusRectangle = false;
             this.cmbSetSwitch.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cmbSetSwitch.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSetSwitch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbSetSwitch.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbSetSwitch.FormattingEnabled = true;
             this.cmbSetSwitch.Location = new System.Drawing.Point(89, 19);
             this.cmbSetSwitch.Name = "cmbSetSwitch";
-            this.cmbSetSwitch.Size = new System.Drawing.Size(90, 21);
+            this.cmbSetSwitch.Size = new System.Drawing.Size(132, 21);
             this.cmbSetSwitch.TabIndex = 22;
+            this.cmbSetSwitch.Text = null;
+            this.cmbSetSwitch.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // lblSelfSwitch
             // 
@@ -124,7 +136,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // EventCommand_SelfSwitch
+            // EventCommandSelfSwitch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -132,7 +144,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpSelfSwitch);
             this.Name = "EventCommandSelfSwitch";
-            this.Size = new System.Drawing.Size(298, 88);
+            this.Size = new System.Drawing.Size(330, 88);
             this.grpSelfSwitch.ResumeLayout(false);
             this.grpSelfSwitch.PerformLayout();
             this.ResumeLayout(false);

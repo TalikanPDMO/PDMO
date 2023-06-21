@@ -51,7 +51,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpEndQuest.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpEndQuest.Location = new System.Drawing.Point(3, 3);
             this.grpEndQuest.Name = "grpEndQuest";
-            this.grpEndQuest.Size = new System.Drawing.Size(261, 126);
+            this.grpEndQuest.Size = new System.Drawing.Size(320, 126);
             this.grpEndQuest.TabIndex = 17;
             this.grpEndQuest.TabStop = false;
             this.grpEndQuest.Text = "End Quest";
@@ -81,7 +81,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbQuests.FormattingEnabled = true;
             this.cmbQuests.Location = new System.Drawing.Point(47, 19);
             this.cmbQuests.Name = "cmbQuests";
-            this.cmbQuests.Size = new System.Drawing.Size(208, 21);
+            this.cmbQuests.Size = new System.Drawing.Size(267, 21);
             this.cmbQuests.TabIndex = 22;
             this.cmbQuests.Text = null;
             this.cmbQuests.TextPadding = new System.Windows.Forms.Padding(2);
@@ -123,7 +123,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpEndQuest);
             this.Name = "EventCommandEndQuest";
-            this.Size = new System.Drawing.Size(267, 132);
+            this.Size = new System.Drawing.Size(326, 132);
             this.grpEndQuest.ResumeLayout(false);
             this.grpEndQuest.PerformLayout();
             this.ResumeLayout(false);
