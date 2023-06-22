@@ -8,6 +8,7 @@ using Intersect.Editor.Content;
 using Intersect.Editor.Entities;
 using Intersect.Editor.Forms.DockingElements;
 using Intersect.Editor.General;
+using Intersect.Editor.Localization;
 using Intersect.Editor.Maps;
 using Intersect.Enums;
 using Intersect.GameObjects;
@@ -933,19 +934,22 @@ namespace Intersect.Editor.Core
                 }
                 else if (Globals.CurrentLayer == LayerOptions.Events) //Events
                 {
+                    var font = GameContentManager.GetFont(Strings.MapLayers.eventtextfont);
+                    var textcolor = System.Drawing.Color.FromName(Strings.MapLayers.eventtextcolor);
+                    var textcolorborder = System.Drawing.Color.FromName(Strings.MapLayers.eventtextcolorborder);
+                    var eventTex = GameContentManager.GetTexture(
+                                GameContentManager.TextureType.Misc, "eventicon.png"
+                            );
+                    var listText = new List<Tuple<int, int, string>>();
                     for (var x = 0; x < Options.MapWidth; x++)
                     {
                         for (var y = 0; y < Options.MapHeight; y++)
                         {
-                            if (tmpMap.FindEventAt(x, y) == null)
+                            var eventMap = tmpMap.FindEventAt(x, y);
+                            if (eventMap == null)
                             {
                                 continue;
                             }
-
-                            var eventTex = GameContentManager.GetTexture(
-                                GameContentManager.TextureType.Misc, "eventicon.png"
-                            );
-
                             if (eventTex != null)
                             {
                                 DrawTexture(
@@ -955,8 +959,17 @@ namespace Intersect.Editor.Core
                                         CurrentView.Top + y * Globals.CurrentTileHeight, Globals.CurrentTileWidth, Globals.CurrentTileHeight
                                     ), System.Drawing.Color.White, null
                                 );
+                                listText.Add(Tuple.Create(x, y, eventMap.Name));
                             }
                         }
+                    }
+                    foreach(var text in listText)
+                    {
+                        var measure = MeasureText(text.Item3, font, 1);
+                        //Center event name horizontaly and alternate the height to avoid text overlap for nearby events
+                        var xText = CurrentView.Left + text.Item1 * Globals.CurrentTileWidth + (int)(eventTex.Width / 2.0) - ((int)(measure.X / 2.0));
+                        var yText = CurrentView.Top + text.Item2 * Globals.CurrentTileHeight - measure.Y * (1 + text.Item1 % 2);
+                        DrawString(text.Item3, font, xText, yText, 1, textcolor, textcolorborder);
                     }
                 }
                 else if (Globals.CurrentLayer == LayerOptions.Npcs) //NPCS
@@ -1014,6 +1027,22 @@ namespace Intersect.Editor.Core
                     System.Drawing.Color.White, null
                 );
             }
+        }
+
+        public static PointF MeasureText(string text, SpriteFont font, float fontScale)
+        {
+
+            foreach (var chr in text)
+            {
+                if (!font.Characters.Contains(chr))
+                {
+                    text = text.Replace(chr, ' ');
+                }
+            }
+
+            var size = font.MeasureString(text);
+
+            return new PointF(size.X * fontScale, size.Y * fontScale);
         }
 
         private static void DrawBoxOutline(int x, int y, int w, int h, System.Drawing.Color clr, RenderTarget2D target)
@@ -2183,6 +2212,57 @@ namespace Intersect.Editor.Core
                 new Vector4(clr.R / 255f, clr.G / 255f, clr.B / 255f, clr.A / 255f)
             );
         }
+
+        public static void DrawString(
+            string text,
+            SpriteFont font,
+            float x,
+            float y,
+            float fontScale,
+            System.Drawing.Color fontColor,
+            System.Drawing.Color borderColor
+        )
+        {
+            if (font == null)
+            {
+                return;
+            }
+
+            StartSpritebatch();
+            foreach (var chr in text)
+            {
+                if (!font.Characters.Contains(chr))
+                {
+                    text = text.Replace(chr, ' ');
+                }
+            }
+
+            if (borderColor != null && borderColor != System.Drawing.Color.Transparent)
+            {
+                sSpriteBatch.DrawString(
+                    font, text, new Vector2(x, y - 1), ConvertColor(borderColor), 0f, Vector2.Zero,
+                    new Vector2(fontScale, fontScale), SpriteEffects.None, 0
+                );
+
+                sSpriteBatch.DrawString(
+                    font, text, new Vector2(x - 1, y), ConvertColor(borderColor), 0f, Vector2.Zero,
+                    new Vector2(fontScale, fontScale), SpriteEffects.None, 0
+                );
+
+                sSpriteBatch.DrawString(
+                    font, text, new Vector2(x + 1, y), ConvertColor(borderColor), 0f, Vector2.Zero,
+                    new Vector2(fontScale, fontScale), SpriteEffects.None, 0
+                );
+
+                sSpriteBatch.DrawString(
+                    font, text, new Vector2(x, y + 1), ConvertColor(borderColor), 0f, Vector2.Zero,
+                    new Vector2(fontScale, fontScale), SpriteEffects.None, 0
+                );
+            }
+
+            sSpriteBatch.DrawString(font, text, new Vector2(x, y), ConvertColor(fontColor));
+        }
+
 
         private static void StartSpritebatch(
             BlendState mode = null,

@@ -3979,6 +3979,12 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString events = @"Events";
 
+            public static LocalizedString eventtextfont = @"arial_10.xnb";
+
+            public static LocalizedString eventtextcolor = @"Black";
+
+            public static LocalizedString eventtextcolorborder = @"White";
+
             public static LocalizedString lightinstructions =
                 @"Lower the maps brightness and double click on a tile to create a light!";
 

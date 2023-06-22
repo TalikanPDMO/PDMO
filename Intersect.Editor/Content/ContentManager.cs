@@ -87,6 +87,8 @@ namespace Intersect.Editor.Content
 
         static IDictionary<string, object> sSoundDict = new Dictionary<string, object>();
 
+        static IDictionary<string, SpriteFont> sFontDict = new Dictionary<string, SpriteFont>();
+
         static IDictionary<string, Texture> sSpellDict = new Dictionary<string, Texture>();
 
         static IDictionary<string, Texture> sTilesetDict = new Dictionary<string, Texture>();
@@ -141,6 +143,7 @@ namespace Intersect.Editor.Content
             LoadShaders();
             LoadSounds();
             LoadMusic();
+            LoadFonts();
         }
 
         public static void Update()
@@ -368,6 +371,24 @@ namespace Intersect.Editor.Content
             }
         }
 
+        public static void LoadFonts()
+        {
+            sFontDict.Clear();
+            var dir = "resources/" + "fonts";
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            var items = Directory.GetFiles(dir, "*.xnb");
+            for (var i = 0; i < items.Length; i++)
+            {
+                var filename = items[i].Replace("resources/" + "fonts" + "\\", "").ToLower();
+                var font = sContentManger.Load<SpriteFont>(Path.Combine(dir, RemoveExtension(filename)));
+                sFontDict.Add(filename, font);
+            }
+        }
+
         public static void LoadMusic()
         {
             sMusicDict.Clear();
@@ -522,6 +543,23 @@ namespace Intersect.Editor.Content
             }
 
             return sSoundDict.TryGetValue(name.ToLower(), out var sound) ? sound : null;
+        }
+
+        public static SpriteFont GetFont(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                Log.Error("Tried to load font with null name.");
+
+                return null;
+            }
+
+            if (sFontDict == null)
+            {
+                return null;
+            }
+
+            return sFontDict.TryGetValue(name.ToLower(), out var font) ? font : null;
         }
 
         public static string[] GetSmartSortedTextureNames(TextureType type)
