@@ -1,4 +1,6 @@
-﻿namespace Intersect.Config
+﻿using System;
+
+namespace Intersect.Config
 {
 
     public class PlayerOptions
@@ -78,6 +80,26 @@
         /// Amount of time (in ms) required to traverse 1 tile when a player is walking
         /// </summary>
         public int WalkingSpeed = 400;
+
+        /// <summary>
+        /// The id of the animation to use for the trail when a player is running horizontaly
+        /// </summary>
+        public Guid HorizontalRunningTrailAnimationId = Guid.Empty;
+
+        /// <summary>
+        /// The number of pixel we want to offset the animation from the center of the tile
+        /// </summary>
+        public int HorizontalRunningTrailOffset = 0;
+
+        /// <summary>
+        /// The id of the animation to use for the trail when a player is running verticaly
+        /// </summary>
+        public Guid VerticalRunningTrailAnimationId = Guid.Empty;
+
+        /// <summary>
+        /// The number of pixel we want to offset the animation from the center of the tile
+        /// </summary>
+        public int VerticalRunningTrailOffset = 0;
 
     }
 

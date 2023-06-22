@@ -131,6 +131,9 @@ namespace Intersect.Client.Entities
         /// </summary>
         public GuildMember[] GuildMembers = new GuildMember[0];
 
+        //Test for running anim
+        public static Guid RunningAnimId = Guid.Empty;
+
         public Player(Guid id, PlayerEntityPacket packet) : base(id, packet)
         {
             for (var i = 0; i < Options.MaxHotbar; i++)
@@ -138,6 +141,7 @@ namespace Intersect.Client.Entities
                 Hotbar[i] = new HotbarInstance();
             }
             mRenderPriority = 2;
+
         }
 
 
@@ -2009,6 +2013,38 @@ namespace Intersect.Client.Entities
 
                     if (IsMoving)
                     {
+                        if (Running)
+                        {
+                            int offsetX = 0;
+                            int offsetY = 0;
+                            switch(Dir)
+                            {
+                                // Up
+                                case 0:
+                                    offsetY = -Options.Instance.PlayerOpts.VerticalRunningTrailOffset;
+                                    MapInstance.AddTileAnimation(Options.Instance.PlayerOpts.VerticalRunningTrailAnimationId,
+                                        X, Y, Dir, null, offsetX, offsetY);
+                                    break;
+                                // Down
+                                case 1:
+                                    offsetY = Options.Instance.PlayerOpts.VerticalRunningTrailOffset;
+                                    MapInstance.AddTileAnimation(Options.Instance.PlayerOpts.VerticalRunningTrailAnimationId,
+                                        X, Y, Dir, null, offsetX, offsetY);
+                                    break;
+                                // Left
+                                case 2:
+                                    offsetX = -Options.Instance.PlayerOpts.HorizontalRunningTrailOffset;
+                                    MapInstance.AddTileAnimation(Options.Instance.PlayerOpts.HorizontalRunningTrailAnimationId,
+                                        X, Y, Dir, null, offsetX, offsetY);
+                                    break;
+                                // Right
+                                case 3:
+                                    offsetX = Options.Instance.PlayerOpts.HorizontalRunningTrailOffset;
+                                    MapInstance.AddTileAnimation(Options.Instance.PlayerOpts.HorizontalRunningTrailAnimationId,
+                                        X, Y, Dir, null, offsetX, offsetY);
+                                    break;
+                            }
+                        }
                         if (tmpX < 0 || tmpY < 0 || tmpX > Options.MapWidth - 1 || tmpY > Options.MapHeight - 1)
                         {
                             var gridX = MapInstance.Get(Globals.Me.CurrentMap).MapGridX;

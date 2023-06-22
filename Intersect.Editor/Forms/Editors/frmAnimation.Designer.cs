@@ -37,6 +37,8 @@ namespace Intersect.Editor.Forms.Editors
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
+            this.txtId = new DarkUI.Controls.DarkTextBox();
+            this.lblId = new System.Windows.Forms.Label();
             this.chkCompleteSoundPlayback = new DarkUI.Controls.DarkCheckBox();
             this.btnAddFolder = new DarkUI.Controls.DarkButton();
             this.lblFolder = new System.Windows.Forms.Label();
@@ -110,8 +112,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.tmrRender = new System.Windows.Forms.Timer(this.components);
             this.toolStripItemRelations = new System.Windows.Forms.ToolStripButton();
+            this.tmrRender = new System.Windows.Forms.Timer(this.components);
             this.grpAnimations.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpLower.SuspendLayout();
@@ -195,6 +197,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpGeneral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpGeneral.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpGeneral.Controls.Add(this.txtId);
+            this.grpGeneral.Controls.Add(this.lblId);
             this.grpGeneral.Controls.Add(this.chkCompleteSoundPlayback);
             this.grpGeneral.Controls.Add(this.btnAddFolder);
             this.grpGeneral.Controls.Add(this.lblFolder);
@@ -213,6 +217,29 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.TabIndex = 18;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
+            // 
+            // txtId
+            // 
+            this.txtId.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.txtId.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtId.ForeColor = System.Drawing.Color.Gainsboro;
+            this.txtId.Location = new System.Drawing.Point(666, 49);
+            this.txtId.Multiline = true;
+            this.txtId.Name = "txtId";
+            this.txtId.ReadOnly = true;
+            this.txtId.Size = new System.Drawing.Size(249, 21);
+            this.txtId.TabIndex = 70;
+            this.txtId.TabStop = false;
+            this.txtId.Text = "guid-guid-guid-guid";
+            // 
+            // lblId
+            // 
+            this.lblId.AutoSize = true;
+            this.lblId.Location = new System.Drawing.Point(643, 49);
+            this.lblId.Name = "lblId";
+            this.lblId.Size = new System.Drawing.Size(19, 13);
+            this.lblId.TabIndex = 69;
+            this.lblId.Text = "Id:";
             // 
             // chkCompleteSoundPlayback
             // 
@@ -1171,12 +1198,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // tmrRender
-            // 
-            this.tmrRender.Enabled = true;
-            this.tmrRender.Interval = 16;
-            this.tmrRender.Tick += new System.EventHandler(this.tmrRender_Tick);
-            // 
             // toolStripItemRelations
             // 
             this.toolStripItemRelations.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -1186,8 +1207,14 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemRelations.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripItemRelations.Name = "toolStripItemRelations";
             this.toolStripItemRelations.Size = new System.Drawing.Size(23, 22);
-            this.toolStripItemRelations.Text = "Relations"; 
+            this.toolStripItemRelations.Text = "Relations";
             this.toolStripItemRelations.Click += new System.EventHandler(this.toolStripItemRelations_Click);
+            // 
+            // tmrRender
+            // 
+            this.tmrRender.Enabled = true;
+            this.tmrRender.Interval = 16;
+            this.tmrRender.Tick += new System.EventHandler(this.tmrRender_Tick);
             // 
             // FrmAnimation
             // 
@@ -1326,5 +1353,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkCompleteSoundPlayback;
         private Controls.GameObjectList lstGameObjects;
         public System.Windows.Forms.ToolStripButton toolStripItemRelations;
+        private DarkTextBox txtId;
+        private System.Windows.Forms.Label lblId;
     }
 }

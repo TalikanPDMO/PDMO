@@ -163,6 +163,7 @@ namespace Intersect.Editor.Forms.Editors
             chkCompleteSoundPlayback.Text = Strings.AnimationEditor.soundcomplete;
             labelDarkness.Text = Strings.AnimationEditor.simulatedarkness.ToString(scrlDarkness.Value);
             btnSwap.Text = Strings.AnimationEditor.swap;
+            lblId.Text = Strings.AnimationEditor.animationid;
 
             grpLower.Text = Strings.AnimationEditor.lowergroup;
             lblLowerGraphic.Text = Strings.AnimationEditor.lowergraphic;
@@ -212,6 +213,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbFolder.Text = mEditorItem.Folder;
 
                 txtName.Text = mEditorItem.Name;
+                txtId.Text = mEditorItem.Id.ToString();
                 cmbSound.SelectedIndex = cmbSound.FindString(TextUtils.NullToNone(mEditorItem.Sound));
                 chkCompleteSoundPlayback.Checked = mEditorItem.CompleteSound;
 

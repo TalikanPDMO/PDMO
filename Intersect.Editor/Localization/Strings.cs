@@ -774,6 +774,8 @@ namespace Intersect.Editor.Localization
 
             public static LocalizedString swap = @"Swap Upper/Lower";
 
+            public static LocalizedString animationid = @"Id:";
+
             public static LocalizedString title = @"Animation Editor";
 
             public static LocalizedString undo = @"Undo Changes";
