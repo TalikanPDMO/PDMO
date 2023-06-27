@@ -109,7 +109,7 @@ namespace Intersect.Updater
                            | SecurityProtocolType.Tls11
                            | SecurityProtocolType.Tls12
                            | SecurityProtocolType.Ssl3;
-                    var jsonBytes = wc.DownloadData(mConfigUrl + "?token=" + Environment.TickCount);
+                    var jsonBytes = wc.DownloadData(mConfigUrl + "?token=" + Environment.TickCount + "&devmode=" + !mIsClient);
                     var json = Encoding.UTF8.GetString(jsonBytes);
                     mUpdate = JsonConvert.DeserializeObject<Update>(json);
 
