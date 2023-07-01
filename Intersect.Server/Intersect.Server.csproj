@@ -705,6 +705,10 @@
     <Compile Include="Migrations\Game\20230616185117_AddingBlockingPropertiesToProjectiles.designer.cs">
       <DependentUpon>20230616185117_AddingBlockingPropertiesToProjectiles.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230701101455_AddingAttackRangeToNpcsAndItemsAndClasses.cs" />
+    <Compile Include="Migrations\Game\20230701101455_AddingAttackRangeToNpcsAndItemsAndClasses.designer.cs">
+      <DependentUpon>20230701101455_AddingAttackRangeToNpcsAndItemsAndClasses.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

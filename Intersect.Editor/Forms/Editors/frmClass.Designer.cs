@@ -92,6 +92,11 @@ namespace Intersect.Editor.Forms.Editors
             this.lblX = new System.Windows.Forms.Label();
             this.lblMap = new System.Windows.Forms.Label();
             this.pnlContainer = new System.Windows.Forms.Panel();
+            this.grpTypes = new DarkUI.Controls.DarkGroupBox();
+            this.cmbType2 = new DarkUI.Controls.DarkComboBox();
+            this.lblType2 = new System.Windows.Forms.Label();
+            this.cmbType1 = new DarkUI.Controls.DarkComboBox();
+            this.lblType1 = new System.Windows.Forms.Label();
             this.grpSpawnItems = new DarkUI.Controls.DarkGroupBox();
             this.btnSpawnItemRemove = new DarkUI.Controls.DarkButton();
             this.btnSpawnItemAdd = new DarkUI.Controls.DarkButton();
@@ -176,11 +181,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.mnuExpGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.btnExpPaste = new System.Windows.Forms.ToolStripMenuItem();
-            this.grpTypes = new DarkUI.Controls.DarkGroupBox();
-            this.cmbType1 = new DarkUI.Controls.DarkComboBox();
-            this.lblType1 = new System.Windows.Forms.Label();
-            this.cmbType2 = new DarkUI.Controls.DarkComboBox();
-            this.lblType2 = new System.Windows.Forms.Label();
+            this.nudAttackRange = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblAttackRange = new System.Windows.Forms.Label();
             this.grpClasses.SuspendLayout();
             this.grpBaseStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBaseMana)).BeginInit();
@@ -199,6 +201,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudX)).BeginInit();
             this.pnlContainer.SuspendLayout();
+            this.grpTypes.SuspendLayout();
             this.grpSpawnItems.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpawnItemAmount)).BeginInit();
             this.grpCombat.SuspendLayout();
@@ -230,7 +233,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudStrengthIncrease)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.mnuExpGrid.SuspendLayout();
-            this.grpTypes.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAttackRange)).BeginInit();
             this.SuspendLayout();
             // 
             // grpClasses
@@ -1069,6 +1072,86 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.TabIndex = 28;
             this.pnlContainer.Visible = false;
             // 
+            // grpTypes
+            // 
+            this.grpTypes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpTypes.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTypes.Controls.Add(this.cmbType2);
+            this.grpTypes.Controls.Add(this.lblType2);
+            this.grpTypes.Controls.Add(this.cmbType1);
+            this.grpTypes.Controls.Add(this.lblType1);
+            this.grpTypes.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpTypes.Location = new System.Drawing.Point(189, 164);
+            this.grpTypes.Margin = new System.Windows.Forms.Padding(2);
+            this.grpTypes.Name = "grpTypes";
+            this.grpTypes.Padding = new System.Windows.Forms.Padding(2);
+            this.grpTypes.Size = new System.Drawing.Size(227, 40);
+            this.grpTypes.TabIndex = 28;
+            this.grpTypes.TabStop = false;
+            this.grpTypes.Text = "Elemental Types";
+            // 
+            // cmbType2
+            // 
+            this.cmbType2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbType2.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbType2.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbType2.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbType2.DrawDropdownHoverOutline = false;
+            this.cmbType2.DrawFocusRectangle = false;
+            this.cmbType2.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbType2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbType2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbType2.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbType2.FormattingEnabled = true;
+            this.cmbType2.Location = new System.Drawing.Point(150, 16);
+            this.cmbType2.Name = "cmbType2";
+            this.cmbType2.Size = new System.Drawing.Size(75, 21);
+            this.cmbType2.TabIndex = 28;
+            this.cmbType2.Text = null;
+            this.cmbType2.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbType2.SelectedIndexChanged += new System.EventHandler(this.cmbType2_SelectedIndexChanged);
+            // 
+            // lblType2
+            // 
+            this.lblType2.AutoSize = true;
+            this.lblType2.Location = new System.Drawing.Point(113, 19);
+            this.lblType2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblType2.Name = "lblType2";
+            this.lblType2.Size = new System.Drawing.Size(40, 13);
+            this.lblType2.TabIndex = 27;
+            this.lblType2.Text = "Type2:";
+            // 
+            // cmbType1
+            // 
+            this.cmbType1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbType1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbType1.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbType1.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbType1.DrawDropdownHoverOutline = false;
+            this.cmbType1.DrawFocusRectangle = false;
+            this.cmbType1.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbType1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbType1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbType1.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbType1.FormattingEnabled = true;
+            this.cmbType1.Location = new System.Drawing.Point(38, 16);
+            this.cmbType1.Name = "cmbType1";
+            this.cmbType1.Size = new System.Drawing.Size(75, 21);
+            this.cmbType1.TabIndex = 26;
+            this.cmbType1.Text = null;
+            this.cmbType1.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbType1.SelectedIndexChanged += new System.EventHandler(this.cmbType1_SelectedIndexChanged);
+            // 
+            // lblType1
+            // 
+            this.lblType1.AutoSize = true;
+            this.lblType1.Location = new System.Drawing.Point(1, 19);
+            this.lblType1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblType1.Name = "lblType1";
+            this.lblType1.Size = new System.Drawing.Size(40, 13);
+            this.lblType1.TabIndex = 23;
+            this.lblType1.Text = "Type1:";
+            // 
             // grpSpawnItems
             // 
             this.grpSpawnItems.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
@@ -1183,6 +1266,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpCombat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpCombat.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpCombat.Controls.Add(this.nudAttackRange);
+            this.grpCombat.Controls.Add(this.lblAttackRange);
             this.grpCombat.Controls.Add(this.grpAttackSpeed);
             this.grpCombat.Controls.Add(this.nudCritMultiplier);
             this.grpCombat.Controls.Add(this.lblCritMultiplier);
@@ -1201,7 +1286,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCombat.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpCombat.Location = new System.Drawing.Point(537, 164);
             this.grpCombat.Name = "grpCombat";
-            this.grpCombat.Size = new System.Drawing.Size(226, 405);
+            this.grpCombat.Size = new System.Drawing.Size(226, 458);
             this.grpCombat.TabIndex = 30;
             this.grpCombat.TabStop = false;
             this.grpCombat.Text = "Combat (Unarmed)";
@@ -1215,7 +1300,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAttackSpeed.Controls.Add(this.cmbAttackSpeedModifier);
             this.grpAttackSpeed.Controls.Add(this.lblAttackSpeedModifier);
             this.grpAttackSpeed.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpAttackSpeed.Location = new System.Drawing.Point(13, 309);
+            this.grpAttackSpeed.Location = new System.Drawing.Point(13, 346);
             this.grpAttackSpeed.Name = "grpAttackSpeed";
             this.grpAttackSpeed.Size = new System.Drawing.Size(192, 86);
             this.grpAttackSpeed.TabIndex = 66;
@@ -2275,85 +2360,29 @@ namespace Intersect.Editor.Forms.Editors
             this.btnExpPaste.Text = "Paste";
             this.btnExpPaste.Click += new System.EventHandler(this.btnPaste_Click);
             // 
-            // grpTypes
+            // nudAttackRange
             // 
-            this.grpTypes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpTypes.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpTypes.Controls.Add(this.cmbType2);
-            this.grpTypes.Controls.Add(this.lblType2);
-            this.grpTypes.Controls.Add(this.cmbType1);
-            this.grpTypes.Controls.Add(this.lblType1);
-            this.grpTypes.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpTypes.Location = new System.Drawing.Point(189, 164);
-            this.grpTypes.Margin = new System.Windows.Forms.Padding(2);
-            this.grpTypes.Name = "grpTypes";
-            this.grpTypes.Padding = new System.Windows.Forms.Padding(2);
-            this.grpTypes.Size = new System.Drawing.Size(227, 40);
-            this.grpTypes.TabIndex = 28;
-            this.grpTypes.TabStop = false;
-            this.grpTypes.Text = "Elemental Types";
+            this.nudAttackRange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudAttackRange.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudAttackRange.Location = new System.Drawing.Point(13, 320);
+            this.nudAttackRange.Name = "nudAttackRange";
+            this.nudAttackRange.Size = new System.Drawing.Size(192, 20);
+            this.nudAttackRange.TabIndex = 68;
+            this.nudAttackRange.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudAttackRange.ValueChanged += new System.EventHandler(this.nudAttackRange_ValueChanged);
             // 
-            // cmbType1
+            // lblAttackRange
             // 
-            this.cmbType1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbType1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbType1.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbType1.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbType1.DrawDropdownHoverOutline = false;
-            this.cmbType1.DrawFocusRectangle = false;
-            this.cmbType1.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbType1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbType1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbType1.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbType1.FormattingEnabled = true;
-            this.cmbType1.Location = new System.Drawing.Point(38, 16);
-            this.cmbType1.Name = "cmbType1";
-            this.cmbType1.Size = new System.Drawing.Size(75, 21);
-            this.cmbType1.TabIndex = 26;
-            this.cmbType1.Text = null;
-            this.cmbType1.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbType1.SelectedIndexChanged += new System.EventHandler(this.cmbType1_SelectedIndexChanged);
-            // 
-            // lblType1
-            // 
-            this.lblType1.AutoSize = true;
-            this.lblType1.Location = new System.Drawing.Point(1, 19);
-            this.lblType1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblType1.Name = "lblType1";
-            this.lblType1.Size = new System.Drawing.Size(40, 13);
-            this.lblType1.TabIndex = 23;
-            this.lblType1.Text = "Type1:";
-            // 
-            // cmbType2
-            // 
-            this.cmbType2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbType2.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbType2.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbType2.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbType2.DrawDropdownHoverOutline = false;
-            this.cmbType2.DrawFocusRectangle = false;
-            this.cmbType2.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbType2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbType2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbType2.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbType2.FormattingEnabled = true;
-            this.cmbType2.Location = new System.Drawing.Point(150, 16);
-            this.cmbType2.Name = "cmbType2";
-            this.cmbType2.Size = new System.Drawing.Size(75, 21);
-            this.cmbType2.TabIndex = 28;
-            this.cmbType2.Text = null;
-            this.cmbType2.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbType2.SelectedIndexChanged += new System.EventHandler(this.cmbType2_SelectedIndexChanged);
-            // 
-            // lblType2
-            // 
-            this.lblType2.AutoSize = true;
-            this.lblType2.Location = new System.Drawing.Point(113, 19);
-            this.lblType2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblType2.Name = "lblType2";
-            this.lblType2.Size = new System.Drawing.Size(40, 13);
-            this.lblType2.TabIndex = 27;
-            this.lblType2.Text = "Type2:";
+            this.lblAttackRange.AutoSize = true;
+            this.lblAttackRange.Location = new System.Drawing.Point(9, 303);
+            this.lblAttackRange.Name = "lblAttackRange";
+            this.lblAttackRange.Size = new System.Drawing.Size(76, 13);
+            this.lblAttackRange.TabIndex = 67;
+            this.lblAttackRange.Text = "Attack Range:";
             // 
             // FrmClass
             // 
@@ -2400,6 +2429,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudX)).EndInit();
             this.pnlContainer.ResumeLayout(false);
+            this.grpTypes.ResumeLayout(false);
+            this.grpTypes.PerformLayout();
             this.grpSpawnItems.ResumeLayout(false);
             this.grpSpawnItems.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpawnItemAmount)).EndInit();
@@ -2440,8 +2471,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.mnuExpGrid.ResumeLayout(false);
-            this.grpTypes.ResumeLayout(false);
-            this.grpTypes.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAttackRange)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2594,5 +2624,7 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblType2;
         private DarkComboBox cmbType1;
         private System.Windows.Forms.Label lblType1;
+        private DarkNumericUpDown nudAttackRange;
+        private System.Windows.Forms.Label lblAttackRange;
     }
 }

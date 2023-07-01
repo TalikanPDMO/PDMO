@@ -159,6 +159,10 @@ namespace Intersect.Editor.Forms.Editors
             this.lblMalePaperdoll = new System.Windows.Forms.Label();
             this.picMalePaperdoll = new System.Windows.Forms.PictureBox();
             this.grpWeaponProperties = new DarkUI.Controls.DarkGroupBox();
+            this.nudAttackRange = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblAttackRange = new System.Windows.Forms.Label();
+            this.cmbElementalType = new DarkUI.Controls.DarkComboBox();
+            this.lblElementalType = new System.Windows.Forms.Label();
             this.chkReplaceCritEffectSpell = new DarkUI.Controls.DarkCheckBox();
             this.cmbCritEffectSpell = new DarkUI.Controls.DarkComboBox();
             this.lblCritEffectSpell = new System.Windows.Forms.Label();
@@ -218,8 +222,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.toolStripItemRelations = new System.Windows.Forms.ToolStripButton();
-            this.lblElementalType = new System.Windows.Forms.Label();
-            this.cmbElementalType = new DarkUI.Controls.DarkComboBox();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxLossOnDeath)).BeginInit();
@@ -260,6 +262,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.picFemalePaperdoll)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picMalePaperdoll)).BeginInit();
             this.grpWeaponProperties.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAttackRange)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCritMultiplier)).BeginInit();
             this.grpAttackSpeed.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudAttackSpeedValue)).BeginInit();
@@ -2062,6 +2065,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpWeaponProperties.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpWeaponProperties.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpWeaponProperties.Controls.Add(this.nudAttackRange);
+            this.grpWeaponProperties.Controls.Add(this.lblAttackRange);
             this.grpWeaponProperties.Controls.Add(this.cmbElementalType);
             this.grpWeaponProperties.Controls.Add(this.lblElementalType);
             this.grpWeaponProperties.Controls.Add(this.chkReplaceCritEffectSpell);
@@ -2088,13 +2093,67 @@ namespace Intersect.Editor.Forms.Editors
             this.grpWeaponProperties.Controls.Add(this.lblProjectile);
             this.grpWeaponProperties.Controls.Add(this.lblDamage);
             this.grpWeaponProperties.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpWeaponProperties.Location = new System.Drawing.Point(221, 15);
+            this.grpWeaponProperties.Location = new System.Drawing.Point(221, 10);
             this.grpWeaponProperties.Name = "grpWeaponProperties";
-            this.grpWeaponProperties.Size = new System.Drawing.Size(207, 574);
+            this.grpWeaponProperties.Size = new System.Drawing.Size(207, 584);
             this.grpWeaponProperties.TabIndex = 39;
             this.grpWeaponProperties.TabStop = false;
             this.grpWeaponProperties.Text = "Weapon Properties";
             this.grpWeaponProperties.Visible = false;
+            // 
+            // nudAttackRange
+            // 
+            this.nudAttackRange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudAttackRange.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudAttackRange.Location = new System.Drawing.Point(15, 454);
+            this.nudAttackRange.Name = "nudAttackRange";
+            this.nudAttackRange.Size = new System.Drawing.Size(180, 20);
+            this.nudAttackRange.TabIndex = 72;
+            this.nudAttackRange.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudAttackRange.ValueChanged += new System.EventHandler(this.nudAttackRange_ValueChanged);
+            // 
+            // lblAttackRange
+            // 
+            this.lblAttackRange.AutoSize = true;
+            this.lblAttackRange.Location = new System.Drawing.Point(12, 439);
+            this.lblAttackRange.Name = "lblAttackRange";
+            this.lblAttackRange.Size = new System.Drawing.Size(76, 13);
+            this.lblAttackRange.TabIndex = 71;
+            this.lblAttackRange.Text = "Attack Range:";
+            // 
+            // cmbElementalType
+            // 
+            this.cmbElementalType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbElementalType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbElementalType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbElementalType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbElementalType.DrawDropdownHoverOutline = false;
+            this.cmbElementalType.DrawFocusRectangle = false;
+            this.cmbElementalType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbElementalType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbElementalType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbElementalType.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbElementalType.FormattingEnabled = true;
+            this.cmbElementalType.Location = new System.Drawing.Point(15, 38);
+            this.cmbElementalType.Name = "cmbElementalType";
+            this.cmbElementalType.Size = new System.Drawing.Size(180, 21);
+            this.cmbElementalType.TabIndex = 70;
+            this.cmbElementalType.Text = "Physical";
+            this.cmbElementalType.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbElementalType.SelectedIndexChanged += new System.EventHandler(this.cmbElementalType_SelectedIndexChanged);
+            // 
+            // lblElementalType
+            // 
+            this.lblElementalType.AutoSize = true;
+            this.lblElementalType.Location = new System.Drawing.Point(12, 21);
+            this.lblElementalType.Name = "lblElementalType";
+            this.lblElementalType.Size = new System.Drawing.Size(83, 13);
+            this.lblElementalType.TabIndex = 69;
+            this.lblElementalType.Text = "Elemental Type:";
             // 
             // chkReplaceCritEffectSpell
             // 
@@ -2182,9 +2241,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAttackSpeed.Controls.Add(this.cmbAttackSpeedModifier);
             this.grpAttackSpeed.Controls.Add(this.lblAttackSpeedModifier);
             this.grpAttackSpeed.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpAttackSpeed.Location = new System.Drawing.Point(15, 485);
+            this.grpAttackSpeed.Location = new System.Drawing.Point(15, 514);
             this.grpAttackSpeed.Name = "grpAttackSpeed";
-            this.grpAttackSpeed.Size = new System.Drawing.Size(180, 86);
+            this.grpAttackSpeed.Size = new System.Drawing.Size(180, 67);
             this.grpAttackSpeed.TabIndex = 56;
             this.grpAttackSpeed.TabStop = false;
             this.grpAttackSpeed.Text = "Attack Speed";
@@ -2193,7 +2252,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudAttackSpeedValue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudAttackSpeedValue.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudAttackSpeedValue.Location = new System.Drawing.Point(60, 56);
+            this.nudAttackSpeedValue.Location = new System.Drawing.Point(60, 43);
             this.nudAttackSpeedValue.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -2212,7 +2271,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblAttackSpeedValue
             // 
             this.lblAttackSpeedValue.AutoSize = true;
-            this.lblAttackSpeedValue.Location = new System.Drawing.Point(9, 58);
+            this.lblAttackSpeedValue.Location = new System.Drawing.Point(9, 45);
             this.lblAttackSpeedValue.Name = "lblAttackSpeedValue";
             this.lblAttackSpeedValue.Size = new System.Drawing.Size(37, 13);
             this.lblAttackSpeedValue.TabIndex = 29;
@@ -2231,7 +2290,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbAttackSpeedModifier.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbAttackSpeedModifier.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbAttackSpeedModifier.FormattingEnabled = true;
-            this.cmbAttackSpeedModifier.Location = new System.Drawing.Point(60, 22);
+            this.cmbAttackSpeedModifier.Location = new System.Drawing.Point(60, 17);
             this.cmbAttackSpeedModifier.Name = "cmbAttackSpeedModifier";
             this.cmbAttackSpeedModifier.Size = new System.Drawing.Size(114, 21);
             this.cmbAttackSpeedModifier.TabIndex = 28;
@@ -2242,7 +2301,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblAttackSpeedModifier
             // 
             this.lblAttackSpeedModifier.AutoSize = true;
-            this.lblAttackSpeedModifier.Location = new System.Drawing.Point(9, 25);
+            this.lblAttackSpeedModifier.Location = new System.Drawing.Point(9, 20);
             this.lblAttackSpeedModifier.Name = "lblAttackSpeedModifier";
             this.lblAttackSpeedModifier.Size = new System.Drawing.Size(47, 13);
             this.lblAttackSpeedModifier.TabIndex = 0;
@@ -2252,7 +2311,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudScaling.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudScaling.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudScaling.Location = new System.Drawing.Point(15, 343);
+            this.nudScaling.Location = new System.Drawing.Point(15, 340);
             this.nudScaling.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -2337,7 +2396,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbScalingStat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbScalingStat.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbScalingStat.FormattingEnabled = true;
-            this.cmbScalingStat.Location = new System.Drawing.Point(16, 302);
+            this.cmbScalingStat.Location = new System.Drawing.Point(16, 301);
             this.cmbScalingStat.Name = "cmbScalingStat";
             this.cmbScalingStat.Size = new System.Drawing.Size(180, 21);
             this.cmbScalingStat.TabIndex = 46;
@@ -2357,7 +2416,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblScalingAmount
             // 
             this.lblScalingAmount.AutoSize = true;
-            this.lblScalingAmount.Location = new System.Drawing.Point(12, 328);
+            this.lblScalingAmount.Location = new System.Drawing.Point(12, 325);
             this.lblScalingAmount.Name = "lblScalingAmount";
             this.lblScalingAmount.Size = new System.Drawing.Size(84, 13);
             this.lblScalingAmount.TabIndex = 44;
@@ -2449,7 +2508,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblToolType
             // 
             this.lblToolType.AutoSize = true;
-            this.lblToolType.Location = new System.Drawing.Point(13, 444);
+            this.lblToolType.Location = new System.Drawing.Point(13, 476);
             this.lblToolType.Name = "lblToolType";
             this.lblToolType.Size = new System.Drawing.Size(58, 13);
             this.lblToolType.TabIndex = 26;
@@ -2468,7 +2527,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbToolType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbToolType.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbToolType.FormattingEnabled = true;
-            this.cmbToolType.Location = new System.Drawing.Point(16, 458);
+            this.cmbToolType.Location = new System.Drawing.Point(16, 490);
             this.cmbToolType.Name = "cmbToolType";
             this.cmbToolType.Size = new System.Drawing.Size(180, 21);
             this.cmbToolType.TabIndex = 27;
@@ -2932,36 +2991,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemRelations.Text = "Relations";
             this.toolStripItemRelations.Click += new System.EventHandler(this.toolStripItemRelations_Click);
             // 
-            // lblElementalType
-            // 
-            this.lblElementalType.AutoSize = true;
-            this.lblElementalType.Location = new System.Drawing.Point(12, 21);
-            this.lblElementalType.Name = "lblElementalType";
-            this.lblElementalType.Size = new System.Drawing.Size(83, 13);
-            this.lblElementalType.TabIndex = 69;
-            this.lblElementalType.Text = "Elemental Type:";
-            // 
-            // cmbElementalType
-            // 
-            this.cmbElementalType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbElementalType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbElementalType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbElementalType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbElementalType.DrawDropdownHoverOutline = false;
-            this.cmbElementalType.DrawFocusRectangle = false;
-            this.cmbElementalType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbElementalType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbElementalType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbElementalType.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbElementalType.FormattingEnabled = true;
-            this.cmbElementalType.Location = new System.Drawing.Point(15, 38);
-            this.cmbElementalType.Name = "cmbElementalType";
-            this.cmbElementalType.Size = new System.Drawing.Size(180, 21);
-            this.cmbElementalType.TabIndex = 70;
-            this.cmbElementalType.Text = "Physical";
-            this.cmbElementalType.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbElementalType.SelectedIndexChanged += new System.EventHandler(this.cmbElementalType_SelectedIndexChanged);
-            // 
             // FrmItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3031,6 +3060,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.picMalePaperdoll)).EndInit();
             this.grpWeaponProperties.ResumeLayout(false);
             this.grpWeaponProperties.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAttackRange)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCritMultiplier)).EndInit();
             this.grpAttackSpeed.ResumeLayout(false);
             this.grpAttackSpeed.PerformLayout();
@@ -3243,5 +3273,7 @@ namespace Intersect.Editor.Forms.Editors
         public ToolStripButton toolStripItemRelations;
         private DarkComboBox cmbElementalType;
         private Label lblElementalType;
+        private DarkNumericUpDown nudAttackRange;
+        private Label lblAttackRange;
     }
 }

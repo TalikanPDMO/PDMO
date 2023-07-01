@@ -178,6 +178,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbDamageType.SelectedIndex = mEditorItem.DamageType;
                 cmbScalingStat.SelectedIndex = mEditorItem.ScalingStat;
                 cmbAttackAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.AttackAnimationId) + 1;
+                nudAttackRange.Value = mEditorItem.AttackRange;
                 cmbAttackSpeedModifier.SelectedIndex = mEditorItem.AttackSpeedModifier;
                 nudAttackSpeedValue.Value = mEditorItem.AttackSpeedValue;
 
@@ -408,6 +409,7 @@ namespace Intersect.Editor.Forms.Editors
             lblScalingStat.Text = Strings.ClassEditor.scalingstat;
             lblScalingAmount.Text = Strings.ClassEditor.scalingamount;
             lblAttackAnimation.Text = Strings.ClassEditor.attackanimation;
+            lblAttackRange.Text = Strings.ClassEditor.attackrange;
 
             grpAttackSpeed.Text = Strings.NpcEditor.attackspeed;
             lblAttackSpeedModifier.Text = Strings.NpcEditor.attackspeedmodifier;
@@ -923,6 +925,11 @@ namespace Intersect.Editor.Forms.Editors
         {
             mEditorItem.AttackAnimation =
                 AnimationBase.Get(AnimationBase.IdFromList(cmbAttackAnimation.SelectedIndex - 1));
+        }
+
+        private void nudAttackRange_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.AttackRange = (byte)nudAttackRange.Value;
         }
 
         private void cmbDamageType_SelectedIndexChanged(object sender, EventArgs e)
