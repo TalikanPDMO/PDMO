@@ -1182,10 +1182,9 @@ namespace Intersect.Server.Networking
                     var weaponItem = ItemBase.Get(player.Items[player.Equipment[Options.WeaponIndex]].ItemId);
 
                     //Check for animation
-                    var attackAnim = ItemBase.Get(player.Items[player.Equipment[Options.WeaponIndex]].ItemId)
-                        .AttackAnimation;
+                    var attackAnim = weaponItem.AttackAnimation;
 
-                    if (attackAnim != null && attackingTile.TryFix())
+                    if (attackAnim != null && attackingTile.TryFix() && weaponItem.AttackRange == 0)
                     {
                         PacketSender.SendAnimationToProximity(
                             attackAnim.Id, -1, player.Id, attackingTile.GetMapId(), attackingTile.GetX(),
@@ -1286,7 +1285,7 @@ namespace Intersect.Server.Networking
                 if (classBase != null)
                 {
                     //Check for animation
-                    if (classBase.AttackAnimation != null)
+                    if (classBase.AttackAnimation != null && classBase.AttackRange == 0)
                     {
                         PacketSender.SendAnimationToProximity(
                             classBase.AttackAnimationId, -1, player.Id, attackingTile.GetMapId(), attackingTile.GetX(),

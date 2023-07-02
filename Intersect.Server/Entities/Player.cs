@@ -1377,24 +1377,41 @@ namespace Intersect.Server.Entities
 
                 return;
             }
-
-            if (!IsOneBlockAway(target))
-            {
-                //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
-                if (Options.Combat.EnableCombatChatMessages)
-                {
-                    PacketSender.SendChatMsg(this, target.Name + Strings.Combat.oneBlockAway, ChatMessageType.Combat);
-                }
-                return;
-            }
             var classBase = ClassBase.Get(ClassId);
+            var attackrange = classBase.AttackRange;
             ItemBase weapon = null;
             if (Options.WeaponIndex > -1 &&
                 Options.WeaponIndex < Equipment.Length &&
                 Equipment[Options.WeaponIndex] >= 0)
             {
                 weapon = ItemBase.Get(Items[Equipment[Options.WeaponIndex]].ItemId);
+                attackrange = weapon.AttackRange;
             }
+
+            if (attackrange > 0)
+            {
+                if (GetDistanceTo(target) > attackrange)
+                {
+                    if (Options.Combat.EnableCombatChatMessages)
+                    {
+                        PacketSender.SendChatMsg(this, target.Name + Strings.Combat.oneBlockAway, ChatMessageType.Combat);
+                    }
+                    return;
+                }
+            }
+            else
+            {
+                if (!IsOneBlockAway(target))
+                {
+                    //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+                    if (Options.Combat.EnableCombatChatMessages)
+                    {
+                        PacketSender.SendChatMsg(this, target.Name + Strings.Combat.oneBlockAway, ChatMessageType.Combat);
+                    }
+                    return;
+                }
+            }
+            
             if (target is Npc npcenemy)
             {
                 this.FightingNpcBaseIds.AddOrUpdate(npcenemy.Base.Id, CombatTimer, (guid, t) => CombatTimer);

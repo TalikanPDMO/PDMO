@@ -2012,19 +2012,16 @@ namespace Intersect.Server.Entities
             AttackTimer = Globals.Timing.Milliseconds + CalculateAttackTime();
 
             //Check if the attacker is blinded.
-            if (IsOneBlockAway(target))
+            foreach (var status in CachedStatuses)
             {
-                foreach (var status in CachedStatuses)
+                if (status.Type == StatusTypes.Stun ||
+                    status.Type == StatusTypes.Blind ||
+                    status.Type == StatusTypes.Sleep)
                 {
-                    if (status.Type == StatusTypes.Stun ||
-                        status.Type == StatusTypes.Blind ||
-                        status.Type == StatusTypes.Sleep)
-                    {
-                        PacketSender.SendActionMsg(this, Strings.Combat.miss, CustomColors.Combat.Missed);
-                        PacketSender.SendEntityAttack(this, CalculateAttackTime());
+                    PacketSender.SendActionMsg(this, Strings.Combat.miss, CustomColors.Combat.Missed);
+                    PacketSender.SendEntityAttack(this, CalculateAttackTime());
 
-                        return;
-                    }
+                    return;
                 }
             }
             bool isCrit = false;

@@ -1490,7 +1490,31 @@ namespace Intersect.Client.Entities
                     break;
             }
 
-            if (GetRealLocation(ref x, ref y, ref map))
+            var isValidLocation = GetRealLocation(ref x, ref y, ref map);
+            var cls = ClassBase.Get(Class);
+            var attackrange = cls.AttackRange;
+            if (Options.WeaponIndex > -1 &&
+                    Options.WeaponIndex < Equipment.Length &&
+                    MyEquipment[Options.WeaponIndex] >= 0)
+            {
+                attackrange = ItemBase.Get(Inventory[MyEquipment[Options.WeaponIndex]].ItemId).AttackRange;
+            }
+            if (attackrange > 0)
+            {
+                if (TargetIndex != Guid.Empty && TargetIndex != Globals.Me.Id
+                    && Globals.Entities.ContainsKey(TargetIndex))
+                {
+                    var targetEntity = Globals.Entities[TargetIndex];
+                    if (GetDistanceTo(targetEntity) <= attackrange && targetEntity.CanBeAttacked())
+                    {
+                        PacketSender.SendAttack(TargetIndex);
+                        AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + CalculateAttackTime();
+
+                        return true;
+                    }
+                }
+            }
+            else if (isValidLocation)
             {
                 foreach (var en in Globals.Entities)
                 {
