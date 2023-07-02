@@ -2785,7 +2785,7 @@ namespace Intersect.Server.Entities
 
                         int[] position = GetPositionNearTarget(baseTarget.MapId, baseTarget.X, baseTarget.Y);
                         Warp(baseTarget.MapId, (byte)position[0], (byte)position[1], (byte)Dir);
-                        ChangeDir(DirToEnemy(baseTarget));
+                        ChangeDir(DirToEnemy(baseTarget, true));
 
                         if (spellBase.ImpactAnimation != null)
                         {
@@ -3157,7 +3157,7 @@ namespace Intersect.Server.Entities
         {
         }
 
-        protected byte DirToEnemy(Entity target)
+        protected byte DirToEnemy(Entity target, bool only4dirs = false)
         {
             //Calculate World Tile of Me
             var x1 = X + MapInstance.Get(MapId).MapGridX * Options.MapWidth;
@@ -3166,44 +3166,101 @@ namespace Intersect.Server.Entities
             //Calculate world tile of target
             var x2 = target.X + MapInstance.Get(target.MapId).MapGridX * Options.MapWidth;
             var y2 = target.Y + MapInstance.Get(target.MapId).MapGridY * Options.MapHeight;
-
-            //Left or Right
-            if (x1 - x2 < 0 && y1 - y2 < 0)
+            
+            if (only4dirs)
             {
-                return (byte)Directions.DownRight;
-            }
-            else if (x1 - x2 < 0 && y1 - y2 > 0)
-            {
-                return (byte)Directions.UpRight;
-            }
-            else if (x1 - x2 < 0 && y1 - y2 == 0)
-            {
-                return (byte)Directions.Right;
-            }
-            else if (x1 - x2 > 0 && y1 - y2 < 0)
-            {
-                return (byte)Directions.DownLeft;
-            }
-            else if (x1 - x2 > 0 && y1 - y2 > 0)
-            {
-                return (byte)Directions.UpLeft;
-            }
-            else if (x1 - x2 > 0 && y1 - y2 == 0)
-            {
-                return (byte)Directions.Left;
-            }
-            else if (x1 - x2 == 0 && y1 - y2 < 0)
-            {
-                return (byte)Directions.Down;
-            }
-            else if (x1 - x2 == 0 && y1 - y2 > 0)
-            {
-                return (byte)Directions.Up;
+                var angle = Math.Atan2(Math.Abs(x1 - x2), Math.Abs(y1 - y2));
+                if (x1 - x2 < 0)
+                {
+                    if (y1 - y2 < 0)
+                    {
+                        //Down Right
+                        return angle < Math.PI / 4 ? (byte)Directions.Down : (byte)Directions.Right; 
+                    }
+                    else if (y1 - y2 > 0)
+                    {
+                        //Up Right
+                        return angle < Math.PI / 4 ? (byte)Directions.Up : (byte)Directions.Right;
+                    }
+                    else if (y1 - y2 == 0)
+                    {
+                        return (byte)Directions.Right;
+                    }
+                }
+                else if (x1 - x2 > 0)
+                {
+                    if (y1 - y2 < 0)
+                    {
+                        //Down Left
+                        return angle < Math.PI / 4 ? (byte)Directions.Down : (byte)Directions.Left;
+                    }
+                    else if (y1 - y2 > 0)
+                    {
+                        //Up Left
+                        return angle < Math.PI / 4 ? (byte)Directions.Up : (byte)Directions.Left;
+                    }
+                    else if (y1 - y2 == 0)
+                    {
+                        return (byte)Directions.Left;
+                    }
+                }
+                else
+                {
+                    if (y1 - y2 < 0)
+                    {
+                        return (byte)Directions.Down;
+                    }
+                    else if (y1 - y2 > 0)
+                    {
+                        return (byte)Directions.Up;
+                    }
+                }
             }
             else
             {
-                return 0;
+                if (x1 - x2 < 0)
+                {
+                    if (y1 - y2 < 0)
+                    {
+                        return (byte)Directions.DownRight;
+                    }
+                    else if (y1 - y2 > 0)
+                    {
+                        return (byte)Directions.UpRight;
+                    }
+                    else if (y1 - y2 == 0)
+                    {
+                        return (byte)Directions.Right;
+                    }
+                }
+                else if (x1 - x2 > 0)
+                {
+                    if (y1 - y2 < 0)
+                    {
+                        return (byte)Directions.DownLeft;
+                    }
+                    else if (y1 - y2 > 0)
+                    {
+                        return (byte)Directions.UpLeft;
+                    }
+                    else if (y1 - y2 == 0)
+                    {
+                        return (byte)Directions.Left;
+                    }
+                }
+                else
+                {
+                    if (y1 - y2 < 0)
+                    {
+                        return (byte)Directions.Down;
+                    }
+                    else if (y1 - y2 > 0)
+                    {
+                        return (byte)Directions.Up;
+                    }
+                }
             }
+            return 0;
         }
 
         // Outdated : Check if the target is either up, down, left or right of the target on the correct Z dimension.

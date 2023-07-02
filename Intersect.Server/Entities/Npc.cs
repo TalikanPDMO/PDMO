@@ -419,17 +419,31 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
-
-            if (!IsOneBlockAway(target))
+            var attackrange = CurrentPhase?.AttackRange ?? Base.AttackRange;
+            if (attackrange > 0)
             {
-                return;
+                if (GetDistanceTo(target) > attackrange)
+                {
+                    return;
+                }
+                if (DirToEnemy(target, true) != Dir)
+                {
+                    return;
+                }
             }
-
-            if (!IsFacingTarget(target))
+            else
             {
-                return;
-            }
+                if (!IsOneBlockAway(target))
+                {
+                    return;
+                }
 
+                if (!IsFacingTarget(target))
+                {
+                    return;
+                }
+            }
+            
             var deadAnimations = new List<KeyValuePair<Guid, sbyte>>();
             var aliveAnimations = new List<KeyValuePair<Guid, sbyte>>();
 
@@ -1226,10 +1240,20 @@ namespace Intersect.Server.Entities
                                 hasFoundSpell = TryCastSpells();
                             }
                             // TODO: Make resetting mobs actually return to their starting location.
-                            if ((!mResetting && !IsOneBlockAway(
-                                mPathFinder.GetTarget().TargetMapId, mPathFinder.GetTarget().TargetX,
-                                mPathFinder.GetTarget().TargetY, mPathFinder.GetTarget().TargetZ
-                            )) ||
+                            var attackrange = CurrentPhase?.AttackRange ?? Base.AttackRange;
+                            var isInAttackRange = false;
+                            if (attackrange > 0)
+                            {
+                                isInAttackRange = GetDistanceTo(tempTarget) <= attackrange;
+                            }
+                            else
+                            {
+                                isInAttackRange = IsOneBlockAway(
+                                    mPathFinder.GetTarget().TargetMapId, mPathFinder.GetTarget().TargetX,
+                                    mPathFinder.GetTarget().TargetY, mPathFinder.GetTarget().TargetZ
+                                );
+                            }
+                            if ((!mResetting && !isInAttackRange) ||
                             (mResetting && GetDistanceTo(AggroCenterMap, AggroCenterX, AggroCenterY) != 0)
                             )
                             {
@@ -1410,9 +1434,10 @@ namespace Intersect.Server.Entities
                                 {
                                     if (tempTarget != null)
                                     {
-                                        if (Dir != DirToEnemy(tempTarget) && DirToEnemy(tempTarget) != -1)
+                                        var dirToEnemy = DirToEnemy(tempTarget, true);
+                                        if (Dir != dirToEnemy && dirToEnemy != -1)
                                         {
-                                            ChangeDir(DirToEnemy(tempTarget));
+                                            ChangeDir(dirToEnemy);
                                         }
                                         else
                                         {
