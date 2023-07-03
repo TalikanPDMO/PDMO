@@ -1490,6 +1490,12 @@ namespace Intersect.Server.Entities
 
             if (weapon != null)
             {
+                if (weapon.AttackAnimation != null && attackrange > 0)
+                {
+                    PacketSender.SendAnimationToProximity(
+                        weapon.AttackAnimationId, 1, target.Id, target.MapId, 0, 0, (sbyte)Dir
+                    );
+                }
                 base.TryAttack(
                     target, weapon.Damage, (DamageType) weapon.DamageType, (Stats) weapon.ScalingStat, weapon.Scaling,
                     weapon.CritChance, weapon.CritMultiplier, null, null, weapon
@@ -1499,6 +1505,12 @@ namespace Intersect.Server.Entities
             {
                 if (classBase != null)
                 {
+                    if (classBase.AttackAnimation != null && attackrange > 0)
+                    {
+                        PacketSender.SendAnimationToProximity(
+                            classBase.AttackAnimationId, 1, target.Id, target.MapId, 0 ,0, (sbyte)Dir
+                        );
+                    }
                     base.TryAttack(
                         target, classBase.Damage, (DamageType) classBase.DamageType, (Stats) classBase.ScalingStat,
                         classBase.Scaling, classBase.CritChance, classBase.CritMultiplier

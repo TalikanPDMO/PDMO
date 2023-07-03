@@ -3169,17 +3169,19 @@ namespace Intersect.Server.Entities
             
             if (only4dirs)
             {
-                var angle = Math.Atan2(Math.Abs(x1 - x2), Math.Abs(y1 - y2));
+                var angle = 0.0;
                 if (x1 - x2 < 0)
                 {
                     if (y1 - y2 < 0)
                     {
                         //Down Right
+                        angle = Math.Atan2(Math.Abs(x1 - x2), Math.Abs(y1 - y2));
                         return angle < Math.PI / 4 ? (byte)Directions.Down : (byte)Directions.Right; 
                     }
                     else if (y1 - y2 > 0)
                     {
                         //Up Right
+                        angle = Math.Atan2(Math.Abs(x1 - x2), Math.Abs(y1 - y2));
                         return angle < Math.PI / 4 ? (byte)Directions.Up : (byte)Directions.Right;
                     }
                     else if (y1 - y2 == 0)
@@ -3192,11 +3194,13 @@ namespace Intersect.Server.Entities
                     if (y1 - y2 < 0)
                     {
                         //Down Left
+                        angle = Math.Atan2(Math.Abs(x1 - x2), Math.Abs(y1 - y2));
                         return angle < Math.PI / 4 ? (byte)Directions.Down : (byte)Directions.Left;
                     }
                     else if (y1 - y2 > 0)
                     {
                         //Up Left
+                        angle = Math.Atan2(Math.Abs(x1 - x2), Math.Abs(y1 - y2));
                         return angle < Math.PI / 4 ? (byte)Directions.Up : (byte)Directions.Left;
                     }
                     else if (y1 - y2 == 0)
