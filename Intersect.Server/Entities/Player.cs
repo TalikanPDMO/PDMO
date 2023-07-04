@@ -1398,6 +1398,8 @@ namespace Intersect.Server.Entities
                     }
                     return;
                 }
+                // Turn toward enemy if needed only for range auto-attacks
+                ChangeDir(DirToEnemy(target, true));
             }
             else
             {
