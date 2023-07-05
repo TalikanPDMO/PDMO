@@ -1388,7 +1388,19 @@ namespace Intersect.Server.Entities
                 attackrange = weapon.AttackRange;
             }
 
-            if (attackrange > 0)
+            if (target is Resource || attackrange == 0)
+            {
+                if (!IsOneBlockAway(target))
+                {
+                    //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+                    if (Options.Combat.EnableCombatChatMessages)
+                    {
+                        PacketSender.SendChatMsg(this, target.Name + Strings.Combat.oneBlockAway, ChatMessageType.Combat);
+                    }
+                    return;
+                }
+            }
+            else
             {
                 if (GetDistanceTo(target) > attackrange)
                 {
@@ -1400,18 +1412,6 @@ namespace Intersect.Server.Entities
                 }
                 // Turn toward enemy if needed only for range auto-attacks
                 ChangeDir(DirToEnemy(target, true));
-            }
-            else
-            {
-                if (!IsOneBlockAway(target))
-                {
-                    //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
-                    if (Options.Combat.EnableCombatChatMessages)
-                    {
-                        PacketSender.SendChatMsg(this, target.Name + Strings.Combat.oneBlockAway, ChatMessageType.Combat);
-                    }
-                    return;
-                }
             }
             
             if (target is Npc npcenemy)

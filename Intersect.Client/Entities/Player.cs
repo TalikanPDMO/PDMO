@@ -1519,7 +1519,8 @@ namespace Intersect.Client.Entities
                     }
                 }
             }
-            else if (isValidLocation)
+            //attackrange is 0 or not in range or no valid target, so we need to check for a possible resource in front of us
+            if (isValidLocation)
             {
                 foreach (var en in Globals.Entities)
                 {
@@ -1535,6 +1536,11 @@ namespace Intersect.Client.Entities
                             en.Value.Y == y &&
                             en.Value.CanBeAttacked())
                         {
+                            if (attackrange > 0 && en.Value.GetType() != typeof(Resource))
+                            {
+                                //Something is here but we can't interact with it, exit the loop
+                                break;
+                            }
                             //ATTACKKKKK!!!
                             PacketSender.SendAttack(en.Key);
                             attackTime = CalculateAttackTime();
