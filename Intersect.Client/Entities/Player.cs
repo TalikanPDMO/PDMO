@@ -1061,11 +1061,14 @@ namespace Intersect.Client.Entities
                         //If we just started to change to a new direction then turn the player only (set the timer to now + TurnOnlyHeldDuration ms)
                         if (MoveDirectionTimers[i] == -1 && !Globals.Me.IsMoving && Dir != Globals.Me.MoveDirInput)
                         {
-                            //Turn Only
-                            Dir = (byte)Globals.Me.MoveDirInput;
-                            PacketSender.SendDirection((byte)Globals.Me.MoveDirInput);
-                            MoveDirectionTimers[i] = Globals.System.GetTimeMs() + Options.Instance.PlayerOpts.TurnOnlyHeldDuration;
-                            Globals.Me.MoveDirInput = -1;
+                            if (AttackAnimationTimer < Timing.Global.Ticks / TimeSpan.TicksPerMillisecond)
+                            {
+                                //Turn Only
+                                Dir = (byte)Globals.Me.MoveDirInput;
+                                PacketSender.SendDirection((byte)Globals.Me.MoveDirInput);
+                                MoveDirectionTimers[i] = Globals.System.GetTimeMs() + Options.Instance.PlayerOpts.TurnOnlyHeldDuration;
+                                Globals.Me.MoveDirInput = -1;
+                            }
                         }
                         //If we're already facing the direction then just start moving (set the timer to now)
                         else if (MoveDirectionTimers[i] == -1 && !Globals.Me.IsMoving && Dir == Globals.Me.MoveDirInput)
