@@ -511,6 +511,7 @@ namespace Intersect.Server.Entities
                         Base.CritChance, Base.CritMultiplier, deadAnimations, aliveAnimations);
                 }
                 var attackTime = CalculateAttackTime();
+                MoveTimer = Globals.Timing.Milliseconds + (long)(attackTime * Options.Combat.AttackAnimationTimeRatio);
                 CastFreq = Globals.Timing.Milliseconds + attackTime;
                 PacketSender.SendEntityAttack(this, attackTime);
             }
@@ -1483,26 +1484,6 @@ namespace Intersect.Server.Entities
                                                 TryAttack(tempTarget);
                                             }
                                         }
-                                        /*var dirToEnemy = DirToEnemy(tempTarget, true);
-                                        if (Dir != dirToEnemy && dirToEnemy != -1)
-                                        {
-                                            ChangeDir(dirToEnemy);
-                                        }
-                                        else
-                                        {
-                                            if (tempTarget.IsDisposed)
-                                            {
-                                                TryFindNewTarget(timeMs);
-                                                tempTarget = Target;
-                                            }
-                                            else
-                                            {
-                                                if (!hasFoundSpell)
-                                                {
-                                                    TryAttack(tempTarget);
-                                                }
-                                            }
-                                        }*/
                                     }
                                 }
                             }

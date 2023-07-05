@@ -1022,6 +1022,7 @@ namespace Intersect.Client.Networking
             if (attackTimer > -1 && en != Globals.Me)
             {
                 en.AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTimer;
+                en.AttackAnimationTimer = (long)(Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTimer * Options.Combat.AttackAnimationTimeRatio);
                 en.AttackTime = attackTimer;
             }
         }

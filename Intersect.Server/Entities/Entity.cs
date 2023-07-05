@@ -2432,11 +2432,11 @@ namespace Intersect.Server.Entities
                 CheckForOnhitAttack(enemy, isAutoAttack);
             }
 
-            // Add a timer before able to make the next move.
-            if (GetType() == typeof(Npc))
+            // Add a timer before able to make the next move. NO NEED with our system (autoattack and spells timing conditions)
+            /*if (GetType() == typeof(Npc))
             {
                 ((Npc) this).MoveTimer = Globals.Timing.Milliseconds + (long) GetMovementTime();
-            }
+            }*/
 
             if (this is Player && enemy is Npc)
             {

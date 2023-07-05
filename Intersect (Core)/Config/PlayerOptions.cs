@@ -52,11 +52,6 @@ namespace Intersect.Config
         public int TradeRange = 6;
 
         /// <summary>
-        /// Unlinks the timers for combat and movement to facilitate complex combat (e.g. kiting)
-        /// </summary>
-        public bool AllowCombatMovement = true;
-
-        /// <summary>
         /// Configures whether or not the level of a player is shown next to their name.
         /// </summary>
         public bool ShowLevelByName = false;

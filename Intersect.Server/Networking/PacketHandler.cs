@@ -687,8 +687,7 @@ namespace Intersect.Server.Networking
             }
 
             var clientTime = packet.Adjusted / TimeSpan.TicksPerMillisecond;
-            if (player.ClientMoveTimer <= clientTime &&
-                (Options.Instance.PlayerOpts.AllowCombatMovement || player.ClientAttackTimer <= clientTime))
+            if (player.ClientMoveTimer <= clientTime)
             {
                 player.Running = packet.Run;
                 var canMove = player.CanMove(packet.Dir);
@@ -1068,8 +1067,7 @@ namespace Intersect.Server.Networking
             var target = packet.Target;
 
             var clientTime = packet.Adjusted / TimeSpan.TicksPerMillisecond;
-            if (player.ClientAttackTimer > clientTime ||
-                (!Options.Instance.PlayerOpts.AllowCombatMovement && player.ClientMoveTimer > clientTime))
+            if (player.ClientAttackTimer > clientTime)
             {
                 return;
             }

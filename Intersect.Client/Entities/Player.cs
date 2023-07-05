@@ -223,13 +223,16 @@ namespace Intersect.Client.Entities
 
                 if (Controls.KeyDown(Control.AttackInteract))
                 {
-                    if (!Globals.Me.TryAttack())
+                    Globals.Me.TryAttack();
+                    // No need now with our auto attack mechanic. TODO : Delete when we are sure it is useless
+                    /*if (!Globals.Me.TryAttack())
                     {
                         if (Globals.Me.AttackTimer < Timing.Global.Ticks / TimeSpan.TicksPerMillisecond)
                         {
                             Globals.Me.AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + Globals.Me.CalculateAttackTime();
+                            Globals.Me.AttackAnimationTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + Entity.ATTACK_ANIMATION_TIME;
                         }
-                    }
+                    }*/
                 }
             }
 
@@ -1444,7 +1447,7 @@ namespace Intersect.Client.Entities
 
         public bool TryAttack()
         {
-            if (AttackTimer > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond || Blocking || (IsMoving && !Options.Instance.PlayerOpts.AllowCombatMovement))
+            if (AttackTimer > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond || Blocking)
             {
                 return false;
             }
@@ -1499,6 +1502,7 @@ namespace Intersect.Client.Entities
             {
                 attackrange = ItemBase.Get(Inventory[MyEquipment[Options.WeaponIndex]].ItemId).AttackRange;
             }
+            var attackTime = 0;
             if (attackrange > 0)
             {
                 if (TargetIndex != Guid.Empty && TargetIndex != Globals.Me.Id
@@ -1508,8 +1512,9 @@ namespace Intersect.Client.Entities
                     if (GetDistanceTo(targetEntity) <= attackrange && targetEntity.CanBeAttacked())
                     {
                         PacketSender.SendAttack(TargetIndex);
-                        AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + CalculateAttackTime();
-
+                        attackTime = CalculateAttackTime();
+                        AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTime;
+                        AttackAnimationTimer = (long)(Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTime * Options.Combat.AttackAnimationTimeRatio);
                         return true;
                     }
                 }
@@ -1532,8 +1537,9 @@ namespace Intersect.Client.Entities
                         {
                             //ATTACKKKKK!!!
                             PacketSender.SendAttack(en.Key);
-                            AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + CalculateAttackTime();
-
+                            attackTime = CalculateAttackTime();
+                            AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTime;
+                            AttackAnimationTimer =(long) (Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTime * Options.Combat.AttackAnimationTimeRatio);
                             return true;
                         }
                     }
@@ -1555,8 +1561,9 @@ namespace Intersect.Client.Entities
                         {
                             //Talk to Event
                             PacketSender.SendActivateEvent(en.Key);
-                            AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + CalculateAttackTime();
-
+                            attackTime = CalculateAttackTime();
+                            AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTime;
+                            AttackAnimationTimer = (long)(Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTime * Options.Combat.AttackAnimationTimeRatio);
                             return true;
                         }
                     }
@@ -1565,8 +1572,9 @@ namespace Intersect.Client.Entities
 
             //Projectile/empty swing for animations
             PacketSender.SendAttack(Guid.Empty);
-            AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + CalculateAttackTime();
-
+            attackTime = CalculateAttackTime();
+            AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTime;
+            AttackAnimationTimer = (long)(Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTime * Options.Combat.AttackAnimationTimeRatio);
             return true;
         }
 
@@ -1911,7 +1919,7 @@ namespace Intersect.Client.Entities
                 return;
             }
 
-            if (AttackTimer > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond && !Options.Instance.PlayerOpts.AllowCombatMovement)
+            if (AttackAnimationTimer > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond)
             {
                 return;
             }
