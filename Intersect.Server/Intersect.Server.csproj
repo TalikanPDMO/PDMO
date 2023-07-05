@@ -697,6 +697,10 @@
     <Compile Include="Migrations\Game\20230126134655_AddingSpellRulesToNpcsAndNpcPhases.designer.cs">
       <DependentUpon>20230126134655_AddingSpellRulesToNpcsAndNpcPhases.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230614183718_AddingActiveSpellToItemBase.cs" />
+    <Compile Include="Migrations\Game\20230614183718_AddingActiveSpellToItemBase.designer.cs">
+      <DependentUpon>20230614183718_AddingActiveSpellToItemBase.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

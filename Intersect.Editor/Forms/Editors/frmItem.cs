@@ -166,6 +166,10 @@ namespace Intersect.Editor.Forms.Editors
             cmbCritEffectSpell.Items.Add(Strings.General.none);
             cmbCritEffectSpell.Items.AddRange(SpellBase.EditorFormatNames);
 
+            cmbActiveEquipment.Items.Clear();
+            cmbActiveEquipment.Items.Add(Strings.General.none);
+            cmbActiveEquipment.Items.AddRange(SpellBase.EditorFormatNames);
+
             InitLocalization();
             UpdateEditor();
         }
@@ -1279,19 +1283,20 @@ namespace Intersect.Editor.Forms.Editors
         }
         
         // Active Equipment
-        /*
+        
         private void cmbActiveEquipment_SelectedIndexChanged(object sender, EventArgs e)
         {
+
             if (cmbActiveEquipment.SelectedIndex > 0)
             {
-                mEditorItem.ActiveEquipment = SpellBase.Get(SpellBase.IdFromList(cmbActiveEquipment.SelectedIndex - 1));
+                mEditorItem.ActiveSpell = SpellBase.Get(SpellBase.IdFromList(cmbActiveEquipment.SelectedIndex - 1));
             }
             else
             {
-                mEditorItem.ActiveEquipment = null;
+                mEditorItem.ActiveSpell = null;
             }
         }
-        */
+        
         private void txtCannotUse_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.CannotUseMessage = txtCannotUse.Text;

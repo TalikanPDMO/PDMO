@@ -340,6 +340,20 @@ namespace Intersect.GameObjects
                                    ItemType != ItemTypes.Equipment &&
                                    ItemType != ItemTypes.Bag;
 
+
+        // ActiveSpell attribut
+        [Column("ActiveSpell")]
+        [JsonProperty]
+        public Guid ActiveSpellId { get; set; }
+
+        [NotMapped]
+        [JsonIgnore]
+        public SpellBase ActiveSpell
+        {
+            get => SpellBase.Get(ActiveSpellId);
+            set => ActiveSpellId = value?.Id ?? Guid.Empty;
+        }
+
         /// <inheritdoc />
         public string Folder { get; set; } = "";
 

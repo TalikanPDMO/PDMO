@@ -3072,7 +3072,7 @@ namespace Intersect.Editor.Forms.Editors
             //this.grpActiveEquipment.Controls.Add(this.chkReUseValues);
             this.grpActiveEquipment.Controls.Add(this.cmbActiveEquipment);
             this.grpActiveEquipment.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpActiveEquipment.Location = new System.Drawing.Point(200 + 100, 420-400);
+            this.grpActiveEquipment.Location = new System.Drawing.Point(300, 20);
             this.grpActiveEquipment.Name = "grpActiveEquipment";
             this.grpActiveEquipment.Size = new System.Drawing.Size(234, 62);
             this.grpActiveEquipment.TabIndex = 54;
@@ -3101,7 +3101,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbActiveEquipment.TabIndex = 66;
             this.cmbActiveEquipment.Text = "None";
             this.cmbActiveEquipment.TextPadding = new System.Windows.Forms.Padding(2);
-            //this.cmbActiveEquipment.SelectedIndexChanged += new System.EventHandler(this.cmbActiveEquipment_SelectedIndexChanged);
+            this.cmbActiveEquipment.SelectedIndexChanged += new System.EventHandler(this.cmbActiveEquipment_SelectedIndexChanged);
         }
 
         #endregion

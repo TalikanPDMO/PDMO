@@ -29,7 +29,7 @@ using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
-
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using Newtonsoft.Json;
 using static Intersect.GameObjects.QuestBase;
 
@@ -2319,19 +2319,42 @@ namespace Intersect.Server.Entities
 
                 // Unequip items even if you do not meet the requirements.
                 // (Need this for silly devs who give people items and then later add restrictions...)
+
                 if (itemBase.ItemType == ItemTypes.Equipment)
                 {
                     for (var i = 0; i < Options.EquipmentSlots.Count; i++)
                     {
                         if (Equipment[i] == slot)
                         {
+                            // unequip the item
                             Equipment[i] = -1;
                             FixVitals();
                             StartCommonEventsWithTrigger(CommonEventTrigger.EquipChange);
                             PacketSender.SendPlayerEquipmentToProximity(this);
                             PacketSender.SendEntityStats(this);
 
-                            return;
+                            //------ Active Equipment
+                            // Is an active equipment ?            
+                            if (Items[slot].Descriptor.ActiveSpell != null)
+                            {
+                                // First method just removing the spell
+                                //Remove it from the player
+                                TryForgetSpell(new Spell(Items[slot].Descriptor.ActiveSpell.Id));
+
+                                // Remove it from the hotbar
+                                int iterateur = 0;
+                                while (iterateur < Options.MaxHotbar - 1)
+                                {
+                                    if (Hotbar[iterateur].ItemOrSpellId == Items[slot].Descriptor.ActiveSpell.Id)
+                                    {
+                                        HotbarChange(iterateur, null);
+                                    }
+                                    iterateur++;
+                                }
+                                PacketSender.SendHotbarSlots(this);
+                                
+                            }
+                        return;
                         }
                     }
                 }
@@ -2449,7 +2472,16 @@ namespace Intersect.Server.Entities
                         }
 
                         EquipItem(itemBase, slot);
+                        //------ Active Equipment
+                        // Is an active equipment ?
+                        if (itemBase.ActiveSpell != null)
+                        {
+                            //Give it to the player and place it to he hotbar
+                            // Old way but need more ability slots so wrong way
+                            TryTeachSpell(new Spell(itemBase.ActiveSpell.Id));
+                            //TryGiveItem(new Item());
 
+                        }
                         break;
                     case ItemTypes.Spell:
                         if (itemBase.SpellId == Guid.Empty)
@@ -2587,7 +2619,7 @@ namespace Intersect.Server.Entities
                 }
             }
             else // Not stackable, so just take one item away.
-            {
+            { 
                 toTake -= 1;
                 TakeItem(slot, 1, sendUpdate);
             }
@@ -4875,6 +4907,27 @@ namespace Intersect.Server.Entities
                 {
                     Equipment[i] = -1;
                     updated = true;
+
+                    //------ Active Equipment
+                    // Is an active equipment ?             
+                    if (Items[itemSlot].Descriptor.ActiveSpell != null)
+                    {
+                        //Remove it from the player
+                        TryForgetSpell(new Spell(Items[itemSlot].Descriptor.ActiveSpell.Id));
+
+                        // Remove it from the hotbar
+                        int iterateur = 0;
+                        while (iterateur < Options.MaxHotbar - 1)
+                        {
+                            if (Hotbar[iterateur].ItemOrSpellId == Items[itemSlot].Descriptor.ActiveSpell.Id)
+                            {
+                                HotbarChange(iterateur, null);
+                            }
+                            iterateur++;
+                        }
+                        PacketSender.SendHotbarSlots(this);
+                    }
+                    
                 }
             }
             if (updated)
@@ -4891,10 +4944,30 @@ namespace Intersect.Server.Entities
 
         public void UnequipItem(int slot, bool sendUpdate = true)
         {
+            //------ Active Equipment
+            // Is an active equipment ?            
+            if (Items[slot].Descriptor.ActiveSpell != null)
+            {
+                //Remove it from the player
+                TryForgetSpell(new Spell(Items[slot].Descriptor.ActiveSpell.Id));
+
+                // Remove it from the hotbar
+                int iterateur = 0;
+                while (iterateur < Options.MaxHotbar - 1)
+                {
+                    if (Hotbar[iterateur].ItemOrSpellId == Items[slot].Descriptor.ActiveSpell.Id)
+                    {
+                        HotbarChange(iterateur, null);
+                    }
+                    iterateur++;
+                }
+                PacketSender.SendHotbarSlots(this);
+            }
+            
             Equipment[slot] = -1;
             FixVitals();
             StartCommonEventsWithTrigger(CommonEventTrigger.EquipChange);
-
+            
             if (sendUpdate)
             {
                 PacketSender.SendPlayerEquipmentToProximity(this);
