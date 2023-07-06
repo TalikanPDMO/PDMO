@@ -100,15 +100,18 @@ namespace Intersect.Client.Entities.Events
             switch (Graphic.Type)
             {
                 case EventGraphicType.Sprite: //Sprite
-                    var entityTex = Globals.ContentManager.GetTexture(
-                        GameContentManager.TextureType.Entity, Graphic.Filename
-                    );
-
+                    var entityTex = AnimatedTextures[SpriteAnimation] ?? Texture;
+                    if (Texture == null)
+                    {
+                        entityTex = Globals.ContentManager.GetTexture(
+                            GameContentManager.TextureType.Entity, Graphic.Filename
+                        );
+                    }
                     if (entityTex != null)
                     {
                         srcTexture = entityTex;
                         height = srcTexture.GetHeight() / Options.Instance.Sprites.Directions;
-                        width = srcTexture.GetWidth() / Options.Instance.Sprites.NormalFrames;
+                        width = srcTexture.GetWidth() / SpriteFrames;
                         d = Graphic.Y;
                         if (!DirectionFix)
                         {
@@ -156,9 +159,13 @@ namespace Intersect.Client.Entities.Events
                         }
 
                         var frame = Graphic.X;
-                        if (WalkingAnim)
+                        if (WalkingAnim && IsMoving)
                         {
                             frame = WalkFrame;
+                        }
+                        else if (SpriteAnimation == SpriteAnimations.Idle)
+                        {
+                            frame = SpriteFrame;
                         }
 
                         if (Options.AnimatedSprites.Contains(Graphic.Filename.ToLower()))
@@ -171,8 +178,8 @@ namespace Intersect.Client.Entities.Events
                         else
                         {
                             srcRectangle = new FloatRect(
-                                frame * (int) srcTexture.GetWidth() / Options.Instance.Sprites.NormalFrames, d * (int) srcTexture.GetHeight() / Options.Instance.Sprites.Directions,
-                                (int) srcTexture.GetWidth() / Options.Instance.Sprites.NormalFrames, (int) srcTexture.GetHeight() / Options.Instance.Sprites.Directions
+                                frame * (int) srcTexture.GetWidth() / SpriteFrames, d * (int) srcTexture.GetHeight() / Options.Instance.Sprites.Directions,
+                                (int) srcTexture.GetWidth() /SpriteFrames, (int) srcTexture.GetHeight() / Options.Instance.Sprites.Directions
                             );
                         }
                     }
