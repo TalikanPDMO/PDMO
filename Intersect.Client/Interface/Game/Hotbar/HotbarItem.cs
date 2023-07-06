@@ -14,6 +14,7 @@ using Intersect.Client.Localization;
 using Intersect.Client.Spells;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Interface.Game.Hotbar
 {
@@ -127,7 +128,7 @@ namespace Intersect.Client.Interface.Game.Hotbar
                         Globals.Me.TryUseItem(mInventoryItemIndex);
                     }
                 }
-                else if (mCurrentSpell != null)
+                else if (mCurrentSpell != null && Globals.Me.AttackAnimationTimer < Timing.Global.Ticks / TimeSpan.TicksPerMillisecond)
                 {
                     Globals.Me.TryUseSpell(mCurrentSpell.Id);
                 }

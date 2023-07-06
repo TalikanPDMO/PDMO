@@ -96,6 +96,8 @@ namespace Intersect.GameObjects
             set => AttackAnimationId = value?.Id ?? Guid.Empty;
         }
 
+        public byte AttackRange { get; set; } = 0;
+
         //Behavior
         public bool Aggressive { get; set; }
 
@@ -497,6 +499,8 @@ namespace Intersect.GameObjects
             get => AnimationBase.Get(AttackAnimationId ?? Guid.Empty);
             set => AttackAnimationId = value?.Id;
         }
+
+        public byte? AttackRange { get; set; } = null;
 
         public ConditionLists ConditionLists { get; set; } = new ConditionLists();
 

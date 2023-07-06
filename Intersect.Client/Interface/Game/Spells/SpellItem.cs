@@ -10,6 +10,7 @@ using Intersect.Client.General;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.GameObjects;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Interface.Game.Spells
 {
@@ -209,7 +210,7 @@ namespace Intersect.Client.Interface.Game.Spells
                         mCanDrag = true;
                         mMouseX = -1;
                         mMouseY = -1;
-                        if (Globals.System.GetTimeMs() < mClickTime)
+                        if (Globals.System.GetTimeMs() < mClickTime && Globals.Me.AttackAnimationTimer < Timing.Global.Ticks / TimeSpan.TicksPerMillisecond)
                         {
                             Globals.Me.TryUseSpell(mYindex);
                             mClickTime = 0;

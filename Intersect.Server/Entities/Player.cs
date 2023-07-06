@@ -1377,24 +1377,43 @@ namespace Intersect.Server.Entities
 
                 return;
             }
-
-            if (!IsOneBlockAway(target))
-            {
-                //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
-                if (Options.Combat.EnableCombatChatMessages)
-                {
-                    PacketSender.SendChatMsg(this, target.Name + Strings.Combat.oneBlockAway, ChatMessageType.Combat);
-                }
-                return;
-            }
             var classBase = ClassBase.Get(ClassId);
+            var attackrange = classBase.AttackRange;
             ItemBase weapon = null;
             if (Options.WeaponIndex > -1 &&
                 Options.WeaponIndex < Equipment.Length &&
                 Equipment[Options.WeaponIndex] >= 0)
             {
                 weapon = ItemBase.Get(Items[Equipment[Options.WeaponIndex]].ItemId);
+                attackrange = weapon.AttackRange;
             }
+
+            if (target is Resource || attackrange == 0)
+            {
+                if (!IsOneBlockAway(target))
+                {
+                    //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+                    if (Options.Combat.EnableCombatChatMessages)
+                    {
+                        PacketSender.SendChatMsg(this, target.Name + Strings.Combat.oneBlockAway, ChatMessageType.Combat);
+                    }
+                    return;
+                }
+            }
+            else
+            {
+                if (GetDistanceTo(target) > attackrange)
+                {
+                    if (Options.Combat.EnableCombatChatMessages)
+                    {
+                        PacketSender.SendChatMsg(this, target.Name + Strings.Combat.oneBlockAway, ChatMessageType.Combat);
+                    }
+                    return;
+                }
+                // Turn toward enemy if needed only for range auto-attacks
+                ChangeDir(DirToEnemy(target, true));
+            }
+            
             if (target is Npc npcenemy)
             {
                 this.FightingNpcBaseIds.AddOrUpdate(npcenemy.Base.Id, CombatTimer, (guid, t) => CombatTimer);
@@ -1473,6 +1492,12 @@ namespace Intersect.Server.Entities
 
             if (weapon != null)
             {
+                if (weapon.AttackAnimation != null && attackrange > 0)
+                {
+                    PacketSender.SendAnimationToProximity(
+                        weapon.AttackAnimationId, 1, target.Id, target.MapId, 0, 0, (sbyte)Dir
+                    );
+                }
                 base.TryAttack(
                     target, weapon.Damage, (DamageType) weapon.DamageType, (Stats) weapon.ScalingStat, weapon.Scaling,
                     weapon.CritChance, weapon.CritMultiplier, null, null, weapon
@@ -1482,6 +1507,12 @@ namespace Intersect.Server.Entities
             {
                 if (classBase != null)
                 {
+                    if (classBase.AttackAnimation != null && attackrange > 0)
+                    {
+                        PacketSender.SendAnimationToProximity(
+                            classBase.AttackAnimationId, 1, target.Id, target.MapId, 0 ,0, (sbyte)Dir
+                        );
+                    }
                     base.TryAttack(
                         target, classBase.Damage, (DamageType) classBase.DamageType, (Stats) classBase.ScalingStat,
                         classBase.Scaling, classBase.CritChance, classBase.CritMultiplier

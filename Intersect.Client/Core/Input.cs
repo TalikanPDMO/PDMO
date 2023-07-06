@@ -2,6 +2,7 @@
 
 using Intersect.Admin.Actions;
 using Intersect.Client.Core.Controls;
+using Intersect.Client.Entities;
 using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Input;
 using Intersect.Client.General;
@@ -676,7 +677,9 @@ namespace Intersect.Client.Core
 
                 if (Globals.Me.AttackTimer < Timing.Global.Ticks / TimeSpan.TicksPerMillisecond)
                 {
-                    Globals.Me.AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + Globals.Me.CalculateAttackTime();
+                    var attackTime = Globals.Me.CalculateAttackTime();
+                    Globals.Me.AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTime;
+                    Globals.Me.AttackAnimationTimer = (long)(Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTime * Options.Combat.AttackAnimationTimeRatio);
                 }
             }
 

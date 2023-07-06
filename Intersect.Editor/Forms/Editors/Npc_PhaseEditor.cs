@@ -178,6 +178,7 @@ namespace Intersect.Editor.Forms.Editors
                 nudCritChance.Value = mMyPhase.CritChance ?? mMyNpc.CritChance;
                 nudCritMultiplier.Value = (decimal)(mMyPhase.CritMultiplier ?? mMyNpc.CritMultiplier);
                 nudScaling.Value = mMyPhase.Scaling ?? mMyNpc.Scaling;
+                nudAttackRange.Value = mMyPhase.AttackRange ?? mMyNpc.AttackRange;
                 cmbDamageType.SelectedIndex = mMyPhase.DamageType ?? mMyNpc.DamageType;
                 cmbScalingStat.Items.Clear();
                 for (var x = 0; x < (int)Stats.StatCount; x++)
@@ -191,7 +192,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbAttackAnimation.SelectedIndex = AnimationBase.ListIndex(mMyPhase.AttackAnimationId?? mMyNpc.AttackAnimationId) + 1;
                 if (mMyPhase.Damage != null || mMyPhase.CritChance != null || mMyPhase.CritMultiplier != null
                     || mMyPhase.Scaling != null || mMyPhase.DamageType != null || mMyPhase.ScalingStat != null
-                    || mMyPhase.AttackAnimation != null)
+                    || mMyPhase.AttackAnimation != null || mMyPhase.AttackRange != null)
                 {
                     chkChangeCombat.Checked = true;
                     nudDamage.Enabled = true;
@@ -201,6 +202,7 @@ namespace Intersect.Editor.Forms.Editors
                     cmbDamageType.Enabled = true;
                     cmbScalingStat.Enabled = true;
                     cmbAttackAnimation.Enabled = true;
+                    nudAttackRange.Enabled = true;
                 }
                 else
                 {
@@ -212,6 +214,7 @@ namespace Intersect.Editor.Forms.Editors
                     cmbDamageType.Enabled = false;
                     cmbScalingStat.Enabled = false;
                     cmbAttackAnimation.Enabled = false;
+                    nudAttackRange.Enabled = false;
                 }
 
                 //Attack speed
@@ -329,6 +332,7 @@ namespace Intersect.Editor.Forms.Editors
             lblScalingStat.Text = Strings.NpcPhaseEditor.scalingstat;
             lblScaling.Text = Strings.NpcPhaseEditor.scalingamount;
             lblAttackAnimation.Text = Strings.NpcPhaseEditor.attackanimation;
+            lblAttackRange.Text = Strings.NpcPhaseEditor.attackrange;
 
             //AttackSpeed
             grpAttackSpeed.Text = Strings.NpcPhaseEditor.attackspeed;
@@ -469,6 +473,7 @@ namespace Intersect.Editor.Forms.Editors
             mMyPhase.ScalingStat = (mMyNpc.ScalingStat == cmbScalingStat.SelectedIndex ? null : (int?)cmbScalingStat.SelectedIndex);
             mMyPhase.AttackAnimation = (mMyNpc.AttackAnimationId == AnimationBase.IdFromList(cmbAttackAnimation.SelectedIndex - 1) ?
                                         null : AnimationBase.Get(AnimationBase.IdFromList(cmbAttackAnimation.SelectedIndex - 1)));
+            mMyPhase.AttackRange = (mMyNpc.AttackRange == nudAttackRange.Value ? null : (byte?)nudAttackRange.Value);
             mMyPhase.AttackSpeedModifier = (mMyNpc.AttackSpeedModifier == cmbAttackSpeedModifier.SelectedIndex ? null : (int?)cmbAttackSpeedModifier.SelectedIndex);
             mMyPhase.AttackSpeedValue = (mMyNpc.AttackSpeedValue == nudAttackSpeedValue.Value ? null : (int?)nudAttackSpeedValue.Value);
 
@@ -653,6 +658,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbDamageType.Enabled = true;
                 cmbScalingStat.Enabled = true;
                 cmbAttackAnimation.Enabled = true;
+                nudAttackRange.Enabled = true;
             }
             else
             {
@@ -663,6 +669,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbDamageType.Enabled = false;
                 cmbScalingStat.Enabled = false;
                 cmbAttackAnimation.Enabled = false;
+                nudAttackRange.Enabled = false;
                 if (mMyNpc != null)
                 {
                     nudDamage.Value = mMyNpc.Damage;
@@ -672,6 +679,7 @@ namespace Intersect.Editor.Forms.Editors
                     cmbDamageType.SelectedIndex = mMyNpc.DamageType;
                     cmbScalingStat.SelectedIndex = mMyNpc.ScalingStat;
                     cmbAttackAnimation.SelectedIndex = AnimationBase.ListIndex(mMyNpc.AttackAnimationId) + 1;
+                    nudAttackRange.Value = mMyNpc.AttackRange;
                 }
             }
         }

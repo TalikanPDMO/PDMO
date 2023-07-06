@@ -52,7 +52,10 @@ namespace Intersect.Client.Entities
 
         //Combat
         public long AttackTimer { get; set; } = 0;
+
         public int AttackTime { get; set; } = -1;
+
+        public long AttackAnimationTimer { get; set; } = 0;
 
         public bool Blocking = false;
 
@@ -1056,8 +1059,7 @@ namespace Intersect.Client.Entities
                 {
                     if (SpriteAnimation == SpriteAnimations.Normal || SpriteAnimation == SpriteAnimations.Run)
                     {
-                        var attackTime = CalculateAttackTime();
-                        if (AttackTimer - CalculateAttackTime() / 2 > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond || Blocking)
+                        if (AttackAnimationTimer - CalculateAttackTime() * Options.Combat.AttackAnimationTimeRatio / 2 > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond || Blocking)
                         {
                             srcRectangle = new FloatRect(
                                 Options.Instance.Sprites.NormalSheetAttackFrame * (int)texture.GetWidth() / SpriteFrames, d * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
@@ -1280,7 +1282,7 @@ namespace Intersect.Client.Entities
                 destRectangle.Y = (int) Math.Ceiling(destRectangle.Y);
                 if (SpriteAnimation == SpriteAnimations.Normal)
                 {
-                    if (AttackTimer - CalculateAttackTime() / 2 > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond || Blocking)
+                    if (AttackAnimationTimer - CalculateAttackTime() * Options.Combat.AttackAnimationTimeRatio / 2 > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond || Blocking)
                     {
                         srcRectangle = new FloatRect(
                             3 * (int)paperdollTex.GetWidth() / spriteFrames, d * (int)paperdollTex.GetHeight() / Options.Instance.Sprites.Directions,
@@ -1914,9 +1916,10 @@ namespace Intersect.Client.Entities
             {
                 SpriteAnimation = SpriteAnimations.Normal;
             }
-            if (AttackTimer > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond) //Attacking
+            if (AttackAnimationTimer > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond) //Attacking
             {
-                var timeIn = CalculateAttackTime() - (AttackTimer - Timing.Global.Ticks / TimeSpan.TicksPerMillisecond);
+                var attackAnimationTime = CalculateAttackTime() * Options.Combat.AttackAnimationTimeRatio;
+                var timeIn = attackAnimationTime - (AttackAnimationTimer - Timing.Global.Ticks / TimeSpan.TicksPerMillisecond);
                 LastActionTime = Globals.System.GetTimeMs();
 
                 if (AnimatedTextures[SpriteAnimations.Attack] != null)
@@ -1961,7 +1964,7 @@ namespace Intersect.Client.Entities
 
                 if (SpriteAnimation != SpriteAnimations.Normal && SpriteAnimation != SpriteAnimations.Idle)
                 {
-                    SpriteFrame = (int)Math.Floor((timeIn / (CalculateAttackTime() / (float)SpriteFrames)));
+                    SpriteFrame = (int)Math.Floor((timeIn / (attackAnimationTime / (float)SpriteFrames)));
                 }
             }
             else if (CastTime > Globals.System.GetTimeMs())

@@ -78,6 +78,8 @@ namespace Intersect.GameObjects
             set => AttackAnimationId = value?.Id ?? Guid.Empty;
         }
 
+        public byte AttackRange { get; set; } = 0;
+
         public string Description { get; set; } = "";
 
         public int BasePoints { get; set; }

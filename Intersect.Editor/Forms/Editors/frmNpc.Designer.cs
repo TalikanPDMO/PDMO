@@ -171,6 +171,7 @@ namespace Intersect.Editor.Forms.Editors
             this.chkAttackAllies = new DarkUI.Controls.DarkCheckBox();
             this.chkEnabled = new DarkUI.Controls.DarkCheckBox();
             this.grpSpells = new DarkUI.Controls.DarkGroupBox();
+            this.nudSpellFrequency = new DarkUI.Controls.DarkNumericUpDown();
             this.nudSpellPriority = new DarkUI.Controls.DarkNumericUpDown();
             this.lblPrioritySpell = new System.Windows.Forms.Label();
             this.nudAfterSpell = new DarkUI.Controls.DarkNumericUpDown();
@@ -198,7 +199,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.toolStripItemRelations = new System.Windows.Forms.ToolStripButton();
             this.searchableDarkTreeView1 = new Intersect.Editor.Forms.Controls.SearchableDarkTreeView();
-            this.nudSpellFrequency = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudAttackRange = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblAttackRange = new System.Windows.Forms.Label();
             this.grpNpcs.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpTypes.SuspendLayout();
@@ -243,11 +245,12 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudDropChance)).BeginInit();
             this.grpNpcVsNpc.SuspendLayout();
             this.grpSpells.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSpellFrequency)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpellPriority)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAfterSpell)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBeforeSpell)).BeginInit();
             this.toolStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSpellFrequency)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAttackRange)).BeginInit();
             this.SuspendLayout();
             // 
             // grpNpcs
@@ -1082,6 +1085,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpCombat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpCombat.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpCombat.Controls.Add(this.nudAttackRange);
+            this.grpCombat.Controls.Add(this.lblAttackRange);
             this.grpCombat.Controls.Add(this.grpAttackSpeed);
             this.grpCombat.Controls.Add(this.nudCritMultiplier);
             this.grpCombat.Controls.Add(this.lblCritMultiplier);
@@ -1114,9 +1119,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAttackSpeed.Controls.Add(this.cmbAttackSpeedModifier);
             this.grpAttackSpeed.Controls.Add(this.lblAttackSpeedModifier);
             this.grpAttackSpeed.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpAttackSpeed.Location = new System.Drawing.Point(12, 310);
+            this.grpAttackSpeed.Location = new System.Drawing.Point(12, 337);
             this.grpAttackSpeed.Name = "grpAttackSpeed";
-            this.grpAttackSpeed.Size = new System.Drawing.Size(192, 86);
+            this.grpAttackSpeed.Size = new System.Drawing.Size(192, 69);
             this.grpAttackSpeed.TabIndex = 64;
             this.grpAttackSpeed.TabStop = false;
             this.grpAttackSpeed.Text = "Attack Speed";
@@ -1125,7 +1130,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudAttackSpeedValue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudAttackSpeedValue.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudAttackSpeedValue.Location = new System.Drawing.Point(60, 58);
+            this.nudAttackSpeedValue.Location = new System.Drawing.Point(60, 44);
             this.nudAttackSpeedValue.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -1144,7 +1149,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblAttackSpeedValue
             // 
             this.lblAttackSpeedValue.AutoSize = true;
-            this.lblAttackSpeedValue.Location = new System.Drawing.Point(9, 60);
+            this.lblAttackSpeedValue.Location = new System.Drawing.Point(9, 46);
             this.lblAttackSpeedValue.Name = "lblAttackSpeedValue";
             this.lblAttackSpeedValue.Size = new System.Drawing.Size(37, 13);
             this.lblAttackSpeedValue.TabIndex = 29;
@@ -1163,7 +1168,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbAttackSpeedModifier.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbAttackSpeedModifier.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbAttackSpeedModifier.FormattingEnabled = true;
-            this.cmbAttackSpeedModifier.Location = new System.Drawing.Point(60, 24);
+            this.cmbAttackSpeedModifier.Location = new System.Drawing.Point(60, 16);
             this.cmbAttackSpeedModifier.Name = "cmbAttackSpeedModifier";
             this.cmbAttackSpeedModifier.Size = new System.Drawing.Size(114, 21);
             this.cmbAttackSpeedModifier.TabIndex = 28;
@@ -1174,7 +1179,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblAttackSpeedModifier
             // 
             this.lblAttackSpeedModifier.AutoSize = true;
-            this.lblAttackSpeedModifier.Location = new System.Drawing.Point(9, 27);
+            this.lblAttackSpeedModifier.Location = new System.Drawing.Point(9, 19);
             this.lblAttackSpeedModifier.Name = "lblAttackSpeedModifier";
             this.lblAttackSpeedModifier.Size = new System.Drawing.Size(47, 13);
             this.lblAttackSpeedModifier.TabIndex = 0;
@@ -1219,7 +1224,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudScaling.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudScaling.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudScaling.Location = new System.Drawing.Point(12, 238);
+            this.nudScaling.Location = new System.Drawing.Point(12, 232);
             this.nudScaling.Maximum = new decimal(new int[] {
             255,
             0,
@@ -1308,7 +1313,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblScaling
             // 
             this.lblScaling.AutoSize = true;
-            this.lblScaling.Location = new System.Drawing.Point(9, 218);
+            this.lblScaling.Location = new System.Drawing.Point(9, 216);
             this.lblScaling.Name = "lblScaling";
             this.lblScaling.Size = new System.Drawing.Size(84, 13);
             this.lblScaling.TabIndex = 56;
@@ -1370,7 +1375,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbAttackAnimation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbAttackAnimation.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbAttackAnimation.FormattingEnabled = true;
-            this.cmbAttackAnimation.Location = new System.Drawing.Point(12, 275);
+            this.cmbAttackAnimation.Location = new System.Drawing.Point(12, 272);
             this.cmbAttackAnimation.Name = "cmbAttackAnimation";
             this.cmbAttackAnimation.Size = new System.Drawing.Size(192, 21);
             this.cmbAttackAnimation.TabIndex = 50;
@@ -1381,7 +1386,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblAttackAnimation
             // 
             this.lblAttackAnimation.AutoSize = true;
-            this.lblAttackAnimation.Location = new System.Drawing.Point(9, 260);
+            this.lblAttackAnimation.Location = new System.Drawing.Point(9, 257);
             this.lblAttackAnimation.Name = "lblAttackAnimation";
             this.lblAttackAnimation.Size = new System.Drawing.Size(90, 13);
             this.lblAttackAnimation.TabIndex = 49;
@@ -2244,6 +2249,21 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpells.TabStop = false;
             this.grpSpells.Text = "Spells";
             // 
+            // nudSpellFrequency
+            // 
+            this.nudSpellFrequency.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSpellFrequency.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSpellFrequency.Location = new System.Drawing.Point(158, 17);
+            this.nudSpellFrequency.Name = "nudSpellFrequency";
+            this.nudSpellFrequency.Size = new System.Drawing.Size(45, 20);
+            this.nudSpellFrequency.TabIndex = 63;
+            this.nudSpellFrequency.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudSpellFrequency.ValueChanged += new System.EventHandler(this.nudSpellFrequency_ValueChanged);
+            // 
             // nudSpellPriority
             // 
             this.nudSpellPriority.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
@@ -2570,20 +2590,29 @@ namespace Intersect.Editor.Forms.Editors
             this.searchableDarkTreeView1.TabIndex = 46;
             this.searchableDarkTreeView1.Visible = false;
             // 
-            // nudSpellFrequency
+            // nudAttackRange
             // 
-            this.nudSpellFrequency.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudSpellFrequency.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudSpellFrequency.Location = new System.Drawing.Point(158, 17);
-            this.nudSpellFrequency.Name = "nudSpellFrequency";
-            this.nudSpellFrequency.Size = new System.Drawing.Size(45, 20);
-            this.nudSpellFrequency.TabIndex = 63;
-            this.nudSpellFrequency.Value = new decimal(new int[] {
+            this.nudAttackRange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudAttackRange.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudAttackRange.Location = new System.Drawing.Point(12, 313);
+            this.nudAttackRange.Name = "nudAttackRange";
+            this.nudAttackRange.Size = new System.Drawing.Size(192, 20);
+            this.nudAttackRange.TabIndex = 70;
+            this.nudAttackRange.Value = new decimal(new int[] {
             0,
             0,
             0,
             0});
-            this.nudSpellFrequency.ValueChanged += new System.EventHandler(this.nudSpellFrequency_ValueChanged);
+            this.nudAttackRange.ValueChanged += new System.EventHandler(this.nudAttackRange_ValueChanged);
+            // 
+            // lblAttackRange
+            // 
+            this.lblAttackRange.AutoSize = true;
+            this.lblAttackRange.Location = new System.Drawing.Point(8, 296);
+            this.lblAttackRange.Name = "lblAttackRange";
+            this.lblAttackRange.Size = new System.Drawing.Size(76, 13);
+            this.lblAttackRange.TabIndex = 69;
+            this.lblAttackRange.Text = "Attack Range:";
             // 
             // FrmNpc
             // 
@@ -2664,12 +2693,13 @@ namespace Intersect.Editor.Forms.Editors
             this.grpNpcVsNpc.PerformLayout();
             this.grpSpells.ResumeLayout(false);
             this.grpSpells.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSpellFrequency)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpellPriority)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAfterSpell)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBeforeSpell)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSpellFrequency)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAttackRange)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2842,5 +2872,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkNumericUpDown nudBeforeSpell;
         private System.Windows.Forms.Label lblBeforeSpell;
         private DarkNumericUpDown nudSpellFrequency;
+        private DarkNumericUpDown nudAttackRange;
+        private System.Windows.Forms.Label lblAttackRange;
     }
 }

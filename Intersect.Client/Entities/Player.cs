@@ -223,13 +223,16 @@ namespace Intersect.Client.Entities
 
                 if (Controls.KeyDown(Control.AttackInteract))
                 {
-                    if (!Globals.Me.TryAttack())
+                    Globals.Me.TryAttack();
+                    // No need now with our auto attack mechanic. TODO : Delete when we are sure it is useless
+                    /*if (!Globals.Me.TryAttack())
                     {
                         if (Globals.Me.AttackTimer < Timing.Global.Ticks / TimeSpan.TicksPerMillisecond)
                         {
                             Globals.Me.AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + Globals.Me.CalculateAttackTime();
+                            Globals.Me.AttackAnimationTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + Entity.ATTACK_ANIMATION_TIME;
                         }
-                    }
+                    }*/
                 }
             }
 
@@ -1058,11 +1061,14 @@ namespace Intersect.Client.Entities
                         //If we just started to change to a new direction then turn the player only (set the timer to now + TurnOnlyHeldDuration ms)
                         if (MoveDirectionTimers[i] == -1 && !Globals.Me.IsMoving && Dir != Globals.Me.MoveDirInput)
                         {
-                            //Turn Only
-                            Dir = (byte)Globals.Me.MoveDirInput;
-                            PacketSender.SendDirection((byte)Globals.Me.MoveDirInput);
-                            MoveDirectionTimers[i] = Globals.System.GetTimeMs() + Options.Instance.PlayerOpts.TurnOnlyHeldDuration;
-                            Globals.Me.MoveDirInput = -1;
+                            if (AttackAnimationTimer < Timing.Global.Ticks / TimeSpan.TicksPerMillisecond)
+                            {
+                                //Turn Only
+                                Dir = (byte)Globals.Me.MoveDirInput;
+                                PacketSender.SendDirection((byte)Globals.Me.MoveDirInput);
+                                MoveDirectionTimers[i] = Globals.System.GetTimeMs() + Options.Instance.PlayerOpts.TurnOnlyHeldDuration;
+                                Globals.Me.MoveDirInput = -1;
+                            }
                         }
                         //If we're already facing the direction then just start moving (set the timer to now)
                         else if (MoveDirectionTimers[i] == -1 && !Globals.Me.IsMoving && Dir == Globals.Me.MoveDirInput)
@@ -1444,7 +1450,7 @@ namespace Intersect.Client.Entities
 
         public bool TryAttack()
         {
-            if (AttackTimer > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond || Blocking || (IsMoving && !Options.Instance.PlayerOpts.AllowCombatMovement))
+            if (AttackTimer > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond || Blocking)
             {
                 return false;
             }
@@ -1490,7 +1496,34 @@ namespace Intersect.Client.Entities
                     break;
             }
 
-            if (GetRealLocation(ref x, ref y, ref map))
+            var isValidLocation = GetRealLocation(ref x, ref y, ref map);
+            var cls = ClassBase.Get(Class);
+            var attackrange = cls.AttackRange;
+            if (Options.WeaponIndex > -1 &&
+                    Options.WeaponIndex < Equipment.Length &&
+                    MyEquipment[Options.WeaponIndex] >= 0)
+            {
+                attackrange = ItemBase.Get(Inventory[MyEquipment[Options.WeaponIndex]].ItemId).AttackRange;
+            }
+            var attackTime = 0;
+            if (attackrange > 0)
+            {
+                if (TargetIndex != Guid.Empty && TargetIndex != Globals.Me.Id
+                    && Globals.Entities.ContainsKey(TargetIndex))
+                {
+                    var targetEntity = Globals.Entities[TargetIndex];
+                    if (GetDistanceTo(targetEntity) <= attackrange && targetEntity.CanBeAttacked())
+                    {
+                        PacketSender.SendAttack(TargetIndex);
+                        attackTime = CalculateAttackTime();
+                        AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTime;
+                        AttackAnimationTimer = (long)(Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTime * Options.Combat.AttackAnimationTimeRatio);
+                        return true;
+                    }
+                }
+            }
+            //attackrange is 0 or not in range or no valid target, so we need to check for a possible resource in front of us
+            if (isValidLocation)
             {
                 foreach (var en in Globals.Entities)
                 {
@@ -1506,10 +1539,16 @@ namespace Intersect.Client.Entities
                             en.Value.Y == y &&
                             en.Value.CanBeAttacked())
                         {
+                            if (attackrange > 0 && en.Value.GetType() != typeof(Resource))
+                            {
+                                //Something is here but we can't interact with it, exit the loop
+                                break;
+                            }
                             //ATTACKKKKK!!!
                             PacketSender.SendAttack(en.Key);
-                            AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + CalculateAttackTime();
-
+                            attackTime = CalculateAttackTime();
+                            AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTime;
+                            AttackAnimationTimer =(long) (Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTime * Options.Combat.AttackAnimationTimeRatio);
                             return true;
                         }
                     }
@@ -1531,8 +1570,9 @@ namespace Intersect.Client.Entities
                         {
                             //Talk to Event
                             PacketSender.SendActivateEvent(en.Key);
-                            AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + CalculateAttackTime();
-
+                            attackTime = CalculateAttackTime();
+                            AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTime;
+                            AttackAnimationTimer = (long)(Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTime * Options.Combat.AttackAnimationTimeRatio);
                             return true;
                         }
                     }
@@ -1541,8 +1581,9 @@ namespace Intersect.Client.Entities
 
             //Projectile/empty swing for animations
             PacketSender.SendAttack(Guid.Empty);
-            AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + CalculateAttackTime();
-
+            attackTime = CalculateAttackTime();
+            AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTime;
+            AttackAnimationTimer = (long)(Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTime * Options.Combat.AttackAnimationTimeRatio);
             return true;
         }
 
@@ -1887,7 +1928,7 @@ namespace Intersect.Client.Entities
                 return;
             }
 
-            if (AttackTimer > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond && !Options.Instance.PlayerOpts.AllowCombatMovement)
+            if (AttackAnimationTimer > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond)
             {
                 return;
             }

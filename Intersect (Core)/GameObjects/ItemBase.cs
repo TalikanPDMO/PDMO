@@ -62,6 +62,8 @@ namespace Intersect.GameObjects
             set => AttackAnimationId = value?.Id ?? Guid.Empty;
         }
 
+        public byte AttackRange { get; set; } = 0;
+
         [Column("EquipmentAnimation")]
         public Guid EquipmentAnimationId { get; set; }
 

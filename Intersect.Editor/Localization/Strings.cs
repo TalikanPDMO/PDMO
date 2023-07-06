@@ -915,6 +915,8 @@ namespace Intersect.Editor.Localization
 
             public static LocalizedString attackanimation = @"Attack Animation:";
 
+            public static LocalizedString attackrange = @"Attack Range:";
+
             public static LocalizedString attackboost = @"Attack (+{00}):";
 
             public static LocalizedString attackspeed = @"Attack Speed";
@@ -3454,6 +3456,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString attackanimation = @"Attack Animation:";
 
+            public static LocalizedString attackrange = @"Attack Range:";
+
             public static LocalizedString attackbonus = @"Attack:";
 
             public static LocalizedString attackspeed = @"Attack Speed";
@@ -4176,6 +4180,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString attackanimation = @"Attack Animation:";
 
+            public static LocalizedString attackrange = @"Attack Range:";
+
             public static LocalizedString attackonsightconditions = @"Attack Player on Sight";
 
             public static LocalizedString attackspeed = @"Attack Speed";
@@ -4506,6 +4512,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString scalingamount = @"Scaling Amount:";
 
             public static LocalizedString attackanimation = @"Attack Animation:";
+
+            public static LocalizedString attackrange = @"Range:";
 
             public static LocalizedString attackspeed = @"AttackSpeed Modifier";
 

@@ -419,17 +419,33 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
-
-            if (!IsOneBlockAway(target))
+            var attackrange = CurrentPhase?.AttackRange ?? Base.AttackRange;
+            var needDir = -1;
+            if (attackrange > 0)
             {
-                return;
+                if (GetDistanceTo(target) > attackrange)
+                {
+                    return;
+                }
+                var dirToEnemy = DirToEnemy(target, true);
+                if (dirToEnemy != Dir)
+                {
+                    needDir = dirToEnemy;
+                }
             }
-
-            if (!IsFacingTarget(target))
+            else
             {
-                return;
-            }
+                if (!IsOneBlockAway(target))
+                {
+                    return;
+                }
 
+                if (!IsFacingTarget(target))
+                {
+                    needDir = DirToEnemy(target, true);
+                }
+            }
+            
             var deadAnimations = new List<KeyValuePair<Guid, sbyte>>();
             var aliveAnimations = new List<KeyValuePair<Guid, sbyte>>();
 
@@ -438,6 +454,9 @@ namespace Intersect.Server.Entities
             if (AttackTimer < Globals.Timing.Milliseconds && 
                 (SpellRules.Count == 0 || Globals.Timing.Milliseconds > LastCastTimer + SpellRules[SpellCastSlot].MinAfterTimer))
             {
+                //Change dir toward enemy only when the attack is possible, not before. If no direction needed, needDir is -1
+                ChangeDir(needDir);
+
                 if (target is Player penemy)
                 {
                     penemy.FightingNpcBaseIds.AddOrUpdate(Base.Id, CombatTimer, (guid, t) => CombatTimer);
@@ -449,10 +468,19 @@ namespace Intersect.Server.Entities
                     // if any members of CurrentPhase is null using ??, we use the base member instead
                     if ((CurrentPhase.AttackAnimation ?? Base.AttackAnimation) != null)
                     {
-                        PacketSender.SendAnimationToProximity(
-                            CurrentPhase.AttackAnimationId ?? Base.AttackAnimationId, -1, Guid.Empty, target.MapId, (byte)target.X, (byte)target.Y,
-                            (sbyte)Dir
-                        );
+                        if (attackrange > 0)
+                        {
+                            PacketSender.SendAnimationToProximity(
+                                   CurrentPhase.AttackAnimationId ?? Base.AttackAnimationId, 1, target.Id, target.MapId, 0, 0, (sbyte)Dir
+                                );
+                        }
+                        else
+                        {
+                            PacketSender.SendAnimationToProximity(
+                                CurrentPhase.AttackAnimationId ?? Base.AttackAnimationId, -1, Guid.Empty, target.MapId, (byte)target.X, (byte)target.Y,
+                                (sbyte)Dir
+                            );
+                        } 
                     }
                     base.TryAttack(
                         target, CurrentPhase.Damage ?? Base.Damage, (DamageType)(CurrentPhase.DamageType ?? Base.DamageType),
@@ -464,16 +492,26 @@ namespace Intersect.Server.Entities
                 {
                     if (Base.AttackAnimation != null)
                     {
-                        PacketSender.SendAnimationToProximity(
-                            Base.AttackAnimationId, -1, Guid.Empty, target.MapId, (byte)target.X, (byte)target.Y,
-                            (sbyte)Dir
-                        );
+                        if (attackrange > 0)
+                        {
+                            PacketSender.SendAnimationToProximity(
+                                    Base.AttackAnimationId, 1, target.Id, target.MapId, 0, 0, (sbyte)Dir
+                                );
+                        }
+                        else
+                        {
+                            PacketSender.SendAnimationToProximity(
+                                Base.AttackAnimationId, -1, Guid.Empty, target.MapId, (byte)target.X, (byte)target.Y,
+                                (sbyte)Dir
+                            );
+                        } 
                     }
                     base.TryAttack(
                         target, Base.Damage, (DamageType)Base.DamageType, (Stats)Base.ScalingStat, Base.Scaling,
                         Base.CritChance, Base.CritMultiplier, deadAnimations, aliveAnimations);
                 }
                 var attackTime = CalculateAttackTime();
+                MoveTimer = Globals.Timing.Milliseconds + (long)(attackTime * Options.Combat.AttackAnimationTimeRatio);
                 CastFreq = Globals.Timing.Milliseconds + attackTime;
                 PacketSender.SendEntityAttack(this, attackTime);
             }
@@ -1226,10 +1264,22 @@ namespace Intersect.Server.Entities
                                 hasFoundSpell = TryCastSpells();
                             }
                             // TODO: Make resetting mobs actually return to their starting location.
-                            if ((!mResetting && !IsOneBlockAway(
-                                mPathFinder.GetTarget().TargetMapId, mPathFinder.GetTarget().TargetX,
-                                mPathFinder.GetTarget().TargetY, mPathFinder.GetTarget().TargetZ
-                            )) ||
+                            var attackrange = CurrentPhase?.AttackRange ?? Base.AttackRange;
+                            var isInAttackRange = false;
+                            var distanceTarget = -1;
+                            if (attackrange > 0)
+                            {
+                                distanceTarget = GetDistanceTo(tempTarget);
+                                isInAttackRange = distanceTarget <= attackrange;
+                            }
+                            else
+                            {
+                                isInAttackRange = IsOneBlockAway(
+                                    mPathFinder.GetTarget().TargetMapId, mPathFinder.GetTarget().TargetX,
+                                    mPathFinder.GetTarget().TargetY, mPathFinder.GetTarget().TargetZ
+                                );
+                            }
+                            if ((!mResetting && !isInAttackRange) ||
                             (mResetting && GetDistanceTo(AggroCenterMap, AggroCenterX, AggroCenterY) != 0)
                             )
                             {
@@ -1348,44 +1398,57 @@ namespace Intersect.Server.Entities
                             else
                             {
                                 var fleed = false;
-                                if (tempTarget != null && fleeing)
+                                var needStepback = false;
+                                if (attackrange > 0)
+                                {
+                                    needStepback = distanceTarget < attackrange;
+                                }
+                                if (tempTarget != null && (fleeing || needStepback))
                                 {
                                     var dir = DirToEnemy(tempTarget);
-                                    switch (dir)
+                                    if (needStepback)
                                     {
-                                        case 0:
-                                            dir = 1;
-
-                                            break;
-                                        case 1:
-                                            dir = 0;
-
-                                            break;
-                                        case 2:
-                                            dir = 3;
-
-                                            break;
-                                        case 3:
-                                            dir = 2;
-
-                                            break;
-                                        case 4:
-                                            dir = 5;
-
-                                            break;
-                                        case 5:
-                                            dir = 4;
-
-                                            break;
-                                        case 6:
-                                            dir = 7;
-
-                                            break;
-                                        case 7:
-                                            dir = 6;
-
-                                            break;
+                                        dir = RandomStepBackDir(dir);
                                     }
+                                    else
+                                    {
+                                        switch (dir)
+                                        {
+                                            case 0:
+                                                dir = 1;
+
+                                                break;
+                                            case 1:
+                                                dir = 0;
+
+                                                break;
+                                            case 2:
+                                                dir = 3;
+
+                                                break;
+                                            case 3:
+                                                dir = 2;
+
+                                                break;
+                                            case 4:
+                                                dir = 5;
+
+                                                break;
+                                            case 5:
+                                                dir = 4;
+
+                                                break;
+                                            case 6:
+                                                dir = 7;
+
+                                                break;
+                                            case 7:
+                                                dir = 6;
+
+                                                break;
+                                        }
+                                    }
+                                    
 
                                     if (CanMove(dir) == -1 || CanMove(dir) == -4)
                                     {
@@ -1400,9 +1463,8 @@ namespace Intersect.Server.Entities
                                                 return;
                                             }
                                         }
-
                                         Move(dir, null);
-                                        fleed = true;
+                                        fleed = fleeing;
                                     }
                                 }
 
@@ -1410,23 +1472,16 @@ namespace Intersect.Server.Entities
                                 {
                                     if (tempTarget != null)
                                     {
-                                        if (Dir != DirToEnemy(tempTarget) && DirToEnemy(tempTarget) != -1)
+                                        if (tempTarget.IsDisposed)
                                         {
-                                            ChangeDir(DirToEnemy(tempTarget));
+                                            TryFindNewTarget(timeMs);
+                                            tempTarget = Target;
                                         }
                                         else
                                         {
-                                            if (tempTarget.IsDisposed)
+                                            if (!hasFoundSpell)
                                             {
-                                                TryFindNewTarget(timeMs);
-                                                tempTarget = Target;
-                                            }
-                                            else
-                                            {
-                                                if (!hasFoundSpell)
-                                                {
-                                                    TryAttack(tempTarget);
-                                                }
+                                                TryAttack(tempTarget);
                                             }
                                         }
                                     }
@@ -1566,6 +1621,47 @@ namespace Intersect.Server.Entities
             }
         }
 
+        public byte RandomStepBackDir(byte dirToEnemy)
+        {
+            byte[] dirList = null;
+            switch (dirToEnemy)
+            {
+                case 0:
+                   dirList = new byte[] { 1, 2, 3, 6, 7 };
+
+                    break;
+                case 1:
+                    dirList = new byte[] { 0, 2, 3, 4, 5 };
+
+                    break;
+                case 2:
+                    dirList = new byte[] { 0, 1, 3, 5, 7 };
+
+                    break;
+                case 3:
+                    dirList = new byte[] { 0, 1, 2, 4, 6 };
+
+                    break;
+                case 4:
+                    dirList = new byte[] { 1, 3, 7 };
+
+                    break;
+                case 5:
+                    dirList = new byte[] { 1, 2, 6 };
+
+                    break;
+                case 6:
+                    dirList = new byte[] { 0, 3, 5 };
+
+                    break;
+                case 7:
+                    dirList = new byte[] { 0, 2, 4 };
+
+                    break;
+            }
+
+            return dirList[Randomization.Next(0, dirList.Length)];
+        }
         private bool CheckForResetLocation(bool forceDistance = false)
         {
             // Check if we've moved out of our range we're allowed to move from after being "aggro'd" by something.

@@ -16,6 +16,8 @@ namespace Intersect.Config
 
         public int MinAttackRate = 500; //2 attacks per second
 
+        public double AttackAnimationTimeRatio = 0.5;
+
         //Combat
         public int RegenTime = 3000; //3 seconds
 
