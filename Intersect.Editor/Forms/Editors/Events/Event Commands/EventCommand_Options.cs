@@ -69,8 +69,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 return;
             }
 
-            pnlFace.BackgroundImage = File.Exists(GameContentManager.GraphResFolder + "$/faces/{cmbFace?.Text}")
-                ? new Bitmap(GameContentManager.GraphResFolder + "$/faces/{cmbFace?.Text}")
+            pnlFace.BackgroundImage = File.Exists(GameContentManager.GraphResFolder + $"/faces/{cmbFace?.Text}")
+                ? new Bitmap(GameContentManager.GraphResFolder + $"/faces/{cmbFace?.Text}")
                 : null;
         }
 
