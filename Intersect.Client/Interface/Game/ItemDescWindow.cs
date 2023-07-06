@@ -191,7 +191,6 @@ namespace Intersect.Client.Interface.Game
                             itemStats.AddLineBreak();
                         }
                     }
-
                     if (statBuffs != null)
                     {
                         for (var i = 0; i < (int)Stats.StatCount; i++)
@@ -202,6 +201,55 @@ namespace Intersect.Client.Interface.Game
                             if (item.PercentageStatsGiven[i] > 0)
                             {
                                 if (flatStat > 0)
+                                {
+                                    bonus += " + ";
+                                }
+                                else
+                                {
+                                    bonus = "";
+                                }
+
+                                bonus += item.PercentageStatsGiven[i] + "%";
+                            }
+                            if (bonus != "0")
+                            {
+                                // Show stat only if not 0
+                                stats = Strings.ItemDesc.stats[i].ToString(bonus);
+                                itemStats.AddText(
+                                    stats, itemStats.RenderColor,
+                                    itemStatsText.CurAlignments.Count > 0
+                                        ? itemStatsText.CurAlignments[0]
+                                        : Alignments.Left, itemDescText.Font
+                                );
+
+                                itemStats.AddLineBreak();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Display the possible stat ranges
+                        for (var i = 0; i < (int)Stats.StatCount; i++)
+                        {
+                            var bonus = item.StatsGiven[i].ToString();
+                            if (item.StatGrowth > 0)
+                            {
+                                var minBonus = item.StatsGiven[i] - item.StatGrowth;
+                                if (minBonus < 0)
+                                {
+                                    minBonus = 0;
+                                }
+                                var maxBonus = item.StatsGiven[i] + item.StatGrowth;
+                                if (maxBonus < 0)
+                                {
+                                    maxBonus = 0;
+                                }
+                                bonus = Strings.ItemDesc.rangestat.ToString(minBonus, maxBonus);
+                            }
+                           
+                            if (item.PercentageStatsGiven[i] > 0)
+                            {
+                                if (bonus != "0")
                                 {
                                     bonus += " + ";
                                 }

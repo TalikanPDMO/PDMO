@@ -386,6 +386,7 @@
       "6": "Sac"
     },
     "prereq": "Prérequis:",
+    "rangestat": "{00} à {01}",
     "stats": {
       "0": "Attaque: {00}",
       "1": "Attaque Spé.: {00}",
