@@ -4302,6 +4302,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString editorname = @"Editor Name:";
 
+            public static LocalizedString levelrange = @"Lvl Range (+-):";
+
             public static LocalizedString New = @"New Npc";
 
             public static LocalizedString npc = @"NPC:";
@@ -4383,7 +4385,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString type2 = @"Type2:";
 
-            public static LocalizedString stats = @"Stats:";
+            public static LocalizedString stats = @"Stats & Lvl Scaling%:  ";
 
             public static LocalizedString swarm = @"Swarm";
 

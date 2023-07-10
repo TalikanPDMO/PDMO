@@ -179,6 +179,7 @@ namespace Intersect.Editor.Forms.Editors
             grpGeneral.Text = Strings.NpcEditor.general;
             lblName.Text = Strings.NpcEditor.name;
             lblEditorName.Text = Strings.NpcEditor.editorname;
+            lblLevelRange.Text = Strings.NpcEditor.levelrange;
             grpBehavior.Text = Strings.NpcEditor.behavior;
 
             lblPic.Text = Strings.NpcEditor.sprite;
@@ -333,6 +334,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbType2.SelectedIndex = mEditorItem.ElementalTypes[1];
 
                 nudLevel.Value = mEditorItem.Level;
+                nudLevelRange.Value = mEditorItem.LevelRange;
                 nudSpawnDuration.Value = mEditorItem.SpawnDuration;
 
                 //Behavior
@@ -386,6 +388,16 @@ namespace Intersect.Editor.Forms.Editors
                 nudHp.Value = mEditorItem.MaxVital[(int) Vitals.Health];
                 nudMana.Value = mEditorItem.MaxVital[(int) Vitals.Mana];
                 nudExp.Value = mEditorItem.Experience;
+
+                nudStrPerc.Value = (int)(mEditorItem.LevelScalings[(int)NpcLevelScalings.Attack] * 100);
+                nudMagicPerc.Value = (int)(mEditorItem.LevelScalings[(int)NpcLevelScalings.AbilityPower] * 100);
+                nudArmorPerc.Value = (int)(mEditorItem.LevelScalings[(int)NpcLevelScalings.Defense] * 100);
+                nudMRPerc.Value = (int)(mEditorItem.LevelScalings[(int)NpcLevelScalings.MagicResist] * 100);
+                nudMoveSpeedPerc.Value = (int)(mEditorItem.LevelScalings[(int)NpcLevelScalings.Speed] * 100);
+                nudHPPerc.Value = (int)(mEditorItem.LevelScalings[(int)NpcLevelScalings.Health] * 100);
+                nudManaPerc.Value = (int)(mEditorItem.LevelScalings[(int)NpcLevelScalings.Mana] * 100);
+                nudExpPerc.Value = (int)(mEditorItem.LevelScalings[(int)NpcLevelScalings.Experience] * 100);
+
                 chkAttackAllies.Checked = mEditorItem.AttackAllies;
                 chkEnabled.Checked = mEditorItem.NpcVsNpcEnabled;
 
@@ -975,7 +987,6 @@ namespace Intersect.Editor.Forms.Editors
         {
             mEditorItem.SightRange = (int) nudSightRange.Value;
         }
-
         private void nudStr_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Stats[(int) Stats.Attack] = (int) nudStr.Value;
@@ -999,6 +1010,46 @@ namespace Intersect.Editor.Forms.Editors
         private void nudSpd_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Stats[(int) Stats.Speed] = (int) nudSpd.Value;
+        }
+
+        private void nudStrPerc_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.LevelScalings[(int)NpcLevelScalings.Attack] = (double)nudStrPerc.Value / 100.0;
+        }
+
+        private void nudMagicPerc_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.LevelScalings[(int)NpcLevelScalings.AbilityPower] = (double)nudMagicPerc.Value / 100.0;
+        }
+
+        private void nudArmorPerc_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.LevelScalings[(int)NpcLevelScalings.Defense] = (double)nudArmorPerc.Value / 100.0;
+        }
+
+        private void nudMRPerc_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.LevelScalings[(int)NpcLevelScalings.MagicResist] = (double)nudMRPerc.Value / 100.0;
+        }
+
+        private void nudMoveSpeedPerc_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.LevelScalings[(int)NpcLevelScalings.Speed] = (double)nudMoveSpeedPerc.Value / 100.0;
+        }
+
+        private void nudHPPerc_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.LevelScalings[(int)NpcLevelScalings.Health] = (double)nudHPPerc.Value / 100.0;
+        }
+
+        private void nudManaPerc_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.LevelScalings[(int)NpcLevelScalings.Mana] = (double)nudManaPerc.Value / 100.0;
+        }
+
+        private void nudExpPerc_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.LevelScalings[(int)NpcLevelScalings.Experience] = (double)nudExpPerc.Value / 100.0;
         }
 
         private void nudDamage_ValueChanged(object sender, EventArgs e)
@@ -1127,6 +1178,11 @@ namespace Intersect.Editor.Forms.Editors
         private void nudLevel_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Level = (int) nudLevel.Value;
+        }
+
+        private void nudLevelRange_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.LevelRange = (int)nudLevelRange.Value;
         }
 
         private void nudHpRegen_ValueChanged(object sender, EventArgs e)
