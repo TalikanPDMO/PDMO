@@ -35,6 +35,8 @@ namespace Intersect.GameObjects
 
         [NotMapped] public int[] ElementalTypes = new int[MAX_ELEMENTAL_TYPES];
 
+        [NotMapped] public double[] LevelScalings = new double[(int)NpcLevelScalings.LevelScalingCount];
+
         [NotMapped] public List<Guid> AddEvents = new List<Guid>(); //Events that need to be added for the quest, int is task id
 
         [NotMapped] public List<Guid> RemoveEvents = new List<Guid>(); //Events that need to be removed for the quest
@@ -219,6 +221,8 @@ namespace Intersect.GameObjects
 
         public int Level { get; set; } = 1;
 
+        public int LevelRange { get; set; } = 0;
+
         //Vitals & Stats
         [Column("MaxVital")]
         [JsonIgnore]
@@ -297,6 +301,14 @@ namespace Intersect.GameObjects
         {
             get => DatabaseUtils.SaveIntArray(ElementalTypes, MAX_ELEMENTAL_TYPES);
             set => ElementalTypes = DatabaseUtils.LoadIntArray(value, MAX_ELEMENTAL_TYPES);
+        }
+
+        [Column("LevelScalings")]
+        [JsonIgnore]
+        public string JsonLevelScalings
+        {
+            get => DatabaseUtils.SaveDoubleArray(LevelScalings, (int)NpcLevelScalings.LevelScalingCount);
+            set => LevelScalings = DatabaseUtils.LoadDoubleArray(value, (int)NpcLevelScalings.LevelScalingCount);
         }
 
         //Vital Regen %
