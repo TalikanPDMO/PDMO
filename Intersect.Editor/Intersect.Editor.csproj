@@ -710,6 +710,9 @@
     <EmbeddedResource Include="Forms\Controls\GameObjectList.resx">
       <DependentUpon>GameObjectList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DockingElements\frmMapLayers.resx">
+      <DependentUpon>frmMapLayers.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\DockingElements\frmMapProperties.resx">
       <DependentUpon>frmMapProperties.cs</DependentUpon>
     </EmbeddedResource>

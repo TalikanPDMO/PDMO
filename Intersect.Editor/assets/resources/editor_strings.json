@@ -1943,7 +1943,7 @@
     "scalingstat": "Scaling Stat:",
     "scalingamount": "Scaling Amount:",
     "attackanimation": "Attack Animation:",
-    "attackrange":  "Range:"
+    "attackrange":  "Range:",
     "attackspeed": "AttackSpeed Modifier",
     "changeattackspeed": "Replace base?",
     "modifier": "Modifier:",

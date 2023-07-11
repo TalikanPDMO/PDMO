@@ -4002,6 +4002,10 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString title = @"Map Layers";
 
+            public static LocalizedString spawnuniquelevel = @"{00} | Level {01}";
+
+            public static LocalizedString spawnmultiplelevel = @"{00} | Level {01}-{02}";
+
         }
 
         public struct MapList
@@ -4564,6 +4568,10 @@ Tick timer saved in server config.json.";
             public static LocalizedString declaredlocation = @"Declared";
 
             public static LocalizedString direction = @"Direction:";
+
+            public static LocalizedString minlevel = @"Min. Level:";
+
+            public static LocalizedString maxlevel = @"Max. Level:";
 
             public static LocalizedString randomdirection = @"Random";
 
