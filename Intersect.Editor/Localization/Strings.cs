@@ -3348,6 +3348,10 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString npc = @"NPC:";
 
+            public static LocalizedString minlevel = @"Min. Level:";
+
+            public static LocalizedString maxlevel = @"Max. Level:";
+
             public static LocalizedString okay = @"Ok";
 
             public static LocalizedString player = @"Player";

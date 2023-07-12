@@ -45,6 +45,23 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbNpc.Items.Clear();
             cmbNpc.Items.AddRange(NpcBase.EditorFormatNames);
             cmbNpc.SelectedIndex = NpcBase.ListIndex(mMyCommand.NpcId);
+            var npc = NpcBase.Get(mMyCommand.NpcId);
+            if (npc != null)
+            {
+                var minlevel = npc.Level - npc.LevelRange;
+                if (minlevel < 1)
+                {
+                    minlevel = 1;
+                }
+                var maxlevel = npc.Level + npc.LevelRange;
+                nudMinLevel.Minimum = minlevel;
+                nudMinLevel.Maximum = maxlevel;
+                nudMaxLevel.Minimum = minlevel;
+                nudMaxLevel.Maximum = maxlevel;
+
+                nudMinLevel.Value = mMyCommand.MinLevel == 0 ? npc.Level : mMyCommand.MinLevel;
+                nudMaxLevel.Value = mMyCommand.MaxLevel == 0 ? npc.Level : mMyCommand.MaxLevel;
+            }
             if (mMyCommand.MapId != Guid.Empty)
             {
                 cmbConditionType.SelectedIndex = 0;
@@ -80,6 +97,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             grpSpawnNpc.Text = Strings.EventSpawnNpc.title;
             lblNpc.Text = Strings.EventSpawnNpc.npc;
+            lblMinLevel.Text = Strings.EventSpawnNpc.minlevel;
+            lblMaxLevel.Text = Strings.EventSpawnNpc.maxlevel;
             lblSpawnType.Text = Strings.EventSpawnNpc.spawntype;
             cmbConditionType.Items.Clear();
             cmbConditionType.Items.Add(Strings.EventSpawnNpc.spawntype0);
@@ -171,6 +190,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void btnSave_Click(object sender, EventArgs e)
         {
             mMyCommand.NpcId = NpcBase.IdFromList(cmbNpc.SelectedIndex);
+            mMyCommand.MinLevel = (int)nudMinLevel.Value;
+            mMyCommand.MaxLevel = (int)nudMaxLevel.Value;
             switch (cmbConditionType.SelectedIndex)
             {
                 case 0: //Tile Spawn
@@ -212,6 +233,31 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             UpdateFormElements();
         }
 
+        private void cmbNpc_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var npcId = NpcBase.IdFromList(cmbNpc.SelectedIndex);
+            var npcBase = NpcBase.Get(npcId);
+            if (npcBase == null)
+            {
+                return;
+            }
+            var minlevel = npcBase.Level - npcBase.LevelRange;
+            if (minlevel < 1)
+            {
+                minlevel = 1;
+            }
+            var maxlevel = npcBase.Level + npcBase.LevelRange;
+
+           
+            nudMinLevel.Minimum = minlevel;
+            nudMinLevel.Maximum = maxlevel;
+            nudMaxLevel.Minimum = minlevel;
+            nudMaxLevel.Maximum = maxlevel;
+
+            nudMinLevel.Value = minlevel;
+            nudMaxLevel.Value = maxlevel;
+        }
+
         private void btnVisual_Click(object sender, EventArgs e)
         {
             var frmWarpSelection = new FrmWarpSelection();
@@ -246,7 +292,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 UpdateSpawnPreview();
             }
         }
-
     }
 
 }
