@@ -640,6 +640,10 @@ namespace Intersect.GameObjects.Events.Commands
 
         public sbyte Y { get; set; }
 
+        public int MinLevel { get; set; }
+
+        public int MaxLevel { get; set; }
+
     }
 
     public class DespawnNpcCommand : EventCommand

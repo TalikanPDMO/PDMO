@@ -1389,7 +1389,7 @@ namespace Intersect.Server.Entities
 
             if (value < 0 && vital == (int) Vitals.Mana)
             {
-                value = 0; //Can't have less than 0 mana
+                value = 1; //Can't have less than 1 mana and 0 is for illimited
             }
 
             _maxVital[vital] = value;

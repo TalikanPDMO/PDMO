@@ -3348,6 +3348,10 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString npc = @"NPC:";
 
+            public static LocalizedString minlevel = @"Min. Level:";
+
+            public static LocalizedString maxlevel = @"Max. Level:";
+
             public static LocalizedString okay = @"Ok";
 
             public static LocalizedString player = @"Player";
@@ -4002,6 +4006,10 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString title = @"Map Layers";
 
+            public static LocalizedString spawnuniquelevel = @"{00} | Level {01}";
+
+            public static LocalizedString spawnmultiplelevel = @"{00} | Level {01}-{02}";
+
         }
 
         public struct MapList
@@ -4302,6 +4310,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString editorname = @"Editor Name:";
 
+            public static LocalizedString levelrange = @"Lvl Range (+-):";
+
             public static LocalizedString New = @"New Npc";
 
             public static LocalizedString npc = @"NPC:";
@@ -4383,7 +4393,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString type2 = @"Type2:";
 
-            public static LocalizedString stats = @"Stats:";
+            public static LocalizedString stats = @"Stats & Lvl Scaling%:  ";
 
             public static LocalizedString swarm = @"Swarm";
 
@@ -4562,6 +4572,10 @@ Tick timer saved in server config.json.";
             public static LocalizedString declaredlocation = @"Declared";
 
             public static LocalizedString direction = @"Direction:";
+
+            public static LocalizedString minlevel = @"Min. Level:";
+
+            public static LocalizedString maxlevel = @"Max. Level:";
 
             public static LocalizedString randomdirection = @"Random";
 

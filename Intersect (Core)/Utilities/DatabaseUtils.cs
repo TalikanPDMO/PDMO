@@ -74,6 +74,46 @@ namespace Intersect.Utilities
             return JsonConvert.SerializeObject(output);
         }
 
+        public static double[] LoadDoubleArray(string json, int arrayLen)
+        {
+            var output = new double[arrayLen];
+            var jsonList = new List<double>();
+            if (json != null)
+            {
+                jsonList = JsonConvert.DeserializeObject<List<double>>(json);
+            }
+
+            for (var i = 0; i < arrayLen && i < jsonList.Count; i++)
+            {
+                output[i] = jsonList[i];
+            }
+
+            return output;
+        }
+
+        public static string SaveDoubleArray(double[] array, int arrayLen)
+        {
+            if (array == null)
+            {
+                array = new double[arrayLen];
+            }
+
+            var output = new List<double>();
+            for (var i = 0; i < arrayLen; i++)
+            {
+                if (i < array.Length)
+                {
+                    output.Add(array[i]);
+                }
+                else
+                {
+                    output.Add(0.0);
+                }
+            }
+
+            return JsonConvert.SerializeObject(output);
+        }
+
         public static string SaveByteArray(byte[] array, int arrayLen)
         {
             if (array == null)

@@ -111,18 +111,26 @@ namespace Intersect.Server.Entities
         /// </summary>
         public int AggroCenterZ;
 
-        public Npc(NpcBase myBase, bool despawnable = false) : base()
+        public Npc(NpcBase myBase, bool despawnable = false, int level = 0) : base()
         {
             Name = myBase.Name;
             Sprite = myBase.Sprite;
             Color = myBase.Color;
-            Level = myBase.Level;
+            Level = level != 0 ? level : myBase.Level;
             Base = myBase;
             Despawnable = despawnable;
 
+            var lvlGap = Level - myBase.Level;
+            int vitalcount = (int)Vitals.VitalCount;
             for (var i = 0; i < (int) Stats.StatCount; i++)
             {
-                BaseStats[i] = myBase.Stats[i];
+                //i+2 for LevelScaling because 0 and 1 are Health/Mana
+                var baseStat = (int)(myBase.Stats[i] * (1 + lvlGap * myBase.LevelScalings[i + vitalcount]));
+                if (baseStat < 1)
+                {
+                    baseStat = 1;
+                }
+                BaseStats[i] = baseStat;
                 Stat[i] = new Stat((Stats) i, this);
             }
             for (var i = 0; i < NpcBase.MAX_ELEMENTAL_TYPES; i++)
@@ -161,10 +169,11 @@ namespace Intersect.Server.Entities
                 itemSlot++;
             }
 
-            for (var i = 0; i < (int) Vitals.VitalCount; i++)
+            for (var i = 0; i < vitalcount; i++)
             {
-                SetMaxVital(i, myBase.MaxVital[i]);
-                SetVital(i, myBase.MaxVital[i]);
+                var maxvital = (int)(myBase.MaxVital[i] * (1 + lvlGap * myBase.LevelScalings[i]));
+                SetMaxVital(i, maxvital);
+                SetVital(i, maxvital);
             }
 
             Range = (byte) myBase.SightRange;
@@ -2208,17 +2217,26 @@ namespace Intersect.Server.Entities
 
                 if (CurrentPhase.BaseStatsDiff != null)
                 {
-                    for (var i = 0; i < (int)Vitals.VitalCount; i++)
+                    int vitalcount = (int)Vitals.VitalCount;
+                    var lvlGap = Level - Base.Level;
+                    for (var i = 0; i < vitalcount; i++)
                     {
                         if (CurrentPhase.BaseStatsDiff[i] != 1.0)
                         {
-                            SetMaxVital(i, Base.MaxVital[i]);
+                            SetMaxVital(i, (int)(Base.MaxVital[i] * (1 + lvlGap * Base.LevelScalings[i])));
                             RestoreVital((Vitals)i);
                         }
                     }
+                    
                     for (var i = 0; i < (int)Stats.StatCount; i++)
                     {
-                        BaseStats[i] = Base.Stats[i];
+                        //i+2 for LevelScaling because 0 and 1 are Health/Mana
+                        var baseStat = (int)(Base.Stats[i] * (1 + lvlGap * Base.LevelScalings[i + vitalcount]));
+                        if (baseStat < 1)
+                        {
+                            baseStat = 1;
+                        }
+                        BaseStats[i] = baseStat;
                     }
                 }
 
@@ -2265,11 +2283,12 @@ namespace Intersect.Server.Entities
             if (phase.BaseStatsDiff != null)
             {
                 int vitalcount = (int)Vitals.VitalCount;
+                var lvlGap = Level - Base.Level;
                 for (var i = 0; i < vitalcount; i++)
                 {
                     if (phase.BaseStatsDiff[i] != 1.0)
                     {
-                        SetMaxVital(i, (int)(Base.MaxVital[i] * phase.BaseStatsDiff[i]));
+                        SetMaxVital(i, (int)(Base.MaxVital[i] * (1 + lvlGap * Base.LevelScalings[i]) * phase.BaseStatsDiff[i]));
                         RestoreVital((Vitals)i);
                     }
                 }

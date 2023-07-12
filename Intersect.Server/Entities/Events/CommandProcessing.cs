@@ -831,7 +831,26 @@ namespace Intersect.Server.Entities.Events
             var tile = new TileHelper(mapId, tileX, tileY);
             if (tile.TryFix())
             {
-                var npc = MapInstance.Get(mapId).SpawnNpc((byte) tileX, (byte) tileY, direction, npcId, true);
+                var spawnLevel = command.MinLevel;
+                var npcBase = NpcBase.Get(npcId);
+                if (npcBase != null)
+                {
+                    if (command.MinLevel != command.MaxLevel)
+                    {
+                        spawnLevel = Randomization.Next(command.MinLevel, command.MaxLevel + 1);
+                    }
+                    if (spawnLevel > npcBase.Level + npcBase.LevelRange || spawnLevel < npcBase.Level - npcBase.LevelRange)
+                    {
+                        // If any issue in the spawns levels, default level
+                        spawnLevel = npcBase.Level;
+                    }
+                    if (spawnLevel < 1)
+                    {
+                        spawnLevel = 1;
+                    }
+                }
+                
+                var npc = MapInstance.Get(mapId).SpawnNpc((byte) tileX, (byte) tileY, direction, npcId, true, spawnLevel);
                 player.SpawnedNpcs.Add((Npc) npc);
             }
         }
