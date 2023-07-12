@@ -654,10 +654,23 @@ namespace Intersect.Server.Maps
                 {
                     dir = (byte)Randomization.Next(0, 4);
                 }
-
+                var spawnLevel = Spawns[i].MinLevel;
+                if (Spawns[i].MinLevel != Spawns[i].MaxLevel)
+                {
+                    spawnLevel = Randomization.Next(Spawns[i].MinLevel, Spawns[i].MaxLevel + 1);
+                }
+                if (spawnLevel > npcBase.Level + npcBase.LevelRange || spawnLevel < npcBase.Level - npcBase.LevelRange )
+                {
+                    // If any issue in the spawns levels, default level
+                    spawnLevel = npcBase.Level;
+                }
+                if (spawnLevel < 1)
+                {
+                    spawnLevel = 1;
+                }
                 if (Spawns[i].X >= 0 && Spawns[i].Y >= 0)
                 {
-                    npcSpawnInstance.Entity = SpawnNpc((byte) Spawns[i].X, (byte) Spawns[i].Y, dir, Spawns[i].NpcId);
+                    npcSpawnInstance.Entity = SpawnNpc((byte) Spawns[i].X, (byte) Spawns[i].Y, dir, Spawns[i].NpcId, false, spawnLevel);
                 }
                 else
                 {
@@ -674,7 +687,7 @@ namespace Intersect.Server.Maps
                         y = 0;
                     }
 
-                    npcSpawnInstance.Entity = SpawnNpc(x, y, dir, Spawns[i].NpcId);
+                    npcSpawnInstance.Entity = SpawnNpc(x, y, dir, Spawns[i].NpcId, false, spawnLevel);
                 }
             }
         }
@@ -708,12 +721,12 @@ namespace Intersect.Server.Maps
             }
         }
 
-        public Entity SpawnNpc(byte tileX, byte tileY, byte dir, Guid npcId, bool despawnable = false)
+        public Entity SpawnNpc(byte tileX, byte tileY, byte dir, Guid npcId, bool despawnable = false, int level = 0)
         {
             var npcBase = NpcBase.Get(npcId);
             if (npcBase != null)
             {
-                var npc = new Npc(npcBase, despawnable)
+                var npc = new Npc(npcBase, despawnable, level)
                 {
                     MapId = Id,
                     X = tileX,

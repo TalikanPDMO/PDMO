@@ -861,26 +861,28 @@ namespace Intersect.Editor.Forms.DockingElements
                 nudMinLevel.Maximum = int.MaxValue;
                 nudMaxLevel.Minimum = 0;
                 nudMaxLevel.Maximum = int.MaxValue;
-
                 var npcBase = NpcBase.Get(Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].NpcId);
-                // Try to keep the current min/max level if possible.
-                if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MinLevel == 0)
+                if (npcBase != null)
                 {
-                    // If 0, we keep the default level (for compatibility before the feature) 
-                    nudMinLevel.Value = npcBase.Level;
-                }
-                else
-                {
-                    nudMinLevel.Value = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MinLevel;
-                }
-                if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MaxLevel == 0)
-                {
-                    // If 0, we keep the default level (for compatibility before the feature) 
-                    nudMaxLevel.Value = npcBase.Level;
-                }
-                else
-                {
-                    nudMaxLevel.Value = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MaxLevel;
+                    // Try to keep the current min/max level if possible.
+                    if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MinLevel == 0)
+                    {
+                        // If 0, we keep the default level (for compatibility before the feature) 
+                        nudMinLevel.Value = npcBase.Level;
+                    }
+                    else
+                    {
+                        nudMinLevel.Value = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MinLevel;
+                    }
+                    if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MaxLevel == 0)
+                    {
+                        // If 0, we keep the default level (for compatibility before the feature) 
+                        nudMaxLevel.Value = npcBase.Level;
+                    }
+                    else
+                    {
+                        nudMaxLevel.Value = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MaxLevel;
+                    }
                 }
                 cmbNpc.SelectedIndex = NpcBase.ListIndex(Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].NpcId);
                 cmbDir.SelectedIndex = (int) Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Direction;
@@ -892,18 +894,20 @@ namespace Intersect.Editor.Forms.DockingElements
                 {
                     rbRandom.Checked = true;
                 }
-
-                var minlevel = npcBase.Level - npcBase.LevelRange;
-                if (minlevel < 1)
+                if (npcBase != null)
                 {
-                    minlevel = 1;
+                    var minlevel = npcBase.Level - npcBase.LevelRange;
+                    if (minlevel < 1)
+                    {
+                        minlevel = 1;
+                    }
+                    var maxlevel = npcBase.Level + npcBase.LevelRange;
+                    // Set news Mini/Maxi for the npc
+                    nudMinLevel.Minimum = minlevel;
+                    nudMinLevel.Maximum = maxlevel;
+                    nudMaxLevel.Minimum = minlevel;
+                    nudMaxLevel.Maximum = maxlevel;
                 }
-                var maxlevel = npcBase.Level + npcBase.LevelRange;
-                // Set news Mini/Maxi for the npc
-                nudMinLevel.Minimum = minlevel;
-                nudMinLevel.Maximum = maxlevel;
-                nudMaxLevel.Minimum = minlevel;
-                nudMaxLevel.Maximum = maxlevel;
             }
         }
 
@@ -931,6 +935,10 @@ namespace Intersect.Editor.Forms.DockingElements
             var n = 0;
             var npcId = NpcBase.IdFromList(cmbNpc.SelectedIndex);
             var npcBase = NpcBase.Get(npcId);
+            if (npcBase == null)
+            {
+                return;
+            }
             var minlevel = npcBase.Level - npcBase.LevelRange;
             if (minlevel < 1)
             {

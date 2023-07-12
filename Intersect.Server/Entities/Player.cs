@@ -1123,14 +1123,19 @@ namespace Intersect.Server.Entities
                         {
                             PacketSender.SendChatMsg(this, Strings.Combat.defeated + entity.Name + " !", ChatMessageType.Combat);
                         }
-
+                        var lvlGap = npc.Level - descriptor.Level;
+                        var npcExp = descriptor.Experience * (1 + lvlGap * descriptor.LevelScalings[(int)NpcLevelScalings.Experience]);
+                        if (npcExp < 0)
+                        {
+                            npcExp = 0;
+                        }
                         // If in party, split the exp.
                         if (Party != null && Party.Count > 0)
                         {
                             var partyMembersInXpRange = Party.Where(partyMember => partyMember.InRangeOf(this, Options.Party.SharedXpRange)).ToArray();
                             float bonusExp = Options.Instance.PartyOpts.BonusExperiencePercentPerMember / 100;
                             var multiplier = 1.0f + (partyMembersInXpRange.Length * bonusExp);
-                            var partyExperience = (int)(descriptor.Experience * multiplier) / partyMembersInXpRange.Length;
+                            var partyExperience = (int)(npcExp * multiplier) / partyMembersInXpRange.Length;
                             foreach (var partyMember in partyMembersInXpRange)
                             {
                                 partyMember.GiveExperience(partyExperience, true, false);
@@ -1150,7 +1155,7 @@ namespace Intersect.Server.Entities
                         }
                         else
                         {
-                            GiveExperience(descriptor.Experience, true, false);
+                            GiveExperience((long)npcExp, true, false);
                             UpdateQuestKillTasks(entity);
                         }
 
