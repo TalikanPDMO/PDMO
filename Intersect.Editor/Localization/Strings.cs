@@ -4006,9 +4006,13 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString title = @"Map Layers";
 
-            public static LocalizedString spawnuniquelevel = @"{00} | Level {01}";
+            public static LocalizedString spawnlistformat = @"{00} | {01} | {02}";
 
-            public static LocalizedString spawnmultiplelevel = @"{00} | Level {01}-{02}";
+            public static LocalizedString spawnuniquelevel = @"Level {00}";
+
+            public static LocalizedString spawnmultiplelevel = @"Level {00}-{01}";
+
+            public static LocalizedString spawntime = @"From {00} To {01}";
 
         }
 
@@ -4576,6 +4580,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString minlevel = @"Min. Level:";
 
             public static LocalizedString maxlevel = @"Max. Level:";
+
+            public static LocalizedString timeslot = @"Time Slot:";
 
             public static LocalizedString randomdirection = @"Random";
 

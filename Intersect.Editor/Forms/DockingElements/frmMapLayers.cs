@@ -783,6 +783,27 @@ namespace Intersect.Editor.Forms.DockingElements
                 lstMapNpcs.Items.Add(FormatNpcSpawn(Globals.CurrentMap.Spawns[i]));
             }
 
+            cmbMinTime.Items.Clear();
+            cmbMaxTime.Items.Clear();
+            var time = new DateTime(2000, 1, 1, 0, 0, 0);
+            var duration = TimeBase.GetTimeBase().RangeInterval;
+            for (var i = 0; i < 1440; i += duration)
+            {
+                var addRange = time.ToString("h:mm:ss tt") + " " + Strings.TimeEditor.to + " ";
+                time = time.AddMinutes(duration);
+                addRange += time.ToString("h:mm:ss tt");
+                cmbMinTime.Items.Add(addRange);
+                cmbMaxTime.Items.Add(addRange);
+            }
+            if (cmbMinTime.Items.Count > 0)
+            {
+                cmbMinTime.SelectedIndex = 0;
+            }
+            if (cmbMaxTime.Items.Count > 0)
+            {
+                cmbMaxTime.SelectedIndex = 0;
+            }
+
             // Don't select if there are no NPCs, to avoid crashes.
             if (cmbNpc.Items.Count > 0)
             {
@@ -825,6 +846,8 @@ namespace Intersect.Editor.Forms.DockingElements
                 n.Direction = NpcSpawnDirection.Random;
                 n.MinLevel = (int)nudMinLevel.Value;
                 n.MaxLevel = (int)nudMaxLevel.Value;
+                n.MinTime = cmbMinTime.SelectedIndex;
+                n.MaxTime = cmbMaxTime.SelectedIndex;
                 Globals.CurrentMap.Spawns.Add(n);
                 lstMapNpcs.Items.Add(FormatNpcSpawn(n));
                 lstMapNpcs.SelectedIndex = lstMapNpcs.Items.Count - 1;
@@ -884,6 +907,8 @@ namespace Intersect.Editor.Forms.DockingElements
                         nudMaxLevel.Value = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MaxLevel;
                     }
                 }
+                cmbMinTime.SelectedIndex = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MinTime;
+                cmbMaxTime.SelectedIndex = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MaxTime;
                 cmbNpc.SelectedIndex = NpcBase.ListIndex(Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].NpcId);
                 cmbDir.SelectedIndex = (int) Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Direction;
                 if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].X >= 0)
@@ -1007,6 +1032,40 @@ namespace Intersect.Editor.Forms.DockingElements
             if (lstMapNpcs.SelectedIndex >= 0)
             {
                 Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MaxLevel = (int)nudMaxLevel.Value;
+                // Refresh List
+                var n = lstMapNpcs.SelectedIndex;
+                lstMapNpcs.Items.Clear();
+                for (var i = 0; i < Globals.CurrentMap.Spawns.Count; i++)
+                {
+                    lstMapNpcs.Items.Add(FormatNpcSpawn(Globals.CurrentMap.Spawns[i]));
+                }
+
+                lstMapNpcs.SelectedIndex = n;
+            }
+        }
+
+        private void cmbMinTime_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstMapNpcs.SelectedIndex >= 0)
+            {
+                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MinTime = cmbMinTime.SelectedIndex;
+                // Refresh List
+                var n = lstMapNpcs.SelectedIndex;
+                lstMapNpcs.Items.Clear();
+                for (var i = 0; i < Globals.CurrentMap.Spawns.Count; i++)
+                {
+                    lstMapNpcs.Items.Add(FormatNpcSpawn(Globals.CurrentMap.Spawns[i]));
+                }
+
+                lstMapNpcs.SelectedIndex = n;
+            }
+        }
+
+        private void cmbMaxTime_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstMapNpcs.SelectedIndex >= 0)
+            {
+                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MaxTime = cmbMaxTime.SelectedIndex;
                 // Refresh List
                 var n = lstMapNpcs.SelectedIndex;
                 lstMapNpcs.Items.Clear();
@@ -1245,6 +1304,7 @@ namespace Intersect.Editor.Forms.DockingElements
             lblDir.Text = Strings.NpcSpawns.direction;
             lblMinLevel.Text = Strings.NpcSpawns.minlevel;
             lblMaxLevel.Text = Strings.NpcSpawns.maxlevel;
+            lblTimeSlot.Text = Strings.NpcSpawns.timeslot;
             cmbDir.Items.Clear();
             cmbDir.Items.Add(Strings.NpcSpawns.randomdirection);
             for (var i = 0; i < 4; i++)
@@ -1454,18 +1514,22 @@ namespace Intersect.Editor.Forms.DockingElements
             var npc = NpcBase.Get(npcSpawn.NpcId);
             if (npc != null)
             {
+                var levelformat = Strings.MapLayers.spawnmultiplelevel.ToString(npcSpawn.MinLevel, npcSpawn.MaxLevel);
                 if (npcSpawn.MinLevel == npcSpawn.MaxLevel)
                 {
                     //For compatibility before the feature, avoid to display 0
-                    var minlevel = npcSpawn.MinLevel == 0 ? npc.Level : npcSpawn.MinLevel;
-                    return Strings.MapLayers.spawnuniquelevel.ToString(
-                        TextUtils.FormatEditorName(npc.Name, npc.EditorName), minlevel);
+                    levelformat = Strings.MapLayers.spawnuniquelevel.ToString(npcSpawn.MinLevel == 0 ? npc.Level : npcSpawn.MinLevel);
                 }
-                else
-                {
-                    return Strings.MapLayers.spawnmultiplelevel.ToString(
-                        TextUtils.FormatEditorName(npc.Name, npc.EditorName), npcSpawn.MinLevel, npcSpawn.MaxLevel);
-                }
+
+                var minutesInterval = TimeBase.GetTimeBase().RangeInterval;
+                var time = new DateTime(2000, 1, 1, 0, 0, 0);
+
+                var minTimeString = time.AddMinutes(minutesInterval * npcSpawn.MinTime).ToString("h:mm tt");
+                var maxTimeString = time.AddMinutes(minutesInterval * (npcSpawn.MaxTime + 1)).ToString("h:mm tt");
+                var timeformat = Strings.MapLayers.spawntime.ToString(minTimeString, maxTimeString);
+
+                return Strings.MapLayers.spawnlistformat.ToString(
+                    TextUtils.FormatEditorName(npc.Name, npc.EditorName),levelformat, timeformat);
             }
             return NpcBase.Deleted;
         }

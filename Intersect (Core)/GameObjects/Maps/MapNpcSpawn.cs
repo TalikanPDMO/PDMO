@@ -20,6 +20,10 @@ namespace Intersect.GameObjects.Maps
 
         public int MaxLevel;
 
+        public int MinTime;
+
+        public int MaxTime;
+
         public NpcSpawn()
         {
         }
@@ -32,6 +36,8 @@ namespace Intersect.GameObjects.Maps
             Direction = copy.Direction;
             MinLevel = copy.MinLevel;
             MaxLevel = copy.MaxLevel;
+            MinTime = copy.MinTime;
+            MaxTime = copy.MaxTime;
         }
 
     }
