@@ -4014,6 +4014,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString spawntime = @"From {00} To {01}";
 
+            public static LocalizedString spawnanytime = @"Anytime";
+
         }
 
         public struct MapList

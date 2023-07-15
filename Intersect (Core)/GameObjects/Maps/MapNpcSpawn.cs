@@ -20,9 +20,9 @@ namespace Intersect.GameObjects.Maps
 
         public int MaxLevel;
 
-        public int MinTime;
+        public int MinTime = -1;
 
-        public int MaxTime;
+        public int MaxTime = -1;
 
         public NpcSpawn()
         {

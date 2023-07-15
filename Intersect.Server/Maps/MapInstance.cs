@@ -621,9 +621,15 @@ namespace Intersect.Server.Maps
         //Npcs
         private void SpawnMapNpcs()
         {
+            var timeRange = Time.GetTimeRange();
             for (var i = 0; i < Spawns.Count; i++)
             {
-                SpawnMapNpc(i);
+                // MinTime or MaxTime to -1 means we can spawn at anytime
+                if ( Spawns[i].MinTime == -1 || Spawns[i].MaxTime == -1 ||
+                    timeRange >= Spawns[i].MinTime && timeRange <= Spawns[i].MaxTime)
+                {
+                    SpawnMapNpc(i);
+                }
             }
         }
 
@@ -1012,26 +1018,46 @@ namespace Intersect.Server.Maps
                     PacketSender.SendMapEntityStatusUpdate(this, statusUpdates.ToArray());
                 }
 
+                var timeRange = Time.GetTimeRange();
                 //Process NPC Respawns
                 for (var i = 0; i < Spawns.Count; i++)
                 {
+                    // MinTime or MaxTime to -1 means we can spawn at anytime
+                    var isInTimeInterval = Spawns[i].MinTime == -1 || Spawns[i].MaxTime == -1 ||
+                        timeRange >= Spawns[i].MinTime && timeRange <= Spawns[i].MaxTime;
                     if (NpcSpawnInstances.ContainsKey(Spawns[i]))
                     {
                         var npcSpawnInstance = NpcSpawnInstances[Spawns[i]];
-                        if (npcSpawnInstance != null && npcSpawnInstance.Entity.Dead)
+                        if (isInTimeInterval)
                         {
-                            if (npcSpawnInstance.RespawnTime == -1)
+                            if (npcSpawnInstance != null && npcSpawnInstance.Entity.Dead)
                             {
-                                npcSpawnInstance.RespawnTime = Globals.Timing.Milliseconds +
-                                                               ((Npc) npcSpawnInstance.Entity).Base.SpawnDuration -
-                                                               (Globals.Timing.Milliseconds - LastUpdateTime);
-                            }
-                            else if (npcSpawnInstance.RespawnTime < Globals.Timing.Milliseconds)
-                            {
-                                SpawnMapNpc(i);
-                                npcSpawnInstance.RespawnTime = -1;
+                                if (npcSpawnInstance.RespawnTime == -1)
+                                {
+                                    npcSpawnInstance.RespawnTime = Globals.Timing.Milliseconds +
+                                                                   ((Npc)npcSpawnInstance.Entity).Base.SpawnDuration -
+                                                                   (Globals.Timing.Milliseconds - LastUpdateTime);
+                                }
+                                else if (npcSpawnInstance.RespawnTime < Globals.Timing.Milliseconds)
+                                {
+                                    SpawnMapNpc(i);
+                                    npcSpawnInstance.RespawnTime = -1;
+                                }
                             }
                         }
+                        else
+                        {
+                            // Spawn instance is not anymore in time, need to despawn
+                            lock (npcSpawnInstance.Entity.EntityLock)
+                            {
+                                npcSpawnInstance.Entity.Die(false);
+                            }
+                            NpcSpawnInstances.TryRemove(Spawns[i], out var spawnRemoved);
+                        }
+                    }
+                    else if (isInTimeInterval)
+                    {
+                        SpawnMapNpc(i);
                     }
                 }
 
