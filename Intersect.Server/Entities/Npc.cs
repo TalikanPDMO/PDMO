@@ -1124,6 +1124,7 @@ namespace Intersect.Server.Entities
                                 PacketSender.SendEntityStats(this);
                                 PacketSender.SendEntityDataToProximity(this);
                                 mResetPhase = 0;
+                                CanDespawn = true;
                             }
                             else
                             {
@@ -2054,6 +2055,7 @@ namespace Intersect.Server.Entities
                 PacketSender.SendEntityStats(this);
                 PacketSender.SendEntityDataToProximity(this);
                 mResetPhase = 0;
+                CanDespawn = true;
             }
         }
 

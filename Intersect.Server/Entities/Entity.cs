@@ -48,6 +48,8 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore] public bool Running = false;
 
+        [NotMapped, JsonIgnore] public bool CanDespawn = true;
+
         [NotMapped, JsonIgnore] public Resource CollidedResource { get; set; } = null;
 
         public Entity() : this(Guid.NewGuid())
@@ -2271,6 +2273,9 @@ namespace Intersect.Server.Entities
                         var dmgMap = enemyNpc.DamageMap;
                         dmgMap.TryGetValue(this, out var damage);
                         dmgMap[this] = damage + baseDamage;
+
+                        //No despawn during a fight
+                        enemyNpc.CanDespawn = false;
 
                         enemyNpc.LootMap.TryAdd(Id, true);
                         enemyNpc.LootMapCache = enemyNpc.LootMap.Keys.ToArray();

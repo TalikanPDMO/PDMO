@@ -94,6 +94,10 @@ namespace Intersect.Editor.Forms.DockingElements
             this.lblLightInstructions = new System.Windows.Forms.Label();
             this.lblEventInstructions = new System.Windows.Forms.Label();
             this.grpNpcList = new DarkUI.Controls.DarkGroupBox();
+            this.btnAddInactive = new DarkUI.Controls.DarkButton();
+            this.nudInactiveSpawn = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblInactiveSpawns = new System.Windows.Forms.Label();
+            this.lstInactiveSpawns = new System.Windows.Forms.ListBox();
             this.cmbMaxTime = new DarkUI.Controls.DarkComboBox();
             this.lblTimeSlot = new System.Windows.Forms.Label();
             this.cmbMinTime = new DarkUI.Controls.DarkComboBox();
@@ -148,6 +152,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.cmbCritterAnimation = new DarkUI.Controls.DarkComboBox();
             this.lblCritterAnimation = new System.Windows.Forms.Label();
             this.rbCritter = new DarkUI.Controls.DarkRadioButton();
+            this.btnRemoveInactive = new DarkUI.Controls.DarkButton();
             this.grpResource.SuspendLayout();
             this.grpZResource.SuspendLayout();
             this.grpItem.SuspendLayout();
@@ -164,6 +169,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpSlide.SuspendLayout();
             this.grpAnimation.SuspendLayout();
             this.grpNpcList.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudInactiveSpawn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMinLevel)).BeginInit();
             this.grpSpawnLoc.SuspendLayout();
@@ -1007,6 +1013,11 @@ namespace Intersect.Editor.Forms.DockingElements
             // 
             this.grpNpcList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpNpcList.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpNpcList.Controls.Add(this.btnRemoveInactive);
+            this.grpNpcList.Controls.Add(this.btnAddInactive);
+            this.grpNpcList.Controls.Add(this.nudInactiveSpawn);
+            this.grpNpcList.Controls.Add(this.lblInactiveSpawns);
+            this.grpNpcList.Controls.Add(this.lstInactiveSpawns);
             this.grpNpcList.Controls.Add(this.cmbMaxTime);
             this.grpNpcList.Controls.Add(this.lblTimeSlot);
             this.grpNpcList.Controls.Add(this.cmbMinTime);
@@ -1018,12 +1029,61 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpNpcList.Controls.Add(this.btnAddMapNpc);
             this.grpNpcList.Controls.Add(this.cmbNpc);
             this.grpNpcList.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpNpcList.Location = new System.Drawing.Point(7, 271);
+            this.grpNpcList.Location = new System.Drawing.Point(7, 242);
             this.grpNpcList.Name = "grpNpcList";
-            this.grpNpcList.Size = new System.Drawing.Size(263, 155);
+            this.grpNpcList.Size = new System.Drawing.Size(263, 244);
             this.grpNpcList.TabIndex = 12;
             this.grpNpcList.TabStop = false;
             this.grpNpcList.Text = "Add/Remove Map NPCs";
+            // 
+            // btnAddInactive
+            // 
+            this.btnAddInactive.Location = new System.Drawing.Point(198, 161);
+            this.btnAddInactive.Name = "btnAddInactive";
+            this.btnAddInactive.Padding = new System.Windows.Forms.Padding(5);
+            this.btnAddInactive.Size = new System.Drawing.Size(60, 20);
+            this.btnAddInactive.TabIndex = 73;
+            this.btnAddInactive.Text = "Add";
+            this.btnAddInactive.Click += new System.EventHandler(this.btnAddInactiveSpawn_Click);
+            // 
+            // nudInactiveSpawn
+            // 
+            this.nudInactiveSpawn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudInactiveSpawn.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudInactiveSpawn.Location = new System.Drawing.Point(198, 138);
+            this.nudInactiveSpawn.Maximum = new decimal(new int[] {
+            2147483647,
+            0,
+            0,
+            0});
+            this.nudInactiveSpawn.Name = "nudInactiveSpawn";
+            this.nudInactiveSpawn.Size = new System.Drawing.Size(60, 20);
+            this.nudInactiveSpawn.TabIndex = 72;
+            this.nudInactiveSpawn.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // lblInactiveSpawns
+            // 
+            this.lblInactiveSpawns.AutoSize = true;
+            this.lblInactiveSpawns.Location = new System.Drawing.Point(4, 121);
+            this.lblInactiveSpawns.Name = "lblInactiveSpawns";
+            this.lblInactiveSpawns.Size = new System.Drawing.Size(148, 13);
+            this.lblInactiveSpawns.TabIndex = 71;
+            this.lblInactiveSpawns.Text = "Need other Inactive Spawns :";
+            // 
+            // lstInactiveSpawns
+            // 
+            this.lstInactiveSpawns.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstInactiveSpawns.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstInactiveSpawns.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstInactiveSpawns.FormattingEnabled = true;
+            this.lstInactiveSpawns.Location = new System.Drawing.Point(5, 138);
+            this.lstInactiveSpawns.Name = "lstInactiveSpawns";
+            this.lstInactiveSpawns.Size = new System.Drawing.Size(189, 67);
+            this.lstInactiveSpawns.TabIndex = 13;
             // 
             // cmbMaxTime
             // 
@@ -1146,22 +1206,22 @@ namespace Intersect.Editor.Forms.DockingElements
             // 
             // btnRemoveMapNpc
             // 
-            this.btnRemoveMapNpc.Location = new System.Drawing.Point(147, 124);
+            this.btnRemoveMapNpc.Location = new System.Drawing.Point(147, 215);
             this.btnRemoveMapNpc.Name = "btnRemoveMapNpc";
             this.btnRemoveMapNpc.Padding = new System.Windows.Forms.Padding(5);
-            this.btnRemoveMapNpc.Size = new System.Drawing.Size(75, 23);
+            this.btnRemoveMapNpc.Size = new System.Drawing.Size(90, 23);
             this.btnRemoveMapNpc.TabIndex = 6;
-            this.btnRemoveMapNpc.Text = "Remove";
+            this.btnRemoveMapNpc.Text = "Remove NPC";
             this.btnRemoveMapNpc.Click += new System.EventHandler(this.btnRemoveMapNpc_Click);
             // 
             // btnAddMapNpc
             // 
-            this.btnAddMapNpc.Location = new System.Drawing.Point(26, 124);
+            this.btnAddMapNpc.Location = new System.Drawing.Point(26, 215);
             this.btnAddMapNpc.Name = "btnAddMapNpc";
             this.btnAddMapNpc.Padding = new System.Windows.Forms.Padding(5);
-            this.btnAddMapNpc.Size = new System.Drawing.Size(75, 23);
+            this.btnAddMapNpc.Size = new System.Drawing.Size(90, 23);
             this.btnAddMapNpc.TabIndex = 5;
-            this.btnAddMapNpc.Text = "Add";
+            this.btnAddMapNpc.Text = "Add NPC";
             this.btnAddMapNpc.Click += new System.EventHandler(this.btnAddMapNpc_Click);
             // 
             // cmbNpc
@@ -1194,7 +1254,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpSpawnLoc.Controls.Add(this.rbRandom);
             this.grpSpawnLoc.Controls.Add(this.rbDeclared);
             this.grpSpawnLoc.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpSpawnLoc.Location = new System.Drawing.Point(5, 183);
+            this.grpSpawnLoc.Location = new System.Drawing.Point(5, 154);
             this.grpSpawnLoc.Name = "grpSpawnLoc";
             this.grpSpawnLoc.Size = new System.Drawing.Size(265, 81);
             this.grpSpawnLoc.TabIndex = 11;
@@ -1266,7 +1326,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.lstMapNpcs.FormattingEnabled = true;
             this.lstMapNpcs.Location = new System.Drawing.Point(5, 6);
             this.lstMapNpcs.Name = "lstMapNpcs";
-            this.lstMapNpcs.Size = new System.Drawing.Size(265, 171);
+            this.lstMapNpcs.Size = new System.Drawing.Size(265, 145);
             this.lstMapNpcs.TabIndex = 10;
             this.lstMapNpcs.SelectedIndexChanged += new System.EventHandler(this.lstMapNpcs_SelectedIndexChanged);
             this.lstMapNpcs.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lstMapNpcs_MouseDown);
@@ -1335,7 +1395,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.panel1.Controls.Add(this.pnlAttributes);
             this.panel1.Location = new System.Drawing.Point(8, 34);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(278, 444);
+            this.panel1.Size = new System.Drawing.Size(278, 492);
             this.panel1.TabIndex = 23;
             // 
             // pnlNpcs
@@ -1346,7 +1406,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.pnlNpcs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlNpcs.Location = new System.Drawing.Point(0, 0);
             this.pnlNpcs.Name = "pnlNpcs";
-            this.pnlNpcs.Size = new System.Drawing.Size(276, 442);
+            this.pnlNpcs.Size = new System.Drawing.Size(276, 490);
             this.pnlNpcs.TabIndex = 1;
             // 
             // pnlTiles
@@ -1366,7 +1426,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.pnlTiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlTiles.Location = new System.Drawing.Point(0, 0);
             this.pnlTiles.Name = "pnlTiles";
-            this.pnlTiles.Size = new System.Drawing.Size(276, 442);
+            this.pnlTiles.Size = new System.Drawing.Size(276, 490);
             this.pnlTiles.TabIndex = 0;
             // 
             // cmbMapLayer
@@ -1450,7 +1510,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.pnlTilesetContainer.Controls.Add(this.picTileset);
             this.pnlTilesetContainer.Location = new System.Drawing.Point(9, 96);
             this.pnlTilesetContainer.Name = "pnlTilesetContainer";
-            this.pnlTilesetContainer.Size = new System.Drawing.Size(264, 338);
+            this.pnlTilesetContainer.Size = new System.Drawing.Size(264, 386);
             this.pnlTilesetContainer.TabIndex = 19;
             // 
             // picTileset
@@ -1470,7 +1530,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.pnlEvents.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlEvents.Location = new System.Drawing.Point(0, 0);
             this.pnlEvents.Name = "pnlEvents";
-            this.pnlEvents.Size = new System.Drawing.Size(276, 442);
+            this.pnlEvents.Size = new System.Drawing.Size(276, 490);
             this.pnlEvents.TabIndex = 1;
             // 
             // pnlLights
@@ -1480,7 +1540,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.pnlLights.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlLights.Location = new System.Drawing.Point(0, 0);
             this.pnlLights.Name = "pnlLights";
-            this.pnlLights.Size = new System.Drawing.Size(276, 442);
+            this.pnlLights.Size = new System.Drawing.Size(276, 490);
             this.pnlLights.TabIndex = 1;
             // 
             // lightEditor
@@ -1517,7 +1577,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.pnlAttributes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlAttributes.Location = new System.Drawing.Point(0, 0);
             this.pnlAttributes.Name = "pnlAttributes";
-            this.pnlAttributes.Size = new System.Drawing.Size(276, 442);
+            this.pnlAttributes.Size = new System.Drawing.Size(276, 490);
             this.pnlAttributes.TabIndex = 1;
             // 
             // grpCritter
@@ -1777,13 +1837,23 @@ namespace Intersect.Editor.Forms.DockingElements
             this.rbCritter.Text = "Critter";
             this.rbCritter.CheckedChanged += new System.EventHandler(this.rbCritter_CheckedChanged);
             // 
+            // btnRemoveInactive
+            // 
+            this.btnRemoveInactive.Location = new System.Drawing.Point(198, 184);
+            this.btnRemoveInactive.Name = "btnRemoveInactive";
+            this.btnRemoveInactive.Padding = new System.Windows.Forms.Padding(5);
+            this.btnRemoveInactive.Size = new System.Drawing.Size(60, 20);
+            this.btnRemoveInactive.TabIndex = 74;
+            this.btnRemoveInactive.Text = "Remove";
+            this.btnRemoveInactive.Click += new System.EventHandler(this.btnRemoveInactiveSpawn_Click);
+            // 
             // FrmMapLayers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(312, 481);
+            this.ClientSize = new System.Drawing.Size(312, 529);
             this.CloseButton = false;
             this.CloseButtonVisible = false;
             this.ControlBox = false;
@@ -1828,6 +1898,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpAnimation.PerformLayout();
             this.grpNpcList.ResumeLayout(false);
             this.grpNpcList.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudInactiveSpawn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxLevel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMinLevel)).EndInit();
             this.grpSpawnLoc.ResumeLayout(false);
@@ -1973,5 +2044,10 @@ namespace Intersect.Editor.Forms.DockingElements
         private DarkComboBox cmbMaxTime;
         private Label lblTimeSlot;
         private DarkComboBox cmbMinTime;
+        private DarkButton btnAddInactive;
+        private DarkNumericUpDown nudInactiveSpawn;
+        private Label lblInactiveSpawns;
+        public ListBox lstInactiveSpawns;
+        private DarkButton btnRemoveInactive;
     }
 }

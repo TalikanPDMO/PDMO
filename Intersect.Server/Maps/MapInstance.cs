@@ -628,16 +628,23 @@ namespace Intersect.Server.Maps
                 if ( Spawns[i].MinTime == -1 || Spawns[i].MaxTime == -1 ||
                     timeRange >= Spawns[i].MinTime && timeRange <= Spawns[i].MaxTime)
                 {
-                    SpawnMapNpc(i);
+                    TrySpawnMapNpc(i);
                 }
             }
         }
 
-        private void SpawnMapNpc(int i)
+        private bool TrySpawnMapNpc(int i)
         {
             byte x = 0;
             byte y = 0;
             byte dir = 0;
+            foreach (var s in Spawns[i].InactiveSpawns)
+            {
+                if (NpcSpawnInstances.ContainsKey(Spawns[s]) && !NpcSpawnInstances[Spawns[s]].Entity.Dead)
+                {
+                    return false;
+                }
+            }
             var npcBase = NpcBase.Get(Spawns[i].NpcId);
             if (npcBase != null)
             {
@@ -695,7 +702,9 @@ namespace Intersect.Server.Maps
 
                     npcSpawnInstance.Entity = SpawnNpc(x, y, dir, Spawns[i].NpcId, false, spawnLevel);
                 }
+                return true;
             }
+            return false;
         }
 
         private void DespawnNpcs()
@@ -1040,12 +1049,20 @@ namespace Intersect.Server.Maps
                                 }
                                 else if (npcSpawnInstance.RespawnTime < Globals.Timing.Milliseconds)
                                 {
-                                    SpawnMapNpc(i);
-                                    npcSpawnInstance.RespawnTime = -1;
+                                    if (TrySpawnMapNpc(i))
+                                    {
+                                        npcSpawnInstance.RespawnTime = -1;
+                                    }
+                                    else
+                                    {
+                                        // Spawn instance need to be removed because of conditions on inactives spawns
+                                        NpcSpawnInstances.TryRemove(Spawns[i], out var spawnRemoved);
+                                    }
+                                   
                                 }
                             }
                         }
-                        else
+                        else if (npcSpawnInstance.Entity.CanDespawn)
                         {
                             // Spawn instance is not anymore in time, need to despawn
                             lock (npcSpawnInstance.Entity.EntityLock)
@@ -1057,7 +1074,7 @@ namespace Intersect.Server.Maps
                     }
                     else if (isInTimeInterval)
                     {
-                        SpawnMapNpc(i);
+                        TrySpawnMapNpc(i);
                     }
                 }
 
