@@ -890,10 +890,10 @@ namespace Intersect.Editor.Forms.DockingElements
                 n.X = -1;
                 n.Y = -1;
                 n.Direction = NpcSpawnDirection.Random;
-                n.MinLevel = (int)nudMinLevel.Value;
-                n.MaxLevel = (int)nudMaxLevel.Value;
-                n.MinTime = cmbMinTime.SelectedIndex - 1;
-                n.MaxTime = cmbMaxTime.SelectedIndex - 1;
+                n.Levels[0] = (int)nudMinLevel.Value;
+                n.Levels[1] = (int)nudMaxLevel.Value;
+                n.Timeslots[0] = cmbMinTime.SelectedIndex - 1;
+                n.Timeslots[1] = cmbMaxTime.SelectedIndex - 1;
                 foreach(var item in lstInactiveSpawns.Items)
                 {
                     n.InactiveSpawns.Add(((KeyValuePair<int, string>)item).Key);
@@ -1013,27 +1013,27 @@ namespace Intersect.Editor.Forms.DockingElements
                 if (npcBase != null)
                 {
                     // Try to keep the current min/max level if possible.
-                    if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MinLevel == 0)
+                    if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Levels[0] == 0)
                     {
                         // If 0, we keep the default level (for compatibility before the feature) 
                         nudMinLevel.Value = npcBase.Level;
                     }
                     else
                     {
-                        nudMinLevel.Value = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MinLevel;
+                        nudMinLevel.Value = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Levels[0];
                     }
-                    if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MaxLevel == 0)
+                    if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Levels[1] == 0)
                     {
                         // If 0, we keep the default level (for compatibility before the feature) 
                         nudMaxLevel.Value = npcBase.Level;
                     }
                     else
                     {
-                        nudMaxLevel.Value = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MaxLevel;
+                        nudMaxLevel.Value = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Levels[1];
                     }
                 }
-                cmbMinTime.SelectedIndex = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MinTime + 1;
-                cmbMaxTime.SelectedIndex = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MaxTime + 1;
+                cmbMinTime.SelectedIndex = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Timeslots[0] + 1;
+                cmbMaxTime.SelectedIndex = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Timeslots[1] + 1;
                 cmbNpc.SelectedIndex = NpcBase.ListIndex(Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].NpcId);
                 cmbDir.SelectedIndex = (int) Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Direction;
                 if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].X >= 0)
@@ -1139,7 +1139,7 @@ namespace Intersect.Editor.Forms.DockingElements
         {
             if (lstMapNpcs.SelectedIndex >= 0)
             {
-                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MinLevel = (int)nudMinLevel.Value;
+                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Levels[0] = (int)nudMinLevel.Value;
                 
                 // Refresh List
                 var n = lstMapNpcs.SelectedIndex;
@@ -1157,7 +1157,7 @@ namespace Intersect.Editor.Forms.DockingElements
         {
             if (lstMapNpcs.SelectedIndex >= 0)
             {
-                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MaxLevel = (int)nudMaxLevel.Value;
+                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Levels[1] = (int)nudMaxLevel.Value;
                 // Refresh List
                 var n = lstMapNpcs.SelectedIndex;
                 lstMapNpcs.Items.Clear();
@@ -1175,7 +1175,7 @@ namespace Intersect.Editor.Forms.DockingElements
             if (lstMapNpcs.SelectedIndex >= 0)
             {
                 var newtime = cmbMinTime.SelectedIndex - 1;
-                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MinTime = newtime;
+                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Timeslots[0] = newtime;
                 if (newtime == -1)
                 {
                     //Set Anytime to the MaxTime also
@@ -1198,7 +1198,7 @@ namespace Intersect.Editor.Forms.DockingElements
             if (lstMapNpcs.SelectedIndex >= 0)
             {
                 var newtime = cmbMaxTime.SelectedIndex - 1;
-                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MaxTime = newtime;
+                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Timeslots[1] = newtime;
                 if (newtime == -1)
                 {
                     //Set Anytime to the MinTime also
@@ -1656,19 +1656,19 @@ namespace Intersect.Editor.Forms.DockingElements
             var npc = NpcBase.Get(npcSpawn.NpcId);
             if (npc != null)
             {
-                var levelformat = Strings.MapLayers.spawnmultiplelevel.ToString(npcSpawn.MinLevel, npcSpawn.MaxLevel);
-                if (npcSpawn.MinLevel == npcSpawn.MaxLevel)
+                var levelformat = Strings.MapLayers.spawnmultiplelevel.ToString(npcSpawn.Levels[0], npcSpawn.Levels[1]);
+                if (npcSpawn.Levels[0] == npcSpawn.Levels[1])
                 {
                     //For compatibility before the feature, avoid to display 0
-                    levelformat = Strings.MapLayers.spawnuniquelevel.ToString(npcSpawn.MinLevel == 0 ? npc.Level : npcSpawn.MinLevel);
+                    levelformat = Strings.MapLayers.spawnuniquelevel.ToString(npcSpawn.Levels[0] == 0 ? npc.Level : npcSpawn.Levels[0]);
                 }
                 var timeformat = Strings.MapLayers.spawnanytime;
-                if (npcSpawn.MinTime != -1 && npcSpawn.MaxTime != -1)
+                if (npcSpawn.Timeslots[0] != -1 && npcSpawn.Timeslots[1] != -1)
                 {
                     var minutesInterval = TimeBase.GetTimeBase().RangeInterval;
                     var time = new DateTime(2000, 1, 1, 0, 0, 0);
-                    var minTimeString = time.AddMinutes(minutesInterval * npcSpawn.MinTime).ToString("h:mm tt");
-                    var maxTimeString = time.AddMinutes(minutesInterval * (npcSpawn.MaxTime + 1)).ToString("h:mm tt");
+                    var minTimeString = time.AddMinutes(minutesInterval * npcSpawn.Timeslots[0]).ToString("h:mm tt");
+                    var maxTimeString = time.AddMinutes(minutesInterval * (npcSpawn.Timeslots[1] + 1)).ToString("h:mm tt");
                     timeformat = Strings.MapLayers.spawntime.ToString(minTimeString, maxTimeString);
                 }
                 var condition = "";

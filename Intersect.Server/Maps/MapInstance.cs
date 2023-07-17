@@ -624,8 +624,8 @@ namespace Intersect.Server.Maps
             for (var i = 0; i < Spawns.Count; i++)
             {
                 // MinTime or MaxTime to -1 means we can spawn at anytime
-                if ( Spawns[i].MinTime == -1 || Spawns[i].MaxTime == -1 ||
-                    Time.IsTimeRangeBetween(Spawns[i].MinTime, Spawns[i].MaxTime))
+                if ( Spawns[i].Timeslots[0] == -1 || Spawns[i].Timeslots[1] == -1 ||
+                    Time.IsTimeRangeBetween(Spawns[i].Timeslots[0], Spawns[i].Timeslots[1]))
                 {
                     TrySpawnMapNpc(i);
                 }
@@ -676,10 +676,10 @@ namespace Intersect.Server.Maps
                     {
                         dir = (byte)Randomization.Next(0, 4);
                     }
-                    var spawnLevel = Spawns[i].MinLevel;
-                    if (Spawns[i].MinLevel != Spawns[i].MaxLevel)
+                    var spawnLevel = Spawns[i].Levels[0];
+                    if (Spawns[i].Levels[0] != Spawns[i].Levels[1])
                     {
-                        spawnLevel = Randomization.Next(Spawns[i].MinLevel, Spawns[i].MaxLevel + 1);
+                        spawnLevel = Randomization.Next(Spawns[i].Levels[0], Spawns[i].Levels[1] + 1);
                     }
                     if (spawnLevel > npcBase.Level + npcBase.LevelRange || spawnLevel < npcBase.Level - npcBase.LevelRange)
                     {
@@ -1041,8 +1041,8 @@ namespace Intersect.Server.Maps
                 for (var i = 0; i < Spawns.Count; i++)
                 {
                     // MinTime or MaxTime to -1 means we can spawn at anytime
-                    var isInTimeInterval = Spawns[i].MinTime == -1 || Spawns[i].MaxTime == -1 ||
-                        Time.IsTimeRangeBetween(Spawns[i].MinTime, Spawns[i].MaxTime);
+                    var isInTimeInterval = Spawns[i].Timeslots[0] == -1 || Spawns[i].Timeslots[1] == -1 ||
+                        Time.IsTimeRangeBetween(Spawns[i].Timeslots[0], Spawns[i].Timeslots[1]);
                     if (NpcSpawnInstances.ContainsKey(Spawns[i]))
                     {
                         var npcSpawnInstance = NpcSpawnInstances[Spawns[i]];

@@ -18,13 +18,9 @@ namespace Intersect.GameObjects.Maps
 
         public int Y;
 
-        public int MinLevel;
+        public int[] Levels { get; set; } = { 0, 0 };
 
-        public int MaxLevel;
-
-        public int MinTime = -1;
-
-        public int MaxTime = -1;
+        public int[] Timeslots { get; set; } = { -1, -1 };
 
         public List<int> InactiveSpawns = new List<int>();
 
@@ -42,10 +38,10 @@ namespace Intersect.GameObjects.Maps
             X = copy.X;
             Y = copy.Y;
             Direction = copy.Direction;
-            MinLevel = copy.MinLevel;
-            MaxLevel = copy.MaxLevel;
-            MinTime = copy.MinTime;
-            MaxTime = copy.MaxTime;
+            Levels = new int[2];
+            copy.Levels.CopyTo(Levels, 0);
+            Timeslots = new int[2];
+            copy.Timeslots.CopyTo(Timeslots, 0);
             InactiveSpawns = new List<int>(copy.InactiveSpawns);
         }
 
