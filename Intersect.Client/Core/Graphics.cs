@@ -236,6 +236,8 @@ namespace Intersect.Client.Core
             var targets = Globals.Me.FindTargets();
             Globals.Me.DrawPreviewSpell(targets);
 
+            DrawDespawnAnimations();
+
             foreach (var animInstance in animations)
             {
                 animInstance.Draw(false);
@@ -1125,6 +1127,33 @@ namespace Intersect.Client.Core
                 }
 
                 sLightUpdate = Globals.System.GetTimeMs();
+            }
+        }
+
+        public static void DrawDespawnAnimations()
+        {
+            List<Guid> idsToRemove = new List<Guid>();
+            foreach(var despawn in Globals.DespawnAnimations)
+            {
+                if (despawn.Value.DespawnExpansionTimer < Globals.System.GetTimeMs())
+                {
+                    despawn.Value.DespawnExpansionTimer = Globals.System.GetTimeMs() + Options.Npc.DespawnExpansionFrameDuration;
+                    despawn.Value.DespawnExpansion++;
+                    if (despawn.Value.DespawnExpansion >= Options.Npc.SpawnExpansionFramesPercentage.Length)
+                    {
+                        despawn.Value.DespawnExpansion = -1;
+                        idsToRemove.Add(despawn.Key);
+                    }
+                }
+                if (despawn.Value.DespawnExpansion > -1)
+                {
+                    despawn.Value.Draw();
+                }
+            }
+
+            foreach(var id in idsToRemove)
+            {
+                Globals.DespawnAnimations.Remove(id);
             }
         }
 

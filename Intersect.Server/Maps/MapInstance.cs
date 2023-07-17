@@ -760,7 +760,7 @@ namespace Intersect.Server.Maps
                 };
 
                 AddEntity(npc);
-                PacketSender.SendEntityDataToProximity(npc);
+                PacketSender.SendEntityDataToProximity(npc, null, true);
 
                 return npc;
             }
@@ -1096,7 +1096,7 @@ namespace Intersect.Server.Maps
                             // Spawn instance is not anymore in time, need to despawn
                             lock (npcSpawnInstance.Entity.EntityLock)
                             {
-                                npcSpawnInstance.Entity.Die(false);
+                                npcSpawnInstance.Entity.Die(false, null, true);
                             }
                             NpcSpawnInstances.TryRemove(Spawns[i], out var spawnRemoved);
                             Spawns[i].RandomSpawnTimer = 0;

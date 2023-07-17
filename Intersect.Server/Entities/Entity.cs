@@ -3317,7 +3317,7 @@ namespace Intersect.Server.Entities
         }
 
         //Spawning/Dying
-        public virtual void Die(bool dropItems = true, Entity killer = null)
+        public virtual void Die(bool dropItems = true, Entity killer = null, bool isDespawn = false)
         {
             if (IsDead() || Items == null)
             {
@@ -3566,7 +3566,7 @@ namespace Intersect.Server.Entities
         {
         }
 
-        public virtual EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null)
+        public virtual EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null, bool isSpawn = false)
         {
             if (packet == null)
             {

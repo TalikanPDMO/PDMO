@@ -688,7 +688,7 @@ namespace Intersect.Server.Entities
             return killSpawn;
         }
 
-        public override void Die(bool dropItems = true, Entity killer = null)
+        public override void Die(bool dropItems = true, Entity killer = null, bool isDespawn = false)
         {
             for (var i = 0; i < Spawns.Length; i++)
             {
@@ -698,7 +698,7 @@ namespace Intersect.Server.Entities
             MapInstance.Get(MapId).RemoveProjectile(this);
         }
 
-        public override EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null)
+        public override EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null, bool isSpawn = false)
         {
             if (packet == null)
             {

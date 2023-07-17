@@ -344,14 +344,14 @@ namespace Intersect.Server.Networking
         }
 
         //EntityPacket
-        public static void SendEntityDataTo(Player player, Entity en)
+        public static void SendEntityDataTo(Player player, Entity en, bool isSpawn = false)
         {
             if (en == null)
             {
                 return;
             }
 
-            var packet = en.EntityPacket(null, player);
+            var packet = en.EntityPacket(null, player, isSpawn);
             packet.IsSelf = en == player;
 
             player.SendPacket(packet);
@@ -428,7 +428,7 @@ namespace Intersect.Server.Networking
         }
 
         //EntityDataPacket
-        public static void SendEntityDataToProximity(Entity en, Player except = null)
+        public static void SendEntityDataToProximity(Entity en, Player except = null, bool isSpawn = false)
         {
             if (en == null)
             {
@@ -447,7 +447,7 @@ namespace Intersect.Server.Networking
                     {
                         if (player != except)
                         {
-                            SendEntityDataTo(player, en);
+                            SendEntityDataTo(player, en, isSpawn);
                         }
                     }
                 }
@@ -915,9 +915,9 @@ namespace Intersect.Server.Networking
         }
 
         //EntityDiePacket
-        public static void SendEntityDie(Entity en)
+        public static void SendEntityDie(Entity en, bool isDespawn = false)
         {
-            SendDataToProximity(en.MapId, new EntityDiePacket(en.Id, en.GetEntityType(), en.MapId));
+            SendDataToProximity(en.MapId, new EntityDiePacket(en.Id, en.GetEntityType(), en.MapId, isDespawn));
         }
 
         //EntityDirectionPacket

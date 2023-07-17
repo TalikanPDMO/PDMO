@@ -726,7 +726,7 @@ namespace Intersect.Server.Entities
         }
 
         //Sending Data
-        public override EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null)
+        public override EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null, bool isSpawn = false)
         {
             if (packet == null)
             {
@@ -812,7 +812,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public override void Die(bool dropItems = true, Entity killer = null)
+        public override void Die(bool dropItems = true, Entity killer = null, bool isDespawn = false)
         {
             //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
             if (Options.Combat.EnableCombatChatMessages) // Ce premier message indique au joueur sur ce compte qu'il vient d'être mis KO par un mob / joueur

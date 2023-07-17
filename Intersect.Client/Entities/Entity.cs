@@ -171,6 +171,14 @@ namespace Intersect.Client.Entities
 
         public long SpriteFrameTimer = -1;
 
+        public int SpawnExpansion = -1;
+
+        public long SpawnExpansionTimer = 0;
+
+        public int DespawnExpansion = -1;
+
+        public long DespawnExpansionTimer = 0;
+
         public long LastActionTime = -1;
         #endregion
 
@@ -771,6 +779,16 @@ namespace Intersect.Client.Entities
                 }
             }
 
+            if (SpawnExpansion > -1 && SpawnExpansionTimer < Globals.System.GetTimeMs())
+            {
+                SpawnExpansionTimer = Globals.System.GetTimeMs() + Options.Npc.SpawnExpansionFrameDuration;
+                SpawnExpansion++;
+                if (SpawnExpansion >= Options.Npc.SpawnExpansionFramesPercentage.Length)
+                {
+                    SpawnExpansion = -1;
+                }
+            }
+
             CalculateCenterPos();
 
             List<Animation> animsToRemove = null;
@@ -1069,10 +1087,6 @@ namespace Intersect.Client.Entities
                         else
                         {
                             //Restore Original Attacking/Blocking Code
-                            if (this == Globals.Me)
-                            {
-                                var t = texture;
-                            }
                             srcRectangle = new FloatRect(
                                 WalkFrame * (int) texture.GetWidth() / SpriteFrames, d * (int) texture.GetHeight() / Options.Instance.Sprites.Directions,
                                 (int) texture.GetWidth() / SpriteFrames, (int) texture.GetHeight() / Options.Instance.Sprites.Directions
@@ -1081,10 +1095,6 @@ namespace Intersect.Client.Entities
                     }
                     else
                     {
-                        if (this == Globals.Me)
-                        {
-                            var t = texture;
-                        }
                         srcRectangle = new FloatRect(
                             SpriteFrame * (int)texture.GetWidth() / SpriteFrames, d * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
                             (int)texture.GetWidth() / SpriteFrames, (int)texture.GetHeight() / Options.Instance.Sprites.Directions
@@ -1096,7 +1106,28 @@ namespace Intersect.Client.Entities
                 destRectangle.Height = srcRectangle.Height;
 
                 WorldPos = destRectangle;
-
+                if (SpawnExpansion > -1)
+                {
+                    destRectangle.Width = (int)(destRectangle.Width * Options.Npc.SpawnExpansionFramesPercentage[SpawnExpansion] / 100.0);
+                    if (destRectangle.Width < 3)
+                    {
+                        destRectangle.Width = 3;
+                    }
+                    destRectangle.Height = (int)(destRectangle.Height * Options.Npc.SpawnExpansionFramesPercentage[SpawnExpansion] / 100.0);
+                    if (destRectangle.Height < 3)
+                    {
+                        destRectangle.Height = 3;
+                    }
+                    destRectangle.X = GetCenterPos().X -destRectangle.Width / 2;
+                    destRectangle.Y = GetCenterPos().Y - destRectangle.Height / 2;
+                }
+                if (DespawnExpansion > -1)
+                {
+                    destRectangle.Width = (int)(destRectangle.Width * Options.Npc.DespawnExpansionFramesPercentage[DespawnExpansion] / 100.0);
+                    destRectangle.Height = (int)(destRectangle.Height * Options.Npc.DespawnExpansionFramesPercentage[DespawnExpansion] / 100.0);
+                    destRectangle.X = GetCenterPos(true).X - destRectangle.Width / 2;
+                    destRectangle.Y = GetCenterPos(true).Y - destRectangle.Height / 2;
+                }
                 int pDollIndex = Dir; // Actually it's because the index would've been outside of the bounds
                 if (Dir == 4 || Dir == 6)
                 {
@@ -1330,9 +1361,9 @@ namespace Intersect.Client.Entities
         }
 
         //returns the point on the screen that is the center of the player sprite
-        public Pointf GetCenterPos()
+        public Pointf GetCenterPos(bool force = false)
         {
-            if (LatestMap == null)
+            if (LatestMap == null && !force)
             {
                 return new Pointf(0, 0);
             }

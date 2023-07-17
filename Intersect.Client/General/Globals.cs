@@ -42,10 +42,11 @@ namespace Intersect.Client.General
         public static GameDatabase Database;
 
         //Entities and stuff
-        //public static List<Entity> Entities = new List<Entity>();
         public static Dictionary<Guid, Entity> Entities = new Dictionary<Guid, Entity>();
 
         public static List<Guid> EntitiesToDispose = new List<Guid>();
+
+        public static Dictionary<Guid, Entity> DespawnAnimations = new Dictionary<Guid, Entity>();
 
         //Control Objects
         public static List<Dialog> EventDialogs = new List<Dialog>();
