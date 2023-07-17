@@ -48,6 +48,8 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore] public bool Running = false;
 
+        [NotMapped, JsonIgnore] public bool CanDespawn = true;
+
         [NotMapped, JsonIgnore] public Resource CollidedResource { get; set; } = null;
 
         public Entity() : this(Guid.NewGuid())
@@ -2272,6 +2274,9 @@ namespace Intersect.Server.Entities
                         dmgMap.TryGetValue(this, out var damage);
                         dmgMap[this] = damage + baseDamage;
 
+                        //No despawn during a fight
+                        enemyNpc.CanDespawn = false;
+
                         enemyNpc.LootMap.TryAdd(Id, true);
                         enemyNpc.LootMapCache = enemyNpc.LootMap.Keys.ToArray();
                         enemyNpc.TryFindNewTarget(Timing.Global.Milliseconds, default, false, this);
@@ -3312,7 +3317,7 @@ namespace Intersect.Server.Entities
         }
 
         //Spawning/Dying
-        public virtual void Die(bool dropItems = true, Entity killer = null)
+        public virtual void Die(bool dropItems = true, Entity killer = null, bool isDespawn = false)
         {
             if (IsDead() || Items == null)
             {
@@ -3561,7 +3566,7 @@ namespace Intersect.Server.Entities
         {
         }
 
-        public virtual EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null)
+        public virtual EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null, bool isSpawn = false)
         {
             if (packet == null)
             {

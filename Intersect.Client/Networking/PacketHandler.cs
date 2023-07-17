@@ -280,6 +280,11 @@ namespace Intersect.Client.Networking
             {
                 Globals.Entities.Add(packet.EntityId, new Entity(packet.EntityId, packet));
                 Globals.Entities[packet.EntityId].Type = packet.Aggression;
+                if (packet.IsSpawn)
+                {
+                    Globals.Entities[packet.EntityId].SpawnExpansion = 0;
+                    Globals.Entities[packet.EntityId].SpawnExpansionTimer = Globals.System.GetTimeMs() + Options.Npc.SpawnExpansionFrameDuration;
+                }
             }
         }
 
@@ -1043,6 +1048,12 @@ namespace Intersect.Client.Networking
                 }
                 
                 en = Globals.Entities[id];
+                if (packet.IsDespawn && !Globals.DespawnAnimations.ContainsKey(id))
+                {
+                    en.DespawnExpansion = 0;
+                    en.DespawnExpansionTimer = Globals.System.GetTimeMs() + Options.Npc.DespawnExpansionFrameDuration;
+                    Globals.DespawnAnimations.Add(id, en);
+                }
             }
             else
             {

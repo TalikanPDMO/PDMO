@@ -46,6 +46,17 @@
 
         public int SpellCastFrequencyCheck = 1000;
 
+        public int MinRandomSpawnTime = 2000;
+
+        public int MaxRandomSpawnTime = 5000;
+
+        public int SpawnExpansionFrameDuration = 100;
+
+        public int[] SpawnExpansionFramesPercentage = { 1, 25, 50, 75 };
+
+        public int DespawnExpansionFrameDuration = 100;
+
+        public int[] DespawnExpansionFramesPercentage = { 75, 50, 25, 1 };
     }
 
 }

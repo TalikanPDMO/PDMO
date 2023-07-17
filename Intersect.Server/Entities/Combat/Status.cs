@@ -193,6 +193,8 @@ namespace Intersect.Server.Entities.Combat
                     {
                         targetNpc.DamageMap[Attacker] = targetNpc.DamageMap.ToArray().Max(x => x.Value) + 1;
                     }
+                    //No despawn during a fight
+                    targetNpc.CanDespawn = false;
                 }
                 else
                 {

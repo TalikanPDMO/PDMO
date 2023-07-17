@@ -98,6 +98,18 @@ namespace Intersect.Server.General
             return sGameTime;
         }
 
+        public static bool IsTimeRangeBetween(int min, int max)
+        {
+            if (min > max)
+            {
+                return sTimeRange <= min && sTimeRange <= max || sTimeRange >= min && sTimeRange >= max;
+            }
+            else
+            {
+                return sTimeRange >= min && sTimeRange <= max;
+            }
+        }
+
     }
 
 }

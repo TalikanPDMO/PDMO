@@ -4006,9 +4006,20 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString title = @"Map Layers";
 
-            public static LocalizedString spawnuniquelevel = @"{00} | Level {01}";
+            public static LocalizedString spawnlistformat = @"{00}) {01} | {02} | {03} {04}";
 
-            public static LocalizedString spawnmultiplelevel = @"{00} | Level {01}-{02}";
+            public static LocalizedString spawnuniquelevel = @"Level {00}";
+
+            public static LocalizedString spawnmultiplelevel = @"Level {00}-{01}";
+
+            public static LocalizedString spawntime = @"{00} To {01}";
+
+            public static LocalizedString spawnanytime = @"Anytime";
+
+            public static LocalizedString indexerror = @"INDEX_ERROR";
+
+            public static LocalizedString condition = @"(C)";
+
 
         }
 
@@ -4565,7 +4576,7 @@ Tick timer saved in server config.json.";
         public struct NpcSpawns
         {
 
-            public static LocalizedString add = @"Add";
+            public static LocalizedString add = @"Add NPC";
 
             public static LocalizedString addremove = @"Add/Remove Map NPCs";
 
@@ -4577,15 +4588,24 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString maxlevel = @"Max. Level:";
 
+            public static LocalizedString timeslot = @"Time Slot:";
+
             public static LocalizedString randomdirection = @"Random";
 
             public static LocalizedString randomlocation = @"Random";
 
-            public static LocalizedString remove = @"Remove";
+            public static LocalizedString remove = @"Remove NPC";
 
             public static LocalizedString spawndeclared = @"Spawn Location: Declared";
 
             public static LocalizedString spawnrandom = @"Spawn Location: Random";
+
+            public static LocalizedString addinactive = @"Add";
+
+            public static LocalizedString removeinactive = @"Remove";
+
+            public static LocalizedString inactivespawns = @"Need other Inactive Spawns:";
+
 
         }
 

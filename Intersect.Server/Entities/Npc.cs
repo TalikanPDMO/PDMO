@@ -191,7 +191,7 @@ namespace Intersect.Server.Entities
             return EntityTypes.GlobalEntity;
         }
 
-        public override void Die(bool generateLoot = true, Entity killer = null)
+        public override void Die(bool generateLoot = true, Entity killer = null, bool isDespawn = false)
         {
             lock (EntityLock) {
 
@@ -217,7 +217,7 @@ namespace Intersect.Server.Entities
 
 
                 MapInstance.Get(MapId).RemoveEntity(this);
-                PacketSender.SendEntityDie(this);
+                PacketSender.SendEntityDie(this, isDespawn);
                 PacketSender.SendEntityLeave(this);
             }
         }
@@ -1124,6 +1124,7 @@ namespace Intersect.Server.Entities
                                 PacketSender.SendEntityStats(this);
                                 PacketSender.SendEntityDataToProximity(this);
                                 mResetPhase = 0;
+                                CanDespawn = true;
                             }
                             else
                             {
@@ -2054,6 +2055,7 @@ namespace Intersect.Server.Entities
                 PacketSender.SendEntityStats(this);
                 PacketSender.SendEntityDataToProximity(this);
                 mResetPhase = 0;
+                CanDespawn = true;
             }
         }
 
@@ -2137,7 +2139,7 @@ namespace Intersect.Server.Entities
             return 2;
         }
 
-        public override EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null)
+        public override EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null, bool isSpawn = false)
         {
             if (packet == null)
             {
@@ -2148,7 +2150,7 @@ namespace Intersect.Server.Entities
 
             var pkt = (NpcEntityPacket) packet;
             pkt.Aggression = GetAggression(forPlayer);
-
+            pkt.IsSpawn = isSpawn;
             return pkt;
         }
 

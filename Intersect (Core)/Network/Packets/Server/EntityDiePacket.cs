@@ -13,11 +13,12 @@ namespace Intersect.Network.Packets.Server
         {
         }
 
-        public EntityDiePacket(Guid id, EntityTypes type, Guid mapId)
+        public EntityDiePacket(Guid id, EntityTypes type, Guid mapId, bool isDespawn = false)
         {
             Id = id;
             Type = type;
             MapId = mapId;
+            IsDespawn = isDespawn;
         }
 
         [Key(0)]
@@ -28,6 +29,9 @@ namespace Intersect.Network.Packets.Server
 
         [Key(2)]
         public Guid MapId { get; set; }
+
+        [Key(3)]
+        public bool IsDespawn { get; set; }
     }
 
 }

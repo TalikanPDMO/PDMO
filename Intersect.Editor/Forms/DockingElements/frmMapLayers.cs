@@ -780,7 +780,29 @@ namespace Intersect.Editor.Forms.DockingElements
             lstMapNpcs.Items.Clear();
             for (var i = 0; i < Globals.CurrentMap.Spawns.Count; i++)
             {
-                lstMapNpcs.Items.Add(FormatNpcSpawn(Globals.CurrentMap.Spawns[i]));
+                lstMapNpcs.Items.Add(FormatNpcSpawn(Globals.CurrentMap.Spawns[i], i));
+            }
+            cmbMinTime.Items.Clear();
+            cmbMaxTime.Items.Clear();
+            cmbMinTime.Items.Add(Strings.MapLayers.spawnanytime);
+            cmbMaxTime.Items.Add(Strings.MapLayers.spawnanytime);
+            var time = new DateTime(2000, 1, 1, 0, 0, 0);
+            var duration = TimeBase.GetTimeBase().RangeInterval;
+            for (var i = 0; i < 1440; i += duration)
+            {
+                var addRange = time.ToString("h:mm:ss tt") + " " + Strings.TimeEditor.to + " ";
+                time = time.AddMinutes(duration);
+                addRange += time.ToString("h:mm:ss tt");
+                cmbMinTime.Items.Add(addRange);
+                cmbMaxTime.Items.Add(addRange);
+            }
+            if (cmbMinTime.Items.Count > 0)
+            {
+                cmbMinTime.SelectedIndex = 0;
+            }
+            if (cmbMaxTime.Items.Count > 0)
+            {
+                cmbMaxTime.SelectedIndex = 0;
             }
 
             // Don't select if there are no NPCs, to avoid crashes.
@@ -804,6 +826,51 @@ namespace Intersect.Editor.Forms.DockingElements
                     }
                 }
             }
+            nudInactiveSpawn.Maximum = Math.Max(0, lstMapNpcs.Items.Count - 1);
+        }
+
+        public void RefreshInactiveSpawnsList()
+        {
+            if (lstMapNpcs.Items.Count > 0 && lstMapNpcs.SelectedIndex > -1)
+            {
+                var spawn = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex];
+                if (spawn != null)
+                {
+                    lstInactiveSpawns.Items.Clear();
+                    for (var i = 0; i < spawn.InactiveSpawns.Count; i++)
+                    {
+                        if (spawn.InactiveSpawns[i] < Globals.CurrentMap.Spawns.Count)
+                        {
+                            var npcBase = NpcBase.Get(Globals.CurrentMap.Spawns[spawn.InactiveSpawns[i]].NpcId);
+                            if (npcBase != null)
+                            {  
+                               lstInactiveSpawns.Items.Add(new KeyValuePair<int, string>(spawn.InactiveSpawns[i], TextUtils.FormatEditorName(npcBase.Name, npcBase.EditorName)));
+                            }
+                            else
+                            {
+                                lstInactiveSpawns.Items.Add(new KeyValuePair<int, string>(spawn.InactiveSpawns[i], NpcBase.Deleted));
+                            }
+                        }
+                        else
+                        {
+                            lstInactiveSpawns.Items.Add(new KeyValuePair<int, string>(spawn.InactiveSpawns[i], Strings.MapLayers.indexerror));
+                        }
+                        
+                    }
+                }
+            }
+            if (lstInactiveSpawns.Items.Count > 0)
+            {
+                lstInactiveSpawns.SelectedIndex = 0;
+            }
+        }
+
+        private void lstInactiveSpawns_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstInactiveSpawns.Items.Count > 0 && lstInactiveSpawns.SelectedIndex > -1)
+            {
+                //TODO Something here
+            }
         }
 
         private void frmMapLayers_DockStateChanged(object sender, EventArgs e)
@@ -823,12 +890,19 @@ namespace Intersect.Editor.Forms.DockingElements
                 n.X = -1;
                 n.Y = -1;
                 n.Direction = NpcSpawnDirection.Random;
-                n.MinLevel = (int)nudMinLevel.Value;
-                n.MaxLevel = (int)nudMaxLevel.Value;
+                n.Levels[0] = (int)nudMinLevel.Value;
+                n.Levels[1] = (int)nudMaxLevel.Value;
+                n.Timeslots[0] = cmbMinTime.SelectedIndex - 1;
+                n.Timeslots[1] = cmbMaxTime.SelectedIndex - 1;
+                foreach(var item in lstInactiveSpawns.Items)
+                {
+                    n.InactiveSpawns.Add(((KeyValuePair<int, string>)item).Key);
+                }
                 Globals.CurrentMap.Spawns.Add(n);
-                lstMapNpcs.Items.Add(FormatNpcSpawn(n));
+                lstMapNpcs.Items.Add(FormatNpcSpawn(n, lstMapNpcs.Items.Count));
                 lstMapNpcs.SelectedIndex = lstMapNpcs.Items.Count - 1;
             }
+            nudInactiveSpawn.Maximum = Math.Max(0, lstMapNpcs.Items.Count - 1);
         }
 
         private void btnRemoveMapNpc_Click(object sender, EventArgs e)
@@ -836,18 +910,92 @@ namespace Intersect.Editor.Forms.DockingElements
             if (lstMapNpcs.SelectedIndex > -1)
             {
                 Globals.CurrentMap.Spawns.RemoveAt(lstMapNpcs.SelectedIndex);
+                foreach (var spawn in Globals.CurrentMap.Spawns)
+                {
+                    spawn.InactiveSpawns.Remove(lstMapNpcs.SelectedIndex);
+                    for (var i = 0; i<spawn.InactiveSpawns.Count; i++)
+                    {
+                        if (spawn.InactiveSpawns[i] > lstMapNpcs.SelectedIndex)
+                        {
+                            spawn.InactiveSpawns[i]--;
+                        }
+                    }
+                }
                 lstMapNpcs.Items.RemoveAt(lstMapNpcs.SelectedIndex);
 
                 // Refresh List
                 lstMapNpcs.Items.Clear();
                 for (var i = 0; i < Globals.CurrentMap.Spawns.Count; i++)
                 {
-                    lstMapNpcs.Items.Add(FormatNpcSpawn(Globals.CurrentMap.Spawns[i]));
+                    lstMapNpcs.Items.Add(FormatNpcSpawn(Globals.CurrentMap.Spawns[i], i));
                 }
 
                 if (lstMapNpcs.Items.Count > 0)
                 {
                     lstMapNpcs.SelectedIndex = 0;
+                }
+                nudInactiveSpawn.Maximum = Math.Max(0, lstMapNpcs.Items.Count - 1);
+            }
+        }
+
+        private void btnAddInactiveSpawn_Click(object sender, EventArgs e)
+        {
+            //Don't add nothing if incorrect value
+            if (nudInactiveSpawn.Value < Globals.CurrentMap.Spawns.Count && lstMapNpcs.Items.Count > 0)
+            { 
+                foreach(var item in lstInactiveSpawns.Items)
+                {
+                    if (((KeyValuePair<int, string>)item).Key == nudInactiveSpawn.Value)
+                    {
+                        //Don't add existing value
+                        return;
+                    }
+                }
+                var npcBase = NpcBase.Get(Globals.CurrentMap.Spawns[(int)nudInactiveSpawn.Value].NpcId);
+                
+                if (lstMapNpcs.SelectedIndex > -1)
+                {
+                    if (nudInactiveSpawn.Value != lstMapNpcs.SelectedIndex)
+                    {
+                        //Dont't add self
+                        lstInactiveSpawns.Items.Add(new KeyValuePair<int, string>((int)nudInactiveSpawn.Value, TextUtils.FormatEditorName(npcBase.Name, npcBase.EditorName)));
+                        Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].InactiveSpawns.Add((int)nudInactiveSpawn.Value);
+                        // Refresh List
+                        var n = lstMapNpcs.SelectedIndex;
+                        lstMapNpcs.Items.Clear();
+                        for (var i = 0; i < Globals.CurrentMap.Spawns.Count; i++)
+                        {
+                            lstMapNpcs.Items.Add(FormatNpcSpawn(Globals.CurrentMap.Spawns[i], i));
+                        }
+
+                        lstMapNpcs.SelectedIndex = n;
+                    } 
+                }
+                else
+                {
+                    lstInactiveSpawns.Items.Add(new KeyValuePair<int, string>((int)nudInactiveSpawn.Value, TextUtils.FormatEditorName(npcBase.Name, npcBase.EditorName)));
+                }
+            }
+        }
+
+        private void btnRemoveInactiveSpawn_Click(object sender, EventArgs e)
+        {
+            if (lstInactiveSpawns.SelectedIndex > -1)
+            {
+                var removepos = lstInactiveSpawns.SelectedIndex;
+                lstInactiveSpawns.Items.RemoveAt(removepos);
+                if (lstMapNpcs.Items.Count > 0 && lstMapNpcs.SelectedIndex > -1)
+                {
+                    Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].InactiveSpawns.RemoveAt(removepos);
+                    // Refresh List
+                    var n = lstMapNpcs.SelectedIndex;
+                    lstMapNpcs.Items.Clear();
+                    for (var i = 0; i < Globals.CurrentMap.Spawns.Count; i++)
+                    {
+                        lstMapNpcs.Items.Add(FormatNpcSpawn(Globals.CurrentMap.Spawns[i], i));
+                    }
+
+                    lstMapNpcs.SelectedIndex = n;
                 }
             }
         }
@@ -865,25 +1013,27 @@ namespace Intersect.Editor.Forms.DockingElements
                 if (npcBase != null)
                 {
                     // Try to keep the current min/max level if possible.
-                    if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MinLevel == 0)
+                    if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Levels[0] == 0)
                     {
                         // If 0, we keep the default level (for compatibility before the feature) 
                         nudMinLevel.Value = npcBase.Level;
                     }
                     else
                     {
-                        nudMinLevel.Value = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MinLevel;
+                        nudMinLevel.Value = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Levels[0];
                     }
-                    if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MaxLevel == 0)
+                    if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Levels[1] == 0)
                     {
                         // If 0, we keep the default level (for compatibility before the feature) 
                         nudMaxLevel.Value = npcBase.Level;
                     }
                     else
                     {
-                        nudMaxLevel.Value = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MaxLevel;
+                        nudMaxLevel.Value = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Levels[1];
                     }
                 }
+                cmbMinTime.SelectedIndex = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Timeslots[0] + 1;
+                cmbMaxTime.SelectedIndex = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Timeslots[1] + 1;
                 cmbNpc.SelectedIndex = NpcBase.ListIndex(Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].NpcId);
                 cmbDir.SelectedIndex = (int) Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Direction;
                 if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].X >= 0)
@@ -908,6 +1058,7 @@ namespace Intersect.Editor.Forms.DockingElements
                     nudMaxLevel.Minimum = minlevel;
                     nudMaxLevel.Maximum = maxlevel;
                 }
+                RefreshInactiveSpawnsList();
             }
         }
 
@@ -967,7 +1118,7 @@ namespace Intersect.Editor.Forms.DockingElements
                 lstMapNpcs.Items.Clear();
                 for (var i = 0; i < Globals.CurrentMap.Spawns.Count; i++)
                 {
-                    lstMapNpcs.Items.Add(FormatNpcSpawn(Globals.CurrentMap.Spawns[i]));
+                    lstMapNpcs.Items.Add(FormatNpcSpawn(Globals.CurrentMap.Spawns[i], i));
                 }
 
                 lstMapNpcs.SelectedIndex = n;
@@ -988,14 +1139,14 @@ namespace Intersect.Editor.Forms.DockingElements
         {
             if (lstMapNpcs.SelectedIndex >= 0)
             {
-                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MinLevel = (int)nudMinLevel.Value;
+                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Levels[0] = (int)nudMinLevel.Value;
                 
                 // Refresh List
                 var n = lstMapNpcs.SelectedIndex;
                 lstMapNpcs.Items.Clear();
                 for (var i = 0; i < Globals.CurrentMap.Spawns.Count; i++)
                 {
-                    lstMapNpcs.Items.Add(FormatNpcSpawn(Globals.CurrentMap.Spawns[i]));
+                    lstMapNpcs.Items.Add(FormatNpcSpawn(Globals.CurrentMap.Spawns[i], i));
                 }
 
                 lstMapNpcs.SelectedIndex = n;
@@ -1006,13 +1157,59 @@ namespace Intersect.Editor.Forms.DockingElements
         {
             if (lstMapNpcs.SelectedIndex >= 0)
             {
-                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].MaxLevel = (int)nudMaxLevel.Value;
+                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Levels[1] = (int)nudMaxLevel.Value;
                 // Refresh List
                 var n = lstMapNpcs.SelectedIndex;
                 lstMapNpcs.Items.Clear();
                 for (var i = 0; i < Globals.CurrentMap.Spawns.Count; i++)
                 {
-                    lstMapNpcs.Items.Add(FormatNpcSpawn(Globals.CurrentMap.Spawns[i]));
+                    lstMapNpcs.Items.Add(FormatNpcSpawn(Globals.CurrentMap.Spawns[i], i));
+                }
+
+                lstMapNpcs.SelectedIndex = n;
+            }
+        }
+
+        private void cmbMinTime_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstMapNpcs.SelectedIndex >= 0)
+            {
+                var newtime = cmbMinTime.SelectedIndex - 1;
+                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Timeslots[0] = newtime;
+                if (newtime == -1)
+                {
+                    //Set Anytime to the MaxTime also
+                    cmbMaxTime.SelectedIndex = 0;
+                }
+                // Refresh List
+                var n = lstMapNpcs.SelectedIndex;
+                lstMapNpcs.Items.Clear();
+                for (var i = 0; i < Globals.CurrentMap.Spawns.Count; i++)
+                {
+                    lstMapNpcs.Items.Add(FormatNpcSpawn(Globals.CurrentMap.Spawns[i], i));
+                }
+
+                lstMapNpcs.SelectedIndex = n;
+            }
+        }
+
+        private void cmbMaxTime_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstMapNpcs.SelectedIndex >= 0)
+            {
+                var newtime = cmbMaxTime.SelectedIndex - 1;
+                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Timeslots[1] = newtime;
+                if (newtime == -1)
+                {
+                    //Set Anytime to the MinTime also
+                    cmbMinTime.SelectedIndex = 0;
+                }
+                // Refresh List
+                var n = lstMapNpcs.SelectedIndex;
+                lstMapNpcs.Items.Clear();
+                for (var i = 0; i < Globals.CurrentMap.Spawns.Count; i++)
+                {
+                    lstMapNpcs.Items.Add(FormatNpcSpawn(Globals.CurrentMap.Spawns[i], i));
                 }
 
                 lstMapNpcs.SelectedIndex = n;
@@ -1245,12 +1442,17 @@ namespace Intersect.Editor.Forms.DockingElements
             lblDir.Text = Strings.NpcSpawns.direction;
             lblMinLevel.Text = Strings.NpcSpawns.minlevel;
             lblMaxLevel.Text = Strings.NpcSpawns.maxlevel;
+            lblTimeSlot.Text = Strings.NpcSpawns.timeslot;
             cmbDir.Items.Clear();
             cmbDir.Items.Add(Strings.NpcSpawns.randomdirection);
             for (var i = 0; i < 4; i++)
             {
                 cmbDir.Items.Add(Strings.Directions.dir[i]);
             }
+
+            lblInactiveSpawns.Text = Strings.NpcSpawns.inactivespawns;
+            btnAddInactive.Text = Strings.NpcSpawns.addinactive;
+            btnRemoveInactive.Text = Strings.NpcSpawns.removeinactive;
 
             grpNpcList.Text = Strings.NpcSpawns.addremove;
             btnAddMapNpc.Text = Strings.NpcSpawns.add;
@@ -1449,23 +1651,33 @@ namespace Intersect.Editor.Forms.DockingElements
             }
         }
 
-        private string FormatNpcSpawn(NpcSpawn npcSpawn)
+        private string FormatNpcSpawn(NpcSpawn npcSpawn, int index)
         {
             var npc = NpcBase.Get(npcSpawn.NpcId);
             if (npc != null)
             {
-                if (npcSpawn.MinLevel == npcSpawn.MaxLevel)
+                var levelformat = Strings.MapLayers.spawnmultiplelevel.ToString(npcSpawn.Levels[0], npcSpawn.Levels[1]);
+                if (npcSpawn.Levels[0] == npcSpawn.Levels[1])
                 {
                     //For compatibility before the feature, avoid to display 0
-                    var minlevel = npcSpawn.MinLevel == 0 ? npc.Level : npcSpawn.MinLevel;
-                    return Strings.MapLayers.spawnuniquelevel.ToString(
-                        TextUtils.FormatEditorName(npc.Name, npc.EditorName), minlevel);
+                    levelformat = Strings.MapLayers.spawnuniquelevel.ToString(npcSpawn.Levels[0] == 0 ? npc.Level : npcSpawn.Levels[0]);
                 }
-                else
+                var timeformat = Strings.MapLayers.spawnanytime;
+                if (npcSpawn.Timeslots[0] != -1 && npcSpawn.Timeslots[1] != -1)
                 {
-                    return Strings.MapLayers.spawnmultiplelevel.ToString(
-                        TextUtils.FormatEditorName(npc.Name, npc.EditorName), npcSpawn.MinLevel, npcSpawn.MaxLevel);
+                    var minutesInterval = TimeBase.GetTimeBase().RangeInterval;
+                    var time = new DateTime(2000, 1, 1, 0, 0, 0);
+                    var minTimeString = time.AddMinutes(minutesInterval * npcSpawn.Timeslots[0]).ToString("h:mm tt");
+                    var maxTimeString = time.AddMinutes(minutesInterval * (npcSpawn.Timeslots[1] + 1)).ToString("h:mm tt");
+                    timeformat = Strings.MapLayers.spawntime.ToString(minTimeString, maxTimeString);
                 }
+                var condition = "";
+                if (npcSpawn.InactiveSpawns.Count > 0)
+                {
+                    condition = Strings.MapLayers.condition;
+                }
+                return Strings.MapLayers.spawnlistformat.ToString(index,
+                    TextUtils.FormatEditorName(npc.Name, npc.EditorName),levelformat, timeformat, condition);
             }
             return NpcBase.Deleted;
         }

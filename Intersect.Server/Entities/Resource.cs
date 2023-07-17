@@ -55,7 +55,7 @@ namespace Intersect.Server.Entities
             PacketSender.SendEntityLeave(this);
         }
 
-        public override void Die(bool dropItems = true, Entity killer = null)
+        public override void Die(bool dropItems = true, Entity killer = null, bool isDespawn = false)
         {
             lock (EntityLock)
             {
@@ -210,7 +210,7 @@ namespace Intersect.Server.Entities
             return IsDead() & Base.WalkableAfter || !IsDead() && Base.WalkableBefore;
         }
 
-        public override EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null)
+        public override EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null, bool isSpawn = false)
         {
             if (packet == null)
             {

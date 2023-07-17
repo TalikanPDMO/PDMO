@@ -14,6 +14,8 @@ namespace Intersect.Network.Packets.Server
         [Key(24)]
         public int Aggression { get; set; }
 
+        [Key(25)]
+        public bool IsSpawn { get; set; }
     }
 
 }
