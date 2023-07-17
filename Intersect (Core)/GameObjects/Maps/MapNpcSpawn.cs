@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using Intersect.Enums;
+using Newtonsoft.Json;
 
 namespace Intersect.GameObjects.Maps
 {
@@ -25,6 +27,10 @@ namespace Intersect.GameObjects.Maps
         public int MaxTime = -1;
 
         public List<int> InactiveSpawns = new List<int>();
+
+        [NotMapped]
+        [JsonIgnore]
+        public long RandomSpawnTimer = 0;
 
         public NpcSpawn()
         {
