@@ -311,12 +311,13 @@ namespace Intersect.Server.Entities.Events
             QuestBase questBase,
             Npc npcEnemy)
         {
+            var maxRange = 1440 / TimeBase.GetTimeBase().RangeInterval;
             if (condition.Ranges[0] > -1 &&
                 condition.Ranges[1] > -1 &&
-                condition.Ranges[0] < 1440 / TimeBase.GetTimeBase().RangeInterval &&
-                condition.Ranges[1] < 1440 / TimeBase.GetTimeBase().RangeInterval)
+                condition.Ranges[0] < maxRange &&
+                condition.Ranges[1] < maxRange)
             {
-                return Time.GetTimeRange() >= condition.Ranges[0] && Time.GetTimeRange() <= condition.Ranges[1];
+                return Time.IsTimeRangeBetween(condition.Ranges[0], condition.Ranges[1]);
             }
 
             return true;

@@ -621,12 +621,11 @@ namespace Intersect.Server.Maps
         //Npcs
         private void SpawnMapNpcs()
         {
-            var timeRange = Time.GetTimeRange();
             for (var i = 0; i < Spawns.Count; i++)
             {
                 // MinTime or MaxTime to -1 means we can spawn at anytime
                 if ( Spawns[i].MinTime == -1 || Spawns[i].MaxTime == -1 ||
-                    timeRange >= Spawns[i].MinTime && timeRange <= Spawns[i].MaxTime)
+                    Time.IsTimeRangeBetween(Spawns[i].MinTime, Spawns[i].MaxTime))
                 {
                     TrySpawnMapNpc(i);
                 }
@@ -1038,13 +1037,12 @@ namespace Intersect.Server.Maps
                     PacketSender.SendMapEntityStatusUpdate(this, statusUpdates.ToArray());
                 }
 
-                var timeRange = Time.GetTimeRange();
                 //Process NPC Respawns
                 for (var i = 0; i < Spawns.Count; i++)
                 {
                     // MinTime or MaxTime to -1 means we can spawn at anytime
                     var isInTimeInterval = Spawns[i].MinTime == -1 || Spawns[i].MaxTime == -1 ||
-                        timeRange >= Spawns[i].MinTime && timeRange <= Spawns[i].MaxTime;
+                        Time.IsTimeRangeBetween(Spawns[i].MinTime, Spawns[i].MaxTime);
                     if (NpcSpawnInstances.ContainsKey(Spawns[i]))
                     {
                         var npcSpawnInstance = NpcSpawnInstances[Spawns[i]];
