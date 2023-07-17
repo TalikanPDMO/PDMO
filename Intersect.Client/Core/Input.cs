@@ -193,7 +193,10 @@ namespace Intersect.Client.Core
                                         break;
 
                                     case Control.PickUp:
-                                        Globals.Me?.TryPickupItem(Globals.Me.MapInstance.Id, Globals.Me.Y * Options.MapWidth + Globals.Me.X);
+                                        if (Globals.Me?.MapInstance != null)
+                                        {
+                                            Globals.Me.TryPickupItem(Globals.Me.MapInstance.Id, Globals.Me.Y * Options.MapWidth + Globals.Me.X);
+                                        }
 
                                         break;
 
@@ -364,7 +367,10 @@ namespace Intersect.Client.Core
 
             if (XboxControllerMonitor.IsPickupKeyUptoDown(lastState))
             {
-                Globals.Me?.TryPickupItem(Globals.Me.MapInstance.Id, Globals.Me.Y * Options.MapWidth + Globals.Me.X);
+                if (Globals.Me?.MapInstance != null)
+                {
+                    Globals.Me.TryPickupItem(Globals.Me.MapInstance.Id, Globals.Me.Y * Options.MapWidth + Globals.Me.X);
+                }   
             }
 
             //Ouverture des menus
@@ -670,7 +676,7 @@ namespace Intersect.Client.Core
 
             if (Controls.Controls.ControlHasKey(Control.PickUp, key))
             {
-                if (Globals.Me.TryPickupItem(Globals.Me.MapInstance.Id, Globals.Me.Y * Options.MapWidth + Globals.Me.X, Guid.Empty, true))
+                if (Globals.Me.MapInstance!= null && Globals.Me.TryPickupItem(Globals.Me.MapInstance.Id, Globals.Me.Y * Options.MapWidth + Globals.Me.X, Guid.Empty, true))
                 {
                     return;
                 }
