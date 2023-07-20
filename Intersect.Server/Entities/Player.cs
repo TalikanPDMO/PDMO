@@ -1750,6 +1750,46 @@ namespace Intersect.Server.Entities
             }
         }
 
+        public void RecalculateKnownSpells()
+        {
+            foreach (var spellslot in Spells)
+            {
+                //Avoid empty slot with Guid Empty
+                if (spellslot.SpellId != Guid.Empty)
+                {
+                    var spell = SpellBase.Get(spellslot.SpellId);
+                    if (spell != null && Conditions.MeetsConditionLists(spell.CastingRequirements, this, null))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        //Spell doesn't exist anymore or requirements changed, forget it
+                        ForgetSpell(spellslot.Slot);
+                    }
+                }
+            }
+            var classBase = ClassBase.Get(ClassId);
+            foreach (var spellClass in classBase.Spells)
+            {
+                if (!KnowsSpell(spellClass.Id) && Level >= spellClass.Level)
+                {
+                    TryTeachSpell(new Spell(spellClass.Id));
+                }
+            }
+        }
+
+        public void RecalculateElementalTypes()
+        {
+            var classBase = ClassBase.Get(ClassId);
+            if (classBase != null)
+            {
+                for (var i = 0; i < ClassBase.MAX_ELEMENTAL_TYPES; i++)
+                {
+                    ElementalTypes[i] = (ElementalType)classBase.ElementalTypes[i];
+                }
+            }
+        }
         //Warping
         public override void Warp(Guid newMapId, float newX, float newY, bool adminWarp = false)
         {

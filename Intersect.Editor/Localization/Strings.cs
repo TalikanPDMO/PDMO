@@ -5293,7 +5293,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString cannotcast = @"Cannot Cast Message:";
 
-            public static LocalizedString requirementsbutton = @"Edit Casting Requirements";
+            public static LocalizedString requirementsbutton = @"Edit Requirements";
 
             public static LocalizedString save = @"Save";
 

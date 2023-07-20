@@ -2289,7 +2289,7 @@
     "projectile": "Projectile/Area:",
     "requirements": "Casting Requirements",
     "cannotcast": "Cannot Cast Message:",
-    "requirementsbutton": "Edit Casting Requirements",
+    "requirementsbutton": "Edit Requirements",
     "save": "Save",
     "scalingamount": "Scaling Amount (%):",
     "scalingstat": "Scaling Stat:",

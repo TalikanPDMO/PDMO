@@ -868,7 +868,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbCastTargetAnimation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbCastTargetAnimation.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbCastTargetAnimation.FormattingEnabled = true;
-            this.cmbCastTargetAnimation.Location = new System.Drawing.Point(68, 38);
+            this.cmbCastTargetAnimation.Location = new System.Drawing.Point(68, 84);
             this.cmbCastTargetAnimation.Name = "cmbCastTargetAnimation";
             this.cmbCastTargetAnimation.Size = new System.Drawing.Size(155, 21);
             this.cmbCastTargetAnimation.TabIndex = 58;
@@ -879,7 +879,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblCastTargetAnimation
             // 
             this.lblCastTargetAnimation.AutoSize = true;
-            this.lblCastTargetAnimation.Location = new System.Drawing.Point(2, 41);
+            this.lblCastTargetAnimation.Location = new System.Drawing.Point(2, 87);
             this.lblCastTargetAnimation.Name = "lblCastTargetAnimation";
             this.lblCastTargetAnimation.Size = new System.Drawing.Size(67, 13);
             this.lblCastTargetAnimation.TabIndex = 57;
@@ -887,7 +887,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnDynamicRequirements
             // 
-            this.btnDynamicRequirements.Location = new System.Drawing.Point(120, 62);
+            this.btnDynamicRequirements.Location = new System.Drawing.Point(119, 10);
             this.btnDynamicRequirements.Name = "btnDynamicRequirements";
             this.btnDynamicRequirements.Padding = new System.Windows.Forms.Padding(3);
             this.btnDynamicRequirements.Size = new System.Drawing.Size(103, 22);
@@ -898,7 +898,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblCannotCast
             // 
             this.lblCannotCast.AutoSize = true;
-            this.lblCannotCast.Location = new System.Drawing.Point(4, 70);
+            this.lblCannotCast.Location = new System.Drawing.Point(4, 19);
             this.lblCannotCast.Name = "lblCannotCast";
             this.lblCannotCast.Size = new System.Drawing.Size(114, 13);
             this.lblCannotCast.TabIndex = 56;
@@ -909,7 +909,7 @@ namespace Intersect.Editor.Forms.Editors
             this.txtCannotCast.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.txtCannotCast.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtCannotCast.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtCannotCast.Location = new System.Drawing.Point(3, 87);
+            this.txtCannotCast.Location = new System.Drawing.Point(3, 35);
             this.txtCannotCast.Name = "txtCannotCast";
             this.txtCannotCast.Size = new System.Drawing.Size(219, 20);
             this.txtCannotCast.TabIndex = 55;
@@ -928,7 +928,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbCastAnimation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbCastAnimation.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbCastAnimation.FormattingEnabled = true;
-            this.cmbCastAnimation.Location = new System.Drawing.Point(68, 14);
+            this.cmbCastAnimation.Location = new System.Drawing.Point(68, 60);
             this.cmbCastAnimation.Name = "cmbCastAnimation";
             this.cmbCastAnimation.Size = new System.Drawing.Size(155, 21);
             this.cmbCastAnimation.TabIndex = 20;
@@ -939,7 +939,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblCastAnimation
             // 
             this.lblCastAnimation.AutoSize = true;
-            this.lblCastAnimation.Location = new System.Drawing.Point(2, 17);
+            this.lblCastAnimation.Location = new System.Drawing.Point(2, 63);
             this.lblCastAnimation.Name = "lblCastAnimation";
             this.lblCastAnimation.Size = new System.Drawing.Size(66, 13);
             this.lblCastAnimation.TabIndex = 14;
