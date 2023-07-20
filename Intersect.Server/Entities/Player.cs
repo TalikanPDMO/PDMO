@@ -6363,15 +6363,26 @@ namespace Intersect.Server.Entities
                 return -5;
             }
 
+            // Consider the Holding only if the move do not come from a MoveRoute
+            if (MoveRoute == null && IsHeld())
+            {
+                return -5;
+            }
+            
+
+            return base.CanMove(moveDir);
+        }
+
+        public bool IsHeld()
+        {
             foreach (var evt in EventLookup)
             {
                 if (evt.Value.HoldingPlayer)
                 {
-                    return -5;
+                    return true;
                 }
             }
-
-            return base.CanMove(moveDir);
+            return false;
         }
 
         protected override int IsTileWalkable(MapInstance map, int x, int y, int z)

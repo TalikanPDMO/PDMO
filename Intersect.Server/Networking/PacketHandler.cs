@@ -1686,7 +1686,7 @@ namespace Intersect.Server.Networking
         public void HandlePacket(Client client, UseItemPacket packet)
         {
             var player = client?.Entity;
-            if (player == null)
+            if (player == null || player.IsHeld())
             {
                 return;
             }
@@ -1739,7 +1739,7 @@ namespace Intersect.Server.Networking
         public void HandlePacket(Client client, UseSpellPacket packet)
         {
             var player = client?.Entity;
-            if (player == null)
+            if (player == null || player.IsHeld())
             {
                 return;
             }

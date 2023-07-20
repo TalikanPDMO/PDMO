@@ -1049,7 +1049,7 @@ namespace Intersect.Client.Entities
                         break;
                 }
             }
-            if (!Running)
+            if (!Running && !IsBusy())
             {
                 //Ajouté par Moussmous pour la rotation du joueur (j'ai suivi le patch)
                 //Loop through our direction timers and keep track of how long we've been requesting to move in each direction
