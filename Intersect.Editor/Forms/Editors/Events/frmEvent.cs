@@ -281,7 +281,8 @@ namespace Intersect.Editor.Forms.Editors.Events
 
                 //Retrieve all npcs triggering the event on death
                 var npcList = NpcBase.Lookup.Where(pair => ((NpcBase)pair.Value)?.OnDeathEventId == MyEvent.Id
-                || ((NpcBase)pair.Value)?.OnDeathPartyEventId == MyEvent.Id)
+                || ((NpcBase)pair.Value)?.OnDeathPartyEventId == MyEvent.Id
+                || ((NpcBase)pair.Value)?.OnDeathAttackersEventId == MyEvent.Id)
                     .OrderBy(p => p.Value?.Name)
                     .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((NpcBase)pair.Value)?.EditorName) ?? NpcBase.Deleted)
                     .ToList();

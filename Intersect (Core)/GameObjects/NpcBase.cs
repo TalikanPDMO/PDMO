@@ -203,6 +203,17 @@ namespace Intersect.GameObjects
             set => OnDeathPartyEventId = value?.Id ?? Guid.Empty;
         }
 
+        [Column("OnDeathAttackersEvent")]
+        public Guid OnDeathAttackersEventId { get; set; }
+
+        [NotMapped]
+        [JsonIgnore]
+        public EventBase OnDeathAttackersEvent
+        {
+            get => EventBase.Get(OnDeathAttackersEventId);
+            set => OnDeathAttackersEventId = value?.Id ?? Guid.Empty;
+        }
+
         //Drops
         [Column("Drops")]
         [JsonIgnore]

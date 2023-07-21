@@ -713,6 +713,10 @@
     <Compile Include="Migrations\Game\20230710084601_AddingMinMaxLevelToNpcsAndSpawns.designer.cs">
       <DependentUpon>20230710084601_AddingMinMaxLevelToNpcsAndSpawns.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230720174105_AddingOnDeathAttackersEventToNpcs.cs" />
+    <Compile Include="Migrations\Game\20230720174105_AddingOnDeathAttackersEventToNpcs.designer.cs">
+      <DependentUpon>20230720174105_AddingOnDeathAttackersEventToNpcs.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

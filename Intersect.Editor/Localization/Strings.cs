@@ -4333,7 +4333,9 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString ondeathevent = @"On Death (for killer):";
 
-            public static LocalizedString ondeathpartyevent = @"On Death (for party):";
+            public static LocalizedString ondeathpartyevent = @"On Death (for killer's party):";
+
+            public static LocalizedString ondeathattackersevent = @"On Death (for all attackers):";
 
             public static LocalizedString paste = @"Paste Npc";
 

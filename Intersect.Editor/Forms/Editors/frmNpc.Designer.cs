@@ -212,6 +212,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.toolStripItemRelations = new System.Windows.Forms.ToolStripButton();
             this.searchableDarkTreeView1 = new Intersect.Editor.Forms.Controls.SearchableDarkTreeView();
+            this.cmbOnDeathEventAttackers = new DarkUI.Controls.DarkComboBox();
+            this.lblOnDeathEventAttackers = new System.Windows.Forms.Label();
             this.grpNpcs.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLevelRange)).BeginInit();
@@ -390,7 +392,7 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0,
             0});
-             this.nudLevelRange.ValueChanged += new System.EventHandler(this.nudLevelRange_ValueChanged);
+            this.nudLevelRange.ValueChanged += new System.EventHandler(this.nudLevelRange_ValueChanged);
             // 
             // grpTypes
             // 
@@ -1659,16 +1661,18 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpCommonEvents.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpCommonEvents.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpCommonEvents.Controls.Add(this.cmbOnDeathEventAttackers);
+            this.grpCommonEvents.Controls.Add(this.lblOnDeathEventAttackers);
             this.grpCommonEvents.Controls.Add(this.cmbOnDeathEventParty);
             this.grpCommonEvents.Controls.Add(this.lblOnDeathEventParty);
             this.grpCommonEvents.Controls.Add(this.cmbOnDeathEventKiller);
             this.grpCommonEvents.Controls.Add(this.lblOnDeathEventKiller);
             this.grpCommonEvents.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpCommonEvents.Location = new System.Drawing.Point(3, 1072);
+            this.grpCommonEvents.Location = new System.Drawing.Point(3, 1028);
             this.grpCommonEvents.Margin = new System.Windows.Forms.Padding(2);
             this.grpCommonEvents.Name = "grpCommonEvents";
             this.grpCommonEvents.Padding = new System.Windows.Forms.Padding(2);
-            this.grpCommonEvents.Size = new System.Drawing.Size(206, 98);
+            this.grpCommonEvents.Size = new System.Drawing.Size(206, 142);
             this.grpCommonEvents.TabIndex = 32;
             this.grpCommonEvents.TabStop = false;
             this.grpCommonEvents.Text = "Common Events";
@@ -1686,7 +1690,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbOnDeathEventParty.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbOnDeathEventParty.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbOnDeathEventParty.FormattingEnabled = true;
-            this.cmbOnDeathEventParty.Location = new System.Drawing.Point(12, 73);
+            this.cmbOnDeathEventParty.Location = new System.Drawing.Point(12, 72);
             this.cmbOnDeathEventParty.Name = "cmbOnDeathEventParty";
             this.cmbOnDeathEventParty.Size = new System.Drawing.Size(182, 21);
             this.cmbOnDeathEventParty.TabIndex = 21;
@@ -1697,11 +1701,11 @@ namespace Intersect.Editor.Forms.Editors
             // lblOnDeathEventParty
             // 
             this.lblOnDeathEventParty.AutoSize = true;
-            this.lblOnDeathEventParty.Location = new System.Drawing.Point(9, 57);
+            this.lblOnDeathEventParty.Location = new System.Drawing.Point(9, 56);
             this.lblOnDeathEventParty.Name = "lblOnDeathEventParty";
-            this.lblOnDeathEventParty.Size = new System.Drawing.Size(103, 13);
+            this.lblOnDeathEventParty.Size = new System.Drawing.Size(134, 13);
             this.lblOnDeathEventParty.TabIndex = 20;
-            this.lblOnDeathEventParty.Text = "On Death (for party):";
+            this.lblOnDeathEventParty.Text = "On Death (for killer\'s party):";
             // 
             // cmbOnDeathEventKiller
             // 
@@ -2391,7 +2395,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpNpcVsNpc.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpNpcVsNpc.Location = new System.Drawing.Point(3, 798);
             this.grpNpcVsNpc.Name = "grpNpcVsNpc";
-            this.grpNpcVsNpc.Size = new System.Drawing.Size(206, 273);
+            this.grpNpcVsNpc.Size = new System.Drawing.Size(206, 225);
             this.grpNpcVsNpc.TabIndex = 29;
             this.grpNpcVsNpc.TabStop = false;
             this.grpNpcVsNpc.Text = "NPC vs NPC Combat/Hostility ";
@@ -2409,7 +2413,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbHostileNPC.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbHostileNPC.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbHostileNPC.FormattingEnabled = true;
-            this.cmbHostileNPC.Location = new System.Drawing.Point(9, 84);
+            this.cmbHostileNPC.Location = new System.Drawing.Point(9, 61);
             this.cmbHostileNPC.Name = "cmbHostileNPC";
             this.cmbHostileNPC.Size = new System.Drawing.Size(191, 21);
             this.cmbHostileNPC.TabIndex = 45;
@@ -2419,7 +2423,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblNPC
             // 
             this.lblNPC.AutoSize = true;
-            this.lblNPC.Location = new System.Drawing.Point(6, 67);
+            this.lblNPC.Location = new System.Drawing.Point(6, 44);
             this.lblNPC.Name = "lblNPC";
             this.lblNPC.Size = new System.Drawing.Size(32, 13);
             this.lblNPC.TabIndex = 44;
@@ -2427,7 +2431,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnRemoveAggro
             // 
-            this.btnRemoveAggro.Location = new System.Drawing.Point(125, 241);
+            this.btnRemoveAggro.Location = new System.Drawing.Point(125, 198);
             this.btnRemoveAggro.Name = "btnRemoveAggro";
             this.btnRemoveAggro.Padding = new System.Windows.Forms.Padding(5);
             this.btnRemoveAggro.Size = new System.Drawing.Size(75, 23);
@@ -2437,7 +2441,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnAddAggro
             // 
-            this.btnAddAggro.Location = new System.Drawing.Point(9, 241);
+            this.btnAddAggro.Location = new System.Drawing.Point(9, 198);
             this.btnAddAggro.Name = "btnAddAggro";
             this.btnAddAggro.Padding = new System.Windows.Forms.Padding(5);
             this.btnAddAggro.Size = new System.Drawing.Size(75, 23);
@@ -2453,7 +2457,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lstAggro.FormattingEnabled = true;
             this.lstAggro.Items.AddRange(new object[] {
             "NPC:"});
-            this.lstAggro.Location = new System.Drawing.Point(9, 122);
+            this.lstAggro.Location = new System.Drawing.Point(9, 88);
             this.lstAggro.Name = "lstAggro";
             this.lstAggro.Size = new System.Drawing.Size(191, 106);
             this.lstAggro.TabIndex = 41;
@@ -2461,7 +2465,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkAttackAllies
             // 
             this.chkAttackAllies.AutoSize = true;
-            this.chkAttackAllies.Location = new System.Drawing.Point(8, 42);
+            this.chkAttackAllies.Location = new System.Drawing.Point(95, 28);
             this.chkAttackAllies.Name = "chkAttackAllies";
             this.chkAttackAllies.Size = new System.Drawing.Size(90, 17);
             this.chkAttackAllies.TabIndex = 1;
@@ -2471,7 +2475,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkEnabled
             // 
             this.chkEnabled.AutoSize = true;
-            this.chkEnabled.Location = new System.Drawing.Point(8, 19);
+            this.chkEnabled.Location = new System.Drawing.Point(8, 17);
             this.chkEnabled.Name = "chkEnabled";
             this.chkEnabled.Size = new System.Drawing.Size(71, 17);
             this.chkEnabled.TabIndex = 0;
@@ -2844,6 +2848,37 @@ namespace Intersect.Editor.Forms.Editors
             this.searchableDarkTreeView1.TabIndex = 46;
             this.searchableDarkTreeView1.Visible = false;
             // 
+            // cmbOnDeathEventAttackers
+            // 
+            this.cmbOnDeathEventAttackers.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbOnDeathEventAttackers.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbOnDeathEventAttackers.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbOnDeathEventAttackers.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbOnDeathEventAttackers.DrawDropdownHoverOutline = false;
+            this.cmbOnDeathEventAttackers.DrawFocusRectangle = false;
+            this.cmbOnDeathEventAttackers.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbOnDeathEventAttackers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbOnDeathEventAttackers.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbOnDeathEventAttackers.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbOnDeathEventAttackers.FormattingEnabled = true;
+            this.cmbOnDeathEventAttackers.Location = new System.Drawing.Point(12, 114);
+            this.cmbOnDeathEventAttackers.Name = "cmbOnDeathEventAttackers";
+            this.cmbOnDeathEventAttackers.Size = new System.Drawing.Size(182, 21);
+            this.cmbOnDeathEventAttackers.TabIndex = 23;
+            this.cmbOnDeathEventAttackers.Text = null;
+            this.cmbOnDeathEventAttackers.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbOnDeathEventAttackers.SelectedIndexChanged += new System.EventHandler(this.cmbOnDeathEventAttackers_SelectedIndexChanged);
+            
+            // 
+            // lblOnDeathEventAttackers
+            // 
+            this.lblOnDeathEventAttackers.AutoSize = true;
+            this.lblOnDeathEventAttackers.Location = new System.Drawing.Point(13, 98);
+            this.lblOnDeathEventAttackers.Name = "lblOnDeathEventAttackers";
+            this.lblOnDeathEventAttackers.Size = new System.Drawing.Size(137, 13);
+            this.lblOnDeathEventAttackers.TabIndex = 22;
+            this.lblOnDeathEventAttackers.Text = "On Death (for all attackers):";
+            // 
             // FrmNpc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3124,5 +3159,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkNumericUpDown nudManaPerc;
         private DarkNumericUpDown nudHPPerc;
         private System.Windows.Forms.Label lblLvlScalingDesc;
+        private DarkComboBox cmbOnDeathEventAttackers;
+        private System.Windows.Forms.Label lblOnDeathEventAttackers;
     }
 }

@@ -1118,6 +1118,7 @@ namespace Intersect.Server.Entities
                         var descriptor = npc.Base;
                         var playerEvent = descriptor.OnDeathEvent;
                         var partyEvent = descriptor.OnDeathPartyEvent;
+                        var attackersEvent = descriptor.OnDeathAttackersEvent;
                         //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
                         if (Options.Combat.EnableCombatChatMessages)
                         {
@@ -1164,6 +1165,13 @@ namespace Intersect.Server.Entities
                             StartCommonEvent(playerEvent);
                         }
 
+                        if (attackersEvent != null)
+                        {
+                            foreach(var id in npc.LootMapCache)
+                            {
+                                FindOnline(id)?.StartCommonEvent(attackersEvent);
+                            }                
+                        }
                         break;
                     }
 

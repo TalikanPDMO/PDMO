@@ -149,6 +149,9 @@ namespace Intersect.Editor.Forms.Editors
             cmbOnDeathEventParty.Items.Clear();
             cmbOnDeathEventParty.Items.Add(Strings.General.none);
             cmbOnDeathEventParty.Items.AddRange(EventBase.Names);
+            cmbOnDeathEventAttackers.Items.Clear();
+            cmbOnDeathEventAttackers.Items.Add(Strings.General.none);
+            cmbOnDeathEventAttackers.Items.AddRange(EventBase.Names);
             cmbScalingStat.Items.Clear();
             for (var x = 0; x < (int)Stats.StatCount; x++)
             {
@@ -233,6 +236,7 @@ namespace Intersect.Editor.Forms.Editors
             grpCommonEvents.Text = Strings.NpcEditor.commonevents;
             lblOnDeathEventKiller.Text = Strings.NpcEditor.ondeathevent;
             lblOnDeathEventParty.Text = Strings.NpcEditor.ondeathpartyevent;
+            lblOnDeathEventAttackers.Text = Strings.NpcEditor.ondeathattackersevent;
 
             grpStats.Text = Strings.NpcEditor.stats;
             lblHP.Text = Strings.NpcEditor.hp;
@@ -379,6 +383,7 @@ namespace Intersect.Editor.Forms.Editors
                 //Common Events
                 cmbOnDeathEventKiller.SelectedIndex = EventBase.ListIndex(mEditorItem.OnDeathEventId) + 1;
                 cmbOnDeathEventParty.SelectedIndex = EventBase.ListIndex(mEditorItem.OnDeathPartyEventId) + 1;
+                cmbOnDeathEventAttackers.SelectedIndex = EventBase.ListIndex(mEditorItem.OnDeathAttackersEventId) + 1;
 
                 nudStr.Value = mEditorItem.Stats[(int) Stats.Attack];
                 nudMag.Value = mEditorItem.Stats[(int) Stats.AbilityPower];
@@ -1323,6 +1328,11 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbOnDeathEventParty_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.OnDeathPartyEvent = EventBase.Get(EventBase.IdFromList(cmbOnDeathEventParty.SelectedIndex - 1));
+        }
+
+        private void cmbOnDeathEventAttackers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.OnDeathAttackersEvent = EventBase.Get(EventBase.IdFromList(cmbOnDeathEventAttackers.SelectedIndex - 1));
         }
 
         private void chkFocusDamageDealer_CheckedChanged(object sender, EventArgs e)
