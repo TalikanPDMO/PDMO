@@ -63,6 +63,8 @@
         public int[] EventMovementFrequencyIntervals = { 15000, 10000, 5000, 2000, 1000, 500};
 
         public int EventMaxRandomMove = 5;
+        public bool HighestDamageDealerIsKiller { get; set; } = true;
+
     }
 
 }

@@ -3324,47 +3324,89 @@ namespace Intersect.Server.Entities
                 return;
             }
 
+            var killerEntity = killer;
+            if (this is Npc && Options.Npc.HighestDamageDealerIsKiller)
+            {
+                var highest = ((Npc)this).DamageMapHighest;
+                if (highest != null && !highest.IsDead())
+                {
+                    killerEntity = highest;
+                }
+            }
             // Run events and other things.
-            killer?.KilledEntity(this);
+            killerEntity?.KilledEntity(this);
 
             if (dropItems)
             {
                 var lootGenerated = new List<Player>();
                 // If this is an NPC, drop loot for every single player that participated in the fight.
-                if (this is Npc npc && npc.Base.IndividualizedLoot)
+                if (this is Npc npc)
                 {
-                    // Generate loot for every player that has helped damage this monster, as well as their party members.
-                    // Keep track of who already got loot generated for them though, or this gets messy!
-                    foreach (var entityEntry in npc.LootMapCache)
+                    float bonusLoot = Options.Party.BonusLootChancePercentPerMember / 100;
+                    if (npc.Base.IndividualizedLoot)
                     {
-                        var player = Player.FindOnline(entityEntry);
-                        if (player != null)
+                        // Generate loot for every player that has helped damage this monster, as well as their party members.
+                        // Keep track of who already got loot generated for them though, or this gets messy!
+                        foreach (var entityEntry in npc.LootMapCache)
                         {
-                            // is this player in a party?
-                            if (player.Party.Count > 0 && Options.Instance.LootOpts.IndividualizedLootAutoIncludePartyMembers)
+                            var player = Player.FindOnline(entityEntry);
+                            if (player != null && !lootGenerated.Contains(player))
                             {
-                                // They are, so check for all party members and drop if still eligible!
-                                foreach (var partyMember in player.Party)
+                                // is this player in a party?
+                                if (player.Party.Count > 0)
                                 {
-                                    if (!lootGenerated.Contains(partyMember))
+                                    Player[] partyMembersInLootRange;
+                                    if (Options.Instance.LootOpts.IndividualizedLootAutoIncludePartyMembers)
                                     {
-                                        DropItems(partyMember);
-                                        lootGenerated.Add(partyMember);
+                                        //Generate loot for all party members in range, even without hit the npc
+                                        partyMembersInLootRange = player.Party.Where(partyMember => partyMember.InRangeOf(npc, Options.Party.SharedLootRange)).ToArray();
                                     }
+                                    else
+                                    {
+                                        //Generate loot for all party members in range, only if the member hit the npc
+                                        partyMembersInLootRange = player.Party.Where(partyMember => partyMember.InRangeOf(npc, Options.Party.SharedLootRange)
+                                            && npc.LootMapCache.Contains(partyMember.Id)).ToArray();
+                                    }
+                                    var multiplier = 1.0f + (partyMembersInLootRange.Length * bonusLoot);
+                                    foreach (var partyMember in partyMembersInLootRange)
+                                    {
+                                        // They are, so check for all party members and drop if still eligible!
+                                        if (!lootGenerated.Contains(partyMember))
+                                        {
+                                            DropItems(partyMember, true, multiplier);
+                                            lootGenerated.Add(partyMember);
+                                        }
+                                    }
+                                    
                                 }
-                            }
-                            else
-                            {
-                                // They're not in a party, so drop the item if still eligible!
-                                if (!lootGenerated.Contains(player))
+                                else
                                 {
+                                    // They're not in a party, so drop the item if still eligible!
                                     DropItems(player);
                                     lootGenerated.Add(player);
                                 }
                             }
                         }
                     }
-
+                    else
+                    {
+                        if (killerEntity is Player p && p.Party.Count > 0 && Options.Loot.GenerateLootForAllPartyMembers)
+                        {
+                            // Take into account only party members in range, but not mandatory to hit the npc
+                            var partyMembersInLootRange = p.Party.Where(partyMember => partyMember.InRangeOf(npc, Options.Party.SharedLootRange)).ToArray();
+                            var multiplier = 1.0f + (partyMembersInLootRange.Length * bonusLoot);
+                            foreach (var partyMember in partyMembersInLootRange)
+                            {
+                                DropItems(partyMember, true, multiplier);
+                            }
+                        }
+                        else
+                        {
+                            // Not in party or no need to generate loot for every party member
+                            DropItems(killerEntity);
+                        }
+                    }
+                    
                     // Clear their loot table and threat table.
                     npc.DamageMap.Clear();
                     npc.LootMap.Clear();
@@ -3372,7 +3414,6 @@ namespace Intersect.Server.Entities
                 }
                 else
                 {
-                    // Drop as normal.
                     DropItems(killer);
                 }
             }
@@ -3395,7 +3436,7 @@ namespace Intersect.Server.Entities
             Dead = true;
         }
 
-        private void DropItems(Entity killer, bool sendUpdate = true)
+        private void DropItems(Entity killer, bool sendUpdate = true, float multiplier = 1)
         {
             // Drop items
             for (var n = 0; n < Items.Count; n++)
@@ -3432,7 +3473,7 @@ namespace Intersect.Server.Entities
                 if (this is Player)
                 {
                     //Player drop rates
-                    if (Randomization.Next(1, 101) >= itemBase.DropChanceOnDeath * luck)
+                    if (Randomization.Next(1, 101) >= itemBase.DropChanceOnDeath * luck * multiplier)
                     {
                         continue;
                     }
@@ -3485,7 +3526,7 @@ namespace Intersect.Server.Entities
                             for (int i = 0; i < quantity; i++)
                             {
                                 // One chance to loot the item for each iteration
-                                if (Randomization.Next(1, 100001) <= (item.DropChance * 1000) * luck)
+                                if (Randomization.Next(1, 100001) <= (item.DropChance * 1000) * luck * multiplier)
                                 {
                                     final_quantity++;
                                 }
@@ -3497,7 +3538,7 @@ namespace Intersect.Server.Entities
                     else
                     {
                         // Only one chance to spawn all the quantity
-                        if (Randomization.Next(1, 100001) > (item.DropChance * 1000) * luck)
+                        if (Randomization.Next(1, 100001) > (item.DropChance * 1000) * luck * multiplier)
                         {
                             continue;
                         }

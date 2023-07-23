@@ -1142,7 +1142,7 @@ namespace Intersect.Server.Entities
                                 partyMember.GiveExperience(partyExperience, true, false);
                                 partyMember.UpdateQuestKillTasks(entity);
                             }
-
+                            StartCommonEvent(playerEvent);
                             if (partyEvent != null)
                             {
                                 foreach (var partyMember in Party)
@@ -1158,10 +1158,6 @@ namespace Intersect.Server.Entities
                         {
                             GiveExperience((long)npcExp, true, false);
                             UpdateQuestKillTasks(entity);
-                        }
-
-                        if (playerEvent != null)
-                        {
                             StartCommonEvent(playerEvent);
                         }
 

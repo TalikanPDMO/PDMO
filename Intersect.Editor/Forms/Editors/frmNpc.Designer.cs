@@ -122,6 +122,8 @@ namespace Intersect.Editor.Forms.Editors
             this.lblAttackAnimation = new System.Windows.Forms.Label();
             this.lblDamage = new System.Windows.Forms.Label();
             this.grpCommonEvents = new DarkUI.Controls.DarkGroupBox();
+            this.cmbOnDeathEventAttackers = new DarkUI.Controls.DarkComboBox();
+            this.lblOnDeathEventAttackers = new System.Windows.Forms.Label();
             this.cmbOnDeathEventParty = new DarkUI.Controls.DarkComboBox();
             this.lblOnDeathEventParty = new System.Windows.Forms.Label();
             this.cmbOnDeathEventKiller = new DarkUI.Controls.DarkComboBox();
@@ -212,8 +214,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.toolStripItemRelations = new System.Windows.Forms.ToolStripButton();
             this.searchableDarkTreeView1 = new Intersect.Editor.Forms.Controls.SearchableDarkTreeView();
-            this.cmbOnDeathEventAttackers = new DarkUI.Controls.DarkComboBox();
-            this.lblOnDeathEventAttackers = new System.Windows.Forms.Label();
             this.grpNpcs.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLevelRange)).BeginInit();
@@ -1677,6 +1677,36 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCommonEvents.TabStop = false;
             this.grpCommonEvents.Text = "Common Events";
             // 
+            // cmbOnDeathEventAttackers
+            // 
+            this.cmbOnDeathEventAttackers.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbOnDeathEventAttackers.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbOnDeathEventAttackers.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbOnDeathEventAttackers.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbOnDeathEventAttackers.DrawDropdownHoverOutline = false;
+            this.cmbOnDeathEventAttackers.DrawFocusRectangle = false;
+            this.cmbOnDeathEventAttackers.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbOnDeathEventAttackers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbOnDeathEventAttackers.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbOnDeathEventAttackers.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbOnDeathEventAttackers.FormattingEnabled = true;
+            this.cmbOnDeathEventAttackers.Location = new System.Drawing.Point(12, 114);
+            this.cmbOnDeathEventAttackers.Name = "cmbOnDeathEventAttackers";
+            this.cmbOnDeathEventAttackers.Size = new System.Drawing.Size(182, 21);
+            this.cmbOnDeathEventAttackers.TabIndex = 23;
+            this.cmbOnDeathEventAttackers.Text = null;
+            this.cmbOnDeathEventAttackers.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbOnDeathEventAttackers.SelectedIndexChanged += new System.EventHandler(this.cmbOnDeathEventAttackers_SelectedIndexChanged);
+            // 
+            // lblOnDeathEventAttackers
+            // 
+            this.lblOnDeathEventAttackers.AutoSize = true;
+            this.lblOnDeathEventAttackers.Location = new System.Drawing.Point(9, 98);
+            this.lblOnDeathEventAttackers.Name = "lblOnDeathEventAttackers";
+            this.lblOnDeathEventAttackers.Size = new System.Drawing.Size(149, 13);
+            this.lblOnDeathEventAttackers.TabIndex = 22;
+            this.lblOnDeathEventAttackers.Text = "3. On Death (for all attackers):";
+            // 
             // cmbOnDeathEventParty
             // 
             this.cmbOnDeathEventParty.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
@@ -1703,9 +1733,9 @@ namespace Intersect.Editor.Forms.Editors
             this.lblOnDeathEventParty.AutoSize = true;
             this.lblOnDeathEventParty.Location = new System.Drawing.Point(9, 56);
             this.lblOnDeathEventParty.Name = "lblOnDeathEventParty";
-            this.lblOnDeathEventParty.Size = new System.Drawing.Size(134, 13);
+            this.lblOnDeathEventParty.Size = new System.Drawing.Size(146, 13);
             this.lblOnDeathEventParty.TabIndex = 20;
-            this.lblOnDeathEventParty.Text = "On Death (for killer\'s party):";
+            this.lblOnDeathEventParty.Text = "2. On Death (for killer\'s party):";
             // 
             // cmbOnDeathEventKiller
             // 
@@ -1733,9 +1763,9 @@ namespace Intersect.Editor.Forms.Editors
             this.lblOnDeathEventKiller.AutoSize = true;
             this.lblOnDeathEventKiller.Location = new System.Drawing.Point(9, 16);
             this.lblOnDeathEventKiller.Name = "lblOnDeathEventKiller";
-            this.lblOnDeathEventKiller.Size = new System.Drawing.Size(101, 13);
+            this.lblOnDeathEventKiller.Size = new System.Drawing.Size(113, 13);
             this.lblOnDeathEventKiller.TabIndex = 18;
-            this.lblOnDeathEventKiller.Text = "On Death (for killer):";
+            this.lblOnDeathEventKiller.Text = "1. On Death (for killer):";
             // 
             // grpBehavior
             // 
@@ -2847,37 +2877,6 @@ namespace Intersect.Editor.Forms.Editors
             this.searchableDarkTreeView1.Size = new System.Drawing.Size(240, 480);
             this.searchableDarkTreeView1.TabIndex = 46;
             this.searchableDarkTreeView1.Visible = false;
-            // 
-            // cmbOnDeathEventAttackers
-            // 
-            this.cmbOnDeathEventAttackers.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbOnDeathEventAttackers.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbOnDeathEventAttackers.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbOnDeathEventAttackers.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbOnDeathEventAttackers.DrawDropdownHoverOutline = false;
-            this.cmbOnDeathEventAttackers.DrawFocusRectangle = false;
-            this.cmbOnDeathEventAttackers.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbOnDeathEventAttackers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbOnDeathEventAttackers.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbOnDeathEventAttackers.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbOnDeathEventAttackers.FormattingEnabled = true;
-            this.cmbOnDeathEventAttackers.Location = new System.Drawing.Point(12, 114);
-            this.cmbOnDeathEventAttackers.Name = "cmbOnDeathEventAttackers";
-            this.cmbOnDeathEventAttackers.Size = new System.Drawing.Size(182, 21);
-            this.cmbOnDeathEventAttackers.TabIndex = 23;
-            this.cmbOnDeathEventAttackers.Text = null;
-            this.cmbOnDeathEventAttackers.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbOnDeathEventAttackers.SelectedIndexChanged += new System.EventHandler(this.cmbOnDeathEventAttackers_SelectedIndexChanged);
-            
-            // 
-            // lblOnDeathEventAttackers
-            // 
-            this.lblOnDeathEventAttackers.AutoSize = true;
-            this.lblOnDeathEventAttackers.Location = new System.Drawing.Point(13, 98);
-            this.lblOnDeathEventAttackers.Name = "lblOnDeathEventAttackers";
-            this.lblOnDeathEventAttackers.Size = new System.Drawing.Size(137, 13);
-            this.lblOnDeathEventAttackers.TabIndex = 22;
-            this.lblOnDeathEventAttackers.Text = "On Death (for all attackers):";
             // 
             // FrmNpc
             // 

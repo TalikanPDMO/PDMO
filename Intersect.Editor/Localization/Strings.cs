@@ -4331,11 +4331,11 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString npcvsnpc = @"NPC vs NPC Combat/Hostility  ";
 
-            public static LocalizedString ondeathevent = @"On Death (for killer):";
+            public static LocalizedString ondeathevent = @"1. On Death (for killer):";
 
-            public static LocalizedString ondeathpartyevent = @"On Death (for killer's party):";
+            public static LocalizedString ondeathpartyevent = @"2. On Death (for killer's party):";
 
-            public static LocalizedString ondeathattackersevent = @"On Death (for all attackers):";
+            public static LocalizedString ondeathattackersevent = @"3. On Death (for all attackers):";
 
             public static LocalizedString paste = @"Paste Npc";
 
