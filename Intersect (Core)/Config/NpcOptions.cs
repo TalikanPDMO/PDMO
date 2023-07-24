@@ -58,7 +58,7 @@
 
         public int[] DespawnExpansionFramesPercentage = { 75, 50, 25, 1 };
 
-        public int[] EventMovementSpeedValues = { 1, 2, 3, 10, 40 };
+        public int[] EventMovementSpeedValues = { 1, 7, 13, 40, 60 };
 
         public int[] EventMovementFrequencyIntervals = { 15000, 10000, 5000, 2000, 1000, 500};
 

@@ -159,6 +159,7 @@ namespace Intersect.Client.Networking
         public void HandlePacket(IPacketSender packetSender, ConfigPacket packet)
         {
             Options.LoadFromServer(packet.Config);
+            Globals.InitCalculatedSpeeds(Options.Instance.PlayerOpts.MaxSpeedStat);
             Graphics.InitInGame();
         }
 

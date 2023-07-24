@@ -77,6 +77,13 @@ namespace Intersect.Config
         public int WalkingSpeed = 400;
 
         /// <summary>
+        /// Coefficients for the 3 speeds formula : i0 - i2 * (x-i3) 
+        /// </summary>
+        public float[] SpeedFormulaCoeffs = {600, 25, 1, 300, 2.5f, 13, 230, 6, 41};
+
+        public int MaxSpeedStat = 60;
+
+        /// <summary>
         /// The id of the animation to use for the trail when a player is running horizontaly
         /// </summary>
         public Guid HorizontalRunningTrailAnimationId = Guid.Empty;

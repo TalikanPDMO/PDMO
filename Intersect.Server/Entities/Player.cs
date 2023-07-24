@@ -5113,16 +5113,19 @@ namespace Intersect.Server.Entities
         //Returns the amount of time required to traverse 1 tile
         public override float GetMovementTime()
         {
-            float time = Options.Instance.PlayerOpts.WalkingSpeed;
-            if (Running)
+            //time = 2.0f * Options.Instance.PlayerOpts.WalkingSpeed / (float)(1 + Math.Log(Stat[(int)Stats.Speed]));
+            float time = Stat[(int)Stats.Speed].Value() > Options.Instance.PlayerOpts.MaxSpeedStat ?
+                Globals.CalculatedSpeeds[Options.Instance.PlayerOpts.MaxSpeedStat] :
+                Globals.CalculatedSpeeds[Stat[(int)Stats.Speed].Value()];
+            if (Blocking)
             {
-                time = 2.0f * Options.Instance.PlayerOpts.WalkingSpeed / (float)(1 + Math.Log(Stat[(int)Stats.Speed].Value()));
-                if (Blocking)
-                {
-                    time += time * (float)Options.BlockingSlow / 100f;
-                }
+                time += time * (float)Options.BlockingSlow / 100f;
             }
-            return Math.Min(Options.Instance.PlayerOpts.WalkingSpeed, time);
+            if (!Running && time < Options.Instance.PlayerOpts.WalkingSpeed)
+            {
+                return Options.Instance.PlayerOpts.WalkingSpeed;
+            }
+            return time;
         }
 
         //Stats

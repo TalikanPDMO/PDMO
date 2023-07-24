@@ -782,7 +782,12 @@ namespace Intersect.Server.Entities.Events
 
         public override float GetMovementTime()
         {
-            return 2.0f * Options.Instance.PlayerOpts.WalkingSpeed / (float)(1 + Math.Log(Speed));
+            //return 2.0f * Options.Instance.PlayerOpts.WalkingSpeed / (float)(1 + Math.Log(Speed));
+            float time = Speed > Options.Instance.PlayerOpts.MaxSpeedStat ?
+                 Globals.CalculatedSpeeds[Options.Instance.PlayerOpts.MaxSpeedStat] :
+                 Globals.CalculatedSpeeds[Speed];
+
+            return time;
         }
 
         public override int CanMove(int moveDir)
