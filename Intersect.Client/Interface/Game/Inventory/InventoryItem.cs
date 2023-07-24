@@ -429,7 +429,7 @@ namespace Intersect.Client.Interface.Game.Inventory
                             }
                         }
                         // "and" added for restriction 
-                        if (bestIntersectIndex > -1 && ItemBase.Get(Globals.Me.Inventory[bestIntersectIndex].ItemId).ActiveSpell == null)
+                        if (bestIntersectIndex > -1 && item.ActiveSpell == null)
                         {
                            
                             Globals.Me.AddToHotbar((byte) bestIntersectIndex, 0, mMySlot);
