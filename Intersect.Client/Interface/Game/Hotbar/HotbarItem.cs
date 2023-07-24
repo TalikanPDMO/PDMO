@@ -656,11 +656,19 @@ namespace Intersect.Client.Interface.Game.Hotbar
 
                             if (bestIntersectIndex > -1 && bestIntersectIndex != mYindex)
                             {
+                                // unable to switch  with the active spell
+                                if (mYindex == 9 || bestIntersectIndex == 9)
+                                {
+                                    mDragIcon.Dispose();
+                                    return;
+                                }
+
                                 if (Globals.Me.CurrentPreviewHotBarKey == mYindex || Globals.Me.CurrentPreviewHotBarKey == bestIntersectIndex)
                                 {
                                     Globals.Me.previewSpellId = Guid.Empty;
                                     Globals.Me.CurrentPreviewHotBarKey = -1;
                                 }
+                                
                                 Globals.Me.HotbarSwap(mYindex, (byte) bestIntersectIndex);
                                 QuantityLabel.IsHidden = true;
                                 mContentPanel.IsHidden = true;

@@ -428,9 +428,10 @@ namespace Intersect.Client.Interface.Game.Inventory
                                 }
                             }
                         }
-
-                        if (bestIntersectIndex > -1)
+                        // "and" added for restriction 
+                        if (bestIntersectIndex > -1 && ItemBase.Get(Globals.Me.Inventory[bestIntersectIndex].ItemId).ActiveSpell == null)
                         {
+                           
                             Globals.Me.AddToHotbar((byte) bestIntersectIndex, 0, mMySlot);
                         }
                     }
