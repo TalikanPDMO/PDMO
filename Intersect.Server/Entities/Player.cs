@@ -2291,7 +2291,7 @@ namespace Intersect.Server.Entities
         [Obsolete("Use TryDropItemFrom(int, int).")]
         public void DropItemFrom(int slotIndex, int amount) => TryDropItemFrom(slotIndex, amount);
 
-        public void UseItem(int slot, Entity target = null)
+        public void UseItem(int slot, Entity target = null, bool fromHotbar = false)
         {
             var equipped = false;
             var Item = Items[slot];
@@ -2326,34 +2326,33 @@ namespace Intersect.Server.Entities
                     {
                         if (Equipment[i] == slot)
                         {
-                            // unequip the item
-                            Equipment[i] = -1;
-                            FixVitals();
-                            StartCommonEventsWithTrigger(CommonEventTrigger.EquipChange);
-                            PacketSender.SendPlayerEquipmentToProximity(this);
-                            PacketSender.SendEntityStats(this);
 
                             //------ Active Equipment
                             // Is an active equipment ?            
-                            if (Items[slot].Descriptor.ActiveSpell != null)
+                            if (Items[slot].Descriptor.ActiveSpell != null && fromHotbar)
                             {
-                                // First method just removing the spell
-                                //Remove it from the player
-                                TryForgetSpell(new Spell(Items[slot].Descriptor.ActiveSpell.Id));
-
-                                // Remove it from the hotbar
-                                int iterateur = 0;
-                                while (iterateur < Options.MaxHotbar - 1)
-                                {
-                                    if (Hotbar[iterateur].ItemOrSpellId == Items[slot].Descriptor.ActiveSpell.Id)
-                                    {
-                                        HotbarChange(iterateur, null);
-                                    }
-                                    iterateur++;
-                                }
+                                //CastSpell(Items[slot].Descriptor.ActiveSpellId,0);
+                                UseSpell(Items[slot].Descriptor.Id, target);
+                                PacketSender.SendPlayerEquipmentToProximity(this);
+                                PacketSender.SendEntityStats(this);
                                 PacketSender.SendHotbarSlots(this);
-                                
+
                             }
+                            else
+                            {
+                                // unequip the item
+                                Equipment[i] = -1;
+                                FixVitals();
+                                StartCommonEventsWithTrigger(CommonEventTrigger.EquipChange);
+                                PacketSender.SendPlayerEquipmentToProximity(this);
+                                PacketSender.SendEntityStats(this);
+                                HotbarChange(9, null);
+                                PacketSender.SendHotbarSlots(this);
+                            }
+                            
+
+
+                            
                         return;
                         }
                     }
@@ -2476,10 +2475,13 @@ namespace Intersect.Server.Entities
                         // Is an active equipment ?
                         if (itemBase.ActiveSpell != null)
                         {
+                            Hotbar[9].ItemOrSpellId = itemBase.Id;
                             //Give it to the player and place it to he hotbar
                             // Old way but need more ability slots so wrong way
-                            TryTeachSpell(new Spell(itemBase.ActiveSpell.Id));
+                            //TryTeachSpell(new Spell(itemBase.ActiveSpell.Id));
                             //TryGiveItem(new Item());
+                            PacketSender.SendHotbarSlots(this);
+
 
                         }
                         break;
@@ -4530,7 +4532,7 @@ namespace Intersect.Server.Entities
 
 
         public bool CanSpellCast(SpellBase spell, Entity target, bool checkVitalReqs)
-        {
+        { 
             if (!Conditions.MeetsConditionLists(spell.CastingRequirements, this, null))
             {
                 if (!string.IsNullOrWhiteSpace(spell.CannotCastMessage))
@@ -4541,7 +4543,6 @@ namespace Intersect.Server.Entities
                 {
                     PacketSender.SendChatMsg(this, Strings.Combat.dynamicreq, ChatMessageType.Spells);
                 }
-
                 return false;
             }
 
@@ -4556,7 +4557,6 @@ namespace Intersect.Server.Entities
                         {
                             PacketSender.SendChatMsg(this, Strings.Combat.silenced, ChatMessageType.Combat);
                         }
-
                         return false;
                     }
 
@@ -4566,7 +4566,6 @@ namespace Intersect.Server.Entities
                         {
                             PacketSender.SendChatMsg(this, Strings.Combat.stunned, ChatMessageType.Combat);
                         }
-
                         return false;
                     }
 
@@ -4576,7 +4575,6 @@ namespace Intersect.Server.Entities
                         {
                             PacketSender.SendChatMsg(this, Strings.Combat.sleep, ChatMessageType.Combat);
                         }
-
                         return false;
                     }
                 }
@@ -4724,7 +4722,6 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
-
             if (!SpellCooldowns.ContainsKey(Spells[spellSlot].SpellId) ||
                 SpellCooldowns[Spells[spellSlot].SpellId] < Globals.Timing.MillisecondsUTC)
             {
@@ -4793,6 +4790,100 @@ namespace Intersect.Server.Entities
                 }
             }
         }
+
+        public void UseSpell(Guid itemId, Entity target)
+        {
+            var itemWithActiveSpell = ItemBase.Get(itemId);
+
+            var spellId = itemWithActiveSpell.ActiveSpellId;
+            Target = target;
+            var spell = SpellBase.Get(spellId);
+            if (spell == null)
+            {
+                return;
+            }
+            var test = ItemCooldowns;
+
+            if (!CanSpellCast(spell, target, true))
+            {
+                return;
+            }
+            if (!ItemCooldowns.ContainsKey(itemId) ||
+                ItemCooldowns[itemId] < Globals.Timing.MillisecondsUTC)
+            {
+                if (CastTime == 0)
+                {
+                    ItemCooldowns[itemId] = Globals.Timing.MillisecondsUTC + itemWithActiveSpell.Cooldown;
+                    PacketSender.SendItemCooldown(this, itemId);
+
+                    var info = ItemCooldowns[itemId] < Globals.Timing.MillisecondsUTC;
+                    CastTime = Globals.Timing.Milliseconds + spell.CastDuration;
+
+                    //Remove stealth status.
+                    foreach (var status in CachedStatuses)
+                    {
+                        if (status.Type == StatusTypes.Stealth)
+                        {
+                            status.RemoveStatus();
+                        }
+                    }
+
+                    CastTarget = Target;
+
+                    //Check if the caster has the right ammunition if a projectile
+                    if (spell.SpellType == SpellTypes.CombatSpell &&
+                        spell.Combat.TargetType == SpellTargetTypes.Projectile &&
+                        spell.Combat.ProjectileId != Guid.Empty)
+                    {
+                        var projectileBase = spell.Combat.Projectile;
+                        if (projectileBase != null && projectileBase.AmmoItemId != Guid.Empty)
+                        {
+                            TryTakeItem(projectileBase.AmmoItemId, projectileBase.AmmoRequired);
+                        }
+                    }
+
+                    if (spell.CastAnimationId != Guid.Empty)
+                    {
+                        PacketSender.SendAnimationToProximity(
+                            spell.CastAnimationId, 1, base.Id, MapId, 0, 0, (sbyte)Dir
+                        ); //Target Type 1 will be global entity
+                    }
+
+                    //Check if cast should be instance
+                    if (Globals.Timing.Milliseconds >= CastTime)
+                    {
+                        //Cast now!
+                        CastTime = 0;
+                        CastSpell(spellId, 0);// 0 est déterminé aléatoire ici
+                        CastTarget = null;
+                    }
+                    else
+                    {
+                        //Tell the client we are channeling the spell
+                        PacketSender.SendEntityCastTime(this, spellId);
+                    }
+                }
+                else
+                {
+                    PacketSender.SendChatMsg(this, Strings.Combat.channeling, ChatMessageType.Combat);
+
+                    if (Options.Combat.EnableCombatChatMessages)
+                    {
+                        PacketSender.SendChatMsg(this, Strings.Combat.channeling, ChatMessageType.Combat);
+                    }
+                }
+            }
+            else
+            {
+                PacketSender.SendChatMsg(this, Strings.Combat.cooldown, ChatMessageType.Combat);
+
+                if (Options.Combat.EnableCombatChatMessages)
+                {
+                    PacketSender.SendChatMsg(this, Strings.Combat.cooldown, ChatMessageType.Combat);
+                }
+            }
+        }
+
 
         public override void CastSpell(Guid spellId, int spellSlot = -1, bool alreadyCrit=false, string sourceSpellName = null, Entity specificTarget = null, bool isNextSpell = false, bool reUseValues = false, int baseDamage = 0, int secondaryDamage = 0)
         {
@@ -4912,22 +5003,23 @@ namespace Intersect.Server.Entities
                     // Is an active equipment ?             
                     if (Items[itemSlot].Descriptor.ActiveSpell != null)
                     {
+                        HotbarChange(9, null);
                         //Remove it from the player
-                        TryForgetSpell(new Spell(Items[itemSlot].Descriptor.ActiveSpell.Id));
+                        //TryForgetSpell(new Spell(Items[itemSlot].Descriptor.ActiveSpell.Id));
 
                         // Remove it from the hotbar
-                        int iterateur = 0;
-                        while (iterateur < Options.MaxHotbar - 1)
-                        {
-                            if (Hotbar[iterateur].ItemOrSpellId == Items[itemSlot].Descriptor.ActiveSpell.Id)
-                            {
-                                HotbarChange(iterateur, null);
-                            }
-                            iterateur++;
-                        }
+                        //int iterateur = 0;
+                        //while (iterateur < Options.MaxHotbar - 1)
+                        //{
+                        //    if (Hotbar[iterateur].ItemOrSpellId == Items[itemSlot].Descriptor.ActiveSpell.Id)
+                        //    {
+                        //        HotbarChange(iterateur, null);
+                        //    }
+                        //    iterateur++;
+                        //}
                         PacketSender.SendHotbarSlots(this);
                     }
-                    
+
                 }
             }
             if (updated)
@@ -4948,22 +5040,23 @@ namespace Intersect.Server.Entities
             // Is an active equipment ?            
             if (Items[slot].Descriptor.ActiveSpell != null)
             {
+                HotbarChange(9, null);
                 //Remove it from the player
-                TryForgetSpell(new Spell(Items[slot].Descriptor.ActiveSpell.Id));
+                //TryForgetSpell(new Spell(Items[slot].Descriptor.ActiveSpell.Id));
 
                 // Remove it from the hotbar
-                int iterateur = 0;
-                while (iterateur < Options.MaxHotbar - 1)
-                {
-                    if (Hotbar[iterateur].ItemOrSpellId == Items[slot].Descriptor.ActiveSpell.Id)
-                    {
-                        HotbarChange(iterateur, null);
-                    }
-                    iterateur++;
-                }
+                //int iterateur = 0;
+                //while (iterateur < Options.MaxHotbar - 1)
+                //{
+                //    if (Hotbar[iterateur].ItemOrSpellId == Items[slot].Descriptor.ActiveSpell.Id)
+                //    {
+                //        HotbarChange(iterateur, null);
+                //    }
+                //    iterateur++;
+                //}
                 PacketSender.SendHotbarSlots(this);
             }
-            
+
             Equipment[slot] = -1;
             FixVitals();
             StartCommonEventsWithTrigger(CommonEventTrigger.EquipChange);

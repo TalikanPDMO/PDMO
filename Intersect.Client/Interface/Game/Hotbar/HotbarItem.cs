@@ -124,7 +124,8 @@ namespace Intersect.Client.Interface.Game.Hotbar
                 {
                     if (mInventoryItemIndex > -1)
                     {
-                        Globals.Me.TryUseItem(mInventoryItemIndex);
+                        Globals.Me.TryUseItem(mInventoryItemIndex, true);
+                        // update le slot activé
                     }
                 }
                 else if (mCurrentSpell != null)
@@ -396,6 +397,11 @@ namespace Intersect.Client.Interface.Game.Hotbar
                 {
                     updateDisplay = true;
                 }
+                // Active Equipment 
+                if (mCurrentItem.ActiveSpell != null)
+                {
+                    updateDisplay = true;
+                }
             }
 
             if (mCurrentSpell != null) //When it's a spell
@@ -419,6 +425,7 @@ namespace Intersect.Client.Interface.Game.Hotbar
                 {
                     updateDisplay = true;
                 }
+                
             }
 
             if (updateDisplay) //Item on cd and fade is incorrect

@@ -235,8 +235,10 @@ namespace Intersect.Server.Networking
             try
             {
                 var sanitizedFields = packet.Sanitize();
+
                 if (sanitizedFields != null)
                 {
+                    Log.Error($"Visualise the packect send , not null {sanitizedFields} ");
                     var sanitizationBuilder = new StringBuilder(256, 8192);
                     sanitizationBuilder.Append("Received out-of-bounds values in '");
                     sanitizationBuilder.Append(packet.GetType().Name);
@@ -1711,7 +1713,7 @@ namespace Intersect.Server.Networking
                 }
             }
 
-            player.UseItem(packet.Slot, target);
+            player.UseItem(packet.Slot, target,packet.FromHotbar);
         }
 
         //SwapSpellsPacket

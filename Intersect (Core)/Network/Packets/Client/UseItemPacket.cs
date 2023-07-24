@@ -11,10 +11,11 @@ namespace Intersect.Network.Packets.Client
         {
         }
 
-        public UseItemPacket(int slot, Guid targetId)
+        public UseItemPacket(int slot, Guid targetId, bool fromHotbar=false)
         {
             Slot = slot;
             TargetId = targetId;
+            FromHotbar = fromHotbar;
         }
 
         [Key(0)]
@@ -22,6 +23,9 @@ namespace Intersect.Network.Packets.Client
 
         [Key(1)]
         public Guid TargetId { get; set; }
+
+        [Key(2)]
+        public bool FromHotbar { get; set; }
 
     }
 
