@@ -329,7 +329,7 @@ namespace Intersect.Server.Entities
                     var statTime = Globals.Timing.Milliseconds;
                     for (var i = 0; i < (int)Stats.StatCount; i++)
                     {
-                        statsUpdated |= Stat[i].Update(statTime);
+                        statsUpdated |= (Stat[i] != null && Stat[i].Update(statTime));
                     }
 
                     if (statsUpdated)
