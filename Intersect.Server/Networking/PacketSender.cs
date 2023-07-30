@@ -1256,11 +1256,11 @@ namespace Intersect.Server.Networking
                             }
                         }
                     }
-
+                    var cls = ClassBase.Get(character.ClassId);
                     characters.Add(
                         new CharacterPacket(
                             character.Id, character.Name, character.Sprite, character.Face, character.Level,
-                            ClassBase.GetName(character.ClassId), equipment
+                            cls.Name, equipment, cls.ElementalTypes
                         )
                     );
                 }

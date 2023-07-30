@@ -12,6 +12,7 @@ using Intersect.Client.General;
 using Intersect.Client.Interface.Game.Chat;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
+using Intersect.Network;
 using Intersect.Utilities;
 
 namespace Intersect.Client.Interface.Menu
@@ -20,13 +21,11 @@ namespace Intersect.Client.Interface.Menu
     public class LoginWindow
     {
 
-        private Button mBackBtn;
+        public Button mForgotPassswordButton;
 
-        private Button mForgotPassswordButton;
+        public Button mLoginBtn;
 
-        private Button mLoginBtn;
-
-        private Label mLoginHeader;
+        public Button mRegisterBtn;
 
         //Controls
         private ImagePanel mLoginWindow;
@@ -60,30 +59,28 @@ namespace Intersect.Client.Interface.Menu
             mMainMenu = mainMenu;
 
             //Main Menu Window
-            mLoginWindow = new ImagePanel(parent, "LoginWindow");
-
-            //Menu Header
-            mLoginHeader = new Label(mLoginWindow, "LoginHeader");
-            mLoginHeader.SetText(Strings.Login.title);
-
-            mUsernameBackground = new ImagePanel(mLoginWindow, "UsernamePanel");
+            mLoginWindow = new ImagePanel(parentPanel, "LoginWindow");
 
             //Login Username Label
-            mUsernameLabel = new Label(mUsernameBackground, "UsernameLabel");
+            mUsernameLabel = new Label(mLoginWindow, "UsernameLabel");
             mUsernameLabel.SetText(Strings.Login.username);
 
             //Login Username Textbox
+            mUsernameBackground = new ImagePanel(mLoginWindow, "UsernameBackgroundPanel");
+
             mUsernameTextbox = new TextBox(mUsernameBackground, "UsernameField");
             mUsernameTextbox.SubmitPressed += UsernameTextbox_SubmitPressed;
             mUsernameTextbox.Clicked += _usernameTextbox_Clicked;
 
-            mPasswordBackground = new ImagePanel(mLoginWindow, "PasswordPanel");
 
             //Login Password Label
-            mPasswordLabel = new Label(mPasswordBackground, "PasswordLabel");
+            
+            mPasswordLabel = new Label(mLoginWindow, "PasswordLabel");
             mPasswordLabel.SetText(Strings.Login.password);
 
             //Login Password Textbox
+            mPasswordBackground = new ImagePanel(mLoginWindow, "PasswordBackgroundPanel");
+
             mPasswordTextbox = new TextBoxPassword(mPasswordBackground, "PasswordField");
             mPasswordTextbox.SubmitPressed += PasswordTextbox_SubmitPressed;
             mPasswordTextbox.TextChanged += _passwordTextbox_TextChanged;
@@ -93,19 +90,17 @@ namespace Intersect.Client.Interface.Menu
 
             //Forgot Password Button
             mForgotPassswordButton = new Button(mLoginWindow, "ForgotPasswordButton");
-            mForgotPassswordButton.IsHidden = true;
             mForgotPassswordButton.SetText(Strings.Login.forgot);
             mForgotPassswordButton.Clicked += mForgotPassswordButton_Clicked;
-
             //Login - Send Login Button
             mLoginBtn = new Button(mLoginWindow, "LoginButton");
             mLoginBtn.SetText(Strings.Login.login);
             mLoginBtn.Clicked += LoginBtn_Clicked;
 
-            //Login - Back Button
-            mBackBtn = new Button(mLoginWindow, "BackButton");
-            mBackBtn.SetText(Strings.Login.back);
-            mBackBtn.Clicked += BackBtn_Clicked;
+            //Register - Send Register Button
+            mRegisterBtn = new Button(mLoginWindow, "RegisterButton");
+            mRegisterBtn.SetText(Strings.Registration.register);
+            mRegisterBtn.Clicked += RegisterButton_Clicked;
 
             LoadCredentials();
 
@@ -132,16 +127,16 @@ namespace Intersect.Client.Interface.Menu
         {
             if (!Networking.Network.Connected)
             {
-                Hide();
-                mMainMenu.Show();
-                Interface.MsgboxErrors.Add(new KeyValuePair<string, string>("", Strings.Errors.lostconnection));
+                //Interface.MsgboxErrors.Add(new KeyValuePair<string, string>("", Strings.Errors.lostconnection));
                 return;
             }
 
             // Re-Enable our buttons button if we're not waiting for the server anymore with it disabled.
-            if (!Globals.WaitingOnServer && mLoginBtn.IsDisabled)
+            if (!Globals.WaitingOnServer && MainMenu.ActiveNetworkStatus == NetworkStatus.Online && mLoginBtn.IsDisabled)
             {
                 mLoginBtn.Enable();
+                mRegisterBtn.Enable();
+                mForgotPassswordButton.Show();
             }
         }
 
@@ -155,7 +150,7 @@ namespace Intersect.Client.Interface.Menu
             mLoginWindow.IsHidden = false;
             if (!mForgotPassswordButton.IsHidden)
             {
-                mForgotPassswordButton.IsHidden = !Options.Instance.SmtpValid;
+                mForgotPassswordButton.IsHidden = Options.Instance == null || !Options.Instance.SmtpValid;
             }
 
             // Set focus to the appropriate elements.
@@ -175,12 +170,6 @@ namespace Intersect.Client.Interface.Menu
             mUseSavedPass = false;
         }
 
-        void BackBtn_Clicked(Base sender, ClickedEventArgs arguments)
-        {
-            Hide();
-            mMainMenu.Show();
-        }
-
         void UsernameTextbox_SubmitPressed(Base sender, EventArgs arguments)
         {
             TryLogin();
@@ -194,6 +183,11 @@ namespace Intersect.Client.Interface.Menu
         void LoginBtn_Clicked(Base sender, ClickedEventArgs arguments)
         {
             TryLogin();
+        }
+
+        void RegisterButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            mMainMenu.OpenRegisterWindow();
         }
 
         public void TryLogin()
@@ -237,6 +231,8 @@ namespace Intersect.Client.Interface.Menu
             SaveCredentials();
             Globals.WaitingOnServer = true;
             mLoginBtn.Disable();
+            mRegisterBtn.Disable();
+            mForgotPassswordButton.Hide();
             ChatboxMsg.ClearMessages();
         }
 

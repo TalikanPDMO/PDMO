@@ -10,6 +10,8 @@ using Intersect.Client.Interface.Game;
 using Intersect.Client.Interface.Game.Chat;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
+using Intersect.Enums;
+using Intersect.GameObjects;
 
 namespace Intersect.Client.Interface.Menu
 {
@@ -37,6 +39,10 @@ namespace Intersect.Client.Interface.Menu
         private Label mInfoLabel;
 
         private Button mLogoutButton;
+
+        private ImagePanel mType1Image;
+
+        private ImagePanel mType2Image;
 
         //Parent
         private MainMenu mMainMenu;
@@ -86,6 +92,10 @@ namespace Intersect.Client.Interface.Menu
             //Prev Char Button
             mPrevCharButton = new Button(mCharacterContainer, "PreviousCharacterButton");
             mPrevCharButton.Clicked += _prevCharButton_Clicked;
+
+            //Type Images
+            mType1Image = new ImagePanel(mCharacterSelectionPanel, "Type1Image");
+            mType2Image = new ImagePanel(mCharacterSelectionPanel, "Type2Image");
 
             //Play Button
             mPlayButton = new Button(mCharacterSelectionPanel, "PlayButton");
@@ -193,11 +203,12 @@ namespace Intersect.Client.Interface.Menu
                         Characters[mSelectedChar].Level, Characters[mSelectedChar].Class
                     )
                 );
-
+                
                 mPlayButton.Show();
                 mDeleteButton.Show();
                 mNewButton.Hide();
-
+                mType1Image.Texture = Globals.GetElementalTypeTexture((ElementalType)Characters[mSelectedChar].ElementalTypes[0], true);
+                mType2Image.Texture = Globals.GetElementalTypeTexture((ElementalType)Characters[mSelectedChar].ElementalTypes[1], true);
                 for (var i = 0; i <= Options.EquipmentSlots.Count; i++)
                 {
                     if (Characters[mSelectedChar].Equipment[i] == "Player")
@@ -309,6 +320,8 @@ namespace Intersect.Client.Interface.Menu
             {
                 mPlayButton.Hide();
                 mDeleteButton.Hide();
+                mType1Image.Texture = null;
+                mType2Image.Texture = null;
                 mNewButton.Show();
 
                 mCharnameLabel.SetText(Strings.CharacterSelection.empty);
@@ -440,6 +453,8 @@ namespace Intersect.Client.Interface.Menu
 
         public string Sprite = "";
 
+        public int[] ElementalTypes = new int[2]; 
+
         public Character(Guid id)
         {
             Id = id;
@@ -452,7 +467,8 @@ namespace Intersect.Client.Interface.Menu
             string face,
             int level,
             string charClass,
-            string[] equipment
+            string[] equipment,
+            int[] elementalTypes
         )
         {
             Equipment = equipment;
@@ -463,6 +479,7 @@ namespace Intersect.Client.Interface.Menu
             Level = level;
             Class = charClass;
             Exists = true;
+            ElementalTypes = elementalTypes;
         }
 
         public Character()

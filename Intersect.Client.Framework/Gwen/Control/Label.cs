@@ -238,6 +238,11 @@ namespace Intersect.Client.Framework.Gwen.Control
             base.LoadJson(obj);
             if (this.GetType() == typeof(Label) && obj["BackgroundTemplate"] != null)
             {
+                var a = obj["BackgroundTemplate"];
+                var b = (string)obj["BackgroundTemplate"];
+                var c = GameContentManager.Current.GetTexture(
+                        GameContentManager.TextureType.Gui, (string)obj["BackgroundTemplate"]
+                    );
                 SetBackgroundTemplate(
                     GameContentManager.Current.GetTexture(
                         GameContentManager.TextureType.Gui, (string) obj["BackgroundTemplate"]

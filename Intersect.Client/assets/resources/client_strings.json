@@ -99,7 +99,7 @@
     "invalidname": "Le nom est invalide. Veuillez utiliser entre 2 et 20 caractères alphanumériques.",
     "male": "Mâle",
     "name": "Nom:",
-    "title": "Création d'un Pokémon"
+    "title": "Choix du Pokémon"
   },
   "CharacterSelection": {
     "delete": "Effacer",
@@ -726,7 +726,7 @@
     "resourcesfatal": "Échec lors du chargement des ressources depuis les fichiers du jeu. Le jeu ne peut pas se lancer!"
   },
   "Server": {
-    "statuslabel": "État du serveur: {00}",
+    "statuslabel": "Serveur : ",
     "online": "En ligne",
     "offline": "Hors-ligne",
     "failed": "Erreur de connexion",

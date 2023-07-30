@@ -1875,7 +1875,7 @@ namespace Intersect.Client.Framework.Gwen.Skin
                 return;
             }
 
-            mTextures.Input.ComboBox.Button.Normal.Draw(Renderer, control.RenderBounds);
+            mTextures.Input.ComboBox.Button.Normal.Draw(Renderer, control.RenderBounds, control.RenderColor);
         }
 
         public override void DrawNumericUpDownButton(Control.Base control, bool depressed, bool up)

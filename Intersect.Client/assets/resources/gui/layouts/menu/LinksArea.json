@@ -1,5 +1,5 @@
 {
-  "Bounds": "675,760,250,130",
+  "Bounds": "675,760,520,60",
   "Padding": "0,0,0,0",
   "AlignmentEdgeDistances": "0,0,0,0",
   "AlignmentTransform": "0,0",
@@ -29,7 +29,7 @@
       "AlignmentTransform": "0,0",
       "Margin": "0,0,0,15",
       "RenderColor": "255,255,255,255",
-      "Alignments": "CenterH",
+      "Alignments": "Left",
       "DrawBackground": true,
       "MinimumSize": "1,1",
       "MaximumSize": "4096,4096",
@@ -61,13 +61,13 @@
       "ClickSound": ""
     },
     "DiscordButton": {
-      "Bounds": "0,70,250,60",
+      "Bounds": "0,0,250,60",
       "Padding": "0,0,0,0",
       "AlignmentEdgeDistances": "0,0,0,0",
       "AlignmentTransform": "0,0",
       "Margin": "0,0,0,0",
       "RenderColor": "255,255,255,255",
-      "Alignments": "CenterH",
+      "Alignments": "Right",
       "DrawBackground": true,
       "MinimumSize": "1,1",
       "MaximumSize": "4096,4096",

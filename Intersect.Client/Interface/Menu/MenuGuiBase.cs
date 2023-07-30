@@ -19,7 +19,11 @@ namespace Intersect.Client.Interface.Menu
 
         private readonly ImagePanel mServerStatusArea;
 
-        private readonly Label mServerStatusLabel;
+        private readonly RichLabel mServerStatusLabel;
+
+        private readonly ImagePanel mVersionArea;
+
+        private readonly Label mVersionLabel;
 
         private readonly ImagePanel mLinksArea;
 
@@ -35,13 +39,30 @@ namespace Intersect.Client.Interface.Menu
         {
             mMenuCanvas = myCanvas;
             MainMenu = new MainMenu(mMenuCanvas);
-            mServerStatusArea = new ImagePanel(mMenuCanvas, "ServerStatusArea");
-            mServerStatusLabel = new Label(mServerStatusArea, "ServerStatusLabel")
-            {
-                Text = Strings.Server.StatusLabel.ToString(MainMenu.ActiveNetworkStatus.ToLocalizedString()),
-            };
 
+            mServerStatusArea = new ImagePanel(mMenuCanvas, "ServerStatusArea");
+            mServerStatusLabel = new RichLabel(mServerStatusArea, "ServerStatusLabel");
             mServerStatusArea.LoadJsonUi(GameContentManager.UI.Menu, Graphics.Renderer.GetResolutionString());
+            mServerStatusLabel.AddText(Strings.Server.StatusLabel, Color.White, Framework.Gwen.Alignments.Center);
+            switch (MainMenu.ActiveNetworkStatus)
+            {
+                case Network.NetworkStatus.Offline:
+                case Network.NetworkStatus.HandshakeFailure:
+                case Network.NetworkStatus.VersionMismatch:
+                case Network.NetworkStatus.Failed:
+                case Network.NetworkStatus.Quitting:
+                    mServerStatusLabel.AddText(MainMenu.ActiveNetworkStatus.ToLocalizedString(), Color.Red, Framework.Gwen.Alignments.CenterV);
+                    break;
+                case Network.NetworkStatus.Online:
+                    mServerStatusLabel.AddText(MainMenu.ActiveNetworkStatus.ToLocalizedString(), Color.Green, Framework.Gwen.Alignments.CenterV);
+                    break;
+                case Network.NetworkStatus.ServerFull:
+                    mServerStatusLabel.AddText(MainMenu.ActiveNetworkStatus.ToLocalizedString(), Color.Orange, Framework.Gwen.Alignments.CenterV);
+                    break;
+                default:
+                    mServerStatusLabel.AddText(MainMenu.ActiveNetworkStatus.ToLocalizedString(), Color.White, Framework.Gwen.Alignments.CenterV);
+                    break;
+            }
             MainMenu.NetworkStatusChanged += HandleNetworkStatusChanged;
 
             mLinksArea = new ImagePanel(mMenuCanvas, "LinksArea");
@@ -50,6 +71,11 @@ namespace Intersect.Client.Interface.Menu
             mDiscordButton = new Button(mLinksArea, "DiscordButton");
             mDiscordButton.Clicked += DiscordButton_Clicked;
             mLinksArea.LoadJsonUi(GameContentManager.UI.Menu, Graphics.Renderer.GetResolutionString());
+
+            mVersionArea = new ImagePanel(mMenuCanvas, "VersionArea");
+            mVersionLabel = new Label(mVersionArea, "VersionLabel");
+            mVersionArea.LoadJsonUi(GameContentManager.UI.Menu, Graphics.Renderer.GetResolutionString());
+            mVersionLabel.SetText(Strings.Server.Version.ToString(System.Windows.Forms.Application.ProductVersion));
         }
 
         ~MenuGuiBase()
@@ -60,8 +86,27 @@ namespace Intersect.Client.Interface.Menu
 
         private void HandleNetworkStatusChanged()
         {
-            mServerStatusLabel.Text =
-                Strings.Server.StatusLabel.ToString(MainMenu.ActiveNetworkStatus.ToLocalizedString());
+            mServerStatusLabel.ClearText();
+            mServerStatusLabel.AddText(Strings.Server.StatusLabel, Color.White, Framework.Gwen.Alignments.Center);
+            switch (MainMenu.ActiveNetworkStatus)
+            {
+                case Network.NetworkStatus.Offline:
+                case Network.NetworkStatus.HandshakeFailure:
+                case Network.NetworkStatus.VersionMismatch:
+                case Network.NetworkStatus.Failed:
+                case Network.NetworkStatus.Quitting:
+                    mServerStatusLabel.AddText(MainMenu.ActiveNetworkStatus.ToLocalizedString(), Color.Red, Framework.Gwen.Alignments.CenterV);
+                    break;
+                case Network.NetworkStatus.Online:
+                    mServerStatusLabel.AddText(MainMenu.ActiveNetworkStatus.ToLocalizedString(), Color.Green, Framework.Gwen.Alignments.CenterV);
+                    break;
+                case Network.NetworkStatus.ServerFull:
+                    mServerStatusLabel.AddText(MainMenu.ActiveNetworkStatus.ToLocalizedString(), Color.Orange, Framework.Gwen.Alignments.CenterV);
+                    break;
+                default:
+                    mServerStatusLabel.AddText(MainMenu.ActiveNetworkStatus.ToLocalizedString(), Color.White, Framework.Gwen.Alignments.CenterV);
+                    break;
+            }
         }
 
         private void WebsiteButton_Clicked(Base sender, ClickedEventArgs arguments)

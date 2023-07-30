@@ -18,7 +18,8 @@ namespace Intersect.Network.Packets.Server
             string face,
             int level,
             string className,
-            string[] equipment
+            string[] equipment,
+            int[] elementalTypes
         )
         {
             Id = id;
@@ -28,6 +29,7 @@ namespace Intersect.Network.Packets.Server
             Level = level;
             ClassName = className;
             Equipment = equipment;
+            ElementalTypes = elementalTypes;
         }
 
         [Key(0)]
@@ -50,6 +52,9 @@ namespace Intersect.Network.Packets.Server
 
         [Key(6)]
         public string[] Equipment { get; set; }
+
+        [Key(7)]
+        public int[] ElementalTypes { get; set; }
 
     }
 

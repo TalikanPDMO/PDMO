@@ -419,6 +419,8 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString title = @"Create Character";
 
+            public static LocalizedString description = @"Gameplay";
+
         }
 
         public struct CharacterSelection
@@ -1468,7 +1470,9 @@ namespace Intersect.Client.Localization
         public struct Server
         {
 
-            public static LocalizedString StatusLabel = @"Server Status: {00}";
+            public static LocalizedString StatusLabel = @"Server : ";
+
+            public static LocalizedString Version = @"Version : {00}";
 
             public static LocalizedString Online = @"Online";
 

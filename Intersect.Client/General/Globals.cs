@@ -5,6 +5,7 @@ using Intersect.Client.Entities;
 using Intersect.Client.Entities.Events;
 using Intersect.Client.Framework.Database;
 using Intersect.Client.Framework.File_Management;
+using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Framework.Input;
 using Intersect.Client.Framework.Sys;
 using Intersect.Client.Items;
@@ -205,6 +206,25 @@ namespace Intersect.Client.General
                     CalculatedSpeeds[i] = 1000f;
                 }
             }
+        }
+
+        public static GameTexture GetElementalTypeTexture(ElementalType elementalType, bool needFull)
+        {
+            if (elementalType == ElementalType.None)
+            {
+                return null;
+            }
+            if (needFull)
+            {
+                return ContentManager.GetTexture(GameContentManager.TextureType.Gui,
+                    "type_" + elementalType.ToString() + "_full.png");
+            }
+            else
+            {
+                return ContentManager.GetTexture(GameContentManager.TextureType.Gui,
+                    "type_" + elementalType.ToString() + ".png");
+            }
+           
         }
 
     }

@@ -10,6 +10,7 @@ using Intersect.Client.General;
 using Intersect.Client.Interface.Game.Chat;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
+using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.Utilities;
 
@@ -49,6 +50,8 @@ namespace Intersect.Client.Interface.Menu
 
         private int mDisplaySpriteIndex = -1;
 
+        private LabeledCheckBox mMaleChk;
+
         private LabeledCheckBox mFemaleChk;
 
         private List<KeyValuePair<int, ClassSprite>> mFemaleSprites = new List<KeyValuePair<int, ClassSprite>>();
@@ -61,12 +64,18 @@ namespace Intersect.Client.Interface.Menu
 
         private Label mHintLabel;
 
-        private RichLabel mClassDescriptionLabel;
+        private RichLabel mClassDescriptionText;
+
+        private ImagePanel mDescriptionPanel;
+
+        private Label mDescriptionLabel;
+
+        private ImagePanel mType1Image;
+
+        private ImagePanel mType2Image;
 
         //Parent
         private MainMenu mMainMenu;
-
-        private LabeledCheckBox mMaleChk;
 
         //Class Info
         private List<KeyValuePair<int, ClassSprite>> mMaleSprites = new List<KeyValuePair<int, ClassSprite>>();
@@ -129,9 +138,6 @@ namespace Intersect.Client.Interface.Menu
             mHint2Label.SetText(Strings.CharacterCreation.hint2);
             mHint2Label.IsHidden = true;
 
-            //Description label
-            mClassDescriptionLabel = new RichLabel(mCharCreationPanel, "ClassDescriptionLabel");
-
             //Character Container
             mCharacterContainer = new ImagePanel(mCharCreationPanel, "CharacterContainer");
 
@@ -147,10 +153,13 @@ namespace Intersect.Client.Interface.Menu
             mPrevSpriteButton = new Button(mCharacterContainer, "PreviousSpriteButton");
             mPrevSpriteButton.Clicked += _prevSpriteButton_Clicked;
 
-            //Class Background
-            mGenderBackground = new ImagePanel(mCharCreationPanel, "GenderPanel");
+           
+            //Type Images
+            mType1Image = new ImagePanel(mCharCreationPanel, "Type1Image");
+            mType2Image = new ImagePanel(mCharCreationPanel, "Type2Image");
 
             //Gender Label
+            mGenderBackground = new ImagePanel(mCharCreationPanel, "GenderPanel");
             mGenderLabel = new Label(mGenderBackground, "GenderLabel");
             mGenderLabel.SetText(Strings.CharacterCreation.gender);
 
@@ -169,9 +178,15 @@ namespace Intersect.Client.Interface.Menu
             {
                 Text = Strings.CharacterCreation.female
             };
+            //Description Background
+            mDescriptionPanel = new ImagePanel(mCharCreationPanel, "DescriptionPanel");
 
             mFemaleChk.Checked += femaleChk_Checked;
             mFemaleChk.UnChecked += maleChk_Checked;
+            //Description Label & Text
+            mDescriptionLabel = new Label(mDescriptionPanel, "DescriptionLabel");
+            mDescriptionLabel.SetText(Strings.CharacterCreation.description);
+            mClassDescriptionText = new RichLabel(mDescriptionPanel, "DescriptionText");
 
             //Register - Send Registration Button
             mCreateButton = new Button(mCharCreationPanel, "CreateButton");
@@ -184,6 +199,11 @@ namespace Intersect.Client.Interface.Menu
             mBackButton.Clicked += BackButton_Clicked;
 
             mCharCreationPanel.LoadJsonUi(GameContentManager.UI.Menu, Graphics.Renderer.GetResolutionString());
+
+            // Keep compatibility for gender checkbox even if we don't use it now
+            /*mMaleChk = new LabeledCheckBox(mCharCreationPanel);
+            mMaleChk.IsHidden = true;
+            mMaleChk.IsChecked = true;*/
         }
 
         public bool IsHidden => mCharCreationPanel.IsHidden;
@@ -227,10 +247,11 @@ namespace Intersect.Client.Interface.Menu
         private void UpdateDisplay()
         {
             var isFace = true;
-            if (GetClass() != null && mDisplaySpriteIndex != -1)
+            var classBase = GetClass();
+            if (classBase != null && mDisplaySpriteIndex != -1)
             {
                 mCharacterPortrait.IsHidden = false;
-                if (GetClass().Sprites.Count > 0)
+                if (classBase.Sprites.Count > 0)
                 {
                     if (mMaleChk.IsChecked)
                     {
@@ -348,9 +369,11 @@ namespace Intersect.Client.Interface.Menu
             if (cls != null)
             {
                 //Change class description
-                mClassDescriptionLabel.ClearText();
-                mClassDescriptionLabel.AddText(cls.Description, Color.White, mClassDescriptionLabel.CurAlignments.Count > 0 ? mClassDescriptionLabel.CurAlignments[0] : Alignments.Left);
-                mClassDescriptionLabel.SizeToChildren(false, true);
+                mClassDescriptionText.ClearText();
+                mClassDescriptionText.AddText(cls.Description, Color.Black, mClassDescriptionText.CurAlignments.Count > 0 ? mClassDescriptionText.CurAlignments[0] : Alignments.Left);
+                mClassDescriptionText.SizeToChildren(false, true);
+                mType1Image.Texture = Globals.GetElementalTypeTexture((ElementalType)cls.ElementalTypes[0], true);
+                mType2Image.Texture = Globals.GetElementalTypeTexture((ElementalType)cls.ElementalTypes[1], true);
                 for (var i = 0; i < cls.Sprites.Count; i++)
                 {
                     if (cls.Sprites[i].Gender == 0)
