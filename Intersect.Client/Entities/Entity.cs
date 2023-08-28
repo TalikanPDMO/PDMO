@@ -42,6 +42,8 @@ namespace Intersect.Client.Entities
 
         }
 
+        public const byte MAX_ELEMENTAL_TYPES = 2;
+
         public int AnimationFrame;
 
         //Entity Animations
@@ -200,6 +202,8 @@ namespace Intersect.Client.Entities
         public byte Y;
 
         public byte Z;
+
+        public ElementalType[] ElementalTypes = new ElementalType[MAX_ELEMENTAL_TYPES];
 
         public Entity(Guid id, EntityPacket packet, bool isEvent = false)
         {

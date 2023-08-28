@@ -222,6 +222,7 @@ namespace Intersect.Server.Entities
             var pkt = (ResourceEntityPacket) packet;
             pkt.ResourceId = Base.Id;
             pkt.IsDead = IsDead();
+            pkt.ElementalTypes = GetElementalTypes();
 
             return pkt;
         }

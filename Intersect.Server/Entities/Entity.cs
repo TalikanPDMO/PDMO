@@ -1474,6 +1474,14 @@ namespace Intersect.Server.Entities
             return stats;
         }
 
+        public ElementalType[] GetElementalTypes()
+        {
+            var elemTypes = new ElementalType[NpcBase.MAX_ELEMENTAL_TYPES];
+            Array.Copy(ElementalTypes, 0, elemTypes, 0, NpcBase.MAX_ELEMENTAL_TYPES);
+
+            return elemTypes;
+        }
+
         public virtual bool IsAllyOf(Entity otherEntity)
         {
             return this == otherEntity;

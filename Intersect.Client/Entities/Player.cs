@@ -270,7 +270,7 @@ namespace Intersect.Client.Entities
             CombatTimer = pkt.CombatTimeRemaining + Globals.System.GetTimeMs();
             Guild = pkt.Guild;
             Rank = pkt.GuildRank;
-
+            ElementalTypes = pkt.ElementalTypes;
             var playerPacket = (PlayerEntityPacket) packet;
 
             if (playerPacket.Equipment != null)

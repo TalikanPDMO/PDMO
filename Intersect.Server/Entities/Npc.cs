@@ -2151,6 +2151,7 @@ namespace Intersect.Server.Entities
             var pkt = (NpcEntityPacket) packet;
             pkt.Aggression = GetAggression(forPlayer);
             pkt.IsSpawn = isSpawn;
+            pkt.ElementalTypes = GetElementalTypes();
             return pkt;
         }
 

@@ -766,7 +766,7 @@ namespace Intersect.Server.Entities
 
             pkt.Guild = Guild?.Name;
             pkt.GuildRank = GuildRank;
-
+            pkt.ElementalTypes = GetElementalTypes();
             return pkt;
         }
 
@@ -1794,6 +1794,7 @@ namespace Intersect.Server.Entities
                 }
             }
         }
+
         //Warping
         public override void Warp(Guid newMapId, float newX, float newY, bool adminWarp = false)
         {
