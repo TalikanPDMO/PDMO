@@ -311,7 +311,7 @@ namespace Intersect.Editor.Maps
 
             foreach (var t in LocalEvents.Values)
             {
-                if (t.SpawnX == x && t.SpawnY == y)
+                if (t!= null && t.SpawnX == x && t.SpawnY == y)
                 {
                     return t;
                 }
