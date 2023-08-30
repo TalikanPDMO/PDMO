@@ -109,8 +109,16 @@ namespace Intersect.Client.Interface.Game
             mStatus.SetText(Strings.PvpStadium.status.ToString(Strings.PvpStadium.stadiumstates[(int)Globals.Me.StadiumState]));
             mWins.SetText(Strings.PvpStadium.wins.ToString(Globals.Me.StadiumWins));
             mLosses.SetText(Strings.PvpStadium.losses.ToString(Globals.Me.StadiumLosses));
-            var winrate = ((float)(Globals.Me.StadiumWins * 100)) / ((float)(Globals.Me.StadiumWins + Globals.Me.StadiumLosses));
-            mWinrate.SetText(Strings.PvpStadium.winrate.ToString(Math.Round(winrate, 2)));
+            var total = Globals.Me.StadiumWins + Globals.Me.StadiumLosses;
+            if (total == 0)
+            {
+                mWinrate.SetText(Strings.PvpStadium.winrate.ToString(0));
+            }
+            else
+            {
+                var winrate = ((float)(Globals.Me.StadiumWins * 100)) / ((float)(total));
+                mWinrate.SetText(Strings.PvpStadium.winrate.ToString(Math.Round(winrate, 2)));
+            }  
         }
 
         void toggleRegistrationButton_Clicked(Base sender, ClickedEventArgs arguments)
