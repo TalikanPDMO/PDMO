@@ -2401,11 +2401,13 @@ namespace Intersect.Server.Entities
                 }
                 else
                 {
+                    bool stadiumKill = false;
+                    bool pvpKill = false;
                     //PVP Kill common events
                     if (!enemy.Dead && enemy is Player && this is Player)
                     {
                         // No trigger if it is a stadium kill (we handle it in Stadium EndMatch method)
-                        bool stadiumKill = false;
+                        pvpKill = true;
                         if (PvpStadiumUnit.StadiumQueue.TryGetValue(this.Id, out var playerUnit) && playerUnit.StadiumState == PvpStadiumState.MatchOnGoing)
                         {
                             if (PvpStadiumUnit.StadiumQueue.TryGetValue(enemy.Id, out playerUnit) && playerUnit.StadiumState == PvpStadiumState.MatchOnGoing)
@@ -2422,7 +2424,8 @@ namespace Intersect.Server.Entities
 
                     lock (enemy.EntityLock)
                     {
-                        enemy.Die(true, this);
+                        // No drops items when pvpkill
+                        enemy.Die(!pvpKill, this);
                     }
                 }
 

@@ -23,7 +23,7 @@ namespace Intersect.Server.Core.Commands
 
             lock (target.Entity)
             {
-                target.Entity.Die();
+                target.Entity.Die(false);
             }
             
             PacketSender.SendGlobalMsg($@"    {Strings.Player.serverkilled.ToString(target.Entity.Name)}");

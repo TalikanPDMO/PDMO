@@ -862,8 +862,9 @@ namespace Intersect.Server.Entities
                 base.Die(dropItems, killer);
             }
 
-            if (Options.Instance.PlayerOpts.ExpLossOnDeathPercent > 0)
+            if (Options.Instance.PlayerOpts.ExpLossOnDeathPercent > 0 && !(killer is Player))
             {
+                // No xp loss when pvp
                 if (Options.Instance.PlayerOpts.ExpLossFromCurrentExp)
                 {
                     var ExpLoss = (this.Exp * (Options.Instance.PlayerOpts.ExpLossOnDeathPercent / 100.0));

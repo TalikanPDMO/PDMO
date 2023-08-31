@@ -75,7 +75,7 @@ namespace Intersect.Server.Admin.Actions
             {
                 lock (target.EntityLock)
                 {
-                    target.Die(); //Kill em'
+                    target.Die(false); //Kill em'
                 }
                 
                 PacketSender.SendGlobalMsg(Strings.Player.killed.ToString(target.Name, player.Name));
