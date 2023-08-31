@@ -159,6 +159,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lblMalePaperdoll = new System.Windows.Forms.Label();
             this.picMalePaperdoll = new System.Windows.Forms.PictureBox();
             this.grpWeaponProperties = new DarkUI.Controls.DarkGroupBox();
+            this.chkAdaptRange = new DarkUI.Controls.DarkCheckBox();
             this.nudAttackRange = new DarkUI.Controls.DarkNumericUpDown();
             this.lblAttackRange = new System.Windows.Forms.Label();
             this.cmbElementalType = new DarkUI.Controls.DarkComboBox();
@@ -2065,6 +2066,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpWeaponProperties.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpWeaponProperties.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpWeaponProperties.Controls.Add(this.chkAdaptRange);
             this.grpWeaponProperties.Controls.Add(this.nudAttackRange);
             this.grpWeaponProperties.Controls.Add(this.lblAttackRange);
             this.grpWeaponProperties.Controls.Add(this.cmbElementalType);
@@ -2101,13 +2103,23 @@ namespace Intersect.Editor.Forms.Editors
             this.grpWeaponProperties.Text = "Weapon Properties";
             this.grpWeaponProperties.Visible = false;
             // 
+            // chkAdaptRange
+            // 
+            this.chkAdaptRange.AutoSize = true;
+            this.chkAdaptRange.Location = new System.Drawing.Point(91, 455);
+            this.chkAdaptRange.Name = "chkAdaptRange";
+            this.chkAdaptRange.Size = new System.Drawing.Size(104, 17);
+            this.chkAdaptRange.TabIndex = 73;
+            this.chkAdaptRange.Text = "Adapt to Player?";
+            this.chkAdaptRange.CheckedChanged += new System.EventHandler(this.chkAdaptRange_CheckedChanged);
+            // 
             // nudAttackRange
             // 
             this.nudAttackRange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudAttackRange.ForeColor = System.Drawing.Color.Gainsboro;
             this.nudAttackRange.Location = new System.Drawing.Point(15, 454);
             this.nudAttackRange.Name = "nudAttackRange";
-            this.nudAttackRange.Size = new System.Drawing.Size(180, 20);
+            this.nudAttackRange.Size = new System.Drawing.Size(70, 20);
             this.nudAttackRange.TabIndex = 72;
             this.nudAttackRange.Value = new decimal(new int[] {
             0,
@@ -3275,5 +3287,6 @@ namespace Intersect.Editor.Forms.Editors
         private Label lblElementalType;
         private DarkNumericUpDown nudAttackRange;
         private Label lblAttackRange;
+        private DarkCheckBox chkAdaptRange;
     }
 }

@@ -1395,7 +1395,10 @@ namespace Intersect.Server.Entities
                 Equipment[Options.WeaponIndex] >= 0)
             {
                 weapon = ItemBase.Get(Items[Equipment[Options.WeaponIndex]].ItemId);
-                attackrange = weapon.AttackRange;
+                if (!weapon.AdaptRange)
+                {
+                    attackrange = weapon.AttackRange;
+                }
             }
 
             if (target is Resource || attackrange == 0)

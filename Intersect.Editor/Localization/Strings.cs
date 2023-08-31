@@ -3462,6 +3462,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString attackrange = @"Attack Range:";
 
+            public static LocalizedString adaptrange = @"Adapt to Player?";
+
             public static LocalizedString attackbonus = @"Attack:";
 
             public static LocalizedString attackspeed = @"Attack Speed";

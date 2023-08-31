@@ -1170,7 +1170,7 @@ namespace Intersect.Server.Networking
             PacketSender.SendEntityAttack(player, player.CalculateAttackTime());
 
             player.ClientAttackTimer = clientTime + (long) player.CalculateAttackTime();
-
+            var classBase = ClassBase.Get(player.ClassId);
             //Fire projectile instead if weapon has it
             if (Options.WeaponIndex > -1)
             {
@@ -1181,8 +1181,8 @@ namespace Intersect.Server.Networking
 
                     //Check for animation
                     var attackAnim = weaponItem.AttackAnimation;
-
-                    if (attackAnim != null && attackingTile.TryFix() && weaponItem.AttackRange == 0)
+                    var attackrange = weaponItem.AdaptRange ? classBase.AttackRange : weaponItem.AttackRange;
+                    if (attackAnim != null && attackingTile.TryFix() && attackrange == 0)
                     {
                         PacketSender.SendAnimationToProximity(
                             attackAnim.Id, -1, player.Id, attackingTile.GetMapId(), attackingTile.GetX(),
@@ -1279,7 +1279,6 @@ namespace Intersect.Server.Networking
 
             if (unequippedAttack)
             {
-                var classBase = ClassBase.Get(player.ClassId);
                 if (classBase != null)
                 {
                     //Check for animation
