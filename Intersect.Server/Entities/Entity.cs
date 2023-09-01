@@ -2803,7 +2803,10 @@ namespace Intersect.Server.Entities
                         }
 
                         int[] position = GetPositionNearTarget(baseTarget.MapId, baseTarget.X, baseTarget.Y);
-                        Warp(baseTarget.MapId, (byte)position[0], (byte)position[1], (byte)Dir);
+                        if (position!= null)
+                        {
+                            Warp(baseTarget.MapId, (byte)position[0], (byte)position[1], (byte)Dir);
+                        }
                         ChangeDir(DirToEnemy(baseTarget, true));
 
                         if (spellBase.ImpactAnimation != null)
@@ -2931,7 +2934,8 @@ namespace Intersect.Server.Entities
             var map = MapInstance.Get(mapId);
             if (map == null)
             {
-                return new int[] { x, y };
+                //return new int[] { x, y };
+                return null;
             }
 
             List<int[]> validPosition = new List<int[]>();
@@ -2988,8 +2992,9 @@ namespace Intersect.Server.Entities
                 return validPosition[Randomization.Next(0, validPosition.Count)];
             }
 
-            // If nothing found, return target position
-            return new int[] { x, y };
+            // If nothing found, return null to indicate it
+            return null;
+            //return new int[] { x, y };
         }
 
         //Check if the target is either up, down, left or right of the target on the correct Z dimension.
