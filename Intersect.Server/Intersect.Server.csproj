@@ -721,6 +721,10 @@
     <Compile Include="Migrations\Game\20230831161040_AddingAdaptRangeToItems.designer.cs">
       <DependentUpon>20230831161040_AddingAdaptRangeToItems.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230901075305_AddingDescriptionToVariables.cs" />
+    <Compile Include="Migrations\Game\20230901075305_AddingDescriptionToVariables.designer.cs">
+      <DependentUpon>20230901075305_AddingDescriptionToVariables.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>
