@@ -763,7 +763,10 @@ namespace Intersect.Server.Maps
                     MapId = Id,
                     X = tileX,
                     Y = tileY,
-                    Dir = dir
+                    Dir = dir,
+                    SpawnMap = this,
+                    SpawnX = tileX,
+                    SpawnY = tileY
                 };
 
                 AddEntity(npc);

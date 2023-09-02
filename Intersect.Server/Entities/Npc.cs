@@ -111,6 +111,21 @@ namespace Intersect.Server.Entities
         /// </summary>
         public int AggroCenterZ;
 
+        /// <summary>
+        /// The map on which this NPC was spawned.
+        /// </summary>
+        public MapInstance SpawnMap;
+
+        /// <summary>
+        /// The X value on which this NPC was spawned.
+        /// </summary>
+        public int SpawnX;
+
+        /// <summary>
+        /// The Y value on which this NPC was spawned.
+        /// </summary>
+        public int SpawnY;
+
         public Npc(NpcBase myBase, bool despawnable = false, int level = 0) : base()
         {
             Name = myBase.Name;
@@ -637,50 +652,9 @@ namespace Intersect.Server.Entities
             var canMove = base.CanMove(moveDir);
             if ((canMove == -1 || canMove == -4) && IsFleeing() && Options.Instance.NpcOpts.AllowResetRadius)
             {
-                var yOffset = 0;
-                var xOffset = 0;
                 var tile = new TileHelper(MapId, X, Y);
-                switch (moveDir)
-                {
-                    case 0: //Up
-                        yOffset--;
 
-                        break;
-                    case 1: //Down
-                        yOffset++;
-
-                        break;
-                    case 2: //Left
-                        xOffset--;
-
-                        break;
-                    case 3: //Right
-                        xOffset++;
-
-                        break;
-                    case 4: //NW
-                        yOffset--;
-                        xOffset--;
-
-                        break;
-                    case 5: //NE
-                        yOffset--;
-                        xOffset++;
-
-                        break;
-                    case 6: //SW
-                        yOffset++;
-                        xOffset--;
-
-                        break;
-                    case 7: //SE
-                        yOffset++;
-                        xOffset++;
-
-                        break;
-                }
-
-                if (tile.Translate(xOffset, yOffset))
+                if (tile.TranslateDir(moveDir))
                 {
                     //If this would move us past our reset radius then we cannot move.
                     var dist = GetDistanceBetween(AggroCenterMap, tile.GetMap(), AggroCenterX, tile.GetX(), AggroCenterY, tile.GetY());
@@ -692,6 +666,7 @@ namespace Intersect.Server.Entities
             }
             return canMove;
         }
+
 
         private bool TryCastSpells()
         {
@@ -1532,11 +1507,8 @@ namespace Intersect.Server.Entities
                             CurrentRandomMove = 0;
                             OpposingDir = -1;
                         }
-                        int dirMove = Randomization.Next(0, 8);
-                        while(dirMove == OpposingDir)
-                        {
-                            dirMove = Randomization.Next(0, 8);
-                        }
+                        var validDirs = GetRandomMoveValidDirs();
+                        int dirMove = validDirs[Randomization.Next(0, validDirs.Length)];
                         switch (dirMove)
                         {
                             case 0: //Up
@@ -1631,6 +1603,34 @@ namespace Intersect.Server.Entities
             }
         }
 
+        public int[] GetRandomMoveValidDirs()
+        {
+            var validDirs = new List<int>();
+            for (var dir= 0; dir< 8;dir++)
+            {
+                var tile = new TileHelper(MapId, X, Y);
+                if (tile.TranslateDir(dir))
+                {
+                    //If this would move us past our max distance from the spawn, it's not a valid dir
+                    var dist = GetDistanceBetween(SpawnMap, tile.GetMap(), SpawnX, tile.GetX(), SpawnY, tile.GetY(), true);
+                    if (dist <= Options.Npc.MaxDistanceSpawnOnRandomMove)
+                    {
+                        validDirs.Add(dir);
+                    }
+                }
+            }
+            if (validDirs.Count > 1)
+            {
+                // We try to remove the opposingdir if we can move at least at 1 other position
+                validDirs.Remove(OpposingDir);
+            }
+            else if (validDirs.Count == 0)
+            {
+                // If no possible dir, add opposing dir by default
+                validDirs.Add(OpposingDir);
+            }
+            return validDirs.ToArray();
+        }
         public byte RandomStepBackDir(byte dirToEnemy)
         {
             byte[] dirList = null;

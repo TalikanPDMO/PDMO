@@ -46,6 +46,8 @@
 
         public int SpellCastFrequencyCheck = 1000;
 
+        public int MaxDistanceSpawnOnRandomMove { get; set; } = 5;
+
         public int MinRandomSpawnTime = 2000;
 
         public int MaxRandomSpawnTime = 5000;

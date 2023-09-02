@@ -43,6 +43,52 @@ namespace Intersect.Server.Maps
             return TryFix();
         }
 
+        public bool TranslateDir(int dir)
+        {
+            var yOffset = 0;
+            var xOffset = 0;
+            switch (dir)
+            {
+                case 0: //Up
+                    yOffset--;
+
+                    break;
+                case 1: //Down
+                    yOffset++;
+
+                    break;
+                case 2: //Left
+                    xOffset--;
+
+                    break;
+                case 3: //Right
+                    xOffset++;
+
+                    break;
+                case 4: //NW
+                    yOffset--;
+                    xOffset--;
+
+                    break;
+                case 5: //NE
+                    yOffset--;
+                    xOffset++;
+
+                    break;
+                case 6: //SW
+                    yOffset++;
+                    xOffset--;
+
+                    break;
+                case 7: //SE
+                    yOffset++;
+                    xOffset++;
+
+                    break;
+            }
+            return Translate(xOffset, yOffset);
+        }
+
         public bool TryFix()
         {
             var oldTileX = mTileX;
