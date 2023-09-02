@@ -3492,7 +3492,8 @@ namespace Intersect.Server.Entities
                 if (this is Player)
                 {
                     //Player drop rates
-                    if (Randomization.Next(1, 101) >= itemBase.DropChanceOnDeath * luck * multiplier)
+                    // no luck or multiplier for item drop on death
+                    if (Randomization.Next(1, 101) >= itemBase.DropChanceOnDeath)
                     {
                         continue;
                     }
