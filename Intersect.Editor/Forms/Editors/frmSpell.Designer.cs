@@ -1452,9 +1452,9 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbCritEffectSpell.FormattingEnabled = true;
             this.cmbCritEffectSpell.Items.AddRange(new object[] {
             "None"});
-            this.cmbCritEffectSpell.Location = new System.Drawing.Point(138, 208);
+            this.cmbCritEffectSpell.Location = new System.Drawing.Point(126, 208);
             this.cmbCritEffectSpell.Name = "cmbCritEffectSpell";
-            this.cmbCritEffectSpell.Size = new System.Drawing.Size(110, 21);
+            this.cmbCritEffectSpell.Size = new System.Drawing.Size(160, 21);
             this.cmbCritEffectSpell.TabIndex = 65;
             this.cmbCritEffectSpell.Text = "None";
             this.cmbCritEffectSpell.TextPadding = new System.Windows.Forms.Padding(2);

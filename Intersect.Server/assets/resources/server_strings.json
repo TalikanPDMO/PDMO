@@ -121,6 +121,7 @@
     "lowhealth": "Pas assez de PV.",
     "lowmana": "Pas assez de PM.",
     "miss": "MANQUER!",
+    "immune": "IMMUNISÉ",
     "notarget": "Pas de cible!",
     "removesymbol": "-",
     "resourcereqs": "You do not meet the requirements to harvest this resource!",

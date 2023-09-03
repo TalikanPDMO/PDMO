@@ -1589,6 +1589,11 @@ namespace Intersect.Server.Entities
             {
                 var damageHealth = parentItem.Damage;
                 var damageMana = 0;
+                if (target !=null && target.IsImmuneToElementalType(parentItem.ElementalType))
+                {
+                    PacketSender.SendActionMsg(target, Strings.Combat.immune, CustomColors.Combat.Immune);
+                    return;
+                }
                 isCrit = Attack(
                     target, ref damageHealth, ref damageMana, 0, 0, (ElementalType)parentItem.ElementalType, (DamageType) parentItem.DamageType, (Stats) parentItem.ScalingStat,
                     parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, parentItem.Name, null, null, true, parentItem.CritEffectSpellReplace, alreadyCrit
@@ -1704,6 +1709,12 @@ namespace Intersect.Server.Entities
                         }
                     }
                 }
+            }
+
+            if (target != null && target.IsImmuneToElementalType(spellBase.ElementalType))
+            {
+                PacketSender.SendActionMsg(target, Strings.Combat.immune, CustomColors.Combat.Immune);
+                return;
             }
 
             var deadAnimations = new List<KeyValuePair<Guid, sbyte>>();
@@ -1961,6 +1972,11 @@ namespace Intersect.Server.Entities
             //See player and npc override of this virtual void
         }
 
+        public bool IsImmuneToElementalType(int elementalType)
+        {
+            return (Options.Combat.TableElementalTypes[(int)ElementalTypes[0]][elementalType] == 0
+                        || Options.Combat.TableElementalTypes[(int)ElementalTypes[1]][elementalType] == 0);
+        }
         //Attack using a weapon or unarmed
         public virtual void TryAttack(
             Entity target,
@@ -2042,6 +2058,11 @@ namespace Intersect.Server.Entities
             var damageMana = 0;
             if (weapon == null)
             {
+                if (target != null && target.IsImmuneToElementalType((int)ElementalType.None))
+                {
+                    PacketSender.SendActionMsg(target, Strings.Combat.immune, CustomColors.Combat.Immune);
+                    return;
+                }
                 isCrit = Attack(
                     target, ref damageHealth, ref damageMana, 0, 0, ElementalType.None,
                     damageType, scalingStat, scaling, critChance, critMultiplier, null, deadAnimations,
@@ -2050,6 +2071,11 @@ namespace Intersect.Server.Entities
             }
             else
             {
+                if (target != null && target.IsImmuneToElementalType(weapon.ElementalType))
+                {
+                    PacketSender.SendActionMsg(target, Strings.Combat.immune, CustomColors.Combat.Immune);
+                    return;
+                }
                 isCrit = Attack(
                     target, ref damageHealth, ref damageMana, 0, 0, (ElementalType)weapon.ElementalType,
                     damageType, scalingStat, scaling, critChance, critMultiplier, weapon.Name, deadAnimations,

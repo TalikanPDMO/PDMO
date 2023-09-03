@@ -183,6 +183,8 @@ namespace Intersect
 
             public Color Missed = new Color(255, 255, 255, 255);
 
+            public Color Immune = new Color(255, 255, 255, 255);
+
             public Color NoAmmo = Color.Red;
 
             public Color NoTarget = Color.Red;
