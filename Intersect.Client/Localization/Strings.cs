@@ -1681,6 +1681,17 @@ namespace Intersect.Client.Localization
                 {1, @"MP Cost: {00}"},
             };
 
+            public static Dictionary<int, LocalizedString> damagestyles = new Dictionary<int, LocalizedString>
+            {
+                {0, @"{00}"},
+                {1, @"{00}% of your Max {01}"},
+                {2, @"{00}% of your Current {01}"},
+                {3, @"{00}% of your target Max {01}"},
+                {4, @"{00}% of your target Current {01}"}
+            };
+
+            public static LocalizedString hp = @"HP";
+            public static LocalizedString mp = @"MP";
         }
 
         public struct Spells

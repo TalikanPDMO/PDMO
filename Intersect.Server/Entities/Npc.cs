@@ -726,10 +726,12 @@ namespace Intersect.Server.Entities
                     {
                         continue;
                     }
+                    var manacost = CalculateVitalStyle(spellBase.VitalCost[(int)Vitals.Mana], spellBase.VitalCostStyle[(int)Vitals.Mana], Vitals.Mana, target);
+                    var healthcost = CalculateVitalStyle(spellBase.VitalCost[(int)Vitals.Health], spellBase.VitalCostStyle[(int)Vitals.Health], Vitals.Health, target);
 
                     //Max mana to 0 means that the npc has unlimited mana
-                    if (GetMaxVital(Vitals.Mana) != 0 && spellBase.VitalCost[(int)Vitals.Mana] > GetVital(Vitals.Mana)
-                        || spellBase.VitalCost[(int)Vitals.Health] > GetVital(Vitals.Health))
+                    if ((GetMaxVital(Vitals.Mana) != 0 && manacost > GetVital(Vitals.Mana))
+                        || healthcost > GetVital(Vitals.Health))
                     {
                         continue;
                     }

@@ -129,8 +129,10 @@ namespace Intersect.Client.Interface.Game
                 if (spell.VitalCost[(int) Vitals.Health] > 0)
                 {
                     spellStats.AddText(
-                        Strings.SpellDesc.vitalcosts[(int) Vitals.Health]
-                            .ToString(spell.VitalCost[(int) Vitals.Health]), spellStats.RenderColor,
+                        Strings.SpellDesc.vitalcosts[(int) Vitals.Health].ToString(
+                            Strings.SpellDesc.damagestyles[spell.VitalCostStyle[(int)Vitals.Health]].ToString(
+                                spell.VitalCost[(int)Vitals.Health], Strings.SpellDesc.hp)),
+                        spellStats.RenderColor,
                         spellStatsText.CurAlignments.Count > 0 ? spellStatsText.CurAlignments[0] : Alignments.Left,
                         spellStatsText.Font
                     );
@@ -141,7 +143,9 @@ namespace Intersect.Client.Interface.Game
                 if (spell.VitalCost[(int) Vitals.Mana] > 0)
                 {
                     spellStats.AddText(
-                        Strings.SpellDesc.vitalcosts[(int) Vitals.Mana].ToString(spell.VitalCost[(int) Vitals.Mana]),
+                        Strings.SpellDesc.vitalcosts[(int)Vitals.Mana].ToString(
+                            Strings.SpellDesc.damagestyles[spell.VitalCostStyle[(int)Vitals.Mana]].ToString(
+                                spell.VitalCost[(int)Vitals.Mana], Strings.SpellDesc.mp)),
                         spellStats.RenderColor,
                         spellStatsText.CurAlignments.Count > 0 ? spellStatsText.CurAlignments[0] : Alignments.Left,
                         spellStatsText.Font

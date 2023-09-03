@@ -2565,22 +2565,24 @@ namespace Intersect.Server.Entities
             }
 
             //TODO Check alreadycrit or nextspell if we want to cancel vital/mana costs
-            if (spellBase.VitalCost[(int)Vitals.Mana] > 0)
+            var manacost = CalculateVitalStyle(spellBase.VitalCost[(int)Vitals.Mana], spellBase.VitalCostStyle[(int)Vitals.Mana], Vitals.Mana, baseTarget);
+            var healthcost = CalculateVitalStyle(spellBase.VitalCost[(int)Vitals.Health], spellBase.VitalCostStyle[(int)Vitals.Health], Vitals.Health, baseTarget);
+            if (manacost > 0)
             {
-                SubVital(Vitals.Mana, spellBase.VitalCost[(int)Vitals.Mana]);
+                SubVital(Vitals.Mana, manacost);
             }
             else
             {
-                AddVital(Vitals.Mana, -spellBase.VitalCost[(int)Vitals.Mana]);
+                AddVital(Vitals.Mana, -manacost);
             }
 
-            if (spellBase.VitalCost[(int)Vitals.Health] > 0)
+            if (healthcost > 0)
             {
-                SubVital(Vitals.Health, spellBase.VitalCost[(int)Vitals.Health]);
+                SubVital(Vitals.Health, healthcost);
             }
             else
             {
-                AddVital(Vitals.Health, -spellBase.VitalCost[(int)Vitals.Health]);
+                AddVital(Vitals.Health, -healthcost);
             }
 
             switch (spellBase.SpellType)
@@ -3021,6 +3023,32 @@ namespace Intersect.Server.Entities
             // If nothing found, return null to indicate it
             return null;
             //return new int[] { x, y };
+        }
+
+        public int CalculateVitalStyle(int amount, int damageStyle, Vitals vitals, Entity target)
+        {
+            switch((DamageStyle)damageStyle)
+            {
+                case DamageStyle.Normal:
+                    return amount;
+                case DamageStyle.CasterMax:
+                    return (int)(amount / 100.0 * GetMaxVital(vitals));
+                case DamageStyle.CasterCurrent:
+                    return (int)(amount / 100.0 * GetVital(vitals));
+                case DamageStyle.TargetMax:
+                    if (target != null)
+                    {
+                        return (int)(amount / 100.0 * target.GetMaxVital(vitals));
+                    }
+                    break;
+                case DamageStyle.TargetCurrent:
+                    if (target != null)
+                    {
+                        return (int)(amount / 100.0 * target.GetVital(vitals));
+                    }
+                    break;
+            }
+            return 0;
         }
 
         //Check if the target is either up, down, left or right of the target on the correct Z dimension.
