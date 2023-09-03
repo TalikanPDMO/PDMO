@@ -4913,11 +4913,19 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString dropchance = @"Chance (%):";
 
+            public static LocalizedString dropamountrandom = @"Random?";
+
+            public static LocalizedString dropchanceiterative = @"Iterative?";
+
+            public static LocalizedString dropdisplay = @"{00} x{01} : {02}% {03}";
+
+            public static LocalizedString randomdisplay = @"{00}-{01}";
+
+            public static LocalizedString iterativedisplay = @"(Iterative)";
+
             public static LocalizedString dropadd = @"Add";
 
             public static LocalizedString dropremove = @"Remove";
-
-            public static LocalizedString dropdisplay = @"{00} x{01} - {02}%";
 
             public static LocalizedString exhaustedgraphic = @"Exhausted Graphic:";
 
