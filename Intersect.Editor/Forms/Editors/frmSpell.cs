@@ -245,6 +245,15 @@ namespace Intersect.Editor.Forms.Editors
             lblDamageType.Text = Strings.SpellEditor.damagetype;
             lblHPDamage.Text = Strings.SpellEditor.hpdamage;
             lblManaDamage.Text = Strings.SpellEditor.mpdamage;
+            lblHpDamageStyle.Text = Strings.SpellEditor.hpdamagestyle;
+            lblMpDamageStyle.Text = Strings.SpellEditor.manadamagestyle;
+            cmbHpDamageStyle.Items.Clear();
+            cmbMpDamageStyle.Items.Clear();
+            for (var i = 0; i < Strings.Combat.damagestyles.Count; i++)
+            {
+                cmbHpDamageStyle.Items.Add(Strings.Combat.damagestyles[i]);
+                cmbMpDamageStyle.Items.Add(Strings.Combat.damagestyles[i]);
+            }
             lblHPSteal.Text = Strings.SpellEditor.steal;
             lblManaSteal.Text = Strings.SpellEditor.steal;
             chkFriendly.Text = Strings.SpellEditor.friendly;
@@ -393,6 +402,10 @@ namespace Intersect.Editor.Forms.Editors
                 grpCombat.Show();
                 cmbTargetType.SelectedIndex = (int) mEditorItem.Combat.TargetType;
                 UpdateTargetTypePanel();
+
+
+                cmbHpDamageStyle.SelectedIndex = mEditorItem.Combat.VitalDiffStyle[(int)Vitals.Health];
+                cmbMpDamageStyle.SelectedIndex = mEditorItem.Combat.VitalDiffStyle[(int)Vitals.Mana];
 
                 nudHPDamage.Value = mEditorItem.Combat.VitalDiff[(int) Vitals.Health];
                 nudMPDamage.Value = mEditorItem.Combat.VitalDiff[(int) Vitals.Mana];
@@ -985,6 +998,16 @@ namespace Intersect.Editor.Forms.Editors
         private void nudHPDamage_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Combat.VitalDiff[(int) Vitals.Health] = (int) nudHPDamage.Value;
+        }
+
+        private void cmbHpDamageStyle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.VitalDiffStyle[(int)Vitals.Health] = cmbHpDamageStyle.SelectedIndex;
+        }
+
+        private void cmbMpDamageStyle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.VitalDiffStyle[(int)Vitals.Mana] = cmbMpDamageStyle.SelectedIndex;
         }
 
         private void cmbHpCostStyle_SelectedIndexChanged(object sender, EventArgs e)

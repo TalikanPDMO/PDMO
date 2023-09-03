@@ -5248,7 +5248,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString folderprompt = @"Enter a name for the folder you'd like to add:";
 
-            public static LocalizedString friendly = @"Friendly";
+            public static LocalizedString friendly = @"Friendly?";
 
             public static LocalizedString general = @"General";
 
@@ -5274,13 +5274,17 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString reusevalues = @"Re-use values";
 
-            public static LocalizedString hpcost = @"HP Cost Value:";
+            public static LocalizedString hpcost = @"HP Cost:";
 
             public static LocalizedString hpcoststyle = @"HP Cost Style:";
 
             public static LocalizedString manacoststyle = @"Mana Cost Style:";
 
             public static LocalizedString hpdamage = @"HP Damage:";
+
+            public static LocalizedString hpdamagestyle = @"HP Damage Style:";
+
+            public static LocalizedString manadamagestyle = @"Mana Damage Style:";
 
             public static LocalizedString steal = @"Steal (%):";
 
@@ -5302,7 +5306,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString magicresist = @"Mag. resist:";
 
-            public static LocalizedString manacost = @"Mana Cost Value:";
+            public static LocalizedString manacost = @"Mana Cost:";
 
             public static LocalizedString mpdamage = @"Mana Damage:";
 
