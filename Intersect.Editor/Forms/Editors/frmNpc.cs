@@ -239,6 +239,7 @@ namespace Intersect.Editor.Forms.Editors
             lblOnDeathEventAttackers.Text = Strings.NpcEditor.ondeathattackersevent;
 
             grpStats.Text = Strings.NpcEditor.stats;
+            grpLvlScaling.Text = Strings.NpcEditor.lvlscaling;
             lblHP.Text = Strings.NpcEditor.hp;
             lblMana.Text = Strings.NpcEditor.mana;
             lblStr.Text = Strings.NpcEditor.attack;

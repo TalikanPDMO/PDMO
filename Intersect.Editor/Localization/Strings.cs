@@ -4408,7 +4408,9 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString type2 = @"Type2:";
 
-            public static LocalizedString stats = @"Stats & Lvl Scaling%:  ";
+            public static LocalizedString stats = @"Stats:";
+
+            public static LocalizedString lvlscaling = @"Lvl Scaling:";
 
             public static LocalizedString swarm = @"Swarm";
 

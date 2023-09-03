@@ -31,6 +31,8 @@ namespace Intersect.Editor.Forms.Editors.Quest
         private void InitializeComponent()
         {
             this.grpEditor = new DarkUI.Controls.DarkGroupBox();
+            this.txtDesc = new DarkUI.Controls.DarkTextBox();
+            this.lblDesc = new System.Windows.Forms.Label();
             this.lblNoTaskLink = new System.Windows.Forms.Label();
             this.lblName = new System.Windows.Forms.Label();
             this.txtName = new DarkUI.Controls.DarkTextBox();
@@ -48,8 +50,6 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.btnRemoveTask = new DarkUI.Controls.DarkButton();
             this.btnAddTask = new DarkUI.Controls.DarkButton();
             this.lstTasks = new System.Windows.Forms.ListBox();
-            this.txtDesc = new DarkUI.Controls.DarkTextBox();
-            this.lblDesc = new System.Windows.Forms.Label();
             this.grpEditor.SuspendLayout();
             this.grpLinkedTasks.SuspendLayout();
             this.SuspendLayout();
@@ -79,6 +79,29 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpEditor.TabStop = false;
             this.grpEditor.Text = "TaskLinks Editor";
             // 
+            // txtDesc
+            // 
+            this.txtDesc.AcceptsReturn = true;
+            this.txtDesc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDesc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtDesc.Location = new System.Drawing.Point(54, 98);
+            this.txtDesc.Multiline = true;
+            this.txtDesc.Name = "txtDesc";
+            this.txtDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtDesc.Size = new System.Drawing.Size(191, 66);
+            this.txtDesc.TabIndex = 37;
+            this.txtDesc.TextChanged += new System.EventHandler(this.txtDesc_TextChanged);
+            // 
+            // lblDesc
+            // 
+            this.lblDesc.AutoSize = true;
+            this.lblDesc.Location = new System.Drawing.Point(13, 122);
+            this.lblDesc.Name = "lblDesc";
+            this.lblDesc.Size = new System.Drawing.Size(35, 13);
+            this.lblDesc.TabIndex = 36;
+            this.lblDesc.Text = "Desc:";
+            // 
             // lblNoTaskLink
             // 
             this.lblNoTaskLink.AutoSize = true;
@@ -91,7 +114,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // lblName
             // 
             this.lblName.AutoSize = true;
-            this.lblName.Location = new System.Drawing.Point(17, 74);
+            this.lblName.Location = new System.Drawing.Point(13, 74);
             this.lblName.Name = "lblName";
             this.lblName.Size = new System.Drawing.Size(38, 13);
             this.lblName.TabIndex = 34;
@@ -102,9 +125,9 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.txtName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.txtName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtName.Location = new System.Drawing.Point(72, 72);
+            this.txtName.Location = new System.Drawing.Point(54, 72);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(173, 20);
+            this.txtName.Size = new System.Drawing.Size(191, 20);
             this.txtName.TabIndex = 33;
             this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
             // 
@@ -281,29 +304,6 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.lstTasks.Name = "lstTasks";
             this.lstTasks.Size = new System.Drawing.Size(220, 80);
             this.lstTasks.TabIndex = 44;
-            // 
-            // txtDesc
-            // 
-            this.txtDesc.AcceptsReturn = true;
-            this.txtDesc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtDesc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtDesc.Location = new System.Drawing.Point(72, 98);
-            this.txtDesc.Multiline = true;
-            this.txtDesc.Name = "txtDesc";
-            this.txtDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtDesc.Size = new System.Drawing.Size(173, 66);
-            this.txtDesc.TabIndex = 37;
-            this.txtDesc.TextChanged += new System.EventHandler(this.txtDesc_TextChanged);
-            // 
-            // lblDesc
-            // 
-            this.lblDesc.AutoSize = true;
-            this.lblDesc.Location = new System.Drawing.Point(17, 122);
-            this.lblDesc.Name = "lblDesc";
-            this.lblDesc.Size = new System.Drawing.Size(35, 13);
-            this.lblDesc.TabIndex = 36;
-            this.lblDesc.Text = "Desc:";
             // 
             // QuestTaskLinksEditor
             // 
