@@ -58,7 +58,11 @@ namespace Intersect.Editor.Forms.Editors
             this.lblName = new System.Windows.Forms.Label();
             this.txtName = new DarkUI.Controls.DarkTextBox();
             this.grpSpellCost = new DarkUI.Controls.DarkGroupBox();
+            this.cmbMpCostStyle = new DarkUI.Controls.DarkComboBox();
+            this.lblMpCostStyle = new System.Windows.Forms.Label();
+            this.cmbHpCostStyle = new DarkUI.Controls.DarkComboBox();
             this.chkIgnoreCdr = new DarkUI.Controls.DarkCheckBox();
+            this.lblHpCostStyle = new System.Windows.Forms.Label();
             this.chkIgnoreGlobalCooldown = new DarkUI.Controls.DarkCheckBox();
             this.btnAddCooldownGroup = new DarkUI.Controls.DarkButton();
             this.cmbCooldownGroup = new DarkUI.Controls.DarkComboBox();
@@ -629,7 +633,11 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpSpellCost.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpSpellCost.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpSpellCost.Controls.Add(this.cmbMpCostStyle);
+            this.grpSpellCost.Controls.Add(this.lblMpCostStyle);
+            this.grpSpellCost.Controls.Add(this.cmbHpCostStyle);
             this.grpSpellCost.Controls.Add(this.chkIgnoreCdr);
+            this.grpSpellCost.Controls.Add(this.lblHpCostStyle);
             this.grpSpellCost.Controls.Add(this.chkIgnoreGlobalCooldown);
             this.grpSpellCost.Controls.Add(this.btnAddCooldownGroup);
             this.grpSpellCost.Controls.Add(this.cmbCooldownGroup);
@@ -650,20 +658,92 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpellCost.TabStop = false;
             this.grpSpellCost.Text = "Spell Cost:";
             // 
+            // cmbMpCostStyle
+            // 
+            this.cmbMpCostStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbMpCostStyle.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbMpCostStyle.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbMpCostStyle.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbMpCostStyle.DrawDropdownHoverOutline = false;
+            this.cmbMpCostStyle.DrawFocusRectangle = false;
+            this.cmbMpCostStyle.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbMpCostStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMpCostStyle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbMpCostStyle.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbMpCostStyle.FormattingEnabled = true;
+            this.cmbMpCostStyle.Items.AddRange(new object[] {
+            "Normal",
+            "CasterCurrent",
+            "CasterMax",
+            "TargetMax",
+            "TargetCurrent"});
+            this.cmbMpCostStyle.Location = new System.Drawing.Point(13, 80);
+            this.cmbMpCostStyle.Name = "cmbMpCostStyle";
+            this.cmbMpCostStyle.Size = new System.Drawing.Size(125, 21);
+            this.cmbMpCostStyle.TabIndex = 73;
+            this.cmbMpCostStyle.Text = "Normal";
+            this.cmbMpCostStyle.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbMpCostStyle.SelectedIndexChanged += new System.EventHandler(this.cmbMpCostStyle_SelectedIndexChanged);
+            // 
+            // lblMpCostStyle
+            // 
+            this.lblMpCostStyle.AutoSize = true;
+            this.lblMpCostStyle.Location = new System.Drawing.Point(10, 64);
+            this.lblMpCostStyle.Name = "lblMpCostStyle";
+            this.lblMpCostStyle.Size = new System.Drawing.Size(87, 13);
+            this.lblMpCostStyle.TabIndex = 72;
+            this.lblMpCostStyle.Text = "Mana Cost Style:";
+            // 
+            // cmbHpCostStyle
+            // 
+            this.cmbHpCostStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbHpCostStyle.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbHpCostStyle.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbHpCostStyle.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbHpCostStyle.DrawDropdownHoverOutline = false;
+            this.cmbHpCostStyle.DrawFocusRectangle = false;
+            this.cmbHpCostStyle.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbHpCostStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbHpCostStyle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbHpCostStyle.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbHpCostStyle.FormattingEnabled = true;
+            this.cmbHpCostStyle.Items.AddRange(new object[] {
+            "Normal",
+            "CasterCurrent",
+            "CasterMax",
+            "TargetMax",
+            "TargetCurrent"});
+            this.cmbHpCostStyle.Location = new System.Drawing.Point(13, 36);
+            this.cmbHpCostStyle.Name = "cmbHpCostStyle";
+            this.cmbHpCostStyle.Size = new System.Drawing.Size(125, 21);
+            this.cmbHpCostStyle.TabIndex = 71;
+            this.cmbHpCostStyle.Text = "Normal";
+            this.cmbHpCostStyle.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbHpCostStyle.SelectedIndexChanged += new System.EventHandler(this.cmbHpCostStyle_SelectedIndexChanged);
+            // 
             // chkIgnoreCdr
             // 
             this.chkIgnoreCdr.AutoSize = true;
-            this.chkIgnoreCdr.Location = new System.Drawing.Point(11, 120);
+            this.chkIgnoreCdr.Location = new System.Drawing.Point(293, 129);
             this.chkIgnoreCdr.Name = "chkIgnoreCdr";
             this.chkIgnoreCdr.Size = new System.Drawing.Size(164, 17);
             this.chkIgnoreCdr.TabIndex = 57;
             this.chkIgnoreCdr.Text = "Ignore Cooldown Reduction?";
             this.chkIgnoreCdr.CheckedChanged += new System.EventHandler(this.chkIgnoreCdr_CheckedChanged);
             // 
+            // lblHpCostStyle
+            // 
+            this.lblHpCostStyle.AutoSize = true;
+            this.lblHpCostStyle.Location = new System.Drawing.Point(10, 20);
+            this.lblHpCostStyle.Name = "lblHpCostStyle";
+            this.lblHpCostStyle.Size = new System.Drawing.Size(75, 13);
+            this.lblHpCostStyle.TabIndex = 70;
+            this.lblHpCostStyle.Text = "HP Cost Style:";
+            // 
             // chkIgnoreGlobalCooldown
             // 
             this.chkIgnoreGlobalCooldown.AutoSize = true;
-            this.chkIgnoreGlobalCooldown.Location = new System.Drawing.Point(12, 97);
+            this.chkIgnoreGlobalCooldown.Location = new System.Drawing.Point(293, 106);
             this.chkIgnoreGlobalCooldown.Name = "chkIgnoreGlobalCooldown";
             this.chkIgnoreGlobalCooldown.Size = new System.Drawing.Size(145, 17);
             this.chkIgnoreGlobalCooldown.TabIndex = 56;
@@ -672,7 +752,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnAddCooldownGroup
             // 
-            this.btnAddCooldownGroup.Location = new System.Drawing.Point(391, 112);
+            this.btnAddCooldownGroup.Location = new System.Drawing.Point(457, 78);
             this.btnAddCooldownGroup.Name = "btnAddCooldownGroup";
             this.btnAddCooldownGroup.Padding = new System.Windows.Forms.Padding(5);
             this.btnAddCooldownGroup.Size = new System.Drawing.Size(18, 21);
@@ -693,7 +773,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbCooldownGroup.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbCooldownGroup.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbCooldownGroup.FormattingEnabled = true;
-            this.cmbCooldownGroup.Location = new System.Drawing.Point(226, 113);
+            this.cmbCooldownGroup.Location = new System.Drawing.Point(292, 78);
             this.cmbCooldownGroup.Name = "cmbCooldownGroup";
             this.cmbCooldownGroup.Size = new System.Drawing.Size(159, 21);
             this.cmbCooldownGroup.TabIndex = 54;
@@ -704,7 +784,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblCooldownGroup
             // 
             this.lblCooldownGroup.AutoSize = true;
-            this.lblCooldownGroup.Location = new System.Drawing.Point(223, 96);
+            this.lblCooldownGroup.Location = new System.Drawing.Point(289, 61);
             this.lblCooldownGroup.Name = "lblCooldownGroup";
             this.lblCooldownGroup.Size = new System.Drawing.Size(89, 13);
             this.lblCooldownGroup.TabIndex = 53;
@@ -714,7 +794,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudCooldownDuration.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudCooldownDuration.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudCooldownDuration.Location = new System.Drawing.Point(225, 71);
+            this.nudCooldownDuration.Location = new System.Drawing.Point(291, 36);
             this.nudCooldownDuration.Maximum = new decimal(new int[] {
             -100,
             49,
@@ -734,7 +814,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudCastDuration.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudCastDuration.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudCastDuration.Location = new System.Drawing.Point(225, 32);
+            this.nudCastDuration.Location = new System.Drawing.Point(30, 125);
             this.nudCastDuration.Maximum = new decimal(new int[] {
             -100,
             49,
@@ -754,7 +834,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudMpCost.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudMpCost.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudMpCost.Location = new System.Drawing.Point(13, 71);
+            this.nudMpCost.Location = new System.Drawing.Point(160, 80);
             this.nudMpCost.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -766,7 +846,7 @@ namespace Intersect.Editor.Forms.Editors
             0,
             -2147483648});
             this.nudMpCost.Name = "nudMpCost";
-            this.nudMpCost.Size = new System.Drawing.Size(184, 20);
+            this.nudMpCost.Size = new System.Drawing.Size(70, 20);
             this.nudMpCost.TabIndex = 37;
             this.nudMpCost.Value = new decimal(new int[] {
             0,
@@ -779,7 +859,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudHPCost.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudHPCost.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudHPCost.Location = new System.Drawing.Point(13, 32);
+            this.nudHPCost.Location = new System.Drawing.Point(160, 36);
             this.nudHPCost.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -791,7 +871,7 @@ namespace Intersect.Editor.Forms.Editors
             0,
             -2147483648});
             this.nudHPCost.Name = "nudHPCost";
-            this.nudHPCost.Size = new System.Drawing.Size(184, 20);
+            this.nudHPCost.Size = new System.Drawing.Size(70, 20);
             this.nudHPCost.TabIndex = 36;
             this.nudHPCost.Value = new decimal(new int[] {
             0,
@@ -803,25 +883,25 @@ namespace Intersect.Editor.Forms.Editors
             // lblMPCost
             // 
             this.lblMPCost.AutoSize = true;
-            this.lblMPCost.Location = new System.Drawing.Point(9, 55);
+            this.lblMPCost.Location = new System.Drawing.Point(156, 64);
             this.lblMPCost.Name = "lblMPCost";
-            this.lblMPCost.Size = new System.Drawing.Size(61, 13);
+            this.lblMPCost.Size = new System.Drawing.Size(91, 13);
             this.lblMPCost.TabIndex = 23;
-            this.lblMPCost.Text = "Mana Cost:";
+            this.lblMPCost.Text = "Mana Cost Value:";
             // 
             // lblHPCost
             // 
             this.lblHPCost.AutoSize = true;
-            this.lblHPCost.Location = new System.Drawing.Point(9, 16);
+            this.lblHPCost.Location = new System.Drawing.Point(156, 20);
             this.lblHPCost.Name = "lblHPCost";
-            this.lblHPCost.Size = new System.Drawing.Size(49, 13);
+            this.lblHPCost.Size = new System.Drawing.Size(79, 13);
             this.lblHPCost.TabIndex = 22;
-            this.lblHPCost.Text = "HP Cost:";
+            this.lblHPCost.Text = "HP Cost Value:";
             // 
             // lblCastDuration
             // 
             this.lblCastDuration.AutoSize = true;
-            this.lblCastDuration.Location = new System.Drawing.Point(222, 16);
+            this.lblCastDuration.Location = new System.Drawing.Point(27, 109);
             this.lblCastDuration.Name = "lblCastDuration";
             this.lblCastDuration.Size = new System.Drawing.Size(79, 13);
             this.lblCastDuration.TabIndex = 7;
@@ -830,7 +910,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblCooldownDuration
             // 
             this.lblCooldownDuration.AutoSize = true;
-            this.lblCooldownDuration.Location = new System.Drawing.Point(222, 55);
+            this.lblCooldownDuration.Location = new System.Drawing.Point(288, 20);
             this.lblCooldownDuration.Name = "lblCooldownDuration";
             this.lblCooldownDuration.Size = new System.Drawing.Size(79, 13);
             this.lblCooldownDuration.TabIndex = 12;
@@ -3108,5 +3188,9 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblImpactAnimation;
         private DarkComboBox cmbTilesAnimation;
         private System.Windows.Forms.Label lblTilesAnimation;
+        private DarkComboBox cmbHpCostStyle;
+        private System.Windows.Forms.Label lblHpCostStyle;
+        private DarkComboBox cmbMpCostStyle;
+        private System.Windows.Forms.Label lblMpCostStyle;
     }
 }

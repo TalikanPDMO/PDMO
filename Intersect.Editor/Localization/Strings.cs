@@ -1179,6 +1179,15 @@ Tick timer saved in server config.json.";
                 {17, @"Dark"},
                 {18, @"Flying"}
             };
+
+            public static Dictionary<int, LocalizedString> damagestyles = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Normal"},
+                {1, @"Caster Max (%)"},
+                {2, @"Caster Current (%)"},
+                {3, @"Target Max (%)"},
+                {4, @"Target Current (%)"},
+            };
         }
 
         public struct CommonEventEditor
@@ -5265,7 +5274,11 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString reusevalues = @"Re-use values";
 
-            public static LocalizedString hpcost = @"HP Cost:";
+            public static LocalizedString hpcost = @"HP Cost Value:";
+
+            public static LocalizedString hpcoststyle = @"HP Cost Style:";
+
+            public static LocalizedString manacoststyle = @"Mana Cost Style:";
 
             public static LocalizedString hpdamage = @"HP Damage:";
 
@@ -5289,7 +5302,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString magicresist = @"Mag. resist:";
 
-            public static LocalizedString manacost = @"Mana Cost:";
+            public static LocalizedString manacost = @"Mana Cost Value:";
 
             public static LocalizedString mpdamage = @"Mana Damage:";
 

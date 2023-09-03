@@ -206,6 +206,15 @@ namespace Intersect.Editor.Forms.Editors
             grpSpellCost.Text = Strings.SpellEditor.cost;
             lblHPCost.Text = Strings.SpellEditor.hpcost;
             lblMPCost.Text = Strings.SpellEditor.manacost;
+            lblHpCostStyle.Text = Strings.SpellEditor.hpcoststyle;
+            lblMpCostStyle.Text = Strings.SpellEditor.manacoststyle;
+            cmbHpCostStyle.Items.Clear();
+            cmbMpCostStyle.Items.Clear();
+            for (var i = 0; i < Strings.Combat.damagestyles.Count; i++)
+            {
+                cmbHpCostStyle.Items.Add(Strings.Combat.damagestyles[i]);
+                cmbMpCostStyle.Items.Add(Strings.Combat.damagestyles[i]);
+            }
             lblCastDuration.Text = Strings.SpellEditor.casttime;
             lblCooldownDuration.Text = Strings.SpellEditor.cooldown;
             lblCooldownGroup.Text = Strings.SpellEditor.CooldownGroup;
@@ -345,6 +354,8 @@ namespace Intersect.Editor.Forms.Editors
                     picSpell.BackgroundImage = Image.FromFile(GameContentManager.GraphResFolder + "/spells/" + cmbSprite.Text);
                 }
 
+                cmbHpCostStyle.SelectedIndex = mEditorItem.VitalCostStyle[(int)Vitals.Health];
+                cmbMpCostStyle.SelectedIndex = mEditorItem.VitalCostStyle[(int)Vitals.Mana];
                 nudHPCost.Value = mEditorItem.VitalCost[(int) Vitals.Health];
                 nudMpCost.Value = mEditorItem.VitalCost[(int) Vitals.Mana];
 
@@ -974,6 +985,36 @@ namespace Intersect.Editor.Forms.Editors
         private void nudHPDamage_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Combat.VitalDiff[(int) Vitals.Health] = (int) nudHPDamage.Value;
+        }
+
+        private void cmbHpCostStyle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbHpCostStyle.SelectedIndex == (int)DamageStyle.Normal)
+            {
+                nudHPCost.Minimum = -10000;
+                nudHPCost.Maximum = 10000;
+            }
+            else
+            {
+                nudHPCost.Minimum = 0;
+                nudHPCost.Maximum = 100;
+            }
+            mEditorItem.VitalCostStyle[(int)Vitals.Health] = cmbHpCostStyle.SelectedIndex;
+        }
+
+        private void cmbMpCostStyle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbMpCostStyle.SelectedIndex == (int)DamageStyle.Normal)
+            {
+                nudMpCost.Minimum = -10000;
+                nudMpCost.Maximum = 10000;
+            }
+            else
+            {
+                nudMpCost.Minimum = 0;
+                nudMpCost.Maximum = 100;
+            }
+            mEditorItem.VitalCostStyle[(int)Vitals.Mana] = cmbMpCostStyle.SelectedIndex;
         }
 
         private void nudMPDamage_ValueChanged(object sender, EventArgs e)
