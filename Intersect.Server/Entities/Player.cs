@@ -766,7 +766,7 @@ namespace Intersect.Server.Entities
 
             pkt.Guild = Guild?.Name;
             pkt.GuildRank = GuildRank;
-
+            pkt.ElementalTypes = GetElementalTypes();
             return pkt;
         }
 
@@ -862,8 +862,9 @@ namespace Intersect.Server.Entities
                 base.Die(dropItems, killer);
             }
 
-            if (Options.Instance.PlayerOpts.ExpLossOnDeathPercent > 0)
+            if (Options.Instance.PlayerOpts.ExpLossOnDeathPercent > 0 && !(killer is Player))
             {
+                // No xp loss when pvp
                 if (Options.Instance.PlayerOpts.ExpLossFromCurrentExp)
                 {
                     var ExpLoss = (this.Exp * (Options.Instance.PlayerOpts.ExpLossOnDeathPercent / 100.0));
@@ -1394,7 +1395,10 @@ namespace Intersect.Server.Entities
                 Equipment[Options.WeaponIndex] >= 0)
             {
                 weapon = ItemBase.Get(Items[Equipment[Options.WeaponIndex]].ItemId);
-                attackrange = weapon.AttackRange;
+                if (!weapon.AdaptRange)
+                {
+                    attackrange = weapon.AttackRange;
+                }
             }
 
             if (target is Resource || attackrange == 0)
@@ -1794,6 +1798,7 @@ namespace Intersect.Server.Entities
                 }
             }
         }
+
         //Warping
         public override void Warp(Guid newMapId, float newX, float newY, bool adminWarp = false)
         {
@@ -4734,7 +4739,11 @@ namespace Intersect.Server.Entities
 
             if (checkVitalReqs)
             {
-                if (spell.VitalCost[(int)Vitals.Mana] > GetVital(Vitals.Mana))
+                var manacost = CalculateVitalStyle(spell.VitalCost[(int)Vitals.Mana], spell.VitalCostStyle[(int)Vitals.Mana], Vitals.Mana, target);
+                var healthcost = CalculateVitalStyle(spell.VitalCost[(int)Vitals.Health], spell.VitalCostStyle[(int)Vitals.Health], Vitals.Health, target);
+
+
+                if (manacost > GetVital(Vitals.Mana))
                 {
                     if (Options.Combat.EnableCombatChatMessages)
                     {
@@ -4744,7 +4753,7 @@ namespace Intersect.Server.Entities
                     return false;
                 }
 
-                if (spell.VitalCost[(int)Vitals.Health] > GetVital(Vitals.Health))
+                if (healthcost > GetVital(Vitals.Health))
                 {
                     if (Options.Combat.EnableCombatChatMessages)
                     {

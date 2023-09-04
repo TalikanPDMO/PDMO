@@ -102,8 +102,10 @@ namespace Intersect.Server.Entities.Combat
                 aliveAnimations.Add(new KeyValuePair<Guid, sbyte>(SpellBase.HitAnimationId, (sbyte) Directions.Up));
             }
 
-            var damageHealth = SpellBase.Combat.VitalDiff[(int)Vitals.Health];
-            var damageMana = SpellBase.Combat.VitalDiff[(int)Vitals.Mana];
+            var damageHealth = Attacker.CalculateVitalStyle(SpellBase.Combat.VitalDiff[(int)Vitals.Health],
+                SpellBase.Combat.VitalDiffStyle[(int)Vitals.Health], Vitals.Health, Target);
+            var damageMana = Attacker.CalculateVitalStyle(SpellBase.Combat.VitalDiff[(int)Vitals.Mana],
+                SpellBase.Combat.VitalDiffStyle[(int)Vitals.Mana], Vitals.Mana, Target);
 
             Attacker?.Attack(
                 Target, ref damageHealth, ref damageMana, SpellBase.Combat.VitalSteal[(int)Vitals.Health], SpellBase.Combat.VitalSteal[(int)Vitals.Mana],

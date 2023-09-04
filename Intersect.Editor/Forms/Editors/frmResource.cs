@@ -204,6 +204,8 @@ namespace Intersect.Editor.Forms.Editors
             lblDropItem.Text = Strings.ResourceEditor.dropitem;
             lblDropAmount.Text = Strings.ResourceEditor.dropamount;
             lblDropChance.Text = Strings.ResourceEditor.dropchance;
+            chkDropAmountRandom.Text = Strings.ResourceEditor.dropamountrandom;
+            chkDropChanceIterative.Text = Strings.ResourceEditor.dropchanceiterative;
             btnDropAdd.Text = Strings.ResourceEditor.dropadd;
             btnDropRemove.Text = Strings.ResourceEditor.dropremove;
 
@@ -314,10 +316,20 @@ namespace Intersect.Editor.Forms.Editors
             {
                 if (mEditorItem.Drops[i].ItemId != Guid.Empty)
                 {
+                    string quantity_display = mEditorItem.Drops[i].Quantity.ToString();
+                    if (mEditorItem.Drops[i].Random)
+                    {
+                        quantity_display = Strings.ResourceEditor.randomdisplay.ToString(0, mEditorItem.Drops[i].Quantity);
+                    }
+                    string iterative_display = "";
+                    if (mEditorItem.Drops[i].Iterative)
+                    {
+                        iterative_display = Strings.ResourceEditor.iterativedisplay;
+                    }
                     lstDrops.Items.Add(
                         Strings.ResourceEditor.dropdisplay.ToString(
-                            ItemBase.GetName(mEditorItem.Drops[i].ItemId), mEditorItem.Drops[i].Quantity,
-                            mEditorItem.Drops[i].Chance
+                            ItemBase.GetName(mEditorItem.Drops[i].ItemId), quantity_display,
+                            mEditorItem.Drops[i].Chance, iterative_display
                         )
                     );
                 }
@@ -646,6 +658,8 @@ namespace Intersect.Editor.Forms.Editors
                 cmbDropItem.SelectedIndex = ItemBase.ListIndex(mEditorItem.Drops[lstDrops.SelectedIndex].ItemId) + 1;
                 nudDropAmount.Value = mEditorItem.Drops[lstDrops.SelectedIndex].Quantity;
                 nudDropChance.Value = (decimal) mEditorItem.Drops[lstDrops.SelectedIndex].Chance;
+                chkDropAmountRandom.Checked = mEditorItem.Drops[lstDrops.SelectedIndex].Random;
+                chkDropChanceIterative.Checked = mEditorItem.Drops[lstDrops.SelectedIndex].Iterative;
             }
         }
 
@@ -655,6 +669,8 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.Drops[mEditorItem.Drops.Count - 1].ItemId = ItemBase.IdFromList(cmbDropItem.SelectedIndex - 1);
             mEditorItem.Drops[mEditorItem.Drops.Count - 1].Quantity = (int) nudDropAmount.Value;
             mEditorItem.Drops[mEditorItem.Drops.Count - 1].Chance = (double) nudDropChance.Value;
+            mEditorItem.Drops[mEditorItem.Drops.Count - 1].Random = chkDropAmountRandom.Checked;
+            mEditorItem.Drops[mEditorItem.Drops.Count - 1].Iterative = chkDropChanceIterative.Checked;
 
             UpdateDropValues();
         }
@@ -679,6 +695,28 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             mEditorItem.Drops[(int) lstDrops.SelectedIndex].Chance = (double) nudDropChance.Value;
+            UpdateDropValues(true);
+        }
+
+        private void chkDropAmountRandom_CheckedChanged(object sender, EventArgs e)
+        {
+            if (lstDrops.SelectedIndex < lstDrops.Items.Count)
+            {
+                return;
+            }
+
+            mEditorItem.Drops[(int)lstDrops.SelectedIndex].Random = chkDropAmountRandom.Checked;
+            UpdateDropValues(true);
+        }
+
+        private void chkDropChanceIterative_CheckedChanged(object sender, EventArgs e)
+        {
+            if (lstDrops.SelectedIndex < lstDrops.Items.Count)
+            {
+                return;
+            }
+
+            mEditorItem.Drops[(int)lstDrops.SelectedIndex].Iterative = chkDropChanceIterative.Checked;
             UpdateDropValues(true);
         }
 

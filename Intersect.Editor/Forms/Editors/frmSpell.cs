@@ -206,6 +206,15 @@ namespace Intersect.Editor.Forms.Editors
             grpSpellCost.Text = Strings.SpellEditor.cost;
             lblHPCost.Text = Strings.SpellEditor.hpcost;
             lblMPCost.Text = Strings.SpellEditor.manacost;
+            lblHpCostStyle.Text = Strings.SpellEditor.hpcoststyle;
+            lblMpCostStyle.Text = Strings.SpellEditor.manacoststyle;
+            cmbHpCostStyle.Items.Clear();
+            cmbMpCostStyle.Items.Clear();
+            for (var i = 0; i < Strings.Combat.damagestyles.Count; i++)
+            {
+                cmbHpCostStyle.Items.Add(Strings.Combat.damagestyles[i]);
+                cmbMpCostStyle.Items.Add(Strings.Combat.damagestyles[i]);
+            }
             lblCastDuration.Text = Strings.SpellEditor.casttime;
             lblCooldownDuration.Text = Strings.SpellEditor.cooldown;
             lblCooldownGroup.Text = Strings.SpellEditor.CooldownGroup;
@@ -236,6 +245,15 @@ namespace Intersect.Editor.Forms.Editors
             lblDamageType.Text = Strings.SpellEditor.damagetype;
             lblHPDamage.Text = Strings.SpellEditor.hpdamage;
             lblManaDamage.Text = Strings.SpellEditor.mpdamage;
+            lblHpDamageStyle.Text = Strings.SpellEditor.hpdamagestyle;
+            lblMpDamageStyle.Text = Strings.SpellEditor.manadamagestyle;
+            cmbHpDamageStyle.Items.Clear();
+            cmbMpDamageStyle.Items.Clear();
+            for (var i = 0; i < Strings.Combat.damagestyles.Count; i++)
+            {
+                cmbHpDamageStyle.Items.Add(Strings.Combat.damagestyles[i]);
+                cmbMpDamageStyle.Items.Add(Strings.Combat.damagestyles[i]);
+            }
             lblHPSteal.Text = Strings.SpellEditor.steal;
             lblManaSteal.Text = Strings.SpellEditor.steal;
             chkFriendly.Text = Strings.SpellEditor.friendly;
@@ -345,6 +363,8 @@ namespace Intersect.Editor.Forms.Editors
                     picSpell.BackgroundImage = Image.FromFile(GameContentManager.GraphResFolder + "/spells/" + cmbSprite.Text);
                 }
 
+                cmbHpCostStyle.SelectedIndex = mEditorItem.VitalCostStyle[(int)Vitals.Health];
+                cmbMpCostStyle.SelectedIndex = mEditorItem.VitalCostStyle[(int)Vitals.Mana];
                 nudHPCost.Value = mEditorItem.VitalCost[(int) Vitals.Health];
                 nudMpCost.Value = mEditorItem.VitalCost[(int) Vitals.Mana];
 
@@ -382,6 +402,10 @@ namespace Intersect.Editor.Forms.Editors
                 grpCombat.Show();
                 cmbTargetType.SelectedIndex = (int) mEditorItem.Combat.TargetType;
                 UpdateTargetTypePanel();
+
+
+                cmbHpDamageStyle.SelectedIndex = mEditorItem.Combat.VitalDiffStyle[(int)Vitals.Health];
+                cmbMpDamageStyle.SelectedIndex = mEditorItem.Combat.VitalDiffStyle[(int)Vitals.Mana];
 
                 nudHPDamage.Value = mEditorItem.Combat.VitalDiff[(int) Vitals.Health];
                 nudMPDamage.Value = mEditorItem.Combat.VitalDiff[(int) Vitals.Mana];
@@ -770,11 +794,12 @@ namespace Intersect.Editor.Forms.Editors
             if (mEditorItem != null)
             {
                 Dictionary<string, List<string>> dataDict = new Dictionary<string, List<string>>();
-
-                //Retrieve all npcs that could use the spell
-                var npcList = NpcBase.Lookup.Where(pair => ((NpcBase)pair.Value)?.Spells?.Contains(mEditorItem.Id) ?? false)
+                //Retrieve all npcs that could use the spell (classic or in phases)
+                var npcList = NpcBase.Lookup.Where(pair => (((NpcBase)pair.Value)?.Spells?.Contains(mEditorItem.Id) ?? false)
+                || (((NpcBase)pair.Value)?.NpcPhases?.Any(ph => ph?.Spells.Contains(mEditorItem.Id) ?? false) ?? false))
                     .OrderBy(p => p.Value?.Name)
-                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((NpcBase)pair.Value)?.EditorName) ?? NpcBase.Deleted)
+                    .Select(pair => String.Concat(TextUtils.FormatEditorName(pair.Value?.Name, ((NpcBase)pair.Value)?.EditorName) ?? NpcBase.Deleted,
+                                ((NpcBase)pair.Value)?.NpcPhases.Any(ph => ph?.Spells.Contains(mEditorItem.Id) ?? false) ?? false ? " (Phase) " : ""))
                     .ToList();
                 dataDict.Add(Strings.Relations.npcs, npcList);
 
@@ -973,6 +998,46 @@ namespace Intersect.Editor.Forms.Editors
         private void nudHPDamage_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Combat.VitalDiff[(int) Vitals.Health] = (int) nudHPDamage.Value;
+        }
+
+        private void cmbHpDamageStyle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.VitalDiffStyle[(int)Vitals.Health] = cmbHpDamageStyle.SelectedIndex;
+        }
+
+        private void cmbMpDamageStyle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.VitalDiffStyle[(int)Vitals.Mana] = cmbMpDamageStyle.SelectedIndex;
+        }
+
+        private void cmbHpCostStyle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbHpCostStyle.SelectedIndex == (int)DamageStyle.Normal)
+            {
+                nudHPCost.Minimum = -10000;
+                nudHPCost.Maximum = 10000;
+            }
+            else
+            {
+                nudHPCost.Minimum = 0;
+                nudHPCost.Maximum = 100;
+            }
+            mEditorItem.VitalCostStyle[(int)Vitals.Health] = cmbHpCostStyle.SelectedIndex;
+        }
+
+        private void cmbMpCostStyle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbMpCostStyle.SelectedIndex == (int)DamageStyle.Normal)
+            {
+                nudMpCost.Minimum = -10000;
+                nudMpCost.Maximum = 10000;
+            }
+            else
+            {
+                nudMpCost.Minimum = 0;
+                nudMpCost.Maximum = 100;
+            }
+            mEditorItem.VitalCostStyle[(int)Vitals.Mana] = cmbMpCostStyle.SelectedIndex;
         }
 
         private void nudMPDamage_ValueChanged(object sender, EventArgs e)

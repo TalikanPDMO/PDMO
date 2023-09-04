@@ -329,7 +329,7 @@ namespace Intersect.Server.Entities
                     var statTime = Globals.Timing.Milliseconds;
                     for (var i = 0; i < (int)Stats.StatCount; i++)
                     {
-                        statsUpdated |= Stat[i].Update(statTime);
+                        statsUpdated |= (Stat[i] != null && Stat[i].Update(statTime));
                     }
 
                     if (statsUpdated)
@@ -1474,6 +1474,14 @@ namespace Intersect.Server.Entities
             return stats;
         }
 
+        public ElementalType[] GetElementalTypes()
+        {
+            var elemTypes = new ElementalType[NpcBase.MAX_ELEMENTAL_TYPES];
+            Array.Copy(ElementalTypes, 0, elemTypes, 0, NpcBase.MAX_ELEMENTAL_TYPES);
+
+            return elemTypes;
+        }
+
         public virtual bool IsAllyOf(Entity otherEntity)
         {
             return this == otherEntity;
@@ -1581,6 +1589,11 @@ namespace Intersect.Server.Entities
             {
                 var damageHealth = parentItem.Damage;
                 var damageMana = 0;
+                if (target !=null && target.IsImmuneToElementalType(parentItem.ElementalType))
+                {
+                    PacketSender.SendActionMsg(target, Strings.Combat.immune, CustomColors.Combat.Immune);
+                    return;
+                }
                 isCrit = Attack(
                     target, ref damageHealth, ref damageMana, 0, 0, (ElementalType)parentItem.ElementalType, (DamageType) parentItem.DamageType, (Stats) parentItem.ScalingStat,
                     parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, parentItem.Name, null, null, true, parentItem.CritEffectSpellReplace, alreadyCrit
@@ -1623,8 +1636,8 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            //If there is a knockback, knock them backwards and make sure its linear (diagonal player movement not coded).
-            if (projectile.Knockback > 0 && projectileDir < 4)
+            //If there is a knockback, knock them backwards (now 8 directions possible)
+            if (projectile.Knockback > 0)
             {
                 var dash = new Dash(target, projectile.Knockback, projectileDir, false, false, false, false);
             }
@@ -1696,6 +1709,12 @@ namespace Intersect.Server.Entities
                         }
                     }
                 }
+            }
+
+            if (target != null && target.IsImmuneToElementalType(spellBase.ElementalType))
+            {
+                PacketSender.SendActionMsg(target, Strings.Combat.immune, CustomColors.Combat.Immune);
+                return;
             }
 
             var deadAnimations = new List<KeyValuePair<Guid, sbyte>>();
@@ -1785,8 +1804,10 @@ namespace Intersect.Server.Entities
                 aliveAnimations.Add(new KeyValuePair<Guid, sbyte>(spellBase.HitAnimationId, (sbyte) Directions.Up));
             }
 
-            var damageHealth = spellBase.Combat.VitalDiff[(int)Vitals.Health];
-            var damageMana = spellBase.Combat.VitalDiff[(int)Vitals.Mana];
+            var damageHealth = CalculateVitalStyle(spellBase.Combat.VitalDiff[(int)Vitals.Health],
+                spellBase.Combat.VitalDiffStyle[(int)Vitals.Health], Vitals.Health, target);
+            var damageMana = CalculateVitalStyle(spellBase.Combat.VitalDiff[(int)Vitals.Mana],
+                spellBase.Combat.VitalDiffStyle[(int)Vitals.Mana], Vitals.Mana, target);
             if (reUseValues)
             {
                 damageHealth = baseDamage;
@@ -1953,6 +1974,11 @@ namespace Intersect.Server.Entities
             //See player and npc override of this virtual void
         }
 
+        public bool IsImmuneToElementalType(int elementalType)
+        {
+            return (Options.Combat.TableElementalTypes[(int)ElementalTypes[0]][elementalType] == 0
+                        || Options.Combat.TableElementalTypes[(int)ElementalTypes[1]][elementalType] == 0);
+        }
         //Attack using a weapon or unarmed
         public virtual void TryAttack(
             Entity target,
@@ -2034,6 +2060,11 @@ namespace Intersect.Server.Entities
             var damageMana = 0;
             if (weapon == null)
             {
+                if (target != null && target.IsImmuneToElementalType((int)ElementalType.None))
+                {
+                    PacketSender.SendActionMsg(target, Strings.Combat.immune, CustomColors.Combat.Immune);
+                    return;
+                }
                 isCrit = Attack(
                     target, ref damageHealth, ref damageMana, 0, 0, ElementalType.None,
                     damageType, scalingStat, scaling, critChance, critMultiplier, null, deadAnimations,
@@ -2042,6 +2073,11 @@ namespace Intersect.Server.Entities
             }
             else
             {
+                if (target != null && target.IsImmuneToElementalType(weapon.ElementalType))
+                {
+                    PacketSender.SendActionMsg(target, Strings.Combat.immune, CustomColors.Combat.Immune);
+                    return;
+                }
                 isCrit = Attack(
                     target, ref damageHealth, ref damageMana, 0, 0, (ElementalType)weapon.ElementalType,
                     damageType, scalingStat, scaling, critChance, critMultiplier, weapon.Name, deadAnimations,
@@ -2252,6 +2288,12 @@ namespace Intersect.Server.Entities
                             );
 
                             break;
+                        case DamageType.Fixed:
+                            PacketSender.SendActionMsg(
+                                enemy, Strings.Combat.removesymbol + (int)baseDamage, CustomColors.Combat.FixedDamage
+                            );
+
+                            break;
                     }
                     if (stealBase > 0 && amounthp > 0)
                     {
@@ -2393,11 +2435,13 @@ namespace Intersect.Server.Entities
                 }
                 else
                 {
+                    bool stadiumKill = false;
+                    bool pvpKill = false;
                     //PVP Kill common events
                     if (!enemy.Dead && enemy is Player && this is Player)
                     {
                         // No trigger if it is a stadium kill (we handle it in Stadium EndMatch method)
-                        bool stadiumKill = false;
+                        pvpKill = true;
                         if (PvpStadiumUnit.StadiumQueue.TryGetValue(this.Id, out var playerUnit) && playerUnit.StadiumState == PvpStadiumState.MatchOnGoing)
                         {
                             if (PvpStadiumUnit.StadiumQueue.TryGetValue(enemy.Id, out playerUnit) && playerUnit.StadiumState == PvpStadiumState.MatchOnGoing)
@@ -2414,7 +2458,8 @@ namespace Intersect.Server.Entities
 
                     lock (enemy.EntityLock)
                     {
-                        enemy.Die(true, this);
+                        // No drops items when pvpkill
+                        enemy.Die(!pvpKill, this);
                     }
                 }
 
@@ -2528,22 +2573,24 @@ namespace Intersect.Server.Entities
             }
 
             //TODO Check alreadycrit or nextspell if we want to cancel vital/mana costs
-            if (spellBase.VitalCost[(int)Vitals.Mana] > 0)
+            var manacost = CalculateVitalStyle(spellBase.VitalCost[(int)Vitals.Mana], spellBase.VitalCostStyle[(int)Vitals.Mana], Vitals.Mana, baseTarget);
+            var healthcost = CalculateVitalStyle(spellBase.VitalCost[(int)Vitals.Health], spellBase.VitalCostStyle[(int)Vitals.Health], Vitals.Health, baseTarget);
+            if (manacost > 0)
             {
-                SubVital(Vitals.Mana, spellBase.VitalCost[(int)Vitals.Mana]);
+                SubVital(Vitals.Mana, manacost);
             }
             else
             {
-                AddVital(Vitals.Mana, -spellBase.VitalCost[(int)Vitals.Mana]);
+                AddVital(Vitals.Mana, -manacost);
             }
 
-            if (spellBase.VitalCost[(int)Vitals.Health] > 0)
+            if (healthcost > 0)
             {
-                SubVital(Vitals.Health, spellBase.VitalCost[(int)Vitals.Health]);
+                SubVital(Vitals.Health, healthcost);
             }
             else
             {
-                AddVital(Vitals.Health, -spellBase.VitalCost[(int)Vitals.Health]);
+                AddVital(Vitals.Health, -healthcost);
             }
 
             switch (spellBase.SpellType)
@@ -2792,7 +2839,10 @@ namespace Intersect.Server.Entities
                         }
 
                         int[] position = GetPositionNearTarget(baseTarget.MapId, baseTarget.X, baseTarget.Y);
-                        Warp(baseTarget.MapId, (byte)position[0], (byte)position[1], (byte)Dir);
+                        if (position!= null)
+                        {
+                            Warp(baseTarget.MapId, (byte)position[0], (byte)position[1], (byte)Dir);
+                        }
                         ChangeDir(DirToEnemy(baseTarget, true));
 
                         if (spellBase.ImpactAnimation != null)
@@ -2920,7 +2970,8 @@ namespace Intersect.Server.Entities
             var map = MapInstance.Get(mapId);
             if (map == null)
             {
-                return new int[] { x, y };
+                //return new int[] { x, y };
+                return null;
             }
 
             List<int[]> validPosition = new List<int[]>();
@@ -2977,8 +3028,35 @@ namespace Intersect.Server.Entities
                 return validPosition[Randomization.Next(0, validPosition.Count)];
             }
 
-            // If nothing found, return target position
-            return new int[] { x, y };
+            // If nothing found, return null to indicate it
+            return null;
+            //return new int[] { x, y };
+        }
+
+        public int CalculateVitalStyle(int amount, int damageStyle, Vitals vitals, Entity target)
+        {
+            switch((DamageStyle)damageStyle)
+            {
+                case DamageStyle.Normal:
+                    return amount;
+                case DamageStyle.CasterMax:
+                    return (int)(amount / 100.0 * GetMaxVital(vitals));
+                case DamageStyle.CasterCurrent:
+                    return (int)(amount / 100.0 * GetVital(vitals));
+                case DamageStyle.TargetMax:
+                    if (target != null)
+                    {
+                        return (int)(amount / 100.0 * target.GetMaxVital(vitals));
+                    }
+                    break;
+                case DamageStyle.TargetCurrent:
+                    if (target != null)
+                    {
+                        return (int)(amount / 100.0 * target.GetVital(vitals));
+                    }
+                    break;
+            }
+            return 0;
         }
 
         //Check if the target is either up, down, left or right of the target on the correct Z dimension.
@@ -3476,7 +3554,8 @@ namespace Intersect.Server.Entities
                 if (this is Player)
                 {
                     //Player drop rates
-                    if (Randomization.Next(1, 101) >= itemBase.DropChanceOnDeath * luck * multiplier)
+                    // no luck or multiplier for item drop on death
+                    if (Randomization.Next(1, 101) >= itemBase.DropChanceOnDeath)
                     {
                         continue;
                     }

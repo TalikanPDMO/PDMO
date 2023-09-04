@@ -679,7 +679,14 @@ namespace Intersect.Server.Maps
                     var spawnLevel = Spawns[i].Levels[0];
                     if (Spawns[i].Levels[0] != Spawns[i].Levels[1])
                     {
-                        spawnLevel = Randomization.Next(Spawns[i].Levels[0], Spawns[i].Levels[1] + 1);
+                        if (Spawns[i].Levels[0] < Spawns[i].Levels[1])
+                        {
+                            spawnLevel = Randomization.Next(Spawns[i].Levels[0], Spawns[i].Levels[1] + 1);
+                        }
+                        else
+                        {
+                            spawnLevel = Randomization.Next(Spawns[i].Levels[1], Spawns[i].Levels[0] + 1);
+                        }
                     }
                     if (spawnLevel > npcBase.Level + npcBase.LevelRange || spawnLevel < npcBase.Level - npcBase.LevelRange)
                     {
@@ -756,7 +763,10 @@ namespace Intersect.Server.Maps
                     MapId = Id,
                     X = tileX,
                     Y = tileY,
-                    Dir = dir
+                    Dir = dir,
+                    SpawnMap = this,
+                    SpawnX = tileX,
+                    SpawnY = tileY
                 };
 
                 AddEntity(npc);

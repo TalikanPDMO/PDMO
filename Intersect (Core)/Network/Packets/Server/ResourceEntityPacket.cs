@@ -1,4 +1,5 @@
-﻿using MessagePack;
+﻿using Intersect.Enums;
+using MessagePack;
 using System;
 
 namespace Intersect.Network.Packets.Server
@@ -19,6 +20,8 @@ namespace Intersect.Network.Packets.Server
         [Key(25)]
         public bool IsDead { get; set; }
 
+        [Key(26)]
+        public ElementalType[] ElementalTypes { get; set; }
     }
 
 }

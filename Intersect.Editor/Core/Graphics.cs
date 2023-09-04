@@ -1637,8 +1637,8 @@ namespace Intersect.Editor.Core
                         {
                             continue;
                         }
-
-                        var map = MapInstance.Get(Globals.MapGrid.Grid[x, y].MapId);
+                        var map = Globals.MapGrid?.Grid[x, y] != null ?
+                            MapInstance.Get(Globals.MapGrid.Grid[x, y].MapId) : null;
                         if (map == null)
                         {
                             continue;

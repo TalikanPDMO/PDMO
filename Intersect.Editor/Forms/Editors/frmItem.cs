@@ -261,6 +261,7 @@ namespace Intersect.Editor.Forms.Editors
             lblScalingAmount.Text = Strings.ItemEditor.scalingamount;
             lblAttackAnimation.Text = Strings.ItemEditor.attackanimation;
             lblAttackRange.Text = Strings.ItemEditor.attackrange;
+            chkAdaptRange.Text = Strings.ItemEditor.adaptrange;
             lblProjectile.Text = Strings.ItemEditor.projectile;
             lblToolType.Text = Strings.ItemEditor.tooltype;
 
@@ -389,6 +390,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbToolType.SelectedIndex = mEditorItem.Tool + 1;
                 cmbAttackAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.AttackAnimationId) + 1;
                 nudAttackRange.Value = mEditorItem.AttackRange;
+                chkAdaptRange.Checked = Convert.ToBoolean(mEditorItem.AdaptRange);
                 RefreshExtendedData();
                 if (mEditorItem.ItemType == ItemTypes.Equipment)
                 {
@@ -789,6 +791,11 @@ namespace Intersect.Editor.Forms.Editors
         private void nudAttackRange_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.AttackRange = (byte)nudAttackRange.Value;
+        }
+
+        private void chkAdaptRange_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.AdaptRange = chkAdaptRange.Checked;
         }
 
         private void cmbElementalType_SelectedIndexChanged(object sender, EventArgs e)

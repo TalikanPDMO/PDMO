@@ -74,7 +74,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpEditor.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpEditor.Location = new System.Drawing.Point(0, 2);
             this.grpEditor.Name = "grpEditor";
-            this.grpEditor.Size = new System.Drawing.Size(255, 420);
+            this.grpEditor.Size = new System.Drawing.Size(265, 420);
             this.grpEditor.TabIndex = 18;
             this.grpEditor.TabStop = false;
             this.grpEditor.Text = "TaskAlternatives Editor";
@@ -85,18 +85,18 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.txtDesc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.txtDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtDesc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtDesc.Location = new System.Drawing.Point(72, 98);
+            this.txtDesc.Location = new System.Drawing.Point(53, 98);
             this.txtDesc.Multiline = true;
             this.txtDesc.Name = "txtDesc";
             this.txtDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtDesc.Size = new System.Drawing.Size(173, 66);
+            this.txtDesc.Size = new System.Drawing.Size(201, 66);
             this.txtDesc.TabIndex = 37;
             this.txtDesc.TextChanged += new System.EventHandler(this.txtDesc_TextChanged);
             // 
             // lblDesc
             // 
             this.lblDesc.AutoSize = true;
-            this.lblDesc.Location = new System.Drawing.Point(17, 122);
+            this.lblDesc.Location = new System.Drawing.Point(12, 122);
             this.lblDesc.Name = "lblDesc";
             this.lblDesc.Size = new System.Drawing.Size(35, 13);
             this.lblDesc.TabIndex = 36;
@@ -105,7 +105,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // lblNoTaskAlternative
             // 
             this.lblNoTaskAlternative.AutoSize = true;
-            this.lblNoTaskAlternative.Location = new System.Drawing.Point(57, 22);
+            this.lblNoTaskAlternative.Location = new System.Drawing.Point(65, 22);
             this.lblNoTaskAlternative.Name = "lblNoTaskAlternative";
             this.lblNoTaskAlternative.Size = new System.Drawing.Size(197, 13);
             this.lblNoTaskAlternative.TabIndex = 35;
@@ -114,7 +114,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // lblName
             // 
             this.lblName.AutoSize = true;
-            this.lblName.Location = new System.Drawing.Point(17, 74);
+            this.lblName.Location = new System.Drawing.Point(12, 74);
             this.lblName.Name = "lblName";
             this.lblName.Size = new System.Drawing.Size(38, 13);
             this.lblName.TabIndex = 34;
@@ -125,9 +125,9 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.txtName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.txtName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtName.Location = new System.Drawing.Point(72, 72);
+            this.txtName.Location = new System.Drawing.Point(53, 72);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(173, 20);
+            this.txtName.Size = new System.Drawing.Size(201, 20);
             this.txtName.TabIndex = 33;
             this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
             // 
@@ -153,7 +153,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // 
             // btnEditTaskAlternativeEvent
             // 
-            this.btnEditTaskAlternativeEvent.Location = new System.Drawing.Point(10, 361);
+            this.btnEditTaskAlternativeEvent.Location = new System.Drawing.Point(15, 362);
             this.btnEditTaskAlternativeEvent.Name = "btnEditTaskAlternativeEvent";
             this.btnEditTaskAlternativeEvent.Padding = new System.Windows.Forms.Padding(5);
             this.btnEditTaskAlternativeEvent.Size = new System.Drawing.Size(236, 23);
@@ -163,7 +163,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(10, 390);
+            this.btnSave.Location = new System.Drawing.Point(15, 391);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(75, 23);
@@ -188,7 +188,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             "Alternative name 1",
             "Alternative name 2",
             "Alternative name 3"});
-            this.cmbTaskAlternatives.Location = new System.Drawing.Point(72, 18);
+            this.cmbTaskAlternatives.Location = new System.Drawing.Point(80, 18);
             this.cmbTaskAlternatives.Name = "cmbTaskAlternatives";
             this.cmbTaskAlternatives.Size = new System.Drawing.Size(173, 21);
             this.cmbTaskAlternatives.TabIndex = 22;
@@ -199,7 +199,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // lblAlternatives
             // 
             this.lblAlternatives.AutoSize = true;
-            this.lblAlternatives.Location = new System.Drawing.Point(1, 22);
+            this.lblAlternatives.Location = new System.Drawing.Point(9, 22);
             this.lblAlternatives.Name = "lblAlternatives";
             this.lblAlternatives.Size = new System.Drawing.Size(54, 13);
             this.lblAlternatives.TabIndex = 21;
@@ -207,7 +207,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(91, 390);
+            this.btnCancel.Location = new System.Drawing.Point(96, 391);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -226,7 +226,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpAlternativeTasks.Controls.Add(this.btnAddTask);
             this.grpAlternativeTasks.Controls.Add(this.lstTasksOrTaskLinks);
             this.grpAlternativeTasks.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpAlternativeTasks.Location = new System.Drawing.Point(10, 170);
+            this.grpAlternativeTasks.Location = new System.Drawing.Point(15, 171);
             this.grpAlternativeTasks.Name = "grpAlternativeTasks";
             this.grpAlternativeTasks.Size = new System.Drawing.Size(236, 185);
             this.grpAlternativeTasks.TabIndex = 28;
@@ -312,7 +312,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpEditor);
             this.Name = "QuestTaskAlternativesEditor";
-            this.Size = new System.Drawing.Size(255, 422);
+            this.Size = new System.Drawing.Size(268, 422);
             this.grpEditor.ResumeLayout(false);
             this.grpEditor.PerformLayout();
             this.grpAlternativeTasks.ResumeLayout(false);

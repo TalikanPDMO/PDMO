@@ -102,7 +102,8 @@ namespace Intersect.Server.Entities.Combat
             {
                 for (var i = (int)Vitals.Health; i < (int)Vitals.VitalCount; i++)
                 {
-                    var vitalDiff = spell.Combat.VitalDiff[i];
+                    var vitalDiff = Attacker.CalculateVitalStyle(spell.Combat.VitalDiff[i],
+                         spell.Combat.VitalDiffStyle[i], (Vitals)i, mEntity);
 
                     shield[i] = Math.Abs(vitalDiff) +
                                 (int)(spell.Combat.Scaling * en.Stat[spell.Combat.ScalingStat].BaseStat / 100f);

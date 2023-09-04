@@ -355,9 +355,34 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString equipment = @"Equipment:";
 
-            public static LocalizedString levelandclass = @"Level: {00} {01}";
+            public static LocalizedString oneelementaltype = @"Type: {00}";
 
-            public static LocalizedString name = @"{00}";
+            public static LocalizedString twoelementaltype = @"Types: {00} / {01}";
+
+            public static Dictionary<int, LocalizedString> elementaltypes = new Dictionary<int, LocalizedString>
+            {
+                {0, @"None"},
+                {1, @"Steel"},
+                {2, @"Fighting"},
+                {3, @"Dragon"},
+                {4, @"Water"},
+                {5, @"Electric"},
+                {6, @"Fairy"},
+                {7, @"Fire"},
+                {8, @"Ice"},
+                {9, @"Bug"},
+                {10, @"Normal"},
+                {11, @"Grass"},
+                {12, @"Poison"},
+                {13, @"Psychic"},
+                {14, @"Rock"},
+                {15, @"Ground"},
+                {16, @"Ghost"},
+                {17, @"Dark"},
+                {18, @"Flying"},
+            };
+
+            public static LocalizedString nameandinfos = @"{00} - {01} Level {02}";
 
             public static LocalizedString points = @"Points: {00}";
 
@@ -710,6 +735,35 @@ namespace Intersect.Client.Localization
             public static LocalizedString vital1val = @"{00} / {01}";
 
             public static LocalizedString sprinttip = @"Hold the Sprint button to run while moving";
+
+            public static LocalizedString noelementaltype = @"No Type";
+
+            public static LocalizedString oneelementaltype = @"{00}";
+
+            public static LocalizedString twoelementaltype = @"{00} / {01}";
+
+            public static Dictionary<int, LocalizedString> elementaltypes = new Dictionary<int, LocalizedString>
+            {
+                {0, @"None"},
+                {1, @"Steel"},
+                {2, @"Fighting"},
+                {3, @"Dragon"},
+                {4, @"Water"},
+                {5, @"Electric"},
+                {6, @"Fairy"},
+                {7, @"Fire"},
+                {8, @"Ice"},
+                {9, @"Bug"},
+                {10, @"Normal"},
+                {11, @"Grass"},
+                {12, @"Poison"},
+                {13, @"Psychic"},
+                {14, @"Rock"},
+                {15, @"Ground"},
+                {16, @"Ghost"},
+                {17, @"Dark"},
+                {18, @"Flying"},
+            };
 
         }
 
@@ -1631,6 +1685,23 @@ namespace Intersect.Client.Localization
                 {1, @"MP Cost: {00}"},
             };
 
+            public static Dictionary<int, LocalizedString> damagestyles = new Dictionary<int, LocalizedString>
+            {
+                {0, @"{00}"},
+                {1, @"{00}% of your Max {01}"},
+                {2, @"{00}% of your Current {01}"},
+                {3, @"{00}% of your target Max {01}"},
+                {4, @"{00}% of your target Current {01}"}
+            };
+
+            public static LocalizedString hp = @"HP";
+            public static LocalizedString mp = @"MP";
+
+            public static Dictionary<int, LocalizedString> vitalstyles = new Dictionary<int, LocalizedString>
+            {
+                {0, @"HP"},
+                {1, @"MP"},
+            };
         }
 
         public struct Spells

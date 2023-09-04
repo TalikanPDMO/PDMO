@@ -281,6 +281,7 @@ namespace Intersect.Client.Networking
             {
                 Globals.Entities.Add(packet.EntityId, new Entity(packet.EntityId, packet));
                 Globals.Entities[packet.EntityId].Type = packet.Aggression;
+                Globals.Entities[packet.EntityId].ElementalTypes = packet.ElementalTypes;
                 if (packet.IsSpawn)
                 {
                     Globals.Entities[packet.EntityId].SpawnExpansion = 0;

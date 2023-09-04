@@ -19,6 +19,8 @@ namespace Intersect.GameObjects
 
         [NotMapped] public int[] VitalCost = new int[(int) Vitals.VitalCount];
 
+        [NotMapped] public int[] VitalCostStyle = new int[(int)Vitals.VitalCount];
+
         [JsonConstructor]
         public SpellBase(Guid id) : base(id)
         {
@@ -166,6 +168,14 @@ namespace Intersect.GameObjects
             set => VitalCost = DatabaseUtils.LoadIntArray(value, (int) Vitals.VitalCount);
         }
 
+        [Column("VitalCostStyle")]
+        [JsonIgnore]
+        public string VitalCostStyleJson
+        {
+            get => DatabaseUtils.SaveIntArray(VitalCostStyle, (int)Vitals.VitalCount);
+            set => VitalCostStyle = DatabaseUtils.LoadIntArray(value, (int)Vitals.VitalCount);
+        }
+
         /// <inheritdoc />
         public string Folder { get; set; } = "";
 
@@ -193,6 +203,8 @@ namespace Intersect.GameObjects
     {
 
         [NotMapped] public int[] VitalDiff = new int[(int) Vitals.VitalCount];
+
+        [NotMapped] public int[] VitalDiffStyle = new int[(int)Vitals.VitalCount];
 
         [NotMapped] public int[] VitalSteal = new int[(int)Vitals.VitalCount];
 
@@ -260,6 +272,14 @@ namespace Intersect.GameObjects
         {
             get => DatabaseUtils.SaveIntArray(VitalDiff, (int) Vitals.VitalCount);
             set => VitalDiff = DatabaseUtils.LoadIntArray(value, (int) Vitals.VitalCount);
+        }
+
+        [Column("VitalDiffStyle")]
+        [JsonIgnore]
+        public string VitalDiffStyleJson
+        {
+            get => DatabaseUtils.SaveIntArray(VitalDiffStyle, (int)Vitals.VitalCount);
+            set => VitalDiffStyle = DatabaseUtils.LoadIntArray(value, (int)Vitals.VitalCount);
         }
 
         // Steal vitals or not and what amount percentage

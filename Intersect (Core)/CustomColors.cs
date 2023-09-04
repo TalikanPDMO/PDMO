@@ -183,6 +183,8 @@ namespace Intersect
 
             public Color Missed = new Color(255, 255, 255, 255);
 
+            public Color Immune = new Color(255, 255, 255, 255);
+
             public Color NoAmmo = Color.Red;
 
             public Color NoTarget = Color.Red;
@@ -196,6 +198,8 @@ namespace Intersect
             public Color Status = new Color(255, 255, 255, 0);
 
             public Color TrueDamage = new Color(255, 255, 255, 255);
+
+            public Color FixedDamage = new Color(255, 255, 255, 255);
 
         }
 

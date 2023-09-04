@@ -338,6 +338,10 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString miss = @"MISS!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString immune = @"IMMUNE!";
+
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString notarget = @"No Target!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

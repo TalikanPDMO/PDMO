@@ -38,22 +38,22 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.cmbTaskType = new DarkUI.Controls.DarkComboBox();
             this.lblType = new System.Windows.Forms.Label();
             this.btnCancel = new DarkUI.Controls.DarkButton();
-            this.grpKillNpcs = new DarkUI.Controls.DarkGroupBox();
-            this.nudNpcQuantity = new DarkUI.Controls.DarkNumericUpDown();
-            this.cmbNpc = new DarkUI.Controls.DarkComboBox();
-            this.lblNpc = new System.Windows.Forms.Label();
-            this.lblNpcQuantity = new System.Windows.Forms.Label();
             this.grpGatherItems = new DarkUI.Controls.DarkGroupBox();
             this.nudItemAmount = new DarkUI.Controls.DarkNumericUpDown();
             this.cmbItem = new DarkUI.Controls.DarkComboBox();
             this.lblItem = new System.Windows.Forms.Label();
             this.lblItemQuantity = new System.Windows.Forms.Label();
             this.lblEventDriven = new System.Windows.Forms.Label();
+            this.grpKillNpcs = new DarkUI.Controls.DarkGroupBox();
+            this.nudNpcQuantity = new DarkUI.Controls.DarkNumericUpDown();
+            this.cmbNpc = new DarkUI.Controls.DarkComboBox();
+            this.lblNpc = new System.Windows.Forms.Label();
+            this.lblNpcQuantity = new System.Windows.Forms.Label();
             this.grpEditor.SuspendLayout();
-            this.grpKillNpcs.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudNpcQuantity)).BeginInit();
             this.grpGatherItems.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudItemAmount)).BeginInit();
+            this.grpKillNpcs.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudNpcQuantity)).BeginInit();
             this.SuspendLayout();
             // 
             // grpEditor
@@ -71,19 +71,19 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpEditor.Controls.Add(this.lblEventDriven);
             this.grpEditor.Controls.Add(this.grpKillNpcs);
             this.grpEditor.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpEditor.Location = new System.Drawing.Point(-1, 2);
+            this.grpEditor.Location = new System.Drawing.Point(0, 2);
             this.grpEditor.Name = "grpEditor";
-            this.grpEditor.Size = new System.Drawing.Size(256, 261);
+            this.grpEditor.Size = new System.Drawing.Size(270, 298);
             this.grpEditor.TabIndex = 18;
             this.grpEditor.TabStop = false;
             this.grpEditor.Text = "Task Editor";
             // 
             // btnEditTaskEvent
             // 
-            this.btnEditTaskEvent.Location = new System.Drawing.Point(10, 202);
+            this.btnEditTaskEvent.Location = new System.Drawing.Point(10, 239);
             this.btnEditTaskEvent.Name = "btnEditTaskEvent";
             this.btnEditTaskEvent.Padding = new System.Windows.Forms.Padding(5);
-            this.btnEditTaskEvent.Size = new System.Drawing.Size(236, 23);
+            this.btnEditTaskEvent.Size = new System.Drawing.Size(252, 23);
             this.btnEditTaskEvent.TabIndex = 30;
             this.btnEditTaskEvent.Text = "Edit Task Completion Event";
             this.btnEditTaskEvent.Click += new System.EventHandler(this.btnEditTaskEvent_Click);
@@ -94,17 +94,17 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.txtStartDesc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.txtStartDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtStartDesc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtStartDesc.Location = new System.Drawing.Point(88, 40);
+            this.txtStartDesc.Location = new System.Drawing.Point(9, 58);
             this.txtStartDesc.Multiline = true;
             this.txtStartDesc.Name = "txtStartDesc";
             this.txtStartDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtStartDesc.Size = new System.Drawing.Size(157, 64);
+            this.txtStartDesc.Size = new System.Drawing.Size(253, 85);
             this.txtStartDesc.TabIndex = 27;
             // 
             // lblDesc
             // 
             this.lblDesc.AutoSize = true;
-            this.lblDesc.Location = new System.Drawing.Point(9, 42);
+            this.lblDesc.Location = new System.Drawing.Point(14, 41);
             this.lblDesc.Name = "lblDesc";
             this.lblDesc.Size = new System.Drawing.Size(35, 13);
             this.lblDesc.TabIndex = 26;
@@ -112,7 +112,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(10, 231);
+            this.btnSave.Location = new System.Drawing.Point(10, 268);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(75, 23);
@@ -137,7 +137,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             "Event Driven",
             "Gather Item(s)",
             "Kill NPC(s)"});
-            this.cmbTaskType.Location = new System.Drawing.Point(88, 13);
+            this.cmbTaskType.Location = new System.Drawing.Point(95, 19);
             this.cmbTaskType.Name = "cmbTaskType";
             this.cmbTaskType.Size = new System.Drawing.Size(157, 21);
             this.cmbTaskType.TabIndex = 22;
@@ -148,7 +148,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // lblType
             // 
             this.lblType.AutoSize = true;
-            this.lblType.Location = new System.Drawing.Point(6, 16);
+            this.lblType.Location = new System.Drawing.Point(13, 22);
             this.lblType.Name = "lblType";
             this.lblType.Size = new System.Drawing.Size(61, 13);
             this.lblType.TabIndex = 21;
@@ -156,92 +156,13 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(91, 231);
+            this.btnCancel.Location = new System.Drawing.Point(91, 268);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 20;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-            // 
-            // grpKillNpcs
-            // 
-            this.grpKillNpcs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpKillNpcs.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpKillNpcs.Controls.Add(this.nudNpcQuantity);
-            this.grpKillNpcs.Controls.Add(this.cmbNpc);
-            this.grpKillNpcs.Controls.Add(this.lblNpc);
-            this.grpKillNpcs.Controls.Add(this.lblNpcQuantity);
-            this.grpKillNpcs.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpKillNpcs.Location = new System.Drawing.Point(10, 110);
-            this.grpKillNpcs.Name = "grpKillNpcs";
-            this.grpKillNpcs.Size = new System.Drawing.Size(236, 83);
-            this.grpKillNpcs.TabIndex = 28;
-            this.grpKillNpcs.TabStop = false;
-            this.grpKillNpcs.Text = "Kill NPC(s)";
-            this.grpKillNpcs.Visible = false;
-            // 
-            // nudNpcQuantity
-            // 
-            this.nudNpcQuantity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudNpcQuantity.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudNpcQuantity.Location = new System.Drawing.Point(103, 54);
-            this.nudNpcQuantity.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.nudNpcQuantity.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudNpcQuantity.Name = "nudNpcQuantity";
-            this.nudNpcQuantity.Size = new System.Drawing.Size(126, 20);
-            this.nudNpcQuantity.TabIndex = 64;
-            this.nudNpcQuantity.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // cmbNpc
-            // 
-            this.cmbNpc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbNpc.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbNpc.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbNpc.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbNpc.DrawDropdownHoverOutline = false;
-            this.cmbNpc.DrawFocusRectangle = false;
-            this.cmbNpc.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbNpc.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbNpc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbNpc.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbNpc.FormattingEnabled = true;
-            this.cmbNpc.Location = new System.Drawing.Point(57, 21);
-            this.cmbNpc.Name = "cmbNpc";
-            this.cmbNpc.Size = new System.Drawing.Size(172, 21);
-            this.cmbNpc.TabIndex = 3;
-            this.cmbNpc.Text = null;
-            this.cmbNpc.TextPadding = new System.Windows.Forms.Padding(2);
-            // 
-            // lblNpc
-            // 
-            this.lblNpc.AutoSize = true;
-            this.lblNpc.Location = new System.Drawing.Point(7, 24);
-            this.lblNpc.Name = "lblNpc";
-            this.lblNpc.Size = new System.Drawing.Size(32, 13);
-            this.lblNpc.TabIndex = 2;
-            this.lblNpc.Text = "NPC:";
-            // 
-            // lblNpcQuantity
-            // 
-            this.lblNpcQuantity.AutoSize = true;
-            this.lblNpcQuantity.Location = new System.Drawing.Point(7, 56);
-            this.lblNpcQuantity.Name = "lblNpcQuantity";
-            this.lblNpcQuantity.Size = new System.Drawing.Size(46, 13);
-            this.lblNpcQuantity.TabIndex = 0;
-            this.lblNpcQuantity.Text = "Amount:";
             // 
             // grpGatherItems
             // 
@@ -252,9 +173,9 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpGatherItems.Controls.Add(this.lblItem);
             this.grpGatherItems.Controls.Add(this.lblItemQuantity);
             this.grpGatherItems.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpGatherItems.Location = new System.Drawing.Point(9, 112);
+            this.grpGatherItems.Location = new System.Drawing.Point(9, 149);
             this.grpGatherItems.Name = "grpGatherItems";
-            this.grpGatherItems.Size = new System.Drawing.Size(236, 83);
+            this.grpGatherItems.Size = new System.Drawing.Size(253, 83);
             this.grpGatherItems.TabIndex = 25;
             this.grpGatherItems.TabStop = false;
             this.grpGatherItems.Text = "Gather Item(s)";
@@ -324,12 +245,91 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // 
             // lblEventDriven
             // 
-            this.lblEventDriven.Location = new System.Drawing.Point(13, 126);
+            this.lblEventDriven.Location = new System.Drawing.Point(13, 163);
             this.lblEventDriven.Name = "lblEventDriven";
             this.lblEventDriven.Size = new System.Drawing.Size(226, 56);
             this.lblEventDriven.TabIndex = 29;
             this.lblEventDriven.Text = "Event Driven: The description should lead the player to an event. The event will " +
     "then complete the task using the complete quest task command.";
+            // 
+            // grpKillNpcs
+            // 
+            this.grpKillNpcs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpKillNpcs.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpKillNpcs.Controls.Add(this.nudNpcQuantity);
+            this.grpKillNpcs.Controls.Add(this.cmbNpc);
+            this.grpKillNpcs.Controls.Add(this.lblNpc);
+            this.grpKillNpcs.Controls.Add(this.lblNpcQuantity);
+            this.grpKillNpcs.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpKillNpcs.Location = new System.Drawing.Point(10, 147);
+            this.grpKillNpcs.Name = "grpKillNpcs";
+            this.grpKillNpcs.Size = new System.Drawing.Size(236, 83);
+            this.grpKillNpcs.TabIndex = 28;
+            this.grpKillNpcs.TabStop = false;
+            this.grpKillNpcs.Text = "Kill NPC(s)";
+            this.grpKillNpcs.Visible = false;
+            // 
+            // nudNpcQuantity
+            // 
+            this.nudNpcQuantity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudNpcQuantity.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudNpcQuantity.Location = new System.Drawing.Point(103, 54);
+            this.nudNpcQuantity.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.nudNpcQuantity.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudNpcQuantity.Name = "nudNpcQuantity";
+            this.nudNpcQuantity.Size = new System.Drawing.Size(126, 20);
+            this.nudNpcQuantity.TabIndex = 64;
+            this.nudNpcQuantity.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // cmbNpc
+            // 
+            this.cmbNpc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbNpc.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbNpc.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbNpc.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbNpc.DrawDropdownHoverOutline = false;
+            this.cmbNpc.DrawFocusRectangle = false;
+            this.cmbNpc.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbNpc.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbNpc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbNpc.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbNpc.FormattingEnabled = true;
+            this.cmbNpc.Location = new System.Drawing.Point(57, 21);
+            this.cmbNpc.Name = "cmbNpc";
+            this.cmbNpc.Size = new System.Drawing.Size(172, 21);
+            this.cmbNpc.TabIndex = 3;
+            this.cmbNpc.Text = null;
+            this.cmbNpc.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lblNpc
+            // 
+            this.lblNpc.AutoSize = true;
+            this.lblNpc.Location = new System.Drawing.Point(7, 24);
+            this.lblNpc.Name = "lblNpc";
+            this.lblNpc.Size = new System.Drawing.Size(32, 13);
+            this.lblNpc.TabIndex = 2;
+            this.lblNpc.Text = "NPC:";
+            // 
+            // lblNpcQuantity
+            // 
+            this.lblNpcQuantity.AutoSize = true;
+            this.lblNpcQuantity.Location = new System.Drawing.Point(7, 56);
+            this.lblNpcQuantity.Name = "lblNpcQuantity";
+            this.lblNpcQuantity.Size = new System.Drawing.Size(46, 13);
+            this.lblNpcQuantity.TabIndex = 0;
+            this.lblNpcQuantity.Text = "Amount:";
             // 
             // QuestTaskEditor
             // 
@@ -338,15 +338,15 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpEditor);
             this.Name = "QuestTaskEditor";
-            this.Size = new System.Drawing.Size(255, 267);
+            this.Size = new System.Drawing.Size(273, 303);
             this.grpEditor.ResumeLayout(false);
             this.grpEditor.PerformLayout();
-            this.grpKillNpcs.ResumeLayout(false);
-            this.grpKillNpcs.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudNpcQuantity)).EndInit();
             this.grpGatherItems.ResumeLayout(false);
             this.grpGatherItems.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudItemAmount)).EndInit();
+            this.grpKillNpcs.ResumeLayout(false);
+            this.grpKillNpcs.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudNpcQuantity)).EndInit();
             this.ResumeLayout(false);
 
         }

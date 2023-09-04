@@ -39,7 +39,7 @@ namespace Intersect.Client.Interface.Game.Character
 
         private ImagePanel mCharacterContainer;
 
-        private Label mCharacterLevelAndClass;
+        private Label mCharacterInfos;
 
         private Label mCharacterName;
 
@@ -82,8 +82,8 @@ namespace Intersect.Client.Interface.Game.Character
             mCharacterName = new Label(mCharacterWindow, "CharacterNameLabel");
             mCharacterName.SetTextColor(Color.White, Label.ControlState.Normal);
 
-            mCharacterLevelAndClass = new Label(mCharacterWindow, "ChatacterInfoLabel");
-            mCharacterLevelAndClass.SetText("");
+            mCharacterInfos = new Label(mCharacterWindow, "ChatacterInfoLabel");
+            mCharacterInfos.SetText("");
 
             mCharacterContainer = new ImagePanel(mCharacterWindow, "CharacterContainer");
 
@@ -177,10 +177,30 @@ namespace Intersect.Client.Interface.Game.Character
                 return;
             }
 
-            mCharacterName.Text = Globals.Me.Name;
-            mCharacterLevelAndClass.Text = Strings.Character.levelandclass.ToString(
-                Globals.Me.Level, ClassBase.GetName(Globals.Me.Class)
-            );
+            mCharacterName.Text = Strings.Character.nameandinfos.ToString(Globals.Me.Name, ClassBase.GetName(Globals.Me.Class), Globals.Me.Level);
+            if (Globals.Me.ElementalTypes != null)
+            {
+                if (Globals.Me.ElementalTypes[0] == Globals.Me.ElementalTypes[1])
+                {
+                    mCharacterInfos.Text = Strings.Character.oneelementaltype.ToString(Strings.Character.elementaltypes[(int)Globals.Me.ElementalTypes[0]]);
+                }
+                else
+                {
+                    if (Globals.Me.ElementalTypes[0] == ElementalType.None)
+                    {
+                        mCharacterInfos.Text = Strings.Character.oneelementaltype.ToString(Strings.Character.elementaltypes[(int)Globals.Me.ElementalTypes[1]]);
+                    }
+                    else if (Globals.Me.ElementalTypes[1] == ElementalType.None)
+                    {
+                        mCharacterInfos.Text = Strings.Character.oneelementaltype.ToString(Strings.Character.elementaltypes[(int)Globals.Me.ElementalTypes[0]]);
+                    }
+                    else
+                    {
+                        mCharacterInfos.Text = Strings.Character.twoelementaltype.ToString(
+                            Strings.Character.elementaltypes[(int)Globals.Me.ElementalTypes[0]], Strings.Character.elementaltypes[(int)Globals.Me.ElementalTypes[1]]);
+                    }
+                }
+            }
 
             //Load Portrait
             //UNCOMMENT THIS LINE IF YOU'D RATHER HAVE A FACE HERE GameTexture faceTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Face, Globals.Me.Face);

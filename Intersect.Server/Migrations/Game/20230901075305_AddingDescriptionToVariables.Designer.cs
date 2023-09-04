@@ -3,14 +3,16 @@ using System;
 using Intersect.Server.Database.GameData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Intersect.Server.Migrations.Game
 {
     [DbContext(typeof(GameContext))]
-    partial class GameContextModelSnapshot : ModelSnapshot
+    [Migration("20230901075305_AddingDescriptionToVariables")]
+    partial class AddingDescriptionToVariables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -814,9 +816,6 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<string>("VitalCostJson")
                         .HasColumnName("VitalCost");
 
-                    b.Property<string>("VitalCostStyleJson")
-                        .HasColumnName("VitalCostStyle");
-
                     b.HasKey("Id");
 
                     b.ToTable("Spells");
@@ -1168,9 +1167,6 @@ namespace Intersect.Server.Migrations.Game
 
                             b1.Property<string>("VitalDiffJson")
                                 .HasColumnName("VitalDiff");
-
-                            b1.Property<string>("VitalDiffStyleJson")
-                                .HasColumnName("VitalDiffStyle");
 
                             b1.Property<string>("VitalStealJson")
                                 .HasColumnName("VitalSteal");

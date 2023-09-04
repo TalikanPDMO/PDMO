@@ -717,6 +717,18 @@
     <Compile Include="Migrations\Game\20230720174105_AddingOnDeathAttackersEventToNpcs.designer.cs">
       <DependentUpon>20230720174105_AddingOnDeathAttackersEventToNpcs.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230831161040_AddingAdaptRangeToItems.cs" />
+    <Compile Include="Migrations\Game\20230831161040_AddingAdaptRangeToItems.designer.cs">
+      <DependentUpon>20230831161040_AddingAdaptRangeToItems.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230901075305_AddingDescriptionToVariables.cs" />
+    <Compile Include="Migrations\Game\20230901075305_AddingDescriptionToVariables.designer.cs">
+      <DependentUpon>20230901075305_AddingDescriptionToVariables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230903145212_AddingDamageStyleToSpells.cs" />
+    <Compile Include="Migrations\Game\20230903145212_AddingDamageStyleToSpells.designer.cs">
+      <DependentUpon>20230903145212_AddingDamageStyleToSpells.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

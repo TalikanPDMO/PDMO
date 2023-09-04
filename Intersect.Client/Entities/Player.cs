@@ -270,7 +270,7 @@ namespace Intersect.Client.Entities
             CombatTimer = pkt.CombatTimeRemaining + Globals.System.GetTimeMs();
             Guild = pkt.Guild;
             Rank = pkt.GuildRank;
-
+            ElementalTypes = pkt.ElementalTypes;
             var playerPacket = (PlayerEntityPacket) packet;
 
             if (playerPacket.Equipment != null)
@@ -1505,7 +1505,11 @@ namespace Intersect.Client.Entities
                     Options.WeaponIndex < Equipment.Length &&
                     MyEquipment[Options.WeaponIndex] >= 0)
             {
-                attackrange = ItemBase.Get(Inventory[MyEquipment[Options.WeaponIndex]].ItemId).AttackRange;
+                var item = ItemBase.Get(Inventory[MyEquipment[Options.WeaponIndex]].ItemId);
+                if (!item.AdaptRange)
+                {
+                    attackrange = item.AttackRange;
+                }
             }
             var attackTime = 0;
             if (attackrange > 0)

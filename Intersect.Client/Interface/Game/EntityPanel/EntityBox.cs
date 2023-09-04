@@ -31,6 +31,8 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
         public readonly Framework.Gwen.Control.Label EntityLevel;
 
+        public readonly Framework.Gwen.Control.Label EntityElementalTypes;
+
         public readonly Framework.Gwen.Control.Label EntityMap;
 
         public readonly Framework.Gwen.Control.Label EntityName;
@@ -131,6 +133,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
             EntityName = new Framework.Gwen.Control.Label(EntityInfoPanel, "EntityNameLabel") {Text = myEntity?.Name};
             EntityLevel = new Framework.Gwen.Control.Label(EntityInfoPanel, "EntityLevelLabel");
+            EntityElementalTypes = new Framework.Gwen.Control.Label(EntityInfoPanel, "EntityElementalTypesLabel");
             EntityNameAndLevel = new Framework.Gwen.Control.Label(EntityInfoPanel, "NameAndLevelLabel")
                 {IsHidden = true};
 
@@ -450,7 +453,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 {
                     UpdateMpBar(elapsedTime);
                 }
-                
+                UpdateElementalTypes();
                 IsHidden = false;
             }
             else
@@ -582,6 +585,79 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             if (!EntityNameAndLevel.IsHidden)
             {
                 EntityNameAndLevel.Text = Strings.EntityBox.NameAndLevel.ToString(MyEntity.Name, levelString);
+            }
+        }
+
+        private void UpdateElementalTypes()
+        {
+            var elementalString = Strings.EntityBox.noelementaltype;
+            if (EntityType == EntityTypes.Player || EntityType == EntityTypes.GlobalEntity)
+            {
+                if (MyEntity.ElementalTypes != null)
+                {
+                    if (MyEntity.ElementalTypes[0] == MyEntity.ElementalTypes[1])
+                    {
+                        if (MyEntity.ElementalTypes[0] != ElementalType.None)
+                        {
+                            elementalString = Strings.EntityBox.oneelementaltype.ToString(Strings.EntityBox.elementaltypes[(int)MyEntity.ElementalTypes[0]]);
+                        }
+                    }
+                    else
+                    {
+                        if (MyEntity.ElementalTypes[0] == ElementalType.None)
+                        {
+                            elementalString = Strings.EntityBox.oneelementaltype.ToString(Strings.EntityBox.elementaltypes[(int)MyEntity.ElementalTypes[1]]);
+                        }
+                        else if (MyEntity.ElementalTypes[1] == ElementalType.None)
+                        {
+                            elementalString = Strings.EntityBox.oneelementaltype.ToString(Strings.EntityBox.elementaltypes[(int)MyEntity.ElementalTypes[0]]);
+                        }
+                        else
+                        {
+                            elementalString = Strings.EntityBox.twoelementaltype.ToString(
+                                Strings.EntityBox.elementaltypes[(int)MyEntity.ElementalTypes[0]], Strings.EntityBox.elementaltypes[(int)MyEntity.ElementalTypes[1]]);
+                        }
+                    }
+                }
+            }
+            /*int[] elementalTypes = null;
+            if (EntityType == EntityTypes.Player)
+            {
+                elementalTypes = ClassBase.Get(((Player)MyEntity).Class)?.ElementalTypes;
+            }
+            else if (EntityType == EntityTypes.GlobalEntity)
+            {
+                elementalTypes = NpcBase.Get(MyEntity.Id)?.ElementalTypes;
+            }
+            if (elementalTypes != null)
+            {
+                if (elementalTypes[0] == elementalTypes[1])
+                {
+                    if (elementalTypes[0] != 0)
+                    {
+                        elementalString = Strings.EntityBox.oneelementaltype.ToString(Strings.EntityBox.elementaltypes[elementalTypes[0]]);
+                    } 
+                }
+                else
+                {
+                    if (elementalTypes[0] == 0)
+                    {
+                        elementalString = Strings.EntityBox.oneelementaltype.ToString(Strings.EntityBox.elementaltypes[elementalTypes[1]]);
+                    }
+                    else if (elementalTypes[1] == 0)
+                    {
+                        elementalString = Strings.EntityBox.oneelementaltype.ToString(Strings.EntityBox.elementaltypes[elementalTypes[0]]);
+                    }
+                    else
+                    {
+                        elementalString = Strings.EntityBox.twoelementaltype.
+                            ToString(Strings.EntityBox.elementaltypes[elementalTypes[0]], Strings.EntityBox.elementaltypes[elementalTypes[1]]);
+                    }
+                }
+            }*/
+            if (!EntityElementalTypes.IsHidden)
+            {
+                EntityElementalTypes.Text = elementalString;
             }
         }
 

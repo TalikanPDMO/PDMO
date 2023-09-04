@@ -755,6 +755,9 @@
     <EmbeddedResource Include="Forms\Editors\Quest\Quest_TaskAlternativesEditor.resx">
       <DependentUpon>Quest_TaskAlternativesEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Quest\Quest_TaskEditor.resx">
+      <DependentUpon>Quest_TaskEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Quest\Quest_TaskLinksEditor.resx">
       <DependentUpon>Quest_TaskLinksEditor.cs</DependentUpon>
     </EmbeddedResource>

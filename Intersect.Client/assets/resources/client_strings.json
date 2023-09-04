@@ -69,8 +69,30 @@
   },
   "Character": {
     "equipment": "Équipement:",
-    "levelandclass": "Niveau: {00} {01}",
-    "name": "{00}",
+    "nameandinfos": "{00} - {01} Niveau {02}",
+    "oneelementaltype": "Type: {00}",
+    "twoelementaltype": "Types: {00} / {01}",
+    "elementaltypes": {
+      "0": "Aucun",
+      "1": "Acier",
+      "2": "Combat",
+      "3": "Dragon",
+      "4": "Eau",
+      "5": "Electrik",
+      "6": "Fée",
+      "7": "Feu",
+      "8": "Glace",
+      "9": "Insecte",
+      "10": "Normal",
+      "11": "Plante",
+      "12": "Poison",
+      "13": "Psy",
+      "14": "Roche",
+      "15": "Sol",
+      "16": "Spectre",
+      "17": "Tenèbres",
+      "18": "Vol"
+    },
     "points": "Points: {00}",
     "stat0": "{00}: {01}",
     "stat1": "{00}: {01}",
@@ -254,7 +276,31 @@
     "vital0val": "{00} / {01}",
     "vital1": "PM:",
     "vital1val": "{00} / {01}",
-    "sprinttip": "Maintenez la touche de Sprint enfoncée pour courir en vous déplaçant"
+    "sprinttip": "Maintenez la touche de Sprint enfoncée pour courir en vous déplaçant",
+    "noelementaltype": "Aucun Type",
+    "oneelementaltype": "{00}",
+    "twoelementaltype": "{00} / {01}",
+    "elementaltypes": {
+      "0": "Aucun",
+      "1": "Acier",
+      "2": "Combat",
+      "3": "Dragon",
+      "4": "Eau",
+      "5": "Electrik",
+      "6": "Fée",
+      "7": "Feu",
+      "8": "Glace",
+      "9": "Insecte",
+      "10": "Normal",
+      "11": "Plante",
+      "12": "Poison",
+      "13": "Psy",
+      "14": "Roche",
+      "15": "Sol",
+      "16": "Spectre",
+      "17": "Tenèbres",
+      "18": "Vol"
+    }
   },
   "Errors": {
     "displaynotsupported": "Paramètres d'affichage invalides!",
@@ -824,6 +870,19 @@
     "vitalcosts": {
       "0": "PV Cost: {00}",
       "1": "PM Cost: {00}"
+    },
+    "damagestyles": {
+      "0": "{00}",
+      "1": "{00}% de vos {01} max",
+      "2": "{00}% de vos {01} actuels",
+      "3": "{00}% des {01} max de la cible",
+      "4": "{00}% des {01} actuels de la cible"
+    },
+    "hp": "PV",
+    "mp": "PM",
+    "vitalstyles": {
+      "0": "PV",
+      "1": "PM"
     }
   },
   "Spells": {

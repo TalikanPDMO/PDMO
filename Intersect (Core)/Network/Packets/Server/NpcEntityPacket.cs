@@ -1,4 +1,5 @@
 ﻿using MessagePack;
+using Intersect.Enums;
 
 namespace Intersect.Network.Packets.Server
 {
@@ -16,6 +17,9 @@ namespace Intersect.Network.Packets.Server
 
         [Key(25)]
         public bool IsSpawn { get; set; }
+
+        [Key(26)]
+        public ElementalType[] ElementalTypes { get; set; }
     }
 
 }

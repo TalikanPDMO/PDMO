@@ -827,6 +827,34 @@ namespace Intersect.Server.Entities.Events
                     }
 
                     break;
+
+                case (int)Directions.UpLeft:
+                    if (Y == 0 || X == 0)
+                    {
+                        return -5;
+                    }
+
+                    break;
+                case (int)Directions.UpRight:
+                    if (Y == 0 || X == Options.MapWidth - 1)
+                    {
+                        return -5;
+                    }
+
+                    break;
+                case (int)Directions.DownLeft:
+                    if (X == 0 || Y == Options.MapHeight - 1)
+                    {
+                        return -5;
+                    }
+
+                    break;
+                case (int)Directions.DownRight:
+                    if (X == Options.MapWidth - 1 || Y == Options.MapHeight - 1)
+                    {
+                        return -5;
+                    }
+                    break;
             }
 
             return base.CanMove(moveDir);

@@ -1138,6 +1138,7 @@ Tick timer saved in server config.json.";
                 {0, @"Physical"},
                 {1, @"Magic"},
                 {2, @"True"},
+                {3, @"Fixed"}
             };
 
             public static LocalizedString exp = @"Experience";
@@ -1178,6 +1179,15 @@ Tick timer saved in server config.json.";
                 {16, @"Ghost"},
                 {17, @"Dark"},
                 {18, @"Flying"}
+            };
+
+            public static Dictionary<int, LocalizedString> damagestyles = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Normal"},
+                {1, @"Caster Max (%)"},
+                {2, @"Caster Current (%)"},
+                {3, @"Target Max (%)"},
+                {4, @"Target Current (%)"},
             };
         }
 
@@ -3462,6 +3472,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString attackrange = @"Attack Range:";
 
+            public static LocalizedString adaptrange = @"Adapt to Player?";
+
             public static LocalizedString attackbonus = @"Attack:";
 
             public static LocalizedString attackspeed = @"Attack Speed";
@@ -4406,7 +4418,9 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString type2 = @"Type2:";
 
-            public static LocalizedString stats = @"Stats & Lvl Scaling%:  ";
+            public static LocalizedString stats = @"Stats:";
+
+            public static LocalizedString lvlscaling = @"Lvl Scaling:";
 
             public static LocalizedString swarm = @"Swarm";
 
@@ -4909,11 +4923,19 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString dropchance = @"Chance (%):";
 
+            public static LocalizedString dropamountrandom = @"Random?";
+
+            public static LocalizedString dropchanceiterative = @"Iterative?";
+
+            public static LocalizedString dropdisplay = @"{00} x{01} : {02}% {03}";
+
+            public static LocalizedString randomdisplay = @"{00}-{01}";
+
+            public static LocalizedString iterativedisplay = @"(Iterative)";
+
             public static LocalizedString dropadd = @"Add";
 
             public static LocalizedString dropremove = @"Remove";
-
-            public static LocalizedString dropdisplay = @"{00} x{01} - {02}%";
 
             public static LocalizedString exhaustedgraphic = @"Exhausted Graphic:";
 
@@ -5227,7 +5249,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString folderprompt = @"Enter a name for the folder you'd like to add:";
 
-            public static LocalizedString friendly = @"Friendly";
+            public static LocalizedString friendly = @"Friendly?";
 
             public static LocalizedString general = @"General";
 
@@ -5255,7 +5277,15 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString hpcost = @"HP Cost:";
 
+            public static LocalizedString hpcoststyle = @"HP Cost Style:";
+
+            public static LocalizedString manacoststyle = @"Mana Cost Style:";
+
             public static LocalizedString hpdamage = @"HP Damage:";
+
+            public static LocalizedString hpdamagestyle = @"HP Damage Style:";
+
+            public static LocalizedString manadamagestyle = @"Mana Damage Style:";
 
             public static LocalizedString steal = @"Steal (%):";
 
@@ -5419,6 +5449,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString undo = @"Undo Changes";
 
             public static LocalizedString value = @"Value:";
+
+            public static LocalizedString description = @"Description:";
 
             public static LocalizedString textapiid = @"API Id:";
 

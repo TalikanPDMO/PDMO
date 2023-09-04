@@ -64,6 +64,8 @@ namespace Intersect.GameObjects
 
         public byte AttackRange { get; set; } = 0;
 
+        public bool AdaptRange { get; set; } = false;
+
         [Column("EquipmentAnimation")]
         public Guid EquipmentAnimationId { get; set; }
 
