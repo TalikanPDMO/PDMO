@@ -4739,7 +4739,11 @@ namespace Intersect.Server.Entities
 
             if (checkVitalReqs)
             {
-                if (spell.VitalCost[(int)Vitals.Mana] > GetVital(Vitals.Mana))
+                var manacost = CalculateVitalStyle(spell.VitalCost[(int)Vitals.Mana], spell.VitalCostStyle[(int)Vitals.Mana], Vitals.Mana, target);
+                var healthcost = CalculateVitalStyle(spell.VitalCost[(int)Vitals.Health], spell.VitalCostStyle[(int)Vitals.Health], Vitals.Health, target);
+
+
+                if (manacost > GetVital(Vitals.Mana))
                 {
                     if (Options.Combat.EnableCombatChatMessages)
                     {
@@ -4749,7 +4753,7 @@ namespace Intersect.Server.Entities
                     return false;
                 }
 
-                if (spell.VitalCost[(int)Vitals.Health] > GetVital(Vitals.Health))
+                if (healthcost > GetVital(Vitals.Health))
                 {
                     if (Options.Combat.EnableCombatChatMessages)
                     {

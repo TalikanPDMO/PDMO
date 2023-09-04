@@ -31,6 +31,9 @@ namespace Intersect.Server.General
         public string TrueDamage =
             "Random(((BaseDamage + (ScalingStat * ScaleFactor))) * CritMultiplier * .975, ((BaseDamage + (ScalingStat * ScaleFactor))) * CritMultiplier * 1.025)";
 
+        public string FixedDamage =
+            "(BaseDamage + (ScalingStat * ScaleFactor)) * CritMultiplier";
+
         public static void LoadFormulas()
         {
             try
@@ -104,6 +107,10 @@ namespace Intersect.Server.General
                     break;
                 case DamageType.True:
                     expressionString = mFormulas.TrueDamage;
+
+                    break;
+                case DamageType.Fixed:
+                    expressionString = mFormulas.FixedDamage;
 
                     break;
                 default:

@@ -1138,6 +1138,7 @@ Tick timer saved in server config.json.";
                 {0, @"Physical"},
                 {1, @"Magic"},
                 {2, @"True"},
+                {3, @"Fixed"}
             };
 
             public static LocalizedString exp = @"Experience";
@@ -1178,6 +1179,15 @@ Tick timer saved in server config.json.";
                 {16, @"Ghost"},
                 {17, @"Dark"},
                 {18, @"Flying"}
+            };
+
+            public static Dictionary<int, LocalizedString> damagestyles = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Normal"},
+                {1, @"Caster Max (%)"},
+                {2, @"Caster Current (%)"},
+                {3, @"Target Max (%)"},
+                {4, @"Target Current (%)"},
             };
         }
 
@@ -5239,7 +5249,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString folderprompt = @"Enter a name for the folder you'd like to add:";
 
-            public static LocalizedString friendly = @"Friendly";
+            public static LocalizedString friendly = @"Friendly?";
 
             public static LocalizedString general = @"General";
 
@@ -5267,7 +5277,15 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString hpcost = @"HP Cost:";
 
+            public static LocalizedString hpcoststyle = @"HP Cost Style:";
+
+            public static LocalizedString manacoststyle = @"Mana Cost Style:";
+
             public static LocalizedString hpdamage = @"HP Damage:";
+
+            public static LocalizedString hpdamagestyle = @"HP Damage Style:";
+
+            public static LocalizedString manadamagestyle = @"Mana Damage Style:";
 
             public static LocalizedString steal = @"Steal (%):";
 

@@ -199,6 +199,8 @@ namespace Intersect
 
             public Color TrueDamage = new Color(255, 255, 255, 255);
 
+            public Color FixedDamage = new Color(255, 255, 255, 255);
+
         }
 
         public sealed class ItemsNamespace
