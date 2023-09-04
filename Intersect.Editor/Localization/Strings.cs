@@ -1138,6 +1138,7 @@ Tick timer saved in server config.json.";
                 {0, @"Physical"},
                 {1, @"Magic"},
                 {2, @"True"},
+                {3, @"Fixed"}
             };
 
             public static LocalizedString exp = @"Experience";

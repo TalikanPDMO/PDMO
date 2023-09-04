@@ -2288,6 +2288,12 @@ namespace Intersect.Server.Entities
                             );
 
                             break;
+                        case DamageType.Fixed:
+                            PacketSender.SendActionMsg(
+                                enemy, Strings.Combat.removesymbol + (int)baseDamage, CustomColors.Combat.FixedDamage
+                            );
+
+                            break;
                     }
                     if (stealBase > 0 && amounthp > 0)
                     {
