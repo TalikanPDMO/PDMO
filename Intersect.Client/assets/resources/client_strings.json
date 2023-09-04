@@ -870,6 +870,19 @@
     "vitalcosts": {
       "0": "PV Cost: {00}",
       "1": "PM Cost: {00}"
+    },
+    "damagestyles": {
+      "0": "{00}",
+      "1": "{00}% de vos {01} max",
+      "2": "{00}% de vos {01} actuels",
+      "3": "{00}% des {01} max de la cible",
+      "4": "{00}% des {01} actuels de la cible"
+    },
+    "hp": "PV",
+    "mp": "PM",
+    "vitalstyles": {
+      "0": "PV",
+      "1": "PM"
     }
   },
   "Spells": {
