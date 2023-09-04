@@ -1692,6 +1692,12 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString hp = @"HP";
             public static LocalizedString mp = @"MP";
+
+            public static Dictionary<int, LocalizedString> vitalstyles = new Dictionary<int, LocalizedString>
+            {
+                {0, @"HP"},
+                {1, @"MP"},
+            };
         }
 
         public struct Spells

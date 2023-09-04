@@ -285,11 +285,14 @@ namespace Intersect.Client.Interface.Game
                         var vitalSymbol = vitalDiff < 0 ? Strings.SpellDesc.addsymbol : Strings.SpellDesc.removesymbol;
                         if (currentSpell.Combat.Effect == StatusTypes.Shield)
                         {
-                            stats = Strings.SpellDesc.shield.ToString(Math.Abs(vitalDiff));
+                            stats = Strings.SpellDesc.shield.ToString(Strings.SpellDesc.damagestyles[spell.Combat.VitalDiffStyle[i]].ToString(
+                                        Math.Abs(vitalDiff), Strings.SpellDesc.vitalstyles[i]));
                         }
                         else
                         {
-                            stats = Strings.SpellDesc.vitals[i].ToString(vitalSymbol, Math.Abs(vitalDiff));
+                            stats = Strings.SpellDesc.vitals[i].ToString(vitalSymbol,
+                                    Strings.SpellDesc.damagestyles[spell.Combat.VitalDiffStyle[i]].ToString(
+                                        Math.Abs(vitalDiff), Strings.SpellDesc.vitalstyles[i]));
                         }
                         if (currentSpell.Combat.VitalSteal?[i] > 0)
                         {

@@ -1804,8 +1804,10 @@ namespace Intersect.Server.Entities
                 aliveAnimations.Add(new KeyValuePair<Guid, sbyte>(spellBase.HitAnimationId, (sbyte) Directions.Up));
             }
 
-            var damageHealth = spellBase.Combat.VitalDiff[(int)Vitals.Health];
-            var damageMana = spellBase.Combat.VitalDiff[(int)Vitals.Mana];
+            var damageHealth = CalculateVitalStyle(spellBase.Combat.VitalDiff[(int)Vitals.Health],
+                spellBase.Combat.VitalDiffStyle[(int)Vitals.Health], Vitals.Health, target);
+            var damageMana = CalculateVitalStyle(spellBase.Combat.VitalDiff[(int)Vitals.Mana],
+                spellBase.Combat.VitalDiffStyle[(int)Vitals.Mana], Vitals.Mana, target);
             if (reUseValues)
             {
                 damageHealth = baseDamage;
