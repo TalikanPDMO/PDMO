@@ -1636,8 +1636,8 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            //If there is a knockback, knock them backwards and make sure its linear (diagonal player movement not coded).
-            if (projectile.Knockback > 0 && projectileDir < 4)
+            //If there is a knockback, knock them backwards (now 8 directions possible)
+            if (projectile.Knockback > 0)
             {
                 var dash = new Dash(target, projectile.Knockback, projectileDir, false, false, false, false);
             }
