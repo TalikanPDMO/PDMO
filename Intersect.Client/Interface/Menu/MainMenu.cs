@@ -281,10 +281,22 @@ namespace Intersect.Client.Interface.Menu
 
         private void UpdateDisabled()
         {
-            mLoginWindow.mLoginBtn.IsDisabled = ActiveNetworkStatus != NetworkStatus.Online;
-            mLoginWindow.mRegisterBtn.IsDisabled = ActiveNetworkStatus != NetworkStatus.Online ||
-                                         Options.Loaded && Options.BlockClientRegistrations;
-            mLoginWindow.mForgotPassswordButton.IsHidden = ActiveNetworkStatus != NetworkStatus.Online;
+            if (mLoginWindow != null)
+            {
+                if (mLoginWindow.mLoginBtn != null)
+                {
+                    mLoginWindow.mLoginBtn.IsDisabled = ActiveNetworkStatus != NetworkStatus.Online;
+                }
+                if (mLoginWindow.mRegisterBtn != null)
+                {
+                    mLoginWindow.mRegisterBtn.IsDisabled = ActiveNetworkStatus != NetworkStatus.Online ||
+                                              Options.Loaded && Options.BlockClientRegistrations;
+                }
+                if (mLoginWindow.mForgotPassswordButton != null)
+                {
+                    mLoginWindow.mForgotPassswordButton.IsHidden = ActiveNetworkStatus != NetworkStatus.Online;
+                }
+            } 
         }
 
         public static void OnNetworkConnecting()
