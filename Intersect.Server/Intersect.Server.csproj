@@ -729,6 +729,10 @@
     <Compile Include="Migrations\Game\20230903145212_AddingDamageStyleToSpells.designer.cs">
       <DependentUpon>20230903145212_AddingDamageStyleToSpells.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230906143411_AddingInventoryTabToItems.cs" />
+    <Compile Include="Migrations\Game\20230906143411_AddingInventoryTabToItems.designer.cs">
+      <DependentUpon>20230906143411_AddingInventoryTabToItems.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

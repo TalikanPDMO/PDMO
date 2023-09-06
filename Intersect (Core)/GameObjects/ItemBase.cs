@@ -217,6 +217,8 @@ namespace Intersect.GameObjects
 
         public ItemTypes ItemType { get; set; }
 
+        public InventoryTab InventoryTab { get; set; } = InventoryTab.All;
+
         public string MalePaperdoll { get; set; } = "";
 
         public string Icon { get; set; } = "";

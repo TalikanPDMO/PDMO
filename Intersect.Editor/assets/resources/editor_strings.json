@@ -1560,12 +1560,12 @@
     "alpha": "Alpha:",
     "price": "Price:",
     "rarity": {
-      "0": "None",
-      "1": "Common",
-      "2": "Uncommon",
-      "3": "Rare",
-      "4": "Epic",
-      "5": "Legendary"
+      "0": "Obsolete",
+      "1": "Commun",
+      "2": "Super",
+      "3": "Ultra",
+      "4": "Fabuleux",
+      "5": "Legendaire"
     },
     "projectile": "Projectile:",
     "requirementsgroup": "Requirements",

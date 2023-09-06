@@ -888,7 +888,7 @@ namespace Intersect.Editor.Forms.Editors
                 dataDict.Add(Strings.Relations.quests, questList);
 
                 string titleTarget = "Npc : " + TextUtils.FormatEditorName(mEditorItem.Name, mEditorItem.EditorName);
-                var relationsfrm = new FrmRelations(titleTarget, dataDict);
+                var relationsfrm = new FrmRelations(mEditorItem.Id, titleTarget, dataDict);
                 relationsfrm.ShowDialog();
             }
         }

@@ -191,6 +191,13 @@ namespace Intersect.Editor.Forms.Editors
                 cmbType.Items.Add(Strings.ItemEditor.types[i]);
             }
 
+            lblInventoryTab.Text = Strings.ItemEditor.inventorytab;
+            cmbInventoryTab.Items.Clear();
+            for (var i = 0; i < Strings.ItemEditor.inventorytabs.Count; i++)
+            {
+                cmbInventoryTab.Items.Add(Strings.ItemEditor.inventorytabs[i]);
+            }
+
             lblDesc.Text = Strings.ItemEditor.description;
             lblPic.Text = Strings.ItemEditor.picture;
             lblRed.Text = Strings.ItemEditor.Red;
@@ -337,6 +344,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbFolder.Text = mEditorItem.Folder;
                 txtDesc.Text = mEditorItem.Description;
                 cmbType.SelectedIndex = (int) mEditorItem.ItemType;
+                cmbInventoryTab.SelectedIndex = (int)mEditorItem.InventoryTab;
                 cmbPic.SelectedIndex = cmbPic.FindString(TextUtils.NullToNone(mEditorItem.Icon));
                 nudRgbaR.Value = mEditorItem.Color.R;
                 nudRgbaG.Value = mEditorItem.Color.G;
@@ -551,6 +559,11 @@ namespace Intersect.Editor.Forms.Editors
             RefreshExtendedData();
         }
 
+        private void cmbInventoryTab_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.InventoryTab = (InventoryTab)cmbInventoryTab.SelectedIndex;
+        }
+
         private void txtName_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.Name = txtName.Text;
@@ -757,7 +770,7 @@ namespace Intersect.Editor.Forms.Editors
                 dataDict.Add(Strings.Relations.shops, shopList);
 
                 string titleTarget = "Item : " + mEditorItem.Name;
-                var relationsfrm = new FrmRelations(titleTarget, dataDict);
+                var relationsfrm = new FrmRelations(mEditorItem.Id, titleTarget, dataDict);
                 relationsfrm.ShowDialog();
             }
         }

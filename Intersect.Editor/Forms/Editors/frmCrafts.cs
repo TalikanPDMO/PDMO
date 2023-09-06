@@ -283,7 +283,7 @@ namespace Intersect.Editor.Forms.Editors
                 dataDict.Add(Strings.Relations.craftingtables, craftingTableList);
 
                 string titleTarget = "Craft : " + mEditorItem.Name;
-                var relationsfrm = new FrmRelations(titleTarget, dataDict);
+                var relationsfrm = new FrmRelations(mEditorItem.Id, titleTarget, dataDict);
                 relationsfrm.ShowDialog();
             }
         }

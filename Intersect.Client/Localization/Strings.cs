@@ -803,6 +803,9 @@ namespace Intersect.Client.Localization
             public static LocalizedString lostconnection =
                 @"Lost connection to the game server. Please make sure you're connected to the internet and try again!";
 
+            public static LocalizedString manageinventory =
+               @"You can organize your inventory only via the General tab!";
+
         }
 
         public struct Words
@@ -997,6 +1000,14 @@ namespace Intersect.Client.Localization
             public static LocalizedString equippedicon = "E";
 
             public static LocalizedString title = @"Inventory";
+
+            public static Dictionary<int, LocalizedString> InventoryTabTooltips = new Dictionary<int, LocalizedString>() {
+                {0, @"General" },
+                {1, @"Sort by Projectiles" },
+                {2, @"Sort by Consumables" },
+                {3, @"Sort by Equipments" },
+                {4, @"Sort by Others" },
+            };
 
         }
 

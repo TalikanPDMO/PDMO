@@ -714,7 +714,7 @@ namespace Intersect.Editor.Forms.Editors
                 dataDict.Add(Strings.Relations.items, itemList);
 
                 string titleTarget = "Projectile : " + mEditorItem.Name;
-                var relationsfrm = new FrmRelations(titleTarget, dataDict);
+                var relationsfrm = new FrmRelations(mEditorItem.Id, titleTarget, dataDict);
                 relationsfrm.ShowDialog();
             }
         }

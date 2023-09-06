@@ -279,6 +279,8 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<bool>("IgnoreGlobalCooldown");
 
+                    b.Property<int>("InventoryTab");
+
                     b.Property<bool>("IsLossPercentage");
 
                     b.Property<int>("ItemType");

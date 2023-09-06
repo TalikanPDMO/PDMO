@@ -317,7 +317,7 @@ namespace Intersect.Editor.Forms.Editors.Events
                 dataDict.Add(Strings.Relations.crafts, craftList);
 
                 string titleTarget = "Event : " + MyEvent.Name;
-                var relationsfrm = new FrmRelations(titleTarget, dataDict);
+                var relationsfrm = new FrmRelations(MyEvent.Id, titleTarget, dataDict);
                 relationsfrm.ShowDialog();
             }
         }

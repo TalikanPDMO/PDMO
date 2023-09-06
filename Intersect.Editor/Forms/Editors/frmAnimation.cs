@@ -724,7 +724,7 @@ namespace Intersect.Editor.Forms.Editors
                 dataDict.Add(Strings.Relations.resources, resourceList);
 
                 string titleTarget = "Animation : " + mEditorItem.Name;
-                var relationsfrm = new FrmRelations(titleTarget, dataDict);
+                var relationsfrm = new FrmRelations(mEditorItem.Id, titleTarget, dataDict);
                 relationsfrm.ShowDialog();
             }
         }

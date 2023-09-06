@@ -695,6 +695,8 @@ namespace Intersect.Editor.Localization
 
             public static LocalizedString craftingtables = @"CRAFTING TABLES: ";
 
+            public static LocalizedString id = @"ID: ";
+
         }
 
         public struct AnimationEditor
@@ -3721,6 +3723,17 @@ Tick timer saved in server config.json.";
                 {4, @"Spell"},
                 {5, @"Event"},
                 {6, @"Bag"},
+            };
+
+            public static LocalizedString inventorytab = @"Inventory Tab:";
+
+            public static Dictionary<int, LocalizedString> inventorytabs = new Dictionary<int, LocalizedString>
+            {
+                {0, @"General"},
+                {1, @"Projectiles"},
+                {2, @"Consumables"},
+                {3, @"Equipments"},
+                {4, @"Others"}
             };
 
             public static LocalizedString undo = @"Undo Changes";

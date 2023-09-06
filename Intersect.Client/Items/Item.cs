@@ -15,16 +15,19 @@ namespace Intersect.Client.Items
 
         public int Quantity;
 
+        public InventoryTab InventoryTab;
+
         public int[] StatBuffs = new int[(int) Stats.StatCount];
 
         public ItemBase Base => ItemBase.Get(ItemId);
 
-        public void Load(Guid id, int quantity, Guid? bagId, int[] statBuffs)
+        public void Load(Guid id, int quantity, Guid? bagId, int[] statBuffs, InventoryTab inventoryTab)
         {
             ItemId = id;
             Quantity = quantity;
             BagId = bagId;
             StatBuffs = statBuffs;
+            InventoryTab = inventoryTab;
         }
 
         public Item Clone()
@@ -33,7 +36,8 @@ namespace Intersect.Client.Items
             {
                 ItemId = ItemId,
                 Quantity = Quantity,
-                BagId = BagId
+                BagId = BagId,
+                InventoryTab = InventoryTab
             };
 
             for (var i = 0; i < (int) Stats.StatCount; i++)

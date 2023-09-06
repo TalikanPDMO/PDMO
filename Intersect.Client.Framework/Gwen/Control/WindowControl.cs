@@ -29,7 +29,7 @@ namespace Intersect.Client.Framework.Gwen.Control
 
         private readonly Label mTitle;
 
-        private readonly Dragger mTitleBar;
+        public Dragger mTitleBar;
 
         private Color mActiveColor;
 
@@ -62,24 +62,24 @@ namespace Intersect.Client.Framework.Gwen.Control
             mTitleBar.Padding = Gwen.Padding.Zero;
             mTitleBar.Margin = new Margin(0, 0, 0, 0);
             mTitleBar.Target = this;
-            mTitleBar.Dock = Pos.Top;
+            //mTitleBar.Dock = Pos.Fill;
 
             mTitle = new Label(mTitleBar);
-            mTitle.Alignment = Pos.Left | Pos.CenterV;
+            //mTitle.Alignment = Pos.Left | Pos.CenterV;
             mTitle.Text = title;
-            mTitle.Dock = Pos.Fill;
-            mTitle.Padding = new Padding(8, 4, 0, 0);
-            mTitle.TextColor = Skin.Colors.Window.TitleInactive;
+            //mTitle.Dock = Pos.Fill;
+            //mTitle.Padding = new Padding(8, 4, 0, 0);
+            //mTitle.TextColor = Skin.Colors.Window.TitleInactive;
 
             mCloseButton = new CloseButton(mTitleBar, this);
-            mCloseButton.SetSize(24, 24);
+            //mCloseButton.SetSize(24, 24);
             mCloseButton.Dock = Pos.Right;
             mCloseButton.Clicked += CloseButtonPressed;
             mCloseButton.IsTabable = false;
 
             //Create a blank content control, dock it to the top - Should this be a ScrollControl?
             mInnerPanel = new Base(this);
-            mInnerPanel.Dock = Pos.Fill;
+            //mInnerPanel.Dock = Pos.Fill;
             GetResizer(8).Hide();
             BringToFront();
             IsTabable = false;
@@ -324,7 +324,7 @@ namespace Intersect.Client.Framework.Gwen.Control
         protected override void RenderUnder(Skin.Base skin)
         {
             base.RenderUnder(skin);
-            skin.DrawShadow(this);
+            //skin.DrawShadow(this);
         }
 
         public override void Touch()

@@ -32,6 +32,8 @@ namespace Intersect.Config
 
         public int WeaponSlot = 2;
 
+        public Guid CurrencyItemId = Guid.Empty;
+
         [OnDeserializing]
         internal void OnDeserializingMethod(StreamingContext context)
         {

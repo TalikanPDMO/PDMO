@@ -121,7 +121,8 @@
     "invalidname": "Le nom est invalide. Veuillez utiliser entre 2 et 20 caractères alphanumériques.",
     "male": "Mâle",
     "name": "Nom:",
-    "title": "Choix du Pokémon"
+    "title": "Choix du Pokémon",
+    "description": "Description"
   },
   "CharacterSelection": {
     "delete": "Effacer",
@@ -315,7 +316,8 @@
     "title": "Erreur!",
     "usernameinvalid": "Le pseudo est incorrect. Veuillez utiliser entre 2 et 20 caractères alphanumériques.",
     "loadfile": "Échec lors du chargement de {00}. Veuillez prendre contact avec un administrateur en vous munissant du dossier logs.",
-    "lostconnection": "Vous n'êtes plus connecté(e) au jeu. Veuillez vérifier votre connexion internet!"
+    "lostconnection": "Vous n'êtes plus connecté(e) au jeu. Veuillez vérifier votre connexion internet!",
+    "manageinventory": "Vous ne pouvez organiser votre inventaire que via l'onglet General !"
   },
   "Words": {
     "lcase_sound": "sound",
@@ -407,7 +409,14 @@
     "dropitemprompt": "Combien de {00} voulez-vous poser?",
     "dropprompt": "Voulez-vous déposer l'objet: {00}?",
     "equippedicon": "E",
-    "title": "Inventaire"
+    "title": "Inventaire",
+    "InventoryTabTooltips": {
+      "0": "Général",
+      "1": "Trier par Projectiles",
+      "2": "Trier par Consommables",
+      "3": "Trier par Equipements",
+      "4": "Trier par Autres"
+    }
   },
   "ItemDesc": {
     "bonuses": "Bonus:",
@@ -780,7 +789,8 @@
     "unknown": "Inconnu",
     "versionmismatch": "Version Obsolète",
     "serverfull": "Plein",
-    "handshakefailure": "Erreur de lancement"
+    "handshakefailure": "Erreur de lancement",
+    "version": "Version : {00}"
   },
   "Shop": {
     "buyitem": "Acheter l'objet",
@@ -967,6 +977,7 @@
     "infos": "Vos statistiques:",
     "wins": "Victoires: {00}",
     "losses": "Défaites: {00}",
+    "winrate":  "Winrate: {00}",
     "matchmaking_title": "PokéStadium : Match trouvé",
     "matchmaking_message": "Vous et votre adversaire avez {00} secondes pour accepter ce match. Si vous refusez ou dépassez cette durée, vous serez éjecté de la file d'attente du PokéStadium",
     "declined_title": "Pokéstadium : Match annulé",

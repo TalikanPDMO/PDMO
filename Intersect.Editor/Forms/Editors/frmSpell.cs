@@ -834,7 +834,7 @@ namespace Intersect.Editor.Forms.Editors
                 dataDict.Add(Strings.Relations.items, itemList);
 
                 string titleTarget = "Spell : " + TextUtils.FormatEditorName(mEditorItem.Name, mEditorItem.EditorName);
-                var relationsfrm = new FrmRelations(titleTarget, dataDict);
+                var relationsfrm = new FrmRelations(mEditorItem.Id, titleTarget, dataDict);
                 relationsfrm.ShowDialog();
             }
         }

@@ -1089,7 +1089,7 @@ namespace Intersect.Server.Networking
             {
                 invItems[i] = new InventoryUpdatePacket(
                     i, player.Items[i].ItemId, player.Items[i].Quantity, player.Items[i].BagId,
-                    player.Items[i].StatBuffs
+                    player.Items[i].StatBuffs, player.Items[i].Descriptor?.InventoryTab ?? InventoryTab.All
                 );
             }
 
@@ -1103,11 +1103,10 @@ namespace Intersect.Server.Networking
             {
                 return;
             }
-
             player.SendPacket(
                 new InventoryUpdatePacket(
                     slot, player.Items[slot].ItemId, player.Items[slot].Quantity, player.Items[slot].BagId,
-                    player.Items[slot].StatBuffs
+                    player.Items[slot].StatBuffs, player.Items[slot].Descriptor?.InventoryTab ?? InventoryTab.All
                 )
             );
         }
@@ -1911,13 +1910,13 @@ namespace Intersect.Server.Networking
                 player.SendPacket(
                     new TradeUpdatePacket(
                         trader.Id, slot, trader.Trading.Offer[slot].ItemId, trader.Trading.Offer[slot].Quantity,
-                        trader.Trading.Offer[slot].BagId, trader.Trading.Offer[slot].StatBuffs
+                        trader.Trading.Offer[slot].BagId, trader.Trading.Offer[slot].StatBuffs, trader.Trading.Offer[slot].Descriptor?.InventoryTab ?? InventoryTab.All
                     )
                 );
             }
             else
             {
-                player.SendPacket(new TradeUpdatePacket(trader.Id, slot, Guid.Empty, 0, null, null));
+                player.SendPacket(new TradeUpdatePacket(trader.Id, slot, Guid.Empty, 0, null, null, InventoryTab.All));
             }
         }
 
@@ -1960,11 +1959,11 @@ namespace Intersect.Server.Networking
         {
             if (item != null && item.ItemId != Guid.Empty && item.Quantity > 0)
             {
-                player.SendPacket(new BagUpdatePacket(slot, item.ItemId, item.Quantity, item.BagId, item.StatBuffs));
+                player.SendPacket(new BagUpdatePacket(slot, item.ItemId, item.Quantity, item.BagId, item.StatBuffs, item.Descriptor?.InventoryTab ?? InventoryTab.All));
             }
             else
             {
-                player.SendPacket(new BagUpdatePacket(slot, Guid.Empty, 0, null, null));
+                player.SendPacket(new BagUpdatePacket(slot, Guid.Empty, 0, null, null, InventoryTab.All));
             }
         }
 
