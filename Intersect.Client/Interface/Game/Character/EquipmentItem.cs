@@ -112,6 +112,7 @@ namespace Intersect.Client.Interface.Game.Character
                 var item = ItemBase.Get(mCurrentItemId);
                 if (item != null)
                 {
+                    UpdateRarity(item.Rarity);
                     var itemTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Item, item.Icon);
                     if (itemTex != null)
                     {
@@ -126,10 +127,31 @@ namespace Intersect.Client.Interface.Game.Character
                 }
                 else
                 {
+                    UpdateRarity(0);
                     ContentPanel.Hide();
                 }
 
                 mTexLoaded = true;
+            }
+        }
+
+        public void UpdateRarity(int rarity)
+        {
+            switch (rarity)
+            {
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                    Pnl.Texture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui,
+                        "invslot_rarity" + rarity + ".png");
+                    break;
+                default:
+                    Pnl.Texture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui,
+                       "invslot.png");
+                    break;
             }
         }
 

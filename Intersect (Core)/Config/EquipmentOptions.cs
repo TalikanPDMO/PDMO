@@ -20,6 +20,7 @@ namespace Intersect.Config
             "Weapon",
             "Shield",
             "Boots",
+            "Other"
         };
 
         public List<string> ToolTypes = new List<string>()

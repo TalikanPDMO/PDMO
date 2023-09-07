@@ -288,11 +288,15 @@
     <EmbeddedResource Include="$(NetworkHandshakePublicKey)" />
     <None Include="app.config" />
     <None Include="app.manifest" />
+    <Content Include="assets\resources\gui\addstat_clicked.png" />
+    <Content Include="assets\resources\gui\addstat_hovered.png" />
+    <Content Include="assets\resources\gui\addstat_normal.png" />
     <Content Include="assets\resources\gui\bagtab.png" />
     <Content Include="assets\resources\gui\bagtab_clicked.png" />
     <Content Include="assets\resources\gui\bagtab_disabled.png" />
     <Content Include="assets\resources\gui\bagtab_hovered.png" />
     <Content Include="assets\resources\gui\buttondisabled.png" />
+    <Content Include="assets\resources\gui\character_window.png" />
     <Content Include="assets\resources\gui\close_clicked.png" />
     <Content Include="assets\resources\gui\close_hovered.png" />
     <Content Include="assets\resources\gui\close_normal.png" />
@@ -302,6 +306,9 @@
     <Content Include="assets\resources\gui\control_button_small_disabled.png" />
     <Content Include="assets\resources\gui\control_button_small_hovered.png" />
     <Content Include="assets\resources\gui\createchar_description2.png" />
+    <Content Include="assets\resources\gui\downarrowinv_clicked.png" />
+    <Content Include="assets\resources\gui\downarrowinv_hovered.png" />
+    <Content Include="assets\resources\gui\downarrowinv_normal.png" />
     <Content Include="assets\resources\gui\gamepad_control_button_disabled.png" />
     <Content Include="assets\resources\gui\inputfield_login.png" />
     <Content Include="assets\resources\gui\inputfield_space.png" />
@@ -555,7 +562,7 @@
     <Content Include="assets\resources\gui\inputfieldshort.png" />
     <Content Include="assets\resources\gui\inputfield_newchar.png" />
     <Content Include="assets\resources\gui\inputfield_slim.png" />
-    <Content Include="assets\resources\gui\inventory.png" />
+    <Content Include="assets\resources\gui\inventory_window.png" />
     <Content Include="assets\resources\gui\inventoryactive.png" />
     <Content Include="assets\resources\gui\inventoryicon.png" />
     <Content Include="assets\resources\gui\inventoryicon2.png" />
@@ -695,8 +702,12 @@
     <Content Include="assets\resources\gui\rightarrowhover.png" />
     <Content Include="assets\resources\gui\rightarrownormal.png" />
     <Content Include="assets\resources\gui\scrollbarbg.png" />
+    <Content Include="assets\resources\gui\scrollbarbg_inv.png" />
     <Content Include="assets\resources\gui\scrollbarclicked.png" />
     <Content Include="assets\resources\gui\scrollbarhover.png" />
+    <Content Include="assets\resources\gui\scrollbarinv_clicked.png" />
+    <Content Include="assets\resources\gui\scrollbarinv_hovered.png" />
+    <Content Include="assets\resources\gui\scrollbarinv_normal.png" />
     <Content Include="assets\resources\gui\scrollbarnormal.png" />
     <Content Include="assets\resources\gui\selectchar_window.png" />
     <Content Include="assets\resources\gui\sendclicked.png" />
@@ -759,6 +770,9 @@
     <Content Include="assets\resources\gui\uibody.png" />
     <Content Include="assets\resources\gui\uparrowclicked.png" />
     <Content Include="assets\resources\gui\uparrowhover.png" />
+    <Content Include="assets\resources\gui\uparrowinv_clicked.png" />
+    <Content Include="assets\resources\gui\uparrowinv_hovered.png" />
+    <Content Include="assets\resources\gui\uparrowinv_normal.png" />
     <Content Include="assets\resources\gui\uparrownormal.png" />
     <Content Include="assets\resources\gui\uparrownormal_medium.png" />
     <Content Include="assets\resources\gui\volume_bar.png" />

@@ -17,6 +17,7 @@ namespace Intersect.Client.Interface.Game.Character
 
     public class CharacterWindow
     {
+        private ImagePanel mInfosContainer;
 
         //Equipment List
         public List<EquipmentItem> Items = new List<EquipmentItem>();
@@ -39,11 +40,21 @@ namespace Intersect.Client.Interface.Game.Character
 
         private ImagePanel mCharacterContainer;
 
-        private Label mCharacterInfos;
+        private Label mCharacterClass;
 
         private Label mCharacterName;
 
+        private Label mCharacterLevel;
+
         private ImagePanel mCharacterPortrait;
+
+        private ImagePanel mStatsContainer;
+
+        private ImagePanel mElementalTypesContainer;
+
+        private ImagePanel mElementalType1Image;
+
+        private ImagePanel mElementalType2Image;
 
         private string mCharacterPortraitImg = "";
 
@@ -76,18 +87,26 @@ namespace Intersect.Client.Interface.Game.Character
         //Init
         public CharacterWindow(Canvas gameCanvas)
         {
-            mCharacterWindow = new WindowControl(gameCanvas, Strings.Character.title, false, "CharacterWindow");
+            mCharacterWindow = new WindowControl(gameCanvas, "", false, "CharacterWindow");
             mCharacterWindow.DisableResizing();
 
-            mCharacterName = new Label(mCharacterWindow, "CharacterNameLabel");
-            mCharacterName.SetTextColor(Color.White, Label.ControlState.Normal);
+            mInfosContainer = new ImagePanel(mCharacterWindow, "InfosContainer");
 
-            mCharacterInfos = new Label(mCharacterWindow, "ChatacterInfoLabel");
-            mCharacterInfos.SetText("");
+            mCharacterName = new Label(mInfosContainer, "CharacterNameLabel");
 
-            mCharacterContainer = new ImagePanel(mCharacterWindow, "CharacterContainer");
+            mCharacterClass = new Label(mInfosContainer, "CharacterClassLabel");
+
+            mCharacterLevel = new Label(mInfosContainer, "CharacterLevelLabel");
+
+            mCharacterContainer = new ImagePanel(mInfosContainer, "CharacterContainer");
 
             mCharacterPortrait = new ImagePanel(mCharacterContainer);
+
+            mElementalTypesContainer = new ImagePanel(mInfosContainer, "CharacterTypesContainer");
+
+            mElementalType1Image = new ImagePanel(mElementalTypesContainer, "ElementalType1Image");
+
+            mElementalType2Image = new ImagePanel(mElementalTypesContainer, "ElementalType2Image");
 
             PaperdollPanels = new ImagePanel[Options.EquipmentSlots.Count + 1];
             PaperdollTextures = new string[Options.EquipmentSlots.Count + 1];
@@ -98,44 +117,43 @@ namespace Intersect.Client.Interface.Game.Character
                 PaperdollPanels[i].Hide();
             }
 
-            var equipmentLabel = new Label(mCharacterWindow, "EquipmentLabel");
-            equipmentLabel.SetText(Strings.Character.equipment);
+            mStatsContainer = new ImagePanel(mCharacterWindow, "StatsContainer");
 
-            mStatsLabel = new Label(mCharacterWindow, "StatsLabel");
+            mStatsLabel = new Label(mStatsContainer, "StatsLabel");
 
-            mAttackLabel = new Label(mCharacterWindow, "AttackLabel");
+            mAttackLabel = new Label(mStatsContainer, "AttackLabel");
             mAttackLabel.SetToolTipText(Strings.Character.stat0desc);
             
-            mAddAttackBtn = new Button(mCharacterWindow, "IncreaseAttackButton");
+            mAddAttackBtn = new Button(mStatsContainer, "IncreaseAttackButton");
             mAddAttackBtn.Clicked += _addAttackBtn_Clicked;
 
-            mDefenseLabel = new Label(mCharacterWindow, "DefenseLabel");
+            mDefenseLabel = new Label(mStatsContainer, "DefenseLabel");
             mDefenseLabel.SetToolTipText(Strings.Character.stat1desc);
-            mAddDefenseBtn = new Button(mCharacterWindow, "IncreaseDefenseButton");
+            mAddDefenseBtn = new Button(mStatsContainer, "IncreaseDefenseButton");
             mAddDefenseBtn.Clicked += _addDefenseBtn_Clicked;
 
-            mSpeedLabel = new Label(mCharacterWindow, "SpeedLabel");
+            mSpeedLabel = new Label(mStatsContainer, "SpeedLabel");
             mSpeedLabel.SetToolTipText(Strings.Character.stat4desc);
             //mAddSpeedBtn = new Button(mCharacterWindow, "IncreaseSpeedButton");
             //mAddSpeedBtn.Clicked += _addSpeedBtn_Clicked;
 
-            mAbilityPwrLabel = new Label(mCharacterWindow, "AbilityPowerLabel");
+            mAbilityPwrLabel = new Label(mStatsContainer, "AbilityPowerLabel");
             mAbilityPwrLabel.SetToolTipText(Strings.Character.stat2desc);
-            mAddAbilityPwrBtn = new Button(mCharacterWindow, "IncreaseAbilityPowerButton");
+            mAddAbilityPwrBtn = new Button(mStatsContainer, "IncreaseAbilityPowerButton");
             mAddAbilityPwrBtn.Clicked += _addAbilityPwrBtn_Clicked;
 
-            mMagicRstLabel = new Label(mCharacterWindow, "MagicResistLabel");
+            mMagicRstLabel = new Label(mStatsContainer, "MagicResistLabel");
             mMagicRstLabel.SetToolTipText(Strings.Character.stat3desc);
-            mAddMagicResistBtn = new Button(mCharacterWindow, "IncreaseMagicResistButton");
+            mAddMagicResistBtn = new Button(mStatsContainer, "IncreaseMagicResistButton");
             mAddMagicResistBtn.Clicked += _addMagicResistBtn_Clicked;
 
-            mAttackSpeedLabel = new Label(mCharacterWindow, "AttackSpeedLabel");
+            mAttackSpeedLabel = new Label(mStatsContainer, "AttackSpeedLabel");
             mAttackSpeedLabel.SetToolTipText(Strings.Character.attackspeeddesc);
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
                 Items.Add(new EquipmentItem(i, mCharacterWindow));
-                Items[i].Pnl = new ImagePanel(mCharacterWindow, "EquipmentItem" + i);
+                Items[i].Pnl = new ImagePanel(mInfosContainer, "EquipmentItem" + i);
                 Items[i].Setup();
             }
 
@@ -177,31 +195,61 @@ namespace Intersect.Client.Interface.Game.Character
                 return;
             }
 
-            mCharacterName.Text = Strings.Character.nameandinfos.ToString(Globals.Me.Name, ClassBase.GetName(Globals.Me.Class), Globals.Me.Level);
+            mCharacterName.Text = Strings.Character.playername.ToString(Globals.Me.Name);
+            mCharacterClass.Text = Strings.Character.playerclass.ToString(ClassBase.GetName(Globals.Me.Class));
+            mCharacterLevel.Text = Strings.Character.playerlevel.ToString(Globals.Me.Level);
             if (Globals.Me.ElementalTypes != null)
             {
                 if (Globals.Me.ElementalTypes[0] == Globals.Me.ElementalTypes[1])
                 {
-                    mCharacterInfos.Text = Strings.Character.oneelementaltype.ToString(Strings.Character.elementaltypes[(int)Globals.Me.ElementalTypes[0]]);
+                    mElementalType1Image.Texture = Globals.GetElementalTypeTexture(Globals.Me.ElementalTypes[0], true);  
+                    mElementalType2Image.Hide();
+                    mElementalType1Image.RemoveAlignments();
+                    mElementalType1Image.AddAlignment(Alignments.CenterH);
+                    mElementalType1Image.Show();
+                    mElementalType1Image.ProcessAlignments();
                 }
                 else
                 {
                     if (Globals.Me.ElementalTypes[0] == ElementalType.None)
                     {
-                        mCharacterInfos.Text = Strings.Character.oneelementaltype.ToString(Strings.Character.elementaltypes[(int)Globals.Me.ElementalTypes[1]]);
+                        mElementalType1Image.Texture = Globals.GetElementalTypeTexture(Globals.Me.ElementalTypes[1], true);
+                        mElementalType2Image.Hide();
+                        mElementalType1Image.RemoveAlignments();
+                        mElementalType1Image.AddAlignment(Alignments.CenterH);
+                        mElementalType1Image.Show();
+                        mElementalType1Image.ProcessAlignments();
                     }
                     else if (Globals.Me.ElementalTypes[1] == ElementalType.None)
                     {
-                        mCharacterInfos.Text = Strings.Character.oneelementaltype.ToString(Strings.Character.elementaltypes[(int)Globals.Me.ElementalTypes[0]]);
+                        mElementalType1Image.Texture = Globals.GetElementalTypeTexture(Globals.Me.ElementalTypes[0], true);
+                        mElementalType2Image.Hide();
+                        mElementalType1Image.RemoveAlignments();
+                        mElementalType1Image.AddAlignment(Alignments.CenterH);
+                        mElementalType1Image.Show();
+                        mElementalType1Image.ProcessAlignments();
                     }
                     else
                     {
-                        mCharacterInfos.Text = Strings.Character.twoelementaltype.ToString(
-                            Strings.Character.elementaltypes[(int)Globals.Me.ElementalTypes[0]], Strings.Character.elementaltypes[(int)Globals.Me.ElementalTypes[1]]);
+                        mElementalType1Image.Texture = Globals.GetElementalTypeTexture(Globals.Me.ElementalTypes[0], true);
+                        mElementalType1Image.RemoveAlignments();
+                        mElementalType1Image.AddAlignment(Alignments.Left);
+                        mElementalType1Image.Show();
+                        mElementalType1Image.ProcessAlignments();
+
+                        mElementalType2Image.Texture = Globals.GetElementalTypeTexture(Globals.Me.ElementalTypes[1], true);
+                        mElementalType2Image.RemoveAlignments();
+                        mElementalType2Image.AddAlignment(Alignments.Right);
+                        mElementalType2Image.Show();
+                        mElementalType2Image.ProcessAlignments();
                     }
                 }
             }
-
+            else
+            {
+                mElementalType1Image.Hide();
+                mElementalType2Image.Hide();
+            }
             //Load Portrait
             //UNCOMMENT THIS LINE IF YOU'D RATHER HAVE A FACE HERE GameTexture faceTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Face, Globals.Me.Face);
             var entityTex = Globals.ContentManager.GetTexture(

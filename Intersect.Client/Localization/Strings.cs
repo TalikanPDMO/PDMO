@@ -352,13 +352,6 @@ namespace Intersect.Client.Localization
 
         public struct Character
         {
-
-            public static LocalizedString equipment = @"Equipment:";
-
-            public static LocalizedString oneelementaltype = @"Type: {00}";
-
-            public static LocalizedString twoelementaltype = @"Types: {00} / {01}";
-
             public static Dictionary<int, LocalizedString> elementaltypes = new Dictionary<int, LocalizedString>
             {
                 {0, @"None"},
@@ -382,7 +375,11 @@ namespace Intersect.Client.Localization
                 {18, @"Flying"},
             };
 
-            public static LocalizedString nameandinfos = @"{00} - {01} Level {02}";
+            public static LocalizedString playername = @"{00}";
+
+            public static LocalizedString playerclass = @"Class: {00}";
+
+            public static LocalizedString playerlevel = @"Level: {00}";
 
             public static LocalizedString points = @"Points: {00}";
 
@@ -413,8 +410,6 @@ namespace Intersect.Client.Localization
             public static LocalizedString stats = @"Stats:";
 
             public static LocalizedString pointstouse = @"points to spend";
-
-            public static LocalizedString title = @"Character";
 
         }
 

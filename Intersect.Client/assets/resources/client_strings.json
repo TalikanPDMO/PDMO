@@ -68,10 +68,9 @@
     "reason": "Reason:"
   },
   "Character": {
-    "equipment": "Équipement:",
-    "nameandinfos": "{00} - {01} Niveau {02}",
-    "oneelementaltype": "Type: {00}",
-    "twoelementaltype": "Types: {00} / {01}",
+    "playername": "{00}",
+    "playerclass": "Starter : {00}",
+    "playerlevel": "Niveau : {00}",
     "elementaltypes": {
       "0": "Aucun",
       "1": "Acier",
@@ -93,22 +92,21 @@
       "17": "Tenèbres",
       "18": "Vol"
     },
-    "points": "Points: {00}",
-    "stat0": "{00}: {01}",
-    "stat1": "{00}: {01}",
-    "stat2": "{00}: {01}",
-    "stat3": "{00}: {01}",
-    "stat4": "{00}: {01}",
-    "attackspeed": "Vitesse d'Atq: {00}s",
+    "points": "Points : {00}",
+    "stat0": "{00} : {01}",
+    "stat1": "{00} : {01}",
+    "stat2": "{00} : {01}",
+    "stat3": "{00} : {01}",
+    "stat4": "{00} : {01}",
+    "attackspeed": "Vitesse d'Atq : {00}s",
     "stat0desc": "Vos dégâts physiques",
     "stat1desc": "Votre résistance aux attaques physiques",
     "stat2desc": "Vos dégâts d'attaques spéciales",
     "stat3desc": "Votre résistance aux attaques spéciales",
     "stat4desc": "Votre vitesse de déplacement",
     "attackspeeddesc": "Le temps que vous mettez pour infliger une attaque de base",
-    "stats": "Stats:",
-    "pointstouse": "points à utiliser",
-    "title": "Pokémon"
+    "stats": "Stats :",
+    "pointstouse": "points à utiliser"
   },
   "CharacterCreation": {
     "back": "Retour",

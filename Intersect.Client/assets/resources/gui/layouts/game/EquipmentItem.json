@@ -1,6 +1,6 @@
 {
-  "Bounds": "0,0,34,34",
-  "Padding": "2,2,2,2",
+  "Bounds": "0,0,34,35",
+  "Padding": "0,0,0,0";
   "AlignmentEdgeDistances": "0,0,0,0",
   "AlignmentTransform": "0,0",
   "Margin": "0,0,0,0",
@@ -14,7 +14,7 @@
   "RestrictToParent": false,
   "MouseInputEnabled": true,
   "HideToolTip": false,
-  "Texture": "equipmentitem.png",
+  "Texture": "",
   "Children": {
     "EquipmentIcon": {
       "Bounds": "1,1,32,32",
@@ -33,9 +33,8 @@
       "MouseInputEnabled": false,
       "HideToolTip": false,
       "Texture": "",
-	        "HoverSound": "octave-tap-resonant.wav",
+	    "HoverSound": "octave-tap-resonant.wav",
 			"RightMouseClickSound": "octave-beep-tapped.wav",
-
     }
   }
 }
