@@ -2869,17 +2869,20 @@ namespace Intersect.Server.Entities
                     break;
             }
 
-            if (spellSlot >= 0 && spellSlot < Options.MaxPlayerSkills)
+            if (spellSlot >= 0)
             {
                 // Player cooldown handling is done elsewhere!
                 if (this is Player player)
                 {
-                    player.UpdateCooldown(spellBase);
-
-                    // Trigger the global cooldown, if we're allowed to.
-                    if (!spellBase.IgnoreGlobalCooldown)
+                    if (spellSlot < Options.MaxPlayerSkills)
                     {
-                        player.UpdateGlobalCooldown();
+                        player.UpdateCooldown(spellBase);
+
+                        // Trigger the global cooldown, if we're allowed to.
+                        if (!spellBase.IgnoreGlobalCooldown)
+                        {
+                            player.UpdateGlobalCooldown();
+                        }
                     }
                 }
                 else

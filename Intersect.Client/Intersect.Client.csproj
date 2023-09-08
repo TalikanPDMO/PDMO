@@ -447,7 +447,6 @@
     <Content Include="assets\resources\gui\buttonclicked.png" />
     <Content Include="assets\resources\gui\buttonhover.png" />
     <Content Include="assets\resources\gui\buttonnormal.png" />
-    <Content Include="assets\resources\gui\character.png" />
     <Content Include="assets\resources\gui\characteractive.png" />
     <Content Include="assets\resources\gui\charactericon.png" />
     <Content Include="assets\resources\gui\charactericon2.png" />
