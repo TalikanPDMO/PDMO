@@ -5274,6 +5274,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString bound = @"Bound?";
 
+            public static LocalizedString ultimate = @"Ultimate?";
+
             public static LocalizedString hitradius = @"Hit Radius:";
 
             public static LocalizedString squareradius = @"Square Radius?";

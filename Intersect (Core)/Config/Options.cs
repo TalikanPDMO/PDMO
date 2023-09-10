@@ -104,7 +104,7 @@ namespace Intersect
 
         public static int MaxInvItems => Instance.PlayerOpts.MaxInventory;
 
-        public static int MaxPlayerSkills => Instance.PlayerOpts.MaxSpells;
+        public static int MaxPlayerSkills => Instance.PlayerOpts.MaxCommonSpells + Instance.PlayerOpts.MaxUltimateSpells;
 
         public static int MaxBankSlots => Instance.PlayerOpts.MaxBank;
 

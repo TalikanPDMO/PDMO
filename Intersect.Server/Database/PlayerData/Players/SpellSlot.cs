@@ -34,6 +34,8 @@ namespace Intersect.Server.Database.PlayerData.Players
 
         public int Slot { get; private set; }
 
+        public bool IsLvl { get; set; } = false;
+
     }
 
 }

@@ -802,7 +802,7 @@ namespace Intersect.Server.Web.RestApi.Routes.V1
                 );
             }
 
-            if (player.TryTeachSpell(new Spell(spell.SpellId), true))
+            if (player.TryTeachSpell(new Spell(spell.SpellId), false, true))
             {
                 using (var context = DbInterface.CreatePlayerContext(false))
                 {

@@ -1122,7 +1122,7 @@ namespace Intersect.Server.Networking
             var spells = new SpellUpdatePacket[Options.MaxPlayerSkills];
             for (var i = 0; i < Options.MaxPlayerSkills; i++)
             {
-                spells[i] = new SpellUpdatePacket(i, player.Spells[i].SpellId);
+                spells[i] = new SpellUpdatePacket(i, player.Spells[i].SpellId, SpellBase.Get(player.Spells[i].SpellId)?.Ultimate ?? false);
             }
 
             player.SendPacket(new SpellsPacket(spells));
@@ -1136,7 +1136,7 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            player.SendPacket(new SpellUpdatePacket(slot, player.Spells[slot].SpellId));
+            player.SendPacket(new SpellUpdatePacket(slot, player.Spells[slot].SpellId, SpellBase.Get(player.Spells[slot].SpellId)?.Ultimate ?? false));
         }
 
         //EquipmentPacket

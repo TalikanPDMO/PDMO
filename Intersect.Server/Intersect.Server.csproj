@@ -557,6 +557,10 @@
     <Compile Include="Migrations\20220628115302_AddingStadiumWinsAndLossesToPlayers.designer.cs">
       <DependentUpon>20220628115302_AddingStadiumWinsAndLossesToPlayers.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20230910124315_AddingIsLvlToSpellSlots.cs" />
+    <Compile Include="Migrations\20230910124315_AddingIsLvlToSpellSlots.designer.cs">
+      <DependentUpon>20230910124315_AddingIsLvlToSpellSlots.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
       <DependentUpon>20201222164741_NpcResetRadius.cs</DependentUpon>
@@ -732,6 +736,10 @@
     <Compile Include="Migrations\Game\20230906143411_AddingInventoryTabToItems.cs" />
     <Compile Include="Migrations\Game\20230906143411_AddingInventoryTabToItems.designer.cs">
       <DependentUpon>20230906143411_AddingInventoryTabToItems.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230909151800_AddingUltimateToSpells.cs" />
+    <Compile Include="Migrations\Game\20230909151800_AddingUltimateToSpells.designer.cs">
+      <DependentUpon>20230909151800_AddingUltimateToSpells.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

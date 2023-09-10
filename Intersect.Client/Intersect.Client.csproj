@@ -607,7 +607,7 @@
     <Content Include="assets\resources\gui\layouts\game\QuestsWindow.json" />
     <Content Include="assets\resources\gui\layouts\game\ShopItem.json" />
     <Content Include="assets\resources\gui\layouts\game\ShopWindow.json" />
-    <Content Include="assets\resources\gui\layouts\game\Spell.json" />
+    <Content Include="assets\resources\gui\layouts\game\SpellItem.json" />
     <Content Include="assets\resources\gui\layouts\game\SpellDescWindow.json" />
     <Content Include="assets\resources\gui\layouts\game\SpellDescWindowExpanded.json" />
     <Content Include="assets\resources\gui\layouts\game\SpellsWindow.json" />
@@ -740,6 +740,7 @@
     <Content Include="assets\resources\gui\spellitem.png" />
     <Content Include="assets\resources\gui\spells.png" />
     <Content Include="assets\resources\gui\spellsactive.png" />
+    <Content Include="assets\resources\gui\spells_window.png" />
     <Content Include="assets\resources\gui\status.png" />
     <Content Include="assets\resources\gui\statusbg.png" />
     <Content Include="assets\resources\gui\textfield.png" />

@@ -122,6 +122,9 @@ namespace Intersect.GameObjects
         //Spell Bound
         public bool Bound { get; set; }
 
+        //Spell Ultimate
+        public bool Ultimate { get; set; } = false;
+
         //Requirements
         [Column("CastRequirements")]
         [JsonIgnore]

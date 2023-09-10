@@ -408,7 +408,7 @@ namespace Intersect.Server.Entities.Events
             var success = false;
             if (command.Add) //Try to add a spell
             {
-                success = player.TryTeachSpell(new Spell(command.SpellId));
+                success = player.TryTeachSpell(new Spell(command.SpellId), false);
             }
             else
             {

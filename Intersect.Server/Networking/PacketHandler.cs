@@ -1527,7 +1527,7 @@ namespace Intersect.Server.Networking
                 if (classBase.Spells[i].Level <= 1)
                 {
                     var tempSpell = new Spell(classBase.Spells[i].Id);
-                    newChar.TryTeachSpell(tempSpell, false);
+                    newChar.TryTeachSpell(tempSpell, true, false);
                 }
             }
 

@@ -1025,7 +1025,7 @@ namespace Intersect.Server.Entities
                         }
 
                         var spellInstance = new Spell(spell.Id);
-                        if (TryTeachSpell(spellInstance, true))
+                        if (TryTeachSpell(spellInstance, true, true))
                         {
                             messages.Add(
                                 Strings.Player.spelltaughtlevelup.ToString(SpellBase.GetName(spellInstance.SpellId))
@@ -1760,7 +1760,121 @@ namespace Intersect.Server.Entities
 
         public void RecalculateKnownSpells()
         {
+            var cls = ClassBase.Get(ClassId);
+            var saveSlots = new List<SpellSlot>();
+
+            // Store all known spells (not empty) learned not by lvl
             foreach (var spellslot in Spells)
+            {
+                if (spellslot.SpellId != Guid.Empty && !spellslot.IsLvl)
+                {
+                    saveSlots.Add(spellslot);
+                }
+            }
+
+            var commonCount = 0;
+            // Set all the spellslot from the class lvl, excluding ultimates
+            for (var i=0; i<cls.Spells.Count; i++)
+            {
+                if (commonCount >= Options.Instance.PlayerOpts.MaxCommonSpells)
+                {
+                    // Maximum common spells reached, we can exit the loop
+                    break;
+                }
+                var spell = SpellBase.Get(cls.Spells[i].Id);
+                if (spell != null && !spell.Ultimate)
+                {
+                    if (Level >= cls.Spells[i].Level)
+                    {
+                        Spells[commonCount].Set(new Spell(spell.Id));
+                        Spells[commonCount].IsLvl = true;
+                    }
+                    else
+                    {
+                        Spells[commonCount].Set(Spell.None);
+                        Spells[commonCount].IsLvl = false;
+                    }
+                    //Count outside the lvl condition because we need the slot empty event without the lvl reached
+                    commonCount++;
+                }
+            }
+            //Then, try to restore commons spells known not by lvl if any (very rare in theory)
+            // Later, this should be handled on dedicated slot probably ?
+            for(var i=0; i<saveSlots.Count; i++)
+            {
+                if (commonCount >= Options.Instance.PlayerOpts.MaxCommonSpells)
+                {
+                    // Maximum common spells reached, we can exit the loop
+                    break;
+                }
+                var spell = SpellBase.Get(saveSlots[i].SpellId);
+                if (spell != null && !spell.Ultimate)
+                {
+                    Spells[commonCount].Set(new Spell(spell.Id));
+                    Spells[commonCount].IsLvl = false;
+                    commonCount++;
+                }
+            }
+            // Then, put all others slots to empty until we reach the max number of common slots
+            for (var i=commonCount; i< Options.Instance.PlayerOpts.MaxCommonSpells;i++)
+            {
+                Spells[i].Set(Spell.None);
+                Spells[i].IsLvl = false;
+            }
+
+            // Then, store ultimates (if any) in the correct slots
+            var ultimateCount = 0;
+            for (var i = 0; i < cls.Spells.Count; i++)
+            {
+                if (ultimateCount >= Options.Instance.PlayerOpts.MaxUltimateSpells)
+                {
+                    // Maximum ultimate spells reached, we can exit the loop
+                    break;
+                }
+                var spell = SpellBase.Get(cls.Spells[i].Id);
+                if (spell != null && spell.Ultimate)
+                {
+                    var u = ultimateCount + Options.Instance.PlayerOpts.MaxCommonSpells;
+                    if (Level >= cls.Spells[i].Level)
+                    {
+                        Spells[u].Set(new Spell(spell.Id));
+                        Spells[u].IsLvl = true;
+                    }
+                    else
+                    {
+                        Spells[u].Set(Spell.None);
+                        Spells[u].IsLvl = false;
+                    }
+                    //Count outside the lvl condition because we need the slot empty event without the lvl reached
+                    ultimateCount++;
+                }
+            }
+            //Then, try to restore ultimate spells known not by lvl if any (very very rare in theory)
+            // Later, this should be handled on dedicated slot probably ?
+            for (var i = 0; i < saveSlots.Count; i++)
+            {
+                if (ultimateCount >= Options.Instance.PlayerOpts.MaxUltimateSpells)
+                {
+                    // Maximum common spells reached, we can exit the loop
+                    break;
+                }
+                var spell = SpellBase.Get(saveSlots[i].SpellId);
+                if (spell != null && spell.Ultimate)
+                {
+                    var u = ultimateCount + Options.Instance.PlayerOpts.MaxCommonSpells;
+                    Spells[u].Set(new Spell(spell.Id));
+                    Spells[u].IsLvl = false;
+                    ultimateCount++;
+                }
+            }
+            // Then, put all others ultimate slots to empty until we reach the max number of common slots
+            for (var i = ultimateCount; i < Options.Instance.PlayerOpts.MaxUltimateSpells; i++)
+            {
+                var u = i + Options.Instance.PlayerOpts.MaxCommonSpells;
+                Spells[u].Set(Spell.None);
+                Spells[u].IsLvl = false;
+            }
+            /*foreach (var spellslot in Spells)
             {
                 //Avoid empty slot with Guid Empty
                 if (spellslot.SpellId != Guid.Empty)
@@ -1784,7 +1898,7 @@ namespace Intersect.Server.Entities
                 {
                     TryTeachSpell(new Spell(spellClass.Id));
                 }
-            }
+            }*/
         }
 
         public void RecalculateElementalTypes()
@@ -2552,7 +2666,7 @@ namespace Intersect.Server.Entities
                             CastTarget = target;
                             CastSpell(itemBase.SpellId);
                         }
-                        else if (!TryTeachSpell(new Spell(itemBase.SpellId)))
+                        else if (!TryTeachSpell(new Spell(itemBase.SpellId), false))
                         {
                             return;
                         }
@@ -4422,7 +4536,7 @@ namespace Intersect.Server.Entities
         }
 
         //Spells
-        public bool TryTeachSpell(Spell spell, bool sendUpdate = true)
+        public bool TryTeachSpell(Spell spell, bool byLevel, bool sendUpdate = true)
         {
             if (spell == null || spell.SpellId == Guid.Empty)
             {
@@ -4433,17 +4547,45 @@ namespace Intersect.Server.Entities
             {
                 return false;
             }
-
-            if (SpellBase.Get(spell.SpellId) == null)
+            var spellBase = SpellBase.Get(spell.SpellId);
+            if (spellBase == null)
             {
                 return false;
             }
-
-            for (var i = 0; i < Options.MaxPlayerSkills; i++)
+            var cls = ClassBase.Get(ClassId);
+            int min = 0, max = 0;
+            if (byLevel)
+            {
+                if (spellBase.Ultimate)
+                {
+                    min = Options.Instance.PlayerOpts.MaxCommonSpells;
+                    max = Options.Instance.PlayerOpts.MaxCommonSpells + cls.Spells.Count(s => SpellBase.Get(s.Id).Ultimate == true);
+                }
+                else
+                {
+                    min = 0;
+                    max = cls.Spells.Count(s => SpellBase.Get(s.Id).Ultimate == false);
+                }
+            }
+            else
+            {
+                if (spellBase.Ultimate)
+                {
+                    min = Options.Instance.PlayerOpts.MaxCommonSpells + cls.Spells.Count(s => SpellBase.Get(s.Id).Ultimate == true);
+                    max = Options.Instance.PlayerOpts.MaxCommonSpells + Options.Instance.PlayerOpts.MaxUltimateSpells;
+                }
+                else
+                {
+                    min = cls.Spells.Count(s => SpellBase.Get(s.Id).Ultimate == false);
+                    max = Options.Instance.PlayerOpts.MaxCommonSpells;
+                }
+            }
+            for (var i = min; i < max; i++)
             {
                 if (Spells[i].SpellId == Guid.Empty)
                 {
                     Spells[i].Set(spell);
+                    Spells[i].IsLvl = byLevel;
                     if (sendUpdate)
                     {
                         PacketSender.SendPlayerSpellUpdate(this, i);
@@ -4496,8 +4638,11 @@ namespace Intersect.Server.Entities
         public void SwapSpells(int spell1, int spell2)
         {
             var tmpInstance = Spells[spell2].Clone();
+            var isLvlInstance = Spells[spell2].IsLvl;
             Spells[spell2].Set(Spells[spell1]);
+            Spells[spell2].IsLvl = Spells[spell1].IsLvl;
             Spells[spell1].Set(tmpInstance);
+            Spells[spell1].IsLvl = isLvlInstance;
             PacketSender.SendPlayerSpellUpdate(this, spell1);
             PacketSender.SendPlayerSpellUpdate(this, spell2);
         }
@@ -4507,6 +4652,7 @@ namespace Intersect.Server.Entities
             if (!SpellBase.Get(Spells[spellSlot].SpellId).Bound)
             {
                 Spells[spellSlot].Set(Spell.None);
+                Spells[spellSlot].IsLvl = false;
                 PacketSender.SendPlayerSpellUpdate(this, spellSlot);
             }
             else

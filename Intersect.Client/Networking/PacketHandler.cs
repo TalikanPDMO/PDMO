@@ -1240,7 +1240,7 @@ namespace Intersect.Client.Networking
         {
             if (Globals.Me != null)
             {
-                Globals.Me.Spells[packet.Slot].Load(packet.SpellId);
+                Globals.Me.Spells[packet.Slot].Load(packet.SpellId, packet.Ultimate);
             }
         }
 

@@ -1721,6 +1721,8 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString title = @"Spells";
 
+            public static LocalizedString lvlspell = @"Level {00}";
+
         }
 
         public struct Trading

@@ -11,10 +11,11 @@ namespace Intersect.Network.Packets.Server
         {
         }
 
-        public SpellUpdatePacket(int slot, Guid spellId)
+        public SpellUpdatePacket(int slot, Guid spellId, bool ultimate)
         {
             Slot = slot;
             SpellId = spellId;
+            Ultimate = ultimate;
         }
 
         [Key(0)]
@@ -22,6 +23,9 @@ namespace Intersect.Network.Packets.Server
 
         [Key(1)]
         public Guid SpellId { get; set; }
+
+        [Key(2)]
+        public bool Ultimate { get; set; }
 
     }
 

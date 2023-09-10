@@ -196,6 +196,7 @@ namespace Intersect.Editor.Forms.Editors
             lblTilesAnimation.Text = Strings.SpellEditor.tilesanimation;
             lblHitAnimation.Text = Strings.SpellEditor.hitanimation;
             chkBound.Text = Strings.SpellEditor.bound;
+            chkUltimate.Text = Strings.SpellEditor.ultimate;
 
             grpCasting.Text = Strings.SpellEditor.requirements;
             lblCastAnimation.Text = Strings.SpellEditor.castanimation;
@@ -354,6 +355,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbHitAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.HitAnimationId) + 1;
 
                 chkBound.Checked = mEditorItem.Bound;
+                chkUltimate.Checked = mEditorItem.Ultimate;
 
                 cmbSprite.SelectedIndex = cmbSprite.FindString(TextUtils.NullToNone(mEditorItem.Icon));
                 picSpell.BackgroundImage?.Dispose();
@@ -1220,6 +1222,11 @@ namespace Intersect.Editor.Forms.Editors
         private void chkBound_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.Bound = chkBound.Checked;
+        }
+
+        private void chkUltimate_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Ultimate = chkUltimate.Checked;
         }
 
         private void btnAddCooldownGroup_Click(object sender, EventArgs e)

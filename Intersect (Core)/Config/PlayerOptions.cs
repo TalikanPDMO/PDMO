@@ -32,9 +32,14 @@ namespace Intersect.Config
         public int MaxLevel = 100;
 
         /// <summary>
-        /// Number of spell slots a player has.
+        /// Number of common spell slots a player has.
         /// </summary>
-        public int MaxSpells = 35;
+        public int MaxCommonSpells = 35;
+
+        /// <summary>
+        /// Number of ultimate spell slots a player has.
+        /// </summary>
+        public int MaxUltimateSpells = 1;
 
         /// <summary>
         /// The highest value a single stat can be for a player.

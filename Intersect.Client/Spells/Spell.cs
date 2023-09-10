@@ -7,20 +7,23 @@ namespace Intersect.Client.Spells
     {
 
         public Guid SpellId;
+        public bool Ultimate;
 
         public Spell Clone()
         {
             var newSpell = new Spell()
             {
-                SpellId = SpellId
+                SpellId = SpellId,
+                Ultimate = Ultimate
             };
 
             return newSpell;
         }
 
-        public void Load(Guid spellId)
+        public void Load(Guid spellId, bool ultimate)
         {
             SpellId = spellId;
+            Ultimate = ultimate;
         }
 
     }

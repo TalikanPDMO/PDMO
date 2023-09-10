@@ -110,9 +110,13 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbEvent = new DarkUI.Controls.DarkComboBox();
             this.grpCombat = new DarkUI.Controls.DarkGroupBox();
             this.grpDamage = new DarkUI.Controls.DarkGroupBox();
+            this.cmbMpDamageStyle = new DarkUI.Controls.DarkComboBox();
             this.nudManaSteal = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblMpDamageStyle = new System.Windows.Forms.Label();
             this.lblManaSteal = new System.Windows.Forms.Label();
+            this.cmbHpDamageStyle = new DarkUI.Controls.DarkComboBox();
             this.nudHPSteal = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblHpDamageStyle = new System.Windows.Forms.Label();
             this.lblHPSteal = new System.Windows.Forms.Label();
             this.cmbCritEffectSpell = new DarkUI.Controls.DarkComboBox();
             this.lblCritEffectSpell = new System.Windows.Forms.Label();
@@ -210,10 +214,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
-            this.cmbMpDamageStyle = new DarkUI.Controls.DarkComboBox();
-            this.lblMpDamageStyle = new System.Windows.Forms.Label();
-            this.cmbHpDamageStyle = new DarkUI.Controls.DarkComboBox();
-            this.lblHpDamageStyle = new System.Windows.Forms.Label();
+            this.chkUltimate = new DarkUI.Controls.DarkCheckBox();
             this.pnlContainer.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSpell)).BeginInit();
@@ -292,6 +293,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpGeneral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpGeneral.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpGeneral.Controls.Add(this.chkUltimate);
             this.grpGeneral.Controls.Add(this.cmbTilesAnimation);
             this.grpGeneral.Controls.Add(this.lblTilesAnimation);
             this.grpGeneral.Controls.Add(this.cmbImpactAnimation);
@@ -477,7 +479,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.chkBound.AutoSize = true;
             this.chkBound.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkBound.Location = new System.Drawing.Point(143, 190);
+            this.chkBound.Location = new System.Drawing.Point(168, 190);
             this.chkBound.Name = "chkBound";
             this.chkBound.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.chkBound.Size = new System.Drawing.Size(63, 17);
@@ -1467,6 +1469,33 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDamage.TabStop = false;
             this.grpDamage.Text = "Damage";
             // 
+            // cmbMpDamageStyle
+            // 
+            this.cmbMpDamageStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbMpDamageStyle.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbMpDamageStyle.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbMpDamageStyle.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbMpDamageStyle.DrawDropdownHoverOutline = false;
+            this.cmbMpDamageStyle.DrawFocusRectangle = false;
+            this.cmbMpDamageStyle.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbMpDamageStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMpDamageStyle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbMpDamageStyle.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbMpDamageStyle.FormattingEnabled = true;
+            this.cmbMpDamageStyle.Items.AddRange(new object[] {
+            "Normal",
+            "CasterCurrent",
+            "CasterMax",
+            "TargetMax",
+            "TargetCurrent"});
+            this.cmbMpDamageStyle.Location = new System.Drawing.Point(5, 88);
+            this.cmbMpDamageStyle.Name = "cmbMpDamageStyle";
+            this.cmbMpDamageStyle.Size = new System.Drawing.Size(125, 21);
+            this.cmbMpDamageStyle.TabIndex = 77;
+            this.cmbMpDamageStyle.Text = "Normal";
+            this.cmbMpDamageStyle.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbMpDamageStyle.SelectedIndexChanged += new System.EventHandler(this.cmbMpDamageStyle_SelectedIndexChanged);
+            // 
             // nudManaSteal
             // 
             this.nudManaSteal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
@@ -1487,6 +1516,15 @@ namespace Intersect.Editor.Forms.Editors
             0});
             this.nudManaSteal.ValueChanged += new System.EventHandler(this.nudManaSteal_ValueChanged);
             // 
+            // lblMpDamageStyle
+            // 
+            this.lblMpDamageStyle.AutoSize = true;
+            this.lblMpDamageStyle.Location = new System.Drawing.Point(2, 72);
+            this.lblMpDamageStyle.Name = "lblMpDamageStyle";
+            this.lblMpDamageStyle.Size = new System.Drawing.Size(106, 13);
+            this.lblMpDamageStyle.TabIndex = 76;
+            this.lblMpDamageStyle.Text = "Mana Damage Style:";
+            // 
             // lblManaSteal
             // 
             this.lblManaSteal.AutoSize = true;
@@ -1495,6 +1533,33 @@ namespace Intersect.Editor.Forms.Editors
             this.lblManaSteal.Size = new System.Drawing.Size(51, 13);
             this.lblManaSteal.TabIndex = 68;
             this.lblManaSteal.Text = "Steal (%):";
+            // 
+            // cmbHpDamageStyle
+            // 
+            this.cmbHpDamageStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbHpDamageStyle.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbHpDamageStyle.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbHpDamageStyle.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbHpDamageStyle.DrawDropdownHoverOutline = false;
+            this.cmbHpDamageStyle.DrawFocusRectangle = false;
+            this.cmbHpDamageStyle.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbHpDamageStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbHpDamageStyle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbHpDamageStyle.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbHpDamageStyle.FormattingEnabled = true;
+            this.cmbHpDamageStyle.Items.AddRange(new object[] {
+            "Normal",
+            "CasterCurrent",
+            "CasterMax",
+            "TargetMax",
+            "TargetCurrent"});
+            this.cmbHpDamageStyle.Location = new System.Drawing.Point(5, 46);
+            this.cmbHpDamageStyle.Name = "cmbHpDamageStyle";
+            this.cmbHpDamageStyle.Size = new System.Drawing.Size(125, 21);
+            this.cmbHpDamageStyle.TabIndex = 75;
+            this.cmbHpDamageStyle.Text = "Normal";
+            this.cmbHpDamageStyle.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbHpDamageStyle.SelectedIndexChanged += new System.EventHandler(this.cmbHpDamageStyle_SelectedIndexChanged);
             // 
             // nudHPSteal
             // 
@@ -1515,6 +1580,15 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0});
             this.nudHPSteal.ValueChanged += new System.EventHandler(this.nudHPSteal_ValueChanged);
+            // 
+            // lblHpDamageStyle
+            // 
+            this.lblHpDamageStyle.AutoSize = true;
+            this.lblHpDamageStyle.Location = new System.Drawing.Point(2, 30);
+            this.lblHpDamageStyle.Name = "lblHpDamageStyle";
+            this.lblHpDamageStyle.Size = new System.Drawing.Size(94, 13);
+            this.lblHpDamageStyle.TabIndex = 74;
+            this.lblHpDamageStyle.Text = "HP Damage Style:";
             // 
             // lblHPSteal
             // 
@@ -2924,77 +2998,17 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Size = new System.Drawing.Size(191, 624);
             this.lstGameObjects.TabIndex = 32;
             // 
-            // cmbMpDamageStyle
+            // chkUltimate
             // 
-            this.cmbMpDamageStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbMpDamageStyle.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbMpDamageStyle.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbMpDamageStyle.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbMpDamageStyle.DrawDropdownHoverOutline = false;
-            this.cmbMpDamageStyle.DrawFocusRectangle = false;
-            this.cmbMpDamageStyle.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbMpDamageStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbMpDamageStyle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbMpDamageStyle.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbMpDamageStyle.FormattingEnabled = true;
-            this.cmbMpDamageStyle.Items.AddRange(new object[] {
-            "Normal",
-            "CasterCurrent",
-            "CasterMax",
-            "TargetMax",
-            "TargetCurrent"});
-            this.cmbMpDamageStyle.Location = new System.Drawing.Point(5, 88);
-            this.cmbMpDamageStyle.Name = "cmbMpDamageStyle";
-            this.cmbMpDamageStyle.Size = new System.Drawing.Size(125, 21);
-            this.cmbMpDamageStyle.TabIndex = 77;
-            this.cmbMpDamageStyle.Text = "Normal";
-            this.cmbMpDamageStyle.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbMpDamageStyle.SelectedIndexChanged += new System.EventHandler(this.cmbMpDamageStyle_SelectedIndexChanged);
-            // 
-            // lblMpDamageStyle
-            // 
-            this.lblMpDamageStyle.AutoSize = true;
-            this.lblMpDamageStyle.Location = new System.Drawing.Point(2, 72);
-            this.lblMpDamageStyle.Name = "lblMpDamageStyle";
-            this.lblMpDamageStyle.Size = new System.Drawing.Size(106, 13);
-            this.lblMpDamageStyle.TabIndex = 76;
-            this.lblMpDamageStyle.Text = "Mana Damage Style:";
-            // 
-            // cmbHpDamageStyle
-            // 
-            this.cmbHpDamageStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbHpDamageStyle.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbHpDamageStyle.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbHpDamageStyle.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbHpDamageStyle.DrawDropdownHoverOutline = false;
-            this.cmbHpDamageStyle.DrawFocusRectangle = false;
-            this.cmbHpDamageStyle.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbHpDamageStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbHpDamageStyle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbHpDamageStyle.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbHpDamageStyle.FormattingEnabled = true;
-            this.cmbHpDamageStyle.Items.AddRange(new object[] {
-            "Normal",
-            "CasterCurrent",
-            "CasterMax",
-            "TargetMax",
-            "TargetCurrent"});
-            this.cmbHpDamageStyle.Location = new System.Drawing.Point(5, 46);
-            this.cmbHpDamageStyle.Name = "cmbHpDamageStyle";
-            this.cmbHpDamageStyle.Size = new System.Drawing.Size(125, 21);
-            this.cmbHpDamageStyle.TabIndex = 75;
-            this.cmbHpDamageStyle.Text = "Normal";
-            this.cmbHpDamageStyle.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbHpDamageStyle.SelectedIndexChanged += new System.EventHandler(this.cmbHpDamageStyle_SelectedIndexChanged);
-            // 
-            // lblHpDamageStyle
-            // 
-            this.lblHpDamageStyle.AutoSize = true;
-            this.lblHpDamageStyle.Location = new System.Drawing.Point(2, 30);
-            this.lblHpDamageStyle.Name = "lblHpDamageStyle";
-            this.lblHpDamageStyle.Size = new System.Drawing.Size(94, 13);
-            this.lblHpDamageStyle.TabIndex = 74;
-            this.lblHpDamageStyle.Text = "HP Damage Style:";
+            this.chkUltimate.AutoSize = true;
+            this.chkUltimate.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkUltimate.Location = new System.Drawing.Point(92, 190);
+            this.chkUltimate.Name = "chkUltimate";
+            this.chkUltimate.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.chkUltimate.Size = new System.Drawing.Size(70, 17);
+            this.chkUltimate.TabIndex = 68;
+            this.chkUltimate.Text = "Ultimate?";
+            this.chkUltimate.CheckedChanged += new System.EventHandler(this.chkUltimate_CheckedChanged);
             // 
             // FrmSpell
             // 
@@ -3276,5 +3290,6 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblMpDamageStyle;
         private DarkComboBox cmbHpDamageStyle;
         private System.Windows.Forms.Label lblHpDamageStyle;
+        private DarkCheckBox chkUltimate;
     }
 }
