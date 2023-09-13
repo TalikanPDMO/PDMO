@@ -84,7 +84,7 @@ namespace Intersect.Client.Framework.Gwen.Renderer
             return new Point((int) size.X, (int) size.Y);
         }
 
-        public override void RenderText(GameFont font, Point pos, string text, float scale = 1f)
+        public override void RenderText(GameFont font, Point pos, string text, float scale = 1f, Color borderColor = null)
         {
             pos = Translate(pos);
             var clip = new FloatRect(ClipRegion.X, ClipRegion.Y, ClipRegion.Width, ClipRegion.Height);
@@ -92,7 +92,7 @@ namespace Intersect.Client.Framework.Gwen.Renderer
             clip.Y = (int) Math.Round(clip.Y * Scale);
             clip.Width = (int) Math.Round(clip.Width * Scale);
             clip.Height = (int) Math.Round(clip.Height * Scale);
-            mRenderer.DrawString(text, font, pos.X, pos.Y, Scale * scale, mColor, false, mRenderTarget, clip);
+            mRenderer.DrawString(text, font, pos.X, pos.Y, Scale * scale, mColor, false, mRenderTarget, clip, borderColor);
         }
 
         public override void DrawFilledRect(Rectangle targetRect)

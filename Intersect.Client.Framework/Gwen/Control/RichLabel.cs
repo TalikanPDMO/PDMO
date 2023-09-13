@@ -73,7 +73,7 @@ namespace Intersect.Client.Framework.Gwen.Control
         /// <param name="text">Text to add.</param>
         /// <param name="color">Text color.</param>
         /// <param name="font">Font to use.</param>
-        public void AddText(string text, Color color, Alignments alignment = Alignments.Left, GameFont font = null)
+        public void AddText(string text, Color color, Alignments alignment = Alignments.Left, GameFont font = null, Color borderColor = null)
         {
             if (String.IsNullOrEmpty(text))
             {
@@ -98,6 +98,7 @@ namespace Intersect.Client.Framework.Gwen.Control
                     Type = BlockType.Text,
                     Text = lines[i],
                     Color = color,
+                    BorderColor = borderColor,
                     Font = font,
                     Alignment = alignment
                 };
@@ -219,6 +220,7 @@ namespace Intersect.Client.Framework.Gwen.Control
             var label = new Label(this);
             label.SetText(x == 0 ? text.TrimStart(' ') : text);
             label.TextColorOverride = block.Color;
+            label.TextBorderColor = block.BorderColor;
             label.Font = font;
             label.RestrictToParent = false;
             label.SizeToContents();
@@ -325,6 +327,8 @@ namespace Intersect.Client.Framework.Gwen.Control
             public GameFont Font;
 
             public Alignments Alignment;
+
+            public Color BorderColor;
 
         }
 

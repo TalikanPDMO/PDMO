@@ -155,6 +155,15 @@ namespace Intersect.Client.Framework.Gwen.Control
         }
 
         /// <summary>
+        ///     Text border color.
+        /// </summary>
+        public Color TextBorderColor
+        {
+            get => mText.TextBorderColor;
+            set => mText.TextBorderColor = value;
+        }
+
+        /// <summary>
         ///     Text override - used to display different string.
         /// </summary>
         public string TextOverride
@@ -292,6 +301,11 @@ namespace Intersect.Client.Framework.Gwen.Control
             if (obj["TextScale"] != null)
             {
                 mText.SetScale((float) obj["TextScale"]);
+            }
+
+            if (obj["TextBorderColor"] != null)
+            {
+                TextBorderColor = Color.FromString((string)obj["TextBorderColor"]);
             }
         }
 

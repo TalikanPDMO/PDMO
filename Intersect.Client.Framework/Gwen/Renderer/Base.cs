@@ -237,7 +237,7 @@ namespace Intersect.Client.Framework.Gwen.Renderer
         /// <param name="font">Font to use.</param>
         /// <param name="position">Top-left corner of the text.</param>
         /// <param name="text">Text to render.</param>
-        public virtual void RenderText(GameFont font, Point position, string text, float scale = 1f)
+        public virtual void RenderText(GameFont font, Point position, string text, float scale = 1f, Color borderColor = null)
         {
         }
 

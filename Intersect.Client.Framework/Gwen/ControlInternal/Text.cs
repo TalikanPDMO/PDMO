@@ -25,6 +25,11 @@ namespace Intersect.Client.Framework.Gwen.ControlInternal
         /// </summary>
         private Color mTextColor;
 
+         /// <summary>
+        ///     Text border color.
+        /// </summary>
+        private Color mTextBorderColor;
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="Text" /> class.
         /// </summary>
@@ -36,6 +41,7 @@ namespace Intersect.Client.Framework.Gwen.ControlInternal
             TextColor = Skin.Colors.Label.Default;
             MouseInputEnabled = false;
             TextColorOverride = Color.FromArgb(0, 255, 255, 255); // A==0, override disabled
+            TextBorderColor = Color.Transparent;
         }
 
         /// <summary>
@@ -72,6 +78,13 @@ namespace Intersect.Client.Framework.Gwen.ControlInternal
             get => mTextColor;
 
             set => mTextColor = value;
+        }
+
+        public Color TextBorderColor
+        {
+            get => mTextBorderColor;
+
+            set => mTextBorderColor = value;
         }
 
         public bool DrawShadow { get; set; }
@@ -114,7 +127,7 @@ namespace Intersect.Client.Framework.Gwen.ControlInternal
                 skin.Renderer.DrawColor = TextColorOverride;
             }
 
-            skin.Renderer.RenderText(Font, Point.Empty, TextOverride ?? String, mScale);
+            skin.Renderer.RenderText(Font, Point.Empty, TextOverride ?? String, mScale, TextBorderColor);
 
 #if DEBUG_TEXT_MEASURE
             {
@@ -186,7 +199,11 @@ namespace Intersect.Client.Framework.Gwen.ControlInternal
             {
                 p.Y = Skin.Renderer.MeasureText(Font, "|", mScale).Y;
             }
-
+            if (TextBorderColor!= null && TextBorderColor != Color.Transparent)
+            {
+                p.Y += 1;
+                p.X += 1;
+            }
             if (p.X == Width && p.Y == Height)
             {
                 return;
