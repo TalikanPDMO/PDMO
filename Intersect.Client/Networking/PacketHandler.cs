@@ -23,6 +23,7 @@ using Newtonsoft.Json;
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Intersect.Client.Networking
@@ -158,6 +159,7 @@ namespace Intersect.Client.Networking
         public void HandlePacket(IPacketSender packetSender, ConfigPacket packet)
         {
             Options.LoadFromServer(packet.Config);
+            Globals.InitCalculatedSpeeds(Options.Instance.PlayerOpts.MaxSpeedStat);
             Graphics.InitInGame();
         }
 
@@ -279,6 +281,12 @@ namespace Intersect.Client.Networking
             {
                 Globals.Entities.Add(packet.EntityId, new Entity(packet.EntityId, packet));
                 Globals.Entities[packet.EntityId].Type = packet.Aggression;
+                Globals.Entities[packet.EntityId].ElementalTypes = packet.ElementalTypes;
+                if (packet.IsSpawn)
+                {
+                    Globals.Entities[packet.EntityId].SpawnExpansion = 0;
+                    Globals.Entities[packet.EntityId].SpawnExpansionTimer = Globals.System.GetTimeMs() + Options.Npc.SpawnExpansionFrameDuration;
+                }
             }
         }
 
@@ -430,6 +438,7 @@ namespace Intersect.Client.Networking
             en.Dir = packet.Direction;
             en.Passable = packet.Passable;
             en.HideName = packet.HideName;
+            en.Running = packet.Run;
         }
 
         //EntityLeftPacket
@@ -603,6 +612,7 @@ namespace Intersect.Client.Networking
             var y = packet.Y;
             var dir = packet.Direction;
             var correction = packet.Correction;
+            en.Running = packet.Run;
             if ((en.CurrentMap != map || en.X != x || en.Y != y) &&
                 (en != Globals.Me || en == Globals.Me && correction) &&
                 en.Dashing == null)
@@ -610,14 +620,30 @@ namespace Intersect.Client.Networking
                 en.CurrentMap = map;
                 en.X = x;
                 en.Y = y;
-                en.Dir = dir;
-                if (en is Player p)
+                //if (en is Player p)
+                //{
+                //    p.MoveDir = dir;
+                //}
+                en.MoveDir = dir;
+                //en.Dir = dir;
+                // NO DIAGONAL DIRECTION, only movement
+                switch (dir)
                 {
-                    p.MoveDir = dir;
+                    case 4:
+                    case 6:
+                        en.Dir = 2;
+                        break;
+                    case 5:
+                    case 7:
+                        en.Dir = 3;
+                        break;
+                    default:
+                        en.Dir = dir;
+                        break;
                 }
                 en.IsMoving = true;
 
-                switch (en.Dir)
+                switch (dir)
                 {
                     case 0:
                         en.OffsetY = Options.TileWidth;
@@ -636,6 +662,26 @@ namespace Intersect.Client.Networking
                         break;
                     case 3:
                         en.OffsetY = 0;
+                        en.OffsetX = -Options.TileWidth;
+
+                        break;
+                    case 4:
+                        en.OffsetY = Options.TileHeight;
+                        en.OffsetX = Options.TileWidth;
+
+                        break;
+                    case 5:
+                        en.OffsetY = Options.TileHeight;
+                        en.OffsetX = -Options.TileWidth;
+
+                        break;
+                    case 6:
+                        en.OffsetY = -Options.TileHeight;
+                        en.OffsetX = Options.TileWidth;
+
+                        break;
+                    case 7:
+                        en.OffsetY = -Options.TileHeight;
                         en.OffsetX = -Options.TileWidth;
 
                         break;
@@ -745,7 +791,7 @@ namespace Intersect.Client.Networking
                 foreach (var status in en.Statuses)
                 {
                     var instance = new Status(
-                        status.SpellId, status.Type, status.TransformSprite, status.TimeRemaining, status.TotalDuration
+                        status.SpellId, status.Type, status.TransformSprite, status.TimeRemaining, status.TotalDuration, status.SourceSpellName, status.EffectiveStatBuffs
                     );
 
                     entity.Status.Add(instance);
@@ -830,7 +876,7 @@ namespace Intersect.Client.Networking
             foreach (var status in packet.StatusEffects)
             {
                 var instance = new Status(
-                    status.SpellId, status.Type, status.TransformSprite, status.TimeRemaining, status.TotalDuration
+                    status.SpellId, status.Type, status.TransformSprite, status.TimeRemaining, status.TotalDuration, status.SourceSpellName, status.EffectiveStatBuffs
                 );
 
                 en.Status.Add(instance);
@@ -983,6 +1029,7 @@ namespace Intersect.Client.Networking
             if (attackTimer > -1 && en != Globals.Me)
             {
                 en.AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTimer;
+                en.AttackAnimationTimer = (long)(Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTimer * Options.Combat.AttackAnimationTimeRatio);
                 en.AttackTime = attackTimer;
             }
         }
@@ -1003,6 +1050,12 @@ namespace Intersect.Client.Networking
                 }
                 
                 en = Globals.Entities[id];
+                if (packet.IsDespawn && !Globals.DespawnAnimations.ContainsKey(id))
+                {
+                    en.DespawnExpansion = 0;
+                    en.DespawnExpansionTimer = Globals.System.GetTimeMs() + Options.Npc.DespawnExpansionFrameDuration;
+                    Globals.DespawnAnimations.Add(id, en);
+                }
             }
             else
             {
@@ -1475,6 +1528,13 @@ namespace Intersect.Client.Networking
         {
             PacketSender.SendClosePicture(Globals.Picture?.EventId ?? Guid.Empty);
             Globals.Picture = null;
+        }
+
+        //ShowPopupPacket
+        public void HandlePacket(IPacketSender packetSender, ShowPopupPacket packet)
+        {
+            packet.ReceiveTime = Globals.System.GetTimeMs();
+            Globals.Popups.Add(packet);
         }
 
         //ShopPacket
@@ -2044,6 +2104,67 @@ namespace Intersect.Client.Networking
                 null
             );
         }
+
+        //ExpBoost Packet
+        public void HandlePacket(IPacketSender packetSender, ExpBoostPacket packet)
+        {
+            ExpBoost expboost = new ExpBoost(packet.Title, packet.SourcePlayerName, packet.TargetType,
+                packet.AmountKill, packet.ExpireTimeKill, packet.AmountQuest, packet.ExpireTimeQuest);
+            ExpBoost.AddOrUpdateBoost(expboost);
+        }
+
+        //MatchmakingStadium Packet
+        public void HandlePacket(IPacketSender packetSender, MatchmakingStadiumPacket packet)
+        {
+            Globals.Me.StadiumState = packet.StadiumState;
+            Globals.Me.StadiumWins = packet.StadiumWins;
+            Globals.Me.StadiumLosses = packet.StadiumLosses;
+            var layoutDefault = new GameObjects.Events.Commands.ShowPopupCommand().PopupLayout;
+            if (packet.IsDeclinedNotif)
+            {
+                if (Globals.Me.MatchmakingBox != null)
+                {
+                    Globals.Me.MatchmakingBox.Dispose();
+                    Globals.Me.MatchmakingBox = null;
+                }
+                var popup = new ShowPopupPacket("", Strings.PvpStadium.declined_title, Strings.PvpStadium.declined_message, 5000, 255, "",
+                    layoutDefault);
+                Globals.Popups.Add(popup);
+            }
+            else if (packet.StadiumState == PvpStadiumState.WaitForResponse)
+            {
+                
+                string message = Strings.PvpStadium.matchmaking_message.ToString(Options.PvpStadium.AcceptMatchPopupTime / 1000);
+                if (Globals.Me.MatchmakingBox != null)
+                {
+                    Globals.Me.MatchmakingBox.Dispose();
+                }
+                Globals.Me.MatchmakingBox = new InputBox(
+                    Strings.PvpStadium.matchmaking_title, message, true,
+                    InputBox.InputType.YesNo, PacketSender.SendMatchmakingAccept, PacketSender.SendMatchmakingDecline, null
+                );
+            }
+            else if (packet.StadiumState == PvpStadiumState.InCombat)
+            {
+                var popup = new ShowPopupPacket("", Strings.PvpStadium.incombat_title, Strings.PvpStadium.incombat_message, 5000, 255, "",
+                    layoutDefault);
+                Globals.Popups.Add(popup);
+            }
+            else if (packet.StadiumState == PvpStadiumState.MatchDeclined)
+            {
+                if (Globals.Me.MatchmakingBox != null)
+                {
+                    Globals.Me.MatchmakingBox.Dispose();
+                    Globals.Me.MatchmakingBox = null;
+                }
+                var popup = new ShowPopupPacket("", Strings.PvpStadium.missed_title, Strings.PvpStadium.missed_message, 0, 255, "",
+                    layoutDefault);
+                Globals.Popups.Add(popup);
+            }
+
+            Interface.Interface.GameUi.NotifyUpdateStadiumInfos();
+        }
+
 
     }
 

@@ -61,7 +61,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             rdoPlayerVariable.Text = Strings.EventSetVariable.player;
             btnSave.Text = Strings.EventSetVariable.okay;
             btnCancel.Text = Strings.EventSetVariable.cancel;
+            lblSync.Text = Strings.EventSetVariable.synchro;
             chkSyncParty.Text = Strings.EventSetVariable.syncparty;
+            chkSyncGuild.Text = Strings.EventSetVariable.syncguild;
+            chkSyncAll.Text = Strings.EventSetVariable.syncall;
+            chkSyncOffline.Text = Strings.EventSetVariable.syncoffline;
 
             //Numeric
             grpNumericVariable.Text = Strings.EventSetVariable.numericlabel;
@@ -115,6 +119,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             }
 
             chkSyncParty.Checked = mMyCommand.SyncParty;
+            chkSyncGuild.Checked = mMyCommand.SyncGuild;
+            chkSyncAll.Checked = mMyCommand.SyncAll;
+            chkSyncOffline.Checked = mMyCommand.SyncOffline;
 
             UpdateFormElements();
         }
@@ -228,6 +235,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             }
 
             mMyCommand.SyncParty = chkSyncParty.Checked;
+            mMyCommand.SyncGuild = chkSyncGuild.Checked;
+            mMyCommand.SyncAll = chkSyncAll.Checked;
+            mMyCommand.SyncOffline = chkSyncOffline.Checked;
 
             mEventEditor.FinishCommandEdit();
         }

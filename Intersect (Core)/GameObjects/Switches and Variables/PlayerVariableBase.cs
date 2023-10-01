@@ -31,6 +31,8 @@ namespace Intersect.GameObjects
         /// <inheritdoc />
         public string Folder { get; set; } = "";
 
+        public string Description { get; set; } = "";
+
         /// <summary>
         /// Retrieve an array of variable names of the supplied data type.
         /// </summary>

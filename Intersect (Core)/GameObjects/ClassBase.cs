@@ -42,6 +42,8 @@ namespace Intersect.GameObjects
 
         [NotMapped] public int[] VitalRegen = new int[(int) Vitals.VitalCount];
 
+        [NotMapped] public int[] ElementalTypes = new int[MAX_ELEMENTAL_TYPES];
+
         [JsonConstructor]
         public ClassBase(Guid id) : base(id)
         {
@@ -75,6 +77,8 @@ namespace Intersect.GameObjects
             get => AnimationBase.Get(AttackAnimationId);
             set => AttackAnimationId = value?.Id ?? Guid.Empty;
         }
+
+        public byte AttackRange { get; set; } = 0;
 
         public string Description { get; set; } = "";
 
@@ -218,6 +222,14 @@ namespace Intersect.GameObjects
         {
             get => DatabaseUtils.SaveIntArray(VitalRegen, (int) Vitals.VitalCount);
             set => VitalRegen = DatabaseUtils.LoadIntArray(value, (int) Vitals.VitalCount);
+        }
+
+        [Column("ElementalTypes")]
+        [JsonIgnore]
+        public string JsonElementalTypes
+        {
+            get => DatabaseUtils.SaveIntArray(ElementalTypes, MAX_ELEMENTAL_TYPES);
+            set => ElementalTypes = DatabaseUtils.LoadIntArray(value, MAX_ELEMENTAL_TYPES);
         }
 
         [JsonIgnore]

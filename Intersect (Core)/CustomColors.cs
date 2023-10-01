@@ -84,6 +84,7 @@ namespace Intersect
                 {"Normal", new LabelColor(new Color(255, 255, 255, 255), Color.Black, new Color(180, 0, 0, 0))},
                 {"Moderator", new LabelColor(new Color(255, 0, 255, 255), Color.Black, new Color(180, 0, 0, 0))},
                 {"Admin", new LabelColor(new Color(255, 255, 255, 0), Color.Black, new Color(180, 0, 0, 0))},
+                {"Party", new LabelColor(new Color(255, 0, 255, 0), Color.Black, new Color(180, 0, 0, 0))},
             };
 
         }
@@ -182,6 +183,8 @@ namespace Intersect
 
             public Color Missed = new Color(255, 255, 255, 255);
 
+            public Color Immune = new Color(255, 255, 255, 255);
+
             public Color NoAmmo = Color.Red;
 
             public Color NoTarget = Color.Red;
@@ -195,6 +198,8 @@ namespace Intersect
             public Color Status = new Color(255, 255, 255, 0);
 
             public Color TrueDamage = new Color(255, 255, 255, 255);
+
+            public Color FixedDamage = new Color(255, 255, 255, 255);
 
         }
 

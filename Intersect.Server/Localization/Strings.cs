@@ -227,6 +227,52 @@ namespace Intersect.Server.Localization
 
         public sealed class CombatNamespace : LocaleNamespace
         {
+            //Ces lignes ont étées rajoutées par Moussmous pour les logs de Combat
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString oneBlockAway = @" is one block too far!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString cantAttack = @"You can't attack ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString defeated = @"You knocked out ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString outOfRange = @" is too far to be attacked with ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString cantAttackWith = @" cannot be attacked with ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString won = @" won ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString EXP = @" EXP";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString lost = @" lost ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString died = @"You have been put KO by ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString diednokiller = @"You have been put KO ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString useAttack = @" uses ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString and = @" and ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString npcunarmed = @" attack unarmed ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString playerunarmed = @" attack unarmed ";
+
+
+            //---------------------------------------------------------------------------
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString addsymbol = @"+";
@@ -246,6 +292,12 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString critical = @"CRITICAL HIT!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString criticaleffect = @"Critical effect: ";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString critsuffix = @" (Crit.) ";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocaleDictionary<int, LocalizedString> damagetypes =
@@ -280,10 +332,14 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString lowhealth = @"Not enough health.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString lowmana = @"Not enough mana.";
+            public readonly LocalizedString lowmana = @"Not enough mana to use ";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString miss = @"MISS!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString immune = @"IMMUNE!";
+
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString notarget = @"No Target!";
@@ -583,6 +639,12 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString timesecond = @"\second";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString playerstadiumwins = @"\pwins";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString playerstadiumlosses = @"\plosses";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString watchdogkill =
@@ -1253,6 +1315,14 @@ namespace Intersect.Server.Localization
 
         }
 
+        public sealed class PvpStadiumNamespace : LocaleNamespace
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)] public readonly LocalizedString disabled = @"Pokestadium is currently disabled";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)] public readonly LocalizedString lowlevel = @"You must be at least level {00} to go in the Pokestadium";
+
+        }
+
         #region Serialization
 
         public static bool Load()
@@ -1387,6 +1457,8 @@ namespace Intersect.Server.Localization
 
             public readonly GuildsNamespace Guilds = new GuildsNamespace();
 
+            public readonly PvpStadiumNamespace PvpStadium = new PvpStadiumNamespace();
+
         }
 
         // ReSharper restore MemberHidesStaticFromOuterClass
@@ -1461,6 +1533,8 @@ namespace Intersect.Server.Localization
         public static TradingNamespace Trading => Root.Trading;
 
         public static UpnpNamespace Upnp => Root.Upnp;
+
+        public static PvpStadiumNamespace PvpStadium => Root.PvpStadium;
 
         #endregion
 

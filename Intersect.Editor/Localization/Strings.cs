@@ -7,7 +7,7 @@ using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.Localization;
-
+using Intersect.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -289,6 +289,129 @@ namespace Intersect.Editor.Localization
             return Strings.EventConditionDesc.MapZoneTypeIs.ToString(Strings.MapProperties.zones[(int)condition.ZoneType]);
         }
 
+        public static string GetEventConditionalDesc(FightingNPCPhase condition)
+        {
+            string npcname = "";
+            var npc = NpcBase.Get(condition.NpcId);
+            if (!condition.Any)
+            {
+                npcname = Strings.EventConditional.triggeringnpc;
+            }
+            else if (condition.NpcId == Guid.Empty)
+            {
+                npcname = Strings.EventConditional.anynpc;
+            }
+            else
+            {
+                npcname = TextUtils.FormatEditorName(npc.Name, npc.EditorName);
+            }
+            switch (condition.Progress)
+            {  
+                case NpcPhasesProgressState.OnAnyPhase:
+                    return Strings.EventConditionDesc.fightingphase.ToString(npcname, Strings.EventConditionDesc.onanyphase);
+                case NpcPhasesProgressState.BeforePhase:
+                    return Strings.EventConditionDesc.fightingphase.ToString(npcname, Strings.EventConditionDesc.beforephase
+                        .ToString(npc.GetPhaseIndex(condition.PhaseId) + 1));
+                case NpcPhasesProgressState.AfterPhase:
+                    return Strings.EventConditionDesc.fightingphase.ToString(npcname, Strings.EventConditionDesc.afterphase
+                        .ToString(npc.GetPhaseIndex(condition.PhaseId) + 1));
+                case NpcPhasesProgressState.OnPhase:
+                    return Strings.EventConditionDesc.fightingphase.ToString(npcname, Strings.EventConditionDesc.onphase
+                        .ToString(npc.GetPhaseIndex(condition.PhaseId) + 1));
+                default:
+                    return Strings.EventConditionDesc.fightingphase.ToString(npcname, Strings.EventConditionDesc.onnonephase);
+            }
+        }
+
+        public static string GetEventConditionalDesc(FightingNPCStats condition)
+        {
+            string npcname = "";
+            if (!condition.Any)
+            {
+                npcname = Strings.EventConditional.triggeringnpc;
+            }
+            else if (condition.NpcId == Guid.Empty)
+            {
+                npcname = Strings.EventConditional.anynpc;
+            }
+            else
+            {
+                var npc = NpcBase.Get(condition.NpcId);
+                npcname = TextUtils.FormatEditorName(npc.Name, npc.EditorName);
+            }
+            return Strings.EventConditionDesc.fightingstats.ToString(npcname);
+        }
+        public static string GetEventConditionalDesc(FightingNPCAttackType condition)
+        {
+            string npcname = "";
+            if (!condition.Any)
+            {
+                npcname = Strings.EventConditional.triggeringnpc;
+            }
+            else if (condition.NpcId == Guid.Empty)
+            {
+                npcname = Strings.EventConditional.anynpc;
+            }
+            else
+            {
+                var npc = NpcBase.Get(condition.NpcId);
+                npcname = TextUtils.FormatEditorName(npc.Name, npc.EditorName);
+            }
+            if (condition.AttackType < 0)
+            {
+                return Strings.EventConditionDesc.fightingattacktype.ToString(npcname, Strings.EventConditionDesc.anyattack);
+            }
+            switch ((AttackType)condition.AttackType)
+            {
+                case AttackType.Basic:
+                    return Strings.EventConditionDesc.fightingattacktype.ToString(npcname, Strings.EventConditionDesc.basicattack);
+                case AttackType.Spell:
+                    return Strings.EventConditionDesc.fightingattacktype.ToString(npcname, Strings.EventConditionDesc.spellattack);
+                case AttackType.Projectile:
+                    return Strings.EventConditionDesc.fightingattacktype.ToString(npcname, Strings.EventConditionDesc.projectileattack);
+                default:
+                    return Strings.EventConditionDesc.fightingattacktype.ToString(npcname, Strings.EventConditionDesc.anyattack);
+            }
+        }
+
+        public static string GetEventConditionalDesc(InPartyWithRole condition)
+        {
+            var pSize = "";
+            switch (condition.Comparator)
+            {
+                case VariableComparators.Equal:
+                    pSize = Strings.EventConditionDesc.equal.ToString(condition.Size);
+
+                    break;
+                case VariableComparators.GreaterOrEqual:
+                    pSize = Strings.EventConditionDesc.greaterequal.ToString(condition.Size);
+
+                    break;
+                case VariableComparators.LesserOrEqual:
+                    pSize = Strings.EventConditionDesc.lessthanequal.ToString(condition.Size);
+
+                    break;
+                case VariableComparators.Greater:
+                    pSize = Strings.EventConditionDesc.greater.ToString(condition.Size);
+
+                    break;
+                case VariableComparators.Less:
+                    pSize = Strings.EventConditionDesc.lessthan.ToString(condition.Size);
+
+                    break;
+                case VariableComparators.NotEqual:
+                    pSize = Strings.EventConditionDesc.notequal.ToString(condition.Size);
+
+                    break;
+            }
+            var pRole = "";
+            if (condition.Role > 0)
+            {
+                pRole = Strings.EventConditionDesc.partyrole.ToString(Strings.EventConditional.partyroles[condition.Role]);
+            }
+            return Strings.EventConditionDesc.inparty.ToString(pSize, pRole);
+        }
+
         public static string GetVariableComparisonString(VariableCompaison comparison)
         {
             return "";
@@ -540,6 +663,40 @@ namespace Intersect.Editor.Localization
 
         }
 
+        public struct Relations
+        {
+            public static LocalizedString title = @"Relations of {00}";
+
+            public static LocalizedString none = @"None";
+
+            public static LocalizedString npcs = @"NPCS: ";
+
+            public static LocalizedString npcsdrops = @"NPCS DROPS: ";
+
+            public static LocalizedString classes = @"CLASSES: ";
+
+            public static LocalizedString spells = @"SPELLS: ";
+
+            public static LocalizedString items = @"ITEMS: ";
+
+            public static LocalizedString projectiles = @"PROJECTILES/AREAS: ";
+
+            public static LocalizedString maps = @"MAPS (ONLY LOADED): ";
+
+            public static LocalizedString resources = @"RESOURCES: ";
+
+            public static LocalizedString resourcesdrops = @"RESOURCES DROPS: ";
+
+            public static LocalizedString crafts = @"CRAFTS: ";
+
+            public static LocalizedString shops = @"SHOPS: ";
+
+            public static LocalizedString quests = @"QUESTS: ";
+
+            public static LocalizedString craftingtables = @"CRAFTING TABLES: ";
+
+        }
+
         public struct AnimationEditor
         {
 
@@ -617,9 +774,13 @@ namespace Intersect.Editor.Localization
 
             public static LocalizedString swap = @"Swap Upper/Lower";
 
+            public static LocalizedString animationid = @"Id:";
+
             public static LocalizedString title = @"Animation Editor";
 
             public static LocalizedString undo = @"Undo Changes";
+
+            public static LocalizedString relations = @"View Relations";
 
             public static LocalizedString undoprompt =
                 @"Are you sure you want to undo changes made to this animation? This action cannot be reverted!";
@@ -753,6 +914,8 @@ namespace Intersect.Editor.Localization
             public static LocalizedString armorboost = @"Armor (+{00}):";
 
             public static LocalizedString attackanimation = @"Attack Animation:";
+
+            public static LocalizedString attackrange = @"Attack Range:";
 
             public static LocalizedString attackboost = @"Attack (+{00}):";
 
@@ -939,6 +1102,12 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString undotitle = @"Undo Changes";
 
+            public static LocalizedString elementaltypes = @"Elemental Types";
+
+            public static LocalizedString type1 = @"Type1:";
+
+            public static LocalizedString type2 = @"Type2:";
+
         }
 
         public struct Colors
@@ -969,6 +1138,7 @@ Tick timer saved in server config.json.";
                 {0, @"Physical"},
                 {1, @"Magic"},
                 {2, @"True"},
+                {3, @"Fixed"}
             };
 
             public static LocalizedString exp = @"Experience";
@@ -988,6 +1158,37 @@ Tick timer saved in server config.json.";
                 {1, @"Mana"},
             };
 
+            public static Dictionary<int, LocalizedString> elementaltypes = new Dictionary<int, LocalizedString>
+            {
+                {0, @"None"},
+                {1, @"Steel"},
+                {2, @"Fighting"},
+                {3, @"Dragon"},
+                {4, @"Water"},
+                {5, @"Electric"},
+                {6, @"Fairy"},
+                {7, @"Fire"},
+                {8, @"Ice"},
+                {9, @"Bug"},
+                {10, @"Normal"},
+                {11, @"Grass"},
+                {12, @"Poison"},
+                {13, @"Psychic"},
+                {14, @"Rock"},
+                {15, @"Ground"},
+                {16, @"Ghost"},
+                {17, @"Dark"},
+                {18, @"Flying"}
+            };
+
+            public static Dictionary<int, LocalizedString> damagestyles = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Normal"},
+                {1, @"Caster Max (%)"},
+                {2, @"Caster Current (%)"},
+                {3, @"Target Max (%)"},
+                {4, @"Target Current (%)"},
+            };
         }
 
         public struct CommonEventEditor
@@ -1011,6 +1212,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString New = @"New";
 
             public static LocalizedString paste = @"Paste Event";
+
+            public static LocalizedString relations = @"View Relations";
 
             public static LocalizedString pasteprompt =
                 @"You cannot undo an event-paste operation! Are you sure you want to overwrite this event?";
@@ -1168,6 +1371,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString undo = @"Undo Changes";
 
+            public static LocalizedString relations = @"View Relations";
+
             public static LocalizedString undoprompt =
                 @"Are you sure you want to undo changes made to this craft? This action cannot be reverted!";
 
@@ -1225,6 +1430,12 @@ Tick timer saved in server config.json.";
             public static LocalizedString instructionsnpccanbeattacked =
                 @"Below are condition lists. If there are conditions, and they are not met, then the player will not be able to attack this npc.";
 
+            public static LocalizedString instructionsnpccanbespelled =
+               @"Below are condition lists. If there are conditions, and they are not met, then the player will not be able to attack this npc with spells.";
+
+            public static LocalizedString instructionsnpccanbeprojectiled =
+               @"Below are condition lists. If there are conditions, and they are not met, then the player will not be able to attack this npc with projectiles.";
+
             public static LocalizedString instructionsquest =
                 @"Below are condition lists. If conditions are met on any of the lists then the player can start the quest.";
 
@@ -1233,6 +1444,9 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString instructionsspell =
                 @"Below are condition lists. If conditions are met on any of the lists then the player can use cast the spell.";
+
+            public static LocalizedString instructionsnpcphase =
+              @"Below are condition lists. If conditions are met on any of the lists when the npc is attacked by a player, then it will start the phase (mainly use 'Player is fighting NPC...')";
 
             public static LocalizedString listname = @"Desc:";
 
@@ -1310,6 +1524,51 @@ Tick timer saved in server config.json.";
             public static LocalizedString hide = @"Hide After (ms):";
 
             public static LocalizedString wait = @"Wait Until Closed?";
+
+        }
+
+        public struct EventShowPopup
+        {
+
+            public static LocalizedString cancel = @"Cancel";
+
+            public static LocalizedString background = @"Custom background:";
+
+            public static LocalizedString popuptitle = @"Title:";
+
+            public static LocalizedString text = @"Text:";
+
+            public static LocalizedString face = @"Face:";
+
+            public static LocalizedString include = @"Include:";
+
+            public static LocalizedString all = @"All";
+
+            public static LocalizedString party = @"Party";
+
+            public static LocalizedString guild = @"Guild";
+
+            public static LocalizedString okay = @"Ok";
+
+            public static LocalizedString title = @"Show Popup";
+
+            public static LocalizedString hide = @"Hide After (ms):";
+
+            public static LocalizedString opacity = @"Opacity (0-255):";
+
+            public static LocalizedString X = @"X :";
+
+            public static LocalizedString Y = @"Y :";
+
+            public static LocalizedString width = @"Width :";
+
+            public static LocalizedString height = @"Height :";
+
+            public static LocalizedString explanations = @"All (X;Y) are from -50% to 50% from the center. Width and Height are from 0% to 100%";
+
+            public static LocalizedString shiftcenter = @"In-Game Popup Position:";
+
+            public static LocalizedString commands = @"Text Commands";
 
         }
 
@@ -1572,6 +1831,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString usespell = @"Use Spell [{00}]";
 
+            public static LocalizedString showpopup = @"Show Popup [{00}]";
+
             public static LocalizedString chatboxtext = @"Show Chatbox Text [Channel: {00}, Color: {01}] - {02}";
 
             public static LocalizedString chatglobal = @"Global";
@@ -1650,7 +1911,9 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString give = @"Give: Item {00}";
 
-            public static LocalizedString giveexp = @"Give Player {00} Experience";
+            public static LocalizedString giveexp = @"Give Player {00} Experience"; 
+
+            public static LocalizedString setexpboost = @"Set Boost Experience '{00}' to {01}";
 
             public static LocalizedString globalswitch = @"Set Global Switch {00} to {01}";
 
@@ -1908,6 +2171,7 @@ Tick timer saved in server config.json.";
                 {"exiteventprocess", @"Exit Event Process"},
                 {"fadeoutbgm", @"Fadeout BGM"},
                 {"giveexperience", @"Give Experience"},
+                {"setexpboost",@"Set Exp. Boost" },
                 {"gotolabel", @"Go To Label"},
                 {"hidepicture", @"Hide Picture"},
                 {"holdplayer", @"Hold Player"},
@@ -1937,6 +2201,7 @@ Tick timer saved in server config.json.";
                 {"showtext", @"Show Text"},
                 {"spawnnpc", @"Spawn NPC"},
                 {"usespell",@"Use Spell" },
+                {"showpopup",@"Show Popup" },
                 {"specialeffects", @"Special Effects"},
                 {"startcommonevent", @"Start Common Event"},
                 {"startquest", @"Start Quest"},
@@ -2020,6 +2285,13 @@ Tick timer saved in server config.json.";
                 {5, @"Does Not Equal"}
             };
 
+            public static Dictionary<int, LocalizedString> partyroles = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Any"},
+                {1, @"Member"},
+                {2, @"Leader"}
+            };
+
             public static Dictionary<int, LocalizedString> conditions = new Dictionary<int, LocalizedString>
             {
                 {0, @"Variable Is..."},
@@ -2039,7 +2311,11 @@ Tick timer saved in server config.json.";
                 {17, @"Item Equipped is..."},
                 {18, @"Has X free Inventory slots..." },
                 {19, @"In Guild With At Least Rank..." },
-                {20, @"Map Zone Type is..." }
+                {20, @"Map Zone Type is..." },
+                {21, @"Player fighting NPC on Phase..." },
+                {22, @"Player fighting NPC when Stats..." },
+                {23, @"Player fighting NPC with AttackType..." },
+                {24, @"In Party with Role..." }
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2184,6 +2460,80 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString MapZoneTypeLabel = @"Zone Type:";
+
+            public static LocalizedString fightingnpc = @"Fighting npc on Phase";
+
+            public static LocalizedString fightnpc = @"NPC:";
+
+            public static LocalizedString triggeringnpc = @"Triggering NPC";
+
+            public static LocalizedString anynpc = @"[ANY NPC]";
+
+            public static LocalizedString onlytrigger = @"Only triggering NPC ?";
+
+            public static LocalizedString isonphase = @"Is:";
+
+            public static LocalizedString includenone = @"Include None Phase ?";
+
+            public static LocalizedString npcphase = @"Phase:";
+
+            public static LocalizedString displayphase = @"Phase {00}: {01}";
+
+            public static Dictionary<int, LocalizedString> phasecomparators = new Dictionary<int, LocalizedString>
+            {
+                {0, @"On None Phase"},
+                {1, @"On Any Phase"},
+                {2, @"Before Phase..."},
+                {3, @"After Phase..."},
+                {4, @"On Phase..."},
+            };
+
+            public static LocalizedString fightingstats = @"Fighting npc when Stats:";
+
+            public static LocalizedString statsnpc = @"NPC:";
+
+            public static LocalizedString any = @"Any";
+
+            public static LocalizedString percent = @"%";
+
+            public static LocalizedString npchp = @"HP:";
+
+            public static LocalizedString npcmana = @"Mana:";
+
+            public static LocalizedString npcattack = @"Attack:";
+
+            public static LocalizedString npcmagic = @"Magic:";
+
+            public static LocalizedString npcdefense = @"Defense:";
+
+            public static LocalizedString npcmr = @"Magic Resist:";
+
+            public static LocalizedString npcspeed = @"Speed:";
+
+            public static LocalizedString fightingattacktype = @"Fighting npc with Attack Type:";
+
+            public static LocalizedString attacktypenpc = @"NPC:";
+
+            public static LocalizedString npcattacktype = @"Attack Type:";
+
+            public static LocalizedString isattacktype = @"Is:";
+
+            public static Dictionary<int, LocalizedString> attacktypes = new Dictionary<int, LocalizedString>
+            {
+                {0, @"BasicAttack"},
+                {1, @"Spell"},
+                {2, @"Projectile"},
+            };
+
+            public static LocalizedString dmgtype = @"Damage Type:";
+
+            public static LocalizedString elementaltype = @"Elemental Type:";
+
+            public static LocalizedString inparty = @"In Party with Role...";
+
+            public static LocalizedString partysize = @"Party Size:";
+
+            public static LocalizedString partyrole = @"Party Role:";
         }
 
         public struct EventConditionDesc
@@ -2287,6 +2637,34 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString True = @"True";
 
+            public static LocalizedString fightingphase = @"Player is fighting npc {00} {01}";
+
+            public static LocalizedString onnonephase = @"on None Phase";
+
+            public static LocalizedString onanyphase = @"on Any Phase";
+
+            public static LocalizedString beforephase = @"Before Phase {00}...";
+
+            public static LocalizedString afterphase = @"After Phase {00}...";
+
+            public static LocalizedString onphase = @"On Phase {00}...";
+
+            public static LocalizedString fightingstats = @"Player fighting npc {00} when Vitals/Stats ...";
+
+            public static LocalizedString fightingattacktype = @"Player fighting npc {00} {01}";
+
+            public static LocalizedString basicattack = @"with BasicAttack";
+
+            public static LocalizedString spellattack = @"with Spell";
+
+            public static LocalizedString projectileattack = @"with Projectile";
+
+            public static LocalizedString anyattack = @"with Any attack";
+
+            public static LocalizedString inparty = @"In Party with Size {00} {01}";
+
+            public static LocalizedString partyrole = @"and Role is {00}";
+
         }
 
         public struct EventCreateGuild
@@ -2343,6 +2721,10 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString commandlist = @"Commands:";
 
+            public static LocalizedString nomapselected = @"No map selected";
+
+            public static LocalizedString ispvpstadium = @"PvpStadium ?";
+
             public static Dictionary<int, LocalizedString> commontriggers = new Dictionary<int, LocalizedString>
             {
                 {0, @"None"},
@@ -2360,6 +2742,8 @@ Tick timer saved in server config.json.";
                 {12, @"Guild Member Joined"},
                 {13, @"Guild Member Left"},
                 {14, @"Guild Member Kicked"},
+                {15, @"On Map Enter"},
+                {16, @"On Map Leave"},
             };
 
             public static LocalizedString conditions = @"Conditions";
@@ -2405,6 +2789,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString global = @"Global Event";
 
+            public static LocalizedString relations = @"View Relations";
+
             public static LocalizedString hidename = @"Hide Name";
 
             public static LocalizedString insertcommand = @"Insert";
@@ -2442,6 +2828,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString pageoptions = @"Page Options";
 
             public static LocalizedString passable = @"Passable";
+
+            public static LocalizedString collideondash = @"Collide on Dash";
 
             public static LocalizedString pastecommand = @"Paste";
 
@@ -2604,6 +2992,10 @@ Tick timer saved in server config.json.";
                 {"moveawayfromplayer", @"Move Away From Player"},
                 {"movedown", @"Move Down"},
                 {"moveleft", @"Move Left"},
+                {"moveupleft", @"Move Up Left"},
+                {"moveupright", @"Move Up Right"},
+                {"movedownleft", @"Move Down Left"},
+                {"movedownright", @"Move Down Right"},
                 {"moverandomly", @"Move Randomly"},
                 {"moveright", @"Move Right"},
                 {"movetowardplayer", @"Move Toward Player"},
@@ -2818,7 +3210,15 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString title = @"Set Variable";
 
-            public static LocalizedString syncparty = @"Party Sync?";
+            public static LocalizedString synchro = @"Synchro:";
+
+            public static LocalizedString syncparty = @"Party";
+
+            public static LocalizedString syncguild = @"Guild";
+
+            public static LocalizedString syncall = @"All";
+
+            public static LocalizedString syncoffline = @"+ Offline /!\";
 
             public static LocalizedString label = @"Select Variable:";
 
@@ -2958,6 +3358,10 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString npc = @"NPC:";
 
+            public static LocalizedString minlevel = @"Min. Level:";
+
+            public static LocalizedString maxlevel = @"Max. Level:";
+
             public static LocalizedString okay = @"Ok";
 
             public static LocalizedString player = @"Player";
@@ -3066,6 +3470,10 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString attackanimation = @"Attack Animation:";
 
+            public static LocalizedString attackrange = @"Attack Range:";
+
+            public static LocalizedString adaptrange = @"Adapt to Player?";
+
             public static LocalizedString attackbonus = @"Attack:";
 
             public static LocalizedString attackspeed = @"Attack Speed";
@@ -3099,6 +3507,7 @@ Tick timer saved in server config.json.";
                 {3, @"Tenacity"},
                 {4, @"Luck"},
                 {5, @"EXP"},
+                {6, @"Attack Speed" }
             };
 
             public static LocalizedString bonuses = @"Stat Bonuses";
@@ -3110,6 +3519,15 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString DeathDropChance = @"Drop chance on Death (%):";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString LossOnDeath = @"Loss on Death:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString LossOnDeathTo = @"to";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString IsLossPercentage = @"is %";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString CanBag = @"Can Bag?";
@@ -3154,6 +3572,10 @@ Tick timer saved in server config.json.";
             public static LocalizedString critchance = @"Crit Chance (%):";
 
             public static LocalizedString critmultiplier = @"Crit Multiplier (Default 1.5x):";
+
+            public static LocalizedString criteffectspell = @"Crit Effect Spell:";
+
+            public static LocalizedString replacecriteffectspell = @"Replace initial effect on crit";
 
             public static LocalizedString damagetype = @"Damage Type:";
 
@@ -3206,6 +3628,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString mpregen = @"MP (%):";
 
             public static LocalizedString name = @"Name:";
+
+            public static LocalizedString editorname = @"Editor Name:";
 
             public static LocalizedString New = @"New Item";
 
@@ -3284,6 +3708,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString twohanded = @"2 Hand";
 
+            public static LocalizedString elementaltype = @"Elemental Type:";
+
             public static LocalizedString type = @"Type:";
 
             public static Dictionary<int, LocalizedString> types = new Dictionary<int, LocalizedString>
@@ -3298,6 +3724,8 @@ Tick timer saved in server config.json.";
             };
 
             public static LocalizedString undo = @"Undo Changes";
+
+            public static LocalizedString relations = @"View Relations";
 
             public static LocalizedString undoprompt =
                 @"Are you sure you want to undo changes made to this item? This action cannot be reverted!";
@@ -3367,6 +3795,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString username = @"Username: ";
 
             public static LocalizedString version = @"Editor v{00}";
+
+            public static LocalizedString devmode = @"Log in Dev mode editing";
 
         }
 
@@ -3443,7 +3873,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString postquestion = @"Post Question";
 
-            public static LocalizedString projectileeditor = @"Projectile Editor";
+            public static LocalizedString projectileeditor = @"Projectile/Area Editor";
 
             public static LocalizedString questeditor = @"Quest Editor";
 
@@ -3571,6 +4001,12 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString events = @"Events";
 
+            public static LocalizedString eventtextfont = @"arial_10.xnb";
+
+            public static LocalizedString eventtextcolor = @"Black";
+
+            public static LocalizedString eventtextcolorborder = @"White";
+
             public static LocalizedString lightinstructions =
                 @"Lower the maps brightness and double click on a tile to create a light!";
 
@@ -3581,6 +4017,21 @@ Tick timer saved in server config.json.";
             public static LocalizedString tiles = @"Tiles";
 
             public static LocalizedString title = @"Map Layers";
+
+            public static LocalizedString spawnlistformat = @"{00}) {01} | {02} | {03} {04}";
+
+            public static LocalizedString spawnuniquelevel = @"Level {00}";
+
+            public static LocalizedString spawnmultiplelevel = @"Level {00}-{01}";
+
+            public static LocalizedString spawntime = @"{00} To {01}";
+
+            public static LocalizedString spawnanytime = @"Anytime";
+
+            public static LocalizedString indexerror = @"INDEX_ERROR";
+
+            public static LocalizedString condition = @"(C)";
+
 
         }
 
@@ -3731,6 +4182,8 @@ Tick timer saved in server config.json.";
             };
 
             public static LocalizedString title = @"Map Properties";
+            public static LocalizedString copyproperties = @"Copy Properties";
+            public static LocalizedString pasteproperties = @"Paste Properties";
 
             public static Dictionary<int, LocalizedString> zones = new Dictionary<int, LocalizedString>
             {
@@ -3757,6 +4210,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString attackallies = @"Attack Allies?";
 
             public static LocalizedString attackanimation = @"Attack Animation:";
+
+            public static LocalizedString attackrange = @"Attack Range:";
 
             public static LocalizedString attackonsightconditions = @"Attack Player on Sight";
 
@@ -3811,17 +4266,28 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString dropchance = @"Chance (%):";
 
+            public static LocalizedString dropamountrandom = @"Random?";
+
+            public static LocalizedString dropchanceiterative = @"Iterative?";
+
             public static LocalizedString dropadd = @"Add";
 
             public static LocalizedString dropremove = @"Remove";
 
-            public static LocalizedString dropdisplay = @"{00} x{01} - {02}%";
+            public static LocalizedString dropdisplay = @"{00} x{01} : {02}% {03}";
+
+            public static LocalizedString randomdisplay = @"{00}-{01}";
+
+            public static LocalizedString iterativedisplay = @"(Iterative)";
 
             public static LocalizedString enabled = @"Enabled?";
 
             public static LocalizedString exp = @"Exp:";
 
             public static LocalizedString flee = @"Flee Health %";
+
+            public static LocalizedString attackonflee = @"Attack on Flee";
+
 
             public static LocalizedString focusdamagedealer = @"Focus Highest Damage Dealer:";
 
@@ -3831,16 +4297,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString folderprompt = @"Enter a name for the folder you'd like to add:";
 
-            public static LocalizedString frequency = @"Freq:";
-
-            public static Dictionary<int, LocalizedString> frequencies = new Dictionary<int, LocalizedString>
-            {
-                {0, @"Not Very Often"},
-                {1, @"Not Often"},
-                {2, @"Normal"},
-                {3, @"Often"},
-                {4, @"Very Often"},
-            };
+            public static LocalizedString frequency = @"Use spells when available (%):";
 
             public static LocalizedString general = @"General";
 
@@ -3848,15 +4305,19 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString hpregen = @"HP (%);";
 
+            public static LocalizedString regenreset = @"Start when Reset start?";
+
             public static LocalizedString individualizedloot = @"Spawn loot for all attackers?";
 
             public static LocalizedString magicresist = @"Magic Resist:";
 
             public static LocalizedString mana = @"Mana:";
 
-            public static LocalizedString movement = @"Movement";
+            public static LocalizedString movement = @"Move:";
 
-            public static LocalizedString resetradius = @"Reset Radius:";
+            public static LocalizedString maxmove = @"Max:";
+
+            public static LocalizedString resetradius = @"Reset radius:";
 
             public static Dictionary<int, LocalizedString> movements = new Dictionary<int, LocalizedString>
             {
@@ -3870,6 +4331,10 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString name = @"Name:";
 
+            public static LocalizedString editorname = @"Editor Name:";
+
+            public static LocalizedString levelrange = @"Lvl Range (+-):";
+
             public static LocalizedString New = @"New Npc";
 
             public static LocalizedString npc = @"NPC:";
@@ -3878,13 +4343,19 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString npcvsnpc = @"NPC vs NPC Combat/Hostility  ";
 
-            public static LocalizedString ondeathevent = @"On Death (for killer):";
+            public static LocalizedString ondeathevent = @"1. On Death (for killer):";
 
-            public static LocalizedString ondeathpartyevent = @"On Death (for party):";
+            public static LocalizedString ondeathpartyevent = @"2. On Death (for killer's party):";
+
+            public static LocalizedString ondeathattackersevent = @"3. On Death (for all attackers):";
 
             public static LocalizedString paste = @"Paste Npc";
 
             public static LocalizedString playercanattackconditions = @"Player Can Attack (Default: True)";
+
+            public static LocalizedString playercanspellconditions = @"Player Can Spell (Default: True)";
+
+            public static LocalizedString playercanprojectileconditions = @"Player Can Projectile (Default: True)";
 
             public static LocalizedString playerfriendprotectorconditions = @"Player Friend/Protector";
 
@@ -3911,13 +4382,21 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString sightrange = @"Sight Range:";
 
-            public static LocalizedString spawnduration = @"Spawn Duration: (ms)";
+            public static LocalizedString spawnduration = @"Spawn(ms):";
 
             public static LocalizedString speed = @"Speed:";
 
             public static LocalizedString spell = @"Spell:";
 
+            public static LocalizedString beforespell = @"Before (ms):";
+
+            public static LocalizedString priority = @"Priority:";
+
+            public static LocalizedString afterspell = @"After (ms):";
+
             public static LocalizedString spells = @"Spells";
+
+            public static LocalizedString spellandrule = @"{00}ms << {01} >> {02}ms :: P{03}";
 
             public static LocalizedString sprite = @"Sprite";
 
@@ -3933,25 +4412,187 @@ Tick timer saved in server config.json.";
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString Alpha = @"Alpha:";
 
+            public static LocalizedString elementaltypes = @"Elemental Types";
+
+            public static LocalizedString type1 = @"Type1:";
+
+            public static LocalizedString type2 = @"Type2:";
+
             public static LocalizedString stats = @"Stats:";
 
+            public static LocalizedString lvlscaling = @"Lvl Scaling:";
+
             public static LocalizedString swarm = @"Swarm";
+
+            public static LocalizedString swarmall = @"Swarm all kinds";
+
+            public static LocalizedString swarmonplayer= @"Swarm on Player";
+
+            public static LocalizedString swarmrange = @"Swarm Range:";
+
+            public static LocalizedString npctoswarm = @"NPCs to swarm:";
+
+            public static LocalizedString addswarm = @"Add";
+
+            public static LocalizedString removeswarm = @"Remove";
 
             public static LocalizedString title = @"Npc Editor";
 
             public static LocalizedString undo = @"Undo Changes";
+
+            public static LocalizedString relations = @"View Relations";
 
             public static LocalizedString undoprompt =
                 @"Are you sure you want to undo changes made to this npc? This action cannot be reverted!";
 
             public static LocalizedString undotitle = @"Undo Changes";
 
+            public static LocalizedString phases = @"Phases";
+
+            public static LocalizedString addphase = @"Add";
+
+            public static LocalizedString removephase = @"Remove";
+
+            public static LocalizedString displayphase = @"Phase {00} : {01}";
         }
 
+        public struct NpcPhaseEditor
+        {
+            public static LocalizedString title = @"Add/Edit Phase";
+
+            public static LocalizedString editor = @"Phase Editor";
+
+            public static LocalizedString phaseindex = @"Phase Index: {00}";
+
+            public static LocalizedString name = @"Name:";
+
+            public static LocalizedString sprite = @"Sprite Modifier";
+
+            public static LocalizedString red = @"Red:";
+
+            public static LocalizedString green = @"Green:";
+
+            public static LocalizedString blue = @"Blue:";
+
+            public static LocalizedString alpha = @"Alpha:";
+
+            public static LocalizedString changesprite = @"Replace base?";
+
+            public static LocalizedString spells = @"Spells Modifier";
+
+            public static LocalizedString spell = @"Spell";
+
+            public static LocalizedString replacespells = @"Replace all known spells?";
+
+            public static LocalizedString spellfrequency = @"Use spells when available (%):";
+
+            public static LocalizedString addspell = @"Add";
+
+            public static LocalizedString removespell = @"Remove";
+
+            public static LocalizedString beforespell = @"Before (ms):";
+
+            public static LocalizedString priority = @"Priority:";
+
+            public static LocalizedString afterspell = @"After (ms):";
+
+            public static LocalizedString spellandrule = @"{00}ms << {01} >> {02}ms :: P{03}";
+
+            public static LocalizedString stats = @"Stats Multiplier";
+
+            public static LocalizedString x = @"x";
+
+            public static LocalizedString health = @"Health:";
+
+            public static LocalizedString mana = @"Mana:";
+
+            public static LocalizedString str = @"Strength:";
+
+            public static LocalizedString mag = @"Magic:";
+
+            public static LocalizedString def = @"Defense:";
+
+            public static LocalizedString MR = @"Mag. resist:";
+
+            public static LocalizedString spd = @"Speed:";
+
+            public static LocalizedString regen = @"Regen";
+
+            public static LocalizedString changeregen = @"Replace base?";
+
+            public static LocalizedString hpregen = @"HP: (%)";
+
+            public static LocalizedString manaregen = @"Mana: (%)";
+
+            public static LocalizedString types = @"Types Modifier";
+
+            public static LocalizedString changetypes = @"Replace base?";
+
+            public static LocalizedString type1 = @"Type1:";
+
+            public static LocalizedString type2 = @"Type2:";
+
+            public static LocalizedString combat = @"Combat Modifier";
+
+            public static LocalizedString changecombat = @"Replace base?";
+
+            public static LocalizedString basedamage = @"Base Damage:";
+
+            public static LocalizedString critchance = @"Crit Chance (%):";
+
+            public static LocalizedString critmultiplier = @"Crit Multiplier:";
+
+            public static LocalizedString damagetype = @"Damage Type:";
+
+            public static LocalizedString scalingstat = @"Scaling Stat:";
+
+            public static LocalizedString scalingamount = @"Scaling Amount:";
+
+            public static LocalizedString attackanimation = @"Attack Animation:";
+
+            public static LocalizedString attackrange = @"Range:";
+
+            public static LocalizedString attackspeed = @"AttackSpeed Modifier";
+
+            public static LocalizedString changeattackspeed = @"Replace base?";
+
+            public static LocalizedString modifier = @"Modifier:";
+
+            public static LocalizedString value = @"Value:";
+
+            public static Dictionary<int, LocalizedString> attackspeedmodifiers = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Disabled"},
+                {1, @"Static (ms)"},
+            };
+
+            public static LocalizedString phaseconditions = @"Phase Beginning";
+
+            public static LocalizedString editconditions = @"Trigger Conditions";
+
+            public static LocalizedString editbeginevent = @"Begin Event";
+
+            public static LocalizedString beginanimation = @"Begin Animation:";
+
+            public static LocalizedString beginspell = @"Begin Spell:";
+
+            public static LocalizedString beginevent = @"NPC {00} - Begin Phase {01}";
+
+            public static LocalizedString duration = @"Phase Duration";
+
+            public static LocalizedString durationenable = @"Enable";
+
+            public static LocalizedString durationms = @"(ms)";
+
+
+            public static LocalizedString ok = @"Ok";
+
+            public static LocalizedString cancel = @"Cancel";
+        }
         public struct NpcSpawns
         {
 
-            public static LocalizedString add = @"Add";
+            public static LocalizedString add = @"Add NPC";
 
             public static LocalizedString addremove = @"Add/Remove Map NPCs";
 
@@ -3959,15 +4600,28 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString direction = @"Direction:";
 
+            public static LocalizedString minlevel = @"Min. Level:";
+
+            public static LocalizedString maxlevel = @"Max. Level:";
+
+            public static LocalizedString timeslot = @"Time Slot:";
+
             public static LocalizedString randomdirection = @"Random";
 
             public static LocalizedString randomlocation = @"Random";
 
-            public static LocalizedString remove = @"Remove";
+            public static LocalizedString remove = @"Remove NPC";
 
             public static LocalizedString spawndeclared = @"Spawn Location: Declared";
 
             public static LocalizedString spawnrandom = @"Spawn Location: Random";
+
+            public static LocalizedString addinactive = @"Add";
+
+            public static LocalizedString removeinactive = @"Remove";
+
+            public static LocalizedString inactivespawns = @"Need other Inactive Spawns:";
+
 
         }
 
@@ -4031,20 +4685,32 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString animations = @"Animations";
 
+            public static LocalizedString uniqueanimation = @"Unique Animation Position:";
+
+            public static LocalizedString uniqueanimationcoords = @"[x:{00}, y:{01}]";
+
             public static LocalizedString autorotate = @"Auto Rotate Animation?";
 
             public static LocalizedString cancel = @"Cancel";
 
             public static LocalizedString collisions = @"Ignore Collision:";
 
-            public static LocalizedString copy = @"Copy Projectile";
+            public static LocalizedString copy = @"Copy Projectile/Area";
 
-            public static LocalizedString delete = @"Delete Projectile";
+            public static LocalizedString delete = @"Delete Projectile/Area";
 
             public static LocalizedString deleteprompt =
                 @"Are you sure you want to delete this projectile? This action cannot be reverted!";
 
-            public static LocalizedString deletetitle = @"Delete Projectile";
+            public static LocalizedString deletetitle = @"Delete Projectile/Area";
+
+            public static LocalizedString editingprojectile = @"You are now editing a Moving Projectile (Speed is more than 0)";
+
+            public static LocalizedString editingarea = @"You are now editing a Static Area (Speed is 0, Range is Disabled)";
+
+            public static LocalizedString editingprojectiletitle = @"Projectile Editing";
+
+            public static LocalizedString editingareatitle = @"Static Area Editing";
 
             public static LocalizedString folderlabel = @"Folder:";
 
@@ -4064,15 +4730,23 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString piercetarget = @"Pierce Target?";
 
+            public static LocalizedString linkedspawns = @"Linked Spawns?";
+
+            public static LocalizedString collisionoptions = @"Collision Options:";
+
+            public static LocalizedString blocktarget = @"Block Target?";
+
+            public static LocalizedString stopprojectiles = @"Stop Projectiles?";
+
             public static LocalizedString knockback = @"Knockback:";
 
             public static LocalizedString name = @"Name:";
 
-            public static LocalizedString New = @"New Projectile";
+            public static LocalizedString New = @"New Projectile/Area";
 
-            public static LocalizedString paste = @"Paste Projectile";
+            public static LocalizedString paste = @"Paste Projectile/Area";
 
-            public static LocalizedString projectiles = @"Projectiles";
+            public static LocalizedString projectiles = @"Projectiles/Areas";
 
             public static LocalizedString properties = @"Properties";
 
@@ -4091,9 +4765,13 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString spawndelay = @"Spawn Delay (ms):";
 
+            public static LocalizedString spawntime = @"Spawn Time (ms):";
+
             public static LocalizedString spawnrange = @"Spawn Range: {00} - {01}";
 
             public static LocalizedString spawns = @"Projectile Spawns";
+
+            public static LocalizedString areaspawns = @"Area Spawns";
 
             public static LocalizedString speed = @"Speed (ms):";
 
@@ -4102,6 +4780,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString title = @"Projectile Editor";
 
             public static LocalizedString undo = @"Undo Changes";
+
+            public static LocalizedString relations = @"View Relations";
 
             public static LocalizedString undoprompt =
                 @"Are you sure you want to undo changes made to this projectile? This action cannot be reverted!";
@@ -4116,6 +4796,10 @@ Tick timer saved in server config.json.";
             public static LocalizedString actions = @"Quest Actions:";
 
             public static LocalizedString addtask = @"Add Task";
+
+            public static LocalizedString editlinks = @"Edit Links (L)";
+
+            public static LocalizedString editalternatives = @"Edit Alternatives (A)";
 
             public static LocalizedString beforeofferdesc = @"Before Offer Description:";
 
@@ -4239,11 +4923,19 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString dropchance = @"Chance (%):";
 
+            public static LocalizedString dropamountrandom = @"Random?";
+
+            public static LocalizedString dropchanceiterative = @"Iterative?";
+
+            public static LocalizedString dropdisplay = @"{00} x{01} : {02}% {03}";
+
+            public static LocalizedString randomdisplay = @"{00}-{01}";
+
+            public static LocalizedString iterativedisplay = @"(Iterative)";
+
             public static LocalizedString dropadd = @"Add";
 
             public static LocalizedString dropremove = @"Remove";
-
-            public static LocalizedString dropdisplay = @"{00} x{01} - {02}%";
 
             public static LocalizedString exhaustedgraphic = @"Exhausted Graphic:";
 
@@ -4281,6 +4973,12 @@ Tick timer saved in server config.json.";
 
 Tick timer saved in server config.json.";
 
+            public static LocalizedString elementaltypes = @"Elemental Types";
+
+            public static LocalizedString type1 = @"Type1:";
+
+            public static LocalizedString type2 = @"Type2:";
+
             public static LocalizedString requirementsgroup = @"Requirements";
 
             public static LocalizedString requirements = @"Harvesting Requirements";
@@ -4312,6 +5010,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString walkableafter = @"Walkable after resource removal?";
 
             public static LocalizedString walkablebefore = @"Walkable before resource removal?";
+
+            public static LocalizedString undashable = @"Undashable?";
 
         }
 
@@ -4452,9 +5152,13 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString cancel = @"Cancel";
 
-            public static LocalizedString castanimation = @"Cast Animation:";
+            public static LocalizedString castanimation = @"Caster Anim:";
+
+            public static LocalizedString casttargetanimation = @"Target Anim:";
 
             public static LocalizedString castrange = @"Cast Range (tiles):";
+
+            public static LocalizedString squarerange = @"Square Range?";
 
             public static LocalizedString casttime = @"Cast Time (ms):";
 
@@ -4485,6 +5189,10 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString critmultiplier = @"Crit Multiplier (Default 1.5x):";
 
+            public static LocalizedString criteffectspell = @"Crit Effect Spell:";
+
+            public static LocalizedString replacecriteffectspell = @"Replace initial effect on crit";
+
             public static LocalizedString damagegroup = @"Damage";
 
             public static LocalizedString damagetype = @"Damage Type:";
@@ -4504,7 +5212,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString deletetitle = @"Delete Spell";
 
-            public static LocalizedString description = @"Desc:";
+            public static LocalizedString description = @"Description:";
 
             public static LocalizedString duration = @"Duration: (ms)";
 
@@ -4529,6 +5237,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString effectlabel = @"Extra Effect:";
 
+            public static LocalizedString effectchancelabel = @"Chance (%):";
+
             public static LocalizedString Event = @"Event";
 
             public static LocalizedString eventlabel = @"Event:";
@@ -4539,25 +5249,49 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString folderprompt = @"Enter a name for the folder you'd like to add:";
 
-            public static LocalizedString friendly = @"Friendly";
+            public static LocalizedString friendly = @"Friendly?";
 
             public static LocalizedString general = @"General";
 
-            public static LocalizedString hitanimation = @"Hit Animation:";
+            public static LocalizedString impactanimation = @"Impact Anim:";
+
+            public static LocalizedString tilesanimation = @"Tiles Anim:";
+
+            public static LocalizedString hitanimation = @"Hits Anim:";
 
             public static LocalizedString bound = @"Bound?";
 
             public static LocalizedString hitradius = @"Hit Radius:";
 
+            public static LocalizedString squareradius = @"Square Radius?";
+
             public static LocalizedString hotdot = @"Heal/Damage Over Time";
 
             public static LocalizedString hotdottick = @"Tick (ms):";
 
+            public static LocalizedString nextspelleffect = @"Next Spell Effect";
+
+            public static LocalizedString nextspellchance = @"Chance (%):";
+
+            public static LocalizedString reusevalues = @"Re-use values";
+
             public static LocalizedString hpcost = @"HP Cost:";
+
+            public static LocalizedString hpcoststyle = @"HP Cost Style:";
+
+            public static LocalizedString manacoststyle = @"Mana Cost Style:";
 
             public static LocalizedString hpdamage = @"HP Damage:";
 
+            public static LocalizedString hpdamagestyle = @"HP Damage Style:";
+
+            public static LocalizedString manadamagestyle = @"Mana Damage Style:";
+
+            public static LocalizedString steal = @"Steal (%):";
+
             public static LocalizedString icon = @"Icon:";
+
+            public static LocalizedString elementaltype = @"Elemental Type:";
 
             public static LocalizedString ignoreactiveresources = @"Active Resources";
 
@@ -4569,7 +5303,9 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString ishotdot = @"HOT/DOT?";
 
-            public static LocalizedString magicresist = @"Magic Resist:";
+            public static LocalizedString statschance = @"Chance (%):";
+
+            public static LocalizedString magicresist = @"Mag. resist:";
 
             public static LocalizedString manacost = @"Mana Cost:";
 
@@ -4577,17 +5313,19 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString name = @"Name:";
 
+            public static LocalizedString editorname = @"Editor Name:";
+
             public static LocalizedString New = @"New Spell";
 
             public static LocalizedString paste = @"Paste Spell";
 
-            public static LocalizedString projectile = @"Projectile:";
+            public static LocalizedString projectile = @"Projectile/Area:";
 
             public static LocalizedString requirements = @"Casting Requirements";
 
             public static LocalizedString cannotcast = @"Cannot Cast Message:";
 
-            public static LocalizedString requirementsbutton = @"Edit Casting Requirements";
+            public static LocalizedString requirementsbutton = @"Edit Requirements";
 
             public static LocalizedString save = @"Save";
 
@@ -4613,8 +5351,8 @@ Tick timer saved in server config.json.";
             public static Dictionary<int, LocalizedString> targettypes = new Dictionary<int, LocalizedString>
             {
                 {0, @"Self"},
-                {1, @"Single Target (includes self)"},
-                {2, @"AOE"},
+                {1, @"Targeted (includes self)"},
+                {2, @"Anchored (on a tile)"},
                 {3, @"Linear (projectile)"},
                 {4, @"On Hit"},
                 {5, @"Trap"}
@@ -4636,6 +5374,8 @@ Tick timer saved in server config.json.";
             };
 
             public static LocalizedString undo = @"Undo Changes";
+
+            public static LocalizedString relations = @"View Relations";
 
             public static LocalizedString undoprompt =
                 @"Are you sure you want to undo changes made to this spell? This action cannot be reverted!";
@@ -4710,6 +5450,10 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString value = @"Value:";
 
+            public static LocalizedString description = @"Description:";
+
+            public static LocalizedString textapiid = @"API Id:";
+
         }
 
         public struct TaskEditor
@@ -4752,6 +5496,98 @@ Tick timer saved in server config.json.";
                 {1, @"Gather Item(s)"},
                 {2, @"Kill NPC(s)"},
             };
+
+            public static Dictionary<int, LocalizedString> descriptions = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Event Driven - {00}"},
+                {1, @"Gather Items [{00} x{01}] - {02}"},
+                {2, @"Kill Npc(s) [{00} x{01}] - {02}"},
+            };
+
+        }
+
+        public struct TaskLinksEditor
+        {
+
+            public static LocalizedString cancel = @"Cancel";
+
+            public static LocalizedString completionevent = @"Quest: {00} - TaskLink {01} Completion Event";
+
+            public static LocalizedString editcompletionevent = @"Edit TaskLink Completion Event";
+
+            public static LocalizedString editor = @"TaskLinks Editor";
+
+            public static LocalizedString ok = @"Ok";
+
+            public static LocalizedString tasklinks = @"Task Links:";
+
+            public static LocalizedString notasklink = @"Currently no task link in this quest";
+
+            public static LocalizedString newlink = @"New";
+
+            public static LocalizedString removelink = @"Remove";
+
+            public static LocalizedString name = @"Name:";
+
+            public static LocalizedString desc = @"Desc:";
+
+            public static LocalizedString linkedtasks = @"Linked Tasks";
+
+            public static LocalizedString task = @"Task";
+
+            public static LocalizedString noavailabletask = @"There is no available task for a TaskLink";
+
+            public static LocalizedString addtask = @"Add";
+
+            public static LocalizedString removetask = @"Remove";
+
+            public static LocalizedString title = @"Edit Quest TaskLinks";
+
+            public static Dictionary<int, LocalizedString> descriptions = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Event Driven - {00}"},
+                {1, @"Gather Items [{00} x{01}] - {02}"},
+                {2, @"Kill Npc(s) [{00} x{01}] - {02}"},
+            };
+
+        }
+
+        public struct TaskAlternativesEditor
+        {
+
+            public static LocalizedString cancel = @"Cancel";
+
+            public static LocalizedString completionevent = @"Quest: {00} - TaskAlt {01} Completion Event";
+
+            public static LocalizedString editcompletionevent = @"Edit TaskAlternative Completion Event";
+
+            public static LocalizedString editor = @"TaskAlternatives Editor";
+
+            public static LocalizedString ok = @"Ok";
+
+            public static LocalizedString taskalts = @"Tasks Alts:";
+
+            public static LocalizedString notaskalt = @"Currently no task alternative in this quest";
+
+            public static LocalizedString newalt = @"New";
+
+            public static LocalizedString removealt = @"Remove";
+
+            public static LocalizedString name = @"Name:";
+
+            public static LocalizedString desc = @"Desc:";
+
+            public static LocalizedString altedtasks = @"Alternative Tasks";
+
+            public static LocalizedString task = @"Task or TaskLink";
+
+            public static LocalizedString noavailabletask = @"No task/tasklink available for a TaskAlternative";
+
+            public static LocalizedString addtask = @"Add";
+
+            public static LocalizedString removetask = @"Remove";
+
+            public static LocalizedString title = @"Edit Quest TaskAlternatives";
 
             public static Dictionary<int, LocalizedString> descriptions = new Dictionary<int, LocalizedString>
             {
@@ -4983,6 +5819,70 @@ Negative values for time to flow backwards.";
             public static LocalizedString thisevent = @"[THIS EVENT]";
 
             public static LocalizedString notargetrequired = @"[No target required]";
+
+        }
+
+        public struct EventSetExpBoost
+        {
+
+            public static LocalizedString cancel = @"Cancel";
+
+            public static LocalizedString okay = @"Ok";
+
+            public static LocalizedString title = @"Set Experience Boost";
+
+            public static LocalizedString infos = @"Infos";
+
+            public static LocalizedString boosttitle = @"Title:";
+
+            public static LocalizedString target = @"Target:";
+
+            public static LocalizedString player = @"Player";
+
+            public static LocalizedString party = @"Party";
+
+            public static LocalizedString guild = @"Guild";
+
+            public static LocalizedString allplayers = @"All Players";
+
+            public static LocalizedString manualkillnpcs = @"Manual Kill Bonus Exp ";
+
+            public static LocalizedString variablekillnpcs = @"Variable Kill Bonus Exp ";
+
+            public static LocalizedString labelkillnpcsbonus = @"Killing NPCs Bonus Exp (%):";
+
+            public static LocalizedString manualkillnpcsduration = @"Manual Kill Bonus Duration ";
+
+            public static LocalizedString variablekillnpcsduration = @"Variable Kill Bonus Duration ";
+
+            public static LocalizedString labelkillnpcsbonusduration = @"Killing NPCs Bonus Duration (s):";
+
+            public static LocalizedString manualquest = @"Manual Quests Bonus Exp ";
+
+            public static LocalizedString variablequest = @"Variable Quests Bonus Exp ";
+
+            public static LocalizedString labelquestbonus = @"Quests/Events Bonus Exp (%):";
+
+            public static LocalizedString manualquestduration = @"Manual Quests Bonus Duration ";
+
+            public static LocalizedString variablequestduration = @"Variable Quests Bonus Duration ";
+
+            public static LocalizedString labelquestbonusduration = @"Quests/Events Bonus Duration (s):";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString AmountType = @"Amount Type";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Variable = @"Variable";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Manual = @"Manual";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString PlayerVariable = @"Player Variable";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ServerVariable = @"Global Variable";
 
         }
 

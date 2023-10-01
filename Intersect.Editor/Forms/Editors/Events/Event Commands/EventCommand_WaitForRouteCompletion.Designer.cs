@@ -49,7 +49,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpWaitRoute.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpWaitRoute.Location = new System.Drawing.Point(3, 3);
             this.grpWaitRoute.Name = "grpWaitRoute";
-            this.grpWaitRoute.Size = new System.Drawing.Size(185, 100);
+            this.grpWaitRoute.Size = new System.Drawing.Size(320, 100);
             this.grpWaitRoute.TabIndex = 17;
             this.grpWaitRoute.TabStop = false;
             this.grpWaitRoute.Text = "Wait for Move Route Completion:";
@@ -59,19 +59,25 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbEntities.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.cmbEntities.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.cmbEntities.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbEntities.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbEntities.DrawDropdownHoverOutline = false;
+            this.cmbEntities.DrawFocusRectangle = false;
             this.cmbEntities.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cmbEntities.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbEntities.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbEntities.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbEntities.FormattingEnabled = true;
-            this.cmbEntities.Location = new System.Drawing.Point(47, 19);
+            this.cmbEntities.Location = new System.Drawing.Point(47, 28);
             this.cmbEntities.Name = "cmbEntities";
-            this.cmbEntities.Size = new System.Drawing.Size(117, 21);
+            this.cmbEntities.Size = new System.Drawing.Size(267, 21);
             this.cmbEntities.TabIndex = 22;
+            this.cmbEntities.Text = null;
+            this.cmbEntities.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // lblEntity
             // 
             this.lblEntity.AutoSize = true;
-            this.lblEntity.Location = new System.Drawing.Point(4, 22);
+            this.lblEntity.Location = new System.Drawing.Point(4, 31);
             this.lblEntity.Name = "lblEntity";
             this.lblEntity.Size = new System.Drawing.Size(36, 13);
             this.lblEntity.TabIndex = 21;
@@ -97,7 +103,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // EventCommand_WaitForRouteCompletion
+            // EventCommandWaitForRouteCompletion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -105,7 +111,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpWaitRoute);
             this.Name = "EventCommandWaitForRouteCompletion";
-            this.Size = new System.Drawing.Size(191, 106);
+            this.Size = new System.Drawing.Size(326, 106);
             this.grpWaitRoute.ResumeLayout(false);
             this.grpWaitRoute.PerformLayout();
             this.ResumeLayout(false);

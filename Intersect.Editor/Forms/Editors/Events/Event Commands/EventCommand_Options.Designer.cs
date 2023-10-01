@@ -73,7 +73,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpOptions.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpOptions.Location = new System.Drawing.Point(3, 3);
             this.grpOptions.Name = "grpOptions";
-            this.grpOptions.Size = new System.Drawing.Size(295, 332);
+            this.grpOptions.Size = new System.Drawing.Size(320, 332);
             this.grpOptions.TabIndex = 17;
             this.grpOptions.TabStop = false;
             this.grpOptions.Text = "Show Options";
@@ -84,7 +84,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblCommands.BackColor = System.Drawing.Color.Transparent;
             this.lblCommands.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCommands.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.lblCommands.Location = new System.Drawing.Point(198, 104);
+            this.lblCommands.Location = new System.Drawing.Point(230, 104);
             this.lblCommands.Name = "lblCommands";
             this.lblCommands.Size = new System.Drawing.Size(84, 13);
             this.lblCommands.TabIndex = 34;
@@ -104,20 +104,26 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbFace.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.cmbFace.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.cmbFace.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbFace.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbFace.DrawDropdownHoverOutline = false;
+            this.cmbFace.DrawFocusRectangle = false;
             this.cmbFace.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cmbFace.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbFace.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbFace.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbFace.FormattingEnabled = true;
-            this.cmbFace.Location = new System.Drawing.Point(47, 201);
+            this.cmbFace.Location = new System.Drawing.Point(47, 214);
             this.cmbFace.Name = "cmbFace";
             this.cmbFace.Size = new System.Drawing.Size(100, 21);
             this.cmbFace.TabIndex = 32;
+            this.cmbFace.Text = null;
+            this.cmbFace.TextPadding = new System.Windows.Forms.Padding(2);
             this.cmbFace.SelectedIndexChanged += new System.EventHandler(this.cmbFace_SelectedIndexChanged);
             // 
             // lblFace
             // 
             this.lblFace.AutoSize = true;
-            this.lblFace.Location = new System.Drawing.Point(10, 185);
+            this.lblFace.Location = new System.Drawing.Point(10, 198);
             this.lblFace.Name = "lblFace";
             this.lblFace.Size = new System.Drawing.Size(34, 13);
             this.lblFace.TabIndex = 31;
@@ -128,9 +134,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.txtShowOptionsOpt4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.txtShowOptionsOpt4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtShowOptionsOpt4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtShowOptionsOpt4.Location = new System.Drawing.Point(182, 173);
+            this.txtShowOptionsOpt4.Location = new System.Drawing.Point(164, 173);
             this.txtShowOptionsOpt4.Name = "txtShowOptionsOpt4";
-            this.txtShowOptionsOpt4.Size = new System.Drawing.Size(100, 20);
+            this.txtShowOptionsOpt4.Size = new System.Drawing.Size(150, 20);
             this.txtShowOptionsOpt4.TabIndex = 30;
             // 
             // txtShowOptionsOpt3
@@ -138,9 +144,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.txtShowOptionsOpt3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.txtShowOptionsOpt3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtShowOptionsOpt3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtShowOptionsOpt3.Location = new System.Drawing.Point(47, 170);
+            this.txtShowOptionsOpt3.Location = new System.Drawing.Point(7, 173);
             this.txtShowOptionsOpt3.Name = "txtShowOptionsOpt3";
-            this.txtShowOptionsOpt3.Size = new System.Drawing.Size(100, 20);
+            this.txtShowOptionsOpt3.Size = new System.Drawing.Size(150, 20);
             this.txtShowOptionsOpt3.TabIndex = 29;
             // 
             // txtShowOptionsOpt2
@@ -148,9 +154,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.txtShowOptionsOpt2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.txtShowOptionsOpt2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtShowOptionsOpt2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtShowOptionsOpt2.Location = new System.Drawing.Point(183, 134);
+            this.txtShowOptionsOpt2.Location = new System.Drawing.Point(164, 132);
             this.txtShowOptionsOpt2.Name = "txtShowOptionsOpt2";
-            this.txtShowOptionsOpt2.Size = new System.Drawing.Size(100, 20);
+            this.txtShowOptionsOpt2.Size = new System.Drawing.Size(150, 20);
             this.txtShowOptionsOpt2.TabIndex = 28;
             // 
             // txtShowOptionsOpt1
@@ -158,15 +164,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.txtShowOptionsOpt1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.txtShowOptionsOpt1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtShowOptionsOpt1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtShowOptionsOpt1.Location = new System.Drawing.Point(47, 131);
+            this.txtShowOptionsOpt1.Location = new System.Drawing.Point(7, 132);
             this.txtShowOptionsOpt1.Name = "txtShowOptionsOpt1";
-            this.txtShowOptionsOpt1.Size = new System.Drawing.Size(100, 20);
+            this.txtShowOptionsOpt1.Size = new System.Drawing.Size(150, 20);
             this.txtShowOptionsOpt1.TabIndex = 27;
             // 
             // lblOpt4
             // 
             this.lblOpt4.AutoSize = true;
-            this.lblOpt4.Location = new System.Drawing.Point(153, 157);
+            this.lblOpt4.Location = new System.Drawing.Point(170, 157);
             this.lblOpt4.Name = "lblOpt4";
             this.lblOpt4.Size = new System.Drawing.Size(50, 13);
             this.lblOpt4.TabIndex = 26;
@@ -175,7 +181,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblOpt3
             // 
             this.lblOpt3.AutoSize = true;
-            this.lblOpt3.Location = new System.Drawing.Point(10, 154);
+            this.lblOpt3.Location = new System.Drawing.Point(10, 157);
             this.lblOpt3.Name = "lblOpt3";
             this.lblOpt3.Size = new System.Drawing.Size(50, 13);
             this.lblOpt3.TabIndex = 25;
@@ -184,7 +190,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblOpt2
             // 
             this.lblOpt2.AutoSize = true;
-            this.lblOpt2.Location = new System.Drawing.Point(153, 118);
+            this.lblOpt2.Location = new System.Drawing.Point(170, 117);
             this.lblOpt2.Name = "lblOpt2";
             this.lblOpt2.Size = new System.Drawing.Size(50, 13);
             this.lblOpt2.TabIndex = 24;
@@ -193,7 +199,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblOpt1
             // 
             this.lblOpt1.AutoSize = true;
-            this.lblOpt1.Location = new System.Drawing.Point(10, 115);
+            this.lblOpt1.Location = new System.Drawing.Point(10, 116);
             this.lblOpt1.Name = "lblOpt1";
             this.lblOpt1.Size = new System.Drawing.Size(50, 13);
             this.lblOpt1.TabIndex = 23;
@@ -208,7 +214,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.txtShowOptions.Multiline = true;
             this.txtShowOptions.Name = "txtShowOptions";
             this.txtShowOptions.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.txtShowOptions.Size = new System.Drawing.Size(234, 82);
+            this.txtShowOptions.Size = new System.Drawing.Size(266, 82);
             this.txtShowOptions.TabIndex = 22;
             // 
             // lblText
@@ -240,7 +246,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // EventCommand_Options
+            // EventCommandOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -248,7 +254,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpOptions);
             this.Name = "EventCommandOptions";
-            this.Size = new System.Drawing.Size(301, 340);
+            this.Size = new System.Drawing.Size(330, 340);
             this.grpOptions.ResumeLayout(false);
             this.grpOptions.PerformLayout();
             this.ResumeLayout(false);

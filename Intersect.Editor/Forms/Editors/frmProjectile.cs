@@ -6,12 +6,13 @@ using System.Windows.Forms;
 
 using DarkUI.Controls;
 using DarkUI.Forms;
-
+using Intersect.Editor.Content;
 using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.Editor.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.Utilities;
 
 namespace Intersect.Editor.Forms.Editors
 {
@@ -29,12 +30,14 @@ namespace Intersect.Editor.Forms.Editors
 
         private List<string> mKnownFolders = new List<string>();
 
+        private List<Tuple<int, int>> mPossibleAnimationsPos = new List<Tuple<int, int>>();
+
         public FrmProjectile()
         {
             ApplyHooks();
             InitializeComponent();
 
-            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
+            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click, toolStripItemRelations_Click);
         }
         private void AssignEditorItem(Guid id)
         {
@@ -84,18 +87,18 @@ namespace Intersect.Editor.Forms.Editors
 
         private void frmProjectile_Load(object sender, EventArgs e)
         {
-            mDirectionGrid = new Bitmap("resources/misc/directions.png");
+            mDirectionGrid = new Bitmap(GameContentManager.GraphResFolder + "/misc/directions.png");
             cmbAnimation.Items.Clear();
             cmbAnimation.Items.Add(Strings.General.none);
             cmbAnimation.Items.AddRange(AnimationBase.Names);
 
             cmbItem.Items.Clear();
             cmbItem.Items.Add(Strings.General.none);
-            cmbItem.Items.AddRange(ItemBase.Names);
+            cmbItem.Items.AddRange(ItemBase.EditorFormatNames);
 
             cmbSpell.Items.Clear();
             cmbSpell.Items.Add(Strings.General.none);
-            cmbSpell.Items.AddRange(SpellBase.Names);
+            cmbSpell.Items.AddRange(SpellBase.EditorFormatNames);
 
             InitLocalization();
             UpdateEditor();
@@ -109,6 +112,7 @@ namespace Intersect.Editor.Forms.Editors
             toolStripItemCopy.Text = Strings.ProjectileEditor.copy;
             toolStripItemPaste.Text = Strings.ProjectileEditor.paste;
             toolStripItemUndo.Text = Strings.ProjectileEditor.undo;
+            toolStripItemRelations.Text = Strings.ProjectileEditor.relations;
 
             grpProjectiles.Text = Strings.ProjectileEditor.projectiles;
 
@@ -126,16 +130,22 @@ namespace Intersect.Editor.Forms.Editors
 
             grpAnimations.Text = Strings.ProjectileEditor.animations;
             lblAnimation.Text = Strings.ProjectileEditor.animation;
+            lblUniqueAnimation.Text = Strings.ProjectileEditor.uniqueanimation;
             chkRotation.Text = Strings.ProjectileEditor.autorotate;
             btnAdd.Text = Strings.ProjectileEditor.addanimation;
             btnRemove.Text = Strings.ProjectileEditor.removeanimation;
 
-            grpCollisions.Text = Strings.ProjectileEditor.collisions;
+            grpIgnoreCollisions.Text = Strings.ProjectileEditor.collisions;
             chkIgnoreMapBlocks.Text = Strings.ProjectileEditor.ignoreblocks;
             chkIgnoreActiveResources.Text = Strings.ProjectileEditor.ignoreactiveresources;
             chkIgnoreInactiveResources.Text = Strings.ProjectileEditor.ignoreinactiveresources;
             chkIgnoreZDimensionBlocks.Text = Strings.ProjectileEditor.ignorezdimension;
-            chkPierce.Text = Strings.ProjectileEditor.piercetarget;
+
+            grpCollisionOptions.Text = Strings.ProjectileEditor.collisionoptions;
+            chkLinkedSpawns.Text = Strings.ProjectileEditor.linkedspawns;
+            chkPierceTarget.Text = Strings.ProjectileEditor.piercetarget;
+            chkBlockTarget.Text = Strings.ProjectileEditor.blocktarget;
+            chkStopProjectiles.Text = Strings.ProjectileEditor.stopprojectiles;
 
             grpAmmo.Text = Strings.ProjectileEditor.ammo;
             lblAmmoItem.Text = Strings.ProjectileEditor.ammoitem;
@@ -156,9 +166,13 @@ namespace Intersect.Editor.Forms.Editors
             {
                 pnlContainer.Show();
 
+                lstAnimations.SelectedIndex = 0;
+
                 txtName.Text = mEditorItem.Name;
                 cmbFolder.Text = mEditorItem.Folder;
                 nudSpeed.Value = mEditorItem.Speed;
+                // Try to trigger the warning window if needed
+                ToggleProjectileArea(true);
                 nudSpawn.Value = mEditorItem.Delay;
                 nudAmount.Value = mEditorItem.Quantity;
                 nudRange.Value = mEditorItem.Range;
@@ -169,7 +183,10 @@ namespace Intersect.Editor.Forms.Editors
                 chkIgnoreInactiveResources.Checked = mEditorItem.IgnoreExhaustedResources;
                 chkIgnoreZDimensionBlocks.Checked = mEditorItem.IgnoreZDimension;
                 chkGrapple.Checked = mEditorItem.GrappleHook;
-                chkPierce.Checked = mEditorItem.PierceTarget;
+                chkPierceTarget.Checked = mEditorItem.PierceTarget;
+                chkLinkedSpawns.Checked = mEditorItem.LinkedSpawns;
+                chkBlockTarget.Checked = mEditorItem.BlockTarget;
+                chkStopProjectiles.Checked = mEditorItem.StopProjectiles;
                 cmbItem.SelectedIndex = ItemBase.ListIndex(mEditorItem.AmmoItemId) + 1;
                 nudConsume.Value = mEditorItem.AmmoRequired;
 
@@ -178,8 +195,10 @@ namespace Intersect.Editor.Forms.Editors
                     lstAnimations.SelectedIndex = 0;
                 }
 
+                UpdatePossibleAnimationPos();
+
                 UpdateAnimationData(0);
-                lstAnimations.SelectedIndex = 0;
+                
 
                 Render();
                 if (mChanged.IndexOf(mEditorItem) == -1)
@@ -200,10 +219,85 @@ namespace Intersect.Editor.Forms.Editors
         {
             UpdateAnimations(true);
             cmbAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.Animations[index].AnimationId) + 1;
+            cmbUniqueAnimation.SelectedIndex = GetUniqueAnimationPositionIndex(mEditorItem.Animations[index]);
             scrlSpawnRange.Value = Math.Min(mEditorItem.Animations[index].SpawnRange, scrlSpawnRange.Maximum);
             chkRotation.Checked = mEditorItem.Animations[index].AutoRotate;
             UpdateAnimations(true);
         }
+
+        private int GetUniqueAnimationPositionIndex(ProjectileAnimation projanim)
+        {
+            if (projanim.AnimationPosition == null)
+            {
+                return 0;
+            }
+            else
+            {
+                for (var i=0; i<mPossibleAnimationsPos.Count; i++)
+                {
+                    if (mPossibleAnimationsPos[i].Item1 == projanim.AnimationPosition.Item1 && mPossibleAnimationsPos[i].Item2 == projanim.AnimationPosition.Item2)
+                    {
+                        return i+1;
+                    }
+                }
+            }
+            return 0;
+        }
+
+        private void UpdatePossibleAnimationPos()
+        {
+            cmbUniqueAnimation.Items.Clear();
+            mPossibleAnimationsPos.Clear();
+            cmbUniqueAnimation.Items.Add(Strings.General.none);
+            for (var x = 0; x < ProjectileBase.SPAWN_LOCATIONS_WIDTH; x++)
+            {
+                for (var y = 0; y < ProjectileBase.SPAWN_LOCATIONS_HEIGHT; y++)
+                {
+                    if (mEditorItem.SpawnLocations[x, y].Directions.Contains(true))
+                    {
+                        cmbUniqueAnimation.Items.Add(Strings.ProjectileEditor.uniqueanimationcoords.ToString(x, y));
+                        mPossibleAnimationsPos.Add(Tuple.Create<int, int>(x, y));
+                    }
+                    else
+                    {
+                        // Reset unique animations to none if this unique spawn is removed
+                        for (var i=0; i<mEditorItem.Animations.Count; i++)
+                        {
+                            var animpos = mEditorItem.Animations[i].AnimationPosition;
+                            if (animpos != null && animpos.Item1 == x && animpos.Item2 == y)
+                            {
+                                mEditorItem.Animations[i].AnimationPosition = null;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /*private void UpdateUniqueAnimation(int index)
+        {
+            var projanimpos = mEditorItem.Animations[index].AnimationPosition;
+            cmbUniqueAnimation.Items.Clear();
+            cmbUniqueAnimation.Items.Add(Strings.General.none);
+            var selectedIndex = 0;
+            var i = 0;
+            for (var x = 0; x < ProjectileBase.SPAWN_LOCATIONS_WIDTH; x++)
+            {
+                for (var y = 0; y < ProjectileBase.SPAWN_LOCATIONS_HEIGHT; y++)
+                {
+                    if (mEditorItem.SpawnLocations[x, y].Directions.Contains(true))
+                    {
+                        cmbUniqueAnimation.Items.Add("[" + x + ", " + y + "]");
+                        if (projanimpos != null && projanimpos.Item1 == x && projanimpos.Item2 == y)
+                        {
+                            selectedIndex = i + 1;
+                        }
+                        i++;
+                    }
+                }
+            }
+            cmbUniqueAnimation.SelectedIndex = selectedIndex;
+        }*/
 
         private void UpdateAnimations(bool saveIndex = true)
         {
@@ -460,6 +554,12 @@ namespace Intersect.Editor.Forms.Editors
                 !mEditorItem.SpawnLocations[(int) x, (int) y].Directions[FindDirection((int) i, (int) j)];
 
             Render();
+
+            UpdatePossibleAnimationPos();
+            if (lstAnimations.SelectedIndex > -1)
+            {
+                UpdateAnimationData(lstAnimations.SelectedIndex);
+            }
         }
 
         private void chkIgnoreMapBlocks_CheckedChanged(object sender, EventArgs e)
@@ -484,7 +584,17 @@ namespace Intersect.Editor.Forms.Editors
 
         private void chkPierce_CheckedChanged(object sender, EventArgs e)
         {
-            mEditorItem.PierceTarget = chkPierce.Checked;
+            mEditorItem.PierceTarget = chkPierceTarget.Checked;
+        }
+
+        private void chkBlockTarget_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.BlockTarget = chkBlockTarget.Checked;
+        }
+
+        private void chkStopProjectiles_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StopProjectiles = chkStopProjectiles.Checked;
         }
 
         private void chkGrapple_CheckedChanged(object sender, EventArgs e)
@@ -583,12 +693,39 @@ namespace Intersect.Editor.Forms.Editors
             }
         }
 
+        private void toolStripItemRelations_Click(object sender, EventArgs e)
+        {
+            if (mEditorItem != null)
+            {
+                Dictionary<string, List<string>> dataDict = new Dictionary<string, List<string>>();
+
+                //Retrieve all spells using the projectile 
+                var spellList = SpellBase.Lookup.Where(pair => ((SpellBase)pair.Value)?.Combat?.ProjectileId == mEditorItem.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((SpellBase)pair.Value)?.EditorName) ?? SpellBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.spells, spellList);
+
+                //Retrieve all items using the projectile
+                var itemList = ItemBase.Lookup.Where(pair => ((ItemBase)pair.Value)?.ProjectileId == mEditorItem.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((ItemBase)pair.Value)?.EditorName) ?? ItemBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.items, itemList);
+
+                string titleTarget = "Projectile : " + mEditorItem.Name;
+                var relationsfrm = new FrmRelations(titleTarget, dataDict);
+                relationsfrm.ShowDialog();
+            }
+        }
+
         private void UpdateToolStripItems()
         {
             toolStripItemCopy.Enabled = mEditorItem != null && lstGameObjects.Focused;
             toolStripItemPaste.Enabled = mEditorItem != null && mCopiedItem != null && lstGameObjects.Focused;
             toolStripItemDelete.Enabled = mEditorItem != null && lstGameObjects.Focused;
             toolStripItemUndo.Enabled = mEditorItem != null && lstGameObjects.Focused;
+            toolStripItemRelations.Enabled = mEditorItem != null;
         }
 
         private void form_KeyDown(object sender, KeyEventArgs e)
@@ -615,9 +752,49 @@ namespace Intersect.Editor.Forms.Editors
             UpdateAnimations();
         }
 
+        private void cmbUniqueAnimation_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbUniqueAnimation.SelectedIndex == 0)
+            {
+                mEditorItem.Animations[lstAnimations.SelectedIndex].AnimationPosition = null;
+            }
+            else
+            {
+                mEditorItem.Animations[lstAnimations.SelectedIndex].AnimationPosition =
+                Tuple.Create<int, int>(mPossibleAnimationsPos[cmbUniqueAnimation.SelectedIndex - 1].Item1, mPossibleAnimationsPos[cmbUniqueAnimation.SelectedIndex - 1].Item2);
+
+            }
+            UpdateAnimations();
+        }
+
         private void nudSpeed_ValueChanged(object sender, EventArgs e)
         {
-            mEditorItem.Speed = (int) nudSpeed.Value;
+            ToggleProjectileArea(false);
+            mEditorItem.Speed = (int)nudSpeed.Value;
+        }
+
+        private void ToggleProjectileArea(bool fromSelection)
+        {
+            if ((fromSelection && mEditorItem.Speed == 0) || (mEditorItem.Speed > 0 && nudSpeed.Value == 0))
+            {
+                nudRange.Enabled = false;
+                lblSpawn.Text = Strings.ProjectileEditor.spawntime;
+                grpSpawns.Text = Strings.ProjectileEditor.areaspawns;
+                DarkMessageBox.ShowWarning(
+                        Strings.ProjectileEditor.editingarea, Strings.ProjectileEditor.editingareatitle,
+                        DarkDialogButton.Ok, Properties.Resources.Icon
+                    );
+            }
+            else if ((fromSelection && mEditorItem.Speed > 0) || (mEditorItem.Speed == 0 && nudSpeed.Value > 0))
+            {
+                nudRange.Enabled = true;
+                lblSpawn.Text = Strings.ProjectileEditor.spawndelay;
+                grpSpawns.Text = Strings.ProjectileEditor.spawns;
+                DarkMessageBox.ShowWarning(
+                        Strings.ProjectileEditor.editingprojectile, Strings.ProjectileEditor.editingprojectiletitle,
+                        DarkDialogButton.Ok, Properties.Resources.Icon
+                    );
+            }
         }
 
         private void nudSpawnDelay_ValueChanged(object sender, EventArgs e)
@@ -656,6 +833,11 @@ namespace Intersect.Editor.Forms.Editors
             {
                 mEditorItem.Spell = null;
             }
+        }
+
+        private void chkLinkedSpawns_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.LinkedSpawns = chkLinkedSpawns.Checked;
         }
 
         #region "Item List - Folders, Searching, Sorting, Etc"

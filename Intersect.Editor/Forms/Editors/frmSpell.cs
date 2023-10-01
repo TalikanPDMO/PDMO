@@ -44,7 +44,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbScalingStat.Items.Add(Globals.GetStatName(i));
             }
 
-            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
+            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click, toolStripItemRelations_Click);
         }
         private void AssignEditorItem(Guid id)
         {
@@ -95,13 +95,26 @@ namespace Intersect.Editor.Forms.Editors
         private void frmSpell_Load(object sender, EventArgs e)
         {
             cmbProjectile.Items.Clear();
+            cmbProjectile.Items.Add(Strings.General.none);
             cmbProjectile.Items.AddRange(ProjectileBase.Names);
+
             cmbCastAnimation.Items.Clear();
             cmbCastAnimation.Items.Add(Strings.General.none);
             cmbCastAnimation.Items.AddRange(AnimationBase.Names);
+            cmbCastTargetAnimation.Items.Clear();
+            cmbCastTargetAnimation.Items.Add(Strings.General.none);
+            cmbCastTargetAnimation.Items.AddRange(AnimationBase.Names);
+
+            cmbImpactAnimation.Items.Clear();
+            cmbImpactAnimation.Items.Add(Strings.General.none);
+            cmbImpactAnimation.Items.AddRange(AnimationBase.Names);
+            cmbTilesAnimation.Items.Clear();
+            cmbTilesAnimation.Items.Add(Strings.General.none);
+            cmbTilesAnimation.Items.AddRange(AnimationBase.Names);
             cmbHitAnimation.Items.Clear();
             cmbHitAnimation.Items.Add(Strings.General.none);
             cmbHitAnimation.Items.AddRange(AnimationBase.Names);
+
             cmbEvent.Items.Clear();
             cmbEvent.Items.Add(Strings.General.none);
             cmbEvent.Items.AddRange(EventBase.Names);
@@ -137,6 +150,14 @@ namespace Intersect.Editor.Forms.Editors
             nudCastDuration.Maximum = Int32.MaxValue;
             nudCooldownDuration.Maximum = Int32.MaxValue;
 
+            cmbCritEffectSpell.Items.Clear();
+            cmbCritEffectSpell.Items.Add(Strings.General.none);
+            cmbCritEffectSpell.Items.AddRange(SpellBase.EditorFormatNames);
+
+            cmbNextSpell.Items.Clear();
+            cmbNextSpell.Items.Add(Strings.General.none);
+            cmbNextSpell.Items.AddRange(SpellBase.EditorFormatNames);
+
             InitLocalization();
             UpdateEditor();
         }
@@ -149,11 +170,13 @@ namespace Intersect.Editor.Forms.Editors
             toolStripItemCopy.Text = Strings.SpellEditor.copy;
             toolStripItemPaste.Text = Strings.SpellEditor.paste;
             toolStripItemUndo.Text = Strings.SpellEditor.undo;
+            toolStripItemRelations.Text = Strings.SpellEditor.relations;
 
             grpSpells.Text = Strings.SpellEditor.spells;
 
             grpGeneral.Text = Strings.SpellEditor.general;
             lblName.Text = Strings.SpellEditor.name;
+            lblEditorName.Text = Strings.SpellEditor.editorname;
             lblType.Text = Strings.SpellEditor.type;
             cmbType.Items.Clear();
             for (var i = 0; i < Strings.SpellEditor.types.Count; i++)
@@ -162,18 +185,36 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             lblIcon.Text = Strings.SpellEditor.icon;
+            lblElementalType.Text = Strings.SpellEditor.elementaltype;
+            cmbElementalType.Items.Clear();
+            for (var i = 0; i < Strings.Combat.elementaltypes.Count; i++)
+            {
+                cmbElementalType.Items.Add(Strings.Combat.elementaltypes[i]);
+            }
             lblDesc.Text = Strings.SpellEditor.description;
-            lblCastAnimation.Text = Strings.SpellEditor.castanimation;
+            lblImpactAnimation.Text = Strings.SpellEditor.impactanimation;
+            lblTilesAnimation.Text = Strings.SpellEditor.tilesanimation;
             lblHitAnimation.Text = Strings.SpellEditor.hitanimation;
             chkBound.Text = Strings.SpellEditor.bound;
 
-            grpRequirements.Text = Strings.SpellEditor.requirements;
+            grpCasting.Text = Strings.SpellEditor.requirements;
+            lblCastAnimation.Text = Strings.SpellEditor.castanimation;
+            lblCastTargetAnimation.Text = Strings.SpellEditor.casttargetanimation;
             lblCannotCast.Text = Strings.SpellEditor.cannotcast;
             btnDynamicRequirements.Text = Strings.SpellEditor.requirementsbutton;
 
             grpSpellCost.Text = Strings.SpellEditor.cost;
             lblHPCost.Text = Strings.SpellEditor.hpcost;
             lblMPCost.Text = Strings.SpellEditor.manacost;
+            lblHpCostStyle.Text = Strings.SpellEditor.hpcoststyle;
+            lblMpCostStyle.Text = Strings.SpellEditor.manacoststyle;
+            cmbHpCostStyle.Items.Clear();
+            cmbMpCostStyle.Items.Clear();
+            for (var i = 0; i < Strings.Combat.damagestyles.Count; i++)
+            {
+                cmbHpCostStyle.Items.Add(Strings.Combat.damagestyles[i]);
+                cmbMpCostStyle.Items.Add(Strings.Combat.damagestyles[i]);
+            }
             lblCastDuration.Text = Strings.SpellEditor.casttime;
             lblCooldownDuration.Text = Strings.SpellEditor.cooldown;
             lblCooldownGroup.Text = Strings.SpellEditor.CooldownGroup;
@@ -189,17 +230,32 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             lblCastRange.Text = Strings.SpellEditor.castrange;
+            chkSquareRange.Text = Strings.SpellEditor.squarerange;
             lblProjectile.Text = Strings.SpellEditor.projectile;
             lblHitRadius.Text = Strings.SpellEditor.hitradius;
+            chkSquareRadius.Text = Strings.SpellEditor.squareradius;
             lblDuration.Text = Strings.SpellEditor.duration;
 
             grpCombat.Text = Strings.SpellEditor.combatspell;
             grpDamage.Text = Strings.SpellEditor.damagegroup;
             lblCritChance.Text = Strings.SpellEditor.critchance;
             lblCritMultiplier.Text = Strings.SpellEditor.critmultiplier;
+            lblCritEffectSpell.Text = Strings.SpellEditor.criteffectspell;
+            chkReplaceCritEffectSpell.Text = Strings.SpellEditor.replacecriteffectspell;
             lblDamageType.Text = Strings.SpellEditor.damagetype;
             lblHPDamage.Text = Strings.SpellEditor.hpdamage;
             lblManaDamage.Text = Strings.SpellEditor.mpdamage;
+            lblHpDamageStyle.Text = Strings.SpellEditor.hpdamagestyle;
+            lblMpDamageStyle.Text = Strings.SpellEditor.manadamagestyle;
+            cmbHpDamageStyle.Items.Clear();
+            cmbMpDamageStyle.Items.Clear();
+            for (var i = 0; i < Strings.Combat.damagestyles.Count; i++)
+            {
+                cmbHpDamageStyle.Items.Add(Strings.Combat.damagestyles[i]);
+                cmbMpDamageStyle.Items.Add(Strings.Combat.damagestyles[i]);
+            }
+            lblHPSteal.Text = Strings.SpellEditor.steal;
+            lblManaSteal.Text = Strings.SpellEditor.steal;
             chkFriendly.Text = Strings.SpellEditor.friendly;
             cmbDamageType.Items.Clear();
             for (var i = 0; i < Strings.Combat.damagetypes.Count; i++)
@@ -214,17 +270,23 @@ namespace Intersect.Editor.Forms.Editors
             chkHOTDOT.Text = Strings.SpellEditor.ishotdot;
             lblTick.Text = Strings.SpellEditor.hotdottick;
 
+            grpNextSpell.Text = Strings.SpellEditor.nextspelleffect;
+            chkReUseValues.Text = Strings.SpellEditor.reusevalues;
+            lblNextSpellChance.Text = Strings.SpellEditor.nextspellchance;
+
             grpStats.Text = Strings.SpellEditor.stats;
             lblStr.Text = Strings.SpellEditor.attack;
             lblDef.Text = Strings.SpellEditor.defense;
             lblSpd.Text = Strings.SpellEditor.speed;
             lblMag.Text = Strings.SpellEditor.abilitypower;
             lblMR.Text = Strings.SpellEditor.magicresist;
+            lblStatsChance.Text = Strings.SpellEditor.statschance;
 
             grpEffectDuration.Text = Strings.SpellEditor.boostduration;
             lblBuffDuration.Text = Strings.SpellEditor.duration;
             grpEffect.Text = Strings.SpellEditor.effectgroup;
             lblEffect.Text = Strings.SpellEditor.effectlabel;
+            lblEffectChance.Text = Strings.SpellEditor.effectchancelabel;
             cmbExtraEffect.Items.Clear();
             for (var i = 0; i < Strings.SpellEditor.effects.Count; i++)
             {
@@ -272,9 +334,11 @@ namespace Intersect.Editor.Forms.Editors
                 pnlContainer.Show();
 
                 txtName.Text = mEditorItem.Name;
+                txtEditorName.Text = mEditorItem.EditorName;
                 cmbFolder.Text = mEditorItem.Folder;
                 txtDesc.Text = mEditorItem.Description;
                 cmbType.SelectedIndex = (int) mEditorItem.SpellType;
+                cmbElementalType.SelectedIndex = mEditorItem.ElementalType;
 
                 nudCastDuration.Value = mEditorItem.CastDuration;
                 nudCooldownDuration.Value = mEditorItem.CooldownDuration;
@@ -283,6 +347,10 @@ namespace Intersect.Editor.Forms.Editors
                 chkIgnoreCdr.Checked = mEditorItem.IgnoreCooldownReduction;
 
                 cmbCastAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.CastAnimationId) + 1;
+                cmbCastTargetAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.CastTargetAnimationId) + 1;
+
+                cmbImpactAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.ImpactAnimationId) + 1;
+                cmbTilesAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.TilesAnimationId) + 1;
                 cmbHitAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.HitAnimationId) + 1;
 
                 chkBound.Checked = mEditorItem.Bound;
@@ -292,9 +360,11 @@ namespace Intersect.Editor.Forms.Editors
                 picSpell.BackgroundImage = null;
                 if (cmbSprite.SelectedIndex > 0)
                 {
-                    picSpell.BackgroundImage = Image.FromFile("resources/spells/" + cmbSprite.Text);
+                    picSpell.BackgroundImage = Image.FromFile(GameContentManager.GraphResFolder + "/spells/" + cmbSprite.Text);
                 }
 
+                cmbHpCostStyle.SelectedIndex = mEditorItem.VitalCostStyle[(int)Vitals.Health];
+                cmbMpCostStyle.SelectedIndex = mEditorItem.VitalCostStyle[(int)Vitals.Mana];
                 nudHPCost.Value = mEditorItem.VitalCost[(int) Vitals.Health];
                 nudMpCost.Value = mEditorItem.VitalCost[(int) Vitals.Mana];
 
@@ -333,8 +403,15 @@ namespace Intersect.Editor.Forms.Editors
                 cmbTargetType.SelectedIndex = (int) mEditorItem.Combat.TargetType;
                 UpdateTargetTypePanel();
 
+
+                cmbHpDamageStyle.SelectedIndex = mEditorItem.Combat.VitalDiffStyle[(int)Vitals.Health];
+                cmbMpDamageStyle.SelectedIndex = mEditorItem.Combat.VitalDiffStyle[(int)Vitals.Mana];
+
                 nudHPDamage.Value = mEditorItem.Combat.VitalDiff[(int) Vitals.Health];
                 nudMPDamage.Value = mEditorItem.Combat.VitalDiff[(int) Vitals.Mana];
+
+                nudHPSteal.Value = mEditorItem.Combat.VitalSteal[(int)Vitals.Health];
+                nudManaSteal.Value = mEditorItem.Combat.VitalSteal[(int)Vitals.Mana];
 
                 nudStr.Value = mEditorItem.Combat.StatDiff[(int) Stats.Attack];
                 nudDef.Value = mEditorItem.Combat.StatDiff[(int) Stats.Defense];
@@ -348,16 +425,29 @@ namespace Intersect.Editor.Forms.Editors
                 nudMRPercentage.Value = mEditorItem.Combat.PercentageStatDiff[(int) Stats.MagicResist];
                 nudSpdPercentage.Value = mEditorItem.Combat.PercentageStatDiff[(int) Stats.Speed];
 
+                nudStrChance.Value = mEditorItem.Combat.StatDiffChance[(int)Stats.Attack];
+                nudDefChance.Value = mEditorItem.Combat.StatDiffChance[(int)Stats.Defense];
+                nudSpdChance.Value = mEditorItem.Combat.StatDiffChance[(int)Stats.Speed];
+                nudMagChance.Value = mEditorItem.Combat.StatDiffChance[(int)Stats.AbilityPower];
+                nudMRChance.Value = mEditorItem.Combat.StatDiffChance[(int)Stats.MagicResist];
+
                 chkFriendly.Checked = Convert.ToBoolean(mEditorItem.Combat.Friendly);
                 cmbDamageType.SelectedIndex = mEditorItem.Combat.DamageType;
                 cmbScalingStat.SelectedIndex = mEditorItem.Combat.ScalingStat;
                 nudScaling.Value = mEditorItem.Combat.Scaling;
                 nudCritChance.Value = mEditorItem.Combat.CritChance;
                 nudCritMultiplier.Value = (decimal) mEditorItem.Combat.CritMultiplier;
+                cmbCritEffectSpell.SelectedIndex = SpellBase.ListIndex(mEditorItem.Combat.CritEffectSpellId) + 1;
+                chkReplaceCritEffectSpell.Checked = mEditorItem.Combat.CritEffectSpellReplace;
+
+                cmbNextSpell.SelectedIndex = SpellBase.ListIndex(mEditorItem.Combat.NextEffectSpellId) + 1;
+                chkReUseValues.Checked = mEditorItem.Combat.NextEffectSpellReUseValues;
+                nudNextSpellChance.Value = mEditorItem.Combat.NextEffectSpellChance;
 
                 chkHOTDOT.Checked = mEditorItem.Combat.HoTDoT;
                 nudBuffDuration.Value = mEditorItem.Combat.Duration;
                 nudTick.Value = mEditorItem.Combat.HotDotInterval;
+                nudEffectChance.Value = mEditorItem.Combat.EffectChance;
                 cmbExtraEffect.SelectedIndex = (int) mEditorItem.Combat.Effect;
                 cmbExtraEffect_SelectedIndexChanged(null, null);
             }
@@ -398,7 +488,7 @@ namespace Intersect.Editor.Forms.Editors
             if (cmbType.SelectedIndex == (int) SpellTypes.WarpTo)
             {
                 grpTargetInfo.Show();
-                cmbTargetType.SelectedIndex = (int) SpellTargetTypes.Single;
+                cmbTargetType.SelectedIndex = (int) SpellTargetTypes.Targeted;
                 cmbTargetType.Enabled = false;
                 UpdateTargetTypePanel();
             }
@@ -408,46 +498,67 @@ namespace Intersect.Editor.Forms.Editors
         {
             lblHitRadius.Hide();
             nudHitRadius.Hide();
+            chkSquareRadius.Hide();
             lblCastRange.Hide();
             nudCastRange.Hide();
+            chkSquareRange.Hide();
             lblProjectile.Hide();
             cmbProjectile.Hide();
             lblDuration.Hide();
             nudDuration.Hide();
 
-            if (cmbTargetType.SelectedIndex == (int) SpellTargetTypes.Single)
+            if (cmbTargetType.SelectedIndex == (int) SpellTargetTypes.Targeted)
             {
                 lblCastRange.Show();
                 nudCastRange.Show();
+                chkSquareRange.Show();
                 nudCastRange.Value = mEditorItem.Combat.CastRange;
+                chkSquareRange.Checked = mEditorItem.Combat.SquareRange;
                 if (cmbType.SelectedIndex == (int) SpellTypes.CombatSpell)
                 {
                     lblHitRadius.Show();
                     nudHitRadius.Show();
+                    chkSquareRadius.Show();
                     nudHitRadius.Value = mEditorItem.Combat.HitRadius;
+                    chkSquareRadius.Checked = mEditorItem.Combat.SquareHitRadius;
                 }
             }
 
-            if (cmbTargetType.SelectedIndex == (int) SpellTargetTypes.AoE &&
+            if (cmbTargetType.SelectedIndex == (int) SpellTargetTypes.Anchored &&
                 cmbType.SelectedIndex == (int) SpellTypes.CombatSpell)
             {
+                lblCastRange.Show();
+                nudCastRange.Show();
+                chkSquareRange.Show();
+                nudCastRange.Value = mEditorItem.Combat.CastRange;
+                chkSquareRange.Checked = mEditorItem.Combat.SquareRange;
+
                 lblHitRadius.Show();
                 nudHitRadius.Show();
+                chkSquareRadius.Show();
                 nudHitRadius.Value = mEditorItem.Combat.HitRadius;
+                chkSquareRadius.Checked = mEditorItem.Combat.SquareHitRadius;
+
+                //Static projectile to design custom area of effect
+                lblProjectile.Show();
+                cmbProjectile.Show();
+                cmbProjectile.SelectedIndex = ProjectileBase.ListIndex(mEditorItem.Combat.ProjectileId) + 1;
             }
 
             if (cmbTargetType.SelectedIndex < (int) SpellTargetTypes.Self)
             {
                 lblCastRange.Show();
                 nudCastRange.Show();
+                chkSquareRange.Show();
                 nudCastRange.Value = mEditorItem.Combat.CastRange;
+                chkSquareRange.Checked = mEditorItem.Combat.SquareRange;
             }
 
             if (cmbTargetType.SelectedIndex == (int) SpellTargetTypes.Projectile)
             {
                 lblProjectile.Show();
                 cmbProjectile.Show();
-                cmbProjectile.SelectedIndex = ProjectileBase.ListIndex(mEditorItem.Combat.ProjectileId);
+                cmbProjectile.SelectedIndex = ProjectileBase.ListIndex(mEditorItem.Combat.ProjectileId) + 1;
             }
 
             if (cmbTargetType.SelectedIndex == (int) SpellTargetTypes.OnHit)
@@ -468,7 +579,13 @@ namespace Intersect.Editor.Forms.Editors
         private void txtName_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.Name = txtName.Text;
-            lstGameObjects.UpdateText(txtName.Text);
+            lstGameObjects.UpdateText(TextUtils.FormatEditorName(mEditorItem.Name, mEditorItem.EditorName));
+        }
+
+        private void txtEditorName_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.EditorName = txtEditorName.Text;
+            lstGameObjects.UpdateText(TextUtils.FormatEditorName(mEditorItem.Name, mEditorItem.EditorName));
         }
 
         private void cmbType_SelectedIndexChanged(object sender, EventArgs e)
@@ -486,7 +603,7 @@ namespace Intersect.Editor.Forms.Editors
             picSpell.BackgroundImage?.Dispose();
             picSpell.BackgroundImage = null;
             picSpell.BackgroundImage = cmbSprite.SelectedIndex > 0
-                ? Image.FromFile("resources/spells/" + cmbSprite.Text)
+                ? Image.FromFile(GameContentManager.GraphResFolder + "/spells/" + cmbSprite.Text)
                 : null;
         }
 
@@ -506,6 +623,11 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.Description = txtDesc.Text;
         }
 
+        private void cmbElementalType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ElementalType = cmbElementalType.SelectedIndex;
+        }
+
         private void cmbExtraEffect_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.Combat.Effect = (StatusTypes) cmbExtraEffect.SelectedIndex;
@@ -513,7 +635,16 @@ namespace Intersect.Editor.Forms.Editors
             lblSprite.Visible = false;
             cmbTransform.Visible = false;
             picSprite.Visible = false;
-
+            if (cmbExtraEffect.SelectedIndex == 0)
+            {
+                lblEffectChance.Visible = false;
+                nudEffectChance.Visible = false;
+            }
+            else
+            {
+                lblEffectChance.Visible = true;
+                nudEffectChance.Visible = true;
+            }
             if (cmbExtraEffect.SelectedIndex == 6) //Transform
             {
                 lblSprite.Visible = true;
@@ -527,7 +658,7 @@ namespace Intersect.Editor.Forms.Editors
                 {
                     var bmp = new Bitmap(picSprite.Width, picSprite.Height);
                     var g = Graphics.FromImage(bmp);
-                    var src = Image.FromFile("resources/entities/" + cmbTransform.Text);
+                    var src = Image.FromFile(GameContentManager.GraphResFolder + "/entities/" + cmbTransform.Text);
                     g.DrawImage(
                         src,
                         new Rectangle(
@@ -585,7 +716,7 @@ namespace Intersect.Editor.Forms.Editors
             {
                 var bmp = new Bitmap(picSprite.Width, picSprite.Height);
                 var g = Graphics.FromImage(bmp);
-                var src = Image.FromFile("resources/entities/" + cmbTransform.Text);
+                var src = Image.FromFile(GameContentManager.GraphResFolder + "/entities/" + cmbTransform.Text);
                 g.DrawImage(
                     src,
                     new Rectangle(
@@ -658,12 +789,63 @@ namespace Intersect.Editor.Forms.Editors
             }
         }
 
+        private void toolStripItemRelations_Click(object sender, EventArgs e)
+        {
+            if (mEditorItem != null)
+            {
+                Dictionary<string, List<string>> dataDict = new Dictionary<string, List<string>>();
+                //Retrieve all npcs that could use the spell (classic or in phases)
+                var npcList = NpcBase.Lookup.Where(pair => (((NpcBase)pair.Value)?.Spells?.Contains(mEditorItem.Id) ?? false)
+                || (((NpcBase)pair.Value)?.NpcPhases?.Any(ph => ph?.Spells.Contains(mEditorItem.Id) ?? false) ?? false))
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => String.Concat(TextUtils.FormatEditorName(pair.Value?.Name, ((NpcBase)pair.Value)?.EditorName) ?? NpcBase.Deleted,
+                                ((NpcBase)pair.Value)?.NpcPhases.Any(ph => ph?.Spells.Contains(mEditorItem.Id) ?? false) ?? false ? " (Phase) " : ""))
+                    .ToList();
+                dataDict.Add(Strings.Relations.npcs, npcList);
+
+                //Retrieve all classes who learn the spell in their leveling
+                var classList = ClassBase.Lookup.Where(pair => ((ClassBase)pair.Value)?.Spells?.Any(c => c?.Id == mEditorItem.Id) ?? false)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? ClassBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.classes, classList);
+
+                //Retrieve all spells using the spell (crit or next effect)
+                var spellList = SpellBase.Lookup.Where(pair => ((SpellBase)pair.Value)?.Combat?.CritEffectSpellId == mEditorItem.Id 
+                    || ((SpellBase)pair.Value)?.Combat?.NextEffectSpellId == mEditorItem.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((SpellBase)pair.Value)?.EditorName) ?? SpellBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.spells, spellList);
+
+                //Retrieve all projectiles using the spell
+                var projList = ProjectileBase.Lookup.Where(pair => ((ProjectileBase)pair.Value)?.SpellId == mEditorItem.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? ProjectileBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.projectiles, projList);
+
+                //Retrieve all iems using the spell
+                var itemList = ItemBase.Lookup.Where(pair => ((ItemBase)pair.Value)?.SpellId == mEditorItem.Id
+                    || ((ItemBase)pair.Value)?.CritEffectSpellId == mEditorItem.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((ItemBase)pair.Value)?.EditorName) ?? ItemBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.items, itemList);
+
+                string titleTarget = "Spell : " + TextUtils.FormatEditorName(mEditorItem.Name, mEditorItem.EditorName);
+                var relationsfrm = new FrmRelations(titleTarget, dataDict);
+                relationsfrm.ShowDialog();
+            }
+        }
+
         private void UpdateToolStripItems()
         {
             toolStripItemCopy.Enabled = mEditorItem != null && lstGameObjects.Focused;
             toolStripItemPaste.Enabled = mEditorItem != null && mCopiedItem != null && lstGameObjects.Focused;
             toolStripItemDelete.Enabled = mEditorItem != null && lstGameObjects.Focused;
             toolStripItemUndo.Enabled = mEditorItem != null && lstGameObjects.Focused;
+            toolStripItemRelations.Enabled = mEditorItem != null;
         }
 
         private void form_KeyDown(object sender, KeyEventArgs e)
@@ -703,6 +885,21 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.CastAnimation = AnimationBase.Get(AnimationBase.IdFromList(cmbCastAnimation.SelectedIndex - 1));
         }
 
+        private void cmbCastTargetAnimation_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.CastTargetAnimation = AnimationBase.Get(AnimationBase.IdFromList(cmbCastTargetAnimation.SelectedIndex - 1));
+        }
+
+        private void cmbImpactAnimation_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ImpactAnimation = AnimationBase.Get(AnimationBase.IdFromList(cmbImpactAnimation.SelectedIndex - 1));
+        }
+
+        private void cmbTilesAnimation_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.TilesAnimation = AnimationBase.Get(AnimationBase.IdFromList(cmbTilesAnimation.SelectedIndex - 1));
+        }
+
         private void cmbHitAnimation_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.HitAnimation = AnimationBase.Get(AnimationBase.IdFromList(cmbHitAnimation.SelectedIndex - 1));
@@ -710,7 +907,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private void cmbProjectile_SelectedIndexChanged(object sender, EventArgs e)
         {
-            mEditorItem.Combat.ProjectileId = ProjectileBase.IdFromList(cmbProjectile.SelectedIndex);
+            mEditorItem.Combat.ProjectileId = ProjectileBase.IdFromList(cmbProjectile.SelectedIndex - 1);
         }
 
         private void cmbEvent_SelectedIndexChanged(object sender, EventArgs e)
@@ -783,6 +980,10 @@ namespace Intersect.Editor.Forms.Editors
         {
             mEditorItem.Combat.HitRadius = (int) nudHitRadius.Value;
         }
+        private void chkSquareRadius_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.SquareHitRadius = chkSquareRadius.Checked;
+        }
 
         private void nudHPCost_ValueChanged(object sender, EventArgs e)
         {
@@ -799,9 +1000,59 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.Combat.VitalDiff[(int) Vitals.Health] = (int) nudHPDamage.Value;
         }
 
+        private void cmbHpDamageStyle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.VitalDiffStyle[(int)Vitals.Health] = cmbHpDamageStyle.SelectedIndex;
+        }
+
+        private void cmbMpDamageStyle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.VitalDiffStyle[(int)Vitals.Mana] = cmbMpDamageStyle.SelectedIndex;
+        }
+
+        private void cmbHpCostStyle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbHpCostStyle.SelectedIndex == (int)DamageStyle.Normal)
+            {
+                nudHPCost.Minimum = -10000;
+                nudHPCost.Maximum = 10000;
+            }
+            else
+            {
+                nudHPCost.Minimum = 0;
+                nudHPCost.Maximum = 100;
+            }
+            mEditorItem.VitalCostStyle[(int)Vitals.Health] = cmbHpCostStyle.SelectedIndex;
+        }
+
+        private void cmbMpCostStyle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbMpCostStyle.SelectedIndex == (int)DamageStyle.Normal)
+            {
+                nudMpCost.Minimum = -10000;
+                nudMpCost.Maximum = 10000;
+            }
+            else
+            {
+                nudMpCost.Minimum = 0;
+                nudMpCost.Maximum = 100;
+            }
+            mEditorItem.VitalCostStyle[(int)Vitals.Mana] = cmbMpCostStyle.SelectedIndex;
+        }
+
         private void nudMPDamage_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Combat.VitalDiff[(int) Vitals.Mana] = (int) nudMPDamage.Value;
+        }
+
+        private void nudHPSteal_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.VitalSteal[(int)Vitals.Health] = (int)nudHPSteal.Value;
+        }
+
+        private void nudManaSteal_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.VitalSteal[(int)Vitals.Mana] = (int)nudManaSteal.Value;
         }
 
         private void nudStr_ValueChanged(object sender, EventArgs e)
@@ -854,6 +1105,31 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.Combat.PercentageStatDiff[(int) Stats.Speed] = (int) nudSpdPercentage.Value;
         }
 
+        private void nudStrChance_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.StatDiffChance[(int)Stats.Attack] = (byte)nudStrChance.Value;
+        }
+
+        private void nudMagChance_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.StatDiffChance[(int)Stats.AbilityPower] = (byte)nudMagChance.Value;
+        }
+
+        private void nudDefChance_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.StatDiffChance[(int)Stats.Defense] = (byte)nudDefChance.Value;
+        }
+
+        private void nudMRChance_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.StatDiffChance[(int)Stats.MagicResist] = (byte)nudMRChance.Value;
+        }
+
+        private void nudSpdChance_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.StatDiffChance[(int)Stats.Speed] = (byte)nudSpdChance.Value;
+        }
+
         private void nudBuffDuration_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Combat.Duration = (int) nudBuffDuration.Value;
@@ -869,6 +1145,45 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.Combat.CritChance = (int) nudCritChance.Value;
         }
 
+        private void cmbCritEffectSpell_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbCritEffectSpell.SelectedIndex > 0)
+            {
+                mEditorItem.Combat.CritEffectSpell = SpellBase.Get(SpellBase.IdFromList(cmbCritEffectSpell.SelectedIndex - 1));
+            }
+            else
+            {
+                mEditorItem.Combat.CritEffectSpell = null;
+            }
+        }
+
+        private void chkReplaceCritEffectSpell_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.CritEffectSpellReplace = chkReplaceCritEffectSpell.Checked;
+        }
+
+        private void cmbNextSpell_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbNextSpell.SelectedIndex > 0)
+            {
+                mEditorItem.Combat.NextEffectSpell = SpellBase.Get(SpellBase.IdFromList(cmbNextSpell.SelectedIndex - 1));
+            }
+            else
+            {
+                mEditorItem.Combat.NextEffectSpell = null;
+            }
+        }
+        
+        private void chkReUseValues_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.NextEffectSpellReUseValues = chkReUseValues.Checked;
+        }
+
+        private void nudNextSpellChance_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.NextEffectSpellChance = (int)nudNextSpellChance.Value;
+        }
+
         private void nudScaling_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Combat.Scaling = (int) nudScaling.Value;
@@ -877,6 +1192,11 @@ namespace Intersect.Editor.Forms.Editors
         private void nudCastRange_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Combat.CastRange = (int) nudCastRange.Value;
+        }
+
+        private void chkSquareRange_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.SquareRange = chkSquareRange.Checked;
         }
 
         private void nudCritMultiplier_ValueChanged(object sender, EventArgs e)
@@ -941,6 +1261,10 @@ namespace Intersect.Editor.Forms.Editors
         {
             mEditorItem.CannotCastMessage = txtCannotCast.Text;
         }
+        private void nudEffectChance_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.EffectChance = (int)nudEffectChance.Value;
+        }
 
         #region "Item List - Folders, Searching, Sorting, Etc"
 
@@ -991,8 +1315,12 @@ namespace Intersect.Editor.Forms.Editors
             cmbCooldownGroup.Items.Add(string.Empty);
             cmbCooldownGroup.Items.AddRange(mKnownCooldownGroups.ToArray());
 
-            var items = SpellBase.Lookup.OrderBy(p => p.Value?.Name).Select(pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
-                new KeyValuePair<string, string>(((SpellBase)pair.Value)?.Name ?? Models.DatabaseObject<SpellBase>.Deleted, ((SpellBase)pair.Value)?.Folder ?? ""))).ToArray();
+            var items = SpellBase.Lookup.OrderBy(p => p.Value?.Name).Select(
+                pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
+                new KeyValuePair<string, string>(
+                   TextUtils.FormatEditorName(((SpellBase)pair.Value)?.Name, ((SpellBase)pair.Value)?.EditorName) ?? Models.DatabaseObject<SpellBase>.Deleted,
+                    ((SpellBase)pair.Value)?.Folder ?? ""))
+                ).ToArray();
             lstGameObjects.Repopulate(items, mFolders, btnAlphabetical.Checked, CustomSearch(), txtSearch.Text);
         }
 

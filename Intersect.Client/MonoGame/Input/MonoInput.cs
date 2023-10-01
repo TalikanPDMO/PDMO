@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-
+using Intersect.Client.Core.Controls;
 using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Gwen.Input;
 using Intersect.Client.Framework.Input;
@@ -11,7 +11,7 @@ using Intersect.Logging;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-
+using SharpDX.XInput;
 using Keys = Intersect.Client.Framework.GenericClasses.Keys;
 
 namespace Intersect.Client.MonoGame.Input
@@ -35,6 +35,10 @@ namespace Intersect.Client.MonoGame.Input
         private int mMouseHScroll;
 
         private Game mMyGame;
+
+        //Ajouté par Moussmous pour les controles manette
+        private static XBoxController XboxControllerMonitor = new XBoxController();
+        private State LastGamepadState = XboxControllerMonitor.getState();
 
         public MonoInput(Game myGame)
         {
@@ -125,6 +129,19 @@ namespace Intersect.Client.MonoGame.Input
             if (mKeyDictionary.ContainsKey(key))
             {
                 if (mLastKeyboardState.IsKeyDown(mKeyDictionary[key]))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public override bool KeyUp(Keys key)
+        {
+            if (mKeyDictionary.ContainsKey(key))
+            {
+                if (mLastKeyboardState.IsKeyUp(mKeyDictionary[key]))
                 {
                     return true;
                 }
@@ -232,6 +249,14 @@ namespace Intersect.Client.MonoGame.Input
 
                 mLastKeyboardState = kbState;
                 mLastMouseState = state;
+
+                //On va essayer de rajouter les controles manette ici
+                if (XboxControllerMonitor.StateChanged(LastGamepadState))
+                {
+                    Core.Input.GamepadInteraction(LastGamepadState);
+                }
+                LastGamepadState = XboxControllerMonitor.getState();
+
             }
             else
             {
@@ -268,6 +293,20 @@ namespace Intersect.Client.MonoGame.Input
             return; //no on screen keyboard for pc clients
         }
 
+        public override bool MouseButtonUp(MouseButtons mb)
+        {
+            switch (mb)
+            {
+                case MouseButtons.Left:
+                    return mLastMouseState.LeftButton == ButtonState.Released;
+                case MouseButtons.Right:
+                    return mLastMouseState.RightButton == ButtonState.Released;
+                case MouseButtons.Middle:
+                    return mLastMouseState.MiddleButton == ButtonState.Released;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(mb), mb, null);
+            }
+        }
     }
 
 }

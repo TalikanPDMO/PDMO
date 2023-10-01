@@ -41,7 +41,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbWarpMap.Items.Add(MapList.OrderedMaps[i].Name);
             }
 
-            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
+            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click, null);
         }
         private void AssignEditorItem(Guid id)
         {
@@ -167,6 +167,9 @@ namespace Intersect.Editor.Forms.Editors
 
                 cmbFolder.Text = mEditorItem.Folder;
 
+                cmbType1.SelectedIndex = mEditorItem.ElementalTypes[0];
+                cmbType2.SelectedIndex = mEditorItem.ElementalTypes[1];
+
                 //Combat
                 nudDamage.Value = mEditorItem.Damage;
                 nudCritChance.Value = mEditorItem.CritChance;
@@ -175,6 +178,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbDamageType.SelectedIndex = mEditorItem.DamageType;
                 cmbScalingStat.SelectedIndex = mEditorItem.ScalingStat;
                 cmbAttackAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.AttackAnimationId) + 1;
+                nudAttackRange.Value = mEditorItem.AttackRange;
                 cmbAttackSpeedModifier.SelectedIndex = mEditorItem.AttackSpeedModifier;
                 nudAttackSpeedValue.Value = mEditorItem.AttackSpeedValue;
 
@@ -292,9 +296,9 @@ namespace Intersect.Editor.Forms.Editors
             cmbFace.Items.AddRange(GameContentManager.GetSmartSortedTextureNames(GameContentManager.TextureType.Face));
             cmbSpawnItem.Items.Clear();
             cmbSpawnItem.Items.Add(Strings.General.none);
-            cmbSpawnItem.Items.AddRange(ItemBase.Names);
+            cmbSpawnItem.Items.AddRange(ItemBase.EditorFormatNames);
             cmbSpell.Items.Clear();
-            cmbSpell.Items.AddRange(SpellBase.Names);
+            cmbSpell.Items.AddRange(SpellBase.EditorFormatNames);
             nudLevel.Maximum = Options.MaxLevel;
             cmbAttackAnimation.Items.Clear();
             cmbAttackAnimation.Items.Add(Strings.General.none);
@@ -375,6 +379,17 @@ namespace Intersect.Editor.Forms.Editors
             btnAddSpell.Text = Strings.ClassEditor.addspell;
             btnRemoveSpell.Text = Strings.ClassEditor.removespell;
 
+            grpTypes.Text = Strings.ClassEditor.elementaltypes;
+            lblType1.Text = Strings.ClassEditor.type1;
+            lblType2.Text = Strings.ClassEditor.type2;
+            cmbType1.Items.Clear();
+            cmbType2.Items.Clear();
+            for (var i = 0; i < Strings.Combat.elementaltypes.Count; i++)
+            {
+                cmbType1.Items.Add(Strings.Combat.elementaltypes[i]);
+                cmbType2.Items.Add(Strings.Combat.elementaltypes[i]);
+            }
+
             grpRegen.Text = Strings.ClassEditor.regen;
             lblHpRegen.Text = Strings.ClassEditor.hpregen;
             lblManaRegen.Text = Strings.ClassEditor.mpregen;
@@ -394,6 +409,7 @@ namespace Intersect.Editor.Forms.Editors
             lblScalingStat.Text = Strings.ClassEditor.scalingstat;
             lblScalingAmount.Text = Strings.ClassEditor.scalingamount;
             lblAttackAnimation.Text = Strings.ClassEditor.attackanimation;
+            lblAttackRange.Text = Strings.ClassEditor.attackrange;
 
             grpAttackSpeed.Text = Strings.NpcEditor.attackspeed;
             lblAttackSpeedModifier.Text = Strings.NpcEditor.attackspeedmodifier;
@@ -647,9 +663,9 @@ namespace Intersect.Editor.Forms.Editors
             gfx.FillRectangle(Brushes.Black, new Rectangle(0, 0, picSprite.Width, picSprite.Height));
             if (cmbSprite.SelectedIndex > 0)
             {
-                if (File.Exists("resources/entities/" + cmbSprite.Text))
+                if (File.Exists(GameContentManager.GraphResFolder + "/entities/" + cmbSprite.Text))
                 {
-                    var img = Image.FromFile("resources/entities/" + cmbSprite.Text);
+                    var img = Image.FromFile(GameContentManager.GraphResFolder + "/entities/" + cmbSprite.Text);
                     gfx.DrawImage(
                         img, new Rectangle(0, 0, img.Width / Options.Instance.Sprites.NormalFrames, img.Height / Options.Instance.Sprites.Directions),
                         new Rectangle(0, 0, img.Width / Options.Instance.Sprites.NormalFrames, img.Height / Options.Instance.Sprites.Directions), GraphicsUnit.Pixel
@@ -667,9 +683,9 @@ namespace Intersect.Editor.Forms.Editors
             gfx.FillRectangle(Brushes.Black, new Rectangle(0, 0, picSprite.Width, picSprite.Height));
             if (cmbFace.SelectedIndex > 0)
             {
-                if (File.Exists("resources/faces/" + cmbFace.Text))
+                if (File.Exists(GameContentManager.GraphResFolder + "/faces/" + cmbFace.Text))
                 {
-                    var img = Image.FromFile("resources/faces/" + cmbFace.Text);
+                    var img = Image.FromFile(GameContentManager.GraphResFolder + "/faces/" + cmbFace.Text);
                     gfx.DrawImage(
                         img, new Rectangle(0, 0, img.Width, img.Height), new Rectangle(0, 0, img.Width, img.Height),
                         GraphicsUnit.Pixel
@@ -911,9 +927,23 @@ namespace Intersect.Editor.Forms.Editors
                 AnimationBase.Get(AnimationBase.IdFromList(cmbAttackAnimation.SelectedIndex - 1));
         }
 
+        private void nudAttackRange_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.AttackRange = (byte)nudAttackRange.Value;
+        }
+
         private void cmbDamageType_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.DamageType = cmbDamageType.SelectedIndex;
+        }
+        private void cmbType1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ElementalTypes[0] = cmbType1.SelectedIndex;
+        }
+
+        private void cmbType2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ElementalTypes[1] = cmbType2.SelectedIndex;
         }
 
         private void cmbScalingStat_SelectedIndexChanged(object sender, EventArgs e)

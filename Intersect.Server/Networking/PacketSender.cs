@@ -88,6 +88,9 @@ namespace Intersect.Server.Networking
                 var player = client.Entity;
                 player.RecalculateStatsAndPoints();
                 player.UnequipInvalidItems();
+                player.RecalculateKnownSpells();
+                player.RecalculateElementalTypes();
+                
                 player.InGame = true;
 
                 SendTimeTo(client);
@@ -336,14 +339,14 @@ namespace Intersect.Server.Networking
         }
 
         //EntityPacket
-        public static void SendEntityDataTo(Player player, Entity en)
+        public static void SendEntityDataTo(Player player, Entity en, bool isSpawn = false)
         {
             if (en == null)
             {
                 return;
             }
 
-            var packet = en.EntityPacket(null, player);
+            var packet = en.EntityPacket(null, player, isSpawn);
             packet.IsSelf = en == player;
 
             player.SendPacket(packet);
@@ -420,7 +423,7 @@ namespace Intersect.Server.Networking
         }
 
         //EntityDataPacket
-        public static void SendEntityDataToProximity(Entity en, Player except = null)
+        public static void SendEntityDataToProximity(Entity en, Player except = null, bool isSpawn = false)
         {
             if (en == null)
             {
@@ -439,7 +442,7 @@ namespace Intersect.Server.Networking
                     {
                         if (player != except)
                         {
-                            SendEntityDataTo(player, en);
+                            SendEntityDataTo(player, en, isSpawn);
                         }
                     }
                 }
@@ -507,7 +510,7 @@ namespace Intersect.Server.Networking
             client.Send(
                 new EntityPositionPacket(
                     en.Id, en.GetEntityType(), en.MapId, (byte) en.X, (byte) en.Y, (byte) en.Dir, en.Passable,
-                    en.HideName
+                    en.HideName, en.Running
                 )
             );
         }
@@ -524,7 +527,7 @@ namespace Intersect.Server.Networking
                 en.MapId,
                 new EntityPositionPacket(
                     en.Id, en.GetEntityType(), en.MapId, (byte) en.X, (byte) en.Y, (byte) en.Dir, en.Passable,
-                    en.HideName
+                    en.HideName, en.Running
                 )
             );
         }
@@ -765,7 +768,7 @@ namespace Intersect.Server.Networking
         }
 
         //EntityMovePacket
-        public static void SendEntityMove(Entity en, bool correction = false)
+        public static void SendEntityMove(Entity en, int moveDirection, bool correction = false)
         {
             var map = en?.Map;
             if (map != null)
@@ -775,17 +778,17 @@ namespace Intersect.Server.Networking
                     SendDataToProximity(
                         en.MapId,
                         new EntityMovePacket(
-                            en.Id, en.GetEntityType(), en.MapId, (byte)en.X, (byte)en.Y, (byte)en.Dir, correction
+                            en.Id, en.GetEntityType(), en.MapId, (byte)en.X, (byte)en.Y, (byte)moveDirection, correction, en.Running
                         ), null, TransmissionMode.Any
                     );
                     return;
                 }
-                map.AddBatchedMovement(en, correction, null);
+                map.AddBatchedMovement(en, correction, moveDirection, null);
             }
         }
 
         //EntityMovePacket
-        public static void SendEntityMoveTo(Player player, Entity en, bool correction = false)
+        public static void SendEntityMoveTo(Player player, Entity en, int moveDirection, bool correction = false)
         {
             var map = en?.Map;
             if (map != null)
@@ -794,12 +797,12 @@ namespace Intersect.Server.Networking
                 {
                     player.SendPacket(
                         new EntityMovePacket(
-                            en.Id, en.GetEntityType(), en.MapId, (byte)en.X, (byte)en.Y, (byte)en.Dir, correction
+                            en.Id, en.GetEntityType(), en.MapId, (byte)en.X, (byte)en.Y, (byte)moveDirection, correction, en.Running
                         )
                     );
                     return;
                 }
-                map.AddBatchedMovement(en, correction, player);
+                map.AddBatchedMovement(en, correction, moveDirection, player);
                 return;
             }
         }
@@ -907,9 +910,9 @@ namespace Intersect.Server.Networking
         }
 
         //EntityDiePacket
-        public static void SendEntityDie(Entity en)
+        public static void SendEntityDie(Entity en, bool isDespawn = false)
         {
-            SendDataToProximity(en.MapId, new EntityDiePacket(en.Id, en.GetEntityType(), en.MapId));
+            SendDataToProximity(en.MapId, new EntityDiePacket(en.Id, en.GetEntityType(), en.MapId, isDespawn));
         }
 
         //EntityDirectionPacket
@@ -1485,6 +1488,12 @@ namespace Intersect.Server.Networking
             player.SendPacket(new HidePicturePacket());
         }
 
+        //ShowPopupPacket
+        public static void SendShowPopup(Player player, string picture, string title, string text, int hideTime, byte opacity, string face, sbyte[] popupLayout)
+        {
+            player.SendPacket(new ShowPopupPacket(picture, title, text, hideTime, opacity, face, popupLayout));
+        }
+
         //ShopPacket
         public static void SendOpenShop(Player player, ShopBase shop)
         {
@@ -1660,6 +1669,10 @@ namespace Intersect.Server.Networking
                 {
                     SendQuestEventsTo(client, (QuestBase) obj);
                 }
+                else if (obj.Type == GameObjectType.Npc)
+                {
+                    SendNpcEventsTo(client, (NpcBase)obj);
+                }
             }
 
             if (packetList == null)
@@ -1682,6 +1695,23 @@ namespace Intersect.Server.Networking
             foreach (var tsk in qst.Tasks)
             {
                 SendEventIfExists(client, tsk.CompletionEvent);
+            }
+            foreach (var link in qst.TaskLinks)
+            {
+                SendEventIfExists(client, link.CompletionEvent);
+            }
+            foreach (var alt in qst.TaskAlternatives)
+            {
+                SendEventIfExists(client, alt.CompletionEvent);
+            }
+        }
+
+        //GameObjectPacket
+        public static void SendNpcEventsTo(Client client, NpcBase npc)
+        {
+            foreach (var phase in npc.NpcPhases)
+            {
+                SendEventIfExists(client, phase.BeginEvent);
             }
         }
 
@@ -1797,6 +1827,7 @@ namespace Intersect.Server.Networking
             }
 
             player.SendPacket(new PartyPacket(memberPackets));
+            ExpBoost.SendPlayerBoost(player, EventTargetType.Party);
         }
 
         //PartyUpdatePacket
@@ -2117,6 +2148,21 @@ namespace Intersect.Server.Networking
                     }
                 }
             }
+        }
+
+        // ExpBoostPacket
+        public static void SendExpBoost(Player player, ExpBoost boost, bool disabled = false)
+        {
+            // SourcePlayer = null means the boost is disabled (mainly for party boosts)
+            player.SendPacket(new ExpBoostPacket(boost.Title, disabled ? null : boost.SourcePlayer.Name, boost.TargetType,
+                boost.AmountKill, boost.ExpireTimeKill - Globals.Timing.Milliseconds,
+                boost.AmountQuest, boost.ExpireTimeQuest - Globals.Timing.Milliseconds));
+        }
+
+        // ShowStadiumDialogPacket
+        public static void SendMatchmakingStadium(Player player, PvpStadiumState stadiumState, bool isDeclinedNotif=false)
+        {
+            player?.SendPacket(new MatchmakingStadiumPacket(isDeclinedNotif, stadiumState, player.StadiumWins, player.StadiumLosses));
         }
 
     }

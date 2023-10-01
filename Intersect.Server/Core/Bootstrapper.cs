@@ -239,6 +239,7 @@ namespace Intersect.Server.Core
             ExportDependencies(args);
 
             Formulas.LoadFormulas();
+            Globals.InitCalculatedSpeeds(Options.Player.MaxSpeedStat);
 
             CustomColors.Load();
 

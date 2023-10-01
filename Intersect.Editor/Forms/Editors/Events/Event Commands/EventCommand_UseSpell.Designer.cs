@@ -30,6 +30,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpUseSpell = new DarkUI.Controls.DarkGroupBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.cmbTarget = new DarkUI.Controls.DarkComboBox();
@@ -40,7 +41,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblSource = new System.Windows.Forms.Label();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
-            this.label3 = new System.Windows.Forms.Label();
             this.grpUseSpell.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -62,15 +62,25 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpUseSpell.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpUseSpell.Location = new System.Drawing.Point(3, 4);
             this.grpUseSpell.Name = "grpUseSpell";
-            this.grpUseSpell.Size = new System.Drawing.Size(257, 240);
+            this.grpUseSpell.Size = new System.Drawing.Size(320, 240);
             this.grpUseSpell.TabIndex = 18;
             this.grpUseSpell.TabStop = false;
             this.grpUseSpell.Text = "Use Spell:";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(53, 85);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(225, 13);
+            this.label3.TabIndex = 29;
+            this.label3.Text = "Rule 3 : The spell range is taken into account.";
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(5, 52);
+            this.label2.Location = new System.Drawing.Point(52, 52);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(242, 26);
             this.label2.TabIndex = 28;
@@ -80,7 +90,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(5, 20);
+            this.label1.Location = new System.Drawing.Point(52, 20);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(240, 26);
             this.label1.TabIndex = 27;
@@ -102,7 +112,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbTarget.FormattingEnabled = true;
             this.cmbTarget.Location = new System.Drawing.Point(64, 175);
             this.cmbTarget.Name = "cmbTarget";
-            this.cmbTarget.Size = new System.Drawing.Size(161, 21);
+            this.cmbTarget.Size = new System.Drawing.Size(250, 21);
             this.cmbTarget.TabIndex = 26;
             this.cmbTarget.Text = null;
             this.cmbTarget.TextPadding = new System.Windows.Forms.Padding(2);
@@ -131,7 +141,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbSpell.FormattingEnabled = true;
             this.cmbSpell.Location = new System.Drawing.Point(64, 118);
             this.cmbSpell.Name = "cmbSpell";
-            this.cmbSpell.Size = new System.Drawing.Size(161, 21);
+            this.cmbSpell.Size = new System.Drawing.Size(250, 21);
             this.cmbSpell.TabIndex = 24;
             this.cmbSpell.Text = null;
             this.cmbSpell.TextPadding = new System.Windows.Forms.Padding(2);
@@ -161,7 +171,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbSource.FormattingEnabled = true;
             this.cmbSource.Location = new System.Drawing.Point(64, 146);
             this.cmbSource.Name = "cmbSource";
-            this.cmbSource.Size = new System.Drawing.Size(161, 21);
+            this.cmbSource.Size = new System.Drawing.Size(250, 21);
             this.cmbSource.TabIndex = 22;
             this.cmbSource.Text = null;
             this.cmbSource.TextPadding = new System.Windows.Forms.Padding(2);
@@ -195,16 +205,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(6, 85);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(225, 13);
-            this.label3.TabIndex = 29;
-            this.label3.Text = "Rule 3 : The spell range is taken into account.";
-            // 
             // EventCommandUseSpell
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -213,7 +213,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpUseSpell);
             this.Name = "EventCommandUseSpell";
-            this.Size = new System.Drawing.Size(264, 251);
+            this.Size = new System.Drawing.Size(326, 251);
             this.grpUseSpell.ResumeLayout(false);
             this.grpUseSpell.PerformLayout();
             this.ResumeLayout(false);

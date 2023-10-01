@@ -20,6 +20,12 @@ namespace Intersect.GameObjects
 
         [NotMapped] public ConditionLists UsageRequirements = new ConditionLists();
 
+        public string EditorName { get; set; } = "";
+        public static string[] EditorFormatNames => Lookup.OrderBy(p => p.Value?.Name)
+            .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((ItemBase)pair.Value)?.EditorName) ?? Deleted)
+            .ToArray();
+
+
         public string CannotUseMessage { get; set; } = "";
 
         public ItemBase()
@@ -56,6 +62,10 @@ namespace Intersect.GameObjects
             set => AttackAnimationId = value?.Id ?? Guid.Empty;
         }
 
+        public byte AttackRange { get; set; } = 0;
+
+        public bool AdaptRange { get; set; } = false;
+
         [Column("EquipmentAnimation")]
         public Guid EquipmentAnimationId { get; set; }
 
@@ -77,6 +87,21 @@ namespace Intersect.GameObjects
         /// Defines the percentage chance an item will drop upon player Death.
         /// </summary>
         public int DropChanceOnDeath { get; set; }
+
+        /// <summary>
+        /// Defines the minimum amount to lose when a player drop an item on death.
+        /// </summary>
+        public int MinLossOnDeath { get; set; } = 0;
+
+        /// <summary>
+        /// Defines the maximum amount to lose when a player drop an item on death.
+        /// </summary>
+        public int MaxLossOnDeath { get; set; } = 0;
+
+        /// <summary>
+        /// Defines is the loss amount is a percentage or a fixed value
+        /// </summary>
+        public bool IsLossPercentage { get; set; } = true;
 
         /// <summary>
         /// Defines whether or not this item can be traded by a player to another player.
@@ -107,6 +132,19 @@ namespace Intersect.GameObjects
 
         public double CritMultiplier { get; set; } = 1.5;
 
+        [Column("CritEffectSpell")]
+        public Guid CritEffectSpellId { get; set; } = Guid.Empty;
+
+        [NotMapped]
+        [JsonIgnore]
+        public SpellBase CritEffectSpell
+        {
+            get => SpellBase.Get(CritEffectSpellId);
+            set => CritEffectSpellId = value?.Id ?? Guid.Empty;
+        }
+
+        public bool CritEffectSpellReplace { get; set; } = false;
+
         public int Cooldown { get; set; }
 
         /// <summary>
@@ -127,6 +165,8 @@ namespace Intersect.GameObjects
         public int Damage { get; set; }
 
         public int DamageType { get; set; }
+
+        public int ElementalType { get; set; } = 0;
 
         public int AttackSpeedModifier { get; set; }
 

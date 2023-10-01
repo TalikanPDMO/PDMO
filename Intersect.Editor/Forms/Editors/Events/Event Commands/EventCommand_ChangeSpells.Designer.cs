@@ -53,7 +53,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpChangeSpells.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpChangeSpells.Location = new System.Drawing.Point(3, 3);
             this.grpChangeSpells.Name = "grpChangeSpells";
-            this.grpChangeSpells.Size = new System.Drawing.Size(193, 112);
+            this.grpChangeSpells.Size = new System.Drawing.Size(320, 112);
             this.grpChangeSpells.TabIndex = 17;
             this.grpChangeSpells.TabStop = false;
             this.grpChangeSpells.Text = "Change Player Spells:";
@@ -63,14 +63,20 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.cmbSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.cmbSpell.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbSpell.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbSpell.DrawDropdownHoverOutline = false;
+            this.cmbSpell.DrawFocusRectangle = false;
             this.cmbSpell.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cmbSpell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSpell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbSpell.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbSpell.FormattingEnabled = true;
             this.cmbSpell.Location = new System.Drawing.Point(64, 46);
             this.cmbSpell.Name = "cmbSpell";
-            this.cmbSpell.Size = new System.Drawing.Size(115, 21);
+            this.cmbSpell.Size = new System.Drawing.Size(250, 21);
             this.cmbSpell.TabIndex = 24;
+            this.cmbSpell.Text = null;
+            this.cmbSpell.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // lblSpell
             // 
@@ -86,9 +92,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbAction.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.cmbAction.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.cmbAction.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbAction.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbAction.DrawDropdownHoverOutline = false;
+            this.cmbAction.DrawFocusRectangle = false;
             this.cmbAction.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cmbAction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbAction.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbAction.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbAction.FormattingEnabled = true;
             this.cmbAction.Items.AddRange(new object[] {
             "Add",
@@ -97,6 +107,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbAction.Name = "cmbAction";
             this.cmbAction.Size = new System.Drawing.Size(115, 21);
             this.cmbAction.TabIndex = 22;
+            this.cmbAction.Text = "Add";
+            this.cmbAction.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // lblAction
             // 
@@ -127,7 +139,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // EventCommand_ChangeSpells
+            // EventCommandChangeSpells
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -135,7 +147,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpChangeSpells);
             this.Name = "EventCommandChangeSpells";
-            this.Size = new System.Drawing.Size(205, 118);
+            this.Size = new System.Drawing.Size(330, 118);
             this.grpChangeSpells.ResumeLayout(false);
             this.grpChangeSpells.PerformLayout();
             this.ResumeLayout(false);

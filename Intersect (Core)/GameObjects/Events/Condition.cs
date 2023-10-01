@@ -1,5 +1,6 @@
 ﻿using System;
-
+using System.Collections.Generic;
+using System.ComponentModel;
 using Intersect.Enums;
 
 namespace Intersect.GameObjects.Events
@@ -43,6 +44,14 @@ namespace Intersect.GameObjects.Events
         InGuildWithRank,
 
         MapZoneTypeIs,
+
+        FightingNPCPhase,
+
+        FightingNPCStats,
+
+        FightingNPCAttackType,
+
+        InPartyWithRole
 
     }
 
@@ -290,6 +299,83 @@ namespace Intersect.GameObjects.Events
         /// Defines the map Zone Type to compare to.
         /// </summary>
         public MapZones ZoneType { get; set; }
+    }
+
+    /// <summary>
+    /// Defines the condition class used when checking if a player is fighting with a specific NPC.
+    /// </summary>
+    public class FightingNPCPhase : Condition
+    {
+        /// <summary>
+        /// Defines the type of condition.
+        /// </summary>
+        public override ConditionTypes Type { get; } = ConditionTypes.FightingNPCPhase;
+
+        public Guid NpcId { get; set; }
+
+        public NpcPhasesProgressState Progress { get; set; } = NpcPhasesProgressState.OnNonePhase;
+
+        public Guid PhaseId { get; set; }
+
+        public bool OrNone { get; set; } = false;
+
+        public bool Any { get; set; } = false;
+
+    }
+
+    public class FightingNPCStats : Condition
+    {
+        /// <summary>
+        /// Defines the type of condition.
+        /// </summary>
+        public override ConditionTypes Type { get; } = ConditionTypes.FightingNPCStats;
+
+        public Guid NpcId { get; set; }
+
+        public Dictionary<int, int[]> Percents { get; set; } = new Dictionary<int, int[]>();
+
+        public bool Any { get; set; } = false;
+
+    }
+
+    public class FightingNPCAttackType : Condition
+    {
+        /// <summary>
+        /// Defines the type of condition.
+        /// </summary>
+        public override ConditionTypes Type { get; } = ConditionTypes.FightingNPCAttackType;
+
+        public Guid NpcId { get; set; }
+
+        [DefaultValue(-1)]
+        public int AttackType { get; set; } = -1;
+
+        public bool Any { get; set; } = false;
+
+        public Guid AttackId { get; set; }
+
+        [DefaultValue(-1)]
+        public int DamageType { get; set; } = -1;
+
+        [DefaultValue(-1)]
+        public int ElementalType { get; set; } = -1;
+    }
+
+    /// <summary>
+    /// Defines the condition class used when checking whether a player is in a party with a specific size and a specific role (leader, member, other ??)
+    /// </summary>
+    public class InPartyWithRole : Condition
+    {
+        /// <summary>
+        /// Defines the type of condition
+        /// </summary>
+        public override ConditionTypes Type { get; } = ConditionTypes.InPartyWithRole;
+
+        public VariableComparators Comparator { get; set; } = VariableComparators.Equal;
+
+        public int Size { get; set; } = 1;
+
+        public int Role { get; set; } = 0;
     }
 
     public class VariableCompaison

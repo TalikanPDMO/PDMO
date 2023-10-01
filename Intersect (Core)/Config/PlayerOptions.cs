@@ -1,4 +1,6 @@
-﻿namespace Intersect.Config
+﻿using System;
+
+namespace Intersect.Config
 {
 
     public class PlayerOptions
@@ -50,11 +52,6 @@
         public int TradeRange = 6;
 
         /// <summary>
-        /// Unlinks the timers for combat and movement to facilitate complex combat (e.g. kiting)
-        /// </summary>
-        public bool AllowCombatMovement = true;
-
-        /// <summary>
         /// Configures whether or not the level of a player is shown next to their name.
         /// </summary>
         public bool ShowLevelByName = false;
@@ -68,6 +65,43 @@
         /// If true, it will remove the associated exp, otherwise you will lose the exp based on the exp required to level up.
         /// </summary>
         public bool ExpLossFromCurrentExp = true;
+
+        /// <summary>
+        /// Max duration (in ms) that a player need to hold when pressing a direction if only want to turn and not to move
+        /// </summary>
+        public int TurnOnlyHeldDuration = 60;
+
+        /// <summary>
+        /// Amount of time (in ms) required to traverse 1 tile when a player is walking
+        /// </summary>
+        public int WalkingSpeed = 400;
+
+        /// <summary>
+        /// Coefficients for the 3 speeds formula : i0 - i2 * (x-i3) 
+        /// </summary>
+        public float[] SpeedFormulaCoeffs = {600, 25, 1, 300, 2.5f, 13, 230, 6, 41};
+
+        public int MaxSpeedStat = 60;
+
+        /// <summary>
+        /// The id of the animation to use for the trail when a player is running horizontaly
+        /// </summary>
+        public Guid HorizontalRunningTrailAnimationId = Guid.Empty;
+
+        /// <summary>
+        /// The number of pixel we want to offset the animation from the center of the tile
+        /// </summary>
+        public int HorizontalRunningTrailOffset = 0;
+
+        /// <summary>
+        /// The id of the animation to use for the trail when a player is running verticaly
+        /// </summary>
+        public Guid VerticalRunningTrailAnimationId = Guid.Empty;
+
+        /// <summary>
+        /// The number of pixel we want to offset the animation from the center of the tile
+        /// </summary>
+        public int VerticalRunningTrailOffset = 0;
 
     }
 

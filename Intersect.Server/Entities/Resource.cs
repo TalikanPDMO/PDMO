@@ -38,6 +38,10 @@ namespace Intersect.Server.Entities
             RestoreVital(Vitals.Health);
             Passable = resource.WalkableBefore;
             HideName = true;
+            for (var i = 0; i < ResourceBase.MAX_ELEMENTAL_TYPES; i++)
+            {
+                ElementalTypes[i] = (ElementalType)Base.ElementalTypes[i];
+            }
         }
 
         public void Destroy(bool dropItems = false, Entity killer = null)
@@ -51,7 +55,7 @@ namespace Intersect.Server.Entities
             PacketSender.SendEntityLeave(this);
         }
 
-        public override void Die(bool dropItems = true, Entity killer = null)
+        public override void Die(bool dropItems = true, Entity killer = null, bool isDespawn = false)
         {
             lock (EntityLock)
             {
@@ -92,14 +96,54 @@ namespace Intersect.Server.Entities
 
             //Give Resource Drops
             var itemSlot = 0;
+            var quantity = 0;
             foreach (var drop in Base.Drops)
             {
-                if (Randomization.Next(1, 10001) <= drop.Chance * 100 && ItemBase.Get(drop.ItemId) != null)
+                if (ItemBase.Get(drop.ItemId) != null)
                 {
-                    var slot = new InventorySlot(itemSlot);
-                    slot.Set(new Item(drop.ItemId, drop.Quantity));
-                    Items.Add(slot);
-                    itemSlot++;
+                    quantity = drop.Quantity;
+                    // Check if quantity should be randomized or fixed
+                    if (drop.Random)
+                    {
+                        quantity = Randomization.Next(0, quantity + 1);
+                    }
+
+                    // Iterative mode, loop using the maximum quantity
+                    if (drop.Iterative)
+                    {
+                        // No need to iterate if the drop chance is 100%
+                        if (drop.Chance != 100.00)
+                        {
+                            int final_quantity = 0;
+                            for (int i = 0; i < quantity; i++)
+                            {
+                                // One chance to loot the item for each iteration
+                                if (Randomization.Next(1, 100001) <= (drop.Chance * 1000))
+                                {
+                                    final_quantity++;
+                                }
+                            }
+                            // Change the quantity variable for spawning the good final iterative amount
+                            quantity = final_quantity;
+                        }
+                    }
+                    else
+                    {
+                        // Only one chance to spawn all the quantity, go to next iteration if no drop
+                        if (Randomization.Next(1, 100001) > (drop.Chance * 1000))
+                        {
+                            continue;
+                        }
+                    }
+
+                    // Add the drop if the final quantity is not 0
+                    if (quantity != 0)
+                    {
+                        var slot = new InventorySlot(itemSlot);
+                        slot.Set(new Item(drop.ItemId, quantity));
+                        Items.Add(slot);
+                        itemSlot++;
+                    }
                 }
             }
 
@@ -206,7 +250,7 @@ namespace Intersect.Server.Entities
             return IsDead() & Base.WalkableAfter || !IsDead() && Base.WalkableBefore;
         }
 
-        public override EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null)
+        public override EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null, bool isSpawn = false)
         {
             if (packet == null)
             {
@@ -218,6 +262,7 @@ namespace Intersect.Server.Entities
             var pkt = (ResourceEntityPacket) packet;
             pkt.ResourceId = Base.Id;
             pkt.IsDead = IsDead();
+            pkt.ElementalTypes = GetElementalTypes();
 
             return pkt;
         }

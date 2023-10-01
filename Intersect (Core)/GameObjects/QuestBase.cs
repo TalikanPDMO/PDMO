@@ -35,6 +35,8 @@ namespace Intersect.GameObjects
 
         public int TaskProgress;
 
+        public Dictionary<Guid, int> TasksProgress = new Dictionary<Guid, int>();
+
         public QuestProgress(string data)
         {
             JsonConvert.PopulateObject(data, this);
@@ -124,6 +126,26 @@ namespace Intersect.GameObjects
             set => Tasks = JsonConvert.DeserializeObject<List<QuestTask>>(value);
         }
 
+        [NotMapped] public List<TaskLink> TaskLinks = new List<TaskLink>();
+
+        [Column("TaskLinks")]
+        [JsonIgnore]
+        public string TaskLinksJson
+        {
+            get => JsonConvert.SerializeObject(TaskLinks);
+            set => TaskLinks = JsonConvert.DeserializeObject<List<TaskLink>>(value);
+        }
+
+        [NotMapped] public List<TaskAlternative> TaskAlternatives = new List<TaskAlternative>();
+
+        [Column("TaskAlternatives")]
+        [JsonIgnore]
+        public string TaskAlternativesJson
+        {
+            get => JsonConvert.SerializeObject(TaskAlternatives);
+            set => TaskAlternatives = JsonConvert.DeserializeObject<List<TaskAlternative>>(value);
+        }
+
         [NotMapped]
         public string LocalEventsJson
         {
@@ -206,6 +228,79 @@ namespace Intersect.GameObjects
 
             return null;
         }
+        public TaskLink FindLink(Guid taskId)
+        {
+           foreach (var tasklink in TaskLinks)
+            {
+                if (tasklink.TasksList.Contains(taskId))
+                {
+                    return tasklink;
+                }
+            }
+            return null;
+        }
+
+        public TaskLink ContainsLink(Guid linkId)
+        {
+            foreach (var tasklink in TaskLinks)
+            {
+                if (tasklink.Id == linkId)
+                {
+                    return tasklink;
+                }
+            }
+            return null;
+        }
+
+        public bool IsTaskLinked(Guid taskId1, Guid taskId2)
+        {
+            foreach(var link in TaskLinks)
+            {
+                if (link.TasksList.Contains(taskId1) && link.TasksList.Contains(taskId2))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool IsTaskAlternative(Guid taskId1, Guid taskId2)
+        {
+            foreach (var alt in TaskAlternatives)
+            {
+                if (alt.AlternativesList.Contains(taskId1) && alt.AlternativesList.Contains(taskId2))
+                {
+                    return true;
+                }
+                var link1 = FindLink(taskId1);
+                if (link1 != null && alt.AlternativesList.Contains(link1.Id) && alt.AlternativesList.Contains(taskId2))
+                {
+                    return true;
+                }
+                var link2 = FindLink(taskId2);
+                if (link2 != null && alt.AlternativesList.Contains(link2.Id) && alt.AlternativesList.Contains(taskId1))
+                {
+                    return true;
+                }
+                if (link1 != null && link2 != null && alt.AlternativesList.Contains(link1.Id) && alt.AlternativesList.Contains(link2.Id))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public TaskAlternative FindAlternative(Guid linkOrtaskId)
+        {
+            foreach (var taskalt in TaskAlternatives)
+            {
+                if (taskalt.AlternativesList.Contains(linkOrtaskId))
+                {
+                    return taskalt;
+                }
+            }
+            return null;
+        }
 
         public class QuestTask
         {
@@ -257,12 +352,106 @@ namespace Intersect.GameObjects
 
                         break;
                 }
-
                 return taskString;
+                
+            }
+
+            public override string ToString()
+            {
+                Dictionary<int, LocalizedString> descriptions = new Dictionary<int, LocalizedString>
+                {
+                    {0, @"Event Driven - {00}"},
+                    {1, @"Gather Items [{00} x{01}] - {02}"},
+                    {2, @"Kill Npc(s) [{00} x{01}] - {02}"},
+                };
+                return GetTaskString(descriptions);
             }
 
         }
 
+        public class TaskLink
+        {
+            public TaskLink(Guid id)
+            {
+                Id = id;
+                Name = "New Name";
+            }
+
+            public Guid Id { get; set; }
+
+            public string Name { get; set; }
+
+            public string Description { get; set; } = "";
+
+            public Guid CompletionEventId { get; set; }
+
+            [JsonIgnore]
+            public EventBase CompletionEvent
+            {
+                get => EventBase.Get(CompletionEventId);
+                set => CompletionEventId = value.Id;
+            }
+
+            [NotMapped] [JsonIgnore] public EventBase EditingEvent;
+
+            [NotMapped]
+            public List<Guid> TasksList { get; set; } = new List<Guid>();
+
+            [Column("TasksList")]
+            [JsonIgnore]
+            public string JsonTasksList
+            {
+                get => JsonConvert.SerializeObject(TasksList);
+                set => TasksList = JsonConvert.DeserializeObject<List<Guid>>(value);
+            }
+
+            public override string ToString()
+            {
+                return ("(L) " + Name);
+            }
+        }
+
+        public class TaskAlternative
+        {
+            public TaskAlternative(Guid id)
+            {
+                Id = id;
+                Name = "New Name";
+            }
+
+            public Guid Id { get; set; }
+
+            public string Name { get; set; }
+
+            public string Description { get; set; } = "";
+
+            public Guid CompletionEventId { get; set; }
+
+            [JsonIgnore]
+            public EventBase CompletionEvent
+            {
+                get => EventBase.Get(CompletionEventId);
+                set => CompletionEventId = value.Id;
+            }
+
+            [NotMapped] [JsonIgnore] public EventBase EditingEvent;
+
+            [NotMapped]
+            public List<Guid> AlternativesList { get; set; } = new List<Guid>();
+
+            [Column("AlternativesList")]
+            [JsonIgnore]
+            public string JsonAlternativesList
+            {
+                get => JsonConvert.SerializeObject(AlternativesList);
+                set => AlternativesList = JsonConvert.DeserializeObject<List<Guid>>(value);
+            }
+
+            public override string ToString()
+            {
+                return ("(A) " + Name);
+            }
+        }
     }
 
 }

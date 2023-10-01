@@ -449,6 +449,7 @@
     <Compile Include="Database\DbLoggerProvider.cs" />
     <Compile Include="Database\GameData\GameContext.cs" />
     <Compile Include="Database\GameData\IGameContext.cs" />
+    <Compile Include="Database\GameData\Migrations\FixQuestTaskCompletionEventMigration.cs" />
     <Compile Include="Database\GameData\Migrations\Beta6Migration.cs" />
     <Compile Include="Database\GameData\Migrations\BoundItemExtensionMigration.cs" />
     <Compile Include="Database\GameData\Migrations\CerasVersionToleranceMigration.cs" />
@@ -462,6 +463,7 @@
     <Compile Include="Database\Logging\ILoggingContext.cs" />
     <Compile Include="Database\Logging\LoggingContext.cs" />
     <Compile Include="Database\Logging\RequestLog.cs" />
+    <Compile Include="Database\Logging\Seed\SeedTrades.cs" />
     <Compile Include="Database\MigrationBuilderExtensions.cs" />
     <Compile Include="Database\PlayerData\Api\RefreshToken.cs" />
     <Compile Include="Database\PlayerData\Ban.cs" />
@@ -483,6 +485,7 @@
     <Compile Include="Entities\BankInterface.cs" />
     <Compile Include="Entities\Combat\Buff.cs" />
     <Compile Include="Entities\Combat\Dash.cs" />
+    <Compile Include="Entities\Combat\AttackInfo.cs" />
     <Compile Include="Entities\Combat\DoT.cs" />
     <Compile Include="Entities\Events\ConditionHandlerRegistry.cs" />
     <Compile Include="Entities\Events\Conditions.cs" />
@@ -506,6 +509,8 @@
     <Compile Include="Entities\Trading.cs" />
     <Compile Include="Entities\Events\CommandInstance.cs" />
     <Compile Include="Entities\Events\CommandProcessing.cs" />
+    <Compile Include="General\PvpStadiumUnit.cs" />
+    <Compile Include="General\ExpBoost.cs" />
     <Compile Include="General\Formulas.cs" />
     <Compile Include="General\Time.cs" />
     <Compile Include="Localization\CommandsNamespace.cs" />
@@ -543,6 +548,14 @@
     <Compile Include="Migrations\20210510223205_TrackPlaytimeAsULongsInSeconds.cs" />
     <Compile Include="Migrations\20210510223205_TrackPlaytimeAsULongsInSeconds.Designer.cs">
       <DependentUpon>20210510223205_TrackPlaytimeAsULongsInSeconds.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20220320150448_AddingQuestTaskProgressionToPlayers.cs" />
+    <Compile Include="Migrations\20220320150448_AddingQuestTaskProgressionToPlayers.designer.cs">
+      <DependentUpon>20220320150448_AddingQuestTaskProgressionToPlayers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20220628115302_AddingStadiumWinsAndLossesToPlayers.cs" />
+    <Compile Include="Migrations\20220628115302_AddingStadiumWinsAndLossesToPlayers.designer.cs">
+      <DependentUpon>20220628115302_AddingStadiumWinsAndLossesToPlayers.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
@@ -603,6 +616,118 @@
     <Compile Include="Migrations\Game\20210703145618_AddingShopSoundEffects.cs" />
     <Compile Include="Migrations\Game\20210703145618_AddingShopSoundEffects.designer.cs">
       <DependentUpon>20210703145618_AddingShopSoundEffects.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20210725142241_AddingEffectChanceToSpells.cs" />
+    <Compile Include="Migrations\Game\20210725142241_AddingEffectChanceToSpells.designer.cs">
+      <DependentUpon>20210725142241_AddingEffectChanceToSpells.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20210725194157_AddingSquareForRangeAndAOE.cs" />
+    <Compile Include="Migrations\Game\20210725194157_AddingSquareForRangeAndAOE.designer.cs">
+      <DependentUpon>20210725194157_AddingSquareForRangeAndAOE.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20210731192605_AddingMaxRandomMoveToNpcs.cs" />
+    <Compile Include="Migrations\Game\20210731192605_AddingMaxRandomMoveToNpcs.designer.cs">
+      <DependentUpon>20210731192605_AddingMaxRandomMoveToNpcs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20210821143823_AddingCritEffectSpellToItemsAndSpells.cs" />
+    <Compile Include="Migrations\Game\20210821143823_AddingCritEffectSpellToItemsAndSpells.designer.cs">
+      <DependentUpon>20210821143823_AddingCritEffectSpellToItemsAndSpells.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20210903182005_AddingLinkedSpawnsToProjectiles.cs" />
+    <Compile Include="Migrations\Game\20210903182005_AddingLinkedSpawnsToProjectiles.designer.cs">
+      <DependentUpon>20210903182005_AddingLinkedSpawnsToProjectiles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20220305170658_AddingUndashableToResources.cs" />
+    <Compile Include="Migrations\Game\20220305170658_AddingUndashableToResources.designer.cs">
+      <DependentUpon>20220305170658_AddingUndashableToResources.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20220306164424_AddingCanPlayerSpellAndProjectilesToNpcs.cs" />
+    <Compile Include="Migrations\Game\20220306164424_AddingCanPlayerSpellAndProjectilesToNpcs.designer.cs">
+      <DependentUpon>20220306164424_AddingCanPlayerSpellAndProjectilesToNpcs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20220316131852_AddingSwarmFleeBehaviorsToNPC.cs" />
+    <Compile Include="Migrations\Game\20220316131852_AddingSwarmFleeBehaviorsToNPC.designer.cs">
+      <DependentUpon>20220316131852_AddingSwarmFleeBehaviorsToNPC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20220320150600_AddingTaskLinkAndAlternativeToQuests.cs" />
+    <Compile Include="Migrations\Game\20220320150600_AddingTaskLinkAndAlternativeToQuests.designer.cs">
+      <DependentUpon>20220320150600_AddingTaskLinkAndAlternativeToQuests.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20220322114327_FixQuestTaskCompletionEvent.cs" />
+    <Compile Include="Migrations\Game\20220322114327_FixQuestTaskCompletionEvent.designer.cs">
+      <DependentUpon>20220322114327_FixQuestTaskCompletionEvent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20220331155627_AddingNextSpellEffectsToSpells.cs" />
+    <Compile Include="Migrations\Game\20220331155627_AddingNextSpellEffectsToSpells.designer.cs">
+      <DependentUpon>20220331155627_AddingNextSpellEffectsToSpells.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20220401221721_AddingVitalStealToSpells.cs" />
+    <Compile Include="Migrations\Game\20220401221721_AddingVitalStealToSpells.designer.cs">
+      <DependentUpon>20220401221721_AddingVitalStealToSpells.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20220402134336_AddingStatBuffChanceToSpells.cs" />
+    <Compile Include="Migrations\Game\20220402134336_AddingStatBuffChanceToSpells.designer.cs">
+      <DependentUpon>20220402134336_AddingStatBuffChanceToSpells.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20220411131156_AddingEditorNameToSpellsAndNpcsAndItems.cs" />
+    <Compile Include="Migrations\Game\20220411131156_AddingEditorNameToSpellsAndNpcsAndItems.designer.cs">
+      <DependentUpon>20220411131156_AddingEditorNameToSpellsAndNpcsAndItems.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20220511144428_AddingLossAmountsOnItemsOnDeath.cs" />
+    <Compile Include="Migrations\Game\20220511144428_AddingLossAmountsOnItemsOnDeath.designer.cs">
+      <DependentUpon>20220511144428_AddingLossAmountsOnItemsOnDeath.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20220928151610_AddingProbabilityToNextEffectSpells.cs" />
+    <Compile Include="Migrations\Game\20220928151610_AddingProbabilityToNextEffectSpells.designer.cs">
+      <DependentUpon>20220928151610_AddingProbabilityToNextEffectSpells.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230101133030_AddingPhasesToNPCs.cs" />
+    <Compile Include="Migrations\Game\20230101133030_AddingPhasesToNPCs.designer.cs">
+      <DependentUpon>20230101133030_AddingPhasesToNPCs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230118125534_AddingRegenResetToNpcs.cs" />
+    <Compile Include="Migrations\Game\20230118125534_AddingRegenResetToNpcs.designer.cs">
+      <DependentUpon>20230118125534_AddingRegenResetToNpcs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230123144229_AddingElementalTypesToResourcesClassesNpcsItemsSpells.cs" />
+    <Compile Include="Migrations\Game\20230123144229_AddingElementalTypesToResourcesClassesNpcsItemsSpells.designer.cs">
+      <DependentUpon>20230123144229_AddingElementalTypesToResourcesClassesNpcsItemsSpells.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230126134655_AddingSpellRulesToNpcsAndNpcPhases.cs" />
+    <Compile Include="Migrations\Game\20230126134655_AddingSpellRulesToNpcsAndNpcPhases.designer.cs">
+      <DependentUpon>20230126134655_AddingSpellRulesToNpcsAndNpcPhases.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230615125656_AddingSeveralAnimationsToSpells.cs" />
+    <Compile Include="Migrations\Game\20230615125656_AddingSeveralAnimationsToSpells.designer.cs">
+      <DependentUpon>20230615125656_AddingSeveralAnimationsToSpells.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230616185117_AddingBlockingPropertiesToProjectiles.cs" />
+    <Compile Include="Migrations\Game\20230616185117_AddingBlockingPropertiesToProjectiles.designer.cs">
+      <DependentUpon>20230616185117_AddingBlockingPropertiesToProjectiles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230701101455_AddingAttackRangeToNpcsAndItemsAndClasses.cs" />
+    <Compile Include="Migrations\Game\20230701101455_AddingAttackRangeToNpcsAndItemsAndClasses.designer.cs">
+      <DependentUpon>20230701101455_AddingAttackRangeToNpcsAndItemsAndClasses.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230710084601_AddingMinMaxLevelToNpcsAndSpawns.cs" />
+    <Compile Include="Migrations\Game\20230710084601_AddingMinMaxLevelToNpcsAndSpawns.designer.cs">
+      <DependentUpon>20230710084601_AddingMinMaxLevelToNpcsAndSpawns.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230720174105_AddingOnDeathAttackersEventToNpcs.cs" />
+    <Compile Include="Migrations\Game\20230720174105_AddingOnDeathAttackersEventToNpcs.designer.cs">
+      <DependentUpon>20230720174105_AddingOnDeathAttackersEventToNpcs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230831161040_AddingAdaptRangeToItems.cs" />
+    <Compile Include="Migrations\Game\20230831161040_AddingAdaptRangeToItems.designer.cs">
+      <DependentUpon>20230831161040_AddingAdaptRangeToItems.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230901075305_AddingDescriptionToVariables.cs" />
+    <Compile Include="Migrations\Game\20230901075305_AddingDescriptionToVariables.designer.cs">
+      <DependentUpon>20230901075305_AddingDescriptionToVariables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230903145212_AddingDamageStyleToSpells.cs" />
+    <Compile Include="Migrations\Game\20230903145212_AddingDamageStyleToSpells.designer.cs">
+      <DependentUpon>20230903145212_AddingDamageStyleToSpells.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
@@ -873,6 +998,7 @@
     <None Include="app.config" />
     <Compile Include="Entities\Entity.Comparison.cs" />
     <Compile Include="Core\ConsoleService.ConsoleThread.cs" />
+    <None Include="assets\resources\server_strings.json" />
     <None Include="packages.config" />
     <EmbeddedResource Include="Resources\libe_sqlite3_x64.so" />
     <EmbeddedResource Include="Resources\libe_sqlite3.dylib" />
@@ -947,8 +1073,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>xcopy /S /Y "$(ProjectDir)assets" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

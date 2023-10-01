@@ -30,15 +30,40 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EventCommandVariable));
             this.grpSetVariable = new DarkUI.Controls.DarkGroupBox();
             this.grpSelectVariable = new DarkUI.Controls.DarkGroupBox();
+            this.chkSyncOffline = new DarkUI.Controls.DarkCheckBox();
+            this.lblSync = new System.Windows.Forms.Label();
+            this.chkSyncAll = new DarkUI.Controls.DarkCheckBox();
+            this.chkSyncGuild = new DarkUI.Controls.DarkCheckBox();
             this.chkSyncParty = new DarkUI.Controls.DarkCheckBox();
             this.rdoPlayerVariable = new DarkUI.Controls.DarkRadioButton();
             this.cmbVariable = new DarkUI.Controls.DarkComboBox();
             this.rdoGlobalVariable = new DarkUI.Controls.DarkRadioButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
+            this.grpNumericVariable = new DarkUI.Controls.DarkGroupBox();
+            this.optNumericRightShift = new DarkUI.Controls.DarkRadioButton();
+            this.optNumericLeftShift = new DarkUI.Controls.DarkRadioButton();
+            this.optNumericDivide = new DarkUI.Controls.DarkRadioButton();
+            this.optNumericMultiply = new DarkUI.Controls.DarkRadioButton();
+            this.optNumericSet = new DarkUI.Controls.DarkRadioButton();
+            this.optNumericAdd = new DarkUI.Controls.DarkRadioButton();
+            this.optNumericRandom = new DarkUI.Controls.DarkRadioButton();
+            this.optNumericSubtract = new DarkUI.Controls.DarkRadioButton();
+            this.optNumericSystemTime = new DarkUI.Controls.DarkRadioButton();
+            this.grpNumericValues = new DarkUI.Controls.DarkGroupBox();
+            this.nudNumericValue = new DarkUI.Controls.DarkNumericUpDown();
+            this.cmbNumericCloneGlobalVar = new DarkUI.Controls.DarkComboBox();
+            this.cmbNumericClonePlayerVar = new DarkUI.Controls.DarkComboBox();
+            this.optNumericCloneGlobalVar = new DarkUI.Controls.DarkRadioButton();
+            this.optNumericClonePlayerVar = new DarkUI.Controls.DarkRadioButton();
+            this.optNumericStaticVal = new DarkUI.Controls.DarkRadioButton();
+            this.grpNumericRandom = new DarkUI.Controls.DarkGroupBox();
+            this.nudHigh = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudLow = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblNumericRandomHigh = new System.Windows.Forms.Label();
+            this.lblNumericRandomLow = new System.Windows.Forms.Label();
             this.grpStringVariable = new DarkUI.Controls.DarkGroupBox();
             this.lblStringTextVariables = new System.Windows.Forms.Label();
             this.grpStringReplace = new DarkUI.Controls.DarkGroupBox();
@@ -58,40 +83,18 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.optBooleanClonePlayerVar = new DarkUI.Controls.DarkRadioButton();
             this.optBooleanTrue = new DarkUI.Controls.DarkRadioButton();
             this.optBooleanFalse = new DarkUI.Controls.DarkRadioButton();
-            this.grpNumericVariable = new DarkUI.Controls.DarkGroupBox();
-            this.optNumericSet = new DarkUI.Controls.DarkRadioButton();
-            this.optNumericAdd = new DarkUI.Controls.DarkRadioButton();
-            this.optNumericRandom = new DarkUI.Controls.DarkRadioButton();
-            this.optNumericSubtract = new DarkUI.Controls.DarkRadioButton();
-            this.optNumericSystemTime = new DarkUI.Controls.DarkRadioButton();
-            this.grpNumericValues = new DarkUI.Controls.DarkGroupBox();
-            this.nudNumericValue = new DarkUI.Controls.DarkNumericUpDown();
-            this.cmbNumericCloneGlobalVar = new DarkUI.Controls.DarkComboBox();
-            this.cmbNumericClonePlayerVar = new DarkUI.Controls.DarkComboBox();
-            this.optNumericCloneGlobalVar = new DarkUI.Controls.DarkRadioButton();
-            this.optNumericClonePlayerVar = new DarkUI.Controls.DarkRadioButton();
-            this.optNumericStaticVal = new DarkUI.Controls.DarkRadioButton();
-            this.grpNumericRandom = new DarkUI.Controls.DarkGroupBox();
-            this.nudHigh = new DarkUI.Controls.DarkNumericUpDown();
-            this.nudLow = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblNumericRandomHigh = new System.Windows.Forms.Label();
-            this.lblNumericRandomLow = new System.Windows.Forms.Label();
-            this.optNumericMultiply = new DarkUI.Controls.DarkRadioButton();
-            this.optNumericDivide = new DarkUI.Controls.DarkRadioButton();
-            this.optNumericLeftShift = new DarkUI.Controls.DarkRadioButton();
-            this.optNumericRightShift = new DarkUI.Controls.DarkRadioButton();
             this.grpSetVariable.SuspendLayout();
             this.grpSelectVariable.SuspendLayout();
-            this.grpStringVariable.SuspendLayout();
-            this.grpStringReplace.SuspendLayout();
-            this.grpStringSet.SuspendLayout();
-            this.grpBooleanVariable.SuspendLayout();
             this.grpNumericVariable.SuspendLayout();
             this.grpNumericValues.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudNumericValue)).BeginInit();
             this.grpNumericRandom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudHigh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLow)).BeginInit();
+            this.grpStringVariable.SuspendLayout();
+            this.grpStringReplace.SuspendLayout();
+            this.grpStringSet.SuspendLayout();
+            this.grpBooleanVariable.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpSetVariable
@@ -107,7 +110,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpSetVariable.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpSetVariable.Location = new System.Drawing.Point(3, 3);
             this.grpSetVariable.Name = "grpSetVariable";
-            this.grpSetVariable.Size = new System.Drawing.Size(308, 339);
+            this.grpSetVariable.Size = new System.Drawing.Size(320, 339);
             this.grpSetVariable.TabIndex = 17;
             this.grpSetVariable.TabStop = false;
             this.grpSetVariable.Text = "Set Variable";
@@ -116,6 +119,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpSelectVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpSelectVariable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpSelectVariable.Controls.Add(this.chkSyncOffline);
+            this.grpSelectVariable.Controls.Add(this.lblSync);
+            this.grpSelectVariable.Controls.Add(this.chkSyncAll);
+            this.grpSelectVariable.Controls.Add(this.chkSyncGuild);
             this.grpSelectVariable.Controls.Add(this.chkSyncParty);
             this.grpSelectVariable.Controls.Add(this.rdoPlayerVariable);
             this.grpSelectVariable.Controls.Add(this.cmbVariable);
@@ -123,20 +130,59 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpSelectVariable.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpSelectVariable.Location = new System.Drawing.Point(6, 19);
             this.grpSelectVariable.Name = "grpSelectVariable";
-            this.grpSelectVariable.Size = new System.Drawing.Size(296, 75);
+            this.grpSelectVariable.Size = new System.Drawing.Size(308, 90);
             this.grpSelectVariable.TabIndex = 40;
             this.grpSelectVariable.TabStop = false;
             this.grpSelectVariable.Text = "Select Variable";
+            // 
+            // chkSyncOffline
+            // 
+            this.chkSyncOffline.AutoSize = true;
+            this.chkSyncOffline.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.chkSyncOffline.Location = new System.Drawing.Point(205, 67);
+            this.chkSyncOffline.Name = "chkSyncOffline";
+            this.chkSyncOffline.Size = new System.Drawing.Size(81, 17);
+            this.chkSyncOffline.TabIndex = 44;
+            this.chkSyncOffline.Text = "+ Offline /!\\";
+            // 
+            // lblSync
+            // 
+            this.lblSync.AutoSize = true;
+            this.lblSync.Location = new System.Drawing.Point(6, 69);
+            this.lblSync.Name = "lblSync";
+            this.lblSync.Size = new System.Drawing.Size(49, 13);
+            this.lblSync.TabIndex = 43;
+            this.lblSync.Text = "Synchro:";
+            // 
+            // chkSyncAll
+            // 
+            this.chkSyncAll.AutoSize = true;
+            this.chkSyncAll.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.chkSyncAll.Location = new System.Drawing.Point(165, 67);
+            this.chkSyncAll.Name = "chkSyncAll";
+            this.chkSyncAll.Size = new System.Drawing.Size(37, 17);
+            this.chkSyncAll.TabIndex = 42;
+            this.chkSyncAll.Text = "All";
+            // 
+            // chkSyncGuild
+            // 
+            this.chkSyncGuild.AutoSize = true;
+            this.chkSyncGuild.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.chkSyncGuild.Location = new System.Drawing.Point(110, 67);
+            this.chkSyncGuild.Name = "chkSyncGuild";
+            this.chkSyncGuild.Size = new System.Drawing.Size(50, 17);
+            this.chkSyncGuild.TabIndex = 41;
+            this.chkSyncGuild.Text = "Guild";
             // 
             // chkSyncParty
             // 
             this.chkSyncParty.AutoSize = true;
             this.chkSyncParty.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.chkSyncParty.Location = new System.Drawing.Point(207, 19);
+            this.chkSyncParty.Location = new System.Drawing.Point(55, 67);
             this.chkSyncParty.Name = "chkSyncParty";
-            this.chkSyncParty.Size = new System.Drawing.Size(83, 17);
+            this.chkSyncParty.Size = new System.Drawing.Size(50, 17);
             this.chkSyncParty.TabIndex = 40;
-            this.chkSyncParty.Text = "Party Sync?";
+            this.chkSyncParty.Text = "Party";
             // 
             // rdoPlayerVariable
             // 
@@ -165,7 +211,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbVariable.FormattingEnabled = true;
             this.cmbVariable.Location = new System.Drawing.Point(6, 42);
             this.cmbVariable.Name = "cmbVariable";
-            this.cmbVariable.Size = new System.Drawing.Size(284, 21);
+            this.cmbVariable.Size = new System.Drawing.Size(296, 21);
             this.cmbVariable.TabIndex = 22;
             this.cmbVariable.Text = null;
             this.cmbVariable.TextPadding = new System.Windows.Forms.Padding(2);
@@ -201,6 +247,312 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
+            // grpNumericVariable
+            // 
+            this.grpNumericVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpNumericVariable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpNumericVariable.Controls.Add(this.optNumericRightShift);
+            this.grpNumericVariable.Controls.Add(this.optNumericLeftShift);
+            this.grpNumericVariable.Controls.Add(this.optNumericDivide);
+            this.grpNumericVariable.Controls.Add(this.optNumericMultiply);
+            this.grpNumericVariable.Controls.Add(this.optNumericSet);
+            this.grpNumericVariable.Controls.Add(this.optNumericAdd);
+            this.grpNumericVariable.Controls.Add(this.optNumericRandom);
+            this.grpNumericVariable.Controls.Add(this.optNumericSubtract);
+            this.grpNumericVariable.Controls.Add(this.optNumericSystemTime);
+            this.grpNumericVariable.Controls.Add(this.grpNumericValues);
+            this.grpNumericVariable.Controls.Add(this.grpNumericRandom);
+            this.grpNumericVariable.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpNumericVariable.Location = new System.Drawing.Point(6, 115);
+            this.grpNumericVariable.Name = "grpNumericVariable";
+            this.grpNumericVariable.Size = new System.Drawing.Size(308, 183);
+            this.grpNumericVariable.TabIndex = 36;
+            this.grpNumericVariable.TabStop = false;
+            this.grpNumericVariable.Text = "Numeric Variable:";
+            // 
+            // optNumericRightShift
+            // 
+            this.optNumericRightShift.AutoSize = true;
+            this.optNumericRightShift.Location = new System.Drawing.Point(62, 42);
+            this.optNumericRightShift.Name = "optNumericRightShift";
+            this.optNumericRightShift.Size = new System.Drawing.Size(54, 17);
+            this.optNumericRightShift.TabIndex = 43;
+            this.optNumericRightShift.Text = "RShift";
+            this.optNumericRightShift.CheckedChanged += new System.EventHandler(this.optNumericRightShift_CheckedChanged);
+            // 
+            // optNumericLeftShift
+            // 
+            this.optNumericLeftShift.AutoSize = true;
+            this.optNumericLeftShift.Location = new System.Drawing.Point(9, 42);
+            this.optNumericLeftShift.Name = "optNumericLeftShift";
+            this.optNumericLeftShift.Size = new System.Drawing.Size(52, 17);
+            this.optNumericLeftShift.TabIndex = 42;
+            this.optNumericLeftShift.Text = "LShift";
+            this.optNumericLeftShift.CheckedChanged += new System.EventHandler(this.optNumericLeftShift_CheckedChanged);
+            // 
+            // optNumericDivide
+            // 
+            this.optNumericDivide.AutoSize = true;
+            this.optNumericDivide.Location = new System.Drawing.Point(235, 19);
+            this.optNumericDivide.Name = "optNumericDivide";
+            this.optNumericDivide.Size = new System.Drawing.Size(55, 17);
+            this.optNumericDivide.TabIndex = 41;
+            this.optNumericDivide.Text = "Divide";
+            this.optNumericDivide.CheckedChanged += new System.EventHandler(this.optNumericDivide_CheckedChanged);
+            // 
+            // optNumericMultiply
+            // 
+            this.optNumericMultiply.AutoSize = true;
+            this.optNumericMultiply.Location = new System.Drawing.Point(169, 19);
+            this.optNumericMultiply.Name = "optNumericMultiply";
+            this.optNumericMultiply.Size = new System.Drawing.Size(60, 17);
+            this.optNumericMultiply.TabIndex = 40;
+            this.optNumericMultiply.Text = "Multiply";
+            this.optNumericMultiply.CheckedChanged += new System.EventHandler(this.optNumericMultiply_CheckedChanged);
+            // 
+            // optNumericSet
+            // 
+            this.optNumericSet.AutoSize = true;
+            this.optNumericSet.Location = new System.Drawing.Point(9, 19);
+            this.optNumericSet.Name = "optNumericSet";
+            this.optNumericSet.Size = new System.Drawing.Size(41, 17);
+            this.optNumericSet.TabIndex = 26;
+            this.optNumericSet.Text = "Set";
+            this.optNumericSet.CheckedChanged += new System.EventHandler(this.optNumericSet_CheckedChanged);
+            // 
+            // optNumericAdd
+            // 
+            this.optNumericAdd.AutoSize = true;
+            this.optNumericAdd.Location = new System.Drawing.Point(50, 19);
+            this.optNumericAdd.Name = "optNumericAdd";
+            this.optNumericAdd.Size = new System.Drawing.Size(44, 17);
+            this.optNumericAdd.TabIndex = 25;
+            this.optNumericAdd.Text = "Add";
+            this.optNumericAdd.CheckedChanged += new System.EventHandler(this.optNumericAdd_CheckedChanged);
+            // 
+            // optNumericRandom
+            // 
+            this.optNumericRandom.AutoSize = true;
+            this.optNumericRandom.Location = new System.Drawing.Point(116, 42);
+            this.optNumericRandom.Name = "optNumericRandom";
+            this.optNumericRandom.Size = new System.Drawing.Size(65, 17);
+            this.optNumericRandom.TabIndex = 23;
+            this.optNumericRandom.Text = "Random";
+            this.optNumericRandom.CheckedChanged += new System.EventHandler(this.optNumericRandom_CheckedChanged);
+            // 
+            // optNumericSubtract
+            // 
+            this.optNumericSubtract.AutoSize = true;
+            this.optNumericSubtract.Location = new System.Drawing.Point(98, 19);
+            this.optNumericSubtract.Name = "optNumericSubtract";
+            this.optNumericSubtract.Size = new System.Drawing.Size(65, 17);
+            this.optNumericSubtract.TabIndex = 24;
+            this.optNumericSubtract.Text = "Subtract";
+            this.optNumericSubtract.CheckedChanged += new System.EventHandler(this.optNumericSubtract_CheckedChanged);
+            // 
+            // optNumericSystemTime
+            // 
+            this.optNumericSystemTime.Location = new System.Drawing.Point(181, 42);
+            this.optNumericSystemTime.Name = "optNumericSystemTime";
+            this.optNumericSystemTime.Size = new System.Drawing.Size(109, 17);
+            this.optNumericSystemTime.TabIndex = 39;
+            this.optNumericSystemTime.Text = "System Time (Ms)";
+            this.optNumericSystemTime.CheckedChanged += new System.EventHandler(this.optNumericSystemTime_CheckedChanged);
+            // 
+            // grpNumericValues
+            // 
+            this.grpNumericValues.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpNumericValues.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpNumericValues.Controls.Add(this.nudNumericValue);
+            this.grpNumericValues.Controls.Add(this.cmbNumericCloneGlobalVar);
+            this.grpNumericValues.Controls.Add(this.cmbNumericClonePlayerVar);
+            this.grpNumericValues.Controls.Add(this.optNumericCloneGlobalVar);
+            this.grpNumericValues.Controls.Add(this.optNumericClonePlayerVar);
+            this.grpNumericValues.Controls.Add(this.optNumericStaticVal);
+            this.grpNumericValues.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpNumericValues.Location = new System.Drawing.Point(6, 71);
+            this.grpNumericValues.Name = "grpNumericValues";
+            this.grpNumericValues.Size = new System.Drawing.Size(296, 100);
+            this.grpNumericValues.TabIndex = 37;
+            this.grpNumericValues.TabStop = false;
+            // 
+            // nudNumericValue
+            // 
+            this.nudNumericValue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudNumericValue.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudNumericValue.Location = new System.Drawing.Point(143, 9);
+            this.nudNumericValue.Maximum = new decimal(new int[] {
+            -1,
+            -1,
+            -1,
+            0});
+            this.nudNumericValue.Minimum = new decimal(new int[] {
+            -1,
+            -1,
+            -1,
+            -2147483648});
+            this.nudNumericValue.Name = "nudNumericValue";
+            this.nudNumericValue.Size = new System.Drawing.Size(147, 20);
+            this.nudNumericValue.TabIndex = 47;
+            this.nudNumericValue.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // cmbNumericCloneGlobalVar
+            // 
+            this.cmbNumericCloneGlobalVar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbNumericCloneGlobalVar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbNumericCloneGlobalVar.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbNumericCloneGlobalVar.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbNumericCloneGlobalVar.DrawDropdownHoverOutline = false;
+            this.cmbNumericCloneGlobalVar.DrawFocusRectangle = false;
+            this.cmbNumericCloneGlobalVar.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbNumericCloneGlobalVar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbNumericCloneGlobalVar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbNumericCloneGlobalVar.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbNumericCloneGlobalVar.FormattingEnabled = true;
+            this.cmbNumericCloneGlobalVar.Location = new System.Drawing.Point(143, 70);
+            this.cmbNumericCloneGlobalVar.Name = "cmbNumericCloneGlobalVar";
+            this.cmbNumericCloneGlobalVar.Size = new System.Drawing.Size(147, 21);
+            this.cmbNumericCloneGlobalVar.TabIndex = 45;
+            this.cmbNumericCloneGlobalVar.Text = null;
+            this.cmbNumericCloneGlobalVar.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // cmbNumericClonePlayerVar
+            // 
+            this.cmbNumericClonePlayerVar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbNumericClonePlayerVar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbNumericClonePlayerVar.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbNumericClonePlayerVar.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbNumericClonePlayerVar.DrawDropdownHoverOutline = false;
+            this.cmbNumericClonePlayerVar.DrawFocusRectangle = false;
+            this.cmbNumericClonePlayerVar.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbNumericClonePlayerVar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbNumericClonePlayerVar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbNumericClonePlayerVar.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbNumericClonePlayerVar.FormattingEnabled = true;
+            this.cmbNumericClonePlayerVar.Location = new System.Drawing.Point(143, 38);
+            this.cmbNumericClonePlayerVar.Name = "cmbNumericClonePlayerVar";
+            this.cmbNumericClonePlayerVar.Size = new System.Drawing.Size(147, 21);
+            this.cmbNumericClonePlayerVar.TabIndex = 44;
+            this.cmbNumericClonePlayerVar.Text = null;
+            this.cmbNumericClonePlayerVar.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // optNumericCloneGlobalVar
+            // 
+            this.optNumericCloneGlobalVar.AutoSize = true;
+            this.optNumericCloneGlobalVar.Location = new System.Drawing.Point(6, 70);
+            this.optNumericCloneGlobalVar.Name = "optNumericCloneGlobalVar";
+            this.optNumericCloneGlobalVar.Size = new System.Drawing.Size(129, 17);
+            this.optNumericCloneGlobalVar.TabIndex = 43;
+            this.optNumericCloneGlobalVar.Text = "Global Variable Value:";
+            this.optNumericCloneGlobalVar.CheckedChanged += new System.EventHandler(this.optNumericCloneGlobalVar_CheckedChanged);
+            // 
+            // optNumericClonePlayerVar
+            // 
+            this.optNumericClonePlayerVar.AutoSize = true;
+            this.optNumericClonePlayerVar.Location = new System.Drawing.Point(6, 38);
+            this.optNumericClonePlayerVar.Name = "optNumericClonePlayerVar";
+            this.optNumericClonePlayerVar.Size = new System.Drawing.Size(128, 17);
+            this.optNumericClonePlayerVar.TabIndex = 42;
+            this.optNumericClonePlayerVar.Text = "Player Variable Value:";
+            this.optNumericClonePlayerVar.CheckedChanged += new System.EventHandler(this.optNumericClonePlayerVar_CheckedChanged);
+            // 
+            // optNumericStaticVal
+            // 
+            this.optNumericStaticVal.AutoSize = true;
+            this.optNumericStaticVal.Checked = true;
+            this.optNumericStaticVal.Location = new System.Drawing.Point(6, 9);
+            this.optNumericStaticVal.Name = "optNumericStaticVal";
+            this.optNumericStaticVal.Size = new System.Drawing.Size(85, 17);
+            this.optNumericStaticVal.TabIndex = 46;
+            this.optNumericStaticVal.TabStop = true;
+            this.optNumericStaticVal.Text = "Static Value:";
+            // 
+            // grpNumericRandom
+            // 
+            this.grpNumericRandom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpNumericRandom.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpNumericRandom.Controls.Add(this.nudHigh);
+            this.grpNumericRandom.Controls.Add(this.nudLow);
+            this.grpNumericRandom.Controls.Add(this.lblNumericRandomHigh);
+            this.grpNumericRandom.Controls.Add(this.lblNumericRandomLow);
+            this.grpNumericRandom.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpNumericRandom.Location = new System.Drawing.Point(6, 74);
+            this.grpNumericRandom.Name = "grpNumericRandom";
+            this.grpNumericRandom.Size = new System.Drawing.Size(284, 97);
+            this.grpNumericRandom.TabIndex = 39;
+            this.grpNumericRandom.TabStop = false;
+            this.grpNumericRandom.Text = "Random Number:";
+            // 
+            // nudHigh
+            // 
+            this.nudHigh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudHigh.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudHigh.Location = new System.Drawing.Point(44, 51);
+            this.nudHigh.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.nudHigh.Minimum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            -2147483648});
+            this.nudHigh.Name = "nudHigh";
+            this.nudHigh.Size = new System.Drawing.Size(224, 20);
+            this.nudHigh.TabIndex = 42;
+            this.nudHigh.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // nudLow
+            // 
+            this.nudLow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudLow.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudLow.Location = new System.Drawing.Point(44, 25);
+            this.nudLow.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.nudLow.Minimum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            -2147483648});
+            this.nudLow.Name = "nudLow";
+            this.nudLow.Size = new System.Drawing.Size(224, 20);
+            this.nudLow.TabIndex = 41;
+            this.nudLow.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // lblNumericRandomHigh
+            // 
+            this.lblNumericRandomHigh.AutoSize = true;
+            this.lblNumericRandomHigh.Location = new System.Drawing.Point(9, 54);
+            this.lblNumericRandomHigh.Name = "lblNumericRandomHigh";
+            this.lblNumericRandomHigh.Size = new System.Drawing.Size(29, 13);
+            this.lblNumericRandomHigh.TabIndex = 39;
+            this.lblNumericRandomHigh.Text = "High";
+            // 
+            // lblNumericRandomLow
+            // 
+            this.lblNumericRandomLow.AutoSize = true;
+            this.lblNumericRandomLow.Location = new System.Drawing.Point(11, 27);
+            this.lblNumericRandomLow.Name = "lblNumericRandomLow";
+            this.lblNumericRandomLow.Size = new System.Drawing.Size(27, 13);
+            this.lblNumericRandomLow.TabIndex = 40;
+            this.lblNumericRandomLow.Text = "Low";
+            // 
             // grpStringVariable
             // 
             this.grpStringVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
@@ -211,9 +563,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpStringVariable.Controls.Add(this.optStaticString);
             this.grpStringVariable.Controls.Add(this.grpStringSet);
             this.grpStringVariable.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpStringVariable.Location = new System.Drawing.Point(6, 100);
+            this.grpStringVariable.Location = new System.Drawing.Point(6, 115);
             this.grpStringVariable.Name = "grpStringVariable";
-            this.grpStringVariable.Size = new System.Drawing.Size(296, 183);
+            this.grpStringVariable.Size = new System.Drawing.Size(308, 183);
             this.grpStringVariable.TabIndex = 51;
             this.grpStringVariable.TabStop = false;
             this.grpStringVariable.Text = "String Variable:";
@@ -350,9 +702,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpBooleanVariable.Controls.Add(this.optBooleanTrue);
             this.grpBooleanVariable.Controls.Add(this.optBooleanFalse);
             this.grpBooleanVariable.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpBooleanVariable.Location = new System.Drawing.Point(6, 100);
+            this.grpBooleanVariable.Location = new System.Drawing.Point(6, 115);
             this.grpBooleanVariable.Name = "grpBooleanVariable";
-            this.grpBooleanVariable.Size = new System.Drawing.Size(296, 183);
+            this.grpBooleanVariable.Size = new System.Drawing.Size(308, 183);
             this.grpBooleanVariable.TabIndex = 40;
             this.grpBooleanVariable.TabStop = false;
             this.grpBooleanVariable.Text = "Boolean Variable:";
@@ -372,7 +724,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbBooleanCloneGlobalVar.FormattingEnabled = true;
             this.cmbBooleanCloneGlobalVar.Location = new System.Drawing.Point(146, 103);
             this.cmbBooleanCloneGlobalVar.Name = "cmbBooleanCloneGlobalVar";
-            this.cmbBooleanCloneGlobalVar.Size = new System.Drawing.Size(138, 21);
+            this.cmbBooleanCloneGlobalVar.Size = new System.Drawing.Size(156, 21);
             this.cmbBooleanCloneGlobalVar.TabIndex = 49;
             this.cmbBooleanCloneGlobalVar.Text = null;
             this.cmbBooleanCloneGlobalVar.TextPadding = new System.Windows.Forms.Padding(2);
@@ -392,7 +744,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbBooleanClonePlayerVar.FormattingEnabled = true;
             this.cmbBooleanClonePlayerVar.Location = new System.Drawing.Point(146, 71);
             this.cmbBooleanClonePlayerVar.Name = "cmbBooleanClonePlayerVar";
-            this.cmbBooleanClonePlayerVar.Size = new System.Drawing.Size(138, 21);
+            this.cmbBooleanClonePlayerVar.Size = new System.Drawing.Size(156, 21);
             this.cmbBooleanClonePlayerVar.TabIndex = 48;
             this.cmbBooleanClonePlayerVar.Text = null;
             this.cmbBooleanClonePlayerVar.TextPadding = new System.Windows.Forms.Padding(2);
@@ -433,312 +785,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.optBooleanFalse.TabIndex = 25;
             this.optBooleanFalse.Text = "False";
             // 
-            // grpNumericVariable
-            // 
-            this.grpNumericVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpNumericVariable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpNumericVariable.Controls.Add(this.optNumericRightShift);
-            this.grpNumericVariable.Controls.Add(this.optNumericLeftShift);
-            this.grpNumericVariable.Controls.Add(this.optNumericDivide);
-            this.grpNumericVariable.Controls.Add(this.optNumericMultiply);
-            this.grpNumericVariable.Controls.Add(this.optNumericSet);
-            this.grpNumericVariable.Controls.Add(this.optNumericAdd);
-            this.grpNumericVariable.Controls.Add(this.optNumericRandom);
-            this.grpNumericVariable.Controls.Add(this.optNumericSubtract);
-            this.grpNumericVariable.Controls.Add(this.optNumericSystemTime);
-            this.grpNumericVariable.Controls.Add(this.grpNumericValues);
-            this.grpNumericVariable.Controls.Add(this.grpNumericRandom);
-            this.grpNumericVariable.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpNumericVariable.Location = new System.Drawing.Point(6, 100);
-            this.grpNumericVariable.Name = "grpNumericVariable";
-            this.grpNumericVariable.Size = new System.Drawing.Size(296, 183);
-            this.grpNumericVariable.TabIndex = 36;
-            this.grpNumericVariable.TabStop = false;
-            this.grpNumericVariable.Text = "Numeric Variable:";
-            // 
-            // optNumericSet
-            // 
-            this.optNumericSet.AutoSize = true;
-            this.optNumericSet.Location = new System.Drawing.Point(9, 19);
-            this.optNumericSet.Name = "optNumericSet";
-            this.optNumericSet.Size = new System.Drawing.Size(41, 17);
-            this.optNumericSet.TabIndex = 26;
-            this.optNumericSet.Text = "Set";
-            this.optNumericSet.CheckedChanged += new System.EventHandler(this.optNumericSet_CheckedChanged);
-            // 
-            // optNumericAdd
-            // 
-            this.optNumericAdd.AutoSize = true;
-            this.optNumericAdd.Location = new System.Drawing.Point(50, 19);
-            this.optNumericAdd.Name = "optNumericAdd";
-            this.optNumericAdd.Size = new System.Drawing.Size(44, 17);
-            this.optNumericAdd.TabIndex = 25;
-            this.optNumericAdd.Text = "Add";
-            this.optNumericAdd.CheckedChanged += new System.EventHandler(this.optNumericAdd_CheckedChanged);
-            // 
-            // optNumericRandom
-            // 
-            this.optNumericRandom.AutoSize = true;
-            this.optNumericRandom.Location = new System.Drawing.Point(116, 42);
-            this.optNumericRandom.Name = "optNumericRandom";
-            this.optNumericRandom.Size = new System.Drawing.Size(65, 17);
-            this.optNumericRandom.TabIndex = 23;
-            this.optNumericRandom.Text = "Random";
-            this.optNumericRandom.CheckedChanged += new System.EventHandler(this.optNumericRandom_CheckedChanged);
-            // 
-            // optNumericSubtract
-            // 
-            this.optNumericSubtract.AutoSize = true;
-            this.optNumericSubtract.Location = new System.Drawing.Point(98, 19);
-            this.optNumericSubtract.Name = "optNumericSubtract";
-            this.optNumericSubtract.Size = new System.Drawing.Size(65, 17);
-            this.optNumericSubtract.TabIndex = 24;
-            this.optNumericSubtract.Text = "Subtract";
-            this.optNumericSubtract.CheckedChanged += new System.EventHandler(this.optNumericSubtract_CheckedChanged);
-            // 
-            // optNumericSystemTime
-            // 
-            this.optNumericSystemTime.Location = new System.Drawing.Point(181, 42);
-            this.optNumericSystemTime.Name = "optNumericSystemTime";
-            this.optNumericSystemTime.Size = new System.Drawing.Size(109, 17);
-            this.optNumericSystemTime.TabIndex = 39;
-            this.optNumericSystemTime.Text = "System Time (Ms)";
-            this.optNumericSystemTime.CheckedChanged += new System.EventHandler(this.optNumericSystemTime_CheckedChanged);
-            // 
-            // grpNumericValues
-            // 
-            this.grpNumericValues.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpNumericValues.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpNumericValues.Controls.Add(this.nudNumericValue);
-            this.grpNumericValues.Controls.Add(this.cmbNumericCloneGlobalVar);
-            this.grpNumericValues.Controls.Add(this.cmbNumericClonePlayerVar);
-            this.grpNumericValues.Controls.Add(this.optNumericCloneGlobalVar);
-            this.grpNumericValues.Controls.Add(this.optNumericClonePlayerVar);
-            this.grpNumericValues.Controls.Add(this.optNumericStaticVal);
-            this.grpNumericValues.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpNumericValues.Location = new System.Drawing.Point(6, 71);
-            this.grpNumericValues.Name = "grpNumericValues";
-            this.grpNumericValues.Size = new System.Drawing.Size(284, 100);
-            this.grpNumericValues.TabIndex = 37;
-            this.grpNumericValues.TabStop = false;
-            // 
-            // nudNumericValue
-            // 
-            this.nudNumericValue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudNumericValue.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudNumericValue.Location = new System.Drawing.Point(143, 9);
-            this.nudNumericValue.Maximum = new decimal(new int[] {
-            -1,
-            -1,
-            -1,
-            0});
-            this.nudNumericValue.Minimum = new decimal(new int[] {
-            -1,
-            -1,
-            -1,
-            -2147483648});
-            this.nudNumericValue.Name = "nudNumericValue";
-            this.nudNumericValue.Size = new System.Drawing.Size(125, 20);
-            this.nudNumericValue.TabIndex = 47;
-            this.nudNumericValue.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            // 
-            // cmbNumericCloneGlobalVar
-            // 
-            this.cmbNumericCloneGlobalVar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbNumericCloneGlobalVar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbNumericCloneGlobalVar.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbNumericCloneGlobalVar.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbNumericCloneGlobalVar.DrawDropdownHoverOutline = false;
-            this.cmbNumericCloneGlobalVar.DrawFocusRectangle = false;
-            this.cmbNumericCloneGlobalVar.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbNumericCloneGlobalVar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbNumericCloneGlobalVar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbNumericCloneGlobalVar.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbNumericCloneGlobalVar.FormattingEnabled = true;
-            this.cmbNumericCloneGlobalVar.Location = new System.Drawing.Point(143, 70);
-            this.cmbNumericCloneGlobalVar.Name = "cmbNumericCloneGlobalVar";
-            this.cmbNumericCloneGlobalVar.Size = new System.Drawing.Size(125, 21);
-            this.cmbNumericCloneGlobalVar.TabIndex = 45;
-            this.cmbNumericCloneGlobalVar.Text = null;
-            this.cmbNumericCloneGlobalVar.TextPadding = new System.Windows.Forms.Padding(2);
-            // 
-            // cmbNumericClonePlayerVar
-            // 
-            this.cmbNumericClonePlayerVar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbNumericClonePlayerVar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbNumericClonePlayerVar.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbNumericClonePlayerVar.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbNumericClonePlayerVar.DrawDropdownHoverOutline = false;
-            this.cmbNumericClonePlayerVar.DrawFocusRectangle = false;
-            this.cmbNumericClonePlayerVar.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbNumericClonePlayerVar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbNumericClonePlayerVar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbNumericClonePlayerVar.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbNumericClonePlayerVar.FormattingEnabled = true;
-            this.cmbNumericClonePlayerVar.Location = new System.Drawing.Point(143, 38);
-            this.cmbNumericClonePlayerVar.Name = "cmbNumericClonePlayerVar";
-            this.cmbNumericClonePlayerVar.Size = new System.Drawing.Size(125, 21);
-            this.cmbNumericClonePlayerVar.TabIndex = 44;
-            this.cmbNumericClonePlayerVar.Text = null;
-            this.cmbNumericClonePlayerVar.TextPadding = new System.Windows.Forms.Padding(2);
-            // 
-            // optNumericCloneGlobalVar
-            // 
-            this.optNumericCloneGlobalVar.AutoSize = true;
-            this.optNumericCloneGlobalVar.Location = new System.Drawing.Point(6, 70);
-            this.optNumericCloneGlobalVar.Name = "optNumericCloneGlobalVar";
-            this.optNumericCloneGlobalVar.Size = new System.Drawing.Size(129, 17);
-            this.optNumericCloneGlobalVar.TabIndex = 43;
-            this.optNumericCloneGlobalVar.Text = "Global Variable Value:";
-            this.optNumericCloneGlobalVar.CheckedChanged += new System.EventHandler(this.optNumericCloneGlobalVar_CheckedChanged);
-            // 
-            // optNumericClonePlayerVar
-            // 
-            this.optNumericClonePlayerVar.AutoSize = true;
-            this.optNumericClonePlayerVar.Location = new System.Drawing.Point(6, 38);
-            this.optNumericClonePlayerVar.Name = "optNumericClonePlayerVar";
-            this.optNumericClonePlayerVar.Size = new System.Drawing.Size(128, 17);
-            this.optNumericClonePlayerVar.TabIndex = 42;
-            this.optNumericClonePlayerVar.Text = "Player Variable Value:";
-            this.optNumericClonePlayerVar.CheckedChanged += new System.EventHandler(this.optNumericClonePlayerVar_CheckedChanged);
-            // 
-            // optNumericStaticVal
-            // 
-            this.optNumericStaticVal.AutoSize = true;
-            this.optNumericStaticVal.Checked = true;
-            this.optNumericStaticVal.Location = new System.Drawing.Point(6, 9);
-            this.optNumericStaticVal.Name = "optNumericStaticVal";
-            this.optNumericStaticVal.Size = new System.Drawing.Size(85, 17);
-            this.optNumericStaticVal.TabIndex = 46;
-            this.optNumericStaticVal.TabStop = true;
-            this.optNumericStaticVal.Text = "Static Value:";
-            // 
-            // grpNumericRandom
-            // 
-            this.grpNumericRandom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpNumericRandom.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpNumericRandom.Controls.Add(this.nudHigh);
-            this.grpNumericRandom.Controls.Add(this.nudLow);
-            this.grpNumericRandom.Controls.Add(this.lblNumericRandomHigh);
-            this.grpNumericRandom.Controls.Add(this.lblNumericRandomLow);
-            this.grpNumericRandom.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpNumericRandom.Location = new System.Drawing.Point(6, 74);
-            this.grpNumericRandom.Name = "grpNumericRandom";
-            this.grpNumericRandom.Size = new System.Drawing.Size(284, 97);
-            this.grpNumericRandom.TabIndex = 39;
-            this.grpNumericRandom.TabStop = false;
-            this.grpNumericRandom.Text = "Random Number:";
-            // 
-            // nudHigh
-            // 
-            this.nudHigh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudHigh.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudHigh.Location = new System.Drawing.Point(44, 51);
-            this.nudHigh.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.nudHigh.Minimum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            -2147483648});
-            this.nudHigh.Name = "nudHigh";
-            this.nudHigh.Size = new System.Drawing.Size(224, 20);
-            this.nudHigh.TabIndex = 42;
-            this.nudHigh.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            // 
-            // nudLow
-            // 
-            this.nudLow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudLow.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudLow.Location = new System.Drawing.Point(44, 25);
-            this.nudLow.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.nudLow.Minimum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            -2147483648});
-            this.nudLow.Name = "nudLow";
-            this.nudLow.Size = new System.Drawing.Size(224, 20);
-            this.nudLow.TabIndex = 41;
-            this.nudLow.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            // 
-            // lblNumericRandomHigh
-            // 
-            this.lblNumericRandomHigh.AutoSize = true;
-            this.lblNumericRandomHigh.Location = new System.Drawing.Point(9, 54);
-            this.lblNumericRandomHigh.Name = "lblNumericRandomHigh";
-            this.lblNumericRandomHigh.Size = new System.Drawing.Size(29, 13);
-            this.lblNumericRandomHigh.TabIndex = 39;
-            this.lblNumericRandomHigh.Text = "High";
-            // 
-            // lblNumericRandomLow
-            // 
-            this.lblNumericRandomLow.AutoSize = true;
-            this.lblNumericRandomLow.Location = new System.Drawing.Point(11, 27);
-            this.lblNumericRandomLow.Name = "lblNumericRandomLow";
-            this.lblNumericRandomLow.Size = new System.Drawing.Size(27, 13);
-            this.lblNumericRandomLow.TabIndex = 40;
-            this.lblNumericRandomLow.Text = "Low";
-            // 
-            // optNumericMultiply
-            // 
-            this.optNumericMultiply.AutoSize = true;
-            this.optNumericMultiply.Location = new System.Drawing.Point(169, 19);
-            this.optNumericMultiply.Name = "optNumericMultiply";
-            this.optNumericMultiply.Size = new System.Drawing.Size(60, 17);
-            this.optNumericMultiply.TabIndex = 40;
-            this.optNumericMultiply.Text = "Multiply";
-            this.optNumericMultiply.CheckedChanged += new System.EventHandler(this.optNumericMultiply_CheckedChanged);
-            // 
-            // optNumericDivide
-            // 
-            this.optNumericDivide.AutoSize = true;
-            this.optNumericDivide.Location = new System.Drawing.Point(235, 19);
-            this.optNumericDivide.Name = "optNumericDivide";
-            this.optNumericDivide.Size = new System.Drawing.Size(55, 17);
-            this.optNumericDivide.TabIndex = 41;
-            this.optNumericDivide.Text = "Divide";
-            this.optNumericDivide.CheckedChanged += new System.EventHandler(this.optNumericDivide_CheckedChanged);
-            // 
-            // optNumericLeftShift
-            // 
-            this.optNumericLeftShift.AutoSize = true;
-            this.optNumericLeftShift.Location = new System.Drawing.Point(9, 42);
-            this.optNumericLeftShift.Name = "optNumericLeftShift";
-            this.optNumericLeftShift.Size = new System.Drawing.Size(52, 17);
-            this.optNumericLeftShift.TabIndex = 42;
-            this.optNumericLeftShift.Text = "LShift";
-            this.optNumericLeftShift.CheckedChanged += new System.EventHandler(this.optNumericLeftShift_CheckedChanged);
-            // 
-            // optNumericRightShift
-            // 
-            this.optNumericRightShift.AutoSize = true;
-            this.optNumericRightShift.Location = new System.Drawing.Point(62, 42);
-            this.optNumericRightShift.Name = "optNumericRightShift";
-            this.optNumericRightShift.Size = new System.Drawing.Size(54, 17);
-            this.optNumericRightShift.TabIndex = 43;
-            this.optNumericRightShift.Text = "RShift";
-            this.optNumericRightShift.CheckedChanged += new System.EventHandler(this.optNumericRightShift_CheckedChanged);
-            // 
             // EventCommandVariable
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -747,18 +793,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpSetVariable);
             this.Name = "EventCommandVariable";
-            this.Size = new System.Drawing.Size(315, 350);
+            this.Size = new System.Drawing.Size(326, 350);
             this.grpSetVariable.ResumeLayout(false);
             this.grpSelectVariable.ResumeLayout(false);
             this.grpSelectVariable.PerformLayout();
-            this.grpStringVariable.ResumeLayout(false);
-            this.grpStringVariable.PerformLayout();
-            this.grpStringReplace.ResumeLayout(false);
-            this.grpStringReplace.PerformLayout();
-            this.grpStringSet.ResumeLayout(false);
-            this.grpStringSet.PerformLayout();
-            this.grpBooleanVariable.ResumeLayout(false);
-            this.grpBooleanVariable.PerformLayout();
             this.grpNumericVariable.ResumeLayout(false);
             this.grpNumericVariable.PerformLayout();
             this.grpNumericValues.ResumeLayout(false);
@@ -768,6 +806,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpNumericRandom.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudHigh)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLow)).EndInit();
+            this.grpStringVariable.ResumeLayout(false);
+            this.grpStringVariable.PerformLayout();
+            this.grpStringReplace.ResumeLayout(false);
+            this.grpStringReplace.PerformLayout();
+            this.grpStringSet.ResumeLayout(false);
+            this.grpStringSet.PerformLayout();
+            this.grpBooleanVariable.ResumeLayout(false);
+            this.grpBooleanVariable.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -823,5 +869,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         internal DarkRadioButton optNumericLeftShift;
         internal DarkRadioButton optNumericDivide;
         internal DarkRadioButton optNumericMultiply;
+        private DarkCheckBox chkSyncAll;
+        private DarkCheckBox chkSyncGuild;
+        private DarkCheckBox chkSyncOffline;
+        private System.Windows.Forms.Label lblSync;
     }
 }

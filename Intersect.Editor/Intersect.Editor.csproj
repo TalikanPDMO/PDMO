@@ -83,6 +83,9 @@
   <PropertyGroup>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Content\ContentManager.cs" />
     <Compile Include="Content\Texture.cs" />
@@ -99,6 +102,12 @@
     </Compile>
     <Compile Include="Forms\Controls\GameObjectList.Designer.cs">
       <DependentUpon>GameObjectList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_SetExpBoost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_SetExpBoost.designer.cs">
+      <DependentUpon>EventCommand_SetExpBoost.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_SetGuildBankSlots.cs">
       <SubType>UserControl</SubType>
@@ -124,11 +133,41 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_CreateGuild.Designer.cs">
       <DependentUpon>EventCommand_CreateGuild.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ShowPopup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ShowPopup.Designer.cs">
+      <DependentUpon>EventCommand_ShowPopup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_UseSpell.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_UseSpell.Designer.cs">
       <DependentUpon>EventCommand_UseSpell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\frmRelations.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\frmRelations.Designer.cs">
+      <DependentUpon>frmRelations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\Quest\Quest_TaskAlternativesEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Quest\Quest_TaskAlternativesEditor.Designer.cs">
+      <DependentUpon>Quest_TaskAlternativesEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\Quest\Quest_TaskLinksEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Quest\Quest_TaskLinksEditor.Designer.cs">
+      <DependentUpon>Quest_TaskLinksEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\Npc_PhaseEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Npc_PhaseEditor.Designer.cs">
+      <DependentUpon>Npc_PhaseEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmUpdate.cs">
       <SubType>Form</SubType>
@@ -650,6 +689,10 @@
     <Reference Include="System.Transactions.Portable, Version=4.0.0.0, Culture=neutral, PublicKeyToken=59e704a76bc4613a, processorArchitecture=MSIL">
       <HintPath>..\packages\Mono.Data.Sqlite.Portable.1.0.3.5\lib\net4\System.Transactions.Portable.dll</HintPath>
     </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=3.0.4.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
@@ -667,11 +710,59 @@
     <EmbeddedResource Include="Forms\Controls\GameObjectList.resx">
       <DependentUpon>GameObjectList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DockingElements\frmMapLayers.resx">
+      <DependentUpon>frmMapLayers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DockingElements\frmMapProperties.resx">
+      <DependentUpon>frmMapProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\EditorForm.resx">
+      <DependentUpon>EditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeItems.resx">
+      <DependentUpon>EventCommand_ChangeItems.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_CompleteQuestTask.resx">
+      <DependentUpon>EventCommand_CompleteQuestTask.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ConditionalBranch.resx">
       <DependentUpon>EventCommand_ConditionalBranch.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_EndQuest.resx">
+      <DependentUpon>EventCommand_EndQuest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_SetExpBoost.resx">
+      <DependentUpon>EventCommand_SetExpBoost.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ShowPopup.resx">
+      <DependentUpon>EventCommand_ShowPopup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_SpawnNpc.resx">
+      <DependentUpon>EventCommand_SpawnNpc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_StartQuest.resx">
+      <DependentUpon>EventCommand_StartQuest.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_UseSpell.resx">
       <DependentUpon>EventCommand_UseSpell.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_Variable.resx">
+      <DependentUpon>EventCommand_Variable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\frmRelations.resx">
+      <DependentUpon>frmRelations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Quest\Quest_TaskAlternativesEditor.resx">
+      <DependentUpon>Quest_TaskAlternativesEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Quest\Quest_TaskEditor.resx">
+      <DependentUpon>Quest_TaskEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Quest\Quest_TaskLinksEditor.resx">
+      <DependentUpon>Quest_TaskLinksEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Npc_PhaseEditor.resx">
+      <DependentUpon>Npc_PhaseEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Shaders\radialgradient_editor.xnb" />
   </ItemGroup>
@@ -755,6 +846,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\toolStripIemRelations.Image.ico" />
+    <None Include="Resources\toolStripItemRelations.Image.bmp" />
     <None Include="Resources\layer_sel.png" />
     <None Include="Resources\layer_face.png" />
     <None Include="Resources\layer_face_sel.png" />

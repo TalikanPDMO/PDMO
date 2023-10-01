@@ -201,6 +201,13 @@ namespace Intersect.GameObjects.Events.Commands
 
         public bool SyncParty { get; set; }
 
+        public bool SyncGuild { get; set; }
+
+        public bool SyncAll { get; set; }
+
+        public bool SyncOffline { get; set; }
+
+
         public VariableMod Modification { get; set; }
 
     }
@@ -632,6 +639,10 @@ namespace Intersect.GameObjects.Events.Commands
         public sbyte X { get; set; }
 
         public sbyte Y { get; set; }
+
+        public int MinLevel { get; set; }
+
+        public int MaxLevel { get; set; }
 
     }
 
@@ -1098,5 +1109,94 @@ namespace Intersect.GameObjects.Events.Commands
 
         public override EventCommandType Type { get; } = EventCommandType.ResetStatPointAllocations;
 
+    }
+
+    public class ShowPopupCommand : EventCommand
+    {
+
+        public override EventCommandType Type { get; } = EventCommandType.ShowPopup;
+
+        public string Text { get; set; } = "";
+
+        public string Title { get; set; } = "";
+
+        public string BackgroundFile { get; set; } = "";
+
+        public byte Opacity { get; set; } = 255;
+
+        public int HideTime { get; set; } = 0;
+
+        public bool IncludeParty { get; set; } = false;
+
+        public bool IncludeGuild { get; set; } = false;
+
+        public bool IncludeAll { get; set; } = false;
+
+        public string FaceFile { get; set; } = "";
+
+        public sbyte[] PopupLayout { get; set; } = null;
+
+        public ShowPopupCommand()
+        {
+            if (PopupLayout == null)
+            {
+                // Layout for the default popup window, can be changed in the future or in the popup event editor
+                PopupLayout = new sbyte[Enum.GetNames(typeof(PopupLayoutParams)).Length];
+                PopupLayout[((int)PopupLayoutParams.PopupShiftX)] = 0;
+                PopupLayout[((int)PopupLayoutParams.PopupShiftY)] = -20;
+                PopupLayout[((int)PopupLayoutParams.TitleShiftX)] = 0;
+                PopupLayout[((int)PopupLayoutParams.TitleShiftY)] = -40;
+                PopupLayout[((int)PopupLayoutParams.FaceShiftX)] = 0;
+                PopupLayout[((int)PopupLayoutParams.FaceShiftY)] = 0;
+                PopupLayout[((int)PopupLayoutParams.TextAreaShiftX)] = 0;
+                PopupLayout[((int)PopupLayoutParams.TextAreaShiftY)] = 10;
+                PopupLayout[((int)PopupLayoutParams.TextAreaWidth)] = 90;
+                PopupLayout[((int)PopupLayoutParams.TextAreaHeight)] = 70;
+            }
+        }
+    }
+
+    public class SetExpBoostCommand : EventCommand
+    {
+
+        public override EventCommandType Type { get; } = EventCommandType.SetExpBoost;
+
+        public EventTargetType TargetType { get; set; } = EventTargetType.Player;
+        public string Title { get; set; } = "";
+
+        public int ExpBoostNpc { get; set; } = 0;
+
+        public bool UseVariableExpBoostNpc { get; set; } = false;
+
+        public VariableTypes VariableTypeExpBoostNpc { get; set; } = VariableTypes.PlayerVariable;
+
+        public Guid VariableIdExpBoostNpc { get; set; }
+
+        public int ExpBoostNpcDuration { get; set; } = 0;
+
+        public bool UseVariableExpBoostNpcDuration { get; set; } = false;
+
+        public VariableTypes VariableTypeExpBoostNpcDuration { get; set; } = VariableTypes.PlayerVariable;
+
+        public Guid VariableIdExpBoostNpcDuration { get; set; }
+        public int ExpBoostQuestEvent { get; set; } = 0;
+
+        public bool UseVariableExpBoostQuestEvent { get; set; } = false;
+
+        public VariableTypes VariableTypeExpBoostQuestEvent { get; set; } = VariableTypes.PlayerVariable;
+
+        public Guid VariableIdExpBoostQuestEvent { get; set; }
+
+        public int ExpBoostQuestEventDuration { get; set; } = 0;
+
+        public bool UseVariableExpBoostQuestEventDuration { get; set; } = false;
+
+        public VariableTypes VariableTypeExpBoostQuestEventDuration { get; set; } = VariableTypes.PlayerVariable;
+
+        public Guid VariableIdExpBoostQuestEventDuration { get; set; }
+
+        public bool IncludeGuild { get; set; } = false;
+
+        public bool IncludeAll { get; set; } = false;
     }
 }

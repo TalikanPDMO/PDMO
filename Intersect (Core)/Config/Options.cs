@@ -78,6 +78,8 @@ namespace Intersect
 
         public LoggingOptions Logging = new LoggingOptions();
 
+        [JsonProperty("PvpStadium")] public PvpStadiumOption PvpStadiumOpts = new PvpStadiumOption();
+
         public static Options Instance { get; private set; }
 
         [JsonIgnore]
@@ -150,6 +152,10 @@ namespace Intersect
 
         public static int TileHeight => Instance.MapOpts.TileHeight;
 
+        public static int DevTileWidth => Instance.MapOpts.DevTileWidth;
+
+        public static int DevTileHeight => Instance.MapOpts.DevTileHeight;
+
         public static int EventWatchdogKillThreshhold => Instance.EventKillTheshhold;
 
         public static int MaxChatLength => Instance.ChatOpts.MaxChatLength;
@@ -173,6 +179,8 @@ namespace Intersect
         public static int PasswordResetExpirationMinutes => Instance._passResetExpirationMin;
 
         public static bool AdminOnly { get => Instance._adminOnly; set => Instance._adminOnly = value; }
+
+        public static PvpStadiumOption PvpStadium => Instance.PvpStadiumOpts;
 
         public static bool BlockClientRegistrations
         {

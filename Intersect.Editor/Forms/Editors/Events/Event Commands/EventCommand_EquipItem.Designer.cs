@@ -30,13 +30,12 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EventCommandEquipItems));
             this.grpEquipItem = new DarkUI.Controls.DarkGroupBox();
+            this.chkUnequip = new DarkUI.Controls.DarkCheckBox();
             this.cmbItem = new DarkUI.Controls.DarkComboBox();
             this.lblItem = new System.Windows.Forms.Label();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
-            this.chkUnequip = new DarkUI.Controls.DarkCheckBox();
             this.grpEquipItem.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,10 +51,21 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpEquipItem.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpEquipItem.Location = new System.Drawing.Point(3, 3);
             this.grpEquipItem.Name = "grpEquipItem";
-            this.grpEquipItem.Size = new System.Drawing.Size(193, 111);
+            this.grpEquipItem.Size = new System.Drawing.Size(320, 111);
             this.grpEquipItem.TabIndex = 17;
             this.grpEquipItem.TabStop = false;
             this.grpEquipItem.Text = "Equip/Unequip Player Items:";
+            // 
+            // chkUnequip
+            // 
+            this.chkUnequip.AutoSize = true;
+            this.chkUnequip.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkUnequip.Location = new System.Drawing.Point(6, 50);
+            this.chkUnequip.Name = "chkUnequip";
+            this.chkUnequip.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.chkUnequip.Size = new System.Drawing.Size(72, 17);
+            this.chkUnequip.TabIndex = 57;
+            this.chkUnequip.Text = "Unequip?";
             // 
             // cmbItem
             // 
@@ -72,7 +82,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbItem.FormattingEnabled = true;
             this.cmbItem.Location = new System.Drawing.Point(65, 23);
             this.cmbItem.Name = "cmbItem";
-            this.cmbItem.Size = new System.Drawing.Size(115, 21);
+            this.cmbItem.Size = new System.Drawing.Size(249, 21);
             this.cmbItem.TabIndex = 24;
             this.cmbItem.Text = null;
             this.cmbItem.TextPadding = new System.Windows.Forms.Padding(2);
@@ -106,17 +116,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // chkUnequip
-            // 
-            this.chkUnequip.AutoSize = true;
-            this.chkUnequip.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkUnequip.Location = new System.Drawing.Point(6, 50);
-            this.chkUnequip.Name = "chkUnequip";
-            this.chkUnequip.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.chkUnequip.Size = new System.Drawing.Size(72, 17);
-            this.chkUnequip.TabIndex = 57;
-            this.chkUnequip.Text = "Unequip?";
-            // 
             // EventCommandEquipItems
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -125,7 +124,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpEquipItem);
             this.Name = "EventCommandEquipItems";
-            this.Size = new System.Drawing.Size(205, 124);
+            this.Size = new System.Drawing.Size(330, 124);
             this.grpEquipItem.ResumeLayout(false);
             this.grpEquipItem.PerformLayout();
             this.ResumeLayout(false);

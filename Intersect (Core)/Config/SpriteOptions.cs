@@ -38,6 +38,11 @@ namespace Intersect.Config
         public int WeaponFrames = 4;
 
         /// <summary>
+        /// Defines the number of frames there will be in run attacking sprite sheets
+        /// </summary>
+        public int RunFrames = 4;
+
+        /// <summary>
         /// The frame on the normal sprite sheet to show when attacking when there is no designated sheet for attack.
         /// </summary>
         public int NormalSheetAttackFrame = 3;
@@ -53,6 +58,11 @@ namespace Intersect.Config
         public int MovingFrameDuration = 200;
 
         /// <summary>
+        /// Defines how long (in ms) between runing frames
+        /// </summary>
+        public int RunningFrameDuration = 80;
+
+        /// <summary>
         /// Defines how long (in ms) between idling frames
         /// </summary>
         public int IdleFrameDuration = 200;
@@ -61,6 +71,11 @@ namespace Intersect.Config
         /// Defines how long (in ms) a player must idle before the idling sprite starts to render
         /// </summary>
         public int TimeBeforeIdle = 4000;
+
+        /// <summary>
+        /// Defines how long (in ms) a player must idle before the idling sprite starts to render
+        /// </summary>
+        public int TimeBeforeNormal = 30;
 
         /// <summary>
         /// Defines the number of rows in sprite sheets which will correlate to the number of directions in the game (Intersect is programmed by default with only 4 directions)

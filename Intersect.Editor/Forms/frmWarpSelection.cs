@@ -37,8 +37,8 @@ namespace Intersect.Editor.Forms
             InitializeComponent();
             InitLocalization();
             mapTreeList1.UpdateMapList(mCurrentMapId);
-            pnlMap.Width = Options.TileWidth * Options.MapWidth;
-            pnlMap.Height = Options.TileHeight * Options.MapHeight;
+            pnlMap.Width = Globals.CurrentTileWidth * Options.MapWidth;
+            pnlMap.Height = Globals.CurrentTileHeight * Options.MapHeight;
             pnlMap.BackColor = System.Drawing.Color.Black;
             mapTreeList1.SetSelect(NodeDoubleClick);
 
@@ -139,8 +139,8 @@ namespace Intersect.Editor.Forms
                     g.DrawRectangle(
                         new Pen(System.Drawing.Color.White, 2f),
                         new Rectangle(
-                            mCurrentX * Options.TileWidth, mCurrentY * Options.TileHeight, Options.TileWidth,
-                            Options.TileHeight
+                            mCurrentX * Globals.CurrentTileWidth, mCurrentY * Globals.CurrentTileHeight, Globals.CurrentTileWidth,
+                            Globals.CurrentTileHeight
                         )
                     );
                 }
@@ -200,8 +200,8 @@ namespace Intersect.Editor.Forms
                 return;
             }
 
-            mCurrentX = (int) Math.Floor((double) e.X / Options.TileWidth);
-            mCurrentY = (int) Math.Floor((double) e.Y / Options.TileHeight);
+            mCurrentX = (int) Math.Floor((double) e.X / Globals.CurrentTileWidth);
+            mCurrentY = (int) Math.Floor((double) e.Y / Globals.CurrentTileHeight);
             UpdatePreview();
         }
 

@@ -2,6 +2,7 @@
 
 using Intersect.Admin.Actions;
 using Intersect.Client.Core.Controls;
+using Intersect.Client.Entities;
 using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Input;
 using Intersect.Client.General;
@@ -26,6 +27,11 @@ namespace Intersect.Client.Core
         public static HandleKeyEvent MouseDown;
 
         public static HandleKeyEvent MouseUp;
+
+        //Ajouté par Moussmous pour les controles manette
+        private static XBoxController XboxControllerMonitor = new XBoxController();
+        private static ControlGamepad lastMenu;
+        private static bool reafficher = false;
 
         public static void OnKeyPressed(Keys key)
         {
@@ -91,12 +97,20 @@ namespace Intersect.Client.Core
                 {
                     return;
                 }
-
-                // First try and unfocus chat then close all UI elements, then untarget our target.. and THEN open the escape menu.
+                // First try and unfocus chat then close preview if needed then close popup then close all UI elements, then untarget our target.. and THEN open the escape menu.
                 // Most games do this, why not this?
                 if (Interface.Interface.GameUi != null && Interface.Interface.GameUi.ChatFocussed)
                 {
                     Interface.Interface.GameUi.UnfocusChat = true;
+                }
+                else if (Globals.Me.CurrentPreviewHotBarKey != -1)
+                {
+                    Globals.Me.CurrentPreviewHotBarKey = -1;
+                    Globals.Me.previewSpellId = Guid.Empty;
+                }
+                else if (Globals.Popups.Count > 0)
+                {
+                    Interface.Interface.GameUi.mPopupWindow.Close();
                 }
                 else if (Interface.Interface.GameUi != null && Interface.Interface.GameUi.CloseAllWindows())
                 {
@@ -179,7 +193,10 @@ namespace Intersect.Client.Core
                                         break;
 
                                     case Control.PickUp:
-                                        Globals.Me?.TryPickupItem(Globals.Me.MapInstance.Id, Globals.Me.Y * Options.MapWidth + Globals.Me.X);
+                                        if (Globals.Me?.MapInstance != null)
+                                        {
+                                            Globals.Me.TryPickupItem(Globals.Me.MapInstance.Id, Globals.Me.Y * Options.MapWidth + Globals.Me.X);
+                                        }
 
                                         break;
 
@@ -253,6 +270,11 @@ namespace Intersect.Client.Core
                                         Interface.Interface.GameUi?.GameMenu.ToggleGuildWindow();
 
                                         break;
+
+                                    case Control.OpenPvpStadium:
+                                        Interface.Interface.GameUi?.GameMenu.TogglePvpStadiumWindow();
+
+                                        break;
                                 }
 
                                 break;
@@ -270,6 +292,320 @@ namespace Intersect.Client.Core
                         }
                     }
                 );
+        }
+
+        //Ajouté par Moussmous pour les controles manette
+        public static void GamepadInteraction(SharpDX.XInput.State lastState)
+        {
+            var consumeKey = false;
+            bool canFocusChat = true;
+
+
+            if (XboxControllerMonitor.IsEscapeKeyUptoDown(lastState))
+            {
+                reafficher = true;
+                if (Globals.GameState != GameStates.Intro)
+                {
+                    //Y'avait un break avant ici donc mnt plus rien
+                }
+                else
+                {
+                    Fade.FadeIn();
+                    Globals.GameState = GameStates.Menu;
+
+                    return;
+                }
+            }
+                    
+            
+
+            if (XboxControllerMonitor.IsMenuKeyDown())
+            {
+                if (Globals.GameState != GameStates.InGame)
+                {
+                    return;
+                }
+                // First try and unfocus chat then close preview if needed then close all UI elements, then untarget our target.. and THEN open the escape menu.
+                // Most games do this, why not this?
+                if (Interface.Interface.GameUi != null && Interface.Interface.GameUi.ChatFocussed)
+                {
+                    Interface.Interface.GameUi.UnfocusChat = true;
+                }
+                else if (Globals.Me.CurrentPreviewHotBarKey != -1)
+                {
+                    Globals.Me.CurrentPreviewHotBarKey = -1;
+                    Globals.Me.previewSpellId = Guid.Empty;
+                }
+                else if (Interface.Interface.GameUi != null && Interface.Interface.GameUi.CloseAllWindows())
+                {
+                    // We've closed our windows, don't do anything else. :)
+                }
+                else if (Globals.Me != null && Globals.Me.TargetIndex != Guid.Empty)
+                {
+                    Globals.Me.ClearTarget();
+                }
+                else
+                {
+                    Interface.Interface.GameUi?.EscapeMenu?.ToggleHidden();
+                }
+            }
+
+            if (Interface.Interface.HasInputFocus() | consumeKey)
+            {
+                return;
+            }
+
+            if (XboxControllerMonitor.IsBlockKeyUptoDown(lastState))
+            {
+                Globals.Me?.TryBlock();
+            }
+
+            if (XboxControllerMonitor.IsAutotargetKeyUptoDown(lastState))
+            {
+                Globals.Me?.AutoTarget();
+            }
+
+            if (XboxControllerMonitor.IsPickupKeyUptoDown(lastState))
+            {
+                if (Globals.Me?.MapInstance != null)
+                {
+                    Globals.Me.TryPickupItem(Globals.Me.MapInstance.Id, Globals.Me.Y * Options.MapWidth + Globals.Me.X);
+                }   
+            }
+
+            //Ouverture des menus
+            if (XboxControllerMonitor.IsOpenInventoryKeyUptoDown(lastState))
+            {
+                Interface.Interface.GameUi?.GameMenu?.ToggleInventoryWindow();
+            }
+
+            if (XboxControllerMonitor.IsOpenQuestsKeyUptoDown(lastState))
+            {
+                Interface.Interface.GameUi?.GameMenu?.ToggleQuestsWindow();
+            }
+
+            if (XboxControllerMonitor.IsOpenCharacterInfoKeyUptoDown(lastState))
+            {
+                Interface.Interface.GameUi?.GameMenu?.ToggleCharacterWindow();
+            }
+
+            if (XboxControllerMonitor.IsOpenPartiesKeyUptoDown(lastState))
+            {
+                Interface.Interface.GameUi?.GameMenu?.TogglePartyWindow();
+            }
+
+            if (XboxControllerMonitor.IsOpenSpellsKeyUptoDown(lastState))
+            {
+                Interface.Interface.GameUi?.GameMenu?.ToggleSpellsWindow();
+            }
+
+            if (XboxControllerMonitor.IsOpenFriendsKeyUptoDown(lastState))
+            {
+                Interface.Interface.GameUi?.GameMenu?.ToggleFriendsWindow();
+            }
+
+            if (XboxControllerMonitor.IsOpenOpenGuildKeyUptoDown(lastState))
+            {
+                Interface.Interface.GameUi?.GameMenu.ToggleGuildWindow();
+            }
+
+            ControlGamepad retourControl = XboxControllerMonitor.AreSwitchMenuKeysUptoDown(lastState, lastMenu, reafficher);
+            if (retourControl != ControlGamepad.Block)
+            {
+                reafficher = false;
+                lastMenu = retourControl;
+            }
+            switch (retourControl)
+            {
+                case ControlGamepad.OpenInventory:
+                    Interface.Interface.GameUi?.GameMenu?.ToggleInventoryWindow();
+
+                    break;
+
+                case ControlGamepad.OpenQuests:
+                    Interface.Interface.GameUi?.GameMenu?.ToggleQuestsWindow();
+
+                    break;
+
+                case ControlGamepad.OpenCharacterInfo:
+                    Interface.Interface.GameUi?.GameMenu?.ToggleCharacterWindow();
+
+                    break;
+
+                case ControlGamepad.OpenParties:
+                    Interface.Interface.GameUi?.GameMenu?.TogglePartyWindow();
+
+                    break;
+
+                case ControlGamepad.OpenSpells:
+                    Interface.Interface.GameUi?.GameMenu?.ToggleSpellsWindow();
+
+                    break;
+
+                case ControlGamepad.OpenFriends:
+                    Interface.Interface.GameUi?.GameMenu?.ToggleFriendsWindow();
+
+                    break;
+
+                case ControlGamepad.OpenGuild:
+                    Interface.Interface.GameUi?.GameMenu.ToggleGuildWindow();
+
+                    break;
+            }
+
+            /*
+            foreach (Control control in XboxControllerMonitor.GetGamepadControls()) 
+            {
+                if (consumeKey)
+                {
+                    return;
+                }
+
+                switch (control)
+                {
+                    case Control.Screenshot:
+                        Graphics.Renderer?.RequestScreenshot();
+
+                        break;
+
+                    case Control.ToggleGui:
+                        if (Globals.GameState == GameStates.InGame)
+                        {
+                            Interface.Interface.HideUi = !Interface.Interface.HideUi;
+                        }
+
+                        break;
+                }
+
+                switch (Globals.GameState)
+                {
+                    case GameStates.Intro:
+                        break;
+
+                    case GameStates.Menu:
+                        break;
+
+                    case GameStates.InGame:
+                        switch (control)
+                        {
+                            case Control.MoveUp:
+                                break;
+
+                            case Control.MoveLeft:
+                                break;
+
+                            case Control.MoveDown:
+                                break;
+
+                            case Control.MoveRight:
+                                break;
+
+                            case Control.AttackInteract:
+                                break;
+
+                            case Control.Block:
+                                Globals.Me?.TryBlock();
+
+                                break;
+
+                            case Control.AutoTarget:
+                                Globals.Me?.AutoTarget();
+
+                                break;
+
+                            case Control.PickUp:
+                                Globals.Me?.TryPickupItem(Globals.Me.MapInstance.Id, Globals.Me.Y * Options.MapWidth + Globals.Me.X);
+
+                                break;
+
+                            case Control.Enter:
+                                if (canFocusChat)
+                                {
+                                    Interface.Interface.GameUi.FocusChat = true;
+                                    consumeKey = true;
+                                }
+
+                                return;
+
+                            case Control.Hotkey1:
+                            case Control.Hotkey2:
+                            case Control.Hotkey3:
+                            case Control.Hotkey4:
+                            case Control.Hotkey5:
+                            case Control.Hotkey6:
+                            case Control.Hotkey7:
+                            case Control.Hotkey8:
+                            case Control.Hotkey9:
+                            case Control.Hotkey0:
+                                break;
+
+                            case Control.OpenInventory:
+                                Interface.Interface.GameUi?.GameMenu?.ToggleInventoryWindow();
+
+                                break;
+
+                            case Control.OpenQuests:
+                                Interface.Interface.GameUi?.GameMenu?.ToggleQuestsWindow();
+
+                                break;
+
+                            case Control.OpenCharacterInfo:
+                                Interface.Interface.GameUi?.GameMenu?.ToggleCharacterWindow();
+
+                                break;
+
+                            case Control.OpenParties:
+                                Interface.Interface.GameUi?.GameMenu?.TogglePartyWindow();
+
+                                break;
+
+                            case Control.OpenSpells:
+                                Interface.Interface.GameUi?.GameMenu?.ToggleSpellsWindow();
+
+                                break;
+
+                            case Control.OpenFriends:
+                                Interface.Interface.GameUi?.GameMenu?.ToggleFriendsWindow();
+
+                                break;
+
+                            case Control.OpenSettings:
+                                Interface.Interface.GameUi?.EscapeMenu?.OpenSettings();
+
+                                break;
+
+                            case Control.OpenDebugger:
+                                Interface.Interface.GameUi?.ShowHideDebug();
+
+                                break;
+
+                            case Control.OpenAdminPanel:
+                                PacketSender.SendOpenAdminWindow();
+
+                                break;
+
+                            case Control.OpenGuild:
+                                Interface.Interface.GameUi?.GameMenu.ToggleGuildWindow();
+
+                                break;
+                        }
+
+                        break;
+
+                    case GameStates.Loading:
+                        break;
+
+                    case GameStates.Error:
+                        break;
+
+                    default:
+                        throw new ArgumentOutOfRangeException(
+                            nameof(Globals.GameState), Globals.GameState, null
+                        );
+                }
+            }
+            */
+
         }
 
         public static void OnKeyReleased(Keys key)
@@ -340,14 +676,16 @@ namespace Intersect.Client.Core
 
             if (Controls.Controls.ControlHasKey(Control.PickUp, key))
             {
-                if (Globals.Me.TryPickupItem(Globals.Me.MapInstance.Id, Globals.Me.Y * Options.MapWidth + Globals.Me.X, Guid.Empty, true))
+                if (Globals.Me.MapInstance!= null && Globals.Me.TryPickupItem(Globals.Me.MapInstance.Id, Globals.Me.Y * Options.MapWidth + Globals.Me.X, Guid.Empty, true))
                 {
                     return;
                 }
 
                 if (Globals.Me.AttackTimer < Timing.Global.Ticks / TimeSpan.TicksPerMillisecond)
                 {
-                    Globals.Me.AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + Globals.Me.CalculateAttackTime();
+                    var attackTime = Globals.Me.CalculateAttackTime();
+                    Globals.Me.AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTime;
+                    Globals.Me.AttackAnimationTimer = (long)(Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + attackTime * Options.Combat.AttackAnimationTimeRatio);
                 }
             }
 

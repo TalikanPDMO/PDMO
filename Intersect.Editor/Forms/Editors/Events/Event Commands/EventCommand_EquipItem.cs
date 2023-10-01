@@ -23,7 +23,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
             InitLocalization();
             cmbItem.Items.Clear();
-            cmbItem.Items.AddRange(ItemBase.Names);
+            cmbItem.Items.AddRange(ItemBase.EditorFormatNames);
             cmbItem.SelectedIndex = ItemBase.ListIndex(mMyCommand.ItemId);
             chkUnequip.Checked = mMyCommand.Unequip;
         }

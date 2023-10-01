@@ -34,6 +34,8 @@ namespace Intersect.Client.Interface.Game
 
         private Button mLeaveButton;
 
+        private Button mLocateButton;
+
         private List<ImagePanel> mMpBar = new List<ImagePanel>();
 
         private List<ImagePanel> mMpBarContainer = new List<ImagePanel>();
@@ -157,6 +159,11 @@ namespace Intersect.Client.Interface.Game
             mLeaveButton.SetToolTipText(Strings.Parties.leavetip);
             mLeaveButton.Clicked += leave_Clicked;
 
+            mLocateButton = new Button(mPartyWindow, "LocatePartyButton");
+            mLocateButton.Text = Globals.Me.PartyLocalisationEnabled ? Strings.Parties.unlocate : Strings.Parties.locate;
+            mLocateButton.SetToolTipText(Globals.Me.PartyLocalisationEnabled ? Strings.Parties.unlocatetip : Strings.Parties.locatetip);
+            mLocateButton.Clicked += locateAll_Clicked;
+
             mPartyWindow.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
         }
 
@@ -171,6 +178,7 @@ namespace Intersect.Client.Interface.Game
             mLeader.Hide();
             mLeaderText.Hide();
             mLeaveButton.Hide();
+            mLocateButton.Hide();
             for (var i = 0; i < Options.Instance.PartyOpts.MaximumMembers; i++)
             {
                 mHpBarContainer[i].Hide();
@@ -191,6 +199,7 @@ namespace Intersect.Client.Interface.Game
                 mLeader.Show();
                 mLeaderText.Show();
                 mLeaveButton.Show();
+                mLocateButton.Show();
 
                 for (var i = 0; i < Options.Instance.PartyOpts.MaximumMembers; i++)
                 {
@@ -325,6 +334,16 @@ namespace Intersect.Client.Interface.Game
             if (Globals.Me.Party.Count > 0)
             {
                 PacketSender.SendPartyLeave();
+            }
+        }
+
+        void locateAll_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            if (Globals.Me.Party.Count > 0)
+            {
+                Globals.Me.PartyLocalisationEnabled = !Globals.Me.PartyLocalisationEnabled;
+                mLocateButton.Text = Globals.Me.PartyLocalisationEnabled ? Strings.Parties.unlocate : Strings.Parties.locate;
+                mLocateButton.SetToolTipText(Globals.Me.PartyLocalisationEnabled ? Strings.Parties.unlocatetip : Strings.Parties.locatetip);
             }
         }
 

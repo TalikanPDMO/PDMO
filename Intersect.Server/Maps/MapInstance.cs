@@ -623,60 +623,105 @@ namespace Intersect.Server.Maps
         {
             for (var i = 0; i < Spawns.Count; i++)
             {
-                SpawnMapNpc(i);
+                // MinTime or MaxTime to -1 means we can spawn at anytime
+                if ( Spawns[i].Timeslots[0] == -1 || Spawns[i].Timeslots[1] == -1 ||
+                    Time.IsTimeRangeBetween(Spawns[i].Timeslots[0], Spawns[i].Timeslots[1]))
+                {
+                    TrySpawnMapNpc(i);
+                }
             }
         }
 
-        private void SpawnMapNpc(int i)
+        //Return true if we can spawn
+        public bool CheckInactiveSpawnsCondition(int i)
+        {
+            foreach (var s in Spawns[i].InactiveSpawns)
+            {
+                if (NpcSpawnInstances.ContainsKey(Spawns[s]) && !NpcSpawnInstances[Spawns[s]].Entity.Dead)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        //Return true if the npc was spawned
+        private bool TrySpawnMapNpc(int i)
         {
             byte x = 0;
             byte y = 0;
             byte dir = 0;
-            var npcBase = NpcBase.Get(Spawns[i].NpcId);
-            if (npcBase != null)
+
+            if (CheckInactiveSpawnsCondition(i))
             {
-                MapNpcSpawn npcSpawnInstance;
-                if (NpcSpawnInstances.ContainsKey(Spawns[i]))
+                var npcBase = NpcBase.Get(Spawns[i].NpcId);
+                if (npcBase != null)
                 {
-                    npcSpawnInstance = NpcSpawnInstances[Spawns[i]];
-                }
-                else
-                {
-                    npcSpawnInstance = new MapNpcSpawn();
-                    NpcSpawnInstances.TryAdd(Spawns[i], npcSpawnInstance);
-                }
-
-                if (Spawns[i].Direction != NpcSpawnDirection.Random)
-                {
-                    dir = (byte) (Spawns[i].Direction - 1);
-                }
-                else
-                {
-                    dir = (byte)Randomization.Next(0, 4);
-                }
-
-                if (Spawns[i].X >= 0 && Spawns[i].Y >= 0)
-                {
-                    npcSpawnInstance.Entity = SpawnNpc((byte) Spawns[i].X, (byte) Spawns[i].Y, dir, Spawns[i].NpcId);
-                }
-                else
-                {
-                    for (var n = 0; n < 100; n++)
+                    MapNpcSpawn npcSpawnInstance;
+                    if (NpcSpawnInstances.ContainsKey(Spawns[i]))
                     {
-                        x = (byte)Randomization.Next(0, Options.MapWidth);
-                        y = (byte)Randomization.Next(0, Options.MapHeight);
-                        if (Attributes[x, y] == null || Attributes[x, y].Type == (int) MapAttributes.Walkable)
-                        {
-                            break;
-                        }
-
-                        x = 0;
-                        y = 0;
+                        npcSpawnInstance = NpcSpawnInstances[Spawns[i]];
+                    }
+                    else
+                    {
+                        npcSpawnInstance = new MapNpcSpawn();
+                        NpcSpawnInstances.TryAdd(Spawns[i], npcSpawnInstance);
                     }
 
-                    npcSpawnInstance.Entity = SpawnNpc(x, y, dir, Spawns[i].NpcId);
+                    if (Spawns[i].Direction != NpcSpawnDirection.Random)
+                    {
+                        dir = (byte)(Spawns[i].Direction - 1);
+                    }
+                    else
+                    {
+                        dir = (byte)Randomization.Next(0, 4);
+                    }
+                    var spawnLevel = Spawns[i].Levels[0];
+                    if (Spawns[i].Levels[0] != Spawns[i].Levels[1])
+                    {
+                        if (Spawns[i].Levels[0] < Spawns[i].Levels[1])
+                        {
+                            spawnLevel = Randomization.Next(Spawns[i].Levels[0], Spawns[i].Levels[1] + 1);
+                        }
+                        else
+                        {
+                            spawnLevel = Randomization.Next(Spawns[i].Levels[1], Spawns[i].Levels[0] + 1);
+                        }
+                    }
+                    if (spawnLevel > npcBase.Level + npcBase.LevelRange || spawnLevel < npcBase.Level - npcBase.LevelRange)
+                    {
+                        // If any issue in the spawns levels, default level
+                        spawnLevel = npcBase.Level;
+                    }
+                    if (spawnLevel < 1)
+                    {
+                        spawnLevel = 1;
+                    }
+                    if (Spawns[i].X >= 0 && Spawns[i].Y >= 0)
+                    {
+                        npcSpawnInstance.Entity = SpawnNpc((byte)Spawns[i].X, (byte)Spawns[i].Y, dir, Spawns[i].NpcId, false, spawnLevel);
+                    }
+                    else
+                    {
+                        for (var n = 0; n < 100; n++)
+                        {
+                            x = (byte)Randomization.Next(0, Options.MapWidth);
+                            y = (byte)Randomization.Next(0, Options.MapHeight);
+                            if (Attributes[x, y] == null || Attributes[x, y].Type == (int)MapAttributes.Walkable)
+                            {
+                                break;
+                            }
+
+                            x = 0;
+                            y = 0;
+                        }
+
+                        npcSpawnInstance.Entity = SpawnNpc(x, y, dir, Spawns[i].NpcId, false, spawnLevel);
+                    }
+                    return true;
                 }
             }
+            return false;
         }
 
         private void DespawnNpcs()
@@ -708,21 +753,24 @@ namespace Intersect.Server.Maps
             }
         }
 
-        public Entity SpawnNpc(byte tileX, byte tileY, byte dir, Guid npcId, bool despawnable = false)
+        public Entity SpawnNpc(byte tileX, byte tileY, byte dir, Guid npcId, bool despawnable = false, int level = 0)
         {
             var npcBase = NpcBase.Get(npcId);
             if (npcBase != null)
             {
-                var npc = new Npc(npcBase, despawnable)
+                var npc = new Npc(npcBase, despawnable, level)
                 {
                     MapId = Id,
                     X = tileX,
                     Y = tileY,
-                    Dir = dir
+                    Dir = dir,
+                    SpawnMap = this,
+                    SpawnX = tileX,
+                    SpawnY = tileY
                 };
 
                 AddEntity(npc);
-                PacketSender.SendEntityDataToProximity(npc);
+                PacketSender.SendEntityDataToProximity(npc, null, true);
 
                 return npc;
             }
@@ -802,10 +850,11 @@ namespace Intersect.Server.Maps
             byte y,
             byte z,
             byte direction,
-            Entity target
+            Entity target,
+            bool alreadyCrit = false
         )
         {
-            var proj = new Projectile(owner, parentSpell, parentItem, projectile, Id, x, y, z, direction, target);
+            var proj = new Projectile(owner, parentSpell, parentItem, projectile, Id, x, y, z, direction, target, alreadyCrit);
             MapProjectiles.TryAdd(proj.Id, proj);
             MapProjectilesCached = MapProjectiles.Values.ToArray();
             PacketSender.SendEntityDataToProximity(proj);
@@ -865,6 +914,11 @@ namespace Intersect.Server.Maps
                 mPlayers.TryRemove(en.Id, out var pResult);
             }
             mCachedEntities = mEntities.Values.ToArray();
+            if (en is Player p)
+            {
+                //Common Event OnMapLeave
+                p.StartCommonEventsWithTrigger(CommonEventTrigger.OnMapLeave, "", this.Id.ToString());
+            }
         }
 
         public void RemoveProjectile(Projectile en)
@@ -996,22 +1050,82 @@ namespace Intersect.Server.Maps
                 //Process NPC Respawns
                 for (var i = 0; i < Spawns.Count; i++)
                 {
+                    // MinTime or MaxTime to -1 means we can spawn at anytime
+                    var isInTimeInterval = Spawns[i].Timeslots[0] == -1 || Spawns[i].Timeslots[1] == -1 ||
+                        Time.IsTimeRangeBetween(Spawns[i].Timeslots[0], Spawns[i].Timeslots[1]);
                     if (NpcSpawnInstances.ContainsKey(Spawns[i]))
                     {
                         var npcSpawnInstance = NpcSpawnInstances[Spawns[i]];
-                        if (npcSpawnInstance != null && npcSpawnInstance.Entity.Dead)
+                        if (isInTimeInterval)
                         {
-                            if (npcSpawnInstance.RespawnTime == -1)
+                            if (npcSpawnInstance != null && npcSpawnInstance.Entity.Dead)
                             {
-                                npcSpawnInstance.RespawnTime = Globals.Timing.Milliseconds +
-                                                               ((Npc) npcSpawnInstance.Entity).Base.SpawnDuration -
-                                                               (Globals.Timing.Milliseconds - LastUpdateTime);
+                                if (npcSpawnInstance.RespawnTime == -1)
+                                {
+                                    npcSpawnInstance.RespawnTime = Globals.Timing.Milliseconds +
+                                                                   ((Npc)npcSpawnInstance.Entity).Base.SpawnDuration -
+                                                                   (Globals.Timing.Milliseconds - LastUpdateTime);
+                                }
+                                else if (Spawns[i].RandomSpawnTimer != 0)
+                                {
+                                    // If we are here, respawntime is already done and we are waiting the RandomSpawn Timer
+                                    if (Spawns[i].RandomSpawnTimer < Globals.Timing.Milliseconds)
+                                    {
+                                        if (TrySpawnMapNpc(i))
+                                        {
+                                            npcSpawnInstance.RespawnTime = -1;
+                                        }
+                                        else
+                                        {
+                                            // Spawn instance need to be removed because of conditions on inactives spawns
+                                            NpcSpawnInstances.TryRemove(Spawns[i], out var spawnRemoved);
+                                        }
+                                        Spawns[i].RandomSpawnTimer = 0;
+                                    } 
+                                }
+                                else if (npcSpawnInstance.RespawnTime < Globals.Timing.Milliseconds)
+                                {
+                                    // When respawn available, we check if possible and add the RandomSpawn Timer
+                                    if (CheckInactiveSpawnsCondition(i))
+                                    {
+                                        Spawns[i].RandomSpawnTimer = Globals.Timing.Milliseconds +
+                                            Randomization.Next(Options.Npc.MinRandomSpawnTime, Options.Npc.MaxRandomSpawnTime);
+                                    }
+                                    else
+                                    {
+                                        // Spawn instance need to be removed because of conditions on inactives spawns
+                                        NpcSpawnInstances.TryRemove(Spawns[i], out var spawnRemoved);
+                                        Spawns[i].RandomSpawnTimer = 0;
+                                    }
+                                    
+                                }
                             }
-                            else if (npcSpawnInstance.RespawnTime < Globals.Timing.Milliseconds)
+                        }
+                        else if (npcSpawnInstance.Entity.CanDespawn)
+                        {
+                            // Spawn instance is not anymore in time, need to despawn
+                            lock (npcSpawnInstance.Entity.EntityLock)
                             {
-                                SpawnMapNpc(i);
-                                npcSpawnInstance.RespawnTime = -1;
+                                npcSpawnInstance.Entity.Die(false, null, true);
                             }
+                            NpcSpawnInstances.TryRemove(Spawns[i], out var spawnRemoved);
+                            Spawns[i].RandomSpawnTimer = 0;
+                        }
+                    }
+                    else if (isInTimeInterval)
+                    {
+                        if (Spawns[i].RandomSpawnTimer == 0)
+                        {
+                            if (CheckInactiveSpawnsCondition(i))
+                            {
+                                Spawns[i].RandomSpawnTimer = Globals.Timing.Milliseconds +
+                                    Randomization.Next(Options.Npc.MinRandomSpawnTime, Options.Npc.MaxRandomSpawnTime);
+                            }
+                        }
+                        else if (Spawns[i].RandomSpawnTimer < Globals.Timing.Milliseconds)
+                        {
+                            TrySpawnMapNpc(i);
+                            Spawns[i].RandomSpawnTimer = 0;
                         }
                     }
                 }
@@ -1188,10 +1302,14 @@ namespace Intersect.Server.Maps
             PacketSender.SendMapItems(player, Id);
 
             AddEntity(player);
-
             player.LastMapEntered = Id;
+
+           
+
             if (SurroundingMaps.Length <= 0)
             {
+                //Common Event OnMapEnter here
+                player.StartCommonEventsWithTrigger(CommonEventTrigger.OnMapEnter, "", this.Id.ToString());
                 return;
             }
 
@@ -1202,6 +1320,10 @@ namespace Intersect.Server.Maps
             }
 
             PacketSender.SendEntityDataToProximity(player, player);
+            //Common Event OnMapEnter here
+            player.StartCommonEventsWithTrigger(CommonEventTrigger.OnMapEnter, "", this.Id.ToString());
+
+
         }
 
         public void SendMapEntitiesTo(Player player)
@@ -1439,9 +1561,9 @@ namespace Intersect.Server.Maps
         }
 
         #region"Packet Batching"
-        public void AddBatchedMovement(Entity en, bool correction, Player forPlayer)
+        public void AddBatchedMovement(Entity en, bool correction, int moveDirection, Player forPlayer)
         {
-            mEntityMovements.Add(en, correction, forPlayer);
+            mEntityMovements.Add(en, correction, moveDirection, forPlayer);
         }
 
         public void AddBatchedActionMessage(ActionMsgPacket packet)

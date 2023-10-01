@@ -31,13 +31,44 @@ namespace Intersect.Client.Interface.Game
             {
                 title = item.Name;
             }
-
+            bool expandedWindow = false;
             mDescWindow = new ImagePanel(Interface.GameUi.GameCanvas, "ItemDescWindow");
             if (item != null && item.ItemType == ItemTypes.Equipment)
             {
-                mDescWindow.Name = "ItemDescWindowExpanded";
-            }
+                // Look if expanded window is needed
+                if (item.EquipmentSlot == Options.WeaponIndex && item.Damage != 0)
+                {
+                    expandedWindow = true;
+                }
+                else if (item.Effect.Type != EffectType.None && item.Effect.Percentage != 0)
+                {
+                    expandedWindow = true;
+                }
+                else
+                {
+                    for (var i = 0; i < (int)Vitals.VitalCount; i++)
+                    {
+                        if (item.VitalsGiven[i] != 0 || item.PercentageVitalsGiven[i] != 0)
+                        {
+                            expandedWindow = true;
+                            break;
+                        }
+                    }
+                    for (var i = 0; i < (int)Stats.StatCount; i++)
+                    {
+                        if (item.StatsGiven[i] != 0 || item.PercentageStatsGiven[i] != 0)
+                        {
+                            expandedWindow = true;
+                            break;
+                        }
+                    } 
+                }
 
+                if (expandedWindow)
+                {
+                    mDescWindow.Name = "ItemDescWindowExpanded";
+                }
+            }
             if (item != null)
             {
                 var icon = new ImagePanel(mDescWindow, "ItemIcon");
@@ -87,9 +118,9 @@ namespace Intersect.Client.Interface.Game
                 var itemDesc = new RichLabel(mDescWindow, "ItemDescription");
                 var itemDescText = new Label(mDescWindow, "ItemDescText");
                 itemDescText.Font = itemDescText.Parent.Skin.DefaultFont;
-                var itemStatsText = new Label(mDescWindow, item.ItemType == ItemTypes.Equipment ? "ItemStatsText" : "");
+                var itemStatsText = new Label(mDescWindow, expandedWindow ? "ItemStatsText" : "");
                 itemStatsText.Font = itemStatsText.Parent.Skin.DefaultFont;
-                var itemStats = new RichLabel(mDescWindow, item.ItemType == ItemTypes.Equipment ? "ItemStats" : "");
+                var itemStats = new RichLabel(mDescWindow, expandedWindow ? "ItemStats" : "");
                 itemDescText.IsHidden = true;
                 itemStatsText.IsHidden = true;
 
@@ -108,7 +139,7 @@ namespace Intersect.Client.Interface.Game
                 }
 
                 var stats = "";
-                if (item.ItemType == ItemTypes.Equipment)
+                if (expandedWindow)
                 {
                     stats = Strings.ItemDesc.bonuses;
                     itemStats.AddText(
@@ -117,6 +148,7 @@ namespace Intersect.Client.Interface.Game
                         itemDescText.Font
                     );
 
+                    itemStats.AddLineBreak();
                     itemStats.AddLineBreak();
                     if (item.ItemType == ItemTypes.Equipment && item.EquipmentSlot == Options.WeaponIndex)
                     {
@@ -146,17 +178,19 @@ namespace Intersect.Client.Interface.Game
 
                             bonus += item.PercentageVitalsGiven[i] + "%";
                         }
+                        if (bonus != "0")
+                        {
+                            // Show stat only if not 0
+                            var vitals = Strings.ItemDesc.vitals[i].ToString(bonus);
+                            itemStats.AddText(
+                                vitals, itemStats.RenderColor,
+                                itemStatsText.CurAlignments.Count > 0 ? itemStatsText.CurAlignments[0] : Alignments.Left,
+                                itemDescText.Font
+                            );
 
-                        var vitals = Strings.ItemDesc.vitals[i].ToString(bonus);
-                        itemStats.AddText(
-                            vitals, itemStats.RenderColor,
-                            itemStatsText.CurAlignments.Count > 0 ? itemStatsText.CurAlignments[0] : Alignments.Left,
-                            itemDescText.Font
-                        );
-
-                        itemStats.AddLineBreak();
+                            itemStats.AddLineBreak();
+                        }
                     }
-
                     if (statBuffs != null)
                     {
                         for (var i = 0; i < (int)Stats.StatCount; i++)
@@ -177,16 +211,68 @@ namespace Intersect.Client.Interface.Game
 
                                 bonus += item.PercentageStatsGiven[i] + "%";
                             }
+                            if (bonus != "0")
+                            {
+                                // Show stat only if not 0
+                                stats = Strings.ItemDesc.stats[i].ToString(bonus);
+                                itemStats.AddText(
+                                    stats, itemStats.RenderColor,
+                                    itemStatsText.CurAlignments.Count > 0
+                                        ? itemStatsText.CurAlignments[0]
+                                        : Alignments.Left, itemDescText.Font
+                                );
 
-                            stats = Strings.ItemDesc.stats[i].ToString(bonus);
-                            itemStats.AddText(
-                                stats, itemStats.RenderColor,
-                                itemStatsText.CurAlignments.Count > 0
-                                    ? itemStatsText.CurAlignments[0]
-                                    : Alignments.Left, itemDescText.Font
-                            );
+                                itemStats.AddLineBreak();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Display the possible stat ranges
+                        for (var i = 0; i < (int)Stats.StatCount; i++)
+                        {
+                            var bonus = item.StatsGiven[i].ToString();
+                            if (item.StatGrowth > 0)
+                            {
+                                var minBonus = item.StatsGiven[i] - item.StatGrowth;
+                                if (minBonus < 0)
+                                {
+                                    minBonus = 0;
+                                }
+                                var maxBonus = item.StatsGiven[i] + item.StatGrowth;
+                                if (maxBonus < 0)
+                                {
+                                    maxBonus = 0;
+                                }
+                                bonus = Strings.ItemDesc.rangestat.ToString(minBonus, maxBonus);
+                            }
+                           
+                            if (item.PercentageStatsGiven[i] > 0)
+                            {
+                                if (bonus != "0")
+                                {
+                                    bonus += " + ";
+                                }
+                                else
+                                {
+                                    bonus = "";
+                                }
 
-                            itemStats.AddLineBreak();
+                                bonus += item.PercentageStatsGiven[i] + "%";
+                            }
+                            if (bonus != "0")
+                            {
+                                // Show stat only if not 0
+                                stats = Strings.ItemDesc.stats[i].ToString(bonus);
+                                itemStats.AddText(
+                                    stats, itemStats.RenderColor,
+                                    itemStatsText.CurAlignments.Count > 0
+                                        ? itemStatsText.CurAlignments[0]
+                                        : Alignments.Left, itemDescText.Font
+                                );
+
+                                itemStats.AddLineBreak();
+                            }
                         }
                     }
                 }

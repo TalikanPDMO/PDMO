@@ -912,7 +912,7 @@ namespace Intersect.Server.Web.RestApi.Routes.V1
                     {
                         lock (client.Entity.EntityLock)
                         {
-                            client.Entity.Die();
+                            client.Entity.Die(false);
                         }
                         
                         PacketSender.SendGlobalMsg(Strings.Player.serverkilled.ToString(player?.Name));

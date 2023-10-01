@@ -31,6 +31,8 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
         public readonly Framework.Gwen.Control.Label EntityLevel;
 
+        public readonly Framework.Gwen.Control.Label EntityElementalTypes;
+
         public readonly Framework.Gwen.Control.Label EntityMap;
 
         public readonly Framework.Gwen.Control.Label EntityName;
@@ -67,6 +69,8 @@ namespace Intersect.Client.Interface.Game.EntityPanel
         public Framework.Gwen.Control.Label ExpLbl;
 
         public Framework.Gwen.Control.Label ExpTitle;
+
+        public Framework.Gwen.Control.Label ExpNotif;
 
         public Button FriendLabel;
 
@@ -112,6 +116,8 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
         public Button GuildLabel;
 
+        private ExpBoostsWindow mExpBoostsWindow = null;
+
         //Init
         public EntityBox(Canvas gameCanvas, EntityTypes entityType, Entity myEntity, bool playerBox = false)
         {
@@ -127,6 +133,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
             EntityName = new Framework.Gwen.Control.Label(EntityInfoPanel, "EntityNameLabel") {Text = myEntity?.Name};
             EntityLevel = new Framework.Gwen.Control.Label(EntityInfoPanel, "EntityLevelLabel");
+            EntityElementalTypes = new Framework.Gwen.Control.Label(EntityInfoPanel, "EntityElementalTypesLabel");
             EntityNameAndLevel = new Framework.Gwen.Control.Label(EntityInfoPanel, "NameAndLevelLabel")
                 {IsHidden = true};
 
@@ -173,7 +180,14 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             ExpBar = new ImagePanel(EntityInfoPanel, "EXPBar");
             ExpTitle = new Framework.Gwen.Control.Label(EntityInfoPanel, "EXPTitle");
             ExpTitle.SetText(Strings.EntityBox.exp);
+            ExpNotif = new Framework.Gwen.Control.Label(EntityInfoPanel, "EXPNotif");
             ExpLbl = new Framework.Gwen.Control.Label(EntityInfoPanel, "EXPLabel");
+
+            ExpTitle.HoverEnter += ExpBoost_HoverEnter;
+            ExpNotif.HoverEnter += ExpBoost_HoverEnter;
+
+            ExpTitle.HoverLeave += ExpBoost_HoverLeave;
+            ExpNotif.HoverLeave += ExpBoost_HoverLeave;
 
             TradeLabel = new Button(EntityInfoPanel, "TradeButton");
             TradeLabel.SetText(Strings.EntityBox.trade);
@@ -200,6 +214,11 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             EntityStatusPanel = new ImagePanel(EntityWindow, "StatusArea");
 
             SetEntity(myEntity);
+
+            if (PlayerBox)
+            {
+                mExpBoostsWindow = new ExpBoostsWindow(gameCanvas);
+            }
 
             EntityWindow.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
@@ -246,6 +265,9 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             EntityType = type;
             if (MyEntity != null)
             {
+                // Reset locked status window when switch target (if there is one)
+                Globals.Me.ClickedStatus?.mDescWindow?.Dispose();
+                Globals.Me.ClickedStatus = null;
                 SetupEntityElements();
                 UpdateSpellStatus();
                 if (EntityType == EntityTypes.Event)
@@ -291,7 +313,11 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             CurExpWidth = -1;
             ShieldBar.Hide();
             UpdateHpBar(0, true);
-            UpdateMpBar(0, true);
+            if (EntityType != EntityTypes.GlobalEntity || MyEntity.MaxVital[(int)Vitals.Mana] != 0)
+            {
+                UpdateMpBar(0, true);
+            }
+            
             if (MyEntity is Player)
             {
                 UpdateXpBar(0, true);
@@ -334,6 +360,13 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                     ExpBar.Hide();
                     ExpLbl.Hide();
                     ExpTitle.Hide();
+                    if (MyEntity.MaxVital[(int)Vitals.Mana] == 0)
+                    {
+                        MpBackground.Hide();
+                        MpBar.Hide();
+                        MpLbl.Hide();
+                        MpTitle.Hide();
+                    }
                     TradeLabel.Hide();
                     PartyLabel.Hide();
                     GuildLabel.Hide();
@@ -416,7 +449,11 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 UpdateLevel();
                 UpdateMap();
                 UpdateHpBar(elapsedTime);
-                UpdateMpBar(elapsedTime);
+                if (EntityType != EntityTypes.GlobalEntity || MyEntity.MaxVital[(int)Vitals.Mana] != 0)
+                {
+                    UpdateMpBar(elapsedTime);
+                }
+                UpdateElementalTypes();
                 IsHidden = false;
             }
             else
@@ -548,6 +585,79 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             if (!EntityNameAndLevel.IsHidden)
             {
                 EntityNameAndLevel.Text = Strings.EntityBox.NameAndLevel.ToString(MyEntity.Name, levelString);
+            }
+        }
+
+        private void UpdateElementalTypes()
+        {
+            var elementalString = Strings.EntityBox.noelementaltype;
+            if (EntityType == EntityTypes.Player || EntityType == EntityTypes.GlobalEntity)
+            {
+                if (MyEntity.ElementalTypes != null)
+                {
+                    if (MyEntity.ElementalTypes[0] == MyEntity.ElementalTypes[1])
+                    {
+                        if (MyEntity.ElementalTypes[0] != ElementalType.None)
+                        {
+                            elementalString = Strings.EntityBox.oneelementaltype.ToString(Strings.EntityBox.elementaltypes[(int)MyEntity.ElementalTypes[0]]);
+                        }
+                    }
+                    else
+                    {
+                        if (MyEntity.ElementalTypes[0] == ElementalType.None)
+                        {
+                            elementalString = Strings.EntityBox.oneelementaltype.ToString(Strings.EntityBox.elementaltypes[(int)MyEntity.ElementalTypes[1]]);
+                        }
+                        else if (MyEntity.ElementalTypes[1] == ElementalType.None)
+                        {
+                            elementalString = Strings.EntityBox.oneelementaltype.ToString(Strings.EntityBox.elementaltypes[(int)MyEntity.ElementalTypes[0]]);
+                        }
+                        else
+                        {
+                            elementalString = Strings.EntityBox.twoelementaltype.ToString(
+                                Strings.EntityBox.elementaltypes[(int)MyEntity.ElementalTypes[0]], Strings.EntityBox.elementaltypes[(int)MyEntity.ElementalTypes[1]]);
+                        }
+                    }
+                }
+            }
+            /*int[] elementalTypes = null;
+            if (EntityType == EntityTypes.Player)
+            {
+                elementalTypes = ClassBase.Get(((Player)MyEntity).Class)?.ElementalTypes;
+            }
+            else if (EntityType == EntityTypes.GlobalEntity)
+            {
+                elementalTypes = NpcBase.Get(MyEntity.Id)?.ElementalTypes;
+            }
+            if (elementalTypes != null)
+            {
+                if (elementalTypes[0] == elementalTypes[1])
+                {
+                    if (elementalTypes[0] != 0)
+                    {
+                        elementalString = Strings.EntityBox.oneelementaltype.ToString(Strings.EntityBox.elementaltypes[elementalTypes[0]]);
+                    } 
+                }
+                else
+                {
+                    if (elementalTypes[0] == 0)
+                    {
+                        elementalString = Strings.EntityBox.oneelementaltype.ToString(Strings.EntityBox.elementaltypes[elementalTypes[1]]);
+                    }
+                    else if (elementalTypes[1] == 0)
+                    {
+                        elementalString = Strings.EntityBox.oneelementaltype.ToString(Strings.EntityBox.elementaltypes[elementalTypes[0]]);
+                    }
+                    else
+                    {
+                        elementalString = Strings.EntityBox.twoelementaltype.
+                            ToString(Strings.EntityBox.elementaltypes[elementalTypes[0]], Strings.EntityBox.elementaltypes[elementalTypes[1]]);
+                    }
+                }
+            }*/
+            if (!EntityElementalTypes.IsHidden)
+            {
+                EntityElementalTypes.Text = elementalString;
             }
         }
 
@@ -743,6 +853,30 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
         private void UpdateXpBar(float elapsedTime, bool instant = false)
         {
+            int boostcount = ExpBoost.BoostCount;
+            if (boostcount < 1)
+            {
+                ExpNotif.Hide();
+                mExpBoostsWindow?.Hide();
+            }
+            else
+            {
+                if (ExpBoost.PartyExpBoost!= null && ExpBoost.PartyExpBoost.SourcePlayerName == null)
+                {
+                    //PlayerName name null means the boost was sent disabled
+                    boostcount--;
+                }
+                if (boostcount == 0)
+                {
+                    ExpNotif.Text = "";
+                }
+                else
+                {
+                    ExpNotif.Text = boostcount.ToString();
+                }
+                ExpNotif.Show();
+                mExpBoostsWindow?.Update();
+            }
             float targetExpWidth = 1;
             if (((Player) MyEntity).GetNextLevelExperience() > 0)
             {
@@ -799,6 +933,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 ExpBar.SetTextureRect(0, 0, (int) CurExpWidth, ExpBar.Height);
                 ExpBar.IsHidden = false;
             }
+
         }
 
         private void UpdateImage()
@@ -957,6 +1092,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
         public void Dispose()
         {
             EntityWindow.Hide();
+            mExpBoostsWindow?.Hide();
             Interface.GameUi.GameCanvas.RemoveChild(EntityWindow, false);
             EntityWindow.Dispose();
         }
@@ -1060,6 +1196,22 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             EntityWindow.Show();
         }
 
+        void ExpBoost_HoverEnter(Base sender, EventArgs arguments)
+        {
+            if (ExpBoost.BoostCount > 0)
+            {
+                mExpBoostsWindow.Show();
+            }
+            else
+            {
+                mExpBoostsWindow.Hide();
+            }
+        }
+
+        void ExpBoost_HoverLeave(Base sender, EventArgs arguments)
+        {
+              mExpBoostsWindow.Hide();
+        }
     }
 
 }

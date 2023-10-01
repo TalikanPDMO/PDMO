@@ -19,6 +19,8 @@ namespace Intersect.GameObjects
 
         [NotMapped] public int[] VitalCost = new int[(int) Vitals.VitalCount];
 
+        [NotMapped] public int[] VitalCostStyle = new int[(int)Vitals.VitalCount];
+
         [JsonConstructor]
         public SpellBase(Guid id) : base(id)
         {
@@ -34,6 +36,11 @@ namespace Intersect.GameObjects
 
         public string Description { get; set; } = "";
 
+        public string EditorName { get; set; } = "";
+        public static string[] EditorFormatNames => Lookup.OrderBy(p => p.Value?.Name)
+            .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((SpellBase)pair.Value)?.EditorName) ?? Deleted)
+            .ToArray();
+
         public string Icon { get; set; } = "";
 
         //Animations
@@ -46,6 +53,39 @@ namespace Intersect.GameObjects
         {
             get => AnimationBase.Get(CastAnimationId);
             set => CastAnimationId = value?.Id ?? Guid.Empty;
+        }
+
+        [Column("CastTargetAnimation")]
+        public Guid CastTargetAnimationId { get; set; }
+
+        [NotMapped]
+        [JsonIgnore]
+        public AnimationBase CastTargetAnimation
+        {
+            get => AnimationBase.Get(CastTargetAnimationId);
+            set => CastTargetAnimationId = value?.Id ?? Guid.Empty;
+        }
+
+        [Column("ImpactAnimation")]
+        public Guid ImpactAnimationId { get; set; }
+
+        [NotMapped]
+        [JsonIgnore]
+        public AnimationBase ImpactAnimation
+        {
+            get => AnimationBase.Get(ImpactAnimationId);
+            set => ImpactAnimationId = value?.Id ?? Guid.Empty;
+        }
+
+        [Column("TilesAnimation")]
+        public Guid TilesAnimationId { get; set; }
+
+        [NotMapped]
+        [JsonIgnore]
+        public AnimationBase TilesAnimation
+        {
+            get => AnimationBase.Get(TilesAnimationId);
+            set => TilesAnimationId = value?.Id ?? Guid.Empty;
         }
 
         [Column("HitAnimation")]
@@ -99,6 +139,8 @@ namespace Intersect.GameObjects
         //Combat Info
         public SpellCombatData Combat { get; set; } = new SpellCombatData();
 
+        public int ElementalType { get; set; } = 0;
+
         //Warp Info
         public SpellWarpData Warp { get; set; } = new SpellWarpData();
 
@@ -124,6 +166,14 @@ namespace Intersect.GameObjects
         {
             get => DatabaseUtils.SaveIntArray(VitalCost, (int) Vitals.VitalCount);
             set => VitalCost = DatabaseUtils.LoadIntArray(value, (int) Vitals.VitalCount);
+        }
+
+        [Column("VitalCostStyle")]
+        [JsonIgnore]
+        public string VitalCostStyleJson
+        {
+            get => DatabaseUtils.SaveIntArray(VitalCostStyle, (int)Vitals.VitalCount);
+            set => VitalCostStyle = DatabaseUtils.LoadIntArray(value, (int)Vitals.VitalCount);
         }
 
         /// <inheritdoc />
@@ -154,17 +204,54 @@ namespace Intersect.GameObjects
 
         [NotMapped] public int[] VitalDiff = new int[(int) Vitals.VitalCount];
 
+        [NotMapped] public int[] VitalDiffStyle = new int[(int)Vitals.VitalCount];
+
+        [NotMapped] public int[] VitalSteal = new int[(int)Vitals.VitalCount];
+
         public int CritChance { get; set; }
 
         public double CritMultiplier { get; set; } = 1.5;
+
+        [Column("CritEffectSpell")]
+        public Guid CritEffectSpellId { get; set; } = Guid.Empty;
+
+        [NotMapped]
+        [JsonIgnore]
+        public SpellBase CritEffectSpell
+        {
+            get => SpellBase.Get(CritEffectSpellId);
+            set => CritEffectSpellId = value?.Id ?? Guid.Empty;
+        }
+
+        public bool CritEffectSpellReplace { get; set; } = false;
+
+        [Column("NextEffectSpell")]
+        public Guid NextEffectSpellId { get; set; } = Guid.Empty;
+
+        [NotMapped]
+        [JsonIgnore]
+        public SpellBase NextEffectSpell
+        {
+            get => SpellBase.Get(NextEffectSpellId);
+            set => NextEffectSpellId = value?.Id ?? Guid.Empty;
+        }
+
+        public bool NextEffectSpellReUseValues { get; set; } = true;
+
+        public int NextEffectSpellChance { get; set; } = 100;
 
         public int DamageType { get; set; } = 1;
 
         public int HitRadius { get; set; }
 
+        public bool SquareHitRadius { get; set; } = false;
+
         public bool Friendly { get; set; }
 
         public int CastRange { get; set; }
+
+        public bool SquareRange { get; set; } = false;
+
 
         //Extra Data, Teleport Coords, Custom Spells, Etc
         [Column("Projectile")]
@@ -185,6 +272,23 @@ namespace Intersect.GameObjects
         {
             get => DatabaseUtils.SaveIntArray(VitalDiff, (int) Vitals.VitalCount);
             set => VitalDiff = DatabaseUtils.LoadIntArray(value, (int) Vitals.VitalCount);
+        }
+
+        [Column("VitalDiffStyle")]
+        [JsonIgnore]
+        public string VitalDiffStyleJson
+        {
+            get => DatabaseUtils.SaveIntArray(VitalDiffStyle, (int)Vitals.VitalCount);
+            set => VitalDiffStyle = DatabaseUtils.LoadIntArray(value, (int)Vitals.VitalCount);
+        }
+
+        // Steal vitals or not and what amount percentage
+        [Column("VitalSteal")]
+        [JsonIgnore]
+        public string VitalStealJson
+        {
+            get => DatabaseUtils.SaveIntArray(VitalSteal, (int)Vitals.VitalCount);
+            set => VitalSteal = DatabaseUtils.LoadIntArray(value, (int)Vitals.VitalCount);
         }
 
         //Buff/Debuff Data
@@ -211,6 +315,18 @@ namespace Intersect.GameObjects
         [NotMapped]
         public int[] PercentageStatDiff { get; set; } = new int[(int) Stats.StatCount];
 
+        //Buff/Debuff probability
+        [Column("StatDiffChance")]
+        [JsonIgnore]
+        public string StatDiffChanceJson
+        {
+            get => DatabaseUtils.SaveByteArray(StatDiffChance, (int)Stats.StatCount);
+            set => StatDiffChance = DatabaseUtils.LoadByteArray(value, (int)Stats.StatCount);
+        }
+
+        [NotMapped]
+        public byte[] StatDiffChance { get; set; } = new byte[(int)Stats.StatCount];
+
         public int Scaling { get; set; } = 100;
 
         public int ScalingStat { get; set; }
@@ -224,6 +340,8 @@ namespace Intersect.GameObjects
         public int Duration { get; set; }
 
         public StatusTypes Effect { get; set; }
+
+        public int EffectChance { get; set; } = 100;
 
         public string TransformSprite { get; set; }
 

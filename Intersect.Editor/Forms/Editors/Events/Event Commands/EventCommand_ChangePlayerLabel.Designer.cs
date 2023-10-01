@@ -30,7 +30,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
     /// </summary>
     private void InitializeComponent()
     {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EventCommandChangePlayerLabel));
             this.grpChangeLabel = new DarkUI.Controls.DarkGroupBox();
             this.lblStringTextVariables = new System.Windows.Forms.Label();
             this.txtLabel = new DarkUI.Controls.DarkTextBox();
@@ -61,9 +60,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpChangeLabel.Controls.Add(this.btnCancel);
             this.grpChangeLabel.Controls.Add(this.btnSave);
             this.grpChangeLabel.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpChangeLabel.Location = new System.Drawing.Point(3, 3);
+            this.grpChangeLabel.Location = new System.Drawing.Point(5, 3);
             this.grpChangeLabel.Name = "grpChangeLabel";
-            this.grpChangeLabel.Size = new System.Drawing.Size(246, 206);
+            this.grpChangeLabel.Size = new System.Drawing.Size(320, 206);
             this.grpChangeLabel.TabIndex = 17;
             this.grpChangeLabel.TabStop = false;
             this.grpChangeLabel.Text = "Change Player Label:";
@@ -89,7 +88,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.txtLabel.Location = new System.Drawing.Point(88, 57);
             this.txtLabel.Name = "txtLabel";
             this.txtLabel.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.txtLabel.Size = new System.Drawing.Size(152, 20);
+            this.txtLabel.Size = new System.Drawing.Size(226, 20);
             this.txtLabel.TabIndex = 56;
             // 
             // lblValue
@@ -128,7 +127,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             "Below Character Name"});
             this.cmbPosition.Location = new System.Drawing.Point(88, 19);
             this.cmbPosition.Name = "cmbPosition";
-            this.cmbPosition.Size = new System.Drawing.Size(152, 21);
+            this.cmbPosition.Size = new System.Drawing.Size(226, 21);
             this.cmbPosition.TabIndex = 53;
             this.cmbPosition.Text = "Above Character Name";
             this.cmbPosition.TextPadding = new System.Windows.Forms.Padding(2);
@@ -190,7 +189,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpChangeLabel);
             this.Name = "EventCommandChangePlayerLabel";
-            this.Size = new System.Drawing.Size(254, 212);
+            this.Size = new System.Drawing.Size(330, 212);
             this.grpChangeLabel.ResumeLayout(false);
             this.grpChangeLabel.PerformLayout();
             this.ResumeLayout(false);

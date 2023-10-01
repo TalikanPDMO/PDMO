@@ -20,5 +20,9 @@
         /// </summary>
         public float BonusExperiencePercentPerMember = 0;
 
+        public int SharedLootRange = 20;
+
+        public float BonusLootChancePercentPerMember = 0;
+
     }
 }

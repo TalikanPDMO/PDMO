@@ -13,6 +13,7 @@ using Intersect.Editor.Localization;
 using Intersect.Editor.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Crafting;
 using Intersect.GameObjects.Events;
 using Intersect.Utilities;
 
@@ -52,7 +53,7 @@ namespace Intersect.Editor.Forms.Editors
             cmbProjectile.Items.Add(Strings.General.none);
             cmbProjectile.Items.AddRange(ProjectileBase.Names);
 
-            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
+            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click, toolStripItemRelations_Click);
         }
         private void AssignEditorItem(Guid id)
         {
@@ -132,7 +133,7 @@ namespace Intersect.Editor.Forms.Editors
             cmbEquipmentAnimation.Items.AddRange(AnimationBase.Names);
             cmbTeachSpell.Items.Clear();
             cmbTeachSpell.Items.Add(Strings.General.none);
-            cmbTeachSpell.Items.AddRange(SpellBase.Names);
+            cmbTeachSpell.Items.AddRange(SpellBase.EditorFormatNames);
             cmbEvent.Items.Clear();
             cmbEvent.Items.Add(Strings.General.none);
             cmbEvent.Items.AddRange(EventBase.Names);
@@ -161,6 +162,10 @@ namespace Intersect.Editor.Forms.Editors
             nudMR.Minimum = -Options.MaxStatValue;
             nudSpd.Minimum = -Options.MaxStatValue;
 
+            cmbCritEffectSpell.Items.Clear();
+            cmbCritEffectSpell.Items.Add(Strings.General.none);
+            cmbCritEffectSpell.Items.AddRange(SpellBase.EditorFormatNames);
+
             InitLocalization();
             UpdateEditor();
         }
@@ -173,10 +178,12 @@ namespace Intersect.Editor.Forms.Editors
             toolStripItemCopy.Text = Strings.ItemEditor.copy;
             toolStripItemPaste.Text = Strings.ItemEditor.paste;
             toolStripItemUndo.Text = Strings.ItemEditor.undo;
+            toolStripItemRelations.Text = Strings.ItemEditor.relations;
 
             grpItems.Text = Strings.ItemEditor.items;
             grpGeneral.Text = Strings.ItemEditor.general;
             lblName.Text = Strings.ItemEditor.name;
+            lblEditorName.Text = Strings.ItemEditor.editorname;
             lblType.Text = Strings.ItemEditor.type;
             cmbType.Items.Clear();
             for (var i = 0; i < Strings.ItemEditor.types.Count; i++)
@@ -194,6 +201,9 @@ namespace Intersect.Editor.Forms.Editors
             lblAnim.Text = Strings.ItemEditor.animation;
             chkCanDrop.Text = Strings.ItemEditor.CanDrop;
             lblDeathDropChance.Text = Strings.ItemEditor.DeathDropChance;
+            lblLossOnDeath.Text = Strings.ItemEditor.LossOnDeath;
+            lblToLoss.Text = Strings.ItemEditor.LossOnDeathTo;
+            chkIsLossPercentage.Text = Strings.ItemEditor.IsLossPercentage;
             chkCanBank.Text = Strings.ItemEditor.CanBank;
             chkCanGuildBank.Text = Strings.ItemEditor.CanGuildBank;
             chkCanBag.Text = Strings.ItemEditor.CanBag;
@@ -229,9 +239,17 @@ namespace Intersect.Editor.Forms.Editors
 
             grpWeaponProperties.Text = Strings.ItemEditor.weaponproperties;
             chk2Hand.Text = Strings.ItemEditor.twohanded;
+            lblElementalType.Text = Strings.ItemEditor.elementaltype;
+            cmbElementalType.Items.Clear();
+            for (var i = 0; i < Strings.Combat.elementaltypes.Count; i++)
+            {
+                cmbElementalType.Items.Add(Strings.Combat.elementaltypes[i]);
+            }
             lblDamage.Text = Strings.ItemEditor.basedamage;
             lblCritChance.Text = Strings.ItemEditor.critchance;
             lblCritMultiplier.Text = Strings.ItemEditor.critmultiplier;
+            lblCritEffectSpell.Text = Strings.ItemEditor.criteffectspell;
+            chkReplaceCritEffectSpell.Text = Strings.ItemEditor.replacecriteffectspell;
             lblDamageType.Text = Strings.ItemEditor.damagetype;
             cmbDamageType.Items.Clear();
             for (var i = 0; i < Strings.Combat.damagetypes.Count; i++)
@@ -242,6 +260,8 @@ namespace Intersect.Editor.Forms.Editors
             lblScalingStat.Text = Strings.ItemEditor.scalingstat;
             lblScalingAmount.Text = Strings.ItemEditor.scalingamount;
             lblAttackAnimation.Text = Strings.ItemEditor.attackanimation;
+            lblAttackRange.Text = Strings.ItemEditor.attackrange;
+            chkAdaptRange.Text = Strings.ItemEditor.adaptrange;
             lblProjectile.Text = Strings.ItemEditor.projectile;
             lblToolType.Text = Strings.ItemEditor.tooltype;
 
@@ -313,6 +333,7 @@ namespace Intersect.Editor.Forms.Editors
                 pnlContainer.Show();
 
                 txtName.Text = mEditorItem.Name;
+                txtEditorName.Text = mEditorItem.EditorName;
                 cmbFolder.Text = mEditorItem.Folder;
                 txtDesc.Text = mEditorItem.Description;
                 cmbType.SelectedIndex = (int) mEditorItem.ItemType;
@@ -347,6 +368,8 @@ namespace Intersect.Editor.Forms.Editors
                 nudDamage.Value = mEditorItem.Damage;
                 nudCritChance.Value = mEditorItem.CritChance;
                 nudCritMultiplier.Value = (decimal) mEditorItem.CritMultiplier;
+                cmbCritEffectSpell.SelectedIndex = SpellBase.ListIndex(mEditorItem.CritEffectSpellId) + 1;
+                chkReplaceCritEffectSpell.Checked = mEditorItem.CritEffectSpellReplace;
                 cmbAttackSpeedModifier.SelectedIndex = mEditorItem.AttackSpeedModifier;
                 nudAttackSpeedValue.Value = mEditorItem.AttackSpeedValue;
                 nudScaling.Value = mEditorItem.Scaling;
@@ -361,8 +384,13 @@ namespace Intersect.Editor.Forms.Editors
                 nudInvStackLimit.Value = mEditorItem.MaxInventoryStack;
                 nudBankStackLimit.Value = mEditorItem.MaxBankStack;
                 nudDeathDropChance.Value = mEditorItem.DropChanceOnDeath;
+                chkIsLossPercentage.Checked = Convert.ToBoolean(mEditorItem.IsLossPercentage);
+                nudMinLossOnDeath.Value = mEditorItem.MinLossOnDeath;
+                nudMaxLossOnDeath.Value = mEditorItem.MaxLossOnDeath;
                 cmbToolType.SelectedIndex = mEditorItem.Tool + 1;
                 cmbAttackAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.AttackAnimationId) + 1;
+                nudAttackRange.Value = mEditorItem.AttackRange;
+                chkAdaptRange.Checked = Convert.ToBoolean(mEditorItem.AdaptRange);
                 RefreshExtendedData();
                 if (mEditorItem.ItemType == ItemTypes.Equipment)
                 {
@@ -405,6 +433,7 @@ namespace Intersect.Editor.Forms.Editors
                     DrawItemPaperdoll(Gender.Female);
                 }
 
+                cmbElementalType.SelectedIndex = mEditorItem.ElementalType;
                 cmbDamageType.SelectedIndex = mEditorItem.DamageType;
                 cmbScalingStat.SelectedIndex = mEditorItem.ScalingStat;
 
@@ -525,7 +554,13 @@ namespace Intersect.Editor.Forms.Editors
         private void txtName_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.Name = txtName.Text;
-            lstGameObjects.UpdateText(txtName.Text);
+            lstGameObjects.UpdateText(TextUtils.FormatEditorName(mEditorItem.Name, mEditorItem.EditorName));
+        }
+
+        private void txtEditorName_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.EditorName = txtEditorName.Text;
+            lstGameObjects.UpdateText(TextUtils.FormatEditorName(mEditorItem.Name, mEditorItem.EditorName));
         }
 
         private void cmbPic_SelectedIndexChanged(object sender, EventArgs e)
@@ -663,12 +698,77 @@ namespace Intersect.Editor.Forms.Editors
             }
         }
 
+        private void toolStripItemRelations_Click(object sender, EventArgs e)
+        {
+            if (mEditorItem != null)
+            {
+                Dictionary<string, List<string>> dataDict = new Dictionary<string, List<string>>();
+
+                //Retrieve all npcs related the item (drop)
+                var npcList = NpcBase.Lookup.Where(pair => ((NpcBase)pair.Value)?.Drops?.Any(d => d?.ItemId == mEditorItem.Id) ?? false)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((NpcBase)pair.Value)?.EditorName) ?? NpcBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.npcsdrops, npcList);
+
+                //Retrieve all classes using the item
+                var classList = ClassBase.Lookup.Where(pair => ((ClassBase)pair.Value)?.Items?.Any(i => i?.Id == mEditorItem.Id) ?? false)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? ClassBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.classes, classList);
+
+                //Retrieve all projectiles using the item as ammunition
+                var projList = ProjectileBase.Lookup.Where(pair => ((ProjectileBase)pair.Value)?.AmmoItemId == mEditorItem.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? ProjectileBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.projectiles, projList);
+
+                //Retrieve all resources related to the item (drops)
+                var resourceList = ResourceBase.Lookup.Where(pair => ((ResourceBase)pair.Value)?.Drops?.Any(d => d?.ItemId == mEditorItem.Id) ?? false)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? ResourceBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.resourcesdrops, resourceList);
+
+                //Retrieve all quests where we need to gather the item
+                var questList = QuestBase.Lookup.Where(pair =>
+                    ((QuestBase)pair.Value)?.Tasks?.Any(t => t?.Objective == QuestObjective.GatherItems && t?.TargetId == mEditorItem.Id) ?? false)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? QuestBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.quests, questList);
+
+                //Retrieve all crafts related to the item 
+                var craftList = CraftBase.Lookup.Where(pair => ((CraftBase)pair.Value)?.ItemId == mEditorItem.Id
+                    || (((CraftBase)pair.Value)?.Ingredients?.Any(i => i?.ItemId == mEditorItem.Id) ?? false))
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? CraftBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.crafts, craftList);
+
+                //Retrieve all shops related to the item 
+                var shopList = ShopBase.Lookup.Where(pair => (((ShopBase)pair.Value)?.SellingItems?.Any(si => si?.ItemId == mEditorItem.Id) ?? false)
+                    || (((ShopBase)pair.Value)?.BuyingItems?.Any(bi => bi?.ItemId == mEditorItem.Id) ?? false))
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? ShopBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.shops, shopList);
+
+                string titleTarget = "Item : " + mEditorItem.Name;
+                var relationsfrm = new FrmRelations(titleTarget, dataDict);
+                relationsfrm.ShowDialog();
+            }
+        }
+
         private void UpdateToolStripItems()
         {
             toolStripItemCopy.Enabled = mEditorItem != null && lstGameObjects.Focused;
             toolStripItemPaste.Enabled = mEditorItem != null && mCopiedItem != null && lstGameObjects.Focused;
             toolStripItemDelete.Enabled = mEditorItem != null && lstGameObjects.Focused;
             toolStripItemUndo.Enabled = mEditorItem != null && lstGameObjects.Focused;
+            toolStripItemRelations.Enabled = mEditorItem != null;
         }
 
         private void form_KeyDown(object sender, KeyEventArgs e)
@@ -686,6 +786,21 @@ namespace Intersect.Editor.Forms.Editors
         {
             mEditorItem.AttackAnimation =
                 AnimationBase.Get(AnimationBase.IdFromList(cmbAttackAnimation.SelectedIndex - 1));
+        }
+
+        private void nudAttackRange_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.AttackRange = (byte)nudAttackRange.Value;
+        }
+
+        private void chkAdaptRange_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.AdaptRange = chkAdaptRange.Checked;
+        }
+
+        private void cmbElementalType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ElementalType = cmbElementalType.SelectedIndex;
         }
 
         private void cmbDamageType_SelectedIndexChanged(object sender, EventArgs e)
@@ -742,6 +857,22 @@ namespace Intersect.Editor.Forms.Editors
         private void nudCritChance_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.CritChance = (int) nudCritChance.Value;
+        }
+        private void cmbCritEffectSpell_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbCritEffectSpell.SelectedIndex > 0)
+            {
+                mEditorItem.CritEffectSpell = SpellBase.Get(SpellBase.IdFromList(cmbCritEffectSpell.SelectedIndex - 1));
+            }
+            else
+            {
+                mEditorItem.CritEffectSpell = null;
+            }
+        }
+
+        private void chkReplaceCritEffectSpell_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.CritEffectSpellReplace = chkReplaceCritEffectSpell.Checked;
         }
 
         private void nudEffectPercent_ValueChanged(object sender, EventArgs e)
@@ -852,6 +983,37 @@ namespace Intersect.Editor.Forms.Editors
         private void nudDeathDropChance_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.DropChanceOnDeath = (int)nudDeathDropChance.Value;
+        }
+        private void nudMinLossOnDeath_ValueChanged(object sender, EventArgs e)
+        {
+            if (chkIsLossPercentage.Checked && nudMinLossOnDeath.Value > 100)
+            {
+                nudMinLossOnDeath.Value = 100;
+            }
+            mEditorItem.MinLossOnDeath = (int)nudMinLossOnDeath.Value;
+        }
+        private void nudMaxLossOnDeath_ValueChanged(object sender, EventArgs e)
+        {
+            if (chkIsLossPercentage.Checked && nudMaxLossOnDeath.Value > 100)
+            {
+                nudMaxLossOnDeath.Value = 100;
+            }
+            mEditorItem.MaxLossOnDeath = (int)nudMaxLossOnDeath.Value;
+        }
+        private void chkIsLossPercentage_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkIsLossPercentage.Checked)
+            {
+                if (nudMinLossOnDeath.Value > 100)
+                {
+                    nudMinLossOnDeath.Value = 100;
+                }
+                if (nudMaxLossOnDeath.Value > 100)
+                {
+                    nudMaxLossOnDeath.Value = 100;
+                }
+            }
+            mEditorItem.IsLossPercentage = chkIsLossPercentage.Checked;
         }
 
         private void chkStackable_CheckedChanged(object sender, EventArgs e)
@@ -1039,7 +1201,7 @@ namespace Intersect.Editor.Forms.Editors
             gfx.FillRectangle(Brushes.Black, new Rectangle(0, 0, picItem.Width, picItem.Height));
             if (cmbPic.SelectedIndex > 0)
             {
-                var img = Image.FromFile("resources/items/" + cmbPic.Text);
+                var img = Image.FromFile(GameContentManager.GraphResFolder + "/items/" + cmbPic.Text);
                 var imgAttributes = new ImageAttributes();
 
                 // Microsoft, what the heck is this crap?
@@ -1099,7 +1261,7 @@ namespace Intersect.Editor.Forms.Editors
             gfx.FillRectangle(Brushes.Black, new Rectangle(0, 0, picPaperdoll.Width, picPaperdoll.Height));
             if (cmbPaperdoll.SelectedIndex > 0)
             {
-                var img = Image.FromFile("resources/paperdolls/" + cmbPaperdoll.Text);
+                var img = Image.FromFile(GameContentManager.GraphResFolder + "/paperdolls/" + cmbPaperdoll.Text);
                 var imgAttributes = new ImageAttributes();
 
                 // Microsoft, what the heck is this crap?
@@ -1184,8 +1346,12 @@ namespace Intersect.Editor.Forms.Editors
             cmbFolder.Items.Add("");
             cmbFolder.Items.AddRange(mKnownFolders.ToArray());
 
-            var items = ItemBase.Lookup.OrderBy(p => p.Value?.Name).Select(pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
-                new KeyValuePair<string, string>(((ItemBase)pair.Value)?.Name ?? Models.DatabaseObject<ItemBase>.Deleted, ((ItemBase)pair.Value)?.Folder ?? ""))).ToArray();
+            var items = ItemBase.Lookup.OrderBy(p => p.Value?.Name).Select(
+                pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
+                new KeyValuePair<string, string>(
+                   TextUtils.FormatEditorName(((ItemBase)pair.Value)?.Name, ((ItemBase)pair.Value)?.EditorName) ?? Models.DatabaseObject<ItemBase>.Deleted,
+                    ((ItemBase)pair.Value)?.Folder ?? ""))
+                ).ToArray();
             lstGameObjects.Repopulate(items, mFolders, btnAlphabetical.Checked, CustomSearch(), txtSearch.Text);
         }
 

@@ -100,43 +100,72 @@ namespace Intersect.Client.Entities.Events
             switch (Graphic.Type)
             {
                 case EventGraphicType.Sprite: //Sprite
-                    var entityTex = Globals.ContentManager.GetTexture(
-                        GameContentManager.TextureType.Entity, Graphic.Filename
-                    );
-
+                    var entityTex = AnimatedTextures[SpriteAnimation] ?? Texture;
+                    if (Texture == null)
+                    {
+                        entityTex = Globals.ContentManager.GetTexture(
+                            GameContentManager.TextureType.Entity, Graphic.Filename
+                        );
+                    }
                     if (entityTex != null)
                     {
                         srcTexture = entityTex;
                         height = srcTexture.GetHeight() / Options.Instance.Sprites.Directions;
-                        width = srcTexture.GetWidth() / Options.Instance.Sprites.NormalFrames;
+                        width = srcTexture.GetWidth() / SpriteFrames;
                         d = Graphic.Y;
                         if (!DirectionFix)
                         {
                             switch (Dir)
                             {
-                                case 0:
+                                case 0: //Up
                                     d = 3;
 
                                     break;
-                                case 1:
+                                case 1: //Down
                                     d = 0;
 
                                     break;
-                                case 2:
+                                case 2: //Left
                                     d = 1;
 
                                     break;
-                                case 3:
+                                case 3: //Right
                                     d = 2;
+
+                                    break;
+                                case 4: // UpLeft
+                                    d = 1;
+
+                                    break;
+                                case 5: // UpRight
+                                    d = 2;
+
+                                    break;
+                                case 6: // DownLeft
+                                    d = 1;
+
+                                    break;
+                                case 7: // DownRight
+                                    d = 2;
+
+                                    break;
+
+                                default:
+                                    Dir = 0;
+                                    d = 3;
 
                                     break;
                             }
                         }
 
                         var frame = Graphic.X;
-                        if (WalkingAnim)
+                        if (WalkingAnim && IsMoving)
                         {
                             frame = WalkFrame;
+                        }
+                        else if (SpriteAnimation == SpriteAnimations.Idle)
+                        {
+                            frame = SpriteFrame;
                         }
 
                         if (Options.AnimatedSprites.Contains(Graphic.Filename.ToLower()))
@@ -149,8 +178,8 @@ namespace Intersect.Client.Entities.Events
                         else
                         {
                             srcRectangle = new FloatRect(
-                                frame * (int) srcTexture.GetWidth() / Options.Instance.Sprites.NormalFrames, d * (int) srcTexture.GetHeight() / Options.Instance.Sprites.Directions,
-                                (int) srcTexture.GetWidth() / Options.Instance.Sprites.NormalFrames, (int) srcTexture.GetHeight() / Options.Instance.Sprites.Directions
+                                frame * (int) srcTexture.GetWidth() / SpriteFrames, d * (int) srcTexture.GetHeight() / Options.Instance.Sprites.Directions,
+                                (int) srcTexture.GetWidth() /SpriteFrames, (int) srcTexture.GetHeight() / Options.Instance.Sprites.Directions
                             );
                         }
                     }

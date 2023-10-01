@@ -75,6 +75,7 @@ namespace Intersect.Client.Entities
             base.Load(packet);
             var pkt = (ResourceEntityPacket) packet;
             IsDead = pkt.IsDead;
+            ElementalTypes = pkt.ElementalTypes;
             var baseId = pkt.ResourceId;
             BaseResource = ResourceBase.Get(baseId);
             HideName = true;

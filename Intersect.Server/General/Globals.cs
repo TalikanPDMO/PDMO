@@ -24,6 +24,8 @@ namespace Intersect.Server.General
 
         public static long Cps = 0;
 
+        public static float[] CalculatedSpeeds;
+
         [Obsolete] public static Timing Timing => Timing.Global;
 
         public static List<Player> OnlineList => Clients.FindAll(client => client?.Entity != null)
@@ -59,6 +61,31 @@ namespace Intersect.Server.General
             foreach (MapInstance map in MapInstance.Lookup.Values)
             {
                 map?.DespawnItemsOf(item);
+            }
+        }
+
+        public static void InitCalculatedSpeeds(int size)
+        {
+            var coeffs = Options.Instance.PlayerOpts.SpeedFormulaCoeffs;
+            CalculatedSpeeds = new float[size + 1];
+            for (var i = 0; i <= size; i++)
+            {
+                if (i >= coeffs[8])
+                {
+                    CalculatedSpeeds[i] = Math.Max(100, coeffs[6] - coeffs[7] * (i - coeffs[8]));
+                }
+                else if (i >= coeffs[5])
+                {
+                    CalculatedSpeeds[i] = Math.Max(100, coeffs[3] - coeffs[4] * (i - coeffs[5]));
+                }
+                else if (i >= coeffs[2])
+                {
+                    CalculatedSpeeds[i] = Math.Max(100, coeffs[0] - coeffs[1] * (i - coeffs[2]));
+                }
+                else
+                {
+                    CalculatedSpeeds[i] = 1000f;
+                }
             }
         }
 

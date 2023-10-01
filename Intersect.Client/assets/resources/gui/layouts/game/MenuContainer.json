@@ -1,5 +1,5 @@
 {
-  "Bounds": "691,674,329,42",
+  "Bounds": "1267,854,329,42",
   "Padding": "0,0,0,0",
   "AlignmentEdgeDistances": "0,0,4,4",
   "AlignmentTransform": "0,0",
@@ -406,7 +406,7 @@
         }
       }
     },
-    "GuildContainer": {
+    "PvpStadiumContainer": {
       "Bounds": "208,4,34,35",
       "Padding": "0,0,0,0",
       "AlignmentEdgeDistances": "0,0,0,0",
@@ -430,7 +430,7 @@
       "LeftMouseClickSound": null,
       "RightMouseClickSound": null,
       "Children": {
-        "GuildButton": {
+        "PvpStadiumButton": {
           "Bounds": "1,1,32,32",
           "Padding": "3,3,3,3",
           "AlignmentEdgeDistances": "0,0,0,0",
@@ -458,7 +458,7 @@
           "AutoSizeToContents": false,
           "Font": "arial,10",
           "TextScale": 1.0,
-          "NormalImage": "guildicon.png",
+          "NormalImage": "pvpstadiumicon.png",
           "HoveredImage": "",
           "ClickedImage": "",
           "DisabledImage": "",

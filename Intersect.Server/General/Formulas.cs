@@ -23,13 +23,16 @@ namespace Intersect.Server.General
         public Formula ExpFormula = new Formula("BaseExp * Power(Gain, Level)");
 
         public string MagicDamage =
-            "Random(((BaseDamage + (ScalingStat * ScaleFactor))) * CritMultiplier * .975, ((BaseDamage + (ScalingStat * ScaleFactor))) * CritMultiplier * 1.025) * (100 / (100 + V_MagicResist))";
+            "Random(((BaseDamage + (ScalingStat * ScaleFactor))) * CritMultiplier * .975, ((BaseDamage + (ScalingStat * ScaleFactor))) * CritMultiplier * 1.025) * ElemType1Multiplier * ElemType2Multiplier * (100 / (100 + V_MagicResist))";
 
         public string PhysicalDamage =
-            "Random(((BaseDamage + (ScalingStat * ScaleFactor))) * CritMultiplier * .975, ((BaseDamage + (ScalingStat * ScaleFactor))) * CritMultiplier * 1.025) * (100 / (100 + V_Defense))";
+            "Random(((BaseDamage + (ScalingStat * ScaleFactor))) * CritMultiplier * .975, ((BaseDamage + (ScalingStat * ScaleFactor))) * CritMultiplier * 1.025) * ElemType1Multiplier * ElemType2Multiplier * (100 / (100 + V_Defense))";
 
         public string TrueDamage =
             "Random(((BaseDamage + (ScalingStat * ScaleFactor))) * CritMultiplier * .975, ((BaseDamage + (ScalingStat * ScaleFactor))) * CritMultiplier * 1.025)";
+
+        public string FixedDamage =
+            "(BaseDamage + (ScalingStat * ScaleFactor)) * CritMultiplier";
 
         public static void LoadFormulas()
         {
@@ -53,6 +56,7 @@ namespace Intersect.Server.General
 
         public static int CalculateDamage(
             int baseDamage,
+            ElementalType elementalType,
             DamageType damageType,
             Stats scalingStat,
             int scaling,
@@ -105,6 +109,10 @@ namespace Intersect.Server.General
                     expressionString = mFormulas.TrueDamage;
 
                     break;
+                case DamageType.Fixed:
+                    expressionString = mFormulas.FixedDamage;
+
+                    break;
                 default:
                     expressionString = mFormulas.TrueDamage;
 
@@ -130,6 +138,8 @@ namespace Intersect.Server.General
                 expression.Parameters["ScalingStat"] = attacker.Stat[(int) scalingStat].Value();
                 expression.Parameters["ScaleFactor"] = scaling / 100f;
                 expression.Parameters["CritMultiplier"] = critMultiplier;
+                expression.Parameters["ElemType1Multiplier"] = Options.Combat.TableElementalTypes[(int)victim.ElementalTypes[0]][(int)elementalType];
+                expression.Parameters["ElemType2Multiplier"] = Options.Combat.TableElementalTypes[(int)victim.ElementalTypes[1]][(int)elementalType]; ;
                 expression.Parameters["A_Attack"] = attacker.Stat[(int) Stats.Attack].Value();
                 expression.Parameters["A_Defense"] = attacker.Stat[(int) Stats.Defense].Value();
                 expression.Parameters["A_Speed"] = attacker.Stat[(int) Stats.Speed].Value();

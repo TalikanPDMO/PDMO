@@ -355,9 +355,34 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString equipment = @"Equipment:";
 
-            public static LocalizedString levelandclass = @"Level: {00} {01}";
+            public static LocalizedString oneelementaltype = @"Type: {00}";
 
-            public static LocalizedString name = @"{00}";
+            public static LocalizedString twoelementaltype = @"Types: {00} / {01}";
+
+            public static Dictionary<int, LocalizedString> elementaltypes = new Dictionary<int, LocalizedString>
+            {
+                {0, @"None"},
+                {1, @"Steel"},
+                {2, @"Fighting"},
+                {3, @"Dragon"},
+                {4, @"Water"},
+                {5, @"Electric"},
+                {6, @"Fairy"},
+                {7, @"Fire"},
+                {8, @"Ice"},
+                {9, @"Bug"},
+                {10, @"Normal"},
+                {11, @"Grass"},
+                {12, @"Poison"},
+                {13, @"Psychic"},
+                {14, @"Rock"},
+                {15, @"Ground"},
+                {16, @"Ghost"},
+                {17, @"Dark"},
+                {18, @"Flying"},
+            };
+
+            public static LocalizedString nameandinfos = @"{00} - {01} Level {02}";
 
             public static LocalizedString points = @"Points: {00}";
 
@@ -371,7 +396,23 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString stat4 = @"{00}: {01}";
 
+            public static LocalizedString attackspeed = @"Attack speed: {00}s";
+
+            public static LocalizedString stat0desc = @"Your physical damage";
+
+            public static LocalizedString stat1desc = @"Your resistance to physical damage";
+
+            public static LocalizedString stat2desc = @"Your special damage";
+
+            public static LocalizedString stat3desc = @"Your resistance to special damage";
+
+            public static LocalizedString stat4desc = @"Your movement speed";
+
+            public static LocalizedString attackspeeddesc = @"The time you need to do one basic attack";
+
             public static LocalizedString stats = @"Stats:";
+
+            public static LocalizedString pointstouse = @"points to spend";
 
             public static LocalizedString title = @"Character";
 
@@ -547,6 +588,8 @@ namespace Intersect.Client.Localization
                 {"hotkey7", @"Hot Key 7:"},
                 {"hotkey8", @"Hot Key 8:"},
                 {"hotkey9", @"Hot Key 9:"},
+                {"switchmenuleft", @"Switch to Previous Menu"}, //Ajouté par moussmous pour les controles manette
+                {"switchmenuright", @"Switch to Next Menu"}, //Ajouté par moussmous pour les controles manette
                 {"movedown", @"Down:"},
                 {"moveleft", @"Left:"},
                 {"moveright", @"Right:"},
@@ -561,10 +604,13 @@ namespace Intersect.Client.Localization
                 {"openspells", @"Open Spells:"},
                 {"openfriends", @"Open Friends:"},
                 {"openguild", @"Open Guild:"},
+                {"openpvpstadium", @"Open PokeStadium:"},
                 {"opensettings", @"Open Settings:"},
                 {"opendebugger", @"Open Debugger:"},
                 {"openadminpanel", @"Open Admin Panel:"},
-                {"togglegui", @"Toggle Interface:"}
+                {"togglegui", @"Toggle Interface:"},
+                {"running", @"Running:"},
+                {"partylocate", @"Locate Party Members:"}
             };
 
             public static LocalizedString edit = @"Edit Controls";
@@ -685,6 +731,37 @@ namespace Intersect.Client.Localization
             public static LocalizedString vital1 = @"MP:";
 
             public static LocalizedString vital1val = @"{00} / {01}";
+
+            public static LocalizedString sprinttip = @"Hold the Sprint button to run while moving";
+
+            public static LocalizedString noelementaltype = @"No Type";
+
+            public static LocalizedString oneelementaltype = @"{00}";
+
+            public static LocalizedString twoelementaltype = @"{00} / {01}";
+
+            public static Dictionary<int, LocalizedString> elementaltypes = new Dictionary<int, LocalizedString>
+            {
+                {0, @"None"},
+                {1, @"Steel"},
+                {2, @"Fighting"},
+                {3, @"Dragon"},
+                {4, @"Water"},
+                {5, @"Electric"},
+                {6, @"Fairy"},
+                {7, @"Fire"},
+                {8, @"Ice"},
+                {9, @"Bug"},
+                {10, @"Normal"},
+                {11, @"Grass"},
+                {12, @"Poison"},
+                {13, @"Psychic"},
+                {14, @"Rock"},
+                {15, @"Ground"},
+                {16, @"Ghost"},
+                {17, @"Dark"},
+                {18, @"Flying"},
+            };
 
         }
 
@@ -939,6 +1016,7 @@ namespace Intersect.Client.Localization
                 {2, @"Tenacity"},
                 {3, @"Luck"},
                 {4, @"Exp Increase"},
+                {5, @"%Attack Speed" }
             };
 
             public static Dictionary<int, LocalizedString> itemtypes = new Dictionary<int, LocalizedString>
@@ -953,6 +1031,8 @@ namespace Intersect.Client.Localization
             };
 
             public static LocalizedString prereq = @"Prerequisites:";
+
+            public static LocalizedString rangestat = @"{00} to {01}";
 
             public static Dictionary<int, LocalizedString> stats = new Dictionary<int, LocalizedString>
             {
@@ -1103,16 +1183,16 @@ namespace Intersect.Client.Localization
                 {"noname", @"NoName"},
                 {"none", @"None"},
                 {"numlock", @"NumLock"},
-                {"numpad0", @"NumPad 0"},
-                {"numpad1", @"NumPad 1"},
-                {"numpad2", @"NumPad 2"},
-                {"numpad3", @"NumPad 3"},
-                {"numpad4", @"NumPad 4"},
-                {"numpad5", @"NumPad 5"},
-                {"numpad6", @"NumPad 6"},
-                {"numpad7", @"NumPad 7"},
-                {"numpad8", @"NumPad 8"},
-                {"numpad9", @"NumPad 9"},
+                {"numpad0", @"Num0"},
+                {"numpad1", @"Num1"},
+                {"numpad2", @"Num2"},
+                {"numpad3", @"Num3"},
+                {"numpad4", @"Num4"},
+                {"numpad5", @"Num5"},
+                {"numpad6", @"Num6"},
+                {"numpad7", @"Num7"},
+                {"numpad8", @"Num8"},
+                {"numpad9", @"Num9"},
                 {"o", @"O"},
                 {"oem1", @"1"},
                 {"oem102", @"0"},
@@ -1270,6 +1350,13 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString vsync = @"V-Sync";
 
+            public static LocalizedString AutoPreview = @"Automatic Preview";
+
+            //Ajouté par Moussmous pour les controles manette
+            public static LocalizedString SwitchToKeyboardBindings = @"Keyboard";
+
+            public static LocalizedString SwitchToGamepadBindings = @"Gamepad";
+
         }
 
         public struct Parties
@@ -1289,6 +1376,14 @@ namespace Intersect.Client.Localization
             public static LocalizedString leave = @"Leave Party";
 
             public static LocalizedString leavetip = @"Leave Tip";
+
+            public static LocalizedString locate = @"Auto-locate party members";
+
+            public static LocalizedString locatetip = @"Locate Tip";
+
+            public static LocalizedString unlocate = @"Do not auto-locate party members";
+
+            public static LocalizedString unlocatetip = @"No locate Tip";
 
             public static LocalizedString name = @"{00} - Lv. {01}";
 
@@ -1330,6 +1425,8 @@ namespace Intersect.Client.Localization
             public static LocalizedString tasknpc = @"{00}/{01} {02}(s) slain.";
 
             public static LocalizedString title = @"Quest Log";
+
+            public static LocalizedString alternative_separator = @"----- OR -----";
 
         }
 
@@ -1473,6 +1570,10 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString addsymbol = @"+";
 
+            public static LocalizedString statseparator = @" and ";
+
+            public static LocalizedString statchance = @" ({00}% chance)";
+
             public static LocalizedString casttime = @"Cast Time: {00} Seconds";
 
             public static LocalizedString cooldowntime = @"Cooldown: {00} Seconds";
@@ -1480,6 +1581,14 @@ namespace Intersect.Client.Localization
             public static LocalizedString desc = @"{00}";
 
             public static LocalizedString duration = @"Duration: {00}s";
+
+            public static LocalizedString onself = @"(On Self)";
+
+            public static LocalizedString ontarget = @"(On Target)"; 
+
+            public static LocalizedString effectseparator = @"----------";
+
+            public static LocalizedString effectseparatorchance = @"({00}% chance)";
 
             public static Dictionary<int, LocalizedString> effectlist = new Dictionary<int, LocalizedString>
             {
@@ -1499,6 +1608,10 @@ namespace Intersect.Client.Localization
             };
 
             public static LocalizedString effects = @"Effects:";
+
+            public static LocalizedString effect = @"Effect: ";
+
+            public static LocalizedString effectnumber = @"Effect {00} : ";
 
             public static LocalizedString prereqs = @"Prerequisites:";
 
@@ -1529,17 +1642,37 @@ namespace Intersect.Client.Localization
             public static Dictionary<int, LocalizedString> targettypes = new Dictionary<int, LocalizedString>
             {
                 {0, @"Self Cast"},
-                {1, @"Targetted - Range: {00} Tiles"},
-                {2, @"AOE"},
-                {3, @"Projectile - Range: {00} Tiles"},
+                {1, @"Targeted - Range: {00} - Zone: {01}"},
+                {2, @"Anchored - Range: {00} - Zone: {01}"},
+                {3, @"Projectile - Range: {00}"},
                 {4, @"On Hit"},
                 {5, @"Trap"},
             };
+
+            public static LocalizedString zonenone = @"None";
+            public static LocalizedString zonecircle = @"Circle {00}";
+            public static LocalizedString zonesquare = @"Square {00}";
+            public static LocalizedString zonecustom = @"Custom";
+
+            public static LocalizedString onsiteanchored = @"On Site - Zone: {00}";
+            public static LocalizedString meleeanchored = @"Melee - Zone: {00}";
+            public static LocalizedString anchoredhits = @" - Hits: {00}";
+
+
+            public static LocalizedString meleeprojectile = @"Melee";
+            public static LocalizedString meleeprojectilehits = @" - Hits: {00}";
+            public static LocalizedString projectileshots = @" - Shots: {00}";
 
             public static Dictionary<int, LocalizedString> vitals = new Dictionary<int, LocalizedString>
             {
                 {0, @"HP: {00}{01}"},
                 {1, @"MP: {00}{01}"},
+            };
+
+            public static Dictionary<int, LocalizedString> vitalsteal = new Dictionary<int, LocalizedString>
+            {
+                {0, @"(Restore {00}% of the damage as HP)"},
+                {1, @"(Restore {00}% of the damage as MP)"},
             };
 
             public static Dictionary<int, LocalizedString> vitalcosts = new Dictionary<int, LocalizedString>
@@ -1548,6 +1681,23 @@ namespace Intersect.Client.Localization
                 {1, @"MP Cost: {00}"},
             };
 
+            public static Dictionary<int, LocalizedString> damagestyles = new Dictionary<int, LocalizedString>
+            {
+                {0, @"{00}"},
+                {1, @"{00}% of your Max {01}"},
+                {2, @"{00}% of your Current {01}"},
+                {3, @"{00}% of your target Max {01}"},
+                {4, @"{00}% of your target Current {01}"}
+            };
+
+            public static LocalizedString hp = @"HP";
+            public static LocalizedString mp = @"MP";
+
+            public static Dictionary<int, LocalizedString> vitalstyles = new Dictionary<int, LocalizedString>
+            {
+                {0, @"HP"},
+                {1, @"MP"},
+            };
         }
 
         public struct Spells
@@ -1654,6 +1804,104 @@ namespace Intersect.Client.Localization
             public static LocalizedString EntityNameAndLevel = @"{00} [Lv. {01}]";
         }
 
+        public struct ExpBoosts
+        {
+
+            public static LocalizedString title = @"Active experience boosts";
+
+            public static LocalizedString you = @"You";
+
+            public static LocalizedString personnal = @"Personnal:";
+
+            public static LocalizedString player = @"Player:";
+
+            public static LocalizedString party = @"Party:";
+
+            public static LocalizedString guild = @"Guild:";
+
+            public static LocalizedString allplayers = @"Global:";
+
+            public static LocalizedString playertitle = @"{00}";
+
+            public static LocalizedString hourminsecformat = @"{00:D2}:{01:D2}:{02:D2}";
+
+            public static LocalizedString playerkillvalues = @"Monsters: +{00}% (end in {01}) ";
+
+            public static LocalizedString playerquestvalues = @"Quests: +{00}% (end in {01}) ";
+
+            public static LocalizedString partytitle = @"{00} (initiated by {01})";
+            
+            public static LocalizedString partytitledisabled = @"{00} (Inactive while your are not a party leader)";
+
+            public static LocalizedString partykillvalues = @"Monsters: +{00}% (end in {01}) ";
+
+            public static LocalizedString partyquestvalues = @"Quests: +{00}% (end in {01}) ";
+
+            public static LocalizedString guildtitle = @"{00} (initiated by {01})";
+
+            public static LocalizedString guildkillvalues = @"Monsters: +{00}% (end in {01}) ";
+
+            public static LocalizedString guildquestvalues = @"Quests: +{00}% (end in {01}) ";
+
+            public static LocalizedString allplayerstitle = @"{00} (initiated by {01})";
+
+            public static LocalizedString allplayerskillvalues = @"Monsters: +{00}% (ends in {01}) ";
+
+            public static LocalizedString allplayersquestvalues = @"Quests: +{00}% (ends in {01}) ";
+
+
+        }
+
+        public struct PvpStadium
+        {
+            public static LocalizedString title = @"PokeStadium";
+
+            public static LocalizedString description = @"Here you can register to the Pokestadium queue and play 1vs1 matches with other players";
+
+            public static LocalizedString register = @"Register";
+
+            public static LocalizedString unregister = @"Unregister";
+
+            public static LocalizedString abandon = @"Abandon";
+
+            public static LocalizedString status = @"Status: {00}";
+
+            public static LocalizedString infos = @"Informations:";
+
+            public static LocalizedString wins = @"Wins: {00}";
+
+            public static LocalizedString losses = @"Losses: {00}";
+
+            public static LocalizedString winrate = @"Winrate: {00}%";
+
+            public static LocalizedString matchmaking_title = @"PokeStadium Match found";
+
+            public static LocalizedString matchmaking_message = @"You and your opponent have {00} seconds to accept the match. If you decline or exceed this duration, you will be kick from the PokeStadium queue";
+
+            public static LocalizedString declined_title = @"PokeStadium Match declined";
+
+            public static LocalizedString declined_message = @"Your opponent was afk or declined the match. You are still in the PokeStadium queue";
+
+            public static LocalizedString incombat_title = @"PokeStadium Match on combat";
+
+            public static LocalizedString incombat_message = @"You were in combat when a match was found for you. You are not anymore in the PokeStadium queue";
+
+            public static LocalizedString missed_title = @"PokeStadium Match missed";
+
+            public static LocalizedString missed_message = @"You didn't answer when a match was found for you. You are not anymore in the PokeStadium queue";
+
+            public static Dictionary<int, LocalizedString> stadiumstates = new Dictionary<int, LocalizedString> {
+                { 0, @"Registered" },
+                { 1, @"Wait for response" },
+                { 2, @"Match accepted" },
+                { 3, @"Match declined" },
+                { 4, @"Match on-preparation" },
+                { 5, @"Match on-going" },
+                { 6, @"Match ended" },
+                { 7, @"Unregistred" },
+                { 8, @"Busy in fight" },
+            };
+        }
     }
 
 }

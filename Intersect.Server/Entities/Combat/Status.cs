@@ -29,6 +29,10 @@ namespace Intersect.Server.Entities.Combat
 
         public StatusTypes Type;
 
+        public string SourceSpellName;
+
+        public bool[] EffectiveStatBuffs { get; set; } = new bool[(int)Stats.StatCount];
+
         public static List<StatusTypes> TenacityExcluded = new List<StatusTypes>()
         {
             StatusTypes.None,
@@ -47,13 +51,21 @@ namespace Intersect.Server.Entities.Combat
             StatusTypes.Stun,
         };
 
-        public Status(Entity en, Entity attacker, SpellBase spell, StatusTypes type, int duration, string data)
+        public Status(Entity en, Entity attacker, SpellBase spell, StatusTypes type, int duration, bool[] effectiveStatBuffs, string data, string sourceSpellName = "")
         {
             mEntity = en;
             Attacker = attacker;
             Spell = spell;
             Type = type;
             Data = data;
+            SourceSpellName = sourceSpellName;
+            if (effectiveStatBuffs != null)
+            {
+                for (var b = 0; b < (int)Stats.StatCount; b++)
+                {
+                    EffectiveStatBuffs[b] = effectiveStatBuffs[b];
+                }
+            }
 
             // Handle Player specific stuff, such as interrupting spellcasts 
             var tenacity = 0.0;
@@ -90,7 +102,8 @@ namespace Intersect.Server.Entities.Combat
             {
                 for (var i = (int)Vitals.Health; i < (int)Vitals.VitalCount; i++)
                 {
-                    var vitalDiff = spell.Combat.VitalDiff[i];
+                    var vitalDiff = Attacker.CalculateVitalStyle(spell.Combat.VitalDiff[i],
+                         spell.Combat.VitalDiffStyle[i], (Vitals)i, mEntity);
 
                     shield[i] = Math.Abs(vitalDiff) +
                                 (int)(spell.Combat.Scaling * en.Stat[spell.Combat.ScalingStat].BaseStat / 100f);
@@ -137,6 +150,10 @@ namespace Intersect.Server.Entities.Combat
                 en.Statuses[spell].StartTime = Timing.Global.Milliseconds;
                 en.Statuses[spell].Duration = Timing.Global.Milliseconds + (long) finalDuration;
                 en.Statuses[spell].StartTime = StartTime;
+                for (var b = 0; b < (int)Stats.StatCount; b++)
+                {
+                    en.Statuses[spell].EffectiveStatBuffs[b] = EffectiveStatBuffs[b];
+                }
                 en.CachedStatuses = en.Statuses.Values.ToArray();
             }
             else
@@ -177,6 +194,8 @@ namespace Intersect.Server.Entities.Combat
                     {
                         targetNpc.DamageMap[Attacker] = targetNpc.DamageMap.ToArray().Max(x => x.Value) + 1;
                     }
+                    //No despawn during a fight
+                    targetNpc.CanDespawn = false;
                 }
                 else
                 {

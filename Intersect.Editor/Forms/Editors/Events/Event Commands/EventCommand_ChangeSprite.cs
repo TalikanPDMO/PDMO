@@ -53,9 +53,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             var destBitmap = new Bitmap(pnlPreview.Width, pnlPreview.Height);
             var g = Graphics.FromImage(destBitmap);
             g.Clear(System.Drawing.Color.Black);
-            if (File.Exists("resources/entities/" + cmbSprite.Text))
+            if (File.Exists(GameContentManager.GraphResFolder + "/entities/" + cmbSprite.Text))
             {
-                var sourceBitmap = new Bitmap("resources/entities/" + cmbSprite.Text);
+                var sourceBitmap = new Bitmap(GameContentManager.GraphResFolder + "/entities/" + cmbSprite.Text);
                 g.DrawImage(
                     sourceBitmap,
                     new Rectangle(

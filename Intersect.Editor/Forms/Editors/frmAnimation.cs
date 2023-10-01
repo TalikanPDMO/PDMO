@@ -13,6 +13,7 @@ using Intersect.Editor.Localization;
 using Intersect.Editor.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Maps;
 using Intersect.Utilities;
 
 using Microsoft.Xna.Framework.Graphics;
@@ -53,7 +54,7 @@ namespace Intersect.Editor.Forms.Editors
             ApplyHooks();
             InitializeComponent();
 
-            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
+            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click, toolStripItemRelations_Click);
         }
 
         private void AssignEditorItem(Guid id)
@@ -152,6 +153,7 @@ namespace Intersect.Editor.Forms.Editors
             toolStripItemCopy.Text = Strings.AnimationEditor.copy;
             toolStripItemPaste.Text = Strings.AnimationEditor.paste;
             toolStripItemUndo.Text = Strings.AnimationEditor.undo;
+            toolStripItemRelations.Text = Strings.AnimationEditor.relations;
 
             grpAnimations.Text = Strings.AnimationEditor.animations;
 
@@ -161,6 +163,7 @@ namespace Intersect.Editor.Forms.Editors
             chkCompleteSoundPlayback.Text = Strings.AnimationEditor.soundcomplete;
             labelDarkness.Text = Strings.AnimationEditor.simulatedarkness.ToString(scrlDarkness.Value);
             btnSwap.Text = Strings.AnimationEditor.swap;
+            lblId.Text = Strings.AnimationEditor.animationid;
 
             grpLower.Text = Strings.AnimationEditor.lowergroup;
             lblLowerGraphic.Text = Strings.AnimationEditor.lowergraphic;
@@ -210,6 +213,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbFolder.Text = mEditorItem.Folder;
 
                 txtName.Text = mEditorItem.Name;
+                txtId.Text = mEditorItem.Id.ToString();
                 cmbSound.SelectedIndex = cmbSound.FindString(TextUtils.NullToNone(mEditorItem.Sound));
                 chkCompleteSoundPlayback.Checked = mEditorItem.CompleteSound;
 
@@ -660,12 +664,89 @@ namespace Intersect.Editor.Forms.Editors
             }
         }
 
+        private void toolStripItemRelations_Click(object sender, EventArgs e)
+        {
+            if (mEditorItem != null)
+            {
+                Dictionary<string, List<string>> dataDict = new Dictionary<string, List<string>>();
+
+                //Retrieve all npcs using the animation (attack animation)
+                var npcList = NpcBase.Lookup.Where(pair => ((NpcBase)pair.Value)?.AttackAnimationId == mEditorItem.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((NpcBase)pair.Value)?.EditorName) ?? NpcBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.npcs, npcList);
+
+                //Retrieve all classes using the animation (attack animation)
+                var classList = ClassBase.Lookup.Where(pair => ((ClassBase)pair.Value)?.AttackAnimationId == mEditorItem.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? ClassBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.classes, classList);
+
+                //Retrieve all spells using the animation 
+                var spellList = SpellBase.Lookup.Where(pair => ((SpellBase)pair.Value)?.CastAnimationId == mEditorItem.Id
+                    || ((SpellBase)pair.Value)?.HitAnimationId == mEditorItem.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((SpellBase)pair.Value)?.EditorName) ?? SpellBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.spells, spellList);
+
+                //Retrieve all projectiles using the animation
+                var projList = ProjectileBase.Lookup.Where(pair => ((ProjectileBase)pair.Value)?.Animations?.Any(a => a?.AnimationId == mEditorItem.Id) ?? false)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? ProjectileBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.projectiles, projList);
+
+                //Retrieve all items using the animation
+                var itemList = ItemBase.Lookup.Where(pair => ((ItemBase)pair.Value)?.AnimationId == mEditorItem.Id
+                    || ((ItemBase)pair.Value)?.AttackAnimationId == mEditorItem.Id
+                    || ((ItemBase)pair.Value)?.EquipmentAnimationId == mEditorItem.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((ItemBase)pair.Value)?.EditorName) ?? ItemBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.items, itemList);
+
+                //Retrieve all maps using the animation (weather or in a tile)
+                var mapList = MapBase.Lookup.Where(pair => ((MapBase)pair.Value)?.WeatherAnimationId == mEditorItem.Id
+                || IsAnimationInMap(mEditorItem.Id, (MapBase)pair.Value))
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? MapBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.maps, mapList);
+
+                //Retrieve all resources using the animation
+                var resourceList = ResourceBase.Lookup.Where(pair => ((ResourceBase)pair.Value)?.AnimationId == mEditorItem.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? ResourceBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.resources, resourceList);
+
+                string titleTarget = "Animation : " + mEditorItem.Name;
+                var relationsfrm = new FrmRelations(titleTarget, dataDict);
+                relationsfrm.ShowDialog();
+            }
+        }
+
+        private bool IsAnimationInMap(Guid animationId, MapBase mapBase)
+        {
+            foreach (var attribute in mapBase?.Attributes)
+            {
+                if (attribute?.Type == MapAttributes.Animation && (attribute as MapAnimationAttribute).AnimationId == animationId)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         private void UpdateToolStripItems()
         {
             toolStripItemCopy.Enabled = mEditorItem != null && lstGameObjects.Focused;
             toolStripItemPaste.Enabled = mEditorItem != null && mCopiedItem != null && lstGameObjects.Focused;
             toolStripItemDelete.Enabled = mEditorItem != null && lstGameObjects.Focused;
             toolStripItemUndo.Enabled = mEditorItem != null && lstGameObjects.Focused;
+            toolStripItemRelations.Enabled = mEditorItem != null;
         }
 
         private void form_KeyDown(object sender, KeyEventArgs e)

@@ -48,9 +48,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpSetAnimation.Controls.Add(this.lblAnimation);
             this.grpSetAnimation.Controls.Add(this.cmbAnimation);
             this.grpSetAnimation.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpSetAnimation.Location = new System.Drawing.Point(4, 4);
+            this.grpSetAnimation.Location = new System.Drawing.Point(5, 4);
             this.grpSetAnimation.Name = "grpSetAnimation";
-            this.grpSetAnimation.Size = new System.Drawing.Size(197, 96);
+            this.grpSetAnimation.Size = new System.Drawing.Size(320, 96);
             this.grpSetAnimation.TabIndex = 0;
             this.grpSetAnimation.TabStop = false;
             this.grpSetAnimation.Text = "Set Animation";
@@ -89,23 +89,29 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbAnimation.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.cmbAnimation.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.cmbAnimation.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbAnimation.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbAnimation.DrawDropdownHoverOutline = false;
+            this.cmbAnimation.DrawFocusRectangle = false;
             this.cmbAnimation.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cmbAnimation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbAnimation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbAnimation.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbAnimation.FormattingEnabled = true;
-            this.cmbAnimation.Location = new System.Drawing.Point(68, 19);
+            this.cmbAnimation.Location = new System.Drawing.Point(65, 19);
             this.cmbAnimation.Name = "cmbAnimation";
-            this.cmbAnimation.Size = new System.Drawing.Size(123, 21);
+            this.cmbAnimation.Size = new System.Drawing.Size(250, 21);
             this.cmbAnimation.TabIndex = 0;
+            this.cmbAnimation.Text = null;
+            this.cmbAnimation.TextPadding = new System.Windows.Forms.Padding(2);
             // 
-            // Event_MoveRouteAnimationSelector
+            // EventMoveRouteAnimationSelector
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpSetAnimation);
             this.Name = "EventMoveRouteAnimationSelector";
-            this.Size = new System.Drawing.Size(204, 105);
+            this.Size = new System.Drawing.Size(330, 105);
             this.grpSetAnimation.ResumeLayout(false);
             this.grpSetAnimation.PerformLayout();
             this.ResumeLayout(false);

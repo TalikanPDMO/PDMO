@@ -44,6 +44,8 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<Guid>("AttackAnimationId")
                         .HasColumnName("AttackAnimation");
 
+                    b.Property<byte>("AttackRange");
+
                     b.Property<int>("AttackSpeedModifier");
 
                     b.Property<int>("AttackSpeedValue");
@@ -76,6 +78,9 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<string>("JsonBaseVitals")
                         .HasColumnName("BaseVitals");
+
+                    b.Property<string>("JsonElementalTypes")
+                        .HasColumnName("ElementalTypes");
 
                     b.Property<string>("JsonItems")
                         .HasColumnName("Items");
@@ -202,11 +207,15 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("AdaptRange");
+
                     b.Property<Guid>("AnimationId")
                         .HasColumnName("Animation");
 
                     b.Property<Guid>("AttackAnimationId")
                         .HasColumnName("AttackAnimation");
+
+                    b.Property<byte>("AttackRange");
 
                     b.Property<int>("AttackSpeedModifier");
 
@@ -233,6 +242,11 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<int>("CritChance");
 
+                    b.Property<Guid>("CritEffectSpellId")
+                        .HasColumnName("CritEffectSpell");
+
+                    b.Property<bool>("CritEffectSpellReplace");
+
                     b.Property<double>("CritMultiplier");
 
                     b.Property<int>("Damage");
@@ -242,6 +256,10 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<string>("Description");
 
                     b.Property<int>("DropChanceOnDeath");
+
+                    b.Property<string>("EditorName");
+
+                    b.Property<int>("ElementalType");
 
                     b.Property<Guid>("EquipmentAnimationId")
                         .HasColumnName("EquipmentAnimation");
@@ -261,6 +279,8 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<bool>("IgnoreGlobalCooldown");
 
+                    b.Property<bool>("IsLossPercentage");
+
                     b.Property<int>("ItemType");
 
                     b.Property<string>("JsonColor")
@@ -274,6 +294,10 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<int>("MaxBankStack");
 
                     b.Property<int>("MaxInventoryStack");
+
+                    b.Property<int>("MaxLossOnDeath");
+
+                    b.Property<int>("MinLossOnDeath");
 
                     b.Property<string>("Name");
 
@@ -355,8 +379,12 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<Guid>("AttackAnimationId")
                         .HasColumnName("AttackAnimation");
 
+                    b.Property<bool>("AttackOnFlee");
+
                     b.Property<string>("AttackOnSightConditionsJson")
                         .HasColumnName("AttackOnSightConditions");
+
+                    b.Property<byte>("AttackRange");
 
                     b.Property<int>("AttackSpeedModifier");
 
@@ -372,6 +400,8 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<int>("Damage");
 
                     b.Property<int>("DamageType");
+
+                    b.Property<string>("EditorName");
 
                     b.Property<long>("Experience");
 
@@ -392,19 +422,41 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<string>("JsonDrops")
                         .HasColumnName("Drops");
 
+                    b.Property<string>("JsonElementalTypes")
+                        .HasColumnName("ElementalTypes");
+
+                    b.Property<string>("JsonLevelScalings")
+                        .HasColumnName("LevelScalings");
+
                     b.Property<string>("JsonMaxVital")
                         .HasColumnName("MaxVital");
+
+                    b.Property<string>("JsonSpellRules")
+                        .HasColumnName("SpellRules");
 
                     b.Property<string>("JsonStat")
                         .HasColumnName("Stats");
 
+                    b.Property<string>("JsonSwarmList")
+                        .HasColumnName("SwarmList");
+
                     b.Property<int>("Level");
+
+                    b.Property<int>("LevelRange");
+
+                    b.Property<int>("MaxRandomMove");
 
                     b.Property<byte>("Movement");
 
                     b.Property<string>("Name");
 
+                    b.Property<string>("NpcPhasesJson")
+                        .HasColumnName("NpcPhases");
+
                     b.Property<bool>("NpcVsNpcEnabled");
+
+                    b.Property<Guid>("OnDeathAttackersEventId")
+                        .HasColumnName("OnDeathAttackersEvent");
 
                     b.Property<Guid>("OnDeathEventId")
                         .HasColumnName("OnDeathEvent");
@@ -415,11 +467,19 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<string>("PlayerCanAttackConditionsJson")
                         .HasColumnName("PlayerCanAttackConditions");
 
+                    b.Property<string>("PlayerCanProjectileConditionsJson")
+                        .HasColumnName("PlayerCanProjectileConditions");
+
+                    b.Property<string>("PlayerCanSpellConditionsJson")
+                        .HasColumnName("PlayerCanSpellConditions");
+
                     b.Property<string>("PlayerFriendConditionsJson")
                         .HasColumnName("PlayerFriendConditions");
 
                     b.Property<string>("RegenJson")
                         .HasColumnName("VitalRegen");
+
+                    b.Property<bool>("RegenReset");
 
                     b.Property<int>("ResetRadius");
 
@@ -437,6 +497,12 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<bool>("Swarm");
 
+                    b.Property<bool>("SwarmAll");
+
+                    b.Property<bool>("SwarmOnPlayer");
+
+                    b.Property<int>("SwarmRange");
+
                     b.Property<long>("TimeCreated");
 
                     b.HasKey("Id");
@@ -448,6 +514,8 @@ namespace Intersect.Server.Migrations.Game
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
 
                     b.Property<string>("Folder");
 
@@ -477,6 +545,8 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<string>("AnimationsJson")
                         .HasColumnName("Animations");
 
+                    b.Property<bool>("BlockTarget");
+
                     b.Property<int>("Delay");
 
                     b.Property<string>("Folder");
@@ -493,6 +563,8 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<int>("Knockback");
 
+                    b.Property<bool>("LinkedSpawns");
+
                     b.Property<string>("Name");
 
                     b.Property<bool>("PierceTarget");
@@ -508,6 +580,8 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<Guid>("SpellId")
                         .HasColumnName("Spell");
+
+                    b.Property<bool>("StopProjectiles");
 
                     b.Property<long>("TimeCreated");
 
@@ -558,6 +632,12 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<Guid>("StartEventId")
                         .HasColumnName("StartEvent");
 
+                    b.Property<string>("TaskAlternativesJson")
+                        .HasColumnName("TaskAlternatives");
+
+                    b.Property<string>("TaskLinksJson")
+                        .HasColumnName("TaskLinks");
+
                     b.Property<string>("TasksJson")
                         .HasColumnName("Tasks");
 
@@ -588,6 +668,9 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<string>("JsonDrops")
                         .HasColumnName("Drops");
 
+                    b.Property<string>("JsonElementalTypes")
+                        .HasColumnName("ElementalTypes");
+
                     b.Property<string>("JsonHarvestingRequirements")
                         .HasColumnName("HarvestingRequirements");
 
@@ -602,6 +685,8 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<long>("TimeCreated");
 
                     b.Property<int>("Tool");
+
+                    b.Property<bool>("Undashable");
 
                     b.Property<int>("VitalRegen");
 
@@ -618,6 +703,8 @@ namespace Intersect.Server.Migrations.Game
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
 
                     b.Property<string>("Folder");
 
@@ -682,11 +769,18 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<int>("CastDuration");
 
+                    b.Property<Guid>("CastTargetAnimationId")
+                        .HasColumnName("CastTargetAnimation");
+
                     b.Property<int>("CooldownDuration");
 
                     b.Property<string>("CooldownGroup");
 
                     b.Property<string>("Description");
+
+                    b.Property<string>("EditorName");
+
+                    b.Property<int>("ElementalType");
 
                     b.Property<Guid>("EventId")
                         .HasColumnName("Event");
@@ -702,6 +796,9 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<bool>("IgnoreGlobalCooldown");
 
+                    b.Property<Guid>("ImpactAnimationId")
+                        .HasColumnName("ImpactAnimation");
+
                     b.Property<string>("JsonCastRequirements")
                         .HasColumnName("CastRequirements");
 
@@ -709,10 +806,16 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<int>("SpellType");
 
+                    b.Property<Guid>("TilesAnimationId")
+                        .HasColumnName("TilesAnimation");
+
                     b.Property<long>("TimeCreated");
 
                     b.Property<string>("VitalCostJson")
                         .HasColumnName("VitalCost");
+
+                    b.Property<string>("VitalCostStyleJson")
+                        .HasColumnName("VitalCostStyle");
 
                     b.HasKey("Id");
 
@@ -1003,6 +1106,11 @@ namespace Intersect.Server.Migrations.Game
 
                             b1.Property<int>("CritChance");
 
+                            b1.Property<Guid>("CritEffectSpellId")
+                                .HasColumnName("CritEffectSpell");
+
+                            b1.Property<bool>("CritEffectSpellReplace");
+
                             b1.Property<double>("CritMultiplier");
 
                             b1.Property<int>("DamageType");
@@ -1011,6 +1119,8 @@ namespace Intersect.Server.Migrations.Game
 
                             b1.Property<int>("Effect");
 
+                            b1.Property<int>("EffectChance");
+
                             b1.Property<bool>("Friendly");
 
                             b1.Property<int>("HitRadius");
@@ -1018,6 +1128,13 @@ namespace Intersect.Server.Migrations.Game
                             b1.Property<bool>("HoTDoT");
 
                             b1.Property<int>("HotDotInterval");
+
+                            b1.Property<int>("NextEffectSpellChance");
+
+                            b1.Property<Guid>("NextEffectSpellId")
+                                .HasColumnName("NextEffectSpell");
+
+                            b1.Property<bool>("NextEffectSpellReUseValues");
 
                             b1.Property<int>("OnHitDuration")
                                 .HasColumnName("OnHit");
@@ -1032,6 +1149,13 @@ namespace Intersect.Server.Migrations.Game
 
                             b1.Property<int>("ScalingStat");
 
+                            b1.Property<bool>("SquareHitRadius");
+
+                            b1.Property<bool>("SquareRange");
+
+                            b1.Property<string>("StatDiffChanceJson")
+                                .HasColumnName("StatDiffChance");
+
                             b1.Property<string>("StatDiffJson")
                                 .HasColumnName("StatDiff");
 
@@ -1044,6 +1168,12 @@ namespace Intersect.Server.Migrations.Game
 
                             b1.Property<string>("VitalDiffJson")
                                 .HasColumnName("VitalDiff");
+
+                            b1.Property<string>("VitalDiffStyleJson")
+                                .HasColumnName("VitalDiffStyle");
+
+                            b1.Property<string>("VitalStealJson")
+                                .HasColumnName("VitalSteal");
 
                             b1.ToTable("Spells");
 

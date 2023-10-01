@@ -819,6 +819,11 @@ namespace Intersect.Editor.Forms.Editors.Events
             }
         }
 
+        private static string GetCommandText(SetExpBoostCommand command, MapInstance map)
+        {
+            return Strings.EventCommandList.setexpboost.ToString(command.Title, command.TargetType.ToString());
+        }
+
         private static string GetCommandText(ChangeLevelCommand command, MapInstance map)
         {
             return Strings.EventCommandList.setlevel.ToString(command.Level);
@@ -841,6 +846,18 @@ namespace Intersect.Editor.Forms.Editors.Events
         private static string GetCommandText(UseSpellCommand command, MapInstance map)
         {
             return Strings.EventCommandList.usespell.ToString(SpellBase.GetName(command.SpellId));
+        }
+
+        private static string GetCommandText(ShowPopupCommand command, MapInstance map)
+        {
+            if (command.Title.Length > 0)
+            {
+                return Strings.EventCommandList.showpopup.ToString(command.Title);
+            }
+           else
+            {
+                return Strings.EventCommandList.showpopup.ToString(Truncate(command.Text, 30));
+            }
         }
 
         private static string GetCommandText(ChangeItemsCommand command, MapInstance map)

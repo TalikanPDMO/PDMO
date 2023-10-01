@@ -12,7 +12,7 @@ namespace Intersect.Server.Maps
     {
         private Dictionary<Guid, List<EntityMovePacket>> mMovements = new Dictionary<Guid, List<EntityMovePacket>>();
 
-        public void Add(Entity en, bool correction, Player forPlayer = null)
+        public void Add(Entity en, bool correction, int moveDirection, Player forPlayer = null)
         {
             lock (mMovements)
             {
@@ -21,7 +21,7 @@ namespace Intersect.Server.Maps
                 {
                     mMovements.Add(id, new List<EntityMovePacket>());
                 }
-                mMovements[id].Add(new EntityMovePacket(en.Id, en.GetEntityType(), en.MapId, (byte)en.X, (byte)en.Y, (byte)en.Dir, correction));
+                mMovements[id].Add(new EntityMovePacket(en.Id, en.GetEntityType(), en.MapId, (byte)en.X, (byte)en.Y, (byte)moveDirection, correction, en.Running));
             }
         }
 

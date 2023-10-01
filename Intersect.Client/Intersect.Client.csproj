@@ -96,9 +96,11 @@
     <Compile Include="Core\Bootstrapper.cs" />
     <Compile Include="Core\ClientContext.cs" />
     <Compile Include="Core\ClientCommandLineOptions.cs" />
+    <Compile Include="Core\Controls\ControlEnumGamePad.cs" />
     <Compile Include="Core\Controls\ControlEnum.cs" />
     <Compile Include="Core\Controls\ControlMap.cs" />
     <Compile Include="Core\Controls\Controls.cs" />
+    <Compile Include="Core\Controls\XBoxControllertoKeyboard.cs" />
     <Compile Include="Core\Fade.cs" />
     <Compile Include="Core\Graphics.cs" />
     <Compile Include="Core\IClientContext.cs" />
@@ -129,14 +131,18 @@
     <Compile Include="Entities\Projectiles\ProjectileSpawns.cs" />
     <Compile Include="Entities\Resource.cs" />
     <Compile Include="Entities\SpriteAnimations.cs" />
+    <Compile Include="Entities\ExpBoost.cs" />
     <Compile Include="Entities\Status.cs" />
     <Compile Include="General\DiscordHandler.cs" />
     <Compile Include="General\Time.cs" />
     <Compile Include="General\Globals.cs" />
     <Compile Include="Interface\Game\AnnouncementWindow.cs" />
+    <Compile Include="Interface\Game\EntityPanel\ExpBoostsWindow.cs" />
+    <Compile Include="Interface\Game\PvpStadiumWindow.cs" />
     <Compile Include="Interface\Game\GuildWindow.cs" />
     <Compile Include="Interface\Game\MapItem\MapItemIcon.cs" />
     <Compile Include="Interface\Game\MapItem\MapItemWindow.cs" />
+    <Compile Include="Interface\Game\PopupWindow.cs" />
     <Compile Include="Interface\MutableInterface.cs" />
     <Compile Include="Interface\Shared\Errors\ErrorWindow.cs" />
     <Compile Include="Items\Item.cs" />
@@ -171,6 +177,7 @@
     <Compile Include="Plugins\Contexts\ClientPluginContext.cs" />
     <Compile Include="Plugins\Helpers\ClientLifecycleHelper.cs" />
     <Compile Include="Plugins\Helpers\ClientNetworkHelper.cs" />
+    <Compile Include="Plugins\Helpers\PluginPacketSender.cs" />
     <Compile Include="Utilities\MathHelper.cs" />
     <Compile Include="MonoGame\Audio\MonoMusicInstance.cs" />
     <Compile Include="MonoGame\Audio\MonoMusicSource.cs" />
@@ -254,6 +261,12 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.XInput, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.XInput.4.2.0\lib\net45\SharpDX.XInput.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Drawing" />
@@ -275,6 +288,10 @@
     <EmbeddedResource Include="$(NetworkHandshakePublicKey)" />
     <None Include="app.config" />
     <None Include="app.manifest" />
+    <Content Include="assets\resources\gui\layouts\game\PvpStadiumWindow.json" />
+    <None Include="assets\resources\gui\layouts\game\PlayerRunIcon.json" />
+    <Content Include="assets\resources\gui\layouts\game\PopupWindow.json" />
+    <Content Include="assets\resources\gui\layouts\game\ExpBoostsWindow.json" />
     <None Include="assets\resources\gui\layouts\menu\LinksArea.json" />
     <None Include="packages.config" />
     <None Include="FodyWeavers.xml">
@@ -443,6 +460,13 @@
     <Content Include="assets\resources\gui\friendsfield.png" />
     <Content Include="assets\resources\gui\friendsicon.png" />
     <Content Include="assets\resources\gui\gamemenu.png" />
+    <Content Include="assets\resources\gui\gamepad_clicked.png" />
+    <Content Include="assets\resources\gui\gamepad_control_button.png" />
+    <Content Include="assets\resources\gui\gamepad_control_button_clicked.png" />
+    <Content Include="assets\resources\gui\gamepad_control_button_hovered.png" />
+    <Content Include="assets\resources\gui\gamepad_hovered.png" />
+    <Content Include="assets\resources\gui\gamepad_normal.png" />
+    <Content Include="assets\resources\gui\gamepad_under_bar.png" />
     <Content Include="assets\resources\gui\guild.png" />
     <Content Include="assets\resources\gui\guildicon.png" />
     <Content Include="assets\resources\gui\hotbar.png" />
@@ -580,6 +604,7 @@
     <Content Include="assets\resources\gui\menuicon.png" />
     <Content Include="assets\resources\gui\menuicon2.png" />
     <Content Include="assets\resources\gui\menuitem.png" />
+    <Content Include="assets\resources\gui\notif_exp.png" />
     <Content Include="assets\resources\gui\optionsicon.png" />
     <Content Include="assets\resources\gui\optionsicon2.png" />
     <Content Include="assets\resources\gui\options_dropdown.png" />
@@ -591,6 +616,10 @@
     <Content Include="assets\resources\gui\partykick.png" />
     <Content Include="assets\resources\gui\partyleader.png" />
     <Content Include="assets\resources\gui\partyleave.png" />
+    <Content Include="assets\resources\gui\playerrunicon.png" />
+    <Content Include="assets\resources\gui\expboosts_window.png" />
+    <Content Include="assets\resources\gui\popup_window.png" />
+    <Content Include="assets\resources\gui\pvpstadium.png" />
     <Content Include="assets\resources\gui\quantity.png" />
     <Content Include="assets\resources\gui\questoffer.png" />
     <Content Include="assets\resources\gui\quests.png" />

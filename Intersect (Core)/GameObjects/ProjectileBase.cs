@@ -84,6 +84,12 @@ namespace Intersect.GameObjects
 
         public bool PierceTarget { get; set; }
 
+        public bool BlockTarget { get; set; }
+
+        public bool StopProjectiles { get; set; }
+
+        public bool LinkedSpawns { get; set; } = false;
+
         public int Knockback { get; set; }
 
         public int Quantity { get; set; } = 1;
@@ -132,11 +138,14 @@ namespace Intersect.GameObjects
 
         public int SpawnRange = 1;
 
-        public ProjectileAnimation(Guid animationId, int spawnRange, bool autoRotate)
+        public Tuple<int, int> AnimationPosition = null;
+
+        public ProjectileAnimation(Guid animationId, int spawnRange, bool autoRotate, Tuple<int, int> animationPosition = null)
         {
             AnimationId = animationId;
             SpawnRange = spawnRange;
             AutoRotate = autoRotate;
+            AnimationPosition = animationPosition;
         }
 
     }

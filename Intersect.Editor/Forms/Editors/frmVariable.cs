@@ -38,7 +38,7 @@ namespace Intersect.Editor.Forms.Editors
             nudVariableValue.Minimum = long.MinValue;
             nudVariableValue.Maximum = long.MaxValue;
 
-            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, null, toolStripItemUndo_Click, null, toolStripItemDelete_Click);
+            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, null, toolStripItemUndo_Click, null, toolStripItemDelete_Click, null);
         }
         private void AssignEditorItem(Guid id)
         {
@@ -77,6 +77,7 @@ namespace Intersect.Editor.Forms.Editors
             grpEditor.Text = Strings.VariableEditor.editor;
             lblName.Text = Strings.VariableEditor.name;
             grpValue.Text = Strings.VariableEditor.value;
+            grpDescription.Text = Strings.VariableEditor.description;
             cmbBooleanValue.Items.Clear();
             cmbBooleanValue.Items.Add(Strings.VariableEditor.False);
             cmbBooleanValue.Items.Add(Strings.VariableEditor.True);
@@ -215,7 +216,9 @@ namespace Intersect.Editor.Forms.Editors
                 {
                     lblObject.Text = Strings.VariableEditor.playervariable;
                     txtObjectName.Text = ((PlayerVariableBase) mEditorItem).Name;
+                    txtApiId.Text = ((PlayerVariableBase)mEditorItem).Id.ToString();
                     txtId.Text = ((PlayerVariableBase) mEditorItem).TextId;
+                    txtDescription.Text = ((PlayerVariableBase)mEditorItem).Description;
                     cmbFolder.Text = ((PlayerVariableBase) mEditorItem).Folder;
                     cmbVariableType.SelectedIndex = (int) (((PlayerVariableBase) mEditorItem).Type - 1);
                 }
@@ -224,6 +227,8 @@ namespace Intersect.Editor.Forms.Editors
                     lblObject.Text = Strings.VariableEditor.globalvariable;
                     txtObjectName.Text = ((ServerVariableBase) mEditorItem).Name;
                     txtId.Text = ((ServerVariableBase) mEditorItem).TextId;
+                    txtDescription.Text = ((ServerVariableBase)mEditorItem).Description;
+                    txtApiId.Text = ((ServerVariableBase)mEditorItem).Id.ToString();
                     cmbFolder.Text = ((ServerVariableBase) mEditorItem).Folder;
                     cmbVariableType.SelectedIndex = (int) (((ServerVariableBase) mEditorItem).Type - 1);
                     grpValue.Show();
@@ -275,6 +280,23 @@ namespace Intersect.Editor.Forms.Editors
                     var obj = ServerVariableBase.Get((Guid) lstGameObjects.SelectedNode.Tag);
                     obj.Name = txtObjectName.Text;
                     lstGameObjects.UpdateText(obj.Name + " = " + obj.Value.ToString());
+                }
+            }
+        }
+
+        private void txtDescription_TextChanged(object sender, EventArgs e)
+        {
+            if (lstGameObjects.SelectedNode != null && lstGameObjects.SelectedNode.Tag != null)
+            {
+                if (rdoPlayerVariables.Checked)
+                {
+                    var obj = PlayerVariableBase.Get((Guid)lstGameObjects.SelectedNode.Tag);
+                    obj.Description = txtDescription.Text;
+                }
+                else if (rdoGlobalVariables.Checked)
+                {
+                    var obj = ServerVariableBase.Get((Guid)lstGameObjects.SelectedNode.Tag);
+                    obj.Description = txtDescription.Text;
                 }
             }
         }
@@ -438,7 +460,7 @@ namespace Intersect.Editor.Forms.Editors
             var mFolders = new List<string>();
             cmbFolder.Items.Clear();
             cmbFolder.Items.Add("");
-
+            lblApiId.Text = Strings.VariableEditor.textapiid;
             if (rdoPlayerVariables.Checked)
             {
                 foreach (var itm in PlayerVariableBase.Lookup)

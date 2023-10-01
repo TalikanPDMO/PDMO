@@ -57,7 +57,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpShowText.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpShowText.Location = new System.Drawing.Point(3, 3);
             this.grpShowText.Name = "grpShowText";
-            this.grpShowText.Size = new System.Drawing.Size(259, 281);
+            this.grpShowText.Size = new System.Drawing.Size(320, 281);
             this.grpShowText.TabIndex = 17;
             this.grpShowText.TabStop = false;
             this.grpShowText.Text = "Show Text";
@@ -68,7 +68,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblCommands.BackColor = System.Drawing.Color.Transparent;
             this.lblCommands.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCommands.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.lblCommands.Location = new System.Drawing.Point(157, 22);
+            this.lblCommands.Location = new System.Drawing.Point(220, 22);
             this.lblCommands.Name = "lblCommands";
             this.lblCommands.Size = new System.Drawing.Size(84, 13);
             this.lblCommands.TabIndex = 26;
@@ -89,14 +89,20 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbFace.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.cmbFace.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.cmbFace.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbFace.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbFace.DrawDropdownHoverOutline = false;
+            this.cmbFace.DrawFocusRectangle = false;
             this.cmbFace.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cmbFace.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbFace.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbFace.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbFace.FormattingEnabled = true;
             this.cmbFace.Location = new System.Drawing.Point(9, 157);
             this.cmbFace.Name = "cmbFace";
             this.cmbFace.Size = new System.Drawing.Size(121, 21);
             this.cmbFace.TabIndex = 24;
+            this.cmbFace.Text = null;
+            this.cmbFace.TextPadding = new System.Windows.Forms.Padding(2);
             this.cmbFace.SelectedIndexChanged += new System.EventHandler(this.cmbFace_SelectedIndexChanged);
             // 
             // lblFace
@@ -117,7 +123,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.txtShowText.Multiline = true;
             this.txtShowText.Name = "txtShowText";
             this.txtShowText.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.txtShowText.Size = new System.Drawing.Size(234, 100);
+            this.txtShowText.Size = new System.Drawing.Size(307, 100);
             this.txtShowText.TabIndex = 22;
             // 
             // lblText
@@ -149,7 +155,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // EventCommand_Text
+            // EventCommandText
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -157,7 +163,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpShowText);
             this.Name = "EventCommandText";
-            this.Size = new System.Drawing.Size(268, 287);
+            this.Size = new System.Drawing.Size(326, 287);
             this.grpShowText.ResumeLayout(false);
             this.grpShowText.PerformLayout();
             this.ResumeLayout(false);

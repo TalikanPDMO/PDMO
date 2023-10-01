@@ -10,11 +10,13 @@ using DarkUI.Forms;
 
 using Intersect.Editor.Content;
 using Intersect.Editor.Forms.Editors.Events.Event_Commands;
+using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.Editor.Maps;
 using Intersect.Editor.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Crafting;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
 using Intersect.GameObjects.Maps;
@@ -195,16 +197,16 @@ namespace Intersect.Editor.Forms.Editors.Events
 
             if (CurrentPage.Graphic.Type == EventGraphicType.Sprite)
             {
-                if (File.Exists("resources/entities/" + CurrentPage.Graphic.Filename))
+                if (File.Exists(GameContentManager.GraphResFolder + "/entities/" + CurrentPage.Graphic.Filename))
                 {
-                    sourceBitmap = new Bitmap("resources/entities/" + CurrentPage.Graphic.Filename);
+                    sourceBitmap = new Bitmap(GameContentManager.GraphResFolder + "/entities/" + CurrentPage.Graphic.Filename);
                 }
             }
             else if (CurrentPage.Graphic.Type == EventGraphicType.Tileset)
             {
-                if (File.Exists("resources/tilesets/" + CurrentPage.Graphic.Filename))
+                if (File.Exists(GameContentManager.GraphResFolder + "/tilesets/" + CurrentPage.Graphic.Filename))
                 {
-                    sourceBitmap = new Bitmap("resources/tilesets/" + CurrentPage.Graphic.Filename);
+                    sourceBitmap = new Bitmap(GameContentManager.GraphResFolder + "/tilesets/" + CurrentPage.Graphic.Filename);
                 }
             }
 
@@ -232,16 +234,16 @@ namespace Intersect.Editor.Forms.Editors.Events
                         sourceBitmap,
                         new Rectangle(
                             pnlPreview.Width / 2 -
-                            (Options.TileWidth + CurrentPage.Graphic.Width * Options.TileWidth) / 2,
+                            (Globals.CurrentTileWidth + CurrentPage.Graphic.Width * Globals.CurrentTileWidth) / 2,
                             pnlPreview.Height / 2 -
-                            (Options.TileHeight + CurrentPage.Graphic.Height * Options.TileHeight) / 2,
-                            Options.TileWidth + CurrentPage.Graphic.Width * Options.TileWidth,
-                            Options.TileHeight + CurrentPage.Graphic.Height * Options.TileHeight
+                            (Globals.CurrentTileHeight + CurrentPage.Graphic.Height * Globals.CurrentTileHeight) / 2,
+                            Globals.CurrentTileWidth + CurrentPage.Graphic.Width * Globals.CurrentTileWidth,
+                            Globals.CurrentTileHeight + CurrentPage.Graphic.Height * Globals.CurrentTileHeight
                         ),
                         new Rectangle(
-                            CurrentPage.Graphic.X * Options.TileWidth, CurrentPage.Graphic.Y * Options.TileHeight,
-                            Options.TileWidth + CurrentPage.Graphic.Width * Options.TileWidth,
-                            Options.TileHeight + CurrentPage.Graphic.Height * Options.TileHeight
+                            CurrentPage.Graphic.X * Globals.CurrentTileWidth, CurrentPage.Graphic.Y * Globals.CurrentTileHeight,
+                            Globals.CurrentTileWidth + CurrentPage.Graphic.Width * Globals.CurrentTileWidth,
+                            Globals.CurrentTileHeight + CurrentPage.Graphic.Height * Globals.CurrentTileHeight
                         ), GraphicsUnit.Pixel
                     );
                 }
@@ -269,6 +271,55 @@ namespace Intersect.Editor.Forms.Editors.Events
             MyEvent.Pages.Add(new EventPage());
             UpdateTabControl();
             LoadPage(MyEvent.Pages.Count - 1);
+        }
+
+        private void btnRelations_Click(object sender, EventArgs e)
+        {
+            if (MyEvent != null)
+            {
+                Dictionary<string, List<string>> dataDict = new Dictionary<string, List<string>>();
+
+                //Retrieve all npcs triggering the event on death
+                var npcList = NpcBase.Lookup.Where(pair => ((NpcBase)pair.Value)?.OnDeathEventId == MyEvent.Id
+                || ((NpcBase)pair.Value)?.OnDeathPartyEventId == MyEvent.Id
+                || ((NpcBase)pair.Value)?.OnDeathAttackersEventId == MyEvent.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((NpcBase)pair.Value)?.EditorName) ?? NpcBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.npcs, npcList);
+
+                //Retrieve all spells using the event 
+                var spellList = SpellBase.Lookup.Where(pair => ((SpellBase)pair.Value)?.EventId == MyEvent.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((SpellBase)pair.Value)?.EditorName) ?? SpellBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.spells, spellList);
+
+                //Retrieve all items using the event
+                var itemList = ItemBase.Lookup.Where(pair => ((ItemBase)pair.Value)?.EventId == MyEvent.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((ItemBase)pair.Value)?.EditorName) ?? ItemBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.items, itemList);
+
+                //Retrieve all resources triggering the event
+                var resourceList = ResourceBase.Lookup.Where(pair => ((ResourceBase)pair.Value)?.EventId == MyEvent.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? ResourceBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.resources, resourceList);
+
+                //Retrieve all crafts triggering the event
+                var craftList = CraftBase.Lookup.Where(pair => ((CraftBase)pair.Value)?.EventId == MyEvent.Id)
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? CraftBase.Deleted)
+                    .ToList();
+                dataDict.Add(Strings.Relations.crafts, craftList);
+
+                string titleTarget = "Event : " + MyEvent.Name;
+                var relationsfrm = new FrmRelations(titleTarget, dataDict);
+                relationsfrm.ShowDialog();
+            }
         }
 
         private void UpdateTabControl()
@@ -584,6 +635,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new GiveExperienceCommand();
 
                     break;
+                case EventCommandType.SetExpBoost:
+                    tmpCommand = new SetExpBoostCommand();
+
+                    break;
                 case EventCommandType.ChangeLevel:
                     tmpCommand = new ChangeLevelCommand();
 
@@ -650,6 +705,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
                 case EventCommandType.UseSpell:
                     tmpCommand = new UseSpellCommand();
+
+                    break;
+                case EventCommandType.ShowPopup:
+                    tmpCommand = new ShowPopupCommand();
 
                     break;
                 case EventCommandType.PlayAnimation:
@@ -851,6 +910,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             grpGeneral.Text = Strings.EventEditor.general;
             lblName.Text = Strings.EventEditor.name;
             chkIsGlobal.Text = Strings.EventEditor.global;
+            btnRelations.Text = Strings.EventEditor.relations;
 
             grpPageOptions.Text = Strings.EventEditor.pageoptions;
             btnNewPage.Text = Strings.EventEditor.newpage;
@@ -906,6 +966,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             chkDirectionFix.Text = Strings.EventEditor.directionfix;
             chkWalkingAnimation.Text = Strings.EventEditor.walkinganim;
             chkInteractionFreeze.Text = Strings.EventEditor.interactionfreeze;
+            chkCollideOnDash.Text = Strings.EventEditor.collideondash;
             grpTriggers.Text = Strings.EventEditor.trigger;
             grpNewCommands.Text = Strings.EventEditor.addcommand;
             grpEventCommands.Text = Strings.EventEditor.commandlist;
@@ -1057,6 +1118,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             chkDirectionFix.Checked = Convert.ToBoolean(CurrentPage.DirectionFix);
             chkWalkingAnimation.Checked = Convert.ToBoolean(CurrentPage.WalkingAnimation);
             chkInteractionFreeze.Checked = Convert.ToBoolean(CurrentPage.InteractionFreeze);
+            chkCollideOnDash.Checked = Convert.ToBoolean(CurrentPage.CollideOnDash);
             txtDesc.Text = CurrentPage.Description;
             ListPageCommands();
             UpdateEventPreview();
@@ -1197,6 +1259,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     cmdWindow = new EventCommandGiveExperience((GiveExperienceCommand) command, this);
 
                     break;
+                case EventCommandType.SetExpBoost:
+                    cmdWindow = new EventCommandSetExpBoost((SetExpBoostCommand)command, this);
+
+                    break;
                 case EventCommandType.ChangeLevel:
                     cmdWindow = new EventCommandChangeLevel((ChangeLevelCommand) command, this);
 
@@ -1273,6 +1339,9 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
                 case EventCommandType.UseSpell:
                     cmdWindow = new EventCommandUseSpell((UseSpellCommand)command, MyEvent, mCurrentMap, this);
+                    break;
+                case EventCommandType.ShowPopup:
+                    cmdWindow = new EventCommandShowPopup((ShowPopupCommand)command, this);
                     break;
                 case EventCommandType.PlayAnimation:
                     cmdWindow = new EventCommandPlayAnimation(
@@ -1766,6 +1835,9 @@ namespace Intersect.Editor.Forms.Editors.Events
             lblCommand.Hide();
             lblVariableTrigger.Hide();
             cmbVariable.Hide();
+            lblMapTrigger.Hide();
+            btnMapTrigger.Hide();
+            chkPvpStadium.Hide();
 
             if (MyEvent.CommonEvent)
             {
@@ -1793,6 +1865,37 @@ namespace Intersect.Editor.Forms.Editors.Events
                     cmbVariable.Items.AddRange(ServerVariableBase.Names);
                     cmbVariable.SelectedIndex = ServerVariableBase.ListIndex(CurrentPage.TriggerId) + 1;
                 }
+                else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.OnMapEnter || cmbTrigger.SelectedIndex == (int)CommonEventTrigger.OnMapLeave)
+                {
+                    var map = Intersect.GameObjects.Maps.MapList.MapList.List.FindMap(CurrentPage.TriggerId);
+                    if (map == null)
+                    {
+                        lblMapTrigger.Text = Strings.EventEditor.nomapselected;
+                        btnMapTrigger.Tag = Guid.Empty;
+                    }
+                    else
+                    {
+                        lblMapTrigger.Text = map.Name;
+                        btnMapTrigger.Tag = CurrentPage.TriggerId;
+                    }
+                    btnMapTrigger.Show();
+                    lblMapTrigger.Show();
+                }
+                else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.PVPKill || cmbTrigger.SelectedIndex == (int)CommonEventTrigger.PVPDeath)
+                {
+                    chkPvpStadium.Text = Strings.EventEditor.ispvpstadium;
+                    if (CurrentPage.TriggerCommand == nameof(PvpStadiumState))
+                    {
+                        chkPvpStadium.Checked = true;
+                    }
+                    else
+                    {
+                        CurrentPage.TriggerCommand = "";
+                        chkPvpStadium.Checked = false;
+                    }
+                    chkPvpStadium.Show();
+                }
+
             }
         }
 
@@ -1810,6 +1913,11 @@ namespace Intersect.Editor.Forms.Editors.Events
                 }
             }
         }
+        private void chkPvpStadium_CheckedChanged(object sender, EventArgs e)
+        {
+            CurrentPage.TriggerCommand = (chkPvpStadium.Checked  ? nameof(PvpStadiumState) : "");
+        }
+
 
         private void chkHideName_CheckedChanged(object sender, EventArgs e)
         {
@@ -1829,6 +1937,11 @@ namespace Intersect.Editor.Forms.Editors.Events
         private void chkInteractionFreeze_CheckedChanged(object sender, EventArgs e)
         {
             CurrentPage.InteractionFreeze = chkInteractionFreeze.Checked;
+        }
+
+        private void chkCollideOnDash_CheckedChanged(object sender, EventArgs e)
+        {
+            CurrentPage.CollideOnDash = chkCollideOnDash.Checked;
         }
 
         #endregion
@@ -1866,9 +1979,9 @@ namespace Intersect.Editor.Forms.Editors.Events
                 return;
             }
 
-            if (File.Exists("resources/faces/" + cmbPreviewFace.Text))
+            if (File.Exists(GameContentManager.GraphResFolder + "/faces/" + cmbPreviewFace.Text))
             {
-                pnlFacePreview.BackgroundImage = new Bitmap("resources/faces/" + cmbPreviewFace.Text);
+                pnlFacePreview.BackgroundImage = new Bitmap(GameContentManager.GraphResFolder + "/faces/" + cmbPreviewFace.Text);
             }
         }
 
@@ -1879,6 +1992,33 @@ namespace Intersect.Editor.Forms.Editors.Events
         }
 
         #endregion
+
+        private void btnMapTrigger_Click(object sender, EventArgs e)
+        {
+            var frmWarpSelection = new FrmWarpSelection();
+            frmWarpSelection.InitForm(false, null);
+            frmWarpSelection.SelectTile((Guid)btnMapTrigger.Tag, 0, 0);
+            frmWarpSelection.TopMost = true;
+            frmWarpSelection.ShowDialog();
+            if (frmWarpSelection.GetResult())
+            {
+                var mapId = frmWarpSelection.GetMap();
+                btnMapTrigger.Tag = mapId;
+                if(mapId == Guid.Empty)
+                {
+                    lblMapTrigger.Text = Strings.EventEditor.nomapselected;
+                }
+                else
+                {
+                    var map = Intersect.GameObjects.Maps.MapList.MapList.List.FindMap(mapId);
+                    if (map != null)
+                    {
+                        lblMapTrigger.Text = map.Name;
+                        CurrentPage.TriggerId = mapId;
+                    }  
+                }
+            }
+        }
     }
 
     public class CommandListProperties

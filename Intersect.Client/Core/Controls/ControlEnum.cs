@@ -58,6 +58,8 @@
 
         OpenGuild,
 
+        OpenPvpStadium,
+
         OpenFriends,
 
         OpenSettings,
@@ -66,7 +68,11 @@
 
         OpenAdminPanel,
 
-        ToggleGui
+        ToggleGui,
+
+        Running,
+
+        PartyLocate
 
     }
 

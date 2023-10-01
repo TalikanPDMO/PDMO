@@ -1,6 +1,8 @@
 ﻿using Intersect.Enums;
+using Intersect.GameObjects;
 using Intersect.Server.General;
 using Intersect.Server.Networking;
+using System;
 
 namespace Intersect.Server.Entities.Combat
 {
@@ -18,6 +20,8 @@ namespace Intersect.Server.Entities.Combat
 
         public long TransmittionTimer;
 
+        public SpellBase Spell;
+
         public Dash(
             Entity en,
             int range,
@@ -25,24 +29,58 @@ namespace Intersect.Server.Entities.Combat
             bool blockPass = false,
             bool activeResourcePass = false,
             bool deadResourcePass = false,
-            bool zdimensionPass = false
+            bool zdimensionPass = false,
+            SpellBase spellBase = null,
+            int dashTime = 0
         )
         {
             DistanceTraveled = 0;
             Direction = direction;
             Facing = (byte) en.Dir;
+            Spell = spellBase;
 
             CalculateRange(en, range, blockPass, activeResourcePass, deadResourcePass, zdimensionPass);
             if (Range <= 0)
             {
+                //Remove dash instance if no where to dash
                 return;
-            } //Remove dash instance if no where to dash
+            } 
 
+            //Check for collide event at the end of the dash
+            if (en is Player p)
+            {
+                foreach (var evt in p.EventLookup)
+                {
+                    if (evt.Value.MapId == p.MapId)
+                    {
+                        if (evt.Value.PageInstance != null && evt.Value.PageInstance.MapId == p.MapId && !evt.Value.PageInstance.CollideOnDash)
+                        {
+                            var x = evt.Value.PageInstance.GlobalClone?.X ?? evt.Value.PageInstance.X;
+                            var y = evt.Value.PageInstance.GlobalClone?.Y ?? evt.Value.PageInstance.Y;
+                            var z = evt.Value.PageInstance.GlobalClone?.Z ?? evt.Value.PageInstance.Z;
+                            if (x == p.X && y == p.Y && z == p.Z)
+                            {
+                                p.HandleEventCollision(evt.Value, -1, false);
+                            }
+                        }
+                    }
+                }
+            }
+            if (dashTime == 0)
+            {
+                dashTime = (int)(Options.MaxDashSpeed * (Range / 10f));
+            }
             TransmittionTimer = Globals.Timing.Milliseconds + (long) ((float) Options.MaxDashSpeed / (float) Range);
             PacketSender.SendEntityDash(
-                en, en.MapId, (byte) en.X, (byte) en.Y, (int) (Options.MaxDashSpeed * (Range / 10f)),
+                en, en.MapId, (byte) en.X, (byte) en.Y, dashTime,
                 Direction == Facing ? (sbyte) Direction : (sbyte) -1
             );
+
+            // Play the animation on the dash end tile
+            if (Spell?.ImpactAnimation != null)
+            {
+                PacketSender.SendAnimationToProximity(Spell.ImpactAnimationId, -1, Guid.Empty, en.MapId, (byte)en.X, (byte)en.Y, (sbyte)Directions.Up);
+            }
 
             en.MoveTimer = Globals.Timing.Milliseconds + Options.MaxDashSpeed;
         }
@@ -75,24 +113,37 @@ namespace Intersect.Server.Entities.Combat
                 if (n == -3 && zdimensionPass == false)
                 {
                     return;
-                } //Check for active resources
+                }
 
-                if (n == (int) EntityTypes.Resource && activeResourcePass == false)
+                //Check for resources, update of the Intersect Engine code
+                if (n == (int)EntityTypes.Resource)
                 {
-                    return;
-                } //Check for dead resources
+                    if (en.CollidedResource.Base.Undashable)
+                    {
+                        return;
+                    }
 
-                if (n == (int) EntityTypes.Resource && deadResourcePass == false)
-                {
-                    return;
-                } //Check for players and solid events
-
-                if (n == (int) EntityTypes.Player || n == (int) EntityTypes.Event)
+                    if (!deadResourcePass && en.CollidedResource.IsDead())
+                    {
+                        return;
+                    }
+                    if (!activeResourcePass && !en.CollidedResource.IsDead())
+                    {
+                        return;
+                    }
+                }
+                
+                //Check for players and solid events
+                if (n == (int) EntityTypes.Player || n == (int) EntityTypes.Event || n == (int)EntityTypes.Projectile)
                 {
                     return;
                 }
-
-                en.Move(Direction, null, true);
+                // Play the tile animation (if any) on the entity tile during the dash
+                if (Spell?.TilesAnimation != null)
+                {
+                    PacketSender.SendAnimationToProximity(Spell.TilesAnimationId, -1, Guid.Empty, en.MapId, (byte)en.X, (byte)en.Y, (sbyte)Directions.Up);
+                }
+                en.Move(Direction, null, true, false, true);
                 en.Dir = Facing;
 
                 Range = i;

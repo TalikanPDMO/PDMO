@@ -284,6 +284,11 @@ namespace Intersect.Client.Interface.Menu
             Globals.Database.SavePreference("Password", password);
         }
 
+        public void ClearPasswordField()
+        {
+            mPasswordTextbox?.SetText("");
+        }
+
     }
 
 }

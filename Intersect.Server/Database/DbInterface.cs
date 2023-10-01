@@ -112,6 +112,15 @@ namespace Intersect.Server.Database
                 );
         }
 
+        internal static LoggingContext CreateLoggingContext(bool readOnly = true)
+        {
+            return new LoggingContext(
+                Logging.LoggingContext.DefaultConnectionStringBuilder,
+                DatabaseOptions.DatabaseType.SQLite,
+                readOnly: readOnly
+            );
+        }
+
         public static void InitializeDbLoggers()
         {
             if (Options.GameDb.LogLevel > LogLevel.None)
@@ -291,6 +300,13 @@ namespace Intersect.Server.Database
                         using (var loggingContext = LoggingContext)
                         {
                             loggingContext.Database?.Migrate();
+
+#if DEBUG
+                            if (ServerContext.Instance.RestApi.Configuration.SeedMode)
+                            {
+                                loggingContext.Seed();
+                            }
+#endif
                         }
                     }
                     catch (Exception exception)
@@ -929,6 +945,16 @@ namespace Intersect.Server.Database
                         case GameObjectType.Npc:
                             context.Npcs.Remove((NpcBase)gameObject);
 
+                            foreach (var phase in ((NpcBase)gameObject).NpcPhases)
+                            {
+                                if (phase.BeginEvent != null)
+                                {
+                                    context.Events.Remove(phase.BeginEvent);
+                                    context.Entry(phase.BeginEvent).State = EntityState.Deleted;
+                                    EventBase.Lookup.Delete(phase.BeginEvent);
+                                }
+                            }
+
                             break;
                         case GameObjectType.Projectile:
                             context.Projectiles.Remove((ProjectileBase)gameObject);
@@ -957,6 +983,26 @@ namespace Intersect.Server.Database
                                     context.Events.Remove(tsk.CompletionEvent);
                                     context.Entry(tsk.CompletionEvent).State = EntityState.Deleted;
                                     EventBase.Lookup.Delete(tsk.CompletionEvent);
+                                }
+                            }
+
+                            foreach (var link in ((QuestBase)gameObject).TaskLinks)
+                            {
+                                if (link.CompletionEvent != null)
+                                {
+                                    context.Events.Remove(link.CompletionEvent);
+                                    context.Entry(link.CompletionEvent).State = EntityState.Deleted;
+                                    EventBase.Lookup.Delete(link.CompletionEvent);
+                                }
+                            }
+
+                            foreach (var alt in ((QuestBase)gameObject).TaskAlternatives)
+                            {
+                                if (alt.CompletionEvent != null)
+                                {
+                                    context.Events.Remove(alt.CompletionEvent);
+                                    context.Entry(alt.CompletionEvent).State = EntityState.Deleted;
+                                    EventBase.Lookup.Delete(alt.CompletionEvent);
                                 }
                             }
 
@@ -1051,6 +1097,13 @@ namespace Intersect.Server.Database
                             break;
                         case GameObjectType.Npc:
                             context.Npcs.Update((NpcBase)gameObject);
+                            foreach (var phase in ((NpcBase)gameObject).NpcPhases)
+                            {
+                                if (phase.BeginEvent != null)
+                                {
+                                    context.Events.Update(phase.BeginEvent);
+                                }
+                            }
 
                             break;
                         case GameObjectType.Projectile:
@@ -1076,6 +1129,24 @@ namespace Intersect.Server.Database
                                     context.Events.Update(tsk.CompletionEvent);
                                 }
                             }
+
+                            foreach (var link in ((QuestBase)gameObject).TaskLinks)
+                            {
+                                if (link.CompletionEvent != null)
+                                {
+                                    context.Events.Update(link.CompletionEvent);
+                                }
+                            }
+
+                            foreach (var alt in ((QuestBase)gameObject).TaskAlternatives)
+                            {
+                                if (alt.CompletionEvent != null)
+                                {
+                                    context.Events.Update(alt.CompletionEvent);
+                                }
+                            }
+
+
 
                             context.Quests.Update((QuestBase)gameObject);
 
@@ -1323,7 +1394,7 @@ namespace Intersect.Server.Database
                                     y < mapGrids[myGrid].YMax &&
                                     mapGrids[myGrid].MyGrid[x, y] != Guid.Empty)
                                 {
-                                    
+
                                     surroundingMapIds.Add(mapGrids[myGrid].MyGrid[x, y]);
                                     surroundingMaps.Add(MapInstance.Get(mapGrids[myGrid].MyGrid[x, y]));
                                 }
@@ -1658,13 +1729,7 @@ namespace Intersect.Server.Database
             //Shut down server, start migration.
             Console.WriteLine(Strings.Migration.stoppingserver);
 
-            //This variable will end the server loop and save any pending changes
-            ServerContext.Instance.RequestShutdown();
-
-            while (ServerContext.Instance.IsRunning)
-            {
-                System.Threading.Thread.Sleep(100);
-            }
+            
 
 
             Console.WriteLine(Strings.Migration.startingmigration);
@@ -1722,11 +1787,18 @@ namespace Intersect.Server.Database
                 }
                 Options.PlayerDb = newOpts;
                 Options.SaveToDisk();
-
             }
 
             Console.WriteLine(Strings.Migration.migrationcomplete);
             Bootstrapper.Context.ConsoleService.Wait(true);
+
+            //This variable will end the server loop and save any pending changes
+            ServerContext.Instance.RequestShutdown();
+            System.Threading.Thread.Sleep(1000);
+            while (ServerContext.Instance.IsRunning)
+            {
+                System.Threading.Thread.Sleep(100);
+            }
             Environment.Exit(0);
         }
 

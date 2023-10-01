@@ -31,6 +31,7 @@ using Intersect.Server.Networking;
 using Intersect.Utilities;
 
 using Newtonsoft.Json;
+using static Intersect.GameObjects.QuestBase;
 
 namespace Intersect.Server.Entities
 {
@@ -52,6 +53,11 @@ namespace Intersect.Server.Entities
         #endregion
 
         [NotMapped, JsonIgnore] public long LastChatTime = -1;
+
+        [NotMapped, JsonIgnore] public ConcurrentDictionary<Guid, long> FightingNpcBaseIds = new ConcurrentDictionary<Guid, long>();
+
+        //HashSet to contains only 1 reference for each npc, no order
+        [NotMapped, JsonIgnore] public ConcurrentDictionary<Guid, ConcurrentDictionary<Npc, AttackInfo>> FightingListNpcs = new ConcurrentDictionary<Guid, ConcurrentDictionary<Npc, AttackInfo>>();
 
         #region Quests
 
@@ -184,6 +190,10 @@ namespace Intersect.Server.Entities
         /// </summary>
         [NotMapped] public bool GuildBank;
 
+        public int StadiumWins { get; set; }
+
+        public int StadiumLosses { get; set; }
+
         public static Player FindOnline(Guid id)
         {
             return OnlinePlayers.ContainsKey(id) ? OnlinePlayers[id] : null;
@@ -283,6 +293,9 @@ namespace Intersect.Server.Entities
 
             //Send guild list update to all members when coming online
             Guild?.UpdateMemberList();
+
+            // Init all existing expboosts related to the player
+            ExpBoost.InitPlayerBoosts(this);
         }
 
         public void SendPacket(IPacket packet, TransmissionMode mode = TransmissionMode.All)
@@ -300,10 +313,10 @@ namespace Intersect.Server.Entities
             base.Dispose();
         }
 
-        public void TryLogout(bool force = false)
+        public void TryLogout(bool force = false, bool softLogout = false)
         {
             LastOnline = DateTime.Now;
-            Client = null;
+            Client = default;
 
             if (LoginTime != null)
             {
@@ -313,11 +326,11 @@ namespace Intersect.Server.Entities
 
             if (CombatTimer < Globals.Timing.Milliseconds || force)
             {
-                Logout();
+                Logout(softLogout);
             }
         }
 
-        private void Logout()
+        private void Logout(bool softLogout = false)
         {
             var map = MapInstance.Get(MapId);
             map?.RemoveEntity(this);
@@ -327,6 +340,9 @@ namespace Intersect.Server.Entities
 
             //Update trade
             CancelTrade();
+
+            //Update PvpStadium
+            PvpStadiumUnit.UnregisterPlayer(this.Id, true);
 
             mSentMap = false;
             ChatTarget = null;
@@ -418,7 +434,7 @@ namespace Intersect.Server.Entities
             //If our client has disconnected or logged out but we have kept the user logged in due to being in combat then we should try to logout the user now
             if (Client == null)
             {
-                User?.TryLogout();
+                User?.TryLogout(softLogout);
             }
 
             DbInterface.Pool.QueueWorkItem(CompleteLogout);
@@ -464,6 +480,11 @@ namespace Intersect.Server.Entities
                                 DbInterface.Pool.QueueWorkItem(user.Save, false);
                             }
                             SaveTimer = Globals.Timing.Milliseconds + Options.Instance.Processing.PlayerSaveInterval;
+                        }
+                        if (CombatTimer < Globals.Timing.Milliseconds && FightingNpcBaseIds.Count > 0)
+                        {
+                            FightingNpcBaseIds.Clear();
+                            FightingListNpcs.Clear();
                         }
                     }
 
@@ -634,14 +655,14 @@ namespace Intersect.Server.Entities
                             }
 
                             var eventFound = false;
-                            var eventMap = map;
+                            var eventMap = Map;
 
                             if (evt.Value.MapId != Guid.Empty)
                             {
                                 if (evt.Value.MapId != MapId)
                                 {
                                     eventMap = evt.Value.MapInstance;
-                                    eventFound = map.SurroundingMapIds.Contains(eventMap.Id);
+                                    eventFound = Map.SurroundingMapIds.Contains(eventMap.Id);
                                 }
                                 else
                                 {
@@ -705,7 +726,7 @@ namespace Intersect.Server.Entities
         }
 
         //Sending Data
-        public override EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null)
+        public override EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null, bool isSpawn = false)
         {
             if (packet == null)
             {
@@ -745,7 +766,7 @@ namespace Intersect.Server.Entities
 
             pkt.Guild = Guild?.Name;
             pkt.GuildRank = GuildRank;
-
+            pkt.ElementalTypes = GetElementalTypes();
             return pkt;
         }
 
@@ -764,25 +785,53 @@ namespace Intersect.Server.Entities
             CachedStatuses = new Status[0];
 
             CombatTimer = 0;
-
-            var cls = ClassBase.Get(ClassId);
-            if (cls != null)
+            FightingNpcBaseIds.Clear();
+            FightingListNpcs.Clear();
+            // Bypass classic respawn when Stadium kill
+            if (PvpStadiumUnit.CurrentMatchPlayers.TryGetValue(this.Id, out var playerUnit) &&
+                (playerUnit.StadiumState == PvpStadiumState.MatchOnGoing || playerUnit.StadiumState == PvpStadiumState.MatchEnded))
             {
-                Warp(cls.SpawnMapId, (byte) cls.SpawnX, (byte) cls.SpawnY, (byte) cls.SpawnDir);
+                PvpStadiumUnit.EndMatch(this.Id);
             }
             else
             {
-                Warp(Guid.Empty, 0, 0, 0);
+                var cls = ClassBase.Get(ClassId);
+                if (cls != null)
+                {
+                    Warp(cls.SpawnMapId, (byte)cls.SpawnX, (byte)cls.SpawnY, (byte)cls.SpawnDir);
+                }
+                else
+                {
+                    Warp(Guid.Empty, 0, 0, 0);
+                }
+
+                PacketSender.SendEntityDataToProximity(this);
+
+                //Search death common event trigger
+                StartCommonEventsWithTrigger(CommonEventTrigger.OnRespawn);
             }
-
-            PacketSender.SendEntityDataToProximity(this);
-
-            //Search death common event trigger
-            StartCommonEventsWithTrigger(CommonEventTrigger.OnRespawn);
         }
 
-        public override void Die(bool dropItems = true, Entity killer = null)
+        public override void Die(bool dropItems = true, Entity killer = null, bool isDespawn = false)
         {
+            //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+            if (Options.Combat.EnableCombatChatMessages) // Ce premier message indique au joueur sur ce compte qu'il vient d'être mis KO par un mob / joueur
+            {
+                if (killer != null)
+                {
+                    PacketSender.SendChatMsg(this, Strings.Combat.died + killer.Name + " !", ChatMessageType.Combat);
+                    if (killer is Player killerPlayer) //Ce message suivant s'envoie sur la console du joueur qui a mis KO le joueur qui joue sur ce compte
+                    {
+                        PacketSender.SendChatMsg(killerPlayer, Strings.Combat.defeated + this.Name + " !", ChatMessageType.Combat);
+                    }
+                }
+                else
+                {
+                    PacketSender.SendChatMsg(this, Strings.Combat.diednokiller + " !", ChatMessageType.Combat);
+                }
+            }
+
+
             CastTime = 0;
             CastTarget = null;
 
@@ -813,8 +862,9 @@ namespace Intersect.Server.Entities
                 base.Die(dropItems, killer);
             }
 
-            if (Options.Instance.PlayerOpts.ExpLossOnDeathPercent > 0)
+            if (Options.Instance.PlayerOpts.ExpLossOnDeathPercent > 0 && !(killer is Player))
             {
+                // No xp loss when pvp
                 if (Options.Instance.PlayerOpts.ExpLossFromCurrentExp)
                 {
                     var ExpLoss = (this.Exp * (Options.Instance.PlayerOpts.ExpLossOnDeathPercent / 100.0));
@@ -1009,14 +1059,19 @@ namespace Intersect.Server.Entities
             StartCommonEventsWithTrigger(CommonEventTrigger.LevelUp);
         }
 
-        public void GiveExperience(long amount)
+        public void GiveExperience(long amount, bool xpBoostNpc, bool xpBoostQuestEvent)
         {
-            Exp += (int) (amount * GetExpMultiplier() / 100);
+            var amountWithBoost = (int)(amount * GetExpMultiplier(xpBoostNpc, xpBoostQuestEvent) / 100);
+            Exp += amountWithBoost;
             if (Exp < 0)
             {
                 Exp = 0;
             }
-
+            //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+            if (Options.Combat.EnableCombatChatMessages)
+            {
+                PacketSender.SendChatMsg(this, this.Name + Strings.Combat.won + amountWithBoost + Strings.Combat.EXP + ".", ChatMessageType.Combat);
+            }
             if (!CheckLevelUp())
             {
                 PacketSender.SendExperience(this);
@@ -1064,20 +1119,31 @@ namespace Intersect.Server.Entities
                         var descriptor = npc.Base;
                         var playerEvent = descriptor.OnDeathEvent;
                         var partyEvent = descriptor.OnDeathPartyEvent;
-
+                        var attackersEvent = descriptor.OnDeathAttackersEvent;
+                        //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+                        if (Options.Combat.EnableCombatChatMessages)
+                        {
+                            PacketSender.SendChatMsg(this, Strings.Combat.defeated + entity.Name + " !", ChatMessageType.Combat);
+                        }
+                        var lvlGap = npc.Level - descriptor.Level;
+                        var npcExp = descriptor.Experience * (1 + lvlGap * descriptor.LevelScalings[(int)NpcLevelScalings.Experience]);
+                        if (npcExp < 0)
+                        {
+                            npcExp = 0;
+                        }
                         // If in party, split the exp.
                         if (Party != null && Party.Count > 0)
                         {
                             var partyMembersInXpRange = Party.Where(partyMember => partyMember.InRangeOf(this, Options.Party.SharedXpRange)).ToArray();
                             float bonusExp = Options.Instance.PartyOpts.BonusExperiencePercentPerMember / 100;
                             var multiplier = 1.0f + (partyMembersInXpRange.Length * bonusExp);
-                            var partyExperience = (int)(descriptor.Experience * multiplier) / partyMembersInXpRange.Length;
+                            var partyExperience = (int)(npcExp * multiplier) / partyMembersInXpRange.Length;
                             foreach (var partyMember in partyMembersInXpRange)
                             {
-                                partyMember.GiveExperience(partyExperience);
+                                partyMember.GiveExperience(partyExperience, true, false);
                                 partyMember.UpdateQuestKillTasks(entity);
                             }
-
+                            StartCommonEvent(playerEvent);
                             if (partyEvent != null)
                             {
                                 foreach (var partyMember in Party)
@@ -1091,15 +1157,18 @@ namespace Intersect.Server.Entities
                         }
                         else
                         {
-                            GiveExperience(descriptor.Experience);
+                            GiveExperience((long)npcExp, true, false);
                             UpdateQuestKillTasks(entity);
-                        }
-
-                        if (playerEvent != null)
-                        {
                             StartCommonEvent(playerEvent);
                         }
 
+                        if (attackersEvent != null)
+                        {
+                            foreach(var id in npc.LootMapCache)
+                            {
+                                FindOnline(id)?.StartCommonEvent(attackersEvent);
+                            }                
+                        }
                         break;
                     }
 
@@ -1132,26 +1201,100 @@ namespace Intersect.Server.Entities
                         var questTask = quest.FindTask(questProgress.TaskId);
                         if (questTask != null)
                         {
-                            if (questTask.Objective == QuestObjective.KillNpcs && questTask.TargetId == npc.Base.Id)
+                            var link = quest.FindLink(questProgress.TaskId);
+                            if (link == null)
                             {
-                                questProgress.TaskProgress++;
-                                if (questProgress.TaskProgress >= questTask.Quantity)
+                                var alt = quest.FindAlternative(questProgress.TaskId);
+                                if (alt == null)
                                 {
-                                    CompleteQuestTask(questId, questProgress.TaskId);
+                                    if (!questProgress.TasksProgress.ContainsKey(questTask.Id) || questProgress.TasksProgress[questTask.Id] != -1)
+                                    {
+                                        if (questTask.Objective == QuestObjective.KillNpcs && questTask.TargetId == npc.Base.Id)
+                                        {
+                                            UpdateKillTask(questTask, questProgress, quest);
+                                        }
+                                    }
                                 }
                                 else
                                 {
-                                    PacketSender.SendQuestsProgress(this);
-                                    PacketSender.SendChatMsg(
-                                        this,
-                                        Strings.Quests.npctask.ToString(
-                                            quest.Name, questProgress.TaskProgress, questTask.Quantity,
-                                            NpcBase.GetName(questTask.TargetId)
-                                        ),
-                                        ChatMessageType.Quest
-                                    );
+                                    UpdateKillTaskAlternative(alt, questProgress, quest, npc.Base.Id);
                                 }
                             }
+                            else
+                            {
+                                var alt = quest.FindAlternative(link.Id);
+                                if (alt == null)
+                                {
+                                    foreach (var linkedTaskId in link.TasksList)
+                                    {
+                                        if (!questProgress.TasksProgress.ContainsKey(linkedTaskId) || questProgress.TasksProgress[linkedTaskId] != -1)
+                                        {
+                                            var linkedTask = quest.FindTask(linkedTaskId);
+                                            if (linkedTask.Objective == QuestObjective.KillNpcs && linkedTask.TargetId == npc.Base.Id)
+                                            {
+                                                UpdateKillTask(linkedTask, questProgress, quest);
+                                            } 
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    UpdateKillTaskAlternative(alt, questProgress, quest, npc.Base.Id);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public void UpdateKillTask(QuestTask questTask, Quest questProgress, QuestBase quest)
+        {
+            questProgress.UpdateProgress(questTask.Id);
+            if (questProgress.TasksProgress[questTask.Id] >= questTask.Quantity)
+            {
+                CompleteQuestTask(questProgress.QuestId, questTask.Id);
+            }
+            else
+            {
+                PacketSender.SendQuestsProgress(this);
+                PacketSender.SendChatMsg(
+                    this,
+                    Strings.Quests.npctask.ToString(
+                        quest.Name, questProgress.TasksProgress[questTask.Id], questTask.Quantity,
+                        NpcBase.GetName(questTask.TargetId)
+                    ),
+                    ChatMessageType.Quest
+                );
+            }
+        }
+        public void UpdateKillTaskAlternative(TaskAlternative alt, Quest questProgress, QuestBase quest, Guid npcId)
+        {
+            foreach (var altid in alt.AlternativesList)
+            {
+                var link = quest.ContainsLink(altid);
+                if (link == null)
+                {
+                    var questTask = quest.FindTask(altid);
+                    if (!questProgress.TasksProgress.ContainsKey(questTask.Id) || questProgress.TasksProgress[questTask.Id] != -1)
+                    {
+                        if (questTask.Objective == QuestObjective.KillNpcs && questTask.TargetId == npcId)
+                        {
+                            UpdateKillTask(questTask, questProgress, quest);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var linkedTaskId in link.TasksList)
+                    {
+                        if (!questProgress.TasksProgress.ContainsKey(linkedTaskId) || questProgress.TasksProgress[linkedTaskId] != -1)
+                        {
+                            var linkedTask = quest.FindTask(linkedTaskId);
+                            if (linkedTask.Objective == QuestObjective.KillNpcs && linkedTask.TargetId == npcId)
+                            {
+                                UpdateKillTask(linkedTask, questProgress, quest);
+                            }     
                         }
                     }
                 }
@@ -1163,11 +1306,25 @@ namespace Intersect.Server.Entities
             ProjectileBase projectile,
             SpellBase parentSpell,
             ItemBase parentItem,
-            byte projectileDir
+            byte projectileDir,
+            bool alreadyCrit = false
+
         )
         {
             if (!CanAttack(target, parentSpell))
             {
+                //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+                if (Options.Combat.EnableCombatChatMessages)
+                {
+                    if (parentSpell != null)
+                    {
+                        PacketSender.SendChatMsg(this, target?.Name + Strings.Combat.cantAttackWith + parentSpell.Name, ChatMessageType.Combat);
+                    }
+                    else if (parentItem != null)
+                    {
+                        PacketSender.SendChatMsg(this, target?.Name + Strings.Combat.cantAttackWith + parentItem.Name, ChatMessageType.Combat);
+                    }
+                }
                 return;
             }
 
@@ -1216,7 +1373,7 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            base.TryAttack(target, projectile, parentSpell, parentItem, projectileDir);
+            base.TryAttack(target, projectile, parentSpell, parentItem, projectileDir, alreadyCrit);
         }
 
         public void TryAttack(Entity target)
@@ -1230,28 +1387,81 @@ namespace Intersect.Server.Entities
 
                 return;
             }
-
-            if (!IsOneBlockAway(target))
-            {
-                return;
-            }
-
-            if (!CanAttack(target, null))
-            {
-                return;
-            }
-
-            if (target is EventPage)
-            {
-                return;
-            }
-
+            var classBase = ClassBase.Get(ClassId);
+            var attackrange = classBase.AttackRange;
             ItemBase weapon = null;
             if (Options.WeaponIndex > -1 &&
                 Options.WeaponIndex < Equipment.Length &&
                 Equipment[Options.WeaponIndex] >= 0)
             {
                 weapon = ItemBase.Get(Items[Equipment[Options.WeaponIndex]].ItemId);
+                if (!weapon.AdaptRange)
+                {
+                    attackrange = weapon.AttackRange;
+                }
+            }
+
+            if (target is Resource || attackrange == 0)
+            {
+                if (!IsOneBlockAway(target))
+                {
+                    //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+                    if (Options.Combat.EnableCombatChatMessages)
+                    {
+                        PacketSender.SendChatMsg(this, target.Name + Strings.Combat.oneBlockAway, ChatMessageType.Combat);
+                    }
+                    return;
+                }
+            }
+            else
+            {
+                if (GetDistanceTo(target) > attackrange)
+                {
+                    if (Options.Combat.EnableCombatChatMessages)
+                    {
+                        PacketSender.SendChatMsg(this, target.Name + Strings.Combat.oneBlockAway, ChatMessageType.Combat);
+                    }
+                    return;
+                }
+                // Turn toward enemy if needed only for range auto-attacks
+                ChangeDir(DirToEnemy(target, true));
+            }
+            
+            if (target is Npc npcenemy)
+            {
+                this.FightingNpcBaseIds.AddOrUpdate(npcenemy.Base.Id, CombatTimer, (guid, t) => CombatTimer);
+                var npclist = this.FightingListNpcs.GetOrAdd(npcenemy.Base.Id, new ConcurrentDictionary<Npc, AttackInfo>());
+                AttackInfo attackinfo;
+                if (weapon != null)
+                {
+                    attackinfo = new AttackInfo((DamageType)weapon.DamageType, AttackType.Basic,
+                        (ElementalType)weapon.ElementalType, weapon.Id);
+                }
+                else
+                {
+                    attackinfo = new AttackInfo((DamageType)classBase.DamageType, AttackType.Basic,
+                        ElementalType.None, Guid.Empty);
+                }
+                npclist.AddOrUpdate(npcenemy, attackinfo, (npc, info) => attackinfo);
+            }
+            if (!CanAttack(target, null))
+            {
+                //A été rajouté par Moussmous pour décrire les actions de combats dans le chat
+                if (Options.Combat.EnableCombatChatMessages)
+                {
+                    PacketSender.SendChatMsg(this, Strings.Combat.cantAttack + target.Name, ChatMessageType.Combat);
+                }
+                if (target is Npc enemy)
+                {
+                    // Try to trigger possible phase related to the basic attack
+                    enemy.HandlePhases(this);
+                }     
+                return;
+            }
+
+            if (target is EventPage)
+            {
+                return;
             }
 
             //If Entity is resource, check for the correct tool and make sure its not a spell cast.
@@ -1295,6 +1505,12 @@ namespace Intersect.Server.Entities
 
             if (weapon != null)
             {
+                if (weapon.AttackAnimation != null && attackrange > 0)
+                {
+                    PacketSender.SendAnimationToProximity(
+                        weapon.AttackAnimationId, 1, target.Id, target.MapId, 0, 0, (sbyte)Dir
+                    );
+                }
                 base.TryAttack(
                     target, weapon.Damage, (DamageType) weapon.DamageType, (Stats) weapon.ScalingStat, weapon.Scaling,
                     weapon.CritChance, weapon.CritMultiplier, null, null, weapon
@@ -1302,9 +1518,14 @@ namespace Intersect.Server.Entities
             }
             else
             {
-                var classBase = ClassBase.Get(ClassId);
                 if (classBase != null)
                 {
+                    if (classBase.AttackAnimation != null && attackrange > 0)
+                    {
+                        PacketSender.SendAnimationToProximity(
+                            classBase.AttackAnimationId, 1, target.Id, target.MapId, 0 ,0, (sbyte)Dir
+                        );
+                    }
                     base.TryAttack(
                         target, classBase.Damage, (DamageType) classBase.DamageType, (Stats) classBase.ScalingStat,
                         classBase.Scaling, classBase.CritChance, classBase.CritMultiplier
@@ -1321,7 +1542,7 @@ namespace Intersect.Server.Entities
         {
             // If self-cast, AoE, Projectile or Dash.. always accept.
             if (spell?.Combat.TargetType == SpellTargetTypes.Self ||
-                spell?.Combat.TargetType == SpellTargetTypes.AoE ||
+                spell?.Combat.TargetType == SpellTargetTypes.Anchored ||
                 spell?.Combat.TargetType == SpellTargetTypes.Projectile ||
                 spell?.SpellType == SpellTypes.Dash
                 )
@@ -1342,6 +1563,27 @@ namespace Intersect.Server.Entities
             var friendly = spell?.Combat != null && spell.Combat.Friendly;
             if (entity is Player player)
             {
+                if (PvpStadiumUnit.StadiumQueue.TryGetValue(player.Id, out var playerUnit))
+                {
+                    if (playerUnit.StadiumState == PvpStadiumState.MatchOnGoing)
+                    {
+                        // In PvpStadium match, we have no friend except ourself
+                        if (this == player)
+                        {
+                            return friendly;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                    else if (playerUnit.StadiumState == PvpStadiumState.MatchOnPreparation || playerUnit.StadiumState == PvpStadiumState.MatchEnded)
+                    {
+                        // In preparation or when the match is ended, players are untouchable
+                        return false;
+                    }
+                }
+
                 if (player.InParty(this) || this == player || (!Options.Instance.Guild.AllowGuildMemberPvp && friendly != (player.Guild != null && player.Guild == this.Guild)))
                 {
                     return friendly;
@@ -1358,7 +1600,13 @@ namespace Intersect.Server.Entities
 
             if (entity is Npc npc)
             {   
-                return !friendly && npc.CanPlayerAttack(this) || friendly && npc.IsAllyOf(this);
+                if (spell == null)
+                {
+                    // Attacking with weapon or basic attack
+                    return !friendly && npc.CanPlayerAttack(this) || friendly && npc.IsAllyOf(this);
+                }
+                // Attacking with a targetting spell
+                return !friendly && npc.CanPlayerSpell(this) || friendly && npc.IsAllyOf(this);
             }
 
             return true;
@@ -1392,6 +1640,8 @@ namespace Intersect.Server.Entities
             {
                 attackTime = cls.AttackSpeedValue;
             }
+
+            attackTime = (int)(attackTime * (1 - (GetAttackSpeedBonus() / 100)));
 
             if (Options.WeaponIndex > -1 &&
                 Options.WeaponIndex < Equipment.Length &&
@@ -1504,6 +1754,47 @@ namespace Intersect.Server.Entities
                             i = 0;
                         }
                     }
+                }
+            }
+        }
+
+        public void RecalculateKnownSpells()
+        {
+            foreach (var spellslot in Spells)
+            {
+                //Avoid empty slot with Guid Empty
+                if (spellslot.SpellId != Guid.Empty)
+                {
+                    var spell = SpellBase.Get(spellslot.SpellId);
+                    if (spell != null && Conditions.MeetsConditionLists(spell.CastingRequirements, this, null))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        //Spell doesn't exist anymore or requirements changed, forget it
+                        ForgetSpell(spellslot.Slot);
+                    }
+                }
+            }
+            var classBase = ClassBase.Get(ClassId);
+            foreach (var spellClass in classBase.Spells)
+            {
+                if (!KnowsSpell(spellClass.Id) && Level >= spellClass.Level)
+                {
+                    TryTeachSpell(new Spell(spellClass.Id));
+                }
+            }
+        }
+
+        public void RecalculateElementalTypes()
+        {
+            var classBase = ClassBase.Get(ClassId);
+            if (classBase != null)
+            {
+                for (var i = 0; i < ClassBase.MAX_ELEMENTAL_TYPES; i++)
+                {
+                    ElementalTypes[i] = (ElementalType)classBase.ElementalTypes[i];
                 }
             }
         }
@@ -2198,7 +2489,7 @@ namespace Intersect.Server.Entities
                                 value = itemBase.Consumable.Value +
                                         (int) (GetExperienceToNextLevel(Level) * itemBase.Consumable.Percentage / 100);
 
-                                GiveExperience(value);
+                                GiveExperience(value, false, false);
                                 color = CustomColors.Items.ConsumeExp;
 
                                 break;
@@ -2546,7 +2837,7 @@ namespace Intersect.Server.Entities
         public List<InventorySlot> FindInventoryItemSlots(Guid itemId, int quantity = 1)
         {
             var slots = new List<InventorySlot>();
-            if (Items == null)
+            if (Items == null || quantity < 0)
             {
                 return slots;
             }
@@ -2664,6 +2955,34 @@ namespace Intersect.Server.Entities
             return lifesteal;
         }
 
+        public decimal GetAttackSpeedBonus()
+        {
+            var attackspeed = 0;
+
+            for (var i = 0; i < Options.EquipmentSlots.Count; i++)
+            {
+                if (Equipment[i] > -1)
+                {
+                    if (Items[Equipment[i]].ItemId != Guid.Empty)
+                    {
+                        var item = ItemBase.Get(Items[Equipment[i]].ItemId);
+                        if (item != null)
+                        {
+                            if (item.Effect.Type == EffectType.AttackSpeed)
+                            {
+                                attackspeed += item.Effect.Percentage;
+                            }
+                        }
+                    }
+                }
+            }
+            if (attackspeed > 50)
+            {
+                //AttackSpeedBonus max is 50% of normal attack speed
+                attackspeed = 50;
+            }
+            return attackspeed;
+        }
         public double GetTenacity()
         {
             double tenacity = 0;
@@ -2714,7 +3033,7 @@ namespace Intersect.Server.Entities
             return luck;
         }
 
-        public int GetExpMultiplier()
+        public int GetExpMultiplier(bool xpBoostNpc, bool xpBoostQuestEvent)
         {
             var exp = 100;
 
@@ -2735,7 +3054,66 @@ namespace Intersect.Server.Entities
                     }
                 }
             }
+            if (xpBoostNpc)
+            {
+                exp += GetExpBoostsNpcs();
+            }
+            if (xpBoostQuestEvent)
+            {
+                exp += GetExpBoostsQuestsEvents();
+            }
+            return exp;
+        }
 
+        private int GetExpBoostsNpcs()
+        {
+            int exp = 0;
+            ExpBoost boost;
+            if (ExpBoost.PlayerExpBoosts.TryGetValue(Id, out boost))
+            {
+                exp += boost.AmountKill;
+            }
+            // Check party size and bonus of party leader
+            if (Party?.Count > 1 && ExpBoost.PartyExpBoosts.TryGetValue(Party[0].Id, out boost))
+            {
+                exp += boost.AmountKill;
+            }
+            // Check guild size and guild id of the player (minimum size is 1 for the moment)
+            if (Guild?.Members?.Count > 0 && ExpBoost.GuildExpBoosts.TryGetValue(Guild.Id, out boost))
+            {
+                exp += boost.AmountKill;
+            }
+            boost = ExpBoost.AllExpBoost;
+            if (boost != null)
+            {
+                exp += boost.AmountKill;
+            }
+            return exp;
+        }
+
+        private int GetExpBoostsQuestsEvents()
+        {
+            int exp = 0;
+            ExpBoost boost;
+            if (ExpBoost.PlayerExpBoosts.TryGetValue(Id, out boost))
+            {
+                exp += boost.AmountQuest;
+            }
+            // Check party size and bonus of party leader
+            if (Party?.Count > 1 && ExpBoost.PartyExpBoosts.TryGetValue(Party[0].Id, out boost))
+            {
+                exp += boost.AmountQuest;
+            }
+            // Check guild size and guild id of the player (minimum size is 1 for the moment)
+            if (Guild?.Members?.Count > 0 && ExpBoost.GuildExpBoosts.TryGetValue(Guild.Id, out boost))
+            {
+                exp += boost.AmountQuest;
+            }
+            boost = ExpBoost.AllExpBoost;
+            if (boost != null)
+            {
+                exp += boost.AmountQuest;
+            }
             return exp;
         }
 
@@ -4070,7 +4448,18 @@ namespace Intersect.Server.Entities
                     {
                         PacketSender.SendPlayerSpellUpdate(this, i);
                     }
-
+                    //ajouté par moussmous modifié par Chrono
+                    //On ajoute directement le spell appris à la hotbar si elle est pas full
+                    int iterateur = 0;
+                    while (!HotbarIsCaseFree(iterateur) && iterateur < Options.MaxHotbar - 1)
+                    {
+                        iterateur++;
+                    }
+                    if (HotbarIsCaseFree(iterateur))
+                    {
+                        HotbarChange(iterateur, spell);
+                    }
+                    PacketSender.SendHotbarSlots(this);
                     return true;
                 }
             }
@@ -4185,8 +4574,13 @@ namespace Intersect.Server.Entities
 
         public virtual bool IsAllyOf(Player otherPlayer)
         {
+            if (PvpStadiumUnit.StadiumQueue.TryGetValue(otherPlayer.Id, out var playerUnit) && playerUnit.StadiumState == PvpStadiumState.MatchOnGoing)
+            {
+                return false;
+            }      
             return this.InParty(otherPlayer) || this == otherPlayer;
         }
+
 
         public bool CanSpellCast(SpellBase spell, Entity target, bool checkVitalReqs)
         {
@@ -4201,12 +4595,6 @@ namespace Intersect.Server.Entities
                     PacketSender.SendChatMsg(this, Strings.Combat.dynamicreq, ChatMessageType.Spells);
                 }
 
-                return false;
-            }
-
-
-            if (!CanAttack(target, spell))
-            {
                 return false;
             }
 
@@ -4247,7 +4635,8 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            if (target is Player)
+            // Seems useless to our game
+            /*if (target is Player)
             {
                 //Only count safe zones and friendly fire if its a dangerous spell! (If one has been used)
                 if (!spell.Combat.Friendly &&
@@ -4271,7 +4660,7 @@ namespace Intersect.Server.Entities
                     }
 
                 }
-            }
+            }*/
 
             //Check if the caster has the right ammunition if a projectile
             if (spell.SpellType == SpellTypes.CombatSpell &&
@@ -4314,7 +4703,7 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            var singleTargetSpell = (spell.SpellType == SpellTypes.CombatSpell && spell.Combat.TargetType == SpellTargetTypes.Single) || spell.SpellType == SpellTypes.WarpTo;
+            var singleTargetSpell = (spell.SpellType == SpellTypes.CombatSpell && spell.Combat.TargetType == SpellTargetTypes.Targeted) || spell.SpellType == SpellTypes.WarpTo;
 
             if (target == null && singleTargetSpell)
             {
@@ -4337,11 +4726,12 @@ namespace Intersect.Server.Entities
             //Check for range of a single target spell
             if (singleTargetSpell && target != this)
             {
-                if (!InRangeOf(target, spell.Combat.CastRange))
+                if (!InRangeOf(target, spell.Combat.CastRange, spell.Combat.SquareRange))
                 {
+                    //A été modifié par Moussmous pour décrire les actions de combats dans le chat
                     if (Options.Combat.EnableCombatChatMessages)
                     {
-                        PacketSender.SendChatMsg(this, Strings.Combat.targetoutsiderange, ChatMessageType.Combat);
+                        PacketSender.SendChatMsg(this, target.Name + Strings.Combat.outOfRange + spell.Name, ChatMessageType.Combat);
                     }
                     return false;
                 }
@@ -4349,17 +4739,21 @@ namespace Intersect.Server.Entities
 
             if (checkVitalReqs)
             {
-                if (spell.VitalCost[(int)Vitals.Mana] > GetVital(Vitals.Mana))
+                var manacost = CalculateVitalStyle(spell.VitalCost[(int)Vitals.Mana], spell.VitalCostStyle[(int)Vitals.Mana], Vitals.Mana, target);
+                var healthcost = CalculateVitalStyle(spell.VitalCost[(int)Vitals.Health], spell.VitalCostStyle[(int)Vitals.Health], Vitals.Health, target);
+
+
+                if (manacost > GetVital(Vitals.Mana))
                 {
                     if (Options.Combat.EnableCombatChatMessages)
                     {
-                        PacketSender.SendChatMsg(this, Strings.Combat.lowmana, ChatMessageType.Combat);
+                        PacketSender.SendChatMsg(this, Strings.Combat.lowmana + spell.Name, ChatMessageType.Combat);
                     }
 
                     return false;
                 }
 
-                if (spell.VitalCost[(int)Vitals.Health] > GetVital(Vitals.Health))
+                if (healthcost > GetVital(Vitals.Health))
                 {
                     if (Options.Combat.EnableCombatChatMessages)
                     {
@@ -4407,23 +4801,49 @@ namespace Intersect.Server.Entities
                     SpellCastSlot = spellSlot;
                     CastTarget = Target;
 
-                    //Check if the caster has the right ammunition if a projectile
-                    if (spell.SpellType == SpellTypes.CombatSpell &&
-                        spell.Combat.TargetType == SpellTargetTypes.Projectile &&
-                        spell.Combat.ProjectileId != Guid.Empty)
-                    {
-                        var projectileBase = spell.Combat.Projectile;
-                        if (projectileBase != null && projectileBase.AmmoItemId != Guid.Empty)
-                        {
-                            TryTakeItem(projectileBase.AmmoItemId, projectileBase.AmmoRequired);
-                        }
-                    }
-
                     if (spell.CastAnimationId != Guid.Empty)
                     {
                         PacketSender.SendAnimationToProximity(
-                            spell.CastAnimationId, 1, base.Id, MapId, 0, 0, (sbyte) Dir
+                            spell.CastAnimationId, 1, base.Id, MapId, 0, 0, (sbyte)Dir
                         ); //Target Type 1 will be global entity
+                    }
+
+                   
+                    if (spell.SpellType == SpellTypes.CombatSpell)
+                    {
+                        if (spell.Combat.TargetType == SpellTargetTypes.Projectile &&
+                        spell.Combat.ProjectileId != Guid.Empty)
+                        {
+                            //Check if the caster has the right ammunition if a projectile
+                            var projectileBase = spell.Combat.Projectile;
+                            if (projectileBase != null && projectileBase.AmmoItemId != Guid.Empty)
+                            {
+                                TryTakeItem(projectileBase.AmmoItemId, projectileBase.AmmoRequired);
+                            }
+                        }
+                        else if (spell.CastTargetAnimationId != Guid.Empty)
+                        {
+                            // Play casttarget animation only for Targeted and Anchored CombatSpells
+                            if (spell.Combat.TargetType == SpellTargetTypes.Anchored)
+                            {
+                                TileHelper tile = new TileHelper(MapId, X, Y);
+                                if (tile.Translate(Projectile.GetRangeX(Dir, spell.Combat.CastRange), Projectile.GetRangeY(Dir, spell.Combat.CastRange)))
+                                {
+                                    //Target Type -1 will be a tile
+                                    PacketSender.SendAnimationToProximity(spell.CastTargetAnimationId, -1, Guid.Empty, tile.GetMapId(), (byte)tile.GetX(), (byte)tile.GetY(), (sbyte)Directions.Up);
+                                }
+                            }
+                            else if (spell.Combat.TargetType == SpellTargetTypes.Targeted)
+                            {
+                                //Target Type 1 will be global entity
+                                PacketSender.SendAnimationToProximity(spell.CastTargetAnimationId, 1, CastTarget.Id, CastTarget.MapId, 0, 0, (sbyte)Directions.Up);
+                            }
+                        }
+                    }
+                    else if (spell.SpellType == SpellTypes.WarpTo && spell.CastTargetAnimationId != Guid.Empty)
+                    {
+                        //Target Type 1 will be global entity
+                        PacketSender.SendAnimationToProximity(spell.CastTargetAnimationId, 1, CastTarget.Id, CastTarget.MapId, 0, 0, (sbyte)Directions.Up);
                     }
 
                     //Check if cast should be instance
@@ -4457,7 +4877,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public override void CastSpell(Guid spellId, int spellSlot = -1)
+        public override void CastSpell(Guid spellId, int spellSlot = -1, bool alreadyCrit=false, string sourceSpellName = null, Entity specificTarget = null, bool isNextSpell = false, bool reUseValues = false, int baseDamage = 0, int secondaryDamage = 0)
         {
             var spellBase = SpellBase.Get(spellId);
             if (spellBase == null)
@@ -4475,12 +4895,12 @@ namespace Intersect.Server.Entities
                             StartCommonEvent(evt);
                         }
 
-                        base.CastSpell(spellId, spellSlot); //To get cooldown :P
+                        base.CastSpell(spellId, spellSlot, alreadyCrit, sourceSpellName, specificTarget, isNextSpell, reUseValues, baseDamage, secondaryDamage); //To get cooldown :P
 
                         break;
                     }
                 default:
-                    base.CastSpell(spellId, spellSlot);
+                    base.CastSpell(spellId, spellSlot, alreadyCrit, sourceSpellName, specificTarget, isNextSpell, reUseValues, baseDamage, secondaryDamage);
 
                     break;
             }
@@ -4699,10 +5119,29 @@ namespace Intersect.Server.Entities
             }
         }
 
+        //Returns the amount of time required to traverse 1 tile
+        public override float GetMovementTime()
+        {
+            //time = 2.0f * Options.Instance.PlayerOpts.WalkingSpeed / (float)(1 + Math.Log(Stat[(int)Stats.Speed]));
+            float time = Stat[(int)Stats.Speed].Value() > Options.Instance.PlayerOpts.MaxSpeedStat ?
+                Globals.CalculatedSpeeds[Options.Instance.PlayerOpts.MaxSpeedStat] :
+                Globals.CalculatedSpeeds[Stat[(int)Stats.Speed].Value()];
+            if (Blocking)
+            {
+                time += time * (float)Options.BlockingSlow / 100f;
+            }
+            if (!Running && time < Options.Instance.PlayerOpts.WalkingSpeed)
+            {
+                return Options.Instance.PlayerOpts.WalkingSpeed;
+            }
+            return time;
+        }
+
         //Stats
         public void UpgradeStat(int statIndex)
         {
-            if (Stat[statIndex].BaseStat + StatPointAllocations[statIndex] < Options.MaxStatValue && StatPoints > 0)
+            // Not possible to invest stat in speed
+            if (Stat[statIndex].BaseStat + StatPointAllocations[statIndex] < Options.MaxStatValue && StatPoints > 0 && statIndex != ((int)Stats.Speed))
             {
                 StatPointAllocations[statIndex]++;
                 StatPoints--;
@@ -4735,7 +5174,22 @@ namespace Intersect.Server.Entities
                     Hotbar[index].ItemOrSpellId = spell.SpellId;
                 }
             }
-        }  
+        }
+
+        //Ajouté par Moussmous
+        //HotbarSlot fonction pour ajouter juste des sorts (utilisé pour ajouter des sorts direcement 
+        //  dans la hotbar après les avoir appris
+        public void HotbarChange(int index, Spell spell)
+        {
+            Hotbar[index].ItemOrSpellId = Guid.Empty;
+            Hotbar[index].BagId = Guid.Empty;
+            Hotbar[index].PreferredStatBuffs = new int[(int)Stats.StatCount];
+            
+            if (spell != null)
+            {
+                Hotbar[index].ItemOrSpellId = spell.SpellId;
+            }
+        }
 
         public void HotbarSwap(int index, int swapIndex)
         {
@@ -4750,6 +5204,17 @@ namespace Intersect.Server.Entities
             Hotbar[swapIndex].ItemOrSpellId = itemId;
             Hotbar[swapIndex].BagId = bagId;
             Hotbar[swapIndex].PreferredStatBuffs = stats;
+        }
+
+        /// <summary>
+        /// Ajouté par Moussmous
+        /// Renvoie si la case de la hotbar est deja occupée ou non
+        /// </summary>
+        /// <param name="index">index de la case testée</param>
+        /// <returns></returns>
+        public bool HotbarIsCaseFree(int index)
+        {
+            return (Hotbar[index].ItemOrSpellId == Guid.Empty);
         }
 
         //Quests
@@ -4886,15 +5351,32 @@ namespace Intersect.Server.Entities
                     Quests.Add(questProgress);
                 }
 
-                if (quest.Tasks[0].Objective == QuestObjective.GatherItems) //Gather Items
-                {
-                    UpdateGatherItemQuests(quest.Tasks[0].TargetId);
-                }
-
-                StartCommonEvent(EventBase.Get(quest.StartEventId));
                 PacketSender.SendChatMsg(
                     this, Strings.Quests.started.ToString(quest.Name), ChatMessageType.Quest, CustomColors.Quests.Started
                 );
+                StartCommonEvent(EventBase.Get(quest.StartEventId));
+
+                var link = quest.FindLink(quest.Tasks[0].Id);
+                if (link == null)
+                {
+                    // Update for an unlinked task
+                    if (quest.Tasks[0].Objective == QuestObjective.GatherItems)
+                    {
+                        UpdateGatherItemQuests(quest.Tasks[0].TargetId);
+                    }
+                }
+                else
+                {
+                    // Update for all linked tasks
+                    foreach (var t_id in link.TasksList)
+                    {
+                        var task = quest.FindTask(t_id);
+                        if (task.Objective == QuestObjective.GatherItems)
+                        {
+                            UpdateGatherItemQuests(task.TargetId);
+                        }
+                    }
+                }
 
                 PacketSender.SendQuestsProgress(this);
             }
@@ -4985,6 +5467,7 @@ namespace Intersect.Server.Entities
                         var questProgress = FindQuest(quest.Id);
                         questProgress.TaskId = Guid.Empty;
                         questProgress.TaskProgress = -1;
+                        questProgress.TasksProgress = new Dictionary<Guid, int>();
                         PacketSender.SendChatMsg(
                             this, Strings.Quests.abandoned.ToString(QuestBase.GetName(questId)), ChatMessageType.Quest, Color.Red
                         );
@@ -5003,7 +5486,7 @@ namespace Intersect.Server.Entities
                 var questProgress = FindQuest(questId);
                 if (questProgress != null)
                 {
-                    if (questProgress.TaskId == taskId)
+                    if (questProgress.TaskId == taskId || quest.IsTaskLinked(questProgress.TaskId, taskId) || quest.IsTaskAlternative(questProgress.TaskId, taskId))
                     {
                         //Let's Advance this task or complete the quest
                         for (var i = 0; i < quest.Tasks.Count; i++)
@@ -5011,47 +5494,176 @@ namespace Intersect.Server.Entities
                             if (quest.Tasks[i].Id == taskId)
                             {
                                 PacketSender.SendChatMsg(this, Strings.Quests.taskcompleted, ChatMessageType.Quest);
-                                if (i == quest.Tasks.Count - 1)
+                                questProgress.UpdateProgress(taskId, -1);
+                                //Advance Task
+                                questProgress.TaskProgress++; // Count the number of done tasks
+
+                                var link = quest.FindLink(taskId);
+                                QuestTask nextTask = null;
+                                Guid altId = Guid.Empty;
+                                int done_tasks = 0;
+                                if (link != null)
                                 {
-                                    //Complete Quest
+                                    foreach (var t_id in link.TasksList)
+                                    {
+                                        if (questProgress.TasksProgress.ContainsKey(t_id) && questProgress.TasksProgress[t_id] == -1)
+                                        {
+                                            done_tasks++;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    // Task is not linked, so we will need to check the alternative list with this id
+                                    altId = taskId;
+                                }
+
+                                if (quest.Tasks[i].CompletionEvent != null)
+                                {
+                                    StartCommonEvent(quest.Tasks[i].CompletionEvent);
+                                }
+                                if (link != null && done_tasks == link.TasksList.Count)
+                                {
+                                    // Task is linked and the link is fully finished, so we need to check the alternative list with this id
+                                    altId = link.Id;
+                                    if (link.CompletionEvent != null)
+                                    {
+                                        StartCommonEvent(link.CompletionEvent);
+                                    }
+                                }
+                                // Process to alternatives check
+                                if (altId != Guid.Empty)
+                                {
+                                    var alt = quest.FindAlternative(altId);
+                                    if(alt != null)
+                                    {
+                                        foreach (var v_guid in alt.AlternativesList)
+                                        {
+                                            var altlink = quest.ContainsLink(v_guid);
+                                            if (altlink != null)
+                                            {
+                                                foreach (var v_id in altlink.TasksList)
+                                                {
+                                                    // Manually validate all task in the link
+                                                    if (!questProgress.TasksProgress.ContainsKey(v_id) || questProgress.TasksProgress[v_id] != -1)
+                                                    {
+                                                        questProgress.UpdateProgress(v_id, -1);
+                                                        questProgress.TaskProgress++;
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                // Manually validate the task
+                                                if (!questProgress.TasksProgress.ContainsKey(v_guid) || questProgress.TasksProgress[v_guid] != -1)
+                                                {
+                                                    questProgress.UpdateProgress(v_guid, -1);
+                                                    questProgress.TaskProgress++;
+                                                }
+                                            }
+                                        }
+                                        if (alt.CompletionEvent != null)
+                                        {
+                                            StartCommonEvent(alt.CompletionEvent);
+                                        }
+                                    }
+                                }
+
+                                if (questProgress.TaskProgress >= quest.Tasks.Count)
+                                {
+                                    // Finish quest
                                     questProgress.Completed = true;
                                     questProgress.TaskId = Guid.Empty;
                                     questProgress.TaskProgress = -1;
-                                    if (quest.Tasks[i].CompletionEvent != null)
-                                    {
-                                        StartCommonEvent(quest.Tasks[i].CompletionEvent);
-                                    }
+                                    questProgress.TasksProgress = new Dictionary<Guid, int>();
 
                                     StartCommonEvent(EventBase.Get(quest.EndEventId));
                                     PacketSender.SendChatMsg(
                                         this, Strings.Quests.completed.ToString(quest.Name), ChatMessageType.Quest, Color.Green
                                     );
+                                    PacketSender.SendQuestsProgress(this);
+                                    return;
                                 }
-                                else
+
+                                // Player didn't finished the quest but finished a simple task or finished all linked tasks
+                                if (link == null || done_tasks == link.TasksList.Count)
                                 {
-                                    //Advance Task
-                                    questProgress.TaskId = quest.Tasks[i + 1].Id;
-                                    questProgress.TaskProgress = 0;
-                                    if (quest.Tasks[i].CompletionEvent != null)
+                                    // Need to go to the next task id in the quest
+                                    int t = quest.GetTaskIndex(questProgress.TaskId);
+                                    do
                                     {
-                                        StartCommonEvent(quest.Tasks[i].CompletionEvent);
-                                    }
+                                        if (t+1 >= quest.Tasks.Count)
+                                        {
+                                            // Finish quest, verification and compatibility with players who started a quest before v0.3.0
+                                            questProgress.Completed = true;
+                                            questProgress.TaskId = Guid.Empty;
+                                            questProgress.TaskProgress = -1;
+                                            questProgress.TasksProgress = new Dictionary<Guid, int>();
 
-                                    if (quest.Tasks[i + 1].Objective == QuestObjective.GatherItems)
+                                            StartCommonEvent(EventBase.Get(quest.EndEventId));
+                                            PacketSender.SendChatMsg(
+                                                this, Strings.Quests.completed.ToString(quest.Name), ChatMessageType.Quest, Color.Green
+                                            );
+                                            PacketSender.SendQuestsProgress(this);
+                                            return;
+                                        }
+                                        nextTask = quest.Tasks[t + 1];
+                                        questProgress.TaskId = nextTask.Id;
+                                        done_tasks = 0;
+                                        link = quest.FindLink(questProgress.TaskId);
+                                        t++;
+                                        if (link != null)
+                                        {
+                                            // All linked task already completed ?
+                                            foreach (var t_id in link.TasksList)
+                                            {
+                                                if (questProgress.TasksProgress.ContainsKey(t_id) && questProgress.TasksProgress[t_id] == -1)
+                                                {
+                                                    done_tasks++;
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            // Is the task already completed ?
+                                            if (questProgress.TasksProgress.ContainsKey(questProgress.TaskId) && questProgress.TasksProgress[questProgress.TaskId] == -1)
+                                            {
+                                                done_tasks = -1; // just for the while condition
+                                            }
+                                        }
+                                    } while (done_tasks == -1 || done_tasks == link?.TasksList.Count);
+
+                                    link = quest.FindLink(nextTask.Id);
+                                    if (link == null)
                                     {
-                                        UpdateGatherItemQuests(quest.Tasks[i + 1].TargetId);
+                                        // Update for an unlinked task
+                                        if (nextTask.Objective == QuestObjective.GatherItems)
+                                        {
+                                            UpdateGatherItemQuests(nextTask.TargetId);
+                                        }
                                     }
-
-                                    PacketSender.SendChatMsg(
-                                        this, Strings.Quests.updated.ToString(quest.Name),
-                                        ChatMessageType.Quest,
-                                        CustomColors.Quests.TaskUpdated
-                                    );
+                                    else
+                                    {
+                                        // Update for all linked tasks
+                                        foreach (var t_id in link.TasksList)
+                                        {
+                                            var task = quest.FindTask(t_id);
+                                            if (task.Objective == QuestObjective.GatherItems)
+                                            {
+                                                UpdateGatherItemQuests(task.TargetId);
+                                            }
+                                        }
+                                    }
                                 }
+
+                                PacketSender.SendChatMsg(
+                                    this, Strings.Quests.updated.ToString(quest.Name),
+                                    ChatMessageType.Quest,
+                                    CustomColors.Quests.TaskUpdated
+                                );
                             }
                         }
                     }
-
                     PacketSender.SendQuestsProgress(this);
                 }
             }
@@ -5069,6 +5681,7 @@ namespace Intersect.Server.Entities
                     questProgress.Completed = true;
                     questProgress.TaskId = Guid.Empty;
                     questProgress.TaskProgress = -1;
+                    questProgress.TasksProgress = new Dictionary<Guid, int>();
                     if (!skipCompletionEvent)
                     {
                         StartCommonEvent(EventBase.Get(quest.EndEventId));
@@ -5095,28 +5708,102 @@ namespace Intersect.Server.Entities
                         {
                             //Assume this quest is in progress. See if we can find the task in the quest
                             var questTask = quest.FindTask(questProgress.TaskId);
-                            if (questTask?.Objective == QuestObjective.GatherItems && questTask.TargetId == item.Id)
+                            if (questTask != null)
                             {
-                                if (questProgress.TaskProgress != CountItems(item.Id))
+                                var link = quest.FindLink(questProgress.TaskId);
+                                if (link == null)
                                 {
-                                    questProgress.TaskProgress = CountItems(item.Id);
-                                    if (questProgress.TaskProgress >= questTask.Quantity)
+                                    var alt = quest.FindAlternative(questProgress.TaskId);
+                                    if (alt == null)
                                     {
-                                        CompleteQuestTask(questId, questProgress.TaskId);
+                                        if (!questProgress.TasksProgress.ContainsKey(questProgress.TaskId) || questProgress.TasksProgress[questProgress.TaskId] != -1)
+                                        {
+                                            if (questTask.Objective == QuestObjective.GatherItems && questTask.TargetId == item.Id)
+                                            {
+                                                UpdateGatherItemTask(questTask, questProgress, quest, item.Id);
+                                            }
+                                        }
                                     }
                                     else
                                     {
-                                        PacketSender.SendQuestsProgress(this);
-                                        PacketSender.SendChatMsg(
-                                            this,
-                                            Strings.Quests.itemtask.ToString(
-                                                quest.Name, questProgress.TaskProgress, questTask.Quantity,
-                                                ItemBase.GetName(questTask.TargetId)
-                                            ),
-                                            ChatMessageType.Quest
-                                        );
+                                        UpdateGatherItemTaskAlternative(alt, questProgress, quest, item.Id);
                                     }
                                 }
+                                else
+                                {
+                                    var alt = quest.FindAlternative(questProgress.TaskId);
+                                    if (alt == null)
+                                    {
+                                        foreach (var linkedTaskId in link.TasksList)
+                                        {
+                                            if (!questProgress.TasksProgress.ContainsKey(linkedTaskId) || questProgress.TasksProgress[linkedTaskId] != -1)
+                                            {
+                                                var linkedTask = quest.FindTask(linkedTaskId);
+                                                if (linkedTask.Objective == QuestObjective.GatherItems && linkedTask.TargetId == item.Id)
+                                                {
+                                                    UpdateGatherItemTask(linkedTask, questProgress, quest, item.Id);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        UpdateGatherItemTaskAlternative(alt, questProgress, quest, item.Id);
+                                    }
+                                } 
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public void UpdateGatherItemTask(QuestTask questTask, Quest questProgress, QuestBase quest, Guid itemId)
+        {
+            questProgress.UpdateProgress(questTask.Id, CountItems(itemId));
+            if (questProgress.TasksProgress[questTask.Id] >= questTask.Quantity)
+            {
+                CompleteQuestTask(questProgress.QuestId, questTask.Id);
+            }
+            else
+            {
+                PacketSender.SendQuestsProgress(this);
+                PacketSender.SendChatMsg(
+                    this,
+                    Strings.Quests.itemtask.ToString(
+                        quest.Name, questProgress.TasksProgress[questTask.Id], questTask.Quantity,
+                        ItemBase.GetName(questTask.TargetId)
+                    ),
+                    ChatMessageType.Quest
+                );
+            }
+        }
+        public void UpdateGatherItemTaskAlternative(TaskAlternative alt, Quest questProgress, QuestBase quest, Guid itemId)
+        {
+            foreach (var altid in alt.AlternativesList)
+            {
+                var link = quest.ContainsLink(altid);
+                if (link == null)
+                {
+                    var questTask = quest.FindTask(altid);
+                    if (!questProgress.TasksProgress.ContainsKey(questTask.Id) || questProgress.TasksProgress[questTask.Id] != -1)
+                    {
+                        if (questTask.Objective == QuestObjective.GatherItems && questTask.TargetId == itemId)
+                        {
+                            UpdateGatherItemTask(questTask, questProgress, quest, itemId);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var linkedTaskId in link.TasksList)
+                    {
+                        if (!questProgress.TasksProgress.ContainsKey(linkedTaskId) || questProgress.TasksProgress[linkedTaskId] != -1)
+                        {
+                            var linkedTask = quest.FindTask(linkedTaskId);
+                            if (linkedTask.Objective == QuestObjective.GatherItems && linkedTask.TargetId == itemId)
+                            {
+                                UpdateGatherItemTask(linkedTask, questProgress, quest, itemId);
                             }
                         }
                     }
@@ -5149,7 +5836,7 @@ namespace Intersect.Server.Entities
             return s.Value.Boolean;
         }
 
-        public void SetSwitchValue(Guid id, bool value)
+        public void SetSwitchValue(Guid id, bool value, bool startTrigger=true)
         {
             var s = GetSwitch(id);
             var changed = true;
@@ -5168,7 +5855,7 @@ namespace Intersect.Server.Entities
                 Variables.Add(s);
             }
 
-            if (changed)
+            if (changed && startTrigger)
             {
                 StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", id.ToString());
             }
@@ -5221,7 +5908,7 @@ namespace Intersect.Server.Entities
             return v.Value;
         }
 
-        public void SetVariableValue(Guid id, long value)
+        public void SetVariableValue(Guid id, long value, bool startTrigger=true)
         {
             var v = GetVariable(id);
             var changed = true;
@@ -5240,13 +5927,13 @@ namespace Intersect.Server.Entities
                 Variables.Add(v);
             }
 
-            if (changed)
+            if (changed && startTrigger)
             {
                 StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", id.ToString());
             }
         }
 
-        public void SetVariableValue(Guid id, string value)
+        public void SetVariableValue(Guid id, string value, bool startTrigger = true)
         {
             var v = GetVariable(id);
             var changed = true;
@@ -5265,7 +5952,7 @@ namespace Intersect.Server.Entities
                 Variables.Add(v);
             }
 
-            if (changed)
+            if (changed && startTrigger)
             {
                 StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", id.ToString());
             }
@@ -5621,6 +6308,11 @@ namespace Intersect.Server.Entities
                 {
                     if ((trigger == CommonEventTrigger.None || baseEvent.Pages[i].CommonTrigger == trigger) && Conditions.CanSpawnPage(baseEvent.Pages[i], this, null))
                     {
+                        if ((trigger == CommonEventTrigger.OnMapEnter || trigger == CommonEventTrigger.OnMapLeave) && param != baseEvent.Pages[i].TriggerId.ToString())
+                        {
+                            continue;
+                        }
+
                         if (trigger == CommonEventTrigger.SlashCommand && command.ToLower() != baseEvent.Pages[i].TriggerCommand.ToLower())
                         {
                             continue;
@@ -5632,6 +6324,12 @@ namespace Intersect.Server.Entities
                         }
 
                         if (trigger == CommonEventTrigger.ServerVariableChange && param != baseEvent.Pages[i].TriggerId.ToString())
+                        {
+                            continue;
+                        }
+
+                        if ((trigger == CommonEventTrigger.PVPKill || trigger == CommonEventTrigger.PVPDeath) &&
+                            baseEvent.Pages[i].TriggerCommand != null && command != baseEvent.Pages[i].TriggerCommand)
                         {
                             continue;
                         }
@@ -5721,15 +6419,26 @@ namespace Intersect.Server.Entities
                 return -5;
             }
 
+            // Consider the Holding only if the move do not come from a MoveRoute
+            if (MoveRoute == null && IsHeld())
+            {
+                return -5;
+            }
+            
+
+            return base.CanMove(moveDir);
+        }
+
+        public bool IsHeld()
+        {
             foreach (var evt in EventLookup)
             {
                 if (evt.Value.HoldingPlayer)
                 {
-                    return -5;
+                    return true;
                 }
             }
-
-            return base.CanMove(moveDir);
+            return false;
         }
 
         protected override int IsTileWalkable(MapInstance map, int x, int y, int z)
@@ -5761,7 +6470,7 @@ namespace Intersect.Server.Entities
             return -1;
         }
 
-        public override void Move(int moveDir, Player forPlayer, bool dontUpdate = false, bool correction = false)
+        public override void Move(int moveDir, Player forPlayer, bool dontUpdate = false, bool correction = false, bool isDash = false)
         {
             lock (EntityLock)
             {
@@ -5794,7 +6503,7 @@ namespace Intersect.Server.Entities
                             var z = evt.Value.PageInstance.GlobalClone?.Z ?? evt.Value.PageInstance.Z;
                             if (x == X && y == Y && z == Z)
                             {
-                                HandleEventCollision(evt.Value, -1);
+                                HandleEventCollision(evt.Value, -1, isDash);
                             }
                         }
                     }
@@ -5833,7 +6542,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public void HandleEventCollision(Event evt, int pageNum)
+        public void HandleEventCollision(Event evt, int pageNum, bool isDash=false)
         {
             var eventInstance = evt;
             if (evt.Player == null) //Global
@@ -5859,7 +6568,10 @@ namespace Intersect.Server.Entities
                 {
                     return;
                 }
-
+                if (isDash && !eventInstance.PageInstance.CollideOnDash)
+                {
+                    return;
+                }
                 if (eventInstance.CallStack.Count != 0)
                 {
                     return;
@@ -6136,7 +6848,7 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore] public Guid LastMapEntered = Guid.Empty;
 
-        [JsonIgnore, NotMapped] public Client Client;
+        [JsonIgnore, NotMapped] public Client Client { get; set; }
 
         [JsonIgnore, NotMapped]
         public UserRights Power => Client?.Power ?? UserRights.None;

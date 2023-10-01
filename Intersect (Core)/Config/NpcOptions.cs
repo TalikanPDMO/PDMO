@@ -44,6 +44,29 @@
         /// </summary>
         public bool ShowLevelByName = false;
 
+        public int SpellCastFrequencyCheck = 1000;
+
+        public int MaxDistanceSpawnOnRandomMove { get; set; } = 5;
+
+        public int MinRandomSpawnTime = 2000;
+
+        public int MaxRandomSpawnTime = 5000;
+
+        public int SpawnExpansionFrameDuration = 100;
+
+        public int[] SpawnExpansionFramesPercentage = { 1, 25, 50, 75 };
+
+        public int DespawnExpansionFrameDuration = 100;
+
+        public int[] DespawnExpansionFramesPercentage = { 75, 50, 25, 1 };
+
+        public int[] EventMovementSpeedValues = { 1, 7, 13, 40, 60 };
+
+        public int[] EventMovementFrequencyIntervals = { 15000, 10000, 5000, 2000, 1000, 500};
+
+        public int EventMaxRandomMove = 5;
+        public bool HighestDamageDealerIsKiller { get; set; } = true;
+
     }
 
 }

@@ -594,7 +594,7 @@ namespace Intersect.Client.Maps
         }
 
         //Animations
-        public void AddTileAnimation(Guid animId, int tileX, int tileY, int dir = -1, Entity owner = null)
+        public void AddTileAnimation(Guid animId, int tileX, int tileY, int dir = -1, Entity owner = null, int offsetX = 0, int offsetY = 0)
         {
             var animBase = AnimationBase.Get(animId);
             if (animBase == null)
@@ -604,9 +604,11 @@ namespace Intersect.Client.Maps
 
             var anim = new MapAnimation(animBase, tileX, tileY, dir, owner);
             LocalAnimations.TryAdd(anim.Id, anim);
+            var posX = GetX() + tileX * Options.TileWidth + Options.TileWidth / 2;
+            var posY = GetY() + tileY * Options.TileHeight + Options.TileHeight / 2;
             anim.SetPosition(
-                GetX() + tileX * Options.TileWidth + Options.TileWidth / 2,
-                GetY() + tileY * Options.TileHeight + Options.TileHeight / 2, tileX, tileY, Id, dir
+                posX + offsetX,
+                posY + offsetY, tileX, tileY, Id, dir
             );
         }
 
@@ -719,11 +721,12 @@ namespace Intersect.Client.Maps
                     var itemTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Item, itemBase.Icon);
                     if (itemTex != null)
                     {
+                        float final_x = x + (Options.TileWidth - itemTex.GetWidth()) / 2.0f;
+                        float final_y = y + (Options.TileHeight - itemTex.GetHeight()) / 2.0f;
                         Graphics.DrawGameTexture(
                             itemTex, new FloatRect(0, 0, itemTex.GetWidth(), itemTex.GetHeight()),
                             new FloatRect(
-                                x, y,
-                                Options.TileWidth, Options.TileHeight
+                                final_x, final_y, itemTex.GetWidth(), itemTex.GetHeight()
                             ), itemBase.Color
                         );
                     }

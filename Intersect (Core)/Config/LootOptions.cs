@@ -47,5 +47,6 @@
         /// When killing an npc which spawns individualized loot for all of it's attackers, include loot for all their party members, even if they didn't participate (deal damage) to the npc
         /// </summary>
         public bool IndividualizedLootAutoIncludePartyMembers { get; set; } = false;
+        public bool GenerateLootForAllPartyMembers { get; set; } = true;
     }
 }

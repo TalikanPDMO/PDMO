@@ -55,7 +55,7 @@ namespace Intersect.Editor.Forms.Editors
             cmbEvent.Items.Add(Strings.General.none);
             cmbEvent.Items.AddRange(EventBase.Names);
 
-            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
+            lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click, null);
         }
         private void AssignEditorItem(Guid id)
         {
@@ -113,7 +113,7 @@ namespace Intersect.Editor.Forms.Editors
             cmbAnimation.Items.AddRange(AnimationBase.Names);
             cmbDropItem.Items.Clear();
             cmbDropItem.Items.Add(Strings.General.none);
-            cmbDropItem.Items.AddRange(ItemBase.Names);
+            cmbDropItem.Items.AddRange(ItemBase.EditorFormatNames);
             InitLocalization();
             UpdateEditor();
         }
@@ -198,17 +198,32 @@ namespace Intersect.Editor.Forms.Editors
             lblAnimation.Text = Strings.ResourceEditor.animation;
             chkWalkableBefore.Text = Strings.ResourceEditor.walkablebefore;
             chkWalkableAfter.Text = Strings.ResourceEditor.walkableafter;
+            chkUndashable.Text = Strings.ResourceEditor.undashable;
 
             grpDrops.Text = Strings.ResourceEditor.drops;
             lblDropItem.Text = Strings.ResourceEditor.dropitem;
             lblDropAmount.Text = Strings.ResourceEditor.dropamount;
             lblDropChance.Text = Strings.ResourceEditor.dropchance;
+            chkDropAmountRandom.Text = Strings.ResourceEditor.dropamountrandom;
+            chkDropChanceIterative.Text = Strings.ResourceEditor.dropchanceiterative;
             btnDropAdd.Text = Strings.ResourceEditor.dropadd;
             btnDropRemove.Text = Strings.ResourceEditor.dropremove;
 
             grpRegen.Text = Strings.ResourceEditor.regen;
             lblHpRegen.Text = Strings.ResourceEditor.hpregen;
             lblRegenHint.Text = Strings.ResourceEditor.regenhint;
+
+            grpTypes.Text = Strings.ResourceEditor.elementaltypes;
+            lblType1.Text = Strings.ResourceEditor.type1;
+            lblType2.Text = Strings.ResourceEditor.type2;
+            cmbType1.Items.Clear();
+            cmbType2.Items.Clear();
+            for (var i = 0; i < Strings.Combat.elementaltypes.Count; i++)
+            {
+                cmbType1.Items.Add(Strings.Combat.elementaltypes[i]);
+                cmbType2.Items.Add(Strings.Combat.elementaltypes[i]);
+            }
+
 
             grpGraphics.Text = Strings.ResourceEditor.graphics;
             lblPic.Text = Strings.ResourceEditor.initialgraphic;
@@ -250,6 +265,7 @@ namespace Intersect.Editor.Forms.Editors
                 nudMaxHp.Value = mEditorItem.MaxHp;
                 chkWalkableBefore.Checked = mEditorItem.WalkableBefore;
                 chkWalkableAfter.Checked = mEditorItem.WalkableAfter;
+                chkUndashable.Checked = mEditorItem.Undashable;
                 chkInitialFromTileset.Checked = mEditorItem.Initial.GraphicFromTileset;
                 chkExhaustedFromTileset.Checked = mEditorItem.Exhausted.GraphicFromTileset;
                 cmbEvent.SelectedIndex = EventBase.ListIndex(mEditorItem.EventId) + 1;
@@ -259,6 +275,11 @@ namespace Intersect.Editor.Forms.Editors
 
                 //Regen
                 nudHpRegen.Value = mEditorItem.VitalRegen;
+
+                //Elemental Types
+                cmbType1.SelectedIndex = mEditorItem.ElementalTypes[0];
+                cmbType2.SelectedIndex = mEditorItem.ElementalTypes[1];
+
                 PopulateInitialGraphicList();
                 PopulateExhaustedGraphicList();
                 UpdateDropValues();
@@ -295,10 +316,20 @@ namespace Intersect.Editor.Forms.Editors
             {
                 if (mEditorItem.Drops[i].ItemId != Guid.Empty)
                 {
+                    string quantity_display = mEditorItem.Drops[i].Quantity.ToString();
+                    if (mEditorItem.Drops[i].Random)
+                    {
+                        quantity_display = Strings.ResourceEditor.randomdisplay.ToString(0, mEditorItem.Drops[i].Quantity);
+                    }
+                    string iterative_display = "";
+                    if (mEditorItem.Drops[i].Iterative)
+                    {
+                        iterative_display = Strings.ResourceEditor.iterativedisplay;
+                    }
                     lstDrops.Items.Add(
                         Strings.ResourceEditor.dropdisplay.ToString(
-                            ItemBase.GetName(mEditorItem.Drops[i].ItemId), mEditorItem.Drops[i].Quantity,
-                            mEditorItem.Drops[i].Chance
+                            ItemBase.GetName(mEditorItem.Drops[i].ItemId), quantity_display,
+                            mEditorItem.Drops[i].Chance, iterative_display
                         )
                     );
                 }
@@ -342,7 +373,7 @@ namespace Intersect.Editor.Forms.Editors
             {
                 mEditorItem.Initial.Graphic = cmbInitialSprite.Text;
                 var graphic = Path.Combine(
-                    "resources", mEditorItem.Initial.GraphicFromTileset ? "tilesets" : "resources",
+                    GameContentManager.GraphResFolder, mEditorItem.Initial.GraphicFromTileset ? "tilesets" : "resources",
                     cmbInitialSprite.Text
                 );
 
@@ -371,7 +402,7 @@ namespace Intersect.Editor.Forms.Editors
             {
                 mEditorItem.Exhausted.Graphic = cmbEndSprite.Text;
                 var graphic = Path.Combine(
-                    "resources", mEditorItem.Exhausted.GraphicFromTileset ? "tilesets" : "resources", cmbEndSprite.Text
+                    GameContentManager.GraphResFolder, mEditorItem.Exhausted.GraphicFromTileset ? "tilesets" : "resources", cmbEndSprite.Text
                 );
 
                 if (File.Exists(graphic))
@@ -430,8 +461,8 @@ namespace Intersect.Editor.Forms.Editors
                 gfx.DrawRectangle(
                     new Pen(System.Drawing.Color.White, 2f),
                     new Rectangle(
-                        selX * Options.TileWidth, selY * Options.TileHeight,
-                        Options.TileWidth + selW * Options.TileWidth, Options.TileHeight + selH * Options.TileHeight
+                        selX * Globals.CurrentTileWidth, selY * Globals.CurrentTileHeight,
+                        Globals.CurrentTileWidth + selW * Globals.CurrentTileWidth, Globals.CurrentTileHeight + selH * Globals.CurrentTileHeight
                     )
                 );
             }
@@ -474,8 +505,8 @@ namespace Intersect.Editor.Forms.Editors
                 gfx.DrawRectangle(
                     new Pen(System.Drawing.Color.White, 2f),
                     new Rectangle(
-                        selX * Options.TileWidth, selY * Options.TileHeight,
-                        Options.TileWidth + selW * Options.TileWidth, Options.TileHeight + selH * Options.TileHeight
+                        selX * Globals.CurrentTileWidth, selY * Globals.CurrentTileHeight,
+                        Globals.CurrentTileWidth + selW * Globals.CurrentTileWidth, Globals.CurrentTileHeight + selH * Globals.CurrentTileHeight
                     )
                 );
             }
@@ -627,6 +658,8 @@ namespace Intersect.Editor.Forms.Editors
                 cmbDropItem.SelectedIndex = ItemBase.ListIndex(mEditorItem.Drops[lstDrops.SelectedIndex].ItemId) + 1;
                 nudDropAmount.Value = mEditorItem.Drops[lstDrops.SelectedIndex].Quantity;
                 nudDropChance.Value = (decimal) mEditorItem.Drops[lstDrops.SelectedIndex].Chance;
+                chkDropAmountRandom.Checked = mEditorItem.Drops[lstDrops.SelectedIndex].Random;
+                chkDropChanceIterative.Checked = mEditorItem.Drops[lstDrops.SelectedIndex].Iterative;
             }
         }
 
@@ -636,6 +669,8 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.Drops[mEditorItem.Drops.Count - 1].ItemId = ItemBase.IdFromList(cmbDropItem.SelectedIndex - 1);
             mEditorItem.Drops[mEditorItem.Drops.Count - 1].Quantity = (int) nudDropAmount.Value;
             mEditorItem.Drops[mEditorItem.Drops.Count - 1].Chance = (double) nudDropChance.Value;
+            mEditorItem.Drops[mEditorItem.Drops.Count - 1].Random = chkDropAmountRandom.Checked;
+            mEditorItem.Drops[mEditorItem.Drops.Count - 1].Iterative = chkDropChanceIterative.Checked;
 
             UpdateDropValues();
         }
@@ -660,6 +695,28 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             mEditorItem.Drops[(int) lstDrops.SelectedIndex].Chance = (double) nudDropChance.Value;
+            UpdateDropValues(true);
+        }
+
+        private void chkDropAmountRandom_CheckedChanged(object sender, EventArgs e)
+        {
+            if (lstDrops.SelectedIndex < lstDrops.Items.Count)
+            {
+                return;
+            }
+
+            mEditorItem.Drops[(int)lstDrops.SelectedIndex].Random = chkDropAmountRandom.Checked;
+            UpdateDropValues(true);
+        }
+
+        private void chkDropChanceIterative_CheckedChanged(object sender, EventArgs e)
+        {
+            if (lstDrops.SelectedIndex < lstDrops.Items.Count)
+            {
+                return;
+            }
+
+            mEditorItem.Drops[(int)lstDrops.SelectedIndex].Iterative = chkDropChanceIterative.Checked;
             UpdateDropValues(true);
         }
 
@@ -688,8 +745,8 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             mMouseDown = true;
-            mEditorItem.Initial.X = (int) Math.Floor((double) e.X / Options.TileWidth);
-            mEditorItem.Initial.Y = (int) Math.Floor((double) e.Y / Options.TileHeight);
+            mEditorItem.Initial.X = (int) Math.Floor((double) e.X / Globals.CurrentTileWidth);
+            mEditorItem.Initial.Y = (int) Math.Floor((double) e.Y / Globals.CurrentTileHeight);
             mEditorItem.Initial.Width = 0;
             mEditorItem.Initial.Height = 0;
             if (mEditorItem.Initial.X < 0)
@@ -755,8 +812,8 @@ namespace Intersect.Editor.Forms.Editors
 
             if (mMouseDown)
             {
-                var tmpX = (int) Math.Floor((double) e.X / Options.TileWidth);
-                var tmpY = (int) Math.Floor((double) e.Y / Options.TileHeight);
+                var tmpX = (int) Math.Floor((double) e.X / Globals.CurrentTileWidth);
+                var tmpY = (int) Math.Floor((double) e.Y / Globals.CurrentTileHeight);
                 mEditorItem.Initial.Width = tmpX - mEditorItem.Initial.X;
                 mEditorItem.Initial.Height = tmpY - mEditorItem.Initial.Y;
             }
@@ -777,8 +834,8 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             mMouseDown = true;
-            mEditorItem.Exhausted.X = (int) Math.Floor((double) e.X / Options.TileWidth);
-            mEditorItem.Exhausted.Y = (int) Math.Floor((double) e.Y / Options.TileHeight);
+            mEditorItem.Exhausted.X = (int) Math.Floor((double) e.X / Globals.CurrentTileWidth);
+            mEditorItem.Exhausted.Y = (int) Math.Floor((double) e.Y / Globals.CurrentTileHeight);
             mEditorItem.Exhausted.Width = 0;
             mEditorItem.Exhausted.Height = 0;
             if (mEditorItem.Exhausted.X < 0)
@@ -844,8 +901,8 @@ namespace Intersect.Editor.Forms.Editors
 
             if (mMouseDown)
             {
-                var tmpX = (int) Math.Floor((double) e.X / Options.TileWidth);
-                var tmpY = (int) Math.Floor((double) e.Y / Options.TileHeight);
+                var tmpX = (int) Math.Floor((double) e.X / Globals.CurrentTileWidth);
+                var tmpY = (int) Math.Floor((double) e.Y / Globals.CurrentTileHeight);
                 mEditorItem.Exhausted.Width = tmpX - mEditorItem.Exhausted.X;
                 mEditorItem.Exhausted.Height = tmpY - mEditorItem.Exhausted.Y;
             }
@@ -856,6 +913,15 @@ namespace Intersect.Editor.Forms.Editors
         private void nudHpRegen_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.VitalRegen = (int) nudHpRegen.Value;
+        }
+        private void cmbType1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ElementalTypes[0] = cmbType1.SelectedIndex;
+        }
+
+        private void cmbType2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ElementalTypes[1] = cmbType2.SelectedIndex;
         }
 
         private void cmbEvent_SelectedIndexChanged(object sender, EventArgs e)
@@ -979,6 +1045,11 @@ namespace Intersect.Editor.Forms.Editors
         }
 
         #endregion
+
+        private void chkUndashable_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Undashable = chkUndashable.Checked;
+        }
     }
 
 }

@@ -49,16 +49,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpChangeFace.Controls.Add(this.btnCancel);
             this.grpChangeFace.Controls.Add(this.btnSave);
             this.grpChangeFace.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpChangeFace.Location = new System.Drawing.Point(3, 3);
+            this.grpChangeFace.Location = new System.Drawing.Point(5, 3);
             this.grpChangeFace.Name = "grpChangeFace";
-            this.grpChangeFace.Size = new System.Drawing.Size(259, 126);
+            this.grpChangeFace.Size = new System.Drawing.Size(320, 126);
             this.grpChangeFace.TabIndex = 17;
             this.grpChangeFace.TabStop = false;
             this.grpChangeFace.Text = "Change Face:";
             // 
             // pnlPreview
             // 
-            this.pnlPreview.Location = new System.Drawing.Point(170, 19);
+            this.pnlPreview.Location = new System.Drawing.Point(231, 19);
             this.pnlPreview.Name = "pnlPreview";
             this.pnlPreview.Size = new System.Drawing.Size(83, 101);
             this.pnlPreview.TabIndex = 23;
@@ -68,20 +68,26 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbFace.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.cmbFace.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.cmbFace.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbFace.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbFace.DrawDropdownHoverOutline = false;
+            this.cmbFace.DrawFocusRectangle = false;
             this.cmbFace.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cmbFace.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbFace.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbFace.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbFace.FormattingEnabled = true;
-            this.cmbFace.Location = new System.Drawing.Point(47, 19);
+            this.cmbFace.Location = new System.Drawing.Point(47, 26);
             this.cmbFace.Name = "cmbFace";
-            this.cmbFace.Size = new System.Drawing.Size(117, 21);
+            this.cmbFace.Size = new System.Drawing.Size(170, 21);
             this.cmbFace.TabIndex = 22;
+            this.cmbFace.Text = null;
+            this.cmbFace.TextPadding = new System.Windows.Forms.Padding(2);
             this.cmbFace.SelectedIndexChanged += new System.EventHandler(this.cmbSprite_SelectedIndexChanged);
             // 
             // lblFace
             // 
             this.lblFace.AutoSize = true;
-            this.lblFace.Location = new System.Drawing.Point(4, 22);
+            this.lblFace.Location = new System.Drawing.Point(4, 29);
             this.lblFace.Name = "lblFace";
             this.lblFace.Size = new System.Drawing.Size(34, 13);
             this.lblFace.TabIndex = 21;
@@ -107,7 +113,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // EventCommand_ChangeFace
+            // EventCommandChangeFace
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -115,7 +121,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpChangeFace);
             this.Name = "EventCommandChangeFace";
-            this.Size = new System.Drawing.Size(268, 132);
+            this.Size = new System.Drawing.Size(330, 132);
             this.grpChangeFace.ResumeLayout(false);
             this.grpChangeFace.PerformLayout();
             this.ResumeLayout(false);

@@ -30,8 +30,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EventCommandInput));
             this.grpInput = new DarkUI.Controls.DarkGroupBox();
+            this.lblTitle = new System.Windows.Forms.Label();
+            this.txtTitle = new DarkUI.Controls.DarkTextBox();
             this.nudMaxVal = new DarkUI.Controls.DarkNumericUpDown();
             this.lblMaxVal = new System.Windows.Forms.Label();
             this.nudMinVal = new DarkUI.Controls.DarkNumericUpDown();
@@ -44,8 +45,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblText = new System.Windows.Forms.Label();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
-            this.txtTitle = new DarkUI.Controls.DarkTextBox();
-            this.lblTitle = new System.Windows.Forms.Label();
             this.grpInput.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxVal)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMinVal)).BeginInit();
@@ -72,10 +71,29 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpInput.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpInput.Location = new System.Drawing.Point(3, 3);
             this.grpInput.Name = "grpInput";
-            this.grpInput.Size = new System.Drawing.Size(259, 281);
+            this.grpInput.Size = new System.Drawing.Size(320, 281);
             this.grpInput.TabIndex = 17;
             this.grpInput.TabStop = false;
             this.grpInput.Text = "Input Variable";
+            // 
+            // lblTitle
+            // 
+            this.lblTitle.AutoSize = true;
+            this.lblTitle.Location = new System.Drawing.Point(4, 21);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(30, 13);
+            this.lblTitle.TabIndex = 63;
+            this.lblTitle.Text = "Title:";
+            // 
+            // txtTitle
+            // 
+            this.txtTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtTitle.Location = new System.Drawing.Point(51, 19);
+            this.txtTitle.Name = "txtTitle";
+            this.txtTitle.Size = new System.Drawing.Size(263, 20);
+            this.txtTitle.TabIndex = 62;
             // 
             // nudMaxVal
             // 
@@ -148,7 +166,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbVariable.FormattingEnabled = true;
             this.cmbVariable.Location = new System.Drawing.Point(7, 167);
             this.cmbVariable.Name = "cmbVariable";
-            this.cmbVariable.Size = new System.Drawing.Size(234, 21);
+            this.cmbVariable.Size = new System.Drawing.Size(307, 21);
             this.cmbVariable.TabIndex = 49;
             this.cmbVariable.Text = null;
             this.cmbVariable.TextPadding = new System.Windows.Forms.Padding(2);
@@ -182,7 +200,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblCommands.BackColor = System.Drawing.Color.Transparent;
             this.lblCommands.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCommands.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.lblCommands.Location = new System.Drawing.Point(157, 49);
+            this.lblCommands.Location = new System.Drawing.Point(222, 49);
             this.lblCommands.Name = "lblCommands";
             this.lblCommands.Size = new System.Drawing.Size(84, 13);
             this.lblCommands.TabIndex = 26;
@@ -198,7 +216,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.txtText.Multiline = true;
             this.txtText.Name = "txtText";
             this.txtText.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.txtText.Size = new System.Drawing.Size(234, 73);
+            this.txtText.Size = new System.Drawing.Size(307, 73);
             this.txtText.TabIndex = 22;
             // 
             // lblText
@@ -230,25 +248,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // txtTitle
-            // 
-            this.txtTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtTitle.Location = new System.Drawing.Point(51, 19);
-            this.txtTitle.Name = "txtTitle";
-            this.txtTitle.Size = new System.Drawing.Size(190, 20);
-            this.txtTitle.TabIndex = 62;
-            // 
-            // lblTitle
-            // 
-            this.lblTitle.AutoSize = true;
-            this.lblTitle.Location = new System.Drawing.Point(4, 21);
-            this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(30, 13);
-            this.lblTitle.TabIndex = 63;
-            this.lblTitle.Text = "Title:";
-            // 
             // EventCommandInput
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -257,7 +256,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpInput);
             this.Name = "EventCommandInput";
-            this.Size = new System.Drawing.Size(268, 287);
+            this.Size = new System.Drawing.Size(330, 287);
             this.grpInput.ResumeLayout(false);
             this.grpInput.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxVal)).EndInit();

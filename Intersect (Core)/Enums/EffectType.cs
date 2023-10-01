@@ -14,7 +14,9 @@
 
         Luck = 4,
 
-        EXP = 5
+        EXP = 5,
+
+        AttackSpeed = 6,
 
     }
 

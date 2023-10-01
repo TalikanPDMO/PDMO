@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using Intersect.Server.Networking;
 using Intersect.Server.Networking.Lidgren;
 using Intersect.Server.Database.PlayerData.Players;
+using Intersect.Server.Entities.Events;
 
 namespace Intersect.Server.Core
 {
@@ -197,6 +198,8 @@ namespace Intersect.Server.Core
                         }
 
                         Time.Update();
+                        ExpBoost.Update();
+                        PvpStadiumUnit.Update();
                         swCps++;
 
                         var endTime = Globals.Timing.Milliseconds;

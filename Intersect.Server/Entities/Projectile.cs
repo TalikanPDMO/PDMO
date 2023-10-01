@@ -5,9 +5,11 @@ using System.Linq;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Maps;
+using Intersect.Logging;
 using Intersect.Network.Packets.Server;
 using Intersect.Server.Entities.Combat;
 using Intersect.Server.General;
+using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 
@@ -20,6 +22,8 @@ namespace Intersect.Server.Entities
         public ProjectileBase Base;
 
         public bool HasGrappled;
+
+        public bool AlreadyCrit;
 
         public ItemBase Item;
 
@@ -38,6 +42,8 @@ namespace Intersect.Server.Entities
         // Individual Spawns
         public ProjectileSpawn[] Spawns;
 
+        public ProjectileSpawn[,] LinkedSpawns;
+
         public SpellBase Spell;
 
         public Entity Target;
@@ -52,7 +58,8 @@ namespace Intersect.Server.Entities
             byte Y,
             byte z,
             byte direction,
-            Entity target
+            Entity target,
+            bool alreadyCrit
         ) : base()
         {
             Base = projectile;
@@ -60,6 +67,8 @@ namespace Intersect.Server.Entities
             Owner = owner;
             Stat = owner.Stat;
             MapId = mapId;
+            Target = target;
+            AlreadyCrit = alreadyCrit;
             base.X = X;
             base.Y = Y;
             Z = z;
@@ -69,7 +78,8 @@ namespace Intersect.Server.Entities
             Spell = parentSpell;
             Item = parentItem;
 
-            Passable = true;
+            //Static projectiles are passable only if not blocking
+            Passable = !Base.BlockTarget;
             HideName = true;
             for (var x = 0; x < ProjectileBase.SPAWN_LOCATIONS_WIDTH; x++)
             {
@@ -84,13 +94,14 @@ namespace Intersect.Server.Entities
                     }
                 }
             }
-
+            LinkedSpawns = new ProjectileSpawn[Base.Quantity, mTotalSpawns];
             mTotalSpawns *= Base.Quantity;
             Spawns = new ProjectileSpawn[mTotalSpawns];
         }
 
         private void AddProjectileSpawns(List<KeyValuePair<Guid, int>> spawnDeaths)
         {
+            var i = 0;
             for (byte x = 0; x < ProjectileBase.SPAWN_LOCATIONS_WIDTH; x++)
             {
                 for (byte y = 0; y < ProjectileBase.SPAWN_LOCATIONS_HEIGHT; y++)
@@ -99,29 +110,39 @@ namespace Intersect.Server.Entities
                     {
                         if (Base.SpawnLocations[x, y].Directions[d] == true && mSpawnedAmount < Spawns.Length)
                         {
+                            var tile = new TileHelper(MapId, X, Y);
+                            tile.Translate(FindProjectileRotationX(Dir, x - 2, y - 2), FindProjectileRotationY(Dir, x - 2, y - 2));
                             var s = new ProjectileSpawn(
                                 FindProjectileRotationDir(Dir, d),
-                                (byte) (X + FindProjectileRotationX(Dir, x - 2, y - 2)),
-                                (byte) (Y + FindProjectileRotationY(Dir, x - 2, y - 2)), (byte) Z, MapId, Base, this
+                                (byte) tile.GetX(),
+                                (byte) tile.GetY(), (byte) Z, tile.GetMapId(), Base, this,
+                                (byte)mSpawnedAmount, (byte)mQuantity, (byte)i
                             );
 
                             Spawns[mSpawnedAmount] = s;
+                            LinkedSpawns[mQuantity, i] = s;
                             mSpawnedAmount++;
                             mSpawnCount++;
+                            i++;
                             if (CheckForCollision(s))
                             {
                                 s.Dead = true;
                             }
+
+                            // Play the impact animation on the first tile for each spawn
+                            if (Spell?.ImpactAnimation != null)
+                            {
+                                PacketSender.SendAnimationToProximity(Spell.ImpactAnimationId, -1, Guid.Empty, s.MapId, (byte)s.X, (byte)s.Y, (sbyte)Directions.Up);
+                            }  
                         }
                     }
                 }
             }
-
-            mQuantity++;
             mSpawnTime = Globals.Timing.Milliseconds + Base.Delay;
+            mQuantity++;
         }
 
-        private int FindProjectileRotationX(int direction, int x, int y)
+        public static int FindProjectileRotationX(int direction, int x, int y)
         {
             switch (direction)
             {
@@ -133,12 +154,20 @@ namespace Intersect.Server.Entities
                     return y;
                 case 3: //Right
                     return -y;
+                case 4: //UpLeft
+                    return y;
+                case 5: //UpRight
+                    return -y;
+                case 6: //DownLeft
+                    return y;
+                case 7: //DownRight
+                    return -y;
                 default:
                     return x;
             }
         }
 
-        private int FindProjectileRotationY(int direction, int x, int y)
+        public static int FindProjectileRotationY(int direction, int x, int y)
         {
             switch (direction)
             {
@@ -150,12 +179,20 @@ namespace Intersect.Server.Entities
                     return -x;
                 case 3: //Right
                     return x;
+                case 4: //UpLeft
+                    return -x;
+                case 5: //UpRight
+                    return x;
+                case 6: //DownLeft
+                    return -x;
+                case 7: //DownRight
+                    return x;
                 default:
                     return y;
             }
         }
 
-        private byte FindProjectileRotationDir(int entityDir, byte projectionDir)
+        public static byte FindProjectileRotationDir(int entityDir, byte projectionDir)
         {
             switch (entityDir)
             {
@@ -227,6 +264,94 @@ namespace Intersect.Server.Entities
                         default:
                             return projectionDir;
                     }
+                case 4: //UpLeft
+                    switch (projectionDir)
+                    {
+                        case 0: //Up
+                            return 2;
+                        case 1: //Down
+                            return 3;
+                        case 2: //Left
+                            return 1;
+                        case 3: //Right
+                            return 0;
+                        case 4: //UpLeft
+                            return 6;
+                        case 5: //UpRight
+                            return 4;
+                        case 6: //DownLeft
+                            return 7;
+                        case 7: //DownRight
+                            return 5;
+                        default:
+                            return projectionDir;
+                    }
+                case 5: //UpRight
+                    switch (projectionDir)
+                    {
+                        case 0: //Up
+                            return 3;
+                        case 1: //Down
+                            return 2;
+                        case 2: //Left
+                            return 0;
+                        case 3: //Right
+                            return 1;
+                        case 4: //UpLeft
+                            return 5;
+                        case 5: //UpRight
+                            return 7;
+                        case 6: //DownLeft
+                            return 4;
+                        case 7: //DownRight
+                            return 6;
+                        default:
+                            return projectionDir;
+                    }
+                case 6: //DownLeft
+                    switch (projectionDir)
+                    {
+                        case 0: //Up
+                            return 2;
+                        case 1: //Down
+                            return 3;
+                        case 2: //Left
+                            return 1;
+                        case 3: //Right
+                            return 0;
+                        case 4: //UpLeft
+                            return 6;
+                        case 5: //UpRight
+                            return 4;
+                        case 6: //DownLeft
+                            return 7;
+                        case 7: //DownRight
+                            return 5;
+                        default:
+                            return projectionDir;
+                    }
+                case 7: //DownRight
+                    switch (projectionDir)
+                    {
+                        case 0: //Up
+                            return 3;
+                        case 1: //Down
+                            return 2;
+                        case 2: //Left
+                            return 0;
+                        case 3: //Right
+                            return 1;
+                        case 4: //UpLeft
+                            return 5;
+                        case 5: //UpRight
+                            return 7;
+                        case 6: //DownLeft
+                            return 4;
+                        case 7: //DownRight
+                            return 6;
+                        default:
+                            return projectionDir;
+                    }
                 default:
                     return projectionDir;
             }
@@ -242,7 +367,7 @@ namespace Intersect.Server.Entities
             ProcessFragments(projDeaths, spawnDeaths);
         }
 
-        private int GetRangeX(int direction, int range)
+        public static int GetRangeX(int direction, int range)
         {
             //Left, UpLeft, DownLeft
             if (direction == 2 || direction == 4 || direction == 6)
@@ -263,7 +388,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        private int GetRangeY(int direction, int range)
+        public static int GetRangeY(int direction, int range)
         {
             //Up, UpLeft, UpRight
             if (direction == 0 || direction == 4 || direction == 5)
@@ -290,7 +415,7 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
-
+            List<byte> addedDeaths = new List<byte>();
             if (mSpawnCount != 0 || mQuantity < Base.Quantity)
             {
                 for (var i = 0; i < mSpawnedAmount; i++)
@@ -298,7 +423,7 @@ namespace Intersect.Server.Entities
                     var spawn = Spawns[i];
                     if (spawn != null)
                     {
-                        while (Globals.Timing.Milliseconds > spawn.TransmittionTimer && Spawns[i] != null)
+                        while ((Globals.Timing.Milliseconds > spawn.TransmittionTimer || spawn.Dead) && Spawns[i] != null)
                         {
                             var x = spawn.X;
                             var y = spawn.Y;
@@ -306,20 +431,53 @@ namespace Intersect.Server.Entities
                             var killSpawn = false;
                             if (!spawn.Dead)
                             {
-                                killSpawn = MoveFragment(spawn);
-                                if (!killSpawn && (x != spawn.X || y != spawn.Y || map != spawn.MapId))
+                                if (Base.Speed > 0)
+                                {   
+                                    killSpawn = MoveFragment(spawn);
+                                    if (!killSpawn && (x != spawn.X || y != spawn.Y || map != spawn.MapId))
+                                    {
+                                        // Play the tile animation on the current projectilespawn tile
+                                        if (Spell?.TilesAnimation != null)
+                                        {
+                                            PacketSender.SendAnimationToProximity(Spell.TilesAnimationId, -1, Guid.Empty, spawn.MapId, (byte)spawn.X, (byte)spawn.Y, (sbyte)Directions.Up);
+                                        }
+                                        killSpawn = CheckForCollision(spawn);
+                                    }
+                                }
+                                else
                                 {
                                     killSpawn = CheckForCollision(spawn);
+                                    spawn.TransmittionTimer = Globals.Timing.Milliseconds + spawn.ProjectileBase.Delay;
                                 }
                             }
 
                             if (killSpawn || spawn.Dead)
                             {
                                 spawnDeaths.Add(new KeyValuePair<Guid, int>(Id, i));
+                                addedDeaths.Add(Spawns[i].LinkedSpawnIndex);
+                                LinkedSpawns[Spawns[i].LinkedSpawnIndex, Spawns[i].LinkedSpawnNumber] = null;
                                 Spawns[i] = null;
+                                
                                 mSpawnCount--;
                             }
                         }
+                    }
+                }
+                if (Base.LinkedSpawns)
+                {
+                    foreach (var deathIndex in addedDeaths)
+                    {
+                        for(var s=0; s<LinkedSpawns.GetLength(1);s++)
+                        {
+                            if (LinkedSpawns[deathIndex, s] != null)
+                            {
+                                spawnDeaths.Add(new KeyValuePair<Guid, int>(Id, LinkedSpawns[deathIndex, s].SpawnIndex));
+                                Spawns[LinkedSpawns[deathIndex, s].SpawnIndex] = null;
+                                LinkedSpawns[deathIndex, s] = null;
+                                mSpawnCount--;
+                            }
+                        }
+                        
                     }
                 }
             }
@@ -385,34 +543,62 @@ namespace Intersect.Server.Entities
                 {
                     killSpawn = true;
                 }
-            }
 
-            if (!killSpawn && map != null)
-            {
-                var entities = map.GetEntities();
-                for (var z = 0; z < entities.Count; z++)
+                // Check for stop projectiles (mainly static projs like wall etc ...)
+                foreach (var proj in map.MapProjectilesCached)
                 {
-                    if (entities[z] != null &&
-                        (entities[z].X == Math.Round(spawn.X) || entities[z].X == Math.Ceiling(spawn.X) || entities[z].X == Math.Floor(spawn.X)) &&
-                        (entities[z].Y == Math.Round(spawn.Y) || entities[z].Y == Math.Ceiling(spawn.Y) || entities[z].Y == Math.Floor(spawn.Y)) &&
-                        entities[z].Z == spawn.Z)
+                    if (proj != null && proj != this && proj.Base.StopProjectiles && proj.Spawns != null)
                     {
-                        killSpawn = spawn.HitEntity(entities[z]);
-                        if (killSpawn && !spawn.ProjectileBase.PierceTarget)
+                        foreach (var stopSpawn in proj.Spawns)
                         {
-                            return killSpawn;
-                        }
-                    }
-                    else
-                    {
-                        if (z == entities.Count - 1)
-                        {       
-                            if (spawn.Distance >= Base.Range)
+                            if (stopSpawn != null && !stopSpawn.Dead && stopSpawn.IsAtLocation(spawn.MapId, (int)spawn.X, (int)spawn.Y, spawn.Z))
                             {
-                                killSpawn = true;
+                                if (this.Base.StopProjectiles)
+                                {
+                                    // If both are stopping projectiles, we need to kill also the one we collide
+                                    stopSpawn.Dead = true;
+                                }
+                                //No need to check others, we directly exit with true to gain time
+                                return true;
                             }
                         }
                     }
+                }
+            }
+            if (!killSpawn && map != null)
+            {
+                var entities = map.GetEntities();
+                if (entities.Count > 0)
+                {
+                    for (var z = 0; z < entities.Count; z++)
+                    {
+                        if (entities[z] != null &&
+                            (entities[z].X == Math.Round(spawn.X) || entities[z].X == Math.Ceiling(spawn.X) || entities[z].X == Math.Floor(spawn.X)) &&
+                            (entities[z].Y == Math.Round(spawn.Y) || entities[z].Y == Math.Ceiling(spawn.Y) || entities[z].Y == Math.Floor(spawn.Y)) &&
+                            entities[z].Z == spawn.Z)
+                        {
+                            killSpawn = spawn.HitEntity(entities[z]);
+                            if (killSpawn && !spawn.ProjectileBase.PierceTarget)
+                            {
+                                return killSpawn;
+                            }
+                            else if (spawn.Parent.Base.BlockTarget)
+                            {
+                                var dashspeed = spawn.Parent.Base.Speed;
+                                if (spawn.Parent.Base.Range > 0 && spawn.Parent.Base.Speed > 0)
+                                {
+                                    //dashRange = spawn.Parent.Base.Range - spawn.Distance + 1;
+                                    dashspeed = (int)((float)spawn.Parent.Base.Speed / (float)(spawn.Parent.Base.Range + 1));
+                                }
+                                new Dash(entities[z], 1, spawn.Dir, false, false, false, false, null, dashspeed);
+                            }
+                        }
+                    }
+                }
+
+                if ((Base.Speed == 0 && Globals.Timing.Milliseconds > spawn.TransmittionTimer) || (Base.Speed > 0 && spawn.Distance >= Base.Range))
+                {
+                    killSpawn = true;
                 }
             }
 
@@ -428,7 +614,14 @@ namespace Intersect.Server.Entities
             if (move)
             {
                 spawn.Distance++;
-                spawn.TransmittionTimer += (long)((float)Base.Speed / (float)Base.Range);
+                if (Base.Range == 0)
+                {
+                    spawn.TransmittionTimer += Base.Speed;
+                }
+                else
+                {
+                    spawn.TransmittionTimer += (long)((float)Base.Speed / (float)Base.Range);
+                }
                 newx = spawn.X + GetRangeX(spawn.Dir, 1);
                 newy = spawn.Y + GetRangeY(spawn.Dir, 1);
             }
@@ -495,7 +688,7 @@ namespace Intersect.Server.Entities
             return killSpawn;
         }
 
-        public override void Die(bool dropItems = true, Entity killer = null)
+        public override void Die(bool dropItems = true, Entity killer = null, bool isDespawn = false)
         {
             for (var i = 0; i < Spawns.Length; i++)
             {
@@ -505,7 +698,7 @@ namespace Intersect.Server.Entities
             MapInstance.Get(MapId).RemoveProjectile(this);
         }
 
-        public override EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null)
+        public override EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null, bool isSpawn = false)
         {
             if (packet == null)
             {

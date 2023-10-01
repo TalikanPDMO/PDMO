@@ -157,6 +157,12 @@ namespace Intersect.Editor.General
 
         public static int WaterfallFrame = 0;
 
+        public static int CurrentTileHeight = 0;
+
+        public static int CurrentTileWidth = 0;
+
+        public static bool DevMode = false;
+
         public static string IntToDir(int index)
         {
             switch (index)

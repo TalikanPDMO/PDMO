@@ -190,7 +190,7 @@ namespace Intersect.Server.Entities.Events
             Stack<CommandInstance> callStack
         )
         {
-            var success = Conditions.MeetsCondition(command.Condition, player, instance, null);
+            var success = Conditions.MeetsCondition(command.Condition, player, instance, null, null);
 
             List<EventCommand> newCommandList = null;
             if (success && stackInfo.Page.CommandLists.ContainsKey(command.BranchIds[0]))
@@ -380,7 +380,7 @@ namespace Intersect.Server.Entities.Events
                 }
             }
 
-            player.GiveExperience(quantity);
+            player.GiveExperience(quantity, false, true);
         }
 
         //Change Level Command
@@ -831,7 +831,26 @@ namespace Intersect.Server.Entities.Events
             var tile = new TileHelper(mapId, tileX, tileY);
             if (tile.TryFix())
             {
-                var npc = MapInstance.Get(mapId).SpawnNpc((byte) tileX, (byte) tileY, direction, npcId, true);
+                var spawnLevel = command.MinLevel;
+                var npcBase = NpcBase.Get(npcId);
+                if (npcBase != null)
+                {
+                    if (command.MinLevel != command.MaxLevel)
+                    {
+                        spawnLevel = Randomization.Next(command.MinLevel, command.MaxLevel + 1);
+                    }
+                    if (spawnLevel > npcBase.Level + npcBase.LevelRange || spawnLevel < npcBase.Level - npcBase.LevelRange)
+                    {
+                        // If any issue in the spawns levels, default level
+                        spawnLevel = npcBase.Level;
+                    }
+                    if (spawnLevel < 1)
+                    {
+                        spawnLevel = 1;
+                    }
+                }
+                
+                var npc = MapInstance.Get(mapId).SpawnNpc((byte) tileX, (byte) tileY, direction, npcId, true, spawnLevel);
                 player.SpawnedNpcs.Add((Npc) npc);
             }
         }
@@ -1152,7 +1171,6 @@ namespace Intersect.Server.Entities.Events
                 id = instance.PageInstance.Id;
                 stackInfo.WaitingForResponse = CommandInstance.EventResponse.Picture;
             }
-            
             PacketSender.SendShowPicture(player, command.File, command.Size, command.Clickable, command.HideTime, id);
         }
 
@@ -1674,7 +1692,8 @@ namespace Intersect.Server.Entities.Events
                     { Strings.Events.eventnamecommand, instance?.PageInstance?.Name ?? "" },
                     { Strings.Events.commandparameter, instance?.PageInstance?.Param ?? "" },
                     { Strings.Events.eventparams, (instance != null && input.Contains(Strings.Events.eventparams)) ? instance.FormatParameters(player) : "" },
-
+                    { Strings.Events.playerstadiumwins, player.StadiumWins.ToString() },
+                    { Strings.Events.playerstadiumlosses, player.StadiumLosses.ToString() }
                 };
 
                 foreach (var val in replacements)
@@ -1769,22 +1788,93 @@ namespace Intersect.Server.Entities.Events
             {
                 if (changed)
                 {
-
+                    player.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", command.VariableId.ToString());
                 }
-
-                // Set the party member switches too if Sync Party enabled!
-                if (command.SyncParty)
+                if (command.SyncAll)
                 {
-                    if (changed)
+                    if (command.SyncOffline)
                     {
-                        player.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", command.VariableId.ToString());
-                    }
-
-                    foreach (var partyMember in player.Party)
-                    {
-                        if (partyMember != player)
+                        using (var context = DbInterface.CreatePlayerContext(false))
                         {
-                            partyMember.SetSwitchValue(command.VariableId, mod.Value);
+                            foreach (var pl in Player.FindAll())
+                            {
+                                Player p = Player.Find(pl.Id);
+                                if (p != null && p != player)
+                                {
+                                    if (p.Online)
+                                    {
+                                        p.SetSwitchValue(command.VariableId, mod.Value);
+                                    }
+                                    else
+                                    {
+                                        p.SetSwitchValue(command.VariableId, mod.Value, false);
+                                        context.Update(p);
+                                    }
+                                }
+                            }
+                            context.SaveChanges();
+                        }
+                    }
+                    else
+                    {
+                        foreach (var p in Player.OnlineList)
+                        {
+                            if (p != null && p != player)
+                            {
+                                p.SetSwitchValue(command.VariableId, mod.Value);
+                            }
+                        }
+                    }  
+                }
+                else
+                {
+                    // Set the party member switches too if Sync Party enabled!
+                    if (command.SyncParty)
+                    {
+                        foreach (var partyMember in player.Party)
+                        {
+                            if (partyMember != null && partyMember != player)
+                            {
+                                partyMember.SetSwitchValue(command.VariableId, mod.Value);
+                            }
+                        }
+                    }
+                    // Set the guild member switches too if Sync Guild enabled!
+                    if (command.SyncGuild)
+                    {
+                        if (command.SyncOffline)
+                        {
+                            using (var context = DbInterface.CreatePlayerContext(false))
+                            {
+                                foreach (var guildMember in player.Guild.Members)
+                                {
+                                    Player p = Player.Find(guildMember.Key);
+                                    if (p != null && p != player)
+                                    {
+                                        if (p.Online)
+                                        {
+                                            p.SetSwitchValue(command.VariableId, mod.Value);
+                                        }
+                                        else
+                                        {
+                                            p.SetSwitchValue(command.VariableId, mod.Value, false);
+                                            context.Update(p);
+                                        }
+                                    }
+                                }
+                                context.SaveChanges();
+                            }
+                        }
+                        else
+                        {
+                            foreach (var guildMember in player.Guild.Members)
+                            {
+                                Player p = Player.FindOnline(guildMember.Key);
+                                if (p != null && p != player)
+                                {
+                                    p.SetSwitchValue(command.VariableId, mod.Value);
+                                }
+                            }
                         }
                     }
                 }
@@ -1968,15 +2058,91 @@ namespace Intersect.Server.Entities.Events
                 {
                     player.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", command.VariableId.ToString());
                 }
-
-                // Set the party member switches too if Sync Party enabled!
-                if (command.SyncParty)
+                if (command.SyncAll)
                 {
-                    foreach (var partyMember in player.Party)
+                    if (command.SyncOffline)
                     {
-                        if (partyMember != player)
+                        using (var context = DbInterface.CreatePlayerContext(false))
                         {
-                            partyMember.SetVariableValue(command.VariableId, value.Integer);
+                            foreach (var pl in Player.FindAll())
+                            {
+                                Player p = Player.Find(pl.Id);
+                                if (p != null && p != player)
+                                {
+                                    if (p.Online)
+                                    {
+                                        p.SetVariableValue(command.VariableId, value.Integer);
+                                    }
+                                    else
+                                    {
+                                        p.SetVariableValue(command.VariableId, value.Integer, false);
+                                        context.Update(p);
+                                    }
+                                }
+                            }
+                            context.SaveChanges();
+                        }
+                    }
+                    else
+                    {
+                        foreach (var p in Player.OnlineList)
+                        {
+                            if (p != null && p != player)
+                            {
+                                p.SetVariableValue(command.VariableId, value.Integer);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // Set the party member switches too if Sync Party enabled!
+                    if (command.SyncParty)
+                    {
+                        foreach (var partyMember in player.Party)
+                        {
+                            if (partyMember != null && partyMember != player)
+                            {
+                                partyMember.SetVariableValue(command.VariableId, value.Integer);
+                            }
+                        }
+                    }
+                    // Set the guild member switches too if Sync Guild enabled!
+                    if (command.SyncGuild)
+                    {
+                        if (command.SyncOffline)
+                        {
+                            using (var context = DbInterface.CreatePlayerContext(false))
+                            {
+                                foreach (var guildMember in player.Guild.Members)
+                                {
+                                    Player p = Player.Find(guildMember.Key);
+                                    if (p != null && p != player)
+                                    {
+                                        if (p.Online)
+                                        {
+                                            p.SetVariableValue(command.VariableId, value.Integer);
+                                        }
+                                        else
+                                        {
+                                            p.SetVariableValue(command.VariableId, value.Integer, false);
+                                            context.Update(p);
+                                        }
+                                    }
+                                }
+                                context.SaveChanges();
+                            }
+                        }
+                        else
+                        {
+                            foreach (var guildMember in player.Guild.Members)
+                            {
+                                Player p = Player.FindOnline(guildMember.Key);
+                                if (p != null && p != player)
+                                {
+                                    p.SetVariableValue(command.VariableId, value.Integer);
+                                }
+                            }
                         }
                     }
                 }
@@ -2038,14 +2204,91 @@ namespace Intersect.Server.Entities.Events
                     player.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", command.VariableId.ToString());
                 }
 
-                // Set the party member switches too if Sync Party enabled!
-                if (command.SyncParty)
+                if (command.SyncAll)
                 {
-                    foreach (var partyMember in player.Party)
+                    if (command.SyncOffline)
                     {
-                        if (partyMember != player)
+                        using (var context = DbInterface.CreatePlayerContext(false))
                         {
-                            partyMember.SetVariableValue(command.VariableId, value.String);
+                            foreach (var pl in Player.FindAll())
+                            {
+                                Player p = Player.Find(pl.Id);
+                                if (p != null && p != player)
+                                {
+                                    if (p.Online)
+                                    {
+                                        p.SetVariableValue(command.VariableId, value.String);
+                                    }
+                                    else
+                                    {
+                                        p.SetVariableValue(command.VariableId, value.String, false);
+                                        context.Update(p);
+                                    }
+                                }
+                            }
+                            context.SaveChanges();
+                        }
+                    }                   
+                    else
+                    {
+                        foreach (var p in Player.OnlineList)
+                        {
+                            if (p != null && p != player)
+                            {
+                                p.SetVariableValue(command.VariableId, value.String);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // Set the party member switches too if Sync Party enabled!
+                    if (command.SyncParty)
+                    {
+                        foreach (var partyMember in player.Party)
+                        {
+                            if (partyMember != null && partyMember != player)
+                            {
+                                partyMember.SetVariableValue(command.VariableId, value.String);
+                            }
+                        }
+                    }
+                    // Set the guild member switches too if Sync Guild enabled!
+                    if (command.SyncGuild)
+                    {
+                        if (command.SyncOffline)
+                        {
+                            using (var context = DbInterface.CreatePlayerContext(false))
+                            {
+                                foreach (var guildMember in player.Guild.Members)
+                                {
+                                    Player p = Player.Find(guildMember.Key);
+                                    if (p != null && p != player)
+                                    {
+                                        if (p.Online)
+                                        {
+                                            p.SetVariableValue(command.VariableId, value.String);
+                                        }
+                                        else
+                                        {
+                                            p.SetVariableValue(command.VariableId, value.String, false);
+                                            context.Update(p);
+                                        }
+                                    }
+                                }
+                                context.SaveChanges();
+                            }
+                        }
+                        else
+                        {
+                            foreach (var guildMember in player.Guild.Members)
+                            {
+                                Player p = Player.FindOnline(guildMember.Key);
+                                if (p != null && p != player)
+                                {
+                                    p.SetVariableValue(command.VariableId, value.String);
+                                }
+                            }
                         }
                     }
                 }
@@ -2058,6 +2301,197 @@ namespace Intersect.Server.Entities.Events
                     DbInterface.UpdatedServerVariables.AddOrUpdate(command.VariableId, ServerVariableBase.Get(command.VariableId), (key, oldValue) => ServerVariableBase.Get(command.VariableId));
                 }
             }
+        }
+
+        //Show Popup Command
+        private static void ProcessCommand(
+            ShowPopupCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            PacketSender.SendShowPopup(
+                player, command.BackgroundFile, command.Title, ParseEventText(command.Text, player, instance),
+                command.HideTime, command.Opacity, command.FaceFile, command.PopupLayout
+            );
+
+            // Send popup to all online players if IncludeAll checked
+            if (command.IncludeAll)
+            {
+                foreach (var p in Player.OnlineList)
+                {
+                    if (p != null && p != player)
+                    {
+                        PacketSender.SendShowPopup(
+                            p, command.BackgroundFile, command.Title, ParseEventText(command.Text, p, instance),
+                            command.HideTime, command.Opacity, command.FaceFile, command.PopupLayout
+                         );
+                    }
+                }
+            }
+            else
+            {
+                // Send popup to online party members too if IncludeParty checked
+                if (command.IncludeParty)
+                {
+                    foreach (var partyMember in player.Party)
+                    {
+                        if (partyMember != null && partyMember != player)
+                        {
+                            PacketSender.SendShowPopup(
+                               partyMember, command.BackgroundFile, command.Title, ParseEventText(command.Text, partyMember, instance),
+                               command.HideTime, command.Opacity, command.FaceFile, command.PopupLayout
+                            );
+                        }
+                    }
+                }
+                // Send popup to online guild members too if Include Guild checked
+                if (command.IncludeGuild)
+                {
+                    foreach (var guildMember in player.Guild.Members)
+                    {
+                        Player p = Player.FindOnline(guildMember.Key);
+                        if (p != null && p != player)
+                        {
+                            PacketSender.SendShowPopup(
+                               p, command.BackgroundFile, command.Title, ParseEventText(command.Text, p, instance),
+                               command.HideTime, command.Opacity, command.FaceFile, command.PopupLayout
+                            );
+                        }
+                    }
+                }
+            }
+        }
+
+        //Set Exp Boost Command
+        private static void ProcessCommand(
+            SetExpBoostCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            var killExpAmount = command.ExpBoostNpc;
+            long killExpireTime = command.ExpBoostNpcDuration;
+            var questExpAmount = command.ExpBoostQuestEvent;
+            long questExpireTime = command.ExpBoostQuestEventDuration;
+
+            if (command.UseVariableExpBoostNpc)
+            {
+                switch (command.VariableTypeExpBoostNpc)
+                {
+                    case VariableTypes.PlayerVariable:
+                        killExpAmount = (int)player.GetVariableValue(command.VariableIdExpBoostNpc).Integer;
+                        break;
+                    case VariableTypes.ServerVariable:
+                        killExpAmount = (int)ServerVariableBase.Get(command.VariableIdExpBoostNpc)?.Value.Integer;
+                        break;
+                }
+            }
+            if (command.UseVariableExpBoostNpcDuration)
+            {
+                switch (command.VariableTypeExpBoostNpcDuration)
+                {
+                    case VariableTypes.PlayerVariable:
+                        killExpireTime = (long)player.GetVariableValue(command.VariableIdExpBoostNpcDuration).Integer;
+                        break;
+                    case VariableTypes.ServerVariable:
+                        killExpireTime = (long)ServerVariableBase.Get(command.VariableIdExpBoostNpcDuration)?.Value.Integer;
+                        break;
+                }
+            }
+            killExpireTime = Globals.Timing.Milliseconds + killExpireTime * 1000;
+
+            if (command.UseVariableExpBoostQuestEvent)
+            {
+                switch (command.VariableTypeExpBoostQuestEvent)
+                {
+                    case VariableTypes.PlayerVariable:
+                        questExpAmount = (int)player.GetVariableValue(command.VariableIdExpBoostQuestEvent).Integer;
+                        break;
+                    case VariableTypes.ServerVariable:
+                        questExpAmount = (int)ServerVariableBase.Get(command.VariableIdExpBoostQuestEvent)?.Value.Integer;
+                        break;
+                }
+            }
+            if (command.UseVariableExpBoostQuestEventDuration)
+            {
+                switch (command.VariableTypeExpBoostQuestEventDuration)
+                {
+                    case VariableTypes.PlayerVariable:
+                        questExpireTime = (long)player.GetVariableValue(command.VariableIdExpBoostQuestEventDuration).Integer;
+                        break;
+                    case VariableTypes.ServerVariable:
+                        questExpireTime = (long)ServerVariableBase.Get(command.VariableIdExpBoostQuestEventDuration)?.Value.Integer;
+                        break;
+                }
+            }
+            questExpireTime = Globals.Timing.Milliseconds + questExpireTime * 1000;
+
+            var expboost = new ExpBoost(command.Title, player, command.TargetType, killExpAmount, killExpireTime, questExpAmount, questExpireTime);
+            switch(expboost.TargetType)
+            {
+                case EventTargetType.Player:
+                    ExpBoost.PlayerExpBoosts[player.Id] = expboost;
+                    PacketSender.SendExpBoost(player, expboost);
+                    break;
+                case EventTargetType.Party:
+                    ExpBoost.PartyExpBoosts[player.Id] = expboost;
+                    if (player.Party?.Count > 1)
+                    {
+                        if (player.Party[0].Id == player.Id)
+                        {
+                            // Player is the party leader, apply boost to all members
+                            foreach (var partyMember in player.Party)
+                            {
+                                if (partyMember != null)
+                                {
+                                    PacketSender.SendExpBoost(partyMember, expboost);
+                                }
+                            }
+                        }
+                        else if (!ExpBoost.PartyExpBoosts.ContainsKey(player.Party[0].Id))
+                        {
+                            // Party leader has no boost, send the player expboost but disabled
+                            PacketSender.SendExpBoost(player, expboost, true);
+                        }
+                    }
+                    else
+                    {
+                        // Send disabled expboost info if not in party
+                        PacketSender.SendExpBoost(player, expboost, true);
+                    }
+                    break;
+                case EventTargetType.Guild:
+                    if (player.Guild != null && player.Guild.Id != Guid.Empty)
+                    {
+                        // Player has a guild
+                        ExpBoost.GuildExpBoosts[player.Guild.Id] = expboost;
+                        foreach (var guildMember in player.Guild.Members)
+                        {
+                            Player p = Player.FindOnline(guildMember.Key);
+                            if (p != null)
+                            {
+                                PacketSender.SendExpBoost(p, expboost);
+                            }
+                        }
+                    }
+                    break;
+                case EventTargetType.AllPlayers:
+                    ExpBoost.AllExpBoost = expboost;
+                    foreach (var p in Player.OnlineList)
+                    {
+                        if (p != null)
+                        {
+                            PacketSender.SendExpBoost(p, expboost);
+                        }
+                    }
+                    break;
+            }
+            // TODO Send/Create ExpBoostPacket here and when login/joinleaveparty/joinleavecreatedisbandguild
         }
 
     }

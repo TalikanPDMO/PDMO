@@ -56,6 +56,8 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.chkQuittable = new DarkUI.Controls.DarkCheckBox();
             this.chkRepeatable = new DarkUI.Controls.DarkCheckBox();
             this.grpLogOptions = new DarkUI.Controls.DarkGroupBox();
+            this.nudOrderValue = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblSortOrder = new System.Windows.Forms.Label();
             this.lblCompletedCategory = new System.Windows.Forms.Label();
             this.cmbCompletedCategory = new DarkUI.Controls.DarkComboBox();
             this.lblInProgressCategory = new System.Windows.Forms.Label();
@@ -66,6 +68,8 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.chkLogAfterComplete = new DarkUI.Controls.DarkCheckBox();
             this.chkLogBeforeOffer = new DarkUI.Controls.DarkCheckBox();
             this.grpQuestTasks = new DarkUI.Controls.DarkGroupBox();
+            this.btnEditAlternatives = new DarkUI.Controls.DarkButton();
+            this.btnEditLinks = new DarkUI.Controls.DarkButton();
             this.btnShiftTaskDown = new DarkUI.Controls.DarkButton();
             this.btnShiftTaskUp = new DarkUI.Controls.DarkButton();
             this.btnRemoveTask = new DarkUI.Controls.DarkButton();
@@ -90,18 +94,16 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.nudOrderValue = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblSortOrder = new System.Windows.Forms.Label();
             this.grpQuests.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpQuestReqs.SuspendLayout();
             this.grpProgessionOptions.SuspendLayout();
             this.grpLogOptions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudOrderValue)).BeginInit();
             this.grpQuestTasks.SuspendLayout();
             this.pnlContainer.SuspendLayout();
             this.grpActions.SuspendLayout();
             this.toolStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudOrderValue)).BeginInit();
             this.SuspendLayout();
             // 
             // grpQuests
@@ -114,7 +116,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpQuests.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpQuests.Location = new System.Drawing.Point(12, 34);
             this.grpQuests.Name = "grpQuests";
-            this.grpQuests.Size = new System.Drawing.Size(203, 374);
+            this.grpQuests.Size = new System.Drawing.Size(203, 482);
             this.grpQuests.TabIndex = 14;
             this.grpQuests.TabStop = false;
             this.grpQuests.Text = "Quests";
@@ -156,7 +158,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.lstGameObjects.Location = new System.Drawing.Point(6, 45);
             this.lstGameObjects.Name = "lstGameObjects";
             this.lstGameObjects.SelectedImageIndex = 0;
-            this.lstGameObjects.Size = new System.Drawing.Size(191, 323);
+            this.lstGameObjects.Size = new System.Drawing.Size(191, 431);
             this.lstGameObjects.TabIndex = 32;
             // 
             // grpGeneral
@@ -177,18 +179,17 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpGeneral.Controls.Add(this.lblOffer);
             this.grpGeneral.Controls.Add(this.txtName);
             this.grpGeneral.Controls.Add(this.lblName);
-            this.grpGeneral.Controls.Add(this.grpProgessionOptions);
             this.grpGeneral.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpGeneral.Location = new System.Drawing.Point(0, 0);
+            this.grpGeneral.Location = new System.Drawing.Point(0, 3);
             this.grpGeneral.Name = "grpGeneral";
-            this.grpGeneral.Size = new System.Drawing.Size(580, 164);
+            this.grpGeneral.Size = new System.Drawing.Size(580, 267);
             this.grpGeneral.TabIndex = 15;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
             // 
             // btnAddFolder
             // 
-            this.btnAddFolder.Location = new System.Drawing.Point(143, 42);
+            this.btnAddFolder.Location = new System.Drawing.Point(224, 42);
             this.btnAddFolder.Name = "btnAddFolder";
             this.btnAddFolder.Padding = new System.Windows.Forms.Padding(5);
             this.btnAddFolder.Size = new System.Drawing.Size(18, 21);
@@ -211,7 +212,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpQuestReqs.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.grpQuestReqs.Controls.Add(this.btnEditRequirements);
             this.grpQuestReqs.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpQuestReqs.Location = new System.Drawing.Point(169, 11);
+            this.grpQuestReqs.Location = new System.Drawing.Point(303, 11);
             this.grpQuestReqs.Name = "grpQuestReqs";
             this.grpQuestReqs.Size = new System.Drawing.Size(271, 52);
             this.grpQuestReqs.TabIndex = 20;
@@ -243,7 +244,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.cmbFolder.FormattingEnabled = true;
             this.cmbFolder.Location = new System.Drawing.Point(51, 42);
             this.cmbFolder.Name = "cmbFolder";
-            this.cmbFolder.Size = new System.Drawing.Size(86, 21);
+            this.cmbFolder.Size = new System.Drawing.Size(156, 21);
             this.cmbFolder.TabIndex = 50;
             this.cmbFolder.Text = null;
             this.cmbFolder.TextPadding = new System.Windows.Forms.Padding(2);
@@ -255,18 +256,18 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.txtBeforeDesc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.txtBeforeDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtBeforeDesc.ForeColor = System.Drawing.Color.Gainsboro;
-            this.txtBeforeDesc.Location = new System.Drawing.Point(10, 90);
+            this.txtBeforeDesc.Location = new System.Drawing.Point(19, 90);
             this.txtBeforeDesc.Multiline = true;
             this.txtBeforeDesc.Name = "txtBeforeDesc";
             this.txtBeforeDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtBeforeDesc.Size = new System.Drawing.Size(136, 68);
+            this.txtBeforeDesc.Size = new System.Drawing.Size(250, 68);
             this.txtBeforeDesc.TabIndex = 36;
             this.txtBeforeDesc.TextChanged += new System.EventHandler(this.txtBeforeDesc_TextChanged);
             // 
             // lblBeforeOffer
             // 
             this.lblBeforeOffer.AutoSize = true;
-            this.lblBeforeOffer.Location = new System.Drawing.Point(7, 75);
+            this.lblBeforeOffer.Location = new System.Drawing.Point(16, 75);
             this.lblBeforeOffer.Name = "lblBeforeOffer";
             this.lblBeforeOffer.Size = new System.Drawing.Size(123, 13);
             this.lblBeforeOffer.TabIndex = 35;
@@ -278,17 +279,17 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.txtInProgressDesc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.txtInProgressDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtInProgressDesc.ForeColor = System.Drawing.Color.Gainsboro;
-            this.txtInProgressDesc.Location = new System.Drawing.Point(294, 91);
+            this.txtInProgressDesc.Location = new System.Drawing.Point(19, 181);
             this.txtInProgressDesc.Multiline = true;
             this.txtInProgressDesc.Name = "txtInProgressDesc";
             this.txtInProgressDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtInProgressDesc.Size = new System.Drawing.Size(136, 67);
+            this.txtInProgressDesc.Size = new System.Drawing.Size(250, 67);
             this.txtInProgressDesc.TabIndex = 33;
             this.txtInProgressDesc.TextChanged += new System.EventHandler(this.txtInProgressDesc_TextChanged);
             // 
             // lblInProgress
             // 
-            this.lblInProgress.Location = new System.Drawing.Point(291, 75);
+            this.lblInProgress.Location = new System.Drawing.Point(16, 165);
             this.lblInProgress.Name = "lblInProgress";
             this.lblInProgress.Size = new System.Drawing.Size(121, 13);
             this.lblInProgress.TabIndex = 32;
@@ -300,17 +301,17 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.txtEndDesc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.txtEndDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtEndDesc.ForeColor = System.Drawing.Color.Gainsboro;
-            this.txtEndDesc.Location = new System.Drawing.Point(436, 91);
+            this.txtEndDesc.Location = new System.Drawing.Point(318, 181);
             this.txtEndDesc.Multiline = true;
             this.txtEndDesc.Name = "txtEndDesc";
             this.txtEndDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtEndDesc.Size = new System.Drawing.Size(136, 67);
+            this.txtEndDesc.Size = new System.Drawing.Size(250, 67);
             this.txtEndDesc.TabIndex = 28;
             this.txtEndDesc.TextChanged += new System.EventHandler(this.txtEndDesc_TextChanged);
             // 
             // lblCompleted
             // 
-            this.lblCompleted.Location = new System.Drawing.Point(433, 75);
+            this.lblCompleted.Location = new System.Drawing.Point(315, 165);
             this.lblCompleted.Name = "lblCompleted";
             this.lblCompleted.Size = new System.Drawing.Size(128, 13);
             this.lblCompleted.TabIndex = 27;
@@ -322,18 +323,18 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.txtStartDesc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.txtStartDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtStartDesc.ForeColor = System.Drawing.Color.Gainsboro;
-            this.txtStartDesc.Location = new System.Drawing.Point(152, 91);
+            this.txtStartDesc.Location = new System.Drawing.Point(318, 91);
             this.txtStartDesc.Multiline = true;
             this.txtStartDesc.Name = "txtStartDesc";
             this.txtStartDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtStartDesc.Size = new System.Drawing.Size(136, 68);
+            this.txtStartDesc.Size = new System.Drawing.Size(250, 68);
             this.txtStartDesc.TabIndex = 26;
             this.txtStartDesc.TextChanged += new System.EventHandler(this.txtStartDesc_TextChanged);
             // 
             // lblOffer
             // 
             this.lblOffer.AutoSize = true;
-            this.lblOffer.Location = new System.Drawing.Point(149, 75);
+            this.lblOffer.Location = new System.Drawing.Point(315, 75);
             this.lblOffer.Name = "lblOffer";
             this.lblOffer.Size = new System.Drawing.Size(89, 13);
             this.lblOffer.TabIndex = 25;
@@ -346,7 +347,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.txtName.ForeColor = System.Drawing.Color.Gainsboro;
             this.txtName.Location = new System.Drawing.Point(51, 17);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(110, 20);
+            this.txtName.Size = new System.Drawing.Size(191, 20);
             this.txtName.TabIndex = 1;
             this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
             // 
@@ -366,9 +367,9 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpProgessionOptions.Controls.Add(this.chkQuittable);
             this.grpProgessionOptions.Controls.Add(this.chkRepeatable);
             this.grpProgessionOptions.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpProgessionOptions.Location = new System.Drawing.Point(446, 9);
+            this.grpProgessionOptions.Location = new System.Drawing.Point(586, 3);
             this.grpProgessionOptions.Name = "grpProgessionOptions";
-            this.grpProgessionOptions.Size = new System.Drawing.Size(126, 60);
+            this.grpProgessionOptions.Size = new System.Drawing.Size(165, 97);
             this.grpProgessionOptions.TabIndex = 34;
             this.grpProgessionOptions.TabStop = false;
             this.grpProgessionOptions.Text = "Progression Options";
@@ -376,7 +377,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // chkQuittable
             // 
             this.chkQuittable.AutoSize = true;
-            this.chkQuittable.Location = new System.Drawing.Point(6, 37);
+            this.chkQuittable.Location = new System.Drawing.Point(20, 57);
             this.chkQuittable.Name = "chkQuittable";
             this.chkQuittable.Size = new System.Drawing.Size(104, 17);
             this.chkQuittable.TabIndex = 31;
@@ -386,7 +387,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // chkRepeatable
             // 
             this.chkRepeatable.AutoSize = true;
-            this.chkRepeatable.Location = new System.Drawing.Point(6, 19);
+            this.chkRepeatable.Location = new System.Drawing.Point(20, 33);
             this.chkRepeatable.Name = "chkRepeatable";
             this.chkRepeatable.Size = new System.Drawing.Size(118, 17);
             this.chkRepeatable.TabIndex = 30;
@@ -409,12 +410,41 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpLogOptions.Controls.Add(this.chkLogAfterComplete);
             this.grpLogOptions.Controls.Add(this.chkLogBeforeOffer);
             this.grpLogOptions.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpLogOptions.Location = new System.Drawing.Point(3, 168);
+            this.grpLogOptions.Location = new System.Drawing.Point(3, 276);
             this.grpLogOptions.Name = "grpLogOptions";
             this.grpLogOptions.Size = new System.Drawing.Size(268, 201);
             this.grpLogOptions.TabIndex = 37;
             this.grpLogOptions.TabStop = false;
             this.grpLogOptions.Text = "Quest Log Options";
+            // 
+            // nudOrderValue
+            // 
+            this.nudOrderValue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudOrderValue.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudOrderValue.Location = new System.Drawing.Point(120, 171);
+            this.nudOrderValue.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.nudOrderValue.Name = "nudOrderValue";
+            this.nudOrderValue.Size = new System.Drawing.Size(142, 20);
+            this.nudOrderValue.TabIndex = 59;
+            this.nudOrderValue.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudOrderValue.ValueChanged += new System.EventHandler(this.nudOrderValue_ValueChanged);
+            // 
+            // lblSortOrder
+            // 
+            this.lblSortOrder.AutoSize = true;
+            this.lblSortOrder.Location = new System.Drawing.Point(6, 173);
+            this.lblSortOrder.Name = "lblSortOrder";
+            this.lblSortOrder.Size = new System.Drawing.Size(110, 13);
+            this.lblSortOrder.TabIndex = 58;
+            this.lblSortOrder.Text = "Quest Log Sort Order:";
             // 
             // lblCompletedCategory
             // 
@@ -537,18 +567,40 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // 
             this.grpQuestTasks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpQuestTasks.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpQuestTasks.Controls.Add(this.btnEditAlternatives);
+            this.grpQuestTasks.Controls.Add(this.btnEditLinks);
             this.grpQuestTasks.Controls.Add(this.btnShiftTaskDown);
             this.grpQuestTasks.Controls.Add(this.btnShiftTaskUp);
             this.grpQuestTasks.Controls.Add(this.btnRemoveTask);
             this.grpQuestTasks.Controls.Add(this.lstTasks);
             this.grpQuestTasks.Controls.Add(this.btnAddTask);
             this.grpQuestTasks.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpQuestTasks.Location = new System.Drawing.Point(277, 168);
+            this.grpQuestTasks.Location = new System.Drawing.Point(277, 276);
             this.grpQuestTasks.Name = "grpQuestTasks";
             this.grpQuestTasks.Size = new System.Drawing.Size(480, 201);
             this.grpQuestTasks.TabIndex = 19;
             this.grpQuestTasks.TabStop = false;
             this.grpQuestTasks.Text = "Quest Tasks";
+            // 
+            // btnEditAlternatives
+            // 
+            this.btnEditAlternatives.Location = new System.Drawing.Point(359, 170);
+            this.btnEditAlternatives.Name = "btnEditAlternatives";
+            this.btnEditAlternatives.Padding = new System.Windows.Forms.Padding(5);
+            this.btnEditAlternatives.Size = new System.Drawing.Size(115, 23);
+            this.btnEditAlternatives.TabIndex = 9;
+            this.btnEditAlternatives.Text = "Edit Alternatives (A)";
+            this.btnEditAlternatives.Click += new System.EventHandler(this.btnEditAlternatives_Click);
+            // 
+            // btnEditLinks
+            // 
+            this.btnEditLinks.Location = new System.Drawing.Point(246, 170);
+            this.btnEditLinks.Name = "btnEditLinks";
+            this.btnEditLinks.Padding = new System.Windows.Forms.Padding(5);
+            this.btnEditLinks.Size = new System.Drawing.Size(110, 23);
+            this.btnEditLinks.TabIndex = 8;
+            this.btnEditLinks.Text = "Edit Links (L)";
+            this.btnEditLinks.Click += new System.EventHandler(this.btnEditLinks_Click);
             // 
             // btnShiftTaskDown
             // 
@@ -574,10 +626,10 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // 
             // btnRemoveTask
             // 
-            this.btnRemoveTask.Location = new System.Drawing.Point(317, 172);
+            this.btnRemoveTask.Location = new System.Drawing.Point(119, 170);
             this.btnRemoveTask.Name = "btnRemoveTask";
             this.btnRemoveTask.Padding = new System.Windows.Forms.Padding(5);
-            this.btnRemoveTask.Size = new System.Drawing.Size(123, 23);
+            this.btnRemoveTask.Size = new System.Drawing.Size(110, 23);
             this.btnRemoveTask.TabIndex = 5;
             this.btnRemoveTask.Text = "Remove Task";
             this.btnRemoveTask.Click += new System.EventHandler(this.btnRemoveTask_Click);
@@ -591,16 +643,16 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.lstTasks.HorizontalScrollbar = true;
             this.lstTasks.Location = new System.Drawing.Point(6, 19);
             this.lstTasks.Name = "lstTasks";
-            this.lstTasks.Size = new System.Drawing.Size(434, 132);
+            this.lstTasks.Size = new System.Drawing.Size(434, 145);
             this.lstTasks.TabIndex = 3;
             this.lstTasks.DoubleClick += new System.EventHandler(this.lstTasks_DoubleClick);
             // 
             // btnAddTask
             // 
-            this.btnAddTask.Location = new System.Drawing.Point(6, 172);
+            this.btnAddTask.Location = new System.Drawing.Point(6, 170);
             this.btnAddTask.Name = "btnAddTask";
             this.btnAddTask.Padding = new System.Windows.Forms.Padding(5);
-            this.btnAddTask.Size = new System.Drawing.Size(123, 23);
+            this.btnAddTask.Size = new System.Drawing.Size(110, 23);
             this.btnAddTask.TabIndex = 4;
             this.btnAddTask.Text = "Add Task";
             this.btnAddTask.Click += new System.EventHandler(this.btnAddTask_Click);
@@ -611,9 +663,10 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.pnlContainer.Controls.Add(this.grpGeneral);
             this.pnlContainer.Controls.Add(this.grpLogOptions);
             this.pnlContainer.Controls.Add(this.grpQuestTasks);
+            this.pnlContainer.Controls.Add(this.grpProgessionOptions);
             this.pnlContainer.Location = new System.Drawing.Point(221, 34);
             this.pnlContainer.Name = "pnlContainer";
-            this.pnlContainer.Size = new System.Drawing.Size(765, 374);
+            this.pnlContainer.Size = new System.Drawing.Size(765, 482);
             this.pnlContainer.TabIndex = 20;
             this.pnlContainer.Visible = false;
             // 
@@ -626,7 +679,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpActions.Controls.Add(this.lblOnEnd);
             this.grpActions.Controls.Add(this.lblOnStart);
             this.grpActions.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpActions.Location = new System.Drawing.Point(586, 0);
+            this.grpActions.Location = new System.Drawing.Point(586, 106);
             this.grpActions.Name = "grpActions";
             this.grpActions.Size = new System.Drawing.Size(171, 164);
             this.grpActions.TabIndex = 21;
@@ -674,7 +727,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(796, 414);
+            this.btnCancel.Location = new System.Drawing.Point(796, 522);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(190, 27);
@@ -684,7 +737,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(600, 414);
+            this.btnSave.Location = new System.Drawing.Point(600, 522);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(190, 27);
@@ -813,42 +866,13 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // nudOrderValue
-            // 
-            this.nudOrderValue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudOrderValue.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudOrderValue.Location = new System.Drawing.Point(120, 171);
-            this.nudOrderValue.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.nudOrderValue.Name = "nudOrderValue";
-            this.nudOrderValue.Size = new System.Drawing.Size(142, 20);
-            this.nudOrderValue.TabIndex = 59;
-            this.nudOrderValue.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudOrderValue.ValueChanged += new System.EventHandler(this.nudOrderValue_ValueChanged);
-            // 
-            // lblSortOrder
-            // 
-            this.lblSortOrder.AutoSize = true;
-            this.lblSortOrder.Location = new System.Drawing.Point(6, 173);
-            this.lblSortOrder.Name = "lblSortOrder";
-            this.lblSortOrder.Size = new System.Drawing.Size(110, 13);
-            this.lblSortOrder.TabIndex = 58;
-            this.lblSortOrder.Text = "Quest Log Sort Order:";
-            // 
             // FrmQuest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(992, 446);
+            this.ClientSize = new System.Drawing.Size(992, 561);
             this.ControlBox = false;
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.btnCancel);
@@ -871,13 +895,13 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpProgessionOptions.PerformLayout();
             this.grpLogOptions.ResumeLayout(false);
             this.grpLogOptions.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudOrderValue)).EndInit();
             this.grpQuestTasks.ResumeLayout(false);
             this.pnlContainer.ResumeLayout(false);
             this.grpActions.ResumeLayout(false);
             this.grpActions.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudOrderValue)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -944,5 +968,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
         private DarkNumericUpDown nudOrderValue;
         private System.Windows.Forms.Label lblSortOrder;
         private Controls.GameObjectList lstGameObjects;
+        private DarkButton btnEditLinks;
+        private DarkButton btnEditAlternatives;
     }
 }

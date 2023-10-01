@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 
 using Intersect.Editor.Forms.Helpers;
+using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
@@ -42,8 +43,25 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             mCurrentMap = currentMap;
             InitLocalization();
             cmbNpc.Items.Clear();
-            cmbNpc.Items.AddRange(NpcBase.Names);
+            cmbNpc.Items.AddRange(NpcBase.EditorFormatNames);
             cmbNpc.SelectedIndex = NpcBase.ListIndex(mMyCommand.NpcId);
+            var npc = NpcBase.Get(mMyCommand.NpcId);
+            if (npc != null)
+            {
+                var minlevel = npc.Level - npc.LevelRange;
+                if (minlevel < 1)
+                {
+                    minlevel = 1;
+                }
+                var maxlevel = npc.Level + npc.LevelRange;
+                nudMinLevel.Minimum = minlevel;
+                nudMinLevel.Maximum = maxlevel;
+                nudMaxLevel.Minimum = minlevel;
+                nudMaxLevel.Maximum = maxlevel;
+
+                nudMinLevel.Value = mMyCommand.MinLevel == 0 ? npc.Level : mMyCommand.MinLevel;
+                nudMaxLevel.Value = mMyCommand.MaxLevel == 0 ? npc.Level : mMyCommand.MaxLevel;
+            }
             if (mMyCommand.MapId != Guid.Empty)
             {
                 cmbConditionType.SelectedIndex = 0;
@@ -79,6 +97,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             grpSpawnNpc.Text = Strings.EventSpawnNpc.title;
             lblNpc.Text = Strings.EventSpawnNpc.npc;
+            lblMinLevel.Text = Strings.EventSpawnNpc.minlevel;
+            lblMaxLevel.Text = Strings.EventSpawnNpc.maxlevel;
             lblSpawnType.Text = Strings.EventSpawnNpc.spawntype;
             cmbConditionType.Items.Clear();
             cmbConditionType.Items.Add(Strings.EventSpawnNpc.spawntype0);
@@ -140,17 +160,20 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
                     if (!mEditingEvent.CommonEvent)
                     {
-                        foreach (var evt in mCurrentMap.LocalEvents)
+                        if (mCurrentMap != null)
                         {
-                            cmbEntities.Items.Add(
-                                evt.Key == mEditingEvent.Id ? Strings.EventSpawnNpc.This + " " : "" + evt.Value.Name
-                            );
-
-                            if (mMyCommand.EntityId == evt.Key)
+                            foreach (var evt in mCurrentMap.LocalEvents)
                             {
-                                cmbEntities.SelectedIndex = cmbEntities.Items.Count - 1;
+                                cmbEntities.Items.Add(
+                                    evt.Key == mEditingEvent.Id ? Strings.EventSpawnNpc.This + " " : "" + evt.Value.Name
+                                );
+
+                                if (mMyCommand.EntityId == evt.Key)
+                                {
+                                    cmbEntities.SelectedIndex = cmbEntities.Items.Count - 1;
+                                }
                             }
-                        }
+                        } 
                     }
 
                     UpdateSpawnPreview();
@@ -167,6 +190,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void btnSave_Click(object sender, EventArgs e)
         {
             mMyCommand.NpcId = NpcBase.IdFromList(cmbNpc.SelectedIndex);
+            mMyCommand.MinLevel = (int)nudMinLevel.Value;
+            mMyCommand.MaxLevel = (int)nudMaxLevel.Value;
             switch (cmbConditionType.SelectedIndex)
             {
                 case 0: //Tile Spawn
@@ -208,6 +233,31 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             UpdateFormElements();
         }
 
+        private void cmbNpc_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var npcId = NpcBase.IdFromList(cmbNpc.SelectedIndex);
+            var npcBase = NpcBase.Get(npcId);
+            if (npcBase == null)
+            {
+                return;
+            }
+            var minlevel = npcBase.Level - npcBase.LevelRange;
+            if (minlevel < 1)
+            {
+                minlevel = 1;
+            }
+            var maxlevel = npcBase.Level + npcBase.LevelRange;
+
+           
+            nudMinLevel.Minimum = minlevel;
+            nudMinLevel.Maximum = maxlevel;
+            nudMaxLevel.Minimum = minlevel;
+            nudMaxLevel.Maximum = maxlevel;
+
+            nudMinLevel.Value = minlevel;
+            nudMaxLevel.Value = maxlevel;
+        }
+
         private void btnVisual_Click(object sender, EventArgs e)
         {
             var frmWarpSelection = new FrmWarpSelection();
@@ -237,12 +287,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             if (e.X >= 0 && e.Y >= 0 && e.X < pnlSpawnLoc.Width && e.Y < pnlSpawnLoc.Height)
             {
-                mSpawnX = (int) Math.Floor((double) e.X / Options.TileWidth) - 2;
-                mSpawnY = (int) Math.Floor((double) e.Y / Options.TileHeight) - 2;
+                mSpawnX = (int) Math.Floor((double) e.X / Globals.CurrentTileWidth) - 2;
+                mSpawnY = (int) Math.Floor((double) e.Y / Globals.CurrentTileHeight) - 2;
                 UpdateSpawnPreview();
             }
         }
-
     }
 
 }

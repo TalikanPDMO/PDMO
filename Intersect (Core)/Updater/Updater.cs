@@ -104,8 +104,12 @@ namespace Intersect.Updater
                     {
                         mConfigUrl = ClientConfiguration.Instance.UpdateUrl.TrimEnd(new char[] { '/' }) + "/update.json";
                     }
-
-                    var jsonBytes = wc.DownloadData(mConfigUrl + "?token=" + Environment.TickCount);
+                    ServicePointManager.Expect100Continue = true;
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
+                           | SecurityProtocolType.Tls11
+                           | SecurityProtocolType.Tls12
+                           | SecurityProtocolType.Ssl3;
+                    var jsonBytes = wc.DownloadData(mConfigUrl + "?token=" + Environment.TickCount + "&devmode=" + !mIsClient);
                     var json = Encoding.UTF8.GetString(jsonBytes);
                     mUpdate = JsonConvert.DeserializeObject<Update>(json);
 

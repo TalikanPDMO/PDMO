@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeAnalysis.FxCopAnalyzers.3.0.0\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props" Condition="Exists('..\packages\Microsoft.CodeAnalysis.FxCopAnalyzers.3.0.0\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props')" />
   <Import Project="..\packages\Microsoft.NetFramework.Analyzers.3.0.0\build\Microsoft.NetFramework.Analyzers.props" Condition="Exists('..\packages\Microsoft.NetFramework.Analyzers.3.0.0\build\Microsoft.NetFramework.Analyzers.props')" />
@@ -213,6 +213,7 @@
     <Compile Include="Configuration\IConfigurable.cs" />
     <Compile Include="Configuration\IConfiguration.cs" />
     <Compile Include="Configuration\ConfigurationHelper.cs" />
+    <Compile Include="Config\PvpStadiumOption.cs" />
     <Compile Include="Config\ChatOptions.cs" />
     <Compile Include="Config\Guilds\GuildOptions.cs" />
     <Compile Include="Config\Guilds\GuildPermissions.cs" />
@@ -269,8 +270,16 @@
     <Compile Include="CustomColors.cs" />
     <Compile Include="Enums\ChatboxTab.cs" />
     <Compile Include="Enums\ChatMessageType.cs" />
+    <Compile Include="Enums\AttackType.cs" />
+    <Compile Include="Enums\DamageStyle.cs" />
+    <Compile Include="Enums\ElementalType.cs" />
+    <Compile Include="Enums\PvpStadiumState.cs" />
+    <Compile Include="Enums\EventTargetType.cs" />
+    <Compile Include="Enums\PopupLayoutParams.cs" />
     <Compile Include="Enums\GuildMemberUpdateActions.cs" />
     <Compile Include="Enums\ItemHandling.cs" />
+    <Compile Include="Enums\PhaseStats.cs" />
+    <Compile Include="Enums\NpcLevelScalings.cs" />
     <Compile Include="ErrorHandling\ExceptionInfo.cs" />
     <Compile Include="Extensions\ArrayExtensions.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
@@ -392,9 +401,13 @@
     <Compile Include="Network\Packets\Client\HotbarSwapPacket.cs" />
     <Compile Include="Network\Packets\Client\HotbarUpdatePacket.cs" />
     <Compile Include="Network\Packets\Client\LoginPacket.cs" />
+    <Compile Include="Network\Packets\Client\MatchmakingStadiumTogglePacket.cs" />
+    <Compile Include="Network\Packets\Client\MatchmakingStadiumResponsePacket.cs" />
     <Compile Include="Network\Packets\Client\RequestGuildPacket.cs" />
     <Compile Include="Network\Packets\Client\UpdateGuildMemberPacket.cs" />
     <Compile Include="Network\Packets\Client\PictureClosedPacket.cs" />
+    <Compile Include="Network\Packets\Server\MatchmakingStadiumPacket.cs" />
+    <Compile Include="Network\Packets\Server\ExpBoostPacket.cs" />
     <Compile Include="Network\Packets\Server\ActionMsgPackets.cs" />
     <Compile Include="Network\Packets\Server\EntityMovementPackets.cs" />
     <Compile Include="Network\Packets\Server\GuildInvitePacket.cs" />
@@ -405,6 +418,7 @@
     <Compile Include="Network\Packets\Server\AnnouncementPacket.cs" />
     <Compile Include="Network\Packets\Server\CancelCastPacket.cs" />
     <Compile Include="Network\Packets\Server\PlayAnimationPackets.cs" />
+    <Compile Include="Network\Packets\Server\ShowPopupPacket.cs" />
     <Compile Include="Network\Packets\SlotQuantityPacket.cs" />
     <Compile Include="Network\Packets\Client\SwapBankItemsPacket.cs" />
     <Compile Include="Network\Packets\Client\MovePacket.cs" />

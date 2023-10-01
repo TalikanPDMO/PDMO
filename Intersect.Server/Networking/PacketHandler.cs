@@ -108,7 +108,7 @@ namespace Intersect.Server.Networking
 
             var packetOptions = Options.Instance.SecurityOpts?.PacketOpts;
             var thresholds = client.PacketFloodingThreshholds;
-            
+
 
             if (pSize > thresholds.MaxPacketSize)
             {
@@ -419,7 +419,7 @@ namespace Intersect.Server.Networking
                 {
                     client.PacketHandlingQueued = true;
                     ServerNetwork.Pool.QueueWorkItem(client.HandlePackets);
-                } 
+                }
             }
 
             return true;
@@ -632,7 +632,7 @@ namespace Intersect.Server.Networking
 
                 if (Options.MaxCharacters > 1 && packet.ReturningToCharSelect)
                 {
-                    client.Entity?.TryLogout();
+                    client.Entity?.TryLogout(false, true);
                     client.Entity = null;
                     PacketSender.SendPlayerCharacters(client);
                 }
@@ -687,9 +687,9 @@ namespace Intersect.Server.Networking
             }
 
             var clientTime = packet.Adjusted / TimeSpan.TicksPerMillisecond;
-            if (player.ClientMoveTimer <= clientTime &&
-                (Options.Instance.PlayerOpts.AllowCombatMovement || player.ClientAttackTimer <= clientTime))
+            if (player.ClientMoveTimer <= clientTime)
             {
+                player.Running = packet.Run;
                 var canMove = player.CanMove(packet.Dir);
                 if ((canMove == -1 || canMove == -4) && client.Entity.MoveRoute == null)
                 {
@@ -1067,8 +1067,7 @@ namespace Intersect.Server.Networking
             var target = packet.Target;
 
             var clientTime = packet.Adjusted / TimeSpan.TicksPerMillisecond;
-            if (player.ClientAttackTimer > clientTime ||
-                (!Options.Instance.PlayerOpts.AllowCombatMovement && player.ClientMoveTimer > clientTime))
+            if (player.ClientAttackTimer > clientTime)
             {
                 return;
             }
@@ -1100,7 +1099,7 @@ namespace Intersect.Server.Networking
                     {
                         PacketSender.SendChatMsg(player, Strings.Combat.stunattacking, ChatMessageType.Combat);
                     }
-                    
+
                     return;
                 }
 
@@ -1150,12 +1149,28 @@ namespace Intersect.Server.Networking
                     attackingTile.Translate(1, 0);
 
                     break;
+                case 4:
+                    attackingTile.Translate(-1, -1); // UpLeft
+
+                    break;
+                case 5:
+                    attackingTile.Translate(1, -1); // UpRight
+
+                    break;
+                case 6:
+                    attackingTile.Translate(-1, 1); // DownLeft
+
+                    break;
+                case 7:
+                    attackingTile.Translate(1, 1); // DownRight
+
+                    break;
             }
 
             PacketSender.SendEntityAttack(player, player.CalculateAttackTime());
 
             player.ClientAttackTimer = clientTime + (long) player.CalculateAttackTime();
-
+            var classBase = ClassBase.Get(player.ClassId);
             //Fire projectile instead if weapon has it
             if (Options.WeaponIndex > -1)
             {
@@ -1165,10 +1180,9 @@ namespace Intersect.Server.Networking
                     var weaponItem = ItemBase.Get(player.Items[player.Equipment[Options.WeaponIndex]].ItemId);
 
                     //Check for animation
-                    var attackAnim = ItemBase.Get(player.Items[player.Equipment[Options.WeaponIndex]].ItemId)
-                        .AttackAnimation;
-
-                    if (attackAnim != null && attackingTile.TryFix())
+                    var attackAnim = weaponItem.AttackAnimation;
+                    var attackrange = weaponItem.AdaptRange ? classBase.AttackRange : weaponItem.AttackRange;
+                    if (attackAnim != null && attackingTile.TryFix() && attackrange == 0)
                     {
                         PacketSender.SendAnimationToProximity(
                             attackAnim.Id, -1, player.Id, attackingTile.GetMapId(), attackingTile.GetX(),
@@ -1265,11 +1279,10 @@ namespace Intersect.Server.Networking
 
             if (unequippedAttack)
             {
-                var classBase = ClassBase.Get(player.ClassId);
                 if (classBase != null)
                 {
                     //Check for animation
-                    if (classBase.AttackAnimation != null)
+                    if (classBase.AttackAnimation != null && classBase.AttackRange == 0)
                     {
                         PacketSender.SendAnimationToProximity(
                             classBase.AttackAnimationId, -1, player.Id, attackingTile.GetMapId(), attackingTile.GetX(),
@@ -1486,6 +1499,8 @@ namespace Intersect.Server.Networking
             newChar.Name = packet.Name;
             newChar.ClassId = packet.ClassId;
             newChar.Level = 1;
+            newChar.StadiumWins = 0;
+            newChar.StadiumLosses = 0;
 
             if (classBase.Sprites.Count > 0)
             {
@@ -1670,7 +1685,7 @@ namespace Intersect.Server.Networking
         public void HandlePacket(Client client, UseItemPacket packet)
         {
             var player = client?.Entity;
-            if (player == null)
+            if (player == null || player.IsHeld())
             {
                 return;
             }
@@ -1723,7 +1738,7 @@ namespace Intersect.Server.Networking
         public void HandlePacket(Client client, UseSpellPacket packet)
         {
             var player = client?.Entity;
-            if (player == null)
+            if (player == null || player.IsHeld())
             {
                 return;
             }
@@ -2854,10 +2869,10 @@ namespace Intersect.Server.Networking
 
             // Send the newly updated player information to their surroundings.
             PacketSender.SendEntityDataToProximity(player);
- 
+
         }
-      
-      
+
+
         //PictureClosedPacket
         public void HandlePacket(Client client, PictureClosedPacket packet)
         {
@@ -2867,6 +2882,44 @@ namespace Intersect.Server.Networking
                 return;
             }
             player.PictureClosed(packet.EventId);
+        }
+
+        //MatchmakingStadiumResponse Packet
+        public void HandlePacket(Client client, MatchmakingStadiumResponsePacket packet)
+        {
+            var player = client?.Entity;
+            if (player == null)
+            {
+                return;
+            }
+
+            if (packet.AcceptingMatch)
+            {
+                PvpStadiumUnit.AcceptMatch(player.Id);
+            }
+            else
+            {
+                PvpStadiumUnit.DeclineMatch(player.Id);
+            }
+        }
+
+        //MatchmakingStadiumToggle Packet
+        public void HandlePacket(Client client, MatchmakingStadiumTogglePacket packet)
+        {
+            var player = client?.Entity;
+            if (player == null)
+            {
+                return;
+            }
+            if (packet.OnlyInfos)
+            {
+                PacketSender.SendMatchmakingStadium(player, PvpStadiumState.Unregistred);
+            }
+            else
+            {
+                PvpStadiumUnit.ToggleRegistrationForPlayer(player.Id, player.Level);
+            }
+            
         }
 
         #endregion
@@ -3207,7 +3260,7 @@ namespace Intersect.Server.Networking
                         }
 
                         DbInterface.SaveGameObject(newMap);
-                            
+
                         DbInterface.GenerateMapGrids();
                         PacketSender.SendMap(client, newMapId, true);
                         PacketSender.SendMapGridToAll(MapInstance.Get(newMapId).MapGrid);
@@ -3828,8 +3881,6 @@ namespace Intersect.Server.Networking
 
                     obj.Load(packet.Data);
 
-                    DbInterface.SaveGameObject(obj);
-
                     if (type == GameObjectType.Quest)
                     {
                         var qst = (QuestBase)obj;
@@ -3845,7 +3896,7 @@ namespace Intersect.Server.Networking
                         foreach (var evt in qst.AddEvents)
                         {
                             var evtb = (EventBase)DbInterface.AddGameObject(GameObjectType.Event, evt.Key);
-                            evtb.CommonEvent = false;
+                            evtb.Load(evt.Value.JsonData);
                             foreach (var tsk in qst.Tasks)
                             {
                                 if (tsk.Id == evt.Key)
@@ -3853,13 +3904,54 @@ namespace Intersect.Server.Networking
                                     tsk.CompletionEvent = evtb;
                                 }
                             }
+                            foreach (var link in qst.TaskLinks)
+                            {
+                                if (link.Id == evt.Key)
+                                {
+                                    link.CompletionEvent = evtb;
+                                }
+                            }
 
-                            evtb.Load(evt.Value.JsonData);
+                            foreach (var alt in qst.TaskAlternatives)
+                            {
+                                if (alt.Id == evt.Key)
+                                {
+                                    alt.CompletionEvent = evtb;
+                                }
+                            }
                             DbInterface.SaveGameObject(evtb);
                         }
 
                         qst.AddEvents.Clear();
                         qst.RemoveEvents.Clear();
+                    }
+                    else if (type == GameObjectType.Npc)
+                    {
+                        var npc = (NpcBase)obj;
+                        foreach (var evt in npc.RemoveEvents)
+                        {
+                            var evtb = EventBase.Get(evt);
+                            if (evtb != null)
+                            {
+                                DbInterface.DeleteGameObject(evtb);
+                            }
+                        }
+
+                        foreach (var evt in npc.AddEvents)
+                        {
+                            var evtb = (EventBase)DbInterface.AddGameObject(GameObjectType.Event, evt);
+                            foreach (var phase in npc.NpcPhases)
+                            {
+                                if (phase.Id == evt)
+                                {
+                                    phase.BeginEvent = evtb;
+                                }
+                            }
+                            DbInterface.SaveGameObject(evtb);
+                        }
+
+                        npc.AddEvents.Clear();
+                        npc.RemoveEvents.Clear();
                     }
                     else if (type == GameObjectType.PlayerVariable)
                     {
@@ -3870,7 +3962,7 @@ namespace Intersect.Server.Networking
                         Player.StartCommonEventsWithTriggerForAll(CommonEventTrigger.ServerVariableChange, "", obj.Id.ToString());
                         DbInterface.CacheServerVariableEventTextLookups();
                     }
-
+                    DbInterface.SaveGameObject(obj);
                     // Only replace the modified object
                     PacketSender.CacheGameDataPacket();
 

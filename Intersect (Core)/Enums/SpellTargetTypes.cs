@@ -6,9 +6,9 @@ namespace Intersect.Enums
 
         Self = 0,
 
-        Single = 1,
+        Targeted = 1,
 
-        AoE = 2,
+        Anchored = 2,
 
         Projectile = 3,
 

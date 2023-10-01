@@ -1,5 +1,5 @@
 {
-  "Bounds": "286,275,452,234",
+  "Bounds": "574,365,452,234",
   "Padding": "0,0,0,0",
   "AlignmentEdgeDistances": "0,0,0,0",
   "AlignmentTransform": "0,32",
@@ -770,7 +770,7 @@
       "MinimumSize": "1,1",
       "MaximumSize": "4096,4096",
       "Disabled": false,
-      "Hidden": false,
+      "Hidden": true,
       "RestrictToParent": false,
       "MouseInputEnabled": true,
       "HideToolTip": false,
@@ -922,7 +922,7 @@
           "ToolTipFont": null,
           "ToolTipTextColor": "",
           "Label": {
-            "Bounds": "0,6,43,16",
+            "Bounds": "0,6,47,16",
             "Padding": "0,0,0,0",
             "AlignmentEdgeDistances": "0,0,0,0",
             "AlignmentTransform": "0,0",

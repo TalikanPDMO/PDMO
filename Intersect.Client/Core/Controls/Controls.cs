@@ -13,8 +13,14 @@ namespace Intersect.Client.Core.Controls
 
         public readonly IDictionary<Control, ControlMap> ControlMapping;
 
+        //Ajouté par Moussmous
+        private static XBoxController XboxControllerMonitor;
+
         public Controls(Controls gameControls = null)
         {
+            //Ajouté par Moussmous pour permettre la gestion des manettes Xbox (et ptet les autres jsp)
+            XboxControllerMonitor = new XBoxController();
+
             ControlMapping = new Dictionary<Control, ControlMap>();
 
             if (gameControls != null)
@@ -44,6 +50,8 @@ namespace Intersect.Client.Core.Controls
                     }
                     else
                     {
+                        var cle1 = (Keys)Convert.ToInt32(key1);
+                        var cle2 = (Keys)Convert.ToInt32(key2);
                         CreateControlMap(control, (Keys) Convert.ToInt32(key1), (Keys) Convert.ToInt32(key2));
                     }
                 }
@@ -54,12 +62,12 @@ namespace Intersect.Client.Core.Controls
 
         public void ResetDefaults()
         {
-            CreateControlMap(Control.MoveUp, Keys.Up, Keys.W);
+            CreateControlMap(Control.MoveUp, Keys.Up, Keys.Z);
             CreateControlMap(Control.MoveDown, Keys.Down, Keys.S);
-            CreateControlMap(Control.MoveLeft, Keys.Left, Keys.A);
+            CreateControlMap(Control.MoveLeft, Keys.Left, Keys.Q);
             CreateControlMap(Control.MoveRight, Keys.Right, Keys.D);
             CreateControlMap(Control.AttackInteract, Keys.E, Keys.LButton);
-            CreateControlMap(Control.Block, Keys.Q, Keys.RButton);
+            CreateControlMap(Control.Block, Keys.A, Keys.RButton);
             CreateControlMap(Control.AutoTarget, Keys.Tab, Keys.None);
             CreateControlMap(Control.PickUp, Keys.Space, Keys.None);
             CreateControlMap(Control.Enter, Keys.Enter, Keys.None);
@@ -82,19 +90,32 @@ namespace Intersect.Client.Core.Controls
             CreateControlMap(Control.OpenSpells, Keys.X, Keys.None);
             CreateControlMap(Control.OpenFriends, Keys.F, Keys.None);
             CreateControlMap(Control.OpenGuild, Keys.G, Keys.None);
+            CreateControlMap(Control.OpenPvpStadium, Keys.J, Keys.None);
             CreateControlMap(Control.OpenSettings, Keys.None, Keys.None);
             CreateControlMap(Control.OpenDebugger, Keys.F2, Keys.None);
             CreateControlMap(Control.OpenAdminPanel, Keys.Insert, Keys.None);
             CreateControlMap(Control.ToggleGui, Keys.F11, Keys.None);
+            CreateControlMap(Control.Running, Keys.Shift, Keys.None);
+            CreateControlMap(Control.PartyLocate, Keys.W, Keys.None);
         }
 
-        public void Save()
+        public void SaveKeyboard()
         {
             foreach (Control control in Enum.GetValues(typeof(Control)))
             {
                 var name = Enum.GetName(typeof(Control), control);
                 Globals.Database.SavePreference(name + "_key1", ((int) ControlMapping[control].Key1).ToString());
                 Globals.Database.SavePreference(name + "_key2", ((int) ControlMapping[control].Key2).ToString());
+            }
+        }
+
+        //Créé par Moussmous pour sauvegarder les controles des manettes
+        public void SaveGamepad()
+        {
+            foreach (ControlGamepad control in Enum.GetValues(typeof(ControlGamepad)))
+            {
+                var name = Enum.GetName(typeof(ControlGamepad), control);
+                Globals.Database.SavePreference(name + "_gamepadkey", XboxControllerMonitor.getButtonOfControl(control));
             }
         }
 
@@ -105,12 +126,44 @@ namespace Intersect.Client.Core.Controls
 
         public static bool KeyDown(Control control)
         {
+            bool retourClavier = false;
+            bool retourManette = false;
             if (ActiveControls?.ControlMapping.ContainsKey(control) ?? false)
             {
-                return ActiveControls.ControlMapping[control]?.KeyDown() ?? false;
+                retourClavier = ActiveControls.ControlMapping[control]?.KeyDown() ?? false;
+            } 
+
+            retourManette = XboxControllerMonitor.isKeyDown(control);
+            
+            if (retourClavier || retourManette)
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
+
+        public static bool KeyUp(Control control)
+        {
+            bool retourClavier = false;
+            bool retourManette = false;
+            if (ActiveControls?.ControlMapping.ContainsKey(control) ?? false)
+            {
+                retourClavier = ActiveControls.ControlMapping[control]?.KeyUp() ?? false;
             }
 
-            return false;
+            retourManette = !XboxControllerMonitor.isKeyDown(control);
+
+            // We need to put && and not || for the KeyUp logic
+            if (retourClavier && retourManette)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public static List<Control> GetControlsFor(Keys key)

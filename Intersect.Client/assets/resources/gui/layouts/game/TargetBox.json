@@ -190,6 +190,36 @@
           "LeftMouseClickSound": null,
           "RightMouseClickSound": null
         },
+        "EntityElementalTypesLabel": {
+          "Bounds": "2,100,100,20",
+          "Padding": "0,0,0,0",
+          "AlignmentEdgeDistances": "0,0,0,0",
+          "AlignmentTransform": "0,0",
+          "Margin": "0,0,0,0",
+          "RenderColor": "255,255,255,255",
+          "Alignments": "",
+          "DrawBackground": true,
+          "MinimumSize": "1,1",
+          "MaximumSize": "4096,4096",
+          "Disabled": false,
+          "Hidden": false,
+          "RestrictToParent": false,
+          "MouseInputEnabled": false,
+          "HideToolTip": false,
+          "ToolTipBackground": null,
+          "ToolTipFont": null,
+          "ToolTipTextColor": "",
+          "BackgroundTemplate": null,
+          "TextColor": "255,255,255,255",
+          "HoveredTextColor": "",
+          "ClickedTextColor": "",
+          "DisabledTextColor": "255,90,90,90",
+          "TextAlign": "Center",
+          "TextPadding": "0,0,0,0",
+          "AutoSizeToContents": false,
+          "Font": "sourcesansproblack,8",
+          "TextScale": 1.0
+        },
         "EventDescLabel": {
           "Bounds": "93,43,207,0",
           "Padding": "0,0,0,0",
@@ -560,7 +590,7 @@
           "TextScale": 1.0
         },
         "TradeButton": {
-          "Bounds": "144,96,50,20",
+          "Bounds": "130,96,50,20",
           "Padding": "3,3,3,3",
           "AlignmentEdgeDistances": "0,0,0,0",
           "AlignmentTransform": "0,0",
@@ -598,7 +628,7 @@
           "ClickSound": ""
         },
         "PartyButton": {
-          "Bounds": "192,96,50,20",
+          "Bounds": "200,96,50,20",
           "Padding": "3,3,3,3",
           "AlignmentEdgeDistances": "0,0,0,0",
           "AlignmentTransform": "0,0",
@@ -636,7 +666,7 @@
           "ClickSound": ""
         },
         "FriendButton": {
-          "Bounds": "250,96,50,20",
+          "Bounds": "270,96,30,20",
           "Padding": "3,3,3,3",
           "AlignmentEdgeDistances": "0,0,0,0",
           "AlignmentTransform": "0,0",
@@ -674,7 +704,7 @@
           "ClickSound": ""
         },
         "GuildButton": {
-          "Bounds": "100,96,50,20",
+          "Bounds": "80,96,50,20",
           "Padding": "3,3,3,3",
           "AlignmentEdgeDistances": "0,0,0,0",
           "AlignmentTransform": "0,0",

@@ -12,6 +12,7 @@ using Intersect.Client.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.Utilities;
+using static Intersect.GameObjects.QuestBase;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -330,40 +331,37 @@ namespace Intersect.Client.Interface.Game
                         );
 
                         mQuestDescLabel.AddLineBreak();
-                        for (var i = 0; i < mSelectedQuest.Tasks.Count; i++)
+                        var tasksprogress = Globals.Me.QuestProgress[mSelectedQuest.Id].TasksProgress;
+                        bool link_desc_displayed = false;
+
+                        var task = mSelectedQuest.FindTask(Globals.Me.QuestProgress[mSelectedQuest.Id].TaskId);
+                        if (task != null)
                         {
-                            if (mSelectedQuest.Tasks[i].Id == Globals.Me.QuestProgress[mSelectedQuest.Id].TaskId)
+                            var alt = mSelectedQuest.FindAlternative(task.Id);
+                            if (alt != null)
                             {
-                                if (mSelectedQuest.Tasks[i].Description.Length > 0)
+                                DisplayTaskAlternative(alt);
+                            }
+                            else
+                            {
+                                var link = mSelectedQuest.FindLink(task.Id);
+                                if (link != null)
                                 {
-                                    mQuestDescLabel.AddText(
-                                        mSelectedQuest.Tasks[i].Description, Color.White, Alignments.Left,
-                                        mQuestDescTemplateLabel.Font
-                                    );
-
-                                    mQuestDescLabel.AddLineBreak();
-                                    mQuestDescLabel.AddLineBreak();
+                                    // Display link
+                                    alt = mSelectedQuest.FindAlternative(link.Id);
+                                    if (alt != null)
+                                    {
+                                        DisplayTaskAlternative(alt);
+                                    }
+                                    else
+                                    {
+                                        DisplayTaskLink(link);
+                                    }
                                 }
-
-                                if (mSelectedQuest.Tasks[i].Objective == QuestObjective.GatherItems) //Gather Items
+                                else
                                 {
-                                    mQuestDescLabel.AddText(
-                                        Strings.QuestLog.taskitem.ToString(
-                                            Globals.Me.QuestProgress[mSelectedQuest.Id].TaskProgress,
-                                            mSelectedQuest.Tasks[i].Quantity,
-                                            ItemBase.GetName(mSelectedQuest.Tasks[i].TargetId)
-                                        ), Color.White, Alignments.Left, mQuestDescTemplateLabel.Font
-                                    );
-                                }
-                                else if (mSelectedQuest.Tasks[i].Objective == QuestObjective.KillNpcs) //Kill Npcs
-                                {
-                                    mQuestDescLabel.AddText(
-                                        Strings.QuestLog.tasknpc.ToString(
-                                            Globals.Me.QuestProgress[mSelectedQuest.Id].TaskProgress,
-                                            mSelectedQuest.Tasks[i].Quantity,
-                                            NpcBase.GetName(mSelectedQuest.Tasks[i].TargetId)
-                                        ), Color.White, Alignments.Left, mQuestDescTemplateLabel.Font
-                                    );
+                                    // Display simple
+                                    DisplayQuestTask(task);
                                 }
                             }
                         }
@@ -424,6 +422,128 @@ namespace Intersect.Client.Interface.Game
                 mQuestStatus.Show();
                 mBackButton.Show();
                 mQuitButton.Show();
+            }
+        }
+
+        public void DisplayQuestTask(QuestTask task, bool showDescription=true, bool isMainDescription = true)
+        {
+            Color color = Color.White;
+            var tasksprogress = Globals.Me.QuestProgress[mSelectedQuest.Id].TasksProgress;
+            int value_taskprogress = 0; // Default 0 if this task progression do no exists
+            if (task != null)
+            {
+                if (tasksprogress != null && tasksprogress.ContainsKey(task.Id))
+                {
+                    if (tasksprogress[task.Id] == -1)
+                    {
+                        // Task done so max value and gray text
+                        value_taskprogress = task.Quantity;
+                        color = Color.Gray;
+                    }
+                    else
+                    {
+                        // Current value of the progression
+                        value_taskprogress = tasksprogress[task.Id];
+                    }
+                }
+                if (showDescription && task.Description.Length > 0)
+                {
+                    mQuestDescLabel.AddText(
+                        task.Description, color, Alignments.Left,
+                        mQuestDescTemplateLabel.Font
+                    );
+                    mQuestDescLabel.AddLineBreak();
+                }
+                if (isMainDescription)
+                {
+                    mQuestDescLabel.AddLineBreak();
+                }
+                if (task.Objective == QuestObjective.GatherItems) //Gather Items
+                {
+                    mQuestDescLabel.AddText(
+                        Strings.QuestLog.taskitem.ToString(
+                            value_taskprogress,
+                            task.Quantity,
+                            ItemBase.GetName(task.TargetId)
+                        ), color, Alignments.Left, mQuestDescTemplateLabel.Font
+                    );
+                    mQuestDescLabel.AddLineBreak();
+                }
+                else if (task.Objective == QuestObjective.KillNpcs) //Kill Npcs
+                {
+                    mQuestDescLabel.AddText(
+                        Strings.QuestLog.tasknpc.ToString(
+                            value_taskprogress,
+                            task.Quantity,
+                            NpcBase.GetName(task.TargetId)
+                        ), color, Alignments.Left, mQuestDescTemplateLabel.Font
+                    );
+                    mQuestDescLabel.AddLineBreak();
+                }
+            }
+        }
+
+
+        public void DisplayTaskLink(TaskLink link, bool showDescription = true, bool isMainDescription = true)
+        {
+            if (showDescription && link.Description.Length > 0)
+            {
+                mQuestDescLabel.AddText(
+                    link.Description, Color.White, Alignments.Left,
+                    mQuestDescTemplateLabel.Font
+                );
+                mQuestDescLabel.AddLineBreak();
+                // No description for tasks if there is a link description
+                showDescription = false;
+            }
+            if (isMainDescription)
+            {
+                mQuestDescLabel.AddLineBreak();
+            }
+            foreach (var taskid in link.TasksList)
+            {
+                var task = mSelectedQuest.FindTask(taskid);
+                DisplayQuestTask(task, showDescription, false);
+            }
+        }
+
+        public void DisplayTaskAlternative(TaskAlternative alt)
+        {
+            int i = 0;
+
+            if (alt.Description.Length > 0)
+            {
+                mQuestDescLabel.AddText(
+                    alt.Description, Color.White, Alignments.Left,
+                    mQuestDescTemplateLabel.Font
+                );
+                mQuestDescLabel.AddLineBreak();      
+            }
+            mQuestDescLabel.AddLineBreak();
+
+            foreach (var alt_id in alt.AlternativesList)
+            {
+                var link = mSelectedQuest.ContainsLink(alt_id);
+                if (link != null)
+                {
+                    // Display link
+                    DisplayTaskLink(link, alt.Description.Length <= 0, false);
+                }
+                else
+                {
+                    // Display task
+                    var task = mSelectedQuest.FindTask(alt_id);
+                    DisplayQuestTask(task, alt.Description.Length <= 0, false);
+                }
+                if (i != alt.AlternativesList.Count - 1)
+                {
+                    mQuestDescLabel.AddText(
+                       Strings.QuestLog.alternative_separator, Color.White, Alignments.CenterH,
+                       mQuestDescTemplateLabel.Font
+                   );
+                    mQuestDescLabel.AddLineBreak();
+                }
+                i++;
             }
         }
 

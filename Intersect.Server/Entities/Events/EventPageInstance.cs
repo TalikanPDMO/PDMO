@@ -50,7 +50,16 @@ namespace Intersect.Server.Entities.Events
 
         public EventTrigger Trigger;
 
-        public int Speed = 20;
+        public int Speed = Options.Npc.EventMovementSpeedValues[2];
+
+        public bool CollideOnDash;
+
+        //Moving
+        public int RandomMoveValue = -1;
+
+        public int CurrentRandomMove = 0;
+
+        private int OpposingDir = -1;
 
         public EventPageInstance(
             EventBase myEvent,
@@ -74,6 +83,7 @@ namespace Intersect.Server.Entities.Events
             Trigger = MyPage.Trigger;
             Passable = MyPage.Passable;
             HideName = MyPage.HideName;
+            CollideOnDash = MyPage.CollideOnDash;
             MyEventIndex = eventIndex;
             MoveRoute = new EventMoveRoute();
             MoveRoute.CopyFrom(MyPage.Movement.Route);
@@ -205,23 +215,22 @@ namespace Intersect.Server.Entities.Events
                 switch (mMovementSpeed)
                 {
                     case EventMovementSpeed.Slowest:
-                        Speed = 2;
+                        Speed = Options.Npc.EventMovementSpeedValues[0];
 
                         break;
                     case EventMovementSpeed.Slower:
-                        Speed = 5;
+                        Speed = Options.Npc.EventMovementSpeedValues[1];
 
                         break;
                     case EventMovementSpeed.Normal:
-                        Speed = 20;
-
+                        Speed = Options.Npc.EventMovementSpeedValues[2];
                         break;
                     case EventMovementSpeed.Faster:
-                        Speed = 30;
+                        Speed = Options.Npc.EventMovementSpeedValues[3];
 
                         break;
                     case EventMovementSpeed.Fastest:
-                        Speed = 40;
+                        Speed = Options.Npc.EventMovementSpeedValues[4];
 
                         break;
                 }
@@ -245,7 +254,7 @@ namespace Intersect.Server.Entities.Events
             return EntityTypes.Event;
         }
 
-        public override EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null)
+        public override EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null, bool isSpawn = false)
         {
             if (packet == null)
             {
@@ -284,23 +293,22 @@ namespace Intersect.Server.Entities.Events
             switch (speed)
             {
                 case EventMovementSpeed.Slowest:
-                    Speed = 5;
+                    Speed = Options.Npc.EventMovementSpeedValues[0];
 
                     break;
                 case EventMovementSpeed.Slower:
-                    Speed = 10;
+                    Speed = Options.Npc.EventMovementSpeedValues[1];
 
                     break;
                 case EventMovementSpeed.Normal:
-                    Speed = 20;
-
+                    Speed = Options.Npc.EventMovementSpeedValues[2];
                     break;
                 case EventMovementSpeed.Faster:
-                    Speed = 30;
+                    Speed = Options.Npc.EventMovementSpeedValues[3];
 
                     break;
                 case EventMovementSpeed.Fastest:
-                    Speed = 40;
+                    Speed = Options.Npc.EventMovementSpeedValues[4];
 
                     break;
             }
@@ -324,27 +332,92 @@ namespace Intersect.Server.Entities.Events
             {
                 ProcessMoveRoute(Player, timeMs);
             }
-            else
+            else if(MovementType == EventMovementType.Random) //Random
             {
-                if (MovementType == EventMovementType.Random) //Random
+                if (RandomMoveValue == -1)
                 {
-                    if (Randomization.Next(0, 2) != 0)
-                    {
-                        return;
-                    }
+                    RandomMoveValue = Randomization.Next(0, Options.Npc.EventMaxRandomMove);
+                    CurrentRandomMove = 0;
+                    OpposingDir = -1;
+                }
+                int dirMove = Randomization.Next(0, 8);
+                while (dirMove == OpposingDir)
+                {
+                    dirMove = Randomization.Next(0, 8);
+                }
+                switch (dirMove)
+                {
+                    case 0: //Up
+                        OpposingDir = 1;
+                        break;
+                    case 1: //Down
+                        OpposingDir = 0;
+                        break;
+                    case 2: //Left
+                        OpposingDir = 3;
+                        break;
+                    case 3: //Right
+                        OpposingDir = 2;
+                        break;
+                    case 4: //UpLeft
+                        OpposingDir = 7;
+                        break;
+                    case 5: //UpRight
+                        OpposingDir = 6;
+                        break;
+                    case 6: //DownLeft
+                        OpposingDir = 5;
+                        break;
+                    case 7: //DownRight
+                        OpposingDir = 4;
+                        break;
 
-                    var dir = (byte)Randomization.Next(0, 4);
-                    if (CanMove(dir) == -1)
+                }
+                if (CanMove(dirMove) == -1)
+                {
+                    Move((byte)dirMove, Player);
+                }
+                else
+                {
+                    // Can't move in the direction, so no previous direction to store
+                    OpposingDir = -1;
+                }
+                CurrentRandomMove++;
+                if (CurrentRandomMove > RandomMoveValue)
+                {
+                    RandomMoveValue = -1;
+                    var frequencies = Options.Npc.EventMovementFrequencyIntervals;
+                    switch (MovementFreq)
                     {
-                        Move(dir, Player);
+                        case EventMovementFrequency.Lowest:
+                            MoveTimer = Globals.Timing.Milliseconds + Randomization.Next(frequencies[1], frequencies[0]);
+                            break;
+                        case EventMovementFrequency.Lower:
+                            MoveTimer = Globals.Timing.Milliseconds + Randomization.Next(frequencies[2], frequencies[1]);
+                            break;
+                        case EventMovementFrequency.Normal:
+                            MoveTimer = Globals.Timing.Milliseconds + Randomization.Next(frequencies[3], frequencies[2]);
+                            break;
+                        case EventMovementFrequency.Higher:
+                            MoveTimer = Globals.Timing.Milliseconds + Randomization.Next(frequencies[4], frequencies[3]);
+                            break;
+                        case EventMovementFrequency.Highest:
+                            MoveTimer = Globals.Timing.Milliseconds + Randomization.Next(frequencies[5], frequencies[4]);
+                            break;
+                        default:
+                            MoveTimer = Globals.Timing.Milliseconds + Randomization.Next(frequencies[3], frequencies[2]);
+                            break;
                     }
+                }
+                else
+                {
                     MoveTimer = Globals.Timing.Milliseconds + (long)GetMovementTime();
                 }
             }
         }
 
         /// <inheritdoc />
-        public override void Move(int moveDir, Player forPlayer, bool doNotUpdate = false, bool correction = false)
+        public override void Move(int moveDir, Player forPlayer, bool doNotUpdate = false, bool correction = false, bool isDash = false)
         {
             base.Move(moveDir, forPlayer, doNotUpdate, correction);
 
@@ -709,21 +782,12 @@ namespace Intersect.Server.Entities.Events
 
         public override float GetMovementTime()
         {
-            switch (MovementFreq)
-            {
-                case EventMovementFrequency.Lowest:
-                    return 4000;
-                case EventMovementFrequency.Lower:
-                    return 2000;
-                case EventMovementFrequency.Normal:
-                    return 1000;
-                case EventMovementFrequency.Higher:
-                    return 500;
-                case EventMovementFrequency.Highest:
-                    return 250;
-                default:
-                    return 1000;
-            }
+            //return 2.0f * Options.Instance.PlayerOpts.WalkingSpeed / (float)(1 + Math.Log(Speed));
+            float time = Speed > Options.Instance.PlayerOpts.MaxSpeedStat ?
+                 Globals.CalculatedSpeeds[Options.Instance.PlayerOpts.MaxSpeedStat] :
+                 Globals.CalculatedSpeeds[Speed];
+
+            return time;
         }
 
         public override int CanMove(int moveDir)
@@ -762,6 +826,34 @@ namespace Intersect.Server.Entities.Events
                         return -5;
                     }
 
+                    break;
+
+                case (int)Directions.UpLeft:
+                    if (Y == 0 || X == 0)
+                    {
+                        return -5;
+                    }
+
+                    break;
+                case (int)Directions.UpRight:
+                    if (Y == 0 || X == Options.MapWidth - 1)
+                    {
+                        return -5;
+                    }
+
+                    break;
+                case (int)Directions.DownLeft:
+                    if (X == 0 || Y == Options.MapHeight - 1)
+                    {
+                        return -5;
+                    }
+
+                    break;
+                case (int)Directions.DownRight:
+                    if (X == Options.MapWidth - 1 || Y == Options.MapHeight - 1)
+                    {
+                        return -5;
+                    }
                     break;
             }
 

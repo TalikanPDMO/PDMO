@@ -11,8 +11,8 @@ namespace Intersect.Server.Entities.Events
 {
     public static class ConditionHandlerRegistry
     {
-        private delegate bool HandleCondition(Condition condition, Player player, Event eventInstance, QuestBase questBase);
-        private delegate bool HandleConditionBool<TCondition>(TCondition condition, Player player, Event eventInstance, QuestBase questBase) where TCondition : Condition;
+        private delegate bool HandleCondition(Condition condition, Player player, Event eventInstance, QuestBase questBase, Npc npcEnemy);
+        private delegate bool HandleConditionBool<TCondition>(TCondition condition, Player player, Event eventInstance, QuestBase questBase, Npc npcEnemy) where TCondition : Condition;
         private static Dictionary<Type, HandleCondition> MeetsConditionFunctions = new Dictionary<Type, HandleCondition>();
         private static MethodInfo CreateWeaklyTypedDelegateForMethodInfoInfo;
         private static bool Initialized = false;
@@ -40,7 +40,7 @@ namespace Intersect.Server.Entities.Events
             Initialized = true;
         }
 
-        public static bool CheckCondition(Condition condition, Player player, Event eventInstance, QuestBase questBase)
+        public static bool CheckCondition(Condition condition, Player player, Event eventInstance, QuestBase questBase, Npc npcEnemy)
         {
             if (!Initialized)
             {
@@ -53,7 +53,7 @@ namespace Intersect.Server.Entities.Events
                 }
             }
 
-            return MeetsConditionFunctions[condition.GetType()](condition, player, eventInstance, questBase);
+            return MeetsConditionFunctions[condition.GetType()](condition, player, eventInstance, questBase, npcEnemy);
         }
 
 
@@ -68,8 +68,8 @@ namespace Intersect.Server.Entities.Events
                     Delegate.CreateDelegate(typeof(HandleConditionBool<TCondition>), target, methodInfo) as
                         HandleConditionBool<TCondition>;
 
-            return (Condition condition, Player player, Event eventInstance, QuestBase questBase) => stronglyTyped(
-                (TCondition)condition, player, eventInstance, questBase
+            return (Condition condition, Player player, Event eventInstance, QuestBase questBase, Npc npcEnemy) => stronglyTyped(
+                (TCondition)condition, player, eventInstance, questBase, npcEnemy
             );
 
             throw new ArgumentException($"Unsupported condition handler return type '{methodInfo.ReturnType.FullName}'.");

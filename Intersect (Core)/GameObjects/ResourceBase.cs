@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Intersect.GameObjects.Conditions;
 using Intersect.GameObjects.Events;
 using Intersect.Models;
-
+using Intersect.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 using Newtonsoft.Json;
@@ -35,10 +35,11 @@ namespace Intersect.GameObjects
 
     public class ResourceBase : DatabaseObject<ResourceBase>, IFolderable
     {
-
         [NotMapped] public List<ResourceDrop> Drops = new List<ResourceDrop>();
 
         [NotMapped] public ConditionLists HarvestingRequirements = new ConditionLists();
+
+        [NotMapped] public int[] ElementalTypes = new int[MAX_ELEMENTAL_TYPES];
 
         public string CannotHarvestMessage { get; set; } = "";
 
@@ -92,6 +93,14 @@ namespace Intersect.GameObjects
             set => HarvestingRequirements.Load(value);
         }
 
+        [Column("ElementalTypes")]
+        [JsonIgnore]
+        public string JsonElementalTypes
+        {
+            get => DatabaseUtils.SaveIntArray(ElementalTypes, MAX_ELEMENTAL_TYPES);
+            set => ElementalTypes = DatabaseUtils.LoadIntArray(value, MAX_ELEMENTAL_TYPES);
+        }
+
         [Column("Event")]
         [JsonProperty]
         public Guid EventId { get; set; }
@@ -119,6 +128,8 @@ namespace Intersect.GameObjects
 
         public bool WalkableBefore { get; set; }
 
+        public bool Undashable { get; set; }
+
         /// <inheritdoc />
         public string Folder { get; set; } = "";
 
@@ -130,6 +141,10 @@ namespace Intersect.GameObjects
             public Guid ItemId;
 
             public int Quantity;
+
+            public bool Random = false;
+
+            public bool Iterative = false;
 
         }
 

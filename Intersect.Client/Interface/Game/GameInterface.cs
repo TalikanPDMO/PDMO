@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Intersect.Client.Core;
+using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Game.Bag;
@@ -12,9 +13,11 @@ using Intersect.Client.Interface.Game.Hotbar;
 using Intersect.Client.Interface.Game.Inventory;
 using Intersect.Client.Interface.Game.Shop;
 using Intersect.Client.Interface.Game.Trades;
+using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.Network.Packets.Server;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -47,11 +50,17 @@ namespace Intersect.Client.Interface.Game
 
         private PictureWindow mPictureWindow;
 
+        public PopupWindow mPopupWindow { get; set; }
+
+        private ShowPopupPacket mCurrentPopup = null;
+
         private QuestOfferWindow mQuestOfferWindow;
 
         private ShopWindow mShopWindow;
 
         private MapItemWindow mMapItemWindow;
+
+        private ImagePanel mPlayerRunIcon;
 
         private bool mShouldCloseBag;
 
@@ -82,6 +91,8 @@ namespace Intersect.Client.Interface.Game
         private bool mShouldUpdateGuildList;
 
         private bool mShouldHideGuildWindow;
+
+        private bool mShouldUpdateStadiumInfos;
 
         private string mTradingTarget;
 
@@ -118,10 +129,18 @@ namespace Intersect.Client.Interface.Game
                 mPictureWindow = new PictureWindow(GameCanvas);
             }
 
+            if (mPopupWindow == null)
+            {
+                mPopupWindow = new PopupWindow(GameCanvas);
+            }
+
             mEventWindow = new EventWindow(GameCanvas);
             mQuestOfferWindow = new QuestOfferWindow(GameCanvas);
             mDebugMenu = new DebugMenu(GameCanvas);
             mMapItemWindow = new MapItemWindow(GameCanvas);
+            mPlayerRunIcon = new ImagePanel(GameCanvas, "PlayerRunIcon");
+            mPlayerRunIcon.SetToolTipText(Strings.EntityBox.sprinttip);
+            mPlayerRunIcon.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
         }
 
         //Chatbox
@@ -140,6 +159,12 @@ namespace Intersect.Client.Interface.Game
         public void NotifyUpdateGuildList()
         {
             mShouldUpdateGuildList = true;
+        }
+
+        //Stadium Window
+        public void NotifyUpdateStadiumInfos()
+        {
+            mShouldUpdateStadiumInfos = true;
         }
 
         public void HideGuildWindow()
@@ -339,12 +364,14 @@ namespace Intersect.Client.Interface.Game
             GameMenu?.Update(mShouldUpdateQuestLog);
             mShouldUpdateQuestLog = false;
             Hotbar?.Update();
+            mPlayerRunIcon.RenderColor = Globals.Me.Running ? new Color(255, 255, 255, 255) : new Color(100, 255, 255, 255);
             mDebugMenu?.Update();
             EscapeMenu.Update();
             PlayerBox?.Update();
             mMapItemWindow.Update();
             AnnouncementWindow?.Update();
             mPictureWindow?.Update();
+            mPopupWindow?.Update();
 
             if (Globals.QuestOffers.Count > 0)
             {
@@ -370,6 +397,24 @@ namespace Intersect.Client.Interface.Game
                 if (mPictureWindow != null)
                 {
                     mPictureWindow.Close();
+                }
+            }
+
+            if (Globals.Popups.Count > 0)
+            {
+                var popup = Globals.Popups[0];
+                if (popup != mCurrentPopup)
+                {
+                    mCurrentPopup = popup;
+                    mPopupWindow.Setup(popup.Picture, popup.Title, popup.Text, popup.Opacity,
+                       popup.Face, popup.PopupLayout);
+                }  
+            }
+            else
+            {
+                if (mPopupWindow != null)
+                {
+                    mPopupWindow.Close();
                 }
             }
 
@@ -496,6 +541,12 @@ namespace Intersect.Client.Interface.Game
                 mShouldUpdateGuildList = false;
             }
 
+            if (mShouldUpdateStadiumInfos)
+            {
+                GameMenu.UpdateStadiumInfos();
+                mShouldUpdateStadiumInfos = false;
+            }
+
             if (mShouldHideGuildWindow)
             {
                 GameMenu.HideGuildWindow();
@@ -589,6 +640,13 @@ namespace Intersect.Client.Interface.Game
             if (mShopWindow != null && mShopWindow.IsVisible())
             {
                 CloseShop();
+                closedWindows = true;
+            }
+
+            if (Globals.Me.ClickedStatus != null)
+            {
+                Globals.Me.ClickedStatus.mDescWindow?.Dispose();
+                Globals.Me.ClickedStatus = null;
                 closedWindows = true;
             }
 

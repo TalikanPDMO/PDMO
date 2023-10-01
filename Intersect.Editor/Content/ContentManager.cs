@@ -87,6 +87,8 @@ namespace Intersect.Editor.Content
 
         static IDictionary<string, object> sSoundDict = new Dictionary<string, object>();
 
+        static IDictionary<string, SpriteFont> sFontDict = new Dictionary<string, SpriteFont>();
+
         static IDictionary<string, Texture> sSpellDict = new Dictionary<string, Texture>();
 
         static IDictionary<string, Texture> sTilesetDict = new Dictionary<string, Texture>();
@@ -100,6 +102,8 @@ namespace Intersect.Editor.Content
         public static string[] SoundNames => sSoundDict?.Keys.ToArray();
 
         public static string[] SmartSortedSoundNames => SmartSort(SoundNames);
+
+        public static string GraphResFolder = "resources";
 
         //Resource Downloader
         public static void CheckForResources()
@@ -139,6 +143,7 @@ namespace Intersect.Editor.Content
             LoadShaders();
             LoadSounds();
             LoadMusic();
+            LoadFonts();
         }
 
         public static void Update()
@@ -153,27 +158,27 @@ namespace Intersect.Editor.Content
         public static void LoadTextureGroup(string directory, IDictionary<string, Texture> dict)
         {
             dict.Clear();
-            if (!Directory.Exists("resources/" + directory))
+            if (!Directory.Exists(GraphResFolder + "/" + directory))
             {
-                Directory.CreateDirectory("resources/" + directory);
+                Directory.CreateDirectory(GraphResFolder + "/" + directory);
             }
 
-            var items = Directory.GetFiles("resources/" + directory, "*.png");
+            var items = Directory.GetFiles(GraphResFolder + "/" + directory, "*.png");
             for (var i = 0; i < items.Length; i++)
             {
-                var filename = items[i].Replace("resources/" + directory + "\\", "").ToLower();
-                dict.Add(filename, new Texture("resources/" + directory + "/" + filename));
+                var filename = items[i].Replace(GraphResFolder + "/" + directory + "\\", "").ToLower();
+                dict.Add(filename, new Texture(GraphResFolder + "/" + directory + "/" + filename));
             }
         }
 
         public static void LoadTilesets()
         {
-            if (!Directory.Exists("resources/tilesets"))
+            if (!Directory.Exists(GraphResFolder + "/tilesets"))
             {
-                Directory.CreateDirectory("resources/tilesets");
+                Directory.CreateDirectory(GraphResFolder + "/tilesets");
             }
 
-            var tilesets = Directory.GetFiles("resources/tilesets", "*.png");
+            var tilesets = Directory.GetFiles(GraphResFolder + "/tilesets", "*.png");
             var tilesetWarning = false;
             var suppressTilesetWarning = Preferences.LoadPreference("SuppressTextureWarning");
             if (suppressTilesetWarning != "" && Convert.ToBoolean(suppressTilesetWarning))
@@ -188,7 +193,7 @@ namespace Intersect.Editor.Content
                 var tilesetBaseList = TilesetBase.Names;
                 for (var i = 0; i < tilesets.Length; i++)
                 {
-                    tilesets[i] = tilesets[i].Replace("resources/tilesets\\", "");
+                    tilesets[i] = tilesets[i].Replace(GraphResFolder + "/tilesets\\", "");
                     if (tilesetBaseList.Length > 0)
                     {
                         for (var x = 0; x < tilesetBaseList.Length; x++)
@@ -219,11 +224,11 @@ namespace Intersect.Editor.Content
             for (var i = 0; i < TilesetBase.Lookup.Count; i++)
             {
                 var tileset = TilesetBase.Get(TilesetBase.IdFromList(i));
-                if (File.Exists("resources/tilesets/" + tileset.Name))
+                if (File.Exists(GraphResFolder + "/tilesets/" + tileset.Name))
                 {
                     try
                     {
-                        sTilesetDict[tileset.Name.ToLower()] = new Texture("resources/tilesets/" + tileset.Name);
+                        sTilesetDict[tileset.Name.ToLower()] = new Texture(GraphResFolder + "/tilesets/" + tileset.Name);
                         TilesetTextures.Add(sTilesetDict[tileset.Name.ToLower()]);
                     }
                     catch (Exception exception)
@@ -241,7 +246,7 @@ namespace Intersect.Editor.Content
 
                     if (!tilesetWarning)
                     {
-                        using (var img = Image.FromFile("resources/tilesets/" + tileset.Name))
+                        using (var img = Image.FromFile(GraphResFolder + "/tilesets/" + tileset.Name))
                         {
                             if (img.Width > 2048 || img.Height > 2048)
                             {
@@ -363,6 +368,24 @@ namespace Intersect.Editor.Content
             {
                 var filename = items[i].Replace("resources/" + "sounds" + "\\", "").ToLower();
                 sSoundDict.Add(filename, null); //TODO Sound Playback
+            }
+        }
+
+        public static void LoadFonts()
+        {
+            sFontDict.Clear();
+            var dir = "resources/" + "fonts";
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            var items = Directory.GetFiles(dir, "*.xnb");
+            for (var i = 0; i < items.Length; i++)
+            {
+                var filename = items[i].Replace("resources/" + "fonts" + "\\", "").ToLower();
+                var font = sContentManger.Load<SpriteFont>(Path.Combine(dir, RemoveExtension(filename)));
+                sFontDict.Add(filename, font);
             }
         }
 
@@ -520,6 +543,23 @@ namespace Intersect.Editor.Content
             }
 
             return sSoundDict.TryGetValue(name.ToLower(), out var sound) ? sound : null;
+        }
+
+        public static SpriteFont GetFont(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                Log.Error("Tried to load font with null name.");
+
+                return null;
+            }
+
+            if (sFontDict == null)
+            {
+                return null;
+            }
+
+            return sFontDict.TryGetValue(name.ToLower(), out var font) ? font : null;
         }
 
         public static string[] GetSmartSortedTextureNames(TextureType type)

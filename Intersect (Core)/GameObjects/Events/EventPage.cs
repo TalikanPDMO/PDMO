@@ -50,6 +50,8 @@ namespace Intersect.GameObjects.Events
 
         public bool Passable { get; set; }
 
+        public bool CollideOnDash { get; set; }
+
         public EventTrigger Trigger { get; set; } = EventTrigger.ActionButton;
 
         public CommonEventTrigger CommonTrigger { get; set; } = CommonEventTrigger.None;

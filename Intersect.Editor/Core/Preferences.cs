@@ -12,26 +12,34 @@ namespace Intersect.Editor
         {
             var regkey = Registry.CurrentUser.OpenSubKey("Software", true);
 
-            regkey.CreateSubKey("IntersectEditor");
-            regkey = regkey.OpenSubKey("IntersectEditor", true);
-            regkey.CreateSubKey(ClientConfiguration.Instance.Host + ":" + ClientConfiguration.Instance.Port);
-            regkey = regkey.OpenSubKey(
-                ClientConfiguration.Instance.Host + ":" + ClientConfiguration.Instance.Port, true
-            );
-
+            regkey.CreateSubKey("PDMO");
+            regkey = regkey.OpenSubKey("PDMO", true);
+            var editorkey = "PDMOEditor";
+            if (ClientConfiguration.Instance.Host == "localhost" || ClientConfiguration.Instance.Host == "127.0.0.1")
+            {
+                editorkey += "Local";
+            }
+            regkey.CreateSubKey(editorkey);
+            regkey = regkey.OpenSubKey(editorkey, true);
             regkey.SetValue(key, value);
         }
 
         public static string LoadPreference(string key)
         {
             var regkey = Registry.CurrentUser.OpenSubKey("Software", false);
-            regkey = regkey.OpenSubKey("IntersectEditor", false);
+            regkey = regkey.OpenSubKey("PDMO", false);
             if (regkey == null)
             {
                 return "";
             }
 
-            regkey = regkey.OpenSubKey(ClientConfiguration.Instance.Host + ":" + ClientConfiguration.Instance.Port);
+            var editorkey = "PDMOEditor";
+            if (ClientConfiguration.Instance.Host == "localhost" || ClientConfiguration.Instance.Host == "127.0.0.1")
+            {
+                editorkey += "Local";
+            }
+
+            regkey = regkey.OpenSubKey(editorkey);
             if (regkey == null)
             {
                 return "";

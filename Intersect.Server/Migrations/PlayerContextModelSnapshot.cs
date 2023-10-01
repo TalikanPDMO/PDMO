@@ -288,6 +288,9 @@ namespace Intersect.Server.Migrations
 
                     b.Property<int>("TaskProgress");
 
+                    b.Property<string>("TasksProgressJson")
+                        .HasColumnName("TasksProgress");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PlayerId");
@@ -426,6 +429,10 @@ namespace Intersect.Server.Migrations
                         .HasColumnName("SpellCooldowns");
 
                     b.Property<string>("Sprite");
+
+                    b.Property<int>("StadiumLosses");
+
+                    b.Property<int>("StadiumWins");
 
                     b.Property<int>("StatPoints");
 
