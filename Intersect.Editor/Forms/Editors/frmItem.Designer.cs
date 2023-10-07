@@ -224,6 +224,7 @@ namespace Intersect.Editor.Forms.Editors
             // Active Equipment 
             this.grpActiveEquipment = new DarkUI.Controls.DarkGroupBox();
             this.cmbActiveEquipment = new DarkUI.Controls.DarkComboBox();
+            this.chkActiveEquipmentUseActiveSpellCooldown = new DarkUI.Controls.DarkCheckBox();
 
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
@@ -2684,7 +2685,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpell.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpSpell.Location = new System.Drawing.Point(2, 436);
             this.grpSpell.Name = "grpSpell";
-            this.grpSpell.Size = new System.Drawing.Size(217, 127);
+            this.grpSpell.Size = new System.Drawing.Size(217, 140);
             this.grpSpell.TabIndex = 13;
             this.grpSpell.TabStop = false;
             this.grpSpell.Text = "Spell";
@@ -3068,13 +3069,12 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpActiveEquipment.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpActiveEquipment.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            //this.grpActiveEquipment.Controls.Add(this.nudNextSpellChance);
-            //this.grpActiveEquipment.Controls.Add(this.chkReUseValues);
             this.grpActiveEquipment.Controls.Add(this.cmbActiveEquipment);
+            this.grpActiveEquipment.Controls.Add(this.chkActiveEquipmentUseActiveSpellCooldown);
             this.grpActiveEquipment.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpActiveEquipment.Location = new System.Drawing.Point(300, 20);
             this.grpActiveEquipment.Name = "grpActiveEquipment";
-            this.grpActiveEquipment.Size = new System.Drawing.Size(234, 62);
+            this.grpActiveEquipment.Size = new System.Drawing.Size(234, 104);//(324, 62)
             this.grpActiveEquipment.TabIndex = 54;
             this.grpActiveEquipment.TabStop = false;
             this.grpActiveEquipment.Text = "Active Spell";
@@ -3102,6 +3102,21 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbActiveEquipment.Text = "None";
             this.cmbActiveEquipment.TextPadding = new System.Windows.Forms.Padding(2);
             this.cmbActiveEquipment.SelectedIndexChanged += new System.EventHandler(this.cmbActiveEquipment_SelectedIndexChanged);
+
+            //TODO chkActiveEquipmentUseActiveSpellCooldown
+            //
+            // chkActiveEquipmentUseActiveSpellCooldown
+            //
+            this.chkActiveEquipmentUseActiveSpellCooldown.AutoSize = true;
+            this.chkActiveEquipmentUseActiveSpellCooldown.Checked = true;
+            this.chkActiveEquipmentUseActiveSpellCooldown.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkActiveEquipmentUseActiveSpellCooldown.Location = new System.Drawing.Point(15, 62);
+            this.chkActiveEquipmentUseActiveSpellCooldown.Name = "UseSpellCooldown";
+            this.chkActiveEquipmentUseActiveSpellCooldown.Size = new System.Drawing.Size(107, 17);
+            this.chkActiveEquipmentUseActiveSpellCooldown.TabIndex = 67;
+            this.chkActiveEquipmentUseActiveSpellCooldown.Text = "Use Active Spell Cooldown?";
+            this.chkActiveEquipmentUseActiveSpellCooldown.CheckedChanged += new System.EventHandler(this.chkUseActiveSpellCooldown);
+
         }
 
         #endregion
@@ -3295,6 +3310,8 @@ namespace Intersect.Editor.Forms.Editors
         // Active Equipment
         private DarkGroupBox grpActiveEquipment;
         private DarkComboBox cmbActiveEquipment;
+        // Cooldown checkbox
+        private DarkCheckBox chkActiveEquipmentUseActiveSpellCooldown;
 
     }
 }

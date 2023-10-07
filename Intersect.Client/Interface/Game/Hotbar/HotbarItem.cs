@@ -656,7 +656,7 @@ namespace Intersect.Client.Interface.Game.Hotbar
 
                             if (bestIntersectIndex > -1 && bestIntersectIndex != mYindex)
                             {
-                                // unable to switch  with the active spell
+                                // unable to switch with the active spell
                                 if (mYindex == 9 || bestIntersectIndex == 9)
                                 {
                                     mDragIcon.Dispose();

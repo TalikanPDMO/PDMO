@@ -158,6 +158,12 @@ namespace Intersect.GameObjects
         /// </summary>
         public bool IgnoreCooldownReduction { get; set; } = false;
 
+        /// <summary>
+        /// Configured the cooldown use for the active spell with the spell cooldown
+        /// </summary>
+        public bool UseActiveSpellCooldown { get; set; } = false;
+
+
         public int Damage { get; set; }
 
         public int DamageType { get; set; }

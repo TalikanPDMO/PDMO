@@ -2207,7 +2207,7 @@ namespace Intersect.Server.Entities
             var toSlotClone = toSlot.Clone();
             toSlot.Set(fromSlot);
             fromSlot.Set(toSlotClone);
-
+            
             PacketSender.SendInventoryItemUpdate(this, fromSlotIndex);
             PacketSender.SendInventoryItemUpdate(this, toSlotIndex);
             EquipmentProcessItemSwap(fromSlotIndex, toSlotIndex);
@@ -4808,6 +4808,7 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
+            // item isn't already in cooldown
             if (!ItemCooldowns.ContainsKey(itemId) ||
                 ItemCooldowns[itemId] < Globals.Timing.MillisecondsUTC)
             {

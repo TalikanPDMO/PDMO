@@ -1297,6 +1297,11 @@ namespace Intersect.Editor.Forms.Editors
             }
         }
         
+        private void chkUseActiveSpellCooldown(object sender, EventArgs e)
+        {
+            mEditorItem.UseActiveSpellCooldown = chkActiveEquipmentUseActiveSpellCooldown.Checked;
+        }
+
         private void txtCannotUse_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.CannotUseMessage = txtCannotUse.Text;
