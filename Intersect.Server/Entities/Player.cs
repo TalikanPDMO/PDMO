@@ -4804,18 +4804,29 @@ namespace Intersect.Server.Entities
             }
             var test = ItemCooldowns;
 
+
             if (!CanSpellCast(spell, target, true))
             {
                 return;
             }
             // item isn't already in cooldown
-            if (!ItemCooldowns.ContainsKey(itemId) ||
-                ItemCooldowns[itemId] < Globals.Timing.MillisecondsUTC)
+            if ((!ItemCooldowns.ContainsKey(itemId) ||
+                ItemCooldowns[itemId] < Globals.Timing.MillisecondsUTC))
             {
                 if (CastTime == 0)
                 {
-                    ItemCooldowns[itemId] = Globals.Timing.MillisecondsUTC + itemWithActiveSpell.Cooldown;
-                    PacketSender.SendItemCooldown(this, itemId);
+                    if (itemWithActiveSpell.UseActiveSpellCooldown)
+                    {
+                        SpellCooldowns[spellId] = Globals.Timing.MillisecondsUTC + spell.CooldownDuration;
+                        ItemCooldowns[itemId] = Globals.Timing.MillisecondsUTC + spell.CooldownDuration;
+                        PacketSender.SendItemCooldown(this, itemId);
+                        PacketSender.SendSpellCooldown(this, spellId);
+                    }
+                    else
+                    {
+                        ItemCooldowns[itemId] = Globals.Timing.MillisecondsUTC + itemWithActiveSpell.Cooldown;
+                        PacketSender.SendItemCooldown(this, itemId);
+                    }
 
                     var info = ItemCooldowns[itemId] < Globals.Timing.MillisecondsUTC;
                     CastTime = Globals.Timing.Milliseconds + spell.CastDuration;

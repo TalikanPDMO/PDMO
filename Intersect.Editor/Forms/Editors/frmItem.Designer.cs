@@ -3103,12 +3103,12 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbActiveEquipment.TextPadding = new System.Windows.Forms.Padding(2);
             this.cmbActiveEquipment.SelectedIndexChanged += new System.EventHandler(this.cmbActiveEquipment_SelectedIndexChanged);
 
-            //TODO chkActiveEquipmentUseActiveSpellCooldown
+            //
             //
             // chkActiveEquipmentUseActiveSpellCooldown
             //
             this.chkActiveEquipmentUseActiveSpellCooldown.AutoSize = true;
-            this.chkActiveEquipmentUseActiveSpellCooldown.Checked = true;
+            this.chkActiveEquipmentUseActiveSpellCooldown.Checked = false;
             this.chkActiveEquipmentUseActiveSpellCooldown.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkActiveEquipmentUseActiveSpellCooldown.Location = new System.Drawing.Point(15, 62);
             this.chkActiveEquipmentUseActiveSpellCooldown.Name = "UseSpellCooldown";
