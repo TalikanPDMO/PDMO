@@ -214,6 +214,7 @@
     <Compile Include="Configuration\IConfiguration.cs" />
     <Compile Include="Configuration\ConfigurationHelper.cs" />
     <Compile Include="Config\PvpStadiumOption.cs" />
+    <Compile Include="Config\ClashOfElementOptions.cs" />
     <Compile Include="Config\ChatOptions.cs" />
     <Compile Include="Config\Guilds\GuildOptions.cs" />
     <Compile Include="Config\Guilds\GuildPermissions.cs" />
@@ -273,6 +274,7 @@
     <Compile Include="Enums\AttackType.cs" />
     <Compile Include="Enums\ElementalType.cs" />
     <Compile Include="Enums\PvpStadiumState.cs" />
+    <Compile Include="Enums\ClashOfElementsState.cs" />
     <Compile Include="Enums\EventTargetType.cs" />
     <Compile Include="Enums\PopupLayoutParams.cs" />
     <Compile Include="Enums\GuildMemberUpdateActions.cs" />

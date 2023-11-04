@@ -79,6 +79,9 @@ namespace Intersect
         public LoggingOptions Logging = new LoggingOptions();
 
         [JsonProperty("PvpStadium")] public PvpStadiumOption PvpStadiumOpts = new PvpStadiumOption();
+        
+        [JsonProperty("ClashOfElements")] public ClashOfElementOptions ClashOfElementsOpts = new ClashOfElementOptions();
+
 
         public static Options Instance { get; private set; }
 
@@ -181,6 +184,8 @@ namespace Intersect
         public static bool AdminOnly { get => Instance._adminOnly; set => Instance._adminOnly = value; }
 
         public static PvpStadiumOption PvpStadium => Instance.PvpStadiumOpts;
+
+        public static ClashOfElementOptions ClashOfElements => Instance.ClashOfElementsOpts;
 
         public static bool BlockClientRegistrations
         {

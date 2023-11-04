@@ -200,6 +200,7 @@ namespace Intersect.Server.Core
                         Time.Update();
                         ExpBoost.Update();
                         PvpStadiumUnit.Update();
+                        //ClashOfElementsUnit.Update();
                         swCps++;
 
                         var endTime = Globals.Timing.Milliseconds;
