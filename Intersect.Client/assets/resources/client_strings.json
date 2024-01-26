@@ -410,24 +410,47 @@
     "title": "Inventaire",
     "InventoryTabTooltips": {
       "0": "Général",
-      "1": "Trier par Projectiles",
-      "2": "Trier par Consommables",
-      "3": "Trier par Equipements",
-      "4": "Trier par Autres"
+      "1": "Filtrer par Projectiles",
+      "2": "Filtrer par Consommables",
+      "3": "Filtrer par Equipements",
+      "4": "Filtrer par Autres"
     }
   },
   "ItemDesc": {
-    "bonuses": "Bonus:",
-    "damage": "Dégâts: {00}",
+    "bonuses": "Statistiques :",
+    "additionaleffects": "Caractéristiques :",
+    "quantity": "x{00}",
+    "noprice": "Prix : Aucun",
+    "price": "Prix : {00} Poké",
+    "category": "[{00}]",
+    "cooldown": "Délai: {00}s",
+    "typeprojectile": "Projectile",
+    "typeconsumable": "Consommable",
+    "damage": "Dégâts: {00} ({01})",
+    "damagetypes": {
+      "0": "Physique",
+      "1": "Magic",
+      "2": "Brût",
+      "3": "Fixe"
+    },
+    "noscaling": "Influence : Aucune",
+    "scaling": "Influence: {00} ({01}%)",
+    "nocritical": "Coup Critique impossible",
+    "critical": "Critique: {00}% (Dégâts x{01})",
+    "atkspeedstatic": "Vitesse d'Atq: {00}s",
+    "atkspeedperc": "Vitesse d'Atq: {00}% du porteur",
+    "rangemelee": "Portée: Corps-à-Corps",
+    "rangeproj": "Portée: {00} (Projectile)",
+    "rangetargeted": "Portée: {00} (Ciblé)",
+    "usage": "Utilisation :",
     "desc": "{00}",
-    "effect": "Effet: {00}% {01}",
     "effects": {
-      "0": "Réduction de délai",
-      "1": "Vol de vie",
-      "2": "Ténacité",
-      "3": "Chance",
-      "4": "Augmente XP",
-      "5": "% Allure"
+      "0": "-{00}% Délais",
+      "1": "+{00}% Vol de vie",
+      "2": "+{00}% Ténacité",
+      "3": "+{00}% Chance",
+      "4": "+{00}% Gain d'XP",
+      "5": "-{00}% Vitesse d'Atq."
     },
     "itemtypes": {
       "0": "Normal",
@@ -438,14 +461,22 @@
       "5": "Spécial",
       "6": "Sac"
     },
-    "prereq": "Prérequis:",
-    "rangestat": "{00} à {01}",
+    "prereq": "Prérequis: {00}",
+    "rangestat": "+{00} à +{01} ",
     "stats": {
-      "0": "Attaque: {00}",
-      "1": "Attaque Spé.: {00}",
-      "2": "Défense: {00}",
-      "3": "Défense Spé.: {00}",
-      "4": "Vitesse: {00}"
+      "0": "{00}Attaque{01}",
+      "1": "{00}Attaque Spé.{01}",
+      "2": "{00}Défense{01}",
+      "3": "{00}Défense Spé.{01}",
+      "4": "{00}Vitesse{01}"
+    },
+    "restore": "Restaure {00} ",
+    "gain": "Gagne {00} ",
+    "lose": "Retire {00} ",
+    "consumabletypes": {
+      "0": "{00}PV{01}",
+      "1": "{00}PM{01}",
+      "2": "{00}XP{01}"
     },
     "twohand": "2H",
     "rarity": {
@@ -457,8 +488,12 @@
       "5": "Légendaire"
     },
     "vitals": {
-      "0": "PV: {00}",
-      "1": "PM: {00}"
+      "0": "{00}PV Max{01}",
+      "1": "{00}PM Max{01}"
+    },
+    "vitalsregen": {
+      "0": "+{00}% de Régénération de PV",
+      "1": "+{00}% de Régénération de PM"
     }
   },
   "Keys": {
@@ -897,7 +932,8 @@
     "cooldown": "{00}s",
     "forgetspell": "Oublier la Compétence",
     "forgetspellprompt": "Êtes-vous sûr de vouloir oublier {00}?",
-    "title": "Compétences"
+    "title": "Compétences",
+    "lvlspell":  "Niveau {00}"
   },
   "Trading": {
     "accept": "Accepter",

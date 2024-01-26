@@ -41,6 +41,8 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
+            this.lblInventoryTab = new System.Windows.Forms.Label();
+            this.cmbInventoryTab = new DarkUI.Controls.DarkComboBox();
             this.lblToLoss = new System.Windows.Forms.Label();
             this.nudMaxLossOnDeath = new DarkUI.Controls.DarkNumericUpDown();
             this.chkIsLossPercentage = new DarkUI.Controls.DarkCheckBox();
@@ -192,6 +194,8 @@ namespace Intersect.Editor.Forms.Editors
             this.lblProjectile = new System.Windows.Forms.Label();
             this.lblDamage = new System.Windows.Forms.Label();
             this.grpEvent = new DarkUI.Controls.DarkGroupBox();
+            this.lblEventUseDesc = new System.Windows.Forms.Label();
+            this.txtEventUseDesc = new DarkUI.Controls.DarkTextBox();
             this.chkSingleUseEvent = new DarkUI.Controls.DarkCheckBox();
             this.cmbEvent = new DarkUI.Controls.DarkComboBox();
             this.grpConsumable = new DarkUI.Controls.DarkGroupBox();
@@ -223,8 +227,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.toolStripItemRelations = new System.Windows.Forms.ToolStripButton();
-            this.lblInventoryTab = new System.Windows.Forms.Label();
-            this.cmbInventoryTab = new DarkUI.Controls.DarkComboBox();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxLossOnDeath)).BeginInit();
@@ -426,6 +428,42 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.TabIndex = 2;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
+            // 
+            // lblInventoryTab
+            // 
+            this.lblInventoryTab.AutoSize = true;
+            this.lblInventoryTab.Location = new System.Drawing.Point(274, 170);
+            this.lblInventoryTab.Name = "lblInventoryTab";
+            this.lblInventoryTab.Size = new System.Drawing.Size(76, 13);
+            this.lblInventoryTab.TabIndex = 109;
+            this.lblInventoryTab.Text = "Inventory Tab:";
+            // 
+            // cmbInventoryTab
+            // 
+            this.cmbInventoryTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbInventoryTab.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbInventoryTab.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbInventoryTab.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbInventoryTab.DrawDropdownHoverOutline = false;
+            this.cmbInventoryTab.DrawFocusRectangle = false;
+            this.cmbInventoryTab.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbInventoryTab.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbInventoryTab.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbInventoryTab.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbInventoryTab.FormattingEnabled = true;
+            this.cmbInventoryTab.Items.AddRange(new object[] {
+            "None",
+            "Projectiles",
+            "Consumable",
+            "Equipments",
+            "Others"});
+            this.cmbInventoryTab.Location = new System.Drawing.Point(351, 167);
+            this.cmbInventoryTab.Name = "cmbInventoryTab";
+            this.cmbInventoryTab.Size = new System.Drawing.Size(142, 21);
+            this.cmbInventoryTab.TabIndex = 108;
+            this.cmbInventoryTab.Text = "None";
+            this.cmbInventoryTab.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbInventoryTab.SelectedIndexChanged += new System.EventHandler(this.cmbInventoryTab_SelectedIndexChanged);
             // 
             // lblToLoss
             // 
@@ -2574,16 +2612,39 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpEvent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEvent.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEvent.Controls.Add(this.lblEventUseDesc);
+            this.grpEvent.Controls.Add(this.txtEventUseDesc);
             this.grpEvent.Controls.Add(this.chkSingleUseEvent);
             this.grpEvent.Controls.Add(this.cmbEvent);
             this.grpEvent.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpEvent.Location = new System.Drawing.Point(6, 316);
             this.grpEvent.Name = "grpEvent";
-            this.grpEvent.Size = new System.Drawing.Size(200, 65);
+            this.grpEvent.Size = new System.Drawing.Size(305, 149);
             this.grpEvent.TabIndex = 42;
             this.grpEvent.TabStop = false;
             this.grpEvent.Text = "Event";
             this.grpEvent.Visible = false;
+            // 
+            // lblEventUseDesc
+            // 
+            this.lblEventUseDesc.AutoSize = true;
+            this.lblEventUseDesc.Location = new System.Drawing.Point(8, 68);
+            this.lblEventUseDesc.Name = "lblEventUseDesc";
+            this.lblEventUseDesc.Size = new System.Drawing.Size(97, 13);
+            this.lblEventUseDesc.TabIndex = 31;
+            this.lblEventUseDesc.Text = "Usage Description:";
+            // 
+            // txtEventUseDesc
+            // 
+            this.txtEventUseDesc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtEventUseDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtEventUseDesc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtEventUseDesc.Location = new System.Drawing.Point(6, 85);
+            this.txtEventUseDesc.Multiline = true;
+            this.txtEventUseDesc.Name = "txtEventUseDesc";
+            this.txtEventUseDesc.Size = new System.Drawing.Size(293, 58);
+            this.txtEventUseDesc.TabIndex = 30;
+            this.txtEventUseDesc.TextChanged += new System.EventHandler(this.txtEventUseDesc_TextChanged);
             // 
             // chkSingleUseEvent
             // 
@@ -2612,7 +2673,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbEvent.FormattingEnabled = true;
             this.cmbEvent.Location = new System.Drawing.Point(9, 15);
             this.cmbEvent.Name = "cmbEvent";
-            this.cmbEvent.Size = new System.Drawing.Size(185, 21);
+            this.cmbEvent.Size = new System.Drawing.Size(290, 21);
             this.cmbEvent.TabIndex = 17;
             this.cmbEvent.Text = null;
             this.cmbEvent.TextPadding = new System.Windows.Forms.Padding(2);
@@ -2814,11 +2875,11 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.pnlContainer.AutoScroll = true;
             this.pnlContainer.Controls.Add(this.grpEquipment);
-            this.pnlContainer.Controls.Add(this.grpEvent);
             this.pnlContainer.Controls.Add(this.grpGeneral);
             this.pnlContainer.Controls.Add(this.grpSpell);
             this.pnlContainer.Controls.Add(this.grpBags);
             this.pnlContainer.Controls.Add(this.grpConsumable);
+            this.pnlContainer.Controls.Add(this.grpEvent);
             this.pnlContainer.Location = new System.Drawing.Point(221, 34);
             this.pnlContainer.Name = "pnlContainer";
             this.pnlContainer.Size = new System.Drawing.Size(760, 688);
@@ -3007,42 +3068,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemRelations.Size = new System.Drawing.Size(23, 22);
             this.toolStripItemRelations.Text = "Relations";
             this.toolStripItemRelations.Click += new System.EventHandler(this.toolStripItemRelations_Click);
-            // 
-            // lblInventoryTab
-            // 
-            this.lblInventoryTab.AutoSize = true;
-            this.lblInventoryTab.Location = new System.Drawing.Point(274, 170);
-            this.lblInventoryTab.Name = "lblInventoryTab";
-            this.lblInventoryTab.Size = new System.Drawing.Size(76, 13);
-            this.lblInventoryTab.TabIndex = 109;
-            this.lblInventoryTab.Text = "Inventory Tab:";
-            // 
-            // cmbInventoryTab
-            // 
-            this.cmbInventoryTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbInventoryTab.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbInventoryTab.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbInventoryTab.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbInventoryTab.DrawDropdownHoverOutline = false;
-            this.cmbInventoryTab.DrawFocusRectangle = false;
-            this.cmbInventoryTab.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbInventoryTab.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbInventoryTab.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbInventoryTab.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbInventoryTab.FormattingEnabled = true;
-            this.cmbInventoryTab.Items.AddRange(new object[] {
-            "None",
-            "Projectiles",
-            "Consumable",
-            "Equipments",
-            "Others"});
-            this.cmbInventoryTab.Location = new System.Drawing.Point(351, 167);
-            this.cmbInventoryTab.Name = "cmbInventoryTab";
-            this.cmbInventoryTab.Size = new System.Drawing.Size(142, 21);
-            this.cmbInventoryTab.TabIndex = 108;
-            this.cmbInventoryTab.Text = "None";
-            this.cmbInventoryTab.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbInventoryTab.SelectedIndexChanged += new System.EventHandler(this.cmbInventoryTab_SelectedIndexChanged);
             // 
             // FrmItem
             // 
@@ -3331,5 +3356,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkAdaptRange;
         private Label lblInventoryTab;
         private DarkComboBox cmbInventoryTab;
+        private Label lblEventUseDesc;
+        private DarkTextBox txtEventUseDesc;
     }
 }

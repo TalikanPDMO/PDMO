@@ -344,6 +344,11 @@
     <Content Include="assets\resources\gui\invtab_hovered.png" />
     <Content Include="assets\resources\gui\invtab_left.png" />
     <Content Include="assets\resources\gui\invtab_right.png" />
+    <Content Include="assets\resources\gui\itemdesc_effects.png" />
+    <Content Include="assets\resources\gui\itemdesc_large_window.png" />
+    <Content Include="assets\resources\gui\itemdesc_medium_window.png" />
+    <Content Include="assets\resources\gui\itemdesc_small_window.png" />
+    <Content Include="assets\resources\gui\itemiconcontainer.png" />
     <Content Include="assets\resources\gui\keybindings_clicked - Copie.png" />
     <Content Include="assets\resources\gui\keybindings_clicked.png" />
     <Content Include="assets\resources\gui\keybindings_hovered - Copie.png" />
@@ -351,6 +356,7 @@
     <Content Include="assets\resources\gui\keybindings_normal - Copie.png" />
     <Content Include="assets\resources\gui\keybindings_normal.png" />
     <Content Include="assets\resources\gui\layouts\game\PvpStadiumWindow.json" />
+    <Content Include="assets\resources\gui\layouts\game\ItemDescWindowMedium.json" />
     <None Include="assets\resources\gui\layouts\game\PlayerRunIcon.json" />
     <Content Include="assets\resources\gui\layouts\game\PopupWindow.json" />
     <Content Include="assets\resources\gui\layouts\game\ExpBoostsWindow.json" />
@@ -594,8 +600,8 @@
     <Content Include="assets\resources\gui\layouts\game\InputBox.json" />
     <Content Include="assets\resources\gui\layouts\game\InventoryItem.json" />
     <Content Include="assets\resources\gui\layouts\game\InventoryWindow.json" />
-    <Content Include="assets\resources\gui\layouts\game\ItemDescWindow.json" />
-    <Content Include="assets\resources\gui\layouts\game\ItemDescWindowExpanded.json" />
+    <Content Include="assets\resources\gui\layouts\game\ItemDescWindowSmall.json" />
+    <Content Include="assets\resources\gui\layouts\game\ItemDescWindowLarge.json" />
     <Content Include="assets\resources\gui\layouts\game\MapItemIcon.json" />
     <Content Include="assets\resources\gui\layouts\game\MapItemWindow.json" />
     <Content Include="assets\resources\gui\layouts\game\MenuContainer.json" />

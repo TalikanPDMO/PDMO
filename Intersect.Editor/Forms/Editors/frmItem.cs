@@ -308,6 +308,7 @@ namespace Intersect.Editor.Forms.Editors
 
             grpEvent.Text = Strings.ItemEditor.eventpanel;
             chkSingleUseEvent.Text = Strings.ItemEditor.SingleUseEvent;
+            lblEventUseDesc.Text = Strings.ItemEditor.eventusedesc;
 
             grpConsumable.Text = Strings.ItemEditor.consumeablepanel;
             lblVital.Text = Strings.ItemEditor.vital;
@@ -516,6 +517,7 @@ namespace Intersect.Editor.Forms.Editors
             {
                 cmbEvent.SelectedIndex = EventBase.ListIndex(mEditorItem.EventId) + 1;
                 chkSingleUseEvent.Checked = mEditorItem.SingleUse;
+                txtEventUseDesc.Text = mEditorItem.Use;
                 grpEvent.Visible = true;
             }
             else if (cmbType.SelectedIndex == (int) ItemTypes.Equipment)
@@ -845,6 +847,10 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbEvent_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.Event = EventBase.Get(EventBase.IdFromList(cmbEvent.SelectedIndex - 1));
+        }
+        private void txtEventUseDesc_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Use = txtEventUseDesc.Text;
         }
 
         private void cmbTeachSpell_SelectedIndexChanged(object sender, EventArgs e)

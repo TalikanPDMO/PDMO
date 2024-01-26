@@ -213,6 +213,7 @@ namespace Intersect.GameObjects
 
         public string Description { get; set; } = "";
 
+        public string Use { get; set; } = "";
         public string FemalePaperdoll { get; set; } = "";
 
         public ItemTypes ItemType { get; set; }

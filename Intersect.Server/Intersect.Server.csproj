@@ -741,6 +741,10 @@
     <Compile Include="Migrations\Game\20230909151800_AddingUltimateToSpells.designer.cs">
       <DependentUpon>20230909151800_AddingUltimateToSpells.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230914172605_AddingUseToItems.cs" />
+    <Compile Include="Migrations\Game\20230914172605_AddingUseToItems.designer.cs">
+      <DependentUpon>20230914172605_AddingUseToItems.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

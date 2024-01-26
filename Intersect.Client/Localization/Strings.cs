@@ -1009,22 +1009,81 @@ namespace Intersect.Client.Localization
         public struct ItemDesc
         {
 
-            public static LocalizedString bonuses = @"Stat Bonuses:";
+            public static LocalizedString additionaleffects = @"Additional Effects:";
 
-            public static LocalizedString damage = @"Base Damage: {00}";
+            public static LocalizedString bonuses = @"Statistic Bonuses:";
+
+            public static LocalizedString usage = @"Usage:";
+
+            public static LocalizedString quantity = @"x{00}";
+
+            public static LocalizedString noprice = @"Price: None";
+
+            public static LocalizedString price = @"Price: {00}";
+
+            public static LocalizedString category = @"[{00}]";
+
+            public static LocalizedString cooldown = @"Cooldown: {00}s";
+
+            public static LocalizedString typeprojectile = @"Projectile";
+
+            public static LocalizedString typeconsumable = @"Consumable";
+
+            public static LocalizedString restore = @"Restore {00} ";
+
+            public static LocalizedString gain = @"Gain {00} ";
+
+            public static LocalizedString lose = @"Lose {00} ";
+
+            public static Dictionary<int, LocalizedString> consumabletypes = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Health: {00} + {01}"},
+                {1, @"Mana: {00} + {01}"},
+                {2, @"Exp: {00} + {01}"}
+            };
+
+            public static LocalizedString damage = @"Base Damage: {00} ({01})";
+
+            public static Dictionary<int, LocalizedString> damagetypes = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Physical"},
+                {1, @"Magic"},
+                {2, @"True"},
+                {3, @"Fixed"}
+            };
+
+            public static LocalizedString noscaling = @"No Scaling";
+
+            public static LocalizedString scaling = @"Scaling: {00} ({01}%)";
+
+            public static LocalizedString nocritical = @"No critical possible";
+
+            public static LocalizedString critical = @"Critical chance: {00}% (Damage x{01})";
+
+            public static LocalizedString atkspeedstatic = @"Attack Speed: {00}s";
+
+            public static LocalizedString atkspeedperc = @"Attack Speed: {00}% of holder";
+
+            public static LocalizedString rangemelee = @"Range: Melee";
+
+            public static LocalizedString rangeproj = @"Range: {00} (Projectile)";
+
+            public static LocalizedString rangetargeted = @"Range: {00} (Targeted)";
+
+            public static LocalizedString nodata = @"No information";
 
             public static LocalizedString desc = @"{00}";
 
-            public static LocalizedString effect = @"Bonus Effect: {00}% {01}";
+            public static LocalizedString eventeffect = @"{00}";
 
             public static Dictionary<int, LocalizedString> effects = new Dictionary<int, LocalizedString>
             {
-                {0, @"Cooldown Reduction"},
-                {1, @"Lifesteal"},
-                {2, @"Tenacity"},
-                {3, @"Luck"},
-                {4, @"Exp Increase"},
-                {5, @"%Attack Speed" }
+                {0, @"Cooldown Reduction: {00}%"},
+                {1, @"Lifesteal: {00}%"},
+                {2, @"Tenacity: {00}%"},
+                {3, @"Luck: {00}%"},
+                {4, @"Exp Increase: {00}%"},
+                {5, @"%Attack Speed: {00}%" }
             };
 
             public static Dictionary<int, LocalizedString> itemtypes = new Dictionary<int, LocalizedString>
@@ -1038,17 +1097,17 @@ namespace Intersect.Client.Localization
                 {6, @"Bag"},
             };
 
-            public static LocalizedString prereq = @"Prerequisites:";
+            public static LocalizedString prereq = @"Prerequisites: {00}";
 
-            public static LocalizedString rangestat = @"{00} to {01}";
+            public static LocalizedString rangestat = @"+{00} to +{01} ";
 
             public static Dictionary<int, LocalizedString> stats = new Dictionary<int, LocalizedString>
             {
-                {0, @"Attack: {00}"},
-                {1, @"Ability Power: {00}"},
-                {2, @"Defense: {00}"},
-                {3, @"Magic Resist: {00}"},
-                {4, @"Speed: {00}"}
+                {0, @"Attack: {00} + {01}"},
+                {1, @"Ability Power: {00} + {01}"},
+                {2, @"Defense: {00} + {01}"},
+                {3, @"Magic Resist: {00} + {01}"},
+                {4, @"Speed: {00} + {01}"}
             };
 
             public static LocalizedString twohand = @"2H";
@@ -1065,8 +1124,14 @@ namespace Intersect.Client.Localization
 
             public static Dictionary<int, LocalizedString> vitals = new Dictionary<int, LocalizedString>
             {
-                {0, @"HP: {00}"},
-                {1, @"MP: {00}"}
+                {0, @"HP: {00} + {01}"},
+                {1, @"MP: {00} + {01}"}
+            };
+
+            public static Dictionary<int, LocalizedString> vitalsregen = new Dictionary<int, LocalizedString>
+            {
+                {0, @"HP Regeneration: {00}"},
+                {1, @"MP Regeneration: {00}"}
             };
 
         }

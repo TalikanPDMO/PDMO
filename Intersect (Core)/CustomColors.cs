@@ -226,6 +226,10 @@ namespace Intersect
                 {5, Color.Yellow},
             };
 
+            public Color PositiveStat = new Color(255, 56, 168, 103);
+
+            public Color NegativeStat = new Color(255, 242, 30, 30);
+
             public Dictionary<int, LabelColor> MapRarities = new Dictionary<int, LabelColor>() 
             {
                 { 0, new LabelColor(Color.White, Color.Black, new Color(100, 0, 0, 0)) },
