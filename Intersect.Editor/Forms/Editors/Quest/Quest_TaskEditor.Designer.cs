@@ -60,6 +60,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // 
             this.grpEditor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEditor.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEditor.Controls.Add(this.grpGatherItems);
             this.grpEditor.Controls.Add(this.btnEditTaskEvent);
             this.grpEditor.Controls.Add(this.txtStartDesc);
             this.grpEditor.Controls.Add(this.lblDesc);
@@ -67,9 +68,8 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpEditor.Controls.Add(this.cmbTaskType);
             this.grpEditor.Controls.Add(this.lblType);
             this.grpEditor.Controls.Add(this.btnCancel);
-            this.grpEditor.Controls.Add(this.grpGatherItems);
-            this.grpEditor.Controls.Add(this.lblEventDriven);
             this.grpEditor.Controls.Add(this.grpKillNpcs);
+            this.grpEditor.Controls.Add(this.lblEventDriven);
             this.grpEditor.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpEditor.Location = new System.Drawing.Point(0, 2);
             this.grpEditor.Name = "grpEditor";
