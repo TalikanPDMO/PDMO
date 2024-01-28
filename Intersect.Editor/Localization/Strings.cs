@@ -3493,7 +3493,9 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString bagslots = @"Bag Slots:";
 
-            public static LocalizedString basedamage = @"Base Damage:";
+            public static LocalizedString basedamage = @"HP Damage:";
+
+            public static LocalizedString manadamage = @"MP Damage:";
 
             public static LocalizedString bonusamount = @"Effect Amount (%):";
 

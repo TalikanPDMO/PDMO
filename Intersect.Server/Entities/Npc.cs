@@ -507,7 +507,7 @@ namespace Intersect.Server.Entities
                         } 
                     }
                     base.TryAttack(
-                        target, CurrentPhase.Damage ?? Base.Damage, (DamageType)(CurrentPhase.DamageType ?? Base.DamageType),
+                        target, CurrentPhase.Damage ?? Base.Damage, 0, (DamageType)(CurrentPhase.DamageType ?? Base.DamageType),
                         (Stats)(CurrentPhase.ScalingStat ?? Base.ScalingStat), CurrentPhase.Scaling ?? Base.Scaling,
                         CurrentPhase.CritChance ?? Base.CritChance, CurrentPhase.CritMultiplier ?? Base.CritMultiplier,
                         deadAnimations, aliveAnimations);
@@ -531,7 +531,7 @@ namespace Intersect.Server.Entities
                         } 
                     }
                     base.TryAttack(
-                        target, Base.Damage, (DamageType)Base.DamageType, (Stats)Base.ScalingStat, Base.Scaling,
+                        target, Base.Damage, 0, (DamageType)Base.DamageType, (Stats)Base.ScalingStat, Base.Scaling,
                         Base.CritChance, Base.CritMultiplier, deadAnimations, aliveAnimations);
                 }
                 var attackTime = CalculateAttackTime();

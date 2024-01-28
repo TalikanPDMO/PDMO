@@ -164,6 +164,8 @@ namespace Intersect.GameObjects
 
         public int Damage { get; set; }
 
+        public int ManaDamage { get; set; }
+
         public int DamageType { get; set; }
 
         public int ElementalType { get; set; } = 0;

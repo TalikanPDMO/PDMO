@@ -36,7 +36,7 @@ namespace Intersect.Client.Interface.Game
             if (item != null && item.ItemType == ItemTypes.Equipment)
             {
                 // Look if expanded window is needed
-                if (item.EquipmentSlot == Options.WeaponIndex && item.Damage != 0)
+                if (item.EquipmentSlot == Options.WeaponIndex && (item.Damage != 0 || item.ManaDamage != 0))
                 {
                     expandedWindow = true;
                 }
@@ -153,6 +153,15 @@ namespace Intersect.Client.Interface.Game
                     if (item.ItemType == ItemTypes.Equipment && item.EquipmentSlot == Options.WeaponIndex)
                     {
                         stats = Strings.ItemDesc.damage.ToString(item.Damage);
+                        itemStats.AddText(
+                            stats, itemStats.RenderColor,
+                            itemStatsText.CurAlignments.Count > 0 ? itemStatsText.CurAlignments[0] : Alignments.Left,
+                            itemDescText.Font
+                        );
+
+                        itemStats.AddLineBreak();
+
+                        stats = Strings.ItemDesc.manadamage.ToString(item.ManaDamage);
                         itemStats.AddText(
                             stats, itemStats.RenderColor,
                             itemStatsText.CurAlignments.Count > 0 ? itemStatsText.CurAlignments[0] : Alignments.Left,

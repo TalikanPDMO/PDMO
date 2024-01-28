@@ -223,6 +223,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.toolStripItemRelations = new System.Windows.Forms.ToolStripButton();
+            this.nudManaDamage = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblManaDamage = new System.Windows.Forms.Label();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxLossOnDeath)).BeginInit();
@@ -279,6 +281,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpBags.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBag)).BeginInit();
             this.toolStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudManaDamage)).BeginInit();
             this.SuspendLayout();
             // 
             // grpItems
@@ -2067,6 +2070,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpWeaponProperties.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpWeaponProperties.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpWeaponProperties.Controls.Add(this.nudManaDamage);
+            this.grpWeaponProperties.Controls.Add(this.lblManaDamage);
             this.grpWeaponProperties.Controls.Add(this.chkAdaptRange);
             this.grpWeaponProperties.Controls.Add(this.nudAttackRange);
             this.grpWeaponProperties.Controls.Add(this.lblAttackRange);
@@ -2366,7 +2371,7 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0});
             this.nudDamage.Name = "nudDamage";
-            this.nudDamage.Size = new System.Drawing.Size(131, 20);
+            this.nudDamage.Size = new System.Drawing.Size(60, 20);
             this.nudDamage.TabIndex = 49;
             this.nudDamage.Value = new decimal(new int[] {
             0,
@@ -2560,11 +2565,11 @@ namespace Intersect.Editor.Forms.Editors
             // lblDamage
             // 
             this.lblDamage.AutoSize = true;
-            this.lblDamage.Location = new System.Drawing.Point(7, 63);
+            this.lblDamage.Location = new System.Drawing.Point(2, 63);
             this.lblDamage.Name = "lblDamage";
-            this.lblDamage.Size = new System.Drawing.Size(77, 13);
+            this.lblDamage.Size = new System.Drawing.Size(68, 13);
             this.lblDamage.TabIndex = 11;
-            this.lblDamage.Text = "Base Damage:";
+            this.lblDamage.Text = "HP Damage:";
             // 
             // grpEvent
             // 
@@ -3004,6 +3009,35 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemRelations.Text = "Relations";
             this.toolStripItemRelations.Click += new System.EventHandler(this.toolStripItemRelations_Click);
             // 
+            // nudManaDamage
+            // 
+            this.nudManaDamage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudManaDamage.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudManaDamage.Location = new System.Drawing.Point(75, 80);
+            this.nudManaDamage.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.nudManaDamage.Name = "nudManaDamage";
+            this.nudManaDamage.Size = new System.Drawing.Size(60, 20);
+            this.nudManaDamage.TabIndex = 75;
+            this.nudManaDamage.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudManaDamage.ValueChanged += new System.EventHandler(this.nudManaDamage_ValueChanged);
+            // 
+            // lblManaDamage
+            // 
+            this.lblManaDamage.AutoSize = true;
+            this.lblManaDamage.Location = new System.Drawing.Point(70, 63);
+            this.lblManaDamage.Name = "lblManaDamage";
+            this.lblManaDamage.Size = new System.Drawing.Size(69, 13);
+            this.lblManaDamage.TabIndex = 74;
+            this.lblManaDamage.Text = "MP Damage:";
+            // 
             // FrmItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3095,6 +3129,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudBag)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudManaDamage)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -3289,5 +3324,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkNumericUpDown nudAttackRange;
         private Label lblAttackRange;
         private DarkCheckBox chkAdaptRange;
+        private DarkNumericUpDown nudManaDamage;
+        private Label lblManaDamage;
     }
 }

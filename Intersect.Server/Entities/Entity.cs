@@ -1317,6 +1317,11 @@ namespace Intersect.Server.Entities
             return 0;
         }
 
+        public virtual int GetWeaponManaDamage()
+        {
+            return 0;
+        }
+
         public virtual bool CanAttack(Entity entity, SpellBase spell)
         {
             return CastTime <= 0;
@@ -1588,7 +1593,7 @@ namespace Intersect.Server.Entities
             if (parentSpell == null)
             {
                 var damageHealth = parentItem.Damage;
-                var damageMana = 0;
+                var damageMana = parentItem.ManaDamage;
                 if (target !=null && target.IsImmuneToElementalType(parentItem.ElementalType))
                 {
                     PacketSender.SendActionMsg(target, Strings.Combat.immune, CustomColors.Combat.Immune);
@@ -1983,6 +1988,7 @@ namespace Intersect.Server.Entities
         public virtual void TryAttack(
             Entity target,
             int baseDamage,
+            int secondaryDamage,
             DamageType damageType,
             Stats scalingStat,
             int scaling,
@@ -2057,7 +2063,7 @@ namespace Intersect.Server.Entities
             }
             bool isCrit = false;
             var damageHealth = baseDamage;
-            var damageMana = 0;
+            var damageMana = secondaryDamage;
             if (weapon == null)
             {
                 if (target != null && target.IsImmuneToElementalType((int)ElementalType.None))

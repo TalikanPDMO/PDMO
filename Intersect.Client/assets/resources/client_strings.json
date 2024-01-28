@@ -411,7 +411,8 @@
   },
   "ItemDesc": {
     "bonuses": "Bonus:",
-    "damage": "Dégâts: {00}",
+    "damage": "Dégâts PV: {00}",
+    "manadamage": "Dégâts PM: {00}",
     "desc": "{00}",
     "effect": "Effet: {00}% {01}",
     "effects": {

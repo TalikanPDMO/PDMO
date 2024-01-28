@@ -1512,7 +1512,7 @@ namespace Intersect.Server.Entities
                     );
                 }
                 base.TryAttack(
-                    target, weapon.Damage, (DamageType) weapon.DamageType, (Stats) weapon.ScalingStat, weapon.Scaling,
+                    target, weapon.Damage, weapon.ManaDamage, (DamageType) weapon.DamageType, (Stats) weapon.ScalingStat, weapon.Scaling,
                     weapon.CritChance, weapon.CritMultiplier, null, null, weapon
                 );
             }
@@ -1527,13 +1527,13 @@ namespace Intersect.Server.Entities
                         );
                     }
                     base.TryAttack(
-                        target, classBase.Damage, (DamageType) classBase.DamageType, (Stats) classBase.ScalingStat,
+                        target, classBase.Damage, 0, (DamageType) classBase.DamageType, (Stats) classBase.ScalingStat,
                         classBase.Scaling, classBase.CritChance, classBase.CritMultiplier
                     );
                 }
                 else
                 {
-                    base.TryAttack(target, 1, DamageType.Physical, Stats.Attack, 100, 10, 1.5);
+                    base.TryAttack(target, 1, 0, DamageType.Physical, Stats.Attack, 100, 10, 1.5);
                 }
             }
         }
@@ -2898,6 +2898,23 @@ namespace Intersect.Server.Entities
                     if (item != null)
                     {
                         return item.Damage;
+                    }
+                }
+            }
+
+            return 0;
+        }
+
+        public override int GetWeaponManaDamage()
+        {
+            if (Equipment[Options.WeaponIndex] > -1 && Equipment[Options.WeaponIndex] < Options.MaxInvItems)
+            {
+                if (Items[Equipment[Options.WeaponIndex]].ItemId != Guid.Empty)
+                {
+                    var item = ItemBase.Get(Items[Equipment[Options.WeaponIndex]].ItemId);
+                    if (item != null)
+                    {
+                        return item.ManaDamage;
                     }
                 }
             }

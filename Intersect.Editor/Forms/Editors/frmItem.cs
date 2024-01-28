@@ -246,6 +246,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbElementalType.Items.Add(Strings.Combat.elementaltypes[i]);
             }
             lblDamage.Text = Strings.ItemEditor.basedamage;
+            lblManaDamage.Text = Strings.ItemEditor.manadamage;
             lblCritChance.Text = Strings.ItemEditor.critchance;
             lblCritMultiplier.Text = Strings.ItemEditor.critmultiplier;
             lblCritEffectSpell.Text = Strings.ItemEditor.criteffectspell;
@@ -366,6 +367,7 @@ namespace Intersect.Editor.Forms.Editors
                 nudMpRegen.Value = mEditorItem.VitalsRegen[1];
 
                 nudDamage.Value = mEditorItem.Damage;
+                nudManaDamage.Value = mEditorItem.ManaDamage;
                 nudCritChance.Value = mEditorItem.CritChance;
                 nudCritMultiplier.Value = (decimal) mEditorItem.CritMultiplier;
                 cmbCritEffectSpell.SelectedIndex = SpellBase.ListIndex(mEditorItem.CritEffectSpellId) + 1;
@@ -484,6 +486,7 @@ namespace Intersect.Editor.Forms.Editors
                 mEditorItem.SlotCount = 0;
 
                 mEditorItem.Damage = 0;
+                mEditorItem.ManaDamage = 0;
                 mEditorItem.Tool = -1;
 
                 mEditorItem.Spell = null;
@@ -609,6 +612,7 @@ namespace Intersect.Editor.Forms.Editors
                 mEditorItem.Projectile = null;
                 mEditorItem.Tool = -1;
                 mEditorItem.Damage = 0;
+                mEditorItem.ManaDamage = 0;
                 mEditorItem.TwoHanded = false;
             }
         }
@@ -852,6 +856,11 @@ namespace Intersect.Editor.Forms.Editors
         private void nudDamage_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Damage = (int) nudDamage.Value;
+        }
+
+        private void nudManaDamage_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ManaDamage = (int)nudManaDamage.Value;
         }
 
         private void nudCritChance_ValueChanged(object sender, EventArgs e)
