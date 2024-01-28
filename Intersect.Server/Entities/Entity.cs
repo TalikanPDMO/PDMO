@@ -2415,7 +2415,7 @@ namespace Intersect.Server.Entities
             enemy.CombatTimer = Globals.Timing.Milliseconds + Options.CombatTime;
             CombatTimer = Globals.Timing.Milliseconds + Options.CombatTime;
 
-            //Check for lifesteal
+            //Check for lifesteal and/or manasteal
             if (GetType() == typeof(Player) && enemy.GetType() != typeof(Resource))
             {
                 var lifesteal = ((Player) this).GetLifeSteal() / 100;
@@ -2425,6 +2425,16 @@ namespace Intersect.Server.Entities
                     AddVital(Vitals.Health, (int) healthRecovered);
                     PacketSender.SendActionMsg(
                         this, Strings.Combat.addsymbol + (int) healthRecovered, CustomColors.Combat.Heal
+                    );
+                }
+
+                var manasteal = ((Player)this).GetManaSteal() / 100;
+                var manaRecovered = manasteal * secondaryDamage;
+                if (manaRecovered > 0) //Don't send any +0 msg's.
+                {
+                    AddVital(Vitals.Mana, (int)manaRecovered);
+                    PacketSender.SendActionMsg(
+                        this, Strings.Combat.addsymbol + (int)manaRecovered, CustomColors.Combat.AddMana
                     );
                 }
             }

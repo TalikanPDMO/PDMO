@@ -2972,6 +2972,31 @@ namespace Intersect.Server.Entities
             return lifesteal;
         }
 
+        public decimal GetManaSteal()
+        {
+            var manasteal = 0;
+
+            for (var i = 0; i < Options.EquipmentSlots.Count; i++)
+            {
+                if (Equipment[i] > -1)
+                {
+                    if (Items[Equipment[i]].ItemId != Guid.Empty)
+                    {
+                        var item = ItemBase.Get(Items[Equipment[i]].ItemId);
+                        if (item != null)
+                        {
+                            if (item.Effect.Type == EffectType.Manasteal)
+                            {
+                                manasteal += item.Effect.Percentage;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return manasteal;
+        }
+
         public decimal GetAttackSpeedBonus()
         {
             var attackspeed = 0;

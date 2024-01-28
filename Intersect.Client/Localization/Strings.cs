@@ -1018,7 +1018,8 @@ namespace Intersect.Client.Localization
                 {2, @"Tenacity"},
                 {3, @"Luck"},
                 {4, @"Exp Increase"},
-                {5, @"%Attack Speed" }
+                {5, @"%Attack Speed" },
+                {6, @"Manasteal" }
             };
 
             public static Dictionary<int, LocalizedString> itemtypes = new Dictionary<int, LocalizedString>
