@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
@@ -180,8 +181,6 @@ namespace Intersect.GameObjects
 
         public bool TwoHanded { get; set; }
 
-        public EffectData Effect { get; set; }
-
         public int SlotCount { get; set; }
 
         [Column("Spell")]
@@ -346,6 +345,20 @@ namespace Intersect.GameObjects
                                    ItemType != ItemTypes.Equipment &&
                                    ItemType != ItemTypes.Bag;
 
+        //Effects
+        [NotMapped] public List<ExtraEffect> Effects = new List<ExtraEffect>();
+
+        [Column("Effects")]
+        [JsonIgnore]
+        public string EffectsJson
+        {
+            get => JsonConvert.SerializeObject(Effects, Formatting.None, new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
+            set => Effects = JsonConvert.DeserializeObject<List<ExtraEffect>>(value);
+        }
+
         /// <inheritdoc />
         public string Folder { get; set; } = "";
 
@@ -377,7 +390,6 @@ namespace Intersect.GameObjects
             VitalsRegen = new int[(int) Vitals.VitalCount];
             PercentageVitalsGiven = new int[(int) Vitals.VitalCount];
             Consumable = new ConsumableData();
-            Effect = new EffectData();
             Color = new Color(255, 255, 255, 255);
         }
 
@@ -395,7 +407,7 @@ namespace Intersect.GameObjects
 
     }
 
-    [Owned]
+    /*[Owned]
     public class EffectData
     {
 
@@ -403,6 +415,15 @@ namespace Intersect.GameObjects
 
         public int Percentage { get; set; }
 
+    }*/
+
+    public class ExtraEffect
+    {
+        public EffectType Type { get; set; }
+
+        public int Min { get; set; }
+
+        public int Max { get; set; }
     }
 
 }

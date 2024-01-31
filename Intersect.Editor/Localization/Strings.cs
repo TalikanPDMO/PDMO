@@ -3497,9 +3497,19 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString manadamage = @"MP Damage:";
 
-            public static LocalizedString bonusamount = @"Effect Amount (%):";
+            public static LocalizedString bonusamount = @"Effect Amount Range (%):";
 
             public static LocalizedString bonuseffect = @"Bonus Effect:";
+
+            public static LocalizedString effects = @"Extra Effects:";
+
+            public static LocalizedString effectto = @"to";
+
+            public static LocalizedString effectsrange = @"{00} : {01}% to {02}%";
+
+            public static LocalizedString add = @"Add";
+
+            public static LocalizedString remove = @"Remove";
 
             public static Dictionary<int, LocalizedString> bonuseffects = new Dictionary<int, LocalizedString>
             {

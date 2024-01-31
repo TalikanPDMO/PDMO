@@ -43,10 +43,10 @@ namespace Intersect.Editor.Forms.Editors
             cmbToolType.Items.Clear();
             cmbToolType.Items.Add(Strings.General.none);
             cmbToolType.Items.AddRange(Options.ToolTypes.ToArray());
-            cmbEquipmentBonus.Items.Clear();
+            cmbEffect.Items.Clear();
             for (var i = 0; i < Strings.ItemEditor.bonuseffects.Count; i++)
             {
-                cmbEquipmentBonus.Items.Add(Strings.ItemEditor.bonuseffects[i]);
+                cmbEffect.Items.Add(Strings.ItemEditor.bonuseffects[i]);
             }
 
             cmbProjectile.Items.Clear();
@@ -229,12 +229,16 @@ namespace Intersect.Editor.Forms.Editors
             lblMR.Text = Strings.ItemEditor.magicresistbonus;
             lblRange.Text = Strings.ItemEditor.bonusrange;
             lblBonusEffect.Text = Strings.ItemEditor.bonuseffect;
+            lblEffects.Text = Strings.ItemEditor.effects;
+            lblEffectTo.Text = Strings.ItemEditor.effectto;
+            btnAdd.Text = Strings.ItemEditor.add;
+            btnRemove.Text = Strings.ItemEditor.remove;
             lblEffectPercent.Text = Strings.ItemEditor.bonusamount;
             lblEquipmentAnimation.Text = Strings.ItemEditor.equipmentanimation;
-            cmbEquipmentBonus.Items.Clear();
+            cmbEffect.Items.Clear();
             for (var i = 0; i < Strings.ItemEditor.bonuseffects.Count; i++)
             {
-                cmbEquipmentBonus.Items.Add(Strings.ItemEditor.bonuseffects[i]);
+                cmbEffect.Items.Add(Strings.ItemEditor.bonuseffects[i]);
             }
 
             grpWeaponProperties.Text = Strings.ItemEditor.weaponproperties;
@@ -394,12 +398,32 @@ namespace Intersect.Editor.Forms.Editors
                 nudAttackRange.Value = mEditorItem.AttackRange;
                 chkAdaptRange.Checked = Convert.ToBoolean(mEditorItem.AdaptRange);
                 RefreshExtendedData();
-                if (mEditorItem.ItemType == ItemTypes.Equipment)
-                {
-                    cmbEquipmentBonus.SelectedIndex = (int) mEditorItem.Effect.Type;
-                }
 
-                nudEffectPercent.Value = mEditorItem.Effect.Percentage;
+                lstEffects.Items.Clear();
+                for (var i = 0; i < mEditorItem.Effects.Count; i++)
+                {
+                    lstEffects.Items.Add(Strings.ItemEditor.effectsrange.ToString(
+                        Strings.ItemEditor.bonuseffects[(int)mEditorItem.Effects[i].Type],
+                        mEditorItem.Effects[i].Min.ToString("+#;-#;0"),
+                        mEditorItem.Effects[i].Max.ToString("+#;-#;0"))
+                    );
+                }
+                if (lstEffects.Items.Count > 0)
+                {
+                    lstEffects.SelectedIndex = 0;
+                    var effect = mEditorItem.Effects[lstEffects.SelectedIndex];
+                    cmbEffect.SelectedIndex = (int)effect.Type;
+                    nudEffectPercentMin.Value = effect.Min;
+                    nudEffectPercentMax.Value = effect.Max;
+                }
+                else
+                {
+                    cmbEffect.SelectedIndex = 0;
+                    nudEffectPercentMax.Value = 0;
+                    nudEffectPercentMin.Value = 0;
+                }
+                
+
                 chk2Hand.Checked = mEditorItem.TwoHanded;
                 cmbMalePaperdoll.SelectedIndex =
                     cmbMalePaperdoll.FindString(TextUtils.NullToNone(mEditorItem.MalePaperdoll));
@@ -480,8 +504,6 @@ namespace Intersect.Editor.Forms.Editors
 
                 mEditorItem.TwoHanded = false;
                 mEditorItem.EquipmentSlot = 0;
-                mEditorItem.Effect.Type = EffectType.None;
-                mEditorItem.Effect.Percentage = 0;
 
                 mEditorItem.SlotCount = 0;
 
@@ -522,7 +544,6 @@ namespace Intersect.Editor.Forms.Editors
                 }
 
                 cmbEquipmentSlot.SelectedIndex = mEditorItem.EquipmentSlot;
-                cmbEquipmentBonus.SelectedIndex = (int) mEditorItem.Effect.Type;
 
                 // Whether this item type is stackable is not up for debate.
                 chkStackable.Checked = false;
@@ -620,11 +641,6 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbToolType_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.Tool = cmbToolType.SelectedIndex - 1;
-        }
-
-        private void cmbEquipmentBonus_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            mEditorItem.Effect.Type = (EffectType) cmbEquipmentBonus.SelectedIndex;
         }
 
         private void chk2Hand_CheckedChanged(object sender, EventArgs e)
@@ -882,11 +898,6 @@ namespace Intersect.Editor.Forms.Editors
         private void chkReplaceCritEffectSpell_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.CritEffectSpellReplace = chkReplaceCritEffectSpell.Checked;
-        }
-
-        private void nudEffectPercent_ValueChanged(object sender, EventArgs e)
-        {
-            mEditorItem.Effect.Percentage = (int) nudEffectPercent.Value;
         }
 
         private void nudRange_ValueChanged(object sender, EventArgs e)
@@ -1304,6 +1315,78 @@ namespace Intersect.Editor.Forms.Editors
         private void txtCannotUse_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.CannotUseMessage = txtCannotUse.Text;
+        }
+
+        private void lstEffects_Refresh()
+        {
+            var n = lstEffects.SelectedIndex;
+            lstEffects.Items.Clear();
+            for (var i = 0; i < mEditorItem.Effects.Count; i++)
+            {
+                lstEffects.Items.Add(Strings.ItemEditor.effectsrange.ToString(
+                        Strings.ItemEditor.bonuseffects[(int)mEditorItem.Effects[i].Type],
+                        mEditorItem.Effects[i].Min.ToString("+#;-#;0"),
+                        mEditorItem.Effects[i].Max.ToString("+#;-#;0"))
+                    );
+            }
+
+            lstEffects.SelectedIndex = n;
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            var extraeffect = new ExtraEffect();
+            extraeffect.Min = (int)nudEffectPercentMin.Value;
+            extraeffect.Max = (int)nudEffectPercentMax.Value;
+            extraeffect.Type = (EffectType)cmbEffect.SelectedIndex;
+            mEditorItem.Effects.Add(extraeffect);
+            lstEffects_Refresh();
+        }
+
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            if (lstEffects.SelectedIndex > -1)
+            {
+                var i = lstEffects.SelectedIndex;
+                lstEffects.Items.RemoveAt(i);
+                mEditorItem.Effects.RemoveAt(i);
+            }
+        }
+
+        private void lstEffects_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstEffects.SelectedIndex > -1)
+            {
+                cmbEffect.SelectedIndex = (int) mEditorItem.Effects[lstEffects.SelectedIndex].Type;
+                nudEffectPercentMin.Value = mEditorItem.Effects[lstEffects.SelectedIndex].Min;
+                nudEffectPercentMax.Value = mEditorItem.Effects[lstEffects.SelectedIndex].Max;
+            }
+        }
+
+        private void cmbEffect_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstEffects.SelectedIndex > -1 && lstEffects.SelectedIndex < mEditorItem.Effects.Count)
+            {
+                mEditorItem.Effects[lstEffects.SelectedIndex].Type = (EffectType) cmbEffect.SelectedIndex;
+            }
+            lstEffects_Refresh();
+        }
+        private void nudEffectPercentMin_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstEffects.SelectedIndex > -1 && lstEffects.SelectedIndex < mEditorItem.Effects.Count)
+            {
+                mEditorItem.Effects[lstEffects.SelectedIndex].Min = (int)nudEffectPercentMin.Value;
+            }
+            lstEffects_Refresh();
+        }
+
+        private void nudEffectPercentMax_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstEffects.SelectedIndex > -1 && lstEffects.SelectedIndex < mEditorItem.Effects.Count)
+            {
+                mEditorItem.Effects[lstEffects.SelectedIndex].Max = (int)nudEffectPercentMax.Value;
+            }
+            lstEffects_Refresh();
         }
 
         #region "Item List - Folders, Searching, Sorting, Etc"

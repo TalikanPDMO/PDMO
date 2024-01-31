@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using Intersect.Enums;
@@ -51,6 +52,10 @@ namespace Intersect.Server.Database
                 // TODO: What the fuck?
                 StatBuffs[i] = Randomization.Next(-descriptor.StatGrowth, descriptor.StatGrowth + 1);
             }
+            foreach (var effect in descriptor.Effects)
+            {
+                Effects.Add(new int[2] {(int)effect.Type, Randomization.Next(effect.Min, effect.Max + 1)});
+            }
         }
 
         public Item(Item item) : this(item.ItemId, item.Quantity, item.BagId, item.Bag)
@@ -59,7 +64,11 @@ namespace Intersect.Server.Database
             {
                 StatBuffs[i] = item.StatBuffs[i];
             }
-
+            Effects.Clear();
+            foreach (var effect in item.Effects)
+            {
+                Effects.Add(new int[2] { effect[0], effect[1] });
+            }
             DropChance = item.DropChance;
             DropAmountRandom = item.DropAmountRandom;
             DropChanceIterative = item.DropChanceIterative;
@@ -89,6 +98,21 @@ namespace Intersect.Server.Database
         [NotMapped]
         public int[] StatBuffs { get; set; } = new int[(int) Stats.StatCount];
 
+
+        //Effects
+        [NotMapped] public List<int[]> Effects = new List<int[]>();
+
+        [Column("Effects")]
+        [JsonIgnore]
+        public string EffectsJson
+        {
+            get => JsonConvert.SerializeObject(Effects, Formatting.None, new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
+            set => Effects = JsonConvert.DeserializeObject<List<int[]>>(value);
+        }
+
         [JsonIgnore]
         [NotMapped]
         public ItemBase Descriptor => ItemBase.Get(ItemId);
@@ -104,6 +128,11 @@ namespace Intersect.Server.Database
             for (var i = 0; i < (int) Stats.StatCount; i++)
             {
                 StatBuffs[i] = item.StatBuffs[i];
+            }
+            Effects.Clear();
+            foreach (var effect in item.Effects)
+            {
+                Effects.Add(new int[2] { effect[0], effect[1] });
             }
         }
 
@@ -140,6 +169,20 @@ namespace Intersect.Server.Database
             }
 
             return default != bag;
+        }
+
+        public int GetEffectAmount(EffectType effectType)
+        {
+            var amount = 0;
+            int effectTypeIndex = (int)effectType;
+            foreach(var effect in Effects)
+            {
+                if (effect[0] == effectTypeIndex)
+                {
+                    amount += effect[1];
+                }
+            }
+            return amount;
         }
 
     }

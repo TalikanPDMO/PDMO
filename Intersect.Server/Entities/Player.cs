@@ -2928,23 +2928,13 @@ namespace Intersect.Server.Entities
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
-                if (Equipment[i] > -1)
+                if (Equipment[i] > -1 && Items[Equipment[i]].ItemId != Guid.Empty)
                 {
-                    if (Items[Equipment[i]].ItemId != Guid.Empty)
-                    {
-                        var item = ItemBase.Get(Items[Equipment[i]].ItemId);
-                        if (item != null)
-                        {
-                            if (item.Effect.Type == EffectType.CooldownReduction)
-                            {
-                                cooldown += item.Effect.Percentage;
-                            }
-                        }
-                    }
+                    // WARNING, item effects and itembase effects can be different if reworked
+                    cooldown += Items[Equipment[i]].GetEffectAmount(EffectType.CooldownReduction);
                 }
             }
-
-            return cooldown;
+            return Math.Max(0,cooldown);
         }
 
         public decimal GetLifeSteal()
@@ -2953,23 +2943,14 @@ namespace Intersect.Server.Entities
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
-                if (Equipment[i] > -1)
+                if (Equipment[i] > -1 && Items[Equipment[i]].ItemId != Guid.Empty)
                 {
-                    if (Items[Equipment[i]].ItemId != Guid.Empty)
-                    {
-                        var item = ItemBase.Get(Items[Equipment[i]].ItemId);
-                        if (item != null)
-                        {
-                            if (item.Effect.Type == EffectType.Lifesteal)
-                            {
-                                lifesteal += item.Effect.Percentage;
-                            }
-                        }
-                    }
+                    // WARNING, item effects and itembase effects can be different if reworked
+                    lifesteal += Items[Equipment[i]].GetEffectAmount(EffectType.Lifesteal);
                 }
             }
 
-            return lifesteal;
+            return Math.Max(0,lifesteal);
         }
 
         public decimal GetManaSteal()
@@ -2978,23 +2959,14 @@ namespace Intersect.Server.Entities
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
-                if (Equipment[i] > -1)
+                if (Equipment[i] > -1 && Items[Equipment[i]].ItemId != Guid.Empty)
                 {
-                    if (Items[Equipment[i]].ItemId != Guid.Empty)
-                    {
-                        var item = ItemBase.Get(Items[Equipment[i]].ItemId);
-                        if (item != null)
-                        {
-                            if (item.Effect.Type == EffectType.Manasteal)
-                            {
-                                manasteal += item.Effect.Percentage;
-                            }
-                        }
-                    }
+                    // WARNING, item effects and itembase effects can be different if reworked
+                    manasteal += Items[Equipment[i]].GetEffectAmount(EffectType.Manasteal);
                 }
             }
 
-            return manasteal;
+            return Math.Max(0, manasteal);
         }
 
         public decimal GetAttackSpeedBonus()
@@ -3003,19 +2975,10 @@ namespace Intersect.Server.Entities
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
-                if (Equipment[i] > -1)
+                if (Equipment[i] > -1 && Items[Equipment[i]].ItemId != Guid.Empty)
                 {
-                    if (Items[Equipment[i]].ItemId != Guid.Empty)
-                    {
-                        var item = ItemBase.Get(Items[Equipment[i]].ItemId);
-                        if (item != null)
-                        {
-                            if (item.Effect.Type == EffectType.AttackSpeed)
-                            {
-                                attackspeed += item.Effect.Percentage;
-                            }
-                        }
-                    }
+                    // WARNING, item effects and itembase effects can be different if reworked
+                    attackspeed += Items[Equipment[i]].GetEffectAmount(EffectType.AttackSpeed);
                 }
             }
             if (attackspeed > 50)
@@ -3023,7 +2986,7 @@ namespace Intersect.Server.Entities
                 //AttackSpeedBonus max is 50% of normal attack speed
                 attackspeed = 50;
             }
-            return attackspeed;
+            return Math.Max(0, attackspeed);
         }
         public double GetTenacity()
         {
@@ -3031,23 +2994,14 @@ namespace Intersect.Server.Entities
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
-                if (Equipment[i] > -1)
+                if (Equipment[i] > -1 && Items[Equipment[i]].ItemId != Guid.Empty)
                 {
-                    if (Items[Equipment[i]].ItemId != Guid.Empty)
-                    {
-                        var item = ItemBase.Get(Items[Equipment[i]].ItemId);
-                        if (item != null)
-                        {
-                            if (item.Effect.Type == EffectType.Tenacity)
-                            {
-                                tenacity += item.Effect.Percentage;
-                            }
-                        }
-                    }
+                    // WARNING, item effects and itembase effects can be different if reworked
+                    tenacity += Items[Equipment[i]].GetEffectAmount(EffectType.Tenacity);
                 }
             }
 
-            return tenacity;
+            return Math.Max(0, tenacity);
         }
 
         public double GetLuck()
@@ -3056,23 +3010,14 @@ namespace Intersect.Server.Entities
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
-                if (Equipment[i] > -1)
+                if (Equipment[i] > -1 && Items[Equipment[i]].ItemId != Guid.Empty)
                 {
-                    if (Items[Equipment[i]].ItemId != Guid.Empty)
-                    {
-                        var item = ItemBase.Get(Items[Equipment[i]].ItemId);
-                        if (item != null)
-                        {
-                            if (item.Effect.Type == EffectType.Luck)
-                            {
-                                luck += item.Effect.Percentage;
-                            }
-                        }
-                    }
+                    // WARNING, item effects and itembase effects can be different if reworked
+                    luck += Items[Equipment[i]].GetEffectAmount(EffectType.Luck);
                 }
             }
 
-            return luck;
+            return Math.Max(0, luck);
         }
 
         public int GetExpMultiplier(bool xpBoostNpc, bool xpBoostQuestEvent)
@@ -3081,21 +3026,13 @@ namespace Intersect.Server.Entities
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
-                if (Equipment[i] > -1)
+                if (Equipment[i] > -1 && Items[Equipment[i]].ItemId != Guid.Empty)
                 {
-                    if (Items[Equipment[i]].ItemId != Guid.Empty)
-                    {
-                        var item = ItemBase.Get(Items[Equipment[i]].ItemId);
-                        if (item != null)
-                        {
-                            if (item.Effect.Type == EffectType.EXP)
-                            {
-                                exp += item.Effect.Percentage;
-                            }
-                        }
-                    }
+                    // WARNING, item effects and itembase effects can be different if reworked
+                    exp += Items[Equipment[i]].GetEffectAmount(EffectType.EXP);
                 }
             }
+            exp = Math.Max(100, exp);
             if (xpBoostNpc)
             {
                 exp += GetExpBoostsNpcs();

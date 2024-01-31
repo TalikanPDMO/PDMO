@@ -1009,7 +1009,11 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString desc = @"{00}";
 
-            public static LocalizedString effect = @"Bonus Effect: {00}% {01}";
+            public static LocalizedString bonuseffects = @"Bonus Effects:";
+
+            public static LocalizedString effectrange = @"{00}% to {01}% {02}";
+
+            public static LocalizedString effect = @"{00}% {01}";
 
             public static Dictionary<int, LocalizedString> effects = new Dictionary<int, LocalizedString>
             {

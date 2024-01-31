@@ -414,7 +414,7 @@
     "damage": "Dégâts PV: {00}",
     "manadamage": "Dégâts PM: {00}",
     "desc": "{00}",
-    "effect": "Effet: {00}% {01}",
+    "effect": "{00}% {01}",
     "effects": {
       "0": "Réduction de délai",
       "1": "Vol de vie",
@@ -968,6 +968,7 @@
     "infos": "Vos statistiques:",
     "wins": "Victoires: {00}",
     "losses": "Défaites: {00}",
+    "winrate": "Winrate: {00}%",
     "matchmaking_title": "PokéStadium : Match trouvé",
     "matchmaking_message": "Vous et votre adversaire avez {00} secondes pour accepter ce match. Si vous refusez ou dépassez cette durée, vous serez éjecté de la file d'attente du PokéStadium",
     "declined_title": "Pokéstadium : Match annulé",

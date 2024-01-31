@@ -155,7 +155,7 @@ namespace Intersect.Client.Interface.Game.Inventory
                 {
                     mDescWindow = new ItemDescWindow(
                         Globals.Me.Inventory[mMySlot].Base, Globals.Me.Inventory[mMySlot].Quantity, mInventoryWindow.X,
-                        mInventoryWindow.Y, Globals.Me.Inventory[mMySlot].StatBuffs
+                        mInventoryWindow.Y, Globals.Me.Inventory[mMySlot].StatBuffs, Globals.Me.Inventory[mMySlot].Effects
                     );
                 }
             }
@@ -182,7 +182,8 @@ namespace Intersect.Client.Interface.Game.Inventory
                     {
                         mDescWindow = new ItemDescWindow(
                             Globals.Me.Inventory[mMySlot].Base, Globals.Me.Inventory[mMySlot].Quantity,
-                            mInventoryWindow.X, mInventoryWindow.Y, Globals.Me.Inventory[mMySlot].StatBuffs, "",
+                            mInventoryWindow.X, mInventoryWindow.Y, Globals.Me.Inventory[mMySlot].StatBuffs,
+                            Globals.Me.Inventory[mMySlot].Effects, "",
                             Strings.Shop.sellsfor.ToString(shopItem.CostItemQuantity, hoveredItem.Name)
                         );
                     }
@@ -194,7 +195,8 @@ namespace Intersect.Client.Interface.Game.Inventory
                     {
                         mDescWindow = new ItemDescWindow(
                             Globals.Me.Inventory[mMySlot].Base, Globals.Me.Inventory[mMySlot].Quantity,
-                            mInventoryWindow.X, mInventoryWindow.Y, Globals.Me.Inventory[mMySlot].StatBuffs, "",
+                            mInventoryWindow.X, mInventoryWindow.Y, Globals.Me.Inventory[mMySlot].StatBuffs,
+                            Globals.Me.Inventory[mMySlot].Effects, "",
                             Strings.Shop.sellsfor.ToString(invItem.Base.Price.ToString(), costItem.Name)
                         );
                     }
@@ -204,7 +206,7 @@ namespace Intersect.Client.Interface.Game.Inventory
                     if (invItem?.Base != null)
                     {
                         mDescWindow = new ItemDescWindow(
-                            invItem.Base, invItem.Quantity, mInventoryWindow.X, mInventoryWindow.Y, invItem.StatBuffs,
+                            invItem.Base, invItem.Quantity, mInventoryWindow.X, mInventoryWindow.Y, invItem.StatBuffs, invItem.Effects,
                             "", Strings.Shop.wontbuy
                         );
                     }

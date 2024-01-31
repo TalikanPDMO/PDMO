@@ -58,6 +58,8 @@ namespace Intersect.Client.Interface.Game.Character
 
         private int[] mEmptyStatBoost = new int[(int)Stats.StatCount];
 
+        private List<int[]> mEmptyEffects = new List<int[]>();
+
         Label mMagicRstLabel;
 
         Label mAttackSpeedLabel;
@@ -358,17 +360,18 @@ namespace Intersect.Client.Interface.Game.Character
                         Items[i]
                             .Update(
                                 Globals.Me.Inventory[Globals.Me.MyEquipment[i]].ItemId,
-                                Globals.Me.Inventory[Globals.Me.MyEquipment[i]].StatBuffs
+                                Globals.Me.Inventory[Globals.Me.MyEquipment[i]].StatBuffs,
+                                Globals.Me.Inventory[Globals.Me.MyEquipment[i]].Effects
                             );
                     }
                     else
                     {
-                        Items[i].Update(Guid.Empty, mEmptyStatBoost);
+                        Items[i].Update(Guid.Empty, mEmptyStatBoost, mEmptyEffects);
                     }
                 }
                 else
                 {
-                    Items[i].Update(Guid.Empty, mEmptyStatBoost);
+                    Items[i].Update(Guid.Empty, mEmptyStatBoost, mEmptyEffects);
                 }
             }
         }

@@ -251,7 +251,7 @@ namespace Intersect.Client.Interface.Game.Hotbar
 
                 mItemDescWindow = new ItemDescWindow(
                     mCurrentItem, 1, mHotbarWindow.X + Pnl.X + 16, mHotbarWindow.Y + mHotbarWindow.Height + 2,
-                    mInventoryItem?.StatBuffs, mCurrentItem.Name, "", true
+                    mInventoryItem?.StatBuffs, mInventoryItem?.Effects, mCurrentItem.Name, "", true
                 );
 
                 if (Globals.Me.CurrentPreviewHotBarKey == -1 && mInventoryItemIndex > -1 && mCurrentItem.ItemType == ItemTypes.Spell && mCurrentItem.QuickCast)

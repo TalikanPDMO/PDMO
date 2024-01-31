@@ -482,24 +482,14 @@ namespace Intersect.Client.Entities
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
-                if (MyEquipment[i] > -1)
+                if (MyEquipment[i] > -1 && Inventory[MyEquipment[i]].ItemId != Guid.Empty)
                 {
-                    if (Inventory[MyEquipment[i]].ItemId != Guid.Empty)
-                    {
-                        var item = ItemBase.Get(Inventory[MyEquipment[i]].ItemId);
-                        if (item != null)
-                        {
-                            //Check for cooldown reduction
-                            if (item.Effect.Type == EffectType.CooldownReduction)
-                            {
-                                cooldown += item.Effect.Percentage;
-                            }
-                        }
-                    }
+                    // WARNING, item effects and itembase effects can be different if reworked
+                    cooldown += Inventory[MyEquipment[i]].GetEffectAmount(EffectType.CooldownReduction);
                 }
             }
 
-            return cooldown;
+            return Math.Max(0, cooldown);
         }
 
         public decimal GetAttackSpeedBonus()
@@ -508,19 +498,10 @@ namespace Intersect.Client.Entities
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
-                if (MyEquipment[i] > -1)
+                if (MyEquipment[i] > -1 && Inventory[MyEquipment[i]].ItemId != Guid.Empty)
                 {
-                    if (Inventory[MyEquipment[i]].ItemId != Guid.Empty)
-                    {
-                        var item = ItemBase.Get(Inventory[MyEquipment[i]].ItemId);
-                        if (item != null)
-                        {
-                            if (item.Effect.Type == EffectType.AttackSpeed)
-                            {
-                                attackspeed += item.Effect.Percentage;
-                            }
-                        }
-                    }
+                    // WARNING, item effects and itembase effects can be different if reworked
+                    attackspeed += Inventory[MyEquipment[i]].GetEffectAmount(EffectType.AttackSpeed);
                 }
             }
             if (attackspeed > 50)
@@ -528,7 +509,7 @@ namespace Intersect.Client.Entities
                 //AttackSpeedBonus max is 50% of normal attack speed
                 attackspeed = 50;
             }
-            return attackspeed;
+            return Math.Max(0, attackspeed);
         }
 
         public void TrySellItem(int index)

@@ -136,7 +136,7 @@ namespace Intersect.Client.Interface.Game.Shop
             if (item != null && Globals.GameShop.SellingItems[mMySlot].Item != null)
             {
                 mDescWindow = new ItemDescWindow(
-                    Globals.GameShop.SellingItems[mMySlot].Item, 1, mShopWindow.X, mShopWindow.Y, null, "",
+                    Globals.GameShop.SellingItems[mMySlot].Item, 1, mShopWindow.X, mShopWindow.Y, null, null, "",
                     Strings.Shop.costs.ToString(Globals.GameShop.SellingItems[mMySlot].CostItemQuantity, item.Name)
                 );
             }

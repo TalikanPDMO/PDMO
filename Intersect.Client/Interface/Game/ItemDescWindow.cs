@@ -6,6 +6,7 @@ using Intersect.Client.General;
 using Intersect.Client.Localization;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using System.Collections.Generic;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -21,6 +22,7 @@ namespace Intersect.Client.Interface.Game
             int x,
             int y,
             int[] statBuffs,
+            List<int[]> effects,
             string titleOverride = "",
             string valueLabel = "",
             bool centerHorizontally = false
@@ -40,7 +42,7 @@ namespace Intersect.Client.Interface.Game
                 {
                     expandedWindow = true;
                 }
-                else if (item.Effect.Type != EffectType.None && item.Effect.Percentage != 0)
+                else if (effects != null || item.Effects.Count > 0)
                 {
                     expandedWindow = true;
                 }
@@ -286,17 +288,64 @@ namespace Intersect.Client.Interface.Game
                     }
                 }
 
-                if (item.ItemType == ItemTypes.Equipment &&
-                    item.Effect.Type != EffectType.None &&
-                    item.Effect.Percentage > 0)
+                if (item.ItemType == ItemTypes.Equipment)
                 {
-                    itemStats.AddText(
-                        Strings.ItemDesc.effect.ToString(
-                            item.Effect.Percentage, Strings.ItemDesc.effects[(int) item.Effect.Type - 1]
-                        ), itemStats.RenderColor,
-                        itemStatsText.CurAlignments.Count > 0 ? itemStatsText.CurAlignments[0] : Alignments.Left,
-                        itemDescText.Font
-                    );
+                    if (effects != null)
+                    {
+                        // Show actual effects of the player Item
+                        if (effects.Count > 0)
+                        {
+                            itemStats.AddLineBreak();
+                            itemStats.AddText(
+                                Strings.ItemDesc.bonuseffects, itemStats.RenderColor,
+                                itemStatsText.CurAlignments.Count > 0 ? itemStatsText.CurAlignments[0] : Alignments.Left,
+                                itemDescText.Font
+                            );
+                        }
+                        foreach (var effect in effects)
+                        {
+                            if (effect[0] != (int)EffectType.None)
+                            {
+                                itemStats.AddLineBreak();
+                                itemStats.AddText(
+                                    Strings.ItemDesc.effect.ToString(
+                                        effect[1].ToString("+#;-#;0"), Strings.ItemDesc.effects[(int)effect[0] - 1]
+                                    ), itemStats.RenderColor,
+                                    itemStatsText.CurAlignments.Count > 0 ? itemStatsText.CurAlignments[0] : Alignments.Left,
+                                    itemDescText.Font
+                                );
+                            }
+
+                        }
+                    }
+                    else if (item.Effects.Count > 0)
+                    {
+                        // Show theoritical effects of ItemBase and display the possible ranges
+                        itemStats.AddLineBreak();
+                        itemStats.AddText(
+                                Strings.ItemDesc.bonuseffects, itemStats.RenderColor,
+                                itemStatsText.CurAlignments.Count > 0 ? itemStatsText.CurAlignments[0] : Alignments.Left,
+                                itemDescText.Font
+                            );
+                        foreach (var effect in item.Effects)
+                        {
+                            if (effect.Type != EffectType.None)
+                            {
+                                itemStats.AddLineBreak();
+                                itemStats.AddText(
+                                    Strings.ItemDesc.effectrange.ToString(
+                                        effect.Min.ToString("+#;-#;0"), effect.Max.ToString("+#;-#;0"), Strings.ItemDesc.effects[(int)effect.Type - 1]
+                                    ), itemStats.RenderColor,
+                                    itemStatsText.CurAlignments.Count > 0 ? itemStatsText.CurAlignments[0] : Alignments.Left,
+                                    itemDescText.Font
+                                );
+                                
+                            }
+
+                        }
+                    }
+                    
+                    
                 }
 
                 //Load Again for positioning purposes.

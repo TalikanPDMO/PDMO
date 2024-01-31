@@ -557,6 +557,10 @@
     <Compile Include="Migrations\20220628115302_AddingStadiumWinsAndLossesToPlayers.designer.cs">
       <DependentUpon>20220628115302_AddingStadiumWinsAndLossesToPlayers.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20240129142953_AddingMultipleEffectsToPlayerItems.cs" />
+    <Compile Include="Migrations\20240129142953_AddingMultipleEffectsToPlayerItems.designer.cs">
+      <DependentUpon>20240129142953_AddingMultipleEffectsToPlayerItems.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
       <DependentUpon>20201222164741_NpcResetRadius.cs</DependentUpon>
@@ -732,6 +736,10 @@
     <Compile Include="Migrations\Game\20240128141635_AddingManaDamageToItems.cs" />
     <Compile Include="Migrations\Game\20240128141635_AddingManaDamageToItems.designer.cs">
       <DependentUpon>20240128141635_AddingManaDamageToItems.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20240129141414_AddingMultipleEffectsToItems.cs" />
+    <Compile Include="Migrations\Game\20240129141414_AddingMultipleEffectsToItems.designer.cs">
+      <DependentUpon>20240129141414_AddingMultipleEffectsToItems.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
@@ -1015,6 +1023,8 @@
     <None Include="FodyWeavers.xml">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="assets\scripts\migrations\ItemEffectToListEffects_31012024.py" />
+    <Content Include="assets\scripts\migrations\UpdatePlayerItemsEffects_31012024.py" />
     <Content Include="Icon.ico" />
     <EmbeddedResource Include="$(NetworkHandshakePublicKey)" />
     <EmbeddedResource Include="$(NetworkHandshakePrivateKey)" />
