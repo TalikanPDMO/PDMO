@@ -150,17 +150,17 @@ namespace Intersect.Editor.Forms.Editors
                 cmbFemalePaperdoll.Items.Add(paperdollnames[i]);
             }
 
-            nudStr.Maximum = Options.MaxStatValue;
-            nudMag.Maximum = Options.MaxStatValue;
-            nudDef.Maximum = Options.MaxStatValue;
-            nudMR.Maximum = Options.MaxStatValue;
-            nudSpd.Maximum = Options.MaxStatValue;
+            nudStrMin.Maximum = Options.MaxStatValue;
+            nudMagMin.Maximum = Options.MaxStatValue;
+            nudDefMin.Maximum = Options.MaxStatValue;
+            nudMRMin.Maximum = Options.MaxStatValue;
+            nudSpdMin.Maximum = Options.MaxStatValue;
 
-            nudStr.Minimum = -Options.MaxStatValue;
-            nudMag.Minimum = -Options.MaxStatValue;
-            nudDef.Minimum = -Options.MaxStatValue;
-            nudMR.Minimum = -Options.MaxStatValue;
-            nudSpd.Minimum = -Options.MaxStatValue;
+            nudStrMin.Minimum = -Options.MaxStatValue;
+            nudMagMin.Minimum = -Options.MaxStatValue;
+            nudDefMin.Minimum = -Options.MaxStatValue;
+            nudMRMin.Minimum = -Options.MaxStatValue;
+            nudSpdMin.Minimum = -Options.MaxStatValue;
 
             cmbCritEffectSpell.Items.Clear();
             cmbCritEffectSpell.Items.Add(Strings.General.none);
@@ -227,9 +227,8 @@ namespace Intersect.Editor.Forms.Editors
             lblSpd.Text = Strings.ItemEditor.speedbonus;
             lblMag.Text = Strings.ItemEditor.abilitypowerbonus;
             lblMR.Text = Strings.ItemEditor.magicresistbonus;
-            lblRange.Text = Strings.ItemEditor.bonusrange;
             lblBonusEffect.Text = Strings.ItemEditor.bonuseffect;
-            lblEffects.Text = Strings.ItemEditor.effects;
+            grpEffects.Text = Strings.ItemEditor.effects;
             lblEffectTo.Text = Strings.ItemEditor.effectto;
             btnAdd.Text = Strings.ItemEditor.add;
             btnRemove.Text = Strings.ItemEditor.remove;
@@ -351,11 +350,17 @@ namespace Intersect.Editor.Forms.Editors
                 nudPrice.Value = mEditorItem.Price;
                 cmbRarity.SelectedIndex = mEditorItem.Rarity;
 
-                nudStr.Value = mEditorItem.StatsGiven[0];
-                nudMag.Value = mEditorItem.StatsGiven[1];
-                nudDef.Value = mEditorItem.StatsGiven[2];
-                nudMR.Value = mEditorItem.StatsGiven[3];
-                nudSpd.Value = mEditorItem.StatsGiven[4];
+                nudStrMin.Value = mEditorItem.StatsGiven[0, 0];
+                nudMagMin.Value = mEditorItem.StatsGiven[1, 0];
+                nudDefMin.Value = mEditorItem.StatsGiven[2, 0];
+                nudMRMin.Value = mEditorItem.StatsGiven[3, 0];
+                nudSpdMin.Value = mEditorItem.StatsGiven[4, 0];
+
+                nudStrMax.Value = mEditorItem.StatsGiven[0, 1];
+                nudMagMax.Value = mEditorItem.StatsGiven[1, 1];
+                nudDefMax.Value = mEditorItem.StatsGiven[2, 1];
+                nudMRMax.Value = mEditorItem.StatsGiven[3, 1];
+                nudSpdMax.Value = mEditorItem.StatsGiven[4, 1];
 
                 nudStrPercentage.Value = mEditorItem.PercentageStatsGiven[0];
                 nudMagPercentage.Value = mEditorItem.PercentageStatsGiven[1];
@@ -363,8 +368,8 @@ namespace Intersect.Editor.Forms.Editors
                 nudMRPercentage.Value = mEditorItem.PercentageStatsGiven[3];
                 nudSpdPercentage.Value = mEditorItem.PercentageStatsGiven[4];
 
-                nudHealthBonus.Value = mEditorItem.VitalsGiven[0];
-                nudManaBonus.Value = mEditorItem.VitalsGiven[1];
+                nudHealthMin.Value = mEditorItem.VitalsGiven[0];
+                nudManaMin.Value = mEditorItem.VitalsGiven[1];
                 nudHPPercentage.Value = mEditorItem.PercentageVitalsGiven[0];
                 nudMPPercentage.Value = mEditorItem.PercentageVitalsGiven[1];
                 nudHPRegen.Value = mEditorItem.VitalsRegen[0];
@@ -379,7 +384,6 @@ namespace Intersect.Editor.Forms.Editors
                 cmbAttackSpeedModifier.SelectedIndex = mEditorItem.AttackSpeedModifier;
                 nudAttackSpeedValue.Value = mEditorItem.AttackSpeedValue;
                 nudScaling.Value = mEditorItem.Scaling;
-                nudRange.Value = mEditorItem.StatGrowth;
                 chkCanDrop.Checked = Convert.ToBoolean(mEditorItem.CanDrop);
                 chkCanBank.Checked = Convert.ToBoolean(mEditorItem.CanBank);
                 chkCanGuildBank.Checked = Convert.ToBoolean(mEditorItem.CanGuildBank);
@@ -900,34 +904,54 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.CritEffectSpellReplace = chkReplaceCritEffectSpell.Checked;
         }
 
-        private void nudRange_ValueChanged(object sender, EventArgs e)
+        private void nudStrMin_ValueChanged(object sender, EventArgs e)
         {
-            mEditorItem.StatGrowth = (int) nudRange.Value;
+            mEditorItem.StatsGiven[0, 0] = (int) nudStrMin.Value;
         }
 
-        private void nudStr_ValueChanged(object sender, EventArgs e)
+        private void nudMagMin_ValueChanged(object sender, EventArgs e)
         {
-            mEditorItem.StatsGiven[0] = (int) nudStr.Value;
+            mEditorItem.StatsGiven[1, 0] = (int) nudMagMin.Value;
         }
 
-        private void nudMag_ValueChanged(object sender, EventArgs e)
+        private void nudDefMin_ValueChanged(object sender, EventArgs e)
         {
-            mEditorItem.StatsGiven[1] = (int) nudMag.Value;
+            mEditorItem.StatsGiven[2, 0] = (int) nudDefMin.Value;
         }
 
-        private void nudDef_ValueChanged(object sender, EventArgs e)
+        private void nudMRMin_ValueChanged(object sender, EventArgs e)
         {
-            mEditorItem.StatsGiven[2] = (int) nudDef.Value;
+            mEditorItem.StatsGiven[3, 0] = (int) nudMRMin.Value;
         }
 
-        private void nudMR_ValueChanged(object sender, EventArgs e)
+        private void nudSpdMin_ValueChanged(object sender, EventArgs e)
         {
-            mEditorItem.StatsGiven[3] = (int) nudMR.Value;
+            mEditorItem.StatsGiven[4, 0] = (int) nudSpdMin.Value;
         }
 
-        private void nudSpd_ValueChanged(object sender, EventArgs e)
+        private void nudStrMax_ValueChanged(object sender, EventArgs e)
         {
-            mEditorItem.StatsGiven[4] = (int) nudSpd.Value;
+            mEditorItem.StatsGiven[0, 1] = (int)nudStrMax.Value;
+        }
+
+        private void nudMagMax_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StatsGiven[1, 1] = (int)nudMagMax.Value;
+        }
+
+        private void nudDefMax_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StatsGiven[2, 1] = (int)nudDefMax.Value;
+        }
+
+        private void nudMRMax_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StatsGiven[3, 1] = (int)nudMRMax.Value;
+        }
+
+        private void nudSpdMax_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StatsGiven[4, 1] = (int)nudSpdMax.Value;
         }
 
         private void nudStrPercentage_ValueChanged(object sender, EventArgs e)
@@ -1076,12 +1100,12 @@ namespace Intersect.Editor.Forms.Editors
 
         private void nudHealthBonus_ValueChanged(object sender, EventArgs e)
         {
-            mEditorItem.VitalsGiven[0] = (int) nudHealthBonus.Value;
+            mEditorItem.VitalsGiven[0] = (int) nudHealthMin.Value;
         }
 
         private void nudManaBonus_ValueChanged(object sender, EventArgs e)
         {
-            mEditorItem.VitalsGiven[1] = (int) nudManaBonus.Value;
+            mEditorItem.VitalsGiven[1] = (int) nudManaMin.Value;
         }
 
         private void nudHPPercentage_ValueChanged(object sender, EventArgs e)
@@ -1518,6 +1542,7 @@ namespace Intersect.Editor.Forms.Editors
 
 
         #endregion
+
     }
 
 }

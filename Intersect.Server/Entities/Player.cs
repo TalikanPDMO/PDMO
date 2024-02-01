@@ -1689,7 +1689,7 @@ namespace Intersect.Server.Entities
                         var descriptor = ItemBase.Get(item.ItemId);
                         if (descriptor != null)
                         {
-                            flatStats += descriptor.StatsGiven[(int)statType] + item.StatBuffs[(int)statType];
+                            flatStats += item.StatBuffs[(int)statType];
                             percentageStats += descriptor.PercentageStatsGiven[(int)statType];
                         }
                     }

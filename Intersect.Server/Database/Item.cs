@@ -50,7 +50,7 @@ namespace Intersect.Server.Database
             for (var i = 0; i < (int) Stats.StatCount; i++)
             {
                 // TODO: What the fuck?
-                StatBuffs[i] = Randomization.Next(-descriptor.StatGrowth, descriptor.StatGrowth + 1);
+                StatBuffs[i] = Randomization.Next(descriptor.StatsGiven[i, 0], descriptor.StatsGiven[i, 1] + 1);
             }
             foreach (var effect in descriptor.Effects)
             {
