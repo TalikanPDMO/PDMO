@@ -2114,7 +2114,7 @@ namespace Intersect.Server.Entities
                     // Do we have any items to spawn to the map?
                     if (spawnAmount > 0)
                     {
-                        Map.SpawnItem(overflowTileX > -1 ? overflowTileX : X, overflowTileY > -1 ? overflowTileY : Y, item, spawnAmount, Id);
+                        Map.SpawnItem(overflowTileX > -1 ? overflowTileX : X, overflowTileY > -1 ? overflowTileY : Y, item, spawnAmount, Id, true);
                         return spawnAmount != item.Quantity;
                     }
 
@@ -2351,7 +2351,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            map.SpawnItem(X, Y, itemInSlot, itemDescriptor.IsStackable ? amount : 1, Id);
+            map.SpawnItem(X, Y, itemInSlot, itemDescriptor.IsStackable ? amount : 1, Id, true);
 
             itemInSlot.Quantity = Math.Max(0, itemInSlot.Quantity - amount);
 
@@ -4188,7 +4188,7 @@ namespace Intersect.Server.Entities
 
                 if (!TryGiveItem(offer))
                 {
-                    MapInstance.Get(MapId)?.SpawnItem(X, Y, offer, offer.Quantity, Id);
+                    MapInstance.Get(MapId)?.SpawnItem(X, Y, offer, offer.Quantity, Id, true);
                     PacketSender.SendChatMsg(this, Strings.Trading.itemsdropped, ChatMessageType.Inventory, CustomColors.Alerts.Error);
                 }
 

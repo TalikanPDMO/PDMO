@@ -3662,7 +3662,7 @@ namespace Intersect.Server.Entities
 
                 // Spawn the actual item!
                 var map = MapInstance.Get(MapId);
-                map?.SpawnItem(X, Y, item, quantity, lootOwner, sendUpdate);
+                map?.SpawnItem(X, Y, item, quantity, lootOwner, false, sendUpdate);
 
                 // Remove the item from inventory if a player.
                 var player = this as Player;

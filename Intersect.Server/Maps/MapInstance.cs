@@ -296,7 +296,7 @@ namespace Intersect.Server.Maps
         /// <param name="y">The vertical location of this item.</param>
         /// <param name="item">The <see cref="Item"/> to spawn on the map.</param>
         /// <param name="amount">The amount of times to spawn this item to the map. Set to the <see cref="Item"/> quantity, overwrites quantity if stackable!</param>
-        public void SpawnItem(int x, int y, Item item, int amount) => SpawnItem(x, y, item, amount, Guid.Empty);
+        public void SpawnItem(int x, int y, Item item, int amount) => SpawnItem(x, y, item, amount, Guid.Empty, true);
 
         /// <summary>
         /// Spawn an item to this map instance.
@@ -306,7 +306,7 @@ namespace Intersect.Server.Maps
         /// <param name="item">The <see cref="Item"/> to spawn on the map.</param>
         /// <param name="amount">The amount of times to spawn this item to the map. Set to the <see cref="Item"/> quantity, overwrites quantity if stackable!</param>
         /// <param name="owner">The player Id that will be the temporary owner of this item.</param>
-        public void SpawnItem(int x, int y, Item item, int amount, Guid owner, bool sendUpdate = true)
+        public void SpawnItem(int x, int y, Item item, int amount, Guid owner, bool sameRanges, bool sendUpdate = true)
         {
             if (item == null)
             {
@@ -372,7 +372,7 @@ namespace Intersect.Server.Maps
                 // Oh boy here we go! Set quantity to 1 and drop multiple!
                 for (var i = 0; i < amount; i++)
                 {
-                    var mapItem = new MapItem(item.ItemId, amount, x, y, item.BagId, item.Bag) {
+                    var mapItem = new MapItem(item.ItemId, 1, x, y, item.BagId, item.Bag) {
                         DespawnTime = Globals.Timing.Milliseconds + Options.Loot.ItemDespawnTime,
                         Owner = owner,
                         OwnershipTime = Globals.Timing.Milliseconds + Options.Loot.ItemOwnershipTime,
@@ -380,7 +380,7 @@ namespace Intersect.Server.Maps
                     };
 
                     // If this is a piece of equipment, set up the stat buffs for it.
-                    if (itemDescriptor.ItemType == ItemTypes.Equipment)
+                    if (itemDescriptor.ItemType == ItemTypes.Equipment && sameRanges)
                     {
                         mapItem.SetupStatBuffs(item);
                         mapItem.SetupVitalBuffs(item);
