@@ -116,9 +116,13 @@ namespace Intersect.Editor.Forms.Editors
             this.lblManaRegen = new System.Windows.Forms.Label();
             this.lblRegenHint = new System.Windows.Forms.Label();
             this.grpVitalBonuses = new DarkUI.Controls.DarkGroupBox();
+            this.nudManaMax = new DarkUI.Controls.DarkNumericUpDown();
             this.lblPercentage2 = new System.Windows.Forms.Label();
+            this.lblTo7 = new System.Windows.Forms.Label();
             this.lblPercentage1 = new System.Windows.Forms.Label();
+            this.lblTo6 = new System.Windows.Forms.Label();
             this.nudMPPercentage = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudHealthMax = new DarkUI.Controls.DarkNumericUpDown();
             this.nudHPPercentage = new DarkUI.Controls.DarkNumericUpDown();
             this.lblPlus2 = new System.Windows.Forms.Label();
             this.lblPlus1 = new System.Windows.Forms.Label();
@@ -239,10 +243,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.toolStripItemRelations = new System.Windows.Forms.ToolStripButton();
-            this.nudManaMax = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblTo7 = new System.Windows.Forms.Label();
-            this.lblTo6 = new System.Windows.Forms.Label();
-            this.nudHealthMax = new DarkUI.Controls.DarkNumericUpDown();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxLossOnDeath)).BeginInit();
@@ -266,7 +266,9 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMpRegen)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHPRegen)).BeginInit();
             this.grpVitalBonuses.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudManaMax)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMPPercentage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudHealthMax)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHPPercentage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudManaMin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHealthMin)).BeginInit();
@@ -306,8 +308,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpBags.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBag)).BeginInit();
             this.toolStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudManaMax)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudHealthMax)).BeginInit();
             this.SuspendLayout();
             // 
             // grpItems
@@ -1476,6 +1476,31 @@ namespace Intersect.Editor.Forms.Editors
             this.grpVitalBonuses.TabStop = false;
             this.grpVitalBonuses.Text = "Vital Bonuses";
             // 
+            // nudManaMax
+            // 
+            this.nudManaMax.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudManaMax.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudManaMax.Location = new System.Drawing.Point(97, 73);
+            this.nudManaMax.Maximum = new decimal(new int[] {
+            999999999,
+            0,
+            0,
+            0});
+            this.nudManaMax.Minimum = new decimal(new int[] {
+            999999999,
+            0,
+            0,
+            -2147483648});
+            this.nudManaMax.Name = "nudManaMax";
+            this.nudManaMax.Size = new System.Drawing.Size(70, 20);
+            this.nudManaMax.TabIndex = 96;
+            this.nudManaMax.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudManaMax.ValueChanged += new System.EventHandler(this.nudManaMax_ValueChanged);
+            // 
             // lblPercentage2
             // 
             this.lblPercentage2.AutoSize = true;
@@ -1486,6 +1511,16 @@ namespace Intersect.Editor.Forms.Editors
             this.lblPercentage2.TabIndex = 70;
             this.lblPercentage2.Text = "%";
             // 
+            // lblTo7
+            // 
+            this.lblTo7.AutoSize = true;
+            this.lblTo7.Location = new System.Drawing.Point(79, 76);
+            this.lblTo7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblTo7.Name = "lblTo7";
+            this.lblTo7.Size = new System.Drawing.Size(16, 13);
+            this.lblTo7.TabIndex = 95;
+            this.lblTo7.Text = "to";
+            // 
             // lblPercentage1
             // 
             this.lblPercentage1.AutoSize = true;
@@ -1495,6 +1530,16 @@ namespace Intersect.Editor.Forms.Editors
             this.lblPercentage1.Size = new System.Drawing.Size(15, 13);
             this.lblPercentage1.TabIndex = 69;
             this.lblPercentage1.Text = "%";
+            // 
+            // lblTo6
+            // 
+            this.lblTo6.AutoSize = true;
+            this.lblTo6.Location = new System.Drawing.Point(79, 37);
+            this.lblTo6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblTo6.Name = "lblTo6";
+            this.lblTo6.Size = new System.Drawing.Size(16, 13);
+            this.lblTo6.TabIndex = 94;
+            this.lblTo6.Text = "to";
             // 
             // nudMPPercentage
             // 
@@ -1515,6 +1560,31 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0});
             this.nudMPPercentage.ValueChanged += new System.EventHandler(this.nudMPPercentage_ValueChanged);
+            // 
+            // nudHealthMax
+            // 
+            this.nudHealthMax.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudHealthMax.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudHealthMax.Location = new System.Drawing.Point(97, 34);
+            this.nudHealthMax.Maximum = new decimal(new int[] {
+            999999999,
+            0,
+            0,
+            0});
+            this.nudHealthMax.Minimum = new decimal(new int[] {
+            999999999,
+            0,
+            0,
+            -2147483648});
+            this.nudHealthMax.Name = "nudHealthMax";
+            this.nudHealthMax.Size = new System.Drawing.Size(70, 20);
+            this.nudHealthMax.TabIndex = 93;
+            this.nudHealthMax.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudHealthMax.ValueChanged += new System.EventHandler(this.nudHealthMax_ValueChanged);
             // 
             // nudHPPercentage
             // 
@@ -1579,7 +1649,7 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0,
             0});
-            this.nudManaMin.ValueChanged += new System.EventHandler(this.nudManaBonus_ValueChanged);
+            this.nudManaMin.ValueChanged += new System.EventHandler(this.nudManaMin_ValueChanged);
             // 
             // nudHealthMin
             // 
@@ -1604,7 +1674,7 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0,
             0});
-            this.nudHealthMin.ValueChanged += new System.EventHandler(this.nudHealthBonus_ValueChanged);
+            this.nudHealthMin.ValueChanged += new System.EventHandler(this.nudHealthMin_ValueChanged);
             // 
             // lblManaBonus
             // 
@@ -3339,74 +3409,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemRelations.Text = "Relations";
             this.toolStripItemRelations.Click += new System.EventHandler(this.toolStripItemRelations_Click);
             // 
-            // nudManaMax
-            // 
-            this.nudManaMax.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudManaMax.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudManaMax.Location = new System.Drawing.Point(97, 73);
-            this.nudManaMax.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.nudManaMax.Minimum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            -2147483648});
-            this.nudManaMax.Name = "nudManaMax";
-            this.nudManaMax.Size = new System.Drawing.Size(70, 20);
-            this.nudManaMax.TabIndex = 96;
-            this.nudManaMax.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            // 
-            // lblTo7
-            // 
-            this.lblTo7.AutoSize = true;
-            this.lblTo7.Location = new System.Drawing.Point(79, 76);
-            this.lblTo7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblTo7.Name = "lblTo7";
-            this.lblTo7.Size = new System.Drawing.Size(16, 13);
-            this.lblTo7.TabIndex = 95;
-            this.lblTo7.Text = "to";
-            // 
-            // lblTo6
-            // 
-            this.lblTo6.AutoSize = true;
-            this.lblTo6.Location = new System.Drawing.Point(79, 37);
-            this.lblTo6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblTo6.Name = "lblTo6";
-            this.lblTo6.Size = new System.Drawing.Size(16, 13);
-            this.lblTo6.TabIndex = 94;
-            this.lblTo6.Text = "to";
-            // 
-            // nudHealthMax
-            // 
-            this.nudHealthMax.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudHealthMax.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudHealthMax.Location = new System.Drawing.Point(97, 34);
-            this.nudHealthMax.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.nudHealthMax.Minimum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            -2147483648});
-            this.nudHealthMax.Name = "nudHealthMax";
-            this.nudHealthMax.Size = new System.Drawing.Size(70, 20);
-            this.nudHealthMax.TabIndex = 93;
-            this.nudHealthMax.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            // 
             // FrmItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3458,7 +3460,9 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudHPRegen)).EndInit();
             this.grpVitalBonuses.ResumeLayout(false);
             this.grpVitalBonuses.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudManaMax)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMPPercentage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudHealthMax)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHPPercentage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudManaMin)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHealthMin)).EndInit();
@@ -3506,8 +3510,6 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudBag)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudManaMax)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudHealthMax)).EndInit();
             this.ResumeLayout(false);
 
         }

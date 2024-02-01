@@ -58,6 +58,8 @@ namespace Intersect.Client.Interface.Game.Character
 
         private int[] mEmptyStatBoost = new int[(int)Stats.StatCount];
 
+        private int[] mEmptyVitalBoost = new int[(int)Vitals.VitalCount];
+
         private List<int[]> mEmptyEffects = new List<int[]>();
 
         Label mMagicRstLabel;
@@ -361,17 +363,18 @@ namespace Intersect.Client.Interface.Game.Character
                             .Update(
                                 Globals.Me.Inventory[Globals.Me.MyEquipment[i]].ItemId,
                                 Globals.Me.Inventory[Globals.Me.MyEquipment[i]].StatBuffs,
+                                Globals.Me.Inventory[Globals.Me.MyEquipment[i]].VitalBuffs,
                                 Globals.Me.Inventory[Globals.Me.MyEquipment[i]].Effects
                             );
                     }
                     else
                     {
-                        Items[i].Update(Guid.Empty, mEmptyStatBoost, mEmptyEffects);
+                        Items[i].Update(Guid.Empty, mEmptyStatBoost, mEmptyVitalBoost, mEmptyEffects);
                     }
                 }
                 else
                 {
-                    Items[i].Update(Guid.Empty, mEmptyStatBoost, mEmptyEffects);
+                    Items[i].Update(Guid.Empty, mEmptyStatBoost, mEmptyVitalBoost, mEmptyEffects);
                 }
             }
         }

@@ -383,6 +383,8 @@ namespace Intersect.Server.Maps
                     if (itemDescriptor.ItemType == ItemTypes.Equipment)
                     {
                         mapItem.SetupStatBuffs(item);
+                        mapItem.SetupVitalBuffs(item);
+                        mapItem.SetupEffects(item);
                     }
 
                     AddItem(mapItem);

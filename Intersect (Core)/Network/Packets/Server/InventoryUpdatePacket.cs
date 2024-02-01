@@ -13,13 +13,14 @@ namespace Intersect.Network.Packets.Server
         {
         }
 
-        public InventoryUpdatePacket(int slot, Guid id, int quantity, Guid? bagId, int[] statBuffs, List<int[]> effects)
+        public InventoryUpdatePacket(int slot, Guid id, int quantity, Guid? bagId, int[] statBuffs, int[] vitalBuffs, List<int[]> effects)
         {
             Slot = slot;
             ItemId = id;
             BagId = bagId;
             Quantity = quantity;
             StatBuffs = statBuffs;
+            VitalBuffs = vitalBuffs;
             Effects = effects;
         }
 
@@ -39,6 +40,9 @@ namespace Intersect.Network.Packets.Server
         public int[] StatBuffs { get; set; }
 
         [Key(6)]
+        public int[] VitalBuffs { get; set; }
+
+        [Key(7)]
         public List<int[]> Effects { get; set; }
 
     }

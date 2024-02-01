@@ -17,16 +17,19 @@ namespace Intersect.Client.Items
 
         public int[] StatBuffs = new int[(int) Stats.StatCount];
 
+        public int[] VitalBuffs = new int[(int)Vitals.VitalCount];
+
         public List<int[]> Effects = new List<int[]>();
 
         public ItemBase Base => ItemBase.Get(ItemId);
 
-        public void Load(Guid id, int quantity, Guid? bagId, int[] statBuffs, List<int[]> effects)
+        public void Load(Guid id, int quantity, Guid? bagId, int[] statBuffs, int[] vitalBuffs, List<int[]> effects)
         {
             ItemId = id;
             Quantity = quantity;
             BagId = bagId;
             StatBuffs = statBuffs;
+            VitalBuffs = vitalBuffs;
             Effects = effects;
         }
 
@@ -42,6 +45,11 @@ namespace Intersect.Client.Items
             for (var i = 0; i < (int) Stats.StatCount; i++)
             {
                 newItem.StatBuffs[i] = StatBuffs[i];
+            }
+
+            for (var i = 0; i < (int)Vitals.VitalCount; i++)
+            {
+                newItem.VitalBuffs[i] = VitalBuffs[i];
             }
 
             for (var i = 0; i < Effects.Count; i++)

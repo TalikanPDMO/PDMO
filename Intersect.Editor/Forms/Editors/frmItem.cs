@@ -368,8 +368,12 @@ namespace Intersect.Editor.Forms.Editors
                 nudMRPercentage.Value = mEditorItem.PercentageStatsGiven[3];
                 nudSpdPercentage.Value = mEditorItem.PercentageStatsGiven[4];
 
-                nudHealthMin.Value = mEditorItem.VitalsGiven[0];
-                nudManaMin.Value = mEditorItem.VitalsGiven[1];
+                nudHealthMin.Value = mEditorItem.VitalsGiven[0, 0];
+                nudManaMin.Value = mEditorItem.VitalsGiven[1, 0];
+
+                nudHealthMax.Value = mEditorItem.VitalsGiven[0, 1];
+                nudManaMax.Value = mEditorItem.VitalsGiven[1, 1];
+
                 nudHPPercentage.Value = mEditorItem.PercentageVitalsGiven[0];
                 nudMPPercentage.Value = mEditorItem.PercentageVitalsGiven[1];
                 nudHPRegen.Value = mEditorItem.VitalsRegen[0];
@@ -1098,14 +1102,24 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.Cooldown = (int) nudCooldown.Value;
         }
 
-        private void nudHealthBonus_ValueChanged(object sender, EventArgs e)
+        private void nudHealthMin_ValueChanged(object sender, EventArgs e)
         {
-            mEditorItem.VitalsGiven[0] = (int) nudHealthMin.Value;
+            mEditorItem.VitalsGiven[0, 0] = (int) nudHealthMin.Value;
         }
 
-        private void nudManaBonus_ValueChanged(object sender, EventArgs e)
+        private void nudManaMin_ValueChanged(object sender, EventArgs e)
         {
-            mEditorItem.VitalsGiven[1] = (int) nudManaMin.Value;
+            mEditorItem.VitalsGiven[1, 0] = (int) nudManaMin.Value;
+        }
+
+        private void nudHealthMax_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.VitalsGiven[0, 1] = (int)nudHealthMax.Value;
+        }
+
+        private void nudManaMax_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.VitalsGiven[1, 1] = (int)nudManaMax.Value;
         }
 
         private void nudHPPercentage_ValueChanged(object sender, EventArgs e)

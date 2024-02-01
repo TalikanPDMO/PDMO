@@ -1039,6 +1039,8 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString prereq = @"Prerequisites:";
 
+            public static LocalizedString rangevital = @"{00} to {01}";
+
             public static LocalizedString rangestat = @"{00} to {01}";
 
             public static Dictionary<int, LocalizedString> stats = new Dictionary<int, LocalizedString>

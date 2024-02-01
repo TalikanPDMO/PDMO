@@ -279,12 +279,12 @@ namespace Intersect.GameObjects
         [JsonIgnore]
         public string VitalsJson
         {
-            get => DatabaseUtils.SaveIntArray(VitalsGiven, (int) Vitals.VitalCount);
-            set => VitalsGiven = DatabaseUtils.LoadIntArray(value, (int) Vitals.VitalCount);
+            get => JsonConvert.SerializeObject(VitalsGiven);
+            set => VitalsGiven = JsonConvert.DeserializeObject<int[,]>(value);
         }
 
         [NotMapped]
-        public int[] VitalsGiven { get; set; }
+        public int[,] VitalsGiven { get; set; }
 
         [Column("VitalsRegen")]
         [JsonIgnore]
@@ -384,7 +384,7 @@ namespace Intersect.GameObjects
             Speed = 10; // Set to 10 by default.
             StatsGiven = new int[(int) Stats.StatCount, 2];
             PercentageStatsGiven = new int[(int) Stats.StatCount];
-            VitalsGiven = new int[(int) Vitals.VitalCount];
+            VitalsGiven = new int[(int) Vitals.VitalCount, 2];
             VitalsRegen = new int[(int) Vitals.VitalCount];
             PercentageVitalsGiven = new int[(int) Vitals.VitalCount];
             Consumable = new ConsumableData();

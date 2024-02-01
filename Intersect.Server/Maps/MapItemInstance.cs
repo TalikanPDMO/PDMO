@@ -69,6 +69,29 @@ namespace Intersect.Server.Maps
             }
         }
 
+        public void SetupVitalBuffs(Item item)
+        {
+            if (VitalBuffs != null && item.VitalBuffs != null)
+            {
+                for (var i = 0; i < VitalBuffs.Length; ++i)
+                {
+                    VitalBuffs[i] = item.VitalBuffs.Length > i ? item.VitalBuffs[i] : 0;
+                }
+            }
+        }
+
+        public void SetupEffects(Item item)
+        {
+            if (Effects != null && item.Effects != null)
+            {
+                Effects.Clear();
+                foreach (var effect in item.Effects)
+                {
+                    Effects.Add(new int[2] { effect[0], effect[1] });
+                }
+            }
+        }
+
     }
 
 }

@@ -950,7 +950,7 @@ namespace Intersect.Server.Entities
                         var item = ItemBase.Get(Items[Equipment[i]].ItemId);
                         if (item != null)
                         {
-                            classVital += item.VitalsGiven[vital] + item.PercentageVitalsGiven[vital] * baseVital / 100;
+                            classVital += Items[Equipment[i]].VitalBuffs[vital] + item.PercentageVitalsGiven[vital] * baseVital / 100;
                         }
                     }
                 }

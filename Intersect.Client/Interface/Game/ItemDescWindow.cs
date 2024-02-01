@@ -22,6 +22,7 @@ namespace Intersect.Client.Interface.Game
             int x,
             int y,
             int[] statBuffs,
+            int[] vitalBuffs,
             List<int[]> effects,
             string titleOverride = "",
             string valueLabel = "",
@@ -50,7 +51,7 @@ namespace Intersect.Client.Interface.Game
                 {
                     for (var i = 0; i < (int)Vitals.VitalCount; i++)
                     {
-                        if (item.VitalsGiven[i] != 0 || item.PercentageVitalsGiven[i] != 0)
+                        if ((item.VitalsGiven[i, 0] != 0 && item.VitalsGiven[i, 1] != 0) || item.PercentageVitalsGiven[i] != 0)
                         {
                             expandedWindow = true;
                             break;
@@ -172,34 +173,78 @@ namespace Intersect.Client.Interface.Game
 
                         itemStats.AddLineBreak();
                     }
-
-                    for (var i = 0; i < (int) Vitals.VitalCount; i++)
+                    var vitals = "";
+                    if (vitalBuffs != null)
                     {
-                        var bonus = item.VitalsGiven[i].ToString();
-                        if (item.PercentageVitalsGiven[i] > 0)
+                        for (var i = 0; i < (int)Vitals.VitalCount; i++)
                         {
-                            if (item.VitalsGiven[i] > 0)
-                            {
-                                bonus += " + ";
-                            }
-                            else
-                            {
-                                bonus = "";
-                            }
+                            var flatStat = vitalBuffs[i];
+                            var bonus = flatStat.ToString();
 
-                            bonus += item.PercentageVitalsGiven[i] + "%";
+                            if (item.PercentageVitalsGiven[i] > 0)
+                            {
+                                if (flatStat > 0)
+                                {
+                                    bonus += " + ";
+                                }
+                                else
+                                {
+                                    bonus = "";
+                                }
+
+                                bonus += item.PercentageVitalsGiven[i] + "%";
+                            }
+                            if (bonus != "0")
+                            {
+                                // Show stat only if not 0
+                                vitals = Strings.ItemDesc.vitals[i].ToString(bonus);
+                                itemStats.AddText(
+                                    vitals, itemStats.RenderColor,
+                                    itemStatsText.CurAlignments.Count > 0 ? itemStatsText.CurAlignments[0] : Alignments.Left,
+                                    itemDescText.Font
+                                );
+
+                                itemStats.AddLineBreak();
+                            }
                         }
-                        if (bonus != "0")
+                    }
+                    else
+                    {
+                        // Display the possible stat ranges
+                        for (var i = 0; i < (int)Vitals.VitalCount; i++)
                         {
-                            // Show stat only if not 0
-                            var vitals = Strings.ItemDesc.vitals[i].ToString(bonus);
-                            itemStats.AddText(
-                                vitals, itemStats.RenderColor,
-                                itemStatsText.CurAlignments.Count > 0 ? itemStatsText.CurAlignments[0] : Alignments.Left,
-                                itemDescText.Font
-                            );
+                            var bonus = item.VitalsGiven[i, 0].ToString();
+                            if (item.VitalsGiven[i, 0] != item.VitalsGiven[i, 1])
+                            {
+                                bonus = Strings.ItemDesc.rangevital.ToString(item.VitalsGiven[i, 0], item.VitalsGiven[i, 1]);
+                            }
 
-                            itemStats.AddLineBreak();
+                            if (item.PercentageVitalsGiven[i] > 0)
+                            {
+                                if (bonus != "0")
+                                {
+                                    bonus += " + ";
+                                }
+                                else
+                                {
+                                    bonus = "";
+                                }
+
+                                bonus += item.PercentageVitalsGiven[i] + "%";
+                            }
+                            if (bonus != "0")
+                            {
+                                // Show stat only if not 0
+                                vitals = Strings.ItemDesc.vitals[i].ToString(bonus);
+                                itemStats.AddText(
+                                    vitals, itemStats.RenderColor,
+                                    itemStatsText.CurAlignments.Count > 0
+                                        ? itemStatsText.CurAlignments[0]
+                                        : Alignments.Left, itemDescText.Font
+                                );
+
+                                itemStats.AddLineBreak();
+                            }
                         }
                     }
                     if (statBuffs != null)

@@ -49,8 +49,11 @@ namespace Intersect.Server.Database
 
             for (var i = 0; i < (int) Stats.StatCount; i++)
             {
-                // TODO: What the fuck?
                 StatBuffs[i] = Randomization.Next(descriptor.StatsGiven[i, 0], descriptor.StatsGiven[i, 1] + 1);
+            }
+            for (var i = 0; i < (int)Vitals.VitalCount; i++)
+            {
+                VitalBuffs[i] = Randomization.Next(descriptor.VitalsGiven[i, 0], descriptor.VitalsGiven[i, 1] + 1);
             }
             foreach (var effect in descriptor.Effects)
             {
@@ -63,6 +66,10 @@ namespace Intersect.Server.Database
             for (var i = 0; i < (int) Stats.StatCount; i++)
             {
                 StatBuffs[i] = item.StatBuffs[i];
+            }
+            for (var i = 0; i < (int)Vitals.VitalCount; i++)
+            {
+                VitalBuffs[i] = item.VitalBuffs[i];
             }
             Effects.Clear();
             foreach (var effect in item.Effects)
@@ -98,6 +105,17 @@ namespace Intersect.Server.Database
         [NotMapped]
         public int[] StatBuffs { get; set; } = new int[(int) Stats.StatCount];
 
+        [Column("VitalBuffs")]
+        [JsonIgnore]
+        public string VitalBuffsJson
+        {
+            get => DatabaseUtils.SaveIntArray(VitalBuffs, (int)Vitals.VitalCount);
+            set => VitalBuffs = DatabaseUtils.LoadIntArray(value, (int)Vitals.VitalCount);
+        }
+
+        [NotMapped]
+        public int[] VitalBuffs { get; set; } = new int[(int)Vitals.VitalCount];
+
 
         //Effects
         [NotMapped] public List<int[]> Effects = new List<int[]>();
@@ -128,6 +146,10 @@ namespace Intersect.Server.Database
             for (var i = 0; i < (int) Stats.StatCount; i++)
             {
                 StatBuffs[i] = item.StatBuffs[i];
+            }
+            for (var i = 0; i < (int)Vitals.VitalCount; i++)
+            {
+                VitalBuffs[i] = item.VitalBuffs[i];
             }
             Effects.Clear();
             foreach (var effect in item.Effects)

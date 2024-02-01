@@ -25,7 +25,9 @@ namespace Intersect.Client.Interface.Game.Character
 
         private ItemDescWindow mDescWindow;
 
-        private int[] mStatBoost = new int[(int) Enums.Stats.StatCount];
+        private int[] mStatBoost = new int[(int) Stats.StatCount];
+
+        private int[] mVitalBoost = new int[(int)Vitals.VitalCount];
 
         private List<int[]> mEffects = new List<int[]>();
 
@@ -90,7 +92,7 @@ namespace Intersect.Client.Interface.Game.Character
                 return;
             }
 
-            mDescWindow = new ItemDescWindow(item, 1, mCharacterWindow.X, mCharacterWindow.Y, mStatBoost, mEffects, item.Name);
+            mDescWindow = new ItemDescWindow(item, 1, mCharacterWindow.X, mCharacterWindow.Y, mStatBoost, mVitalBoost, mEffects, item.Name);
         }
 
         public FloatRect RenderBounds()
@@ -106,12 +108,13 @@ namespace Intersect.Client.Interface.Game.Character
             return rect;
         }
 
-        public void Update(Guid currentItemId, int[] statBoost, List<int[]> effects)
+        public void Update(Guid currentItemId, int[] statBoost, int[] vitalBoost, List<int[]> effects)
         {
-            if (currentItemId != mCurrentItemId || mStatBoost != statBoost || mEffects != effects || !mTexLoaded)
+            if (currentItemId != mCurrentItemId || mStatBoost != statBoost || mVitalBoost != vitalBoost || mEffects != effects || !mTexLoaded)
             {
                 mCurrentItemId = currentItemId;
                 mStatBoost = statBoost;
+                mStatBoost = vitalBoost;
                 mEffects = effects;
                 var item = ItemBase.Get(mCurrentItemId);
                 if (item != null)
