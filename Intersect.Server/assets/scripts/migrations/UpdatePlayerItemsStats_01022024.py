@@ -5,6 +5,10 @@ import json
 # This script look all the items in gamedata.db
 # Players with those items will now have a max roll of the items stats in their inventory, bank, bag, etc ...
 
+# /!\ LAUNCH AFTER RUNNING THE SERVER CONSOLE MIGRATION, when all item ranges in the editor are configured as we want /!\
+
+# Always SHUTDOWN THE SERVER when running migrations scripts
+
 gamedata_path = "/home/resources/gamedata.db"
 playerdata_path = "/home/resources/playerdata.db"
 

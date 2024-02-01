@@ -3,6 +3,11 @@ import sqlite3
 # Convert all the extrat effects in Items into a list of extra effects, with minimum and maximum range
 # Then, remove the useless old fields for extra effects
 
+# /!\ LAUNCH JUST AFTER RUNNING THE SERVER CONSOLE MIGRATION /!\
+
+# Always SHUTDOWN THE SERVER when running migrations scripts
+
+
 gamedata_path = "/home/resources/gamedata.db"
 
 print("********* START OF MIGRATION *********")

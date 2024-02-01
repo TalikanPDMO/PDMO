@@ -2,8 +2,13 @@ import sqlite3
 from datetime import datetime
 import json
 
+
 # This script look all the items in gamedata.db that have extra effects and then update the playerdata.db
 # Players with those items will now have a max roll of the items effects in their inventory, bank, bag, etc ...
+
+# /!\ LAUNCH AFTER RUNNING THE SERVER CONSOLE MIGRATION, when all effect ranges in the editor are configured as we want /!\
+
+# Always SHUTDOWN THE SERVER when running migrations scripts
 
 gamedata_path = "/home/resources/gamedata.db"
 playerdata_path = "/home/resources/playerdata.db"

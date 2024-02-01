@@ -1,7 +1,13 @@
 import json
 import sqlite3
 
+
 # Convert the stats of all items into the new format with min/max stats
+# Take into account the old Stat Range and convert it to new format in gamedata base
+
+# /!\ LAUNCH BEFORE RUNNING THE SERVER CONSOLE MIGRATION /!\
+
+# Always SHUTDOWN THE SERVER when running migrations scripts
 
 gamedata_path = "/home/resources/gamedata.db"
 playerdata_path = "/home/resources/playerdata.db"
