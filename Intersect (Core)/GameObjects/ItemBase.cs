@@ -273,8 +273,6 @@ namespace Intersect.GameObjects
         /// </summary>
         public int MaxBankStack { get; set; } = 1000000;
 
-        public int StatGrowth { get; set; }
-
         public int Tool { get; set; } = -1;
 
         [Column("VitalsGiven")]
