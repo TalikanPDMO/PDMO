@@ -414,6 +414,8 @@
     "damage": "Dégâts PV: {00}",
     "manadamage": "Dégâts PM: {00}",
     "desc": "{00}",
+    "bonuseffects": "Effets Additionnels:",
+    "effectrange": "{00}% à {01}% {02}",
     "effect": "{00}% {01}",
     "effects": {
       "0": "Réduction de délai",
@@ -421,7 +423,8 @@
       "2": "Ténacité",
       "3": "Chance",
       "4": "Augmente XP",
-      "5": "% Allure"
+      "5": "% Allure",
+      "6": "Vol de mana"
     },
     "itemtypes": {
       "0": "Normal",
@@ -434,6 +437,7 @@
     },
     "prereq": "Prérequis:",
     "rangestat": "{00} à {01}",
+    "rangevital": "{00} à {01}",
     "stats": {
       "0": "Attaque: {00}",
       "1": "Attaque Spé.: {00}",
