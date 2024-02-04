@@ -70,6 +70,11 @@ namespace Intersect.Editor.Forms.Editors.Events
             Text = Strings.EventEditor.title.ToString(txtEventname.Text);
         }
 
+        private void txtCommentary_TextChanged(object sender, EventArgs e)
+        {
+            MyEvent.Comment = txtCommentary.Text;
+        }
+
         private void lstEventCommands_SelectedIndexChanged(object sender, EventArgs e)
         {
             mCurrentCommand = lstEventCommands.SelectedIndex;
@@ -908,6 +913,7 @@ namespace Intersect.Editor.Forms.Editors.Events
         private void InitLocalization()
         {
             grpGeneral.Text = Strings.EventEditor.general;
+            grpCommentary.Text = Strings.EventEditor.commentary;
             lblName.Text = Strings.EventEditor.name;
             chkIsGlobal.Text = Strings.EventEditor.global;
             btnRelations.Text = Strings.EventEditor.relations;
@@ -1003,6 +1009,7 @@ namespace Intersect.Editor.Forms.Editors.Events
         {
             mEventBackup = MyEvent.JsonData;
             txtEventname.Text = MyEvent.Name;
+            txtCommentary.Text = MyEvent.Comment;
             if (disableNaming)
             {
                 txtEventname.Enabled = false;

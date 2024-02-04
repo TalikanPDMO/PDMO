@@ -751,6 +751,8 @@ namespace Intersect.Editor.Localization
 
             public static LocalizedString name = @"Name:";
 
+            public static LocalizedString commentary = @"Commentary";
+
             public static LocalizedString New = @"New Animation";
 
             public static LocalizedString paste = @"Paste Animation";
@@ -956,6 +958,8 @@ namespace Intersect.Editor.Localization
             public static LocalizedString cancel = @"Cancel";
 
             public static LocalizedString classes = @"Classes";
+
+            public static LocalizedString commentary = @"Commentary";
 
             public static LocalizedString combat = @"Combat (Unarmed)";
 
@@ -1193,6 +1197,7 @@ Tick timer saved in server config.json.";
 
         public struct CommonEventEditor
         {
+            public static LocalizedString commentary = @"Commentary";
 
             public static LocalizedString copy = @"Copy Event";
 
@@ -1231,6 +1236,7 @@ Tick timer saved in server config.json.";
 
         public struct CraftingTableEditor
         {
+            public static LocalizedString commentary = @"Commentary";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString cancel = @"Cancel";
@@ -1306,6 +1312,7 @@ Tick timer saved in server config.json.";
 
         public struct CraftsEditor
         {
+            public static LocalizedString commentary = @"Commentary";
 
             public static LocalizedString cancel = @"Cancel";
 
@@ -2708,6 +2715,7 @@ Tick timer saved in server config.json.";
 
         public struct EventEditor
         {
+            public static LocalizedString commentary = @"Commentary";
 
             public static LocalizedString addcommand = @"Add Commands";
 
@@ -3463,6 +3471,7 @@ Tick timer saved in server config.json.";
 
         public struct ItemEditor
         {
+            public static LocalizedString commentary = @"Commentary";
 
             public static LocalizedString abilitypowerbonus = @"Ability Pwr:";
 
@@ -4209,6 +4218,7 @@ Tick timer saved in server config.json.";
 
         public struct NpcEditor
         {
+            public static LocalizedString commentary = @"Commentary";
 
             public static LocalizedString abilitypower = @"Ability Pwr:";
 
@@ -4683,6 +4693,7 @@ Tick timer saved in server config.json.";
 
         public struct ProjectileEditor
         {
+            public static LocalizedString commentary = @"Commentary";
 
             public static LocalizedString addanimation = @"Add";
 
@@ -4805,6 +4816,7 @@ Tick timer saved in server config.json.";
 
         public struct QuestEditor
         {
+            public static LocalizedString commentary = @"Commentary";
 
             public static LocalizedString actions = @"Quest Actions:";
 
@@ -4910,6 +4922,7 @@ Tick timer saved in server config.json.";
 
         public struct ResourceEditor
         {
+            public static LocalizedString commentary = @"Commentary";
 
             public static LocalizedString animation = @"Animation:";
 
@@ -5152,6 +5165,8 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString sellsound = @"Sell Sound:";
+
+            public static LocalizedString commentary = @"Commentary";
         }
 
         public struct SpellEditor
@@ -5178,6 +5193,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString combatspell = @"Combat Spell";
 
             public static LocalizedString cooldown = @"Cooldown (ms):";
+
+            public static LocalizedString commentary = @"Commentary";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString CooldownGroup = @"Cooldown Group:";
@@ -5463,7 +5480,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString value = @"Value:";
 
-            public static LocalizedString description = @"Description:";
+            public static LocalizedString commentary = @"Commentary";
 
             public static LocalizedString textapiid = @"API Id:";
 
@@ -5512,7 +5529,7 @@ Tick timer saved in server config.json.";
 
             public static Dictionary<int, LocalizedString> descriptions = new Dictionary<int, LocalizedString>
             {
-                {0, @"Event Driven - {00}"},
+                {0, @"Event - {00}"},
                 {1, @"Gather Items [{00} x{01}] - {02}"},
                 {2, @"Kill Npc(s) [{00} x{01}] - {02}"},
             };

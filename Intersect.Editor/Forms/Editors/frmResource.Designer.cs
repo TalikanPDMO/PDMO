@@ -87,7 +87,9 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbEvent = new DarkUI.Controls.DarkComboBox();
             this.lblEvent = new System.Windows.Forms.Label();
             this.grpDrops = new DarkUI.Controls.DarkGroupBox();
+            this.chkDropChanceIterative = new DarkUI.Controls.DarkCheckBox();
             this.btnDropRemove = new DarkUI.Controls.DarkButton();
+            this.chkDropAmountRandom = new DarkUI.Controls.DarkCheckBox();
             this.btnDropAdd = new DarkUI.Controls.DarkButton();
             this.lstDrops = new System.Windows.Forms.ListBox();
             this.nudDropAmount = new DarkUI.Controls.DarkNumericUpDown();
@@ -109,8 +111,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.chkDropAmountRandom = new DarkUI.Controls.DarkCheckBox();
-            this.chkDropChanceIterative = new DarkUI.Controls.DarkCheckBox();
+            this.grpCommentary = new DarkUI.Controls.DarkGroupBox();
+            this.txtCommentary = new DarkUI.Controls.DarkTextBox();
             this.grpResources.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxHp)).BeginInit();
@@ -131,6 +133,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudDropAmount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDropChance)).BeginInit();
             this.toolStrip.SuspendLayout();
+            this.grpCommentary.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpResources
@@ -143,7 +146,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpResources.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpResources.Location = new System.Drawing.Point(12, 39);
             this.grpResources.Name = "grpResources";
-            this.grpResources.Size = new System.Drawing.Size(203, 437);
+            this.grpResources.Size = new System.Drawing.Size(203, 515);
             this.grpResources.TabIndex = 14;
             this.grpResources.TabStop = false;
             this.grpResources.Text = "Resources";
@@ -185,7 +188,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Location = new System.Drawing.Point(6, 45);
             this.lstGameObjects.Name = "lstGameObjects";
             this.lstGameObjects.SelectedImageIndex = 0;
-            this.lstGameObjects.Size = new System.Drawing.Size(191, 386);
+            this.lstGameObjects.Size = new System.Drawing.Size(191, 464);
             this.lstGameObjects.TabIndex = 32;
             // 
             // grpGeneral
@@ -479,7 +482,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGraphics.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpGraphics.Location = new System.Drawing.Point(0, 282);
             this.grpGraphics.Name = "grpGraphics";
-            this.grpGraphics.Size = new System.Drawing.Size(706, 454);
+            this.grpGraphics.Size = new System.Drawing.Size(706, 483);
             this.grpGraphics.TabIndex = 16;
             this.grpGraphics.TabStop = false;
             this.grpGraphics.Text = "Graphics";
@@ -642,7 +645,7 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Controls.Add(this.grpGraphics);
             this.pnlContainer.Location = new System.Drawing.Point(221, 39);
             this.pnlContainer.Name = "pnlContainer";
-            this.pnlContainer.Size = new System.Drawing.Size(731, 458);
+            this.pnlContainer.Size = new System.Drawing.Size(731, 583);
             this.pnlContainer.TabIndex = 18;
             this.pnlContainer.Visible = false;
             // 
@@ -882,6 +885,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDrops.TabStop = false;
             this.grpDrops.Text = "Drops";
             // 
+            // chkDropChanceIterative
+            // 
+            this.chkDropChanceIterative.AutoSize = true;
+            this.chkDropChanceIterative.Location = new System.Drawing.Point(147, 226);
+            this.chkDropChanceIterative.Name = "chkDropChanceIterative";
+            this.chkDropChanceIterative.Size = new System.Drawing.Size(70, 17);
+            this.chkDropChanceIterative.TabIndex = 81;
+            this.chkDropChanceIterative.Text = "Iterative?";
+            this.chkDropChanceIterative.CheckedChanged += new System.EventHandler(this.chkDropChanceIterative_CheckedChanged);
+            // 
             // btnDropRemove
             // 
             this.btnDropRemove.Location = new System.Drawing.Point(132, 252);
@@ -891,6 +904,16 @@ namespace Intersect.Editor.Forms.Editors
             this.btnDropRemove.TabIndex = 64;
             this.btnDropRemove.Text = "Remove";
             this.btnDropRemove.Click += new System.EventHandler(this.btnDropRemove_Click);
+            // 
+            // chkDropAmountRandom
+            // 
+            this.chkDropAmountRandom.AutoSize = true;
+            this.chkDropAmountRandom.Location = new System.Drawing.Point(147, 186);
+            this.chkDropAmountRandom.Name = "chkDropAmountRandom";
+            this.chkDropAmountRandom.Size = new System.Drawing.Size(72, 17);
+            this.chkDropAmountRandom.TabIndex = 80;
+            this.chkDropAmountRandom.Text = "Random?";
+            this.chkDropAmountRandom.CheckedChanged += new System.EventHandler(this.chkDropAmountRandom_CheckedChanged);
             // 
             // btnDropAdd
             // 
@@ -1006,7 +1029,7 @@ namespace Intersect.Editor.Forms.Editors
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(762, 503);
+            this.btnCancel.Location = new System.Drawing.Point(762, 628);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(190, 27);
@@ -1016,7 +1039,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(566, 503);
+            this.btnSave.Location = new System.Drawing.Point(566, 628);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(190, 27);
@@ -1145,25 +1168,32 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // chkDropAmountRandom
+            // grpCommentary
             // 
-            this.chkDropAmountRandom.AutoSize = true;
-            this.chkDropAmountRandom.Location = new System.Drawing.Point(147, 186);
-            this.chkDropAmountRandom.Name = "chkDropAmountRandom";
-            this.chkDropAmountRandom.Size = new System.Drawing.Size(72, 17);
-            this.chkDropAmountRandom.TabIndex = 80;
-            this.chkDropAmountRandom.Text = "Random?";
-            this.chkDropAmountRandom.CheckedChanged += new System.EventHandler(this.chkDropAmountRandom_CheckedChanged);
+            this.grpCommentary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpCommentary.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpCommentary.Controls.Add(this.txtCommentary);
+            this.grpCommentary.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpCommentary.Location = new System.Drawing.Point(12, 560);
+            this.grpCommentary.Name = "grpCommentary";
+            this.grpCommentary.Size = new System.Drawing.Size(203, 95);
+            this.grpCommentary.TabIndex = 71;
+            this.grpCommentary.TabStop = false;
+            this.grpCommentary.Text = "Commentary";
+            this.grpCommentary.Visible = false;
             // 
-            // chkDropChanceIterative
+            // txtCommentary
             // 
-            this.chkDropChanceIterative.AutoSize = true;
-            this.chkDropChanceIterative.Location = new System.Drawing.Point(147, 226);
-            this.chkDropChanceIterative.Name = "chkDropChanceIterative";
-            this.chkDropChanceIterative.Size = new System.Drawing.Size(70, 17);
-            this.chkDropChanceIterative.TabIndex = 81;
-            this.chkDropChanceIterative.Text = "Iterative?";
-            this.chkDropChanceIterative.CheckedChanged += new System.EventHandler(this.chkDropChanceIterative_CheckedChanged);
+            this.txtCommentary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtCommentary.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCommentary.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtCommentary.Location = new System.Drawing.Point(3, 15);
+            this.txtCommentary.Multiline = true;
+            this.txtCommentary.Name = "txtCommentary";
+            this.txtCommentary.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtCommentary.Size = new System.Drawing.Size(197, 75);
+            this.txtCommentary.TabIndex = 61;
+            this.txtCommentary.TextChanged += new System.EventHandler(this.txtCommentary_TextChanged);
             // 
             // FrmResource
             // 
@@ -1171,8 +1201,9 @@ namespace Intersect.Editor.Forms.Editors
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(957, 537);
+            this.ClientSize = new System.Drawing.Size(957, 661);
             this.ControlBox = false;
+            this.Controls.Add(this.grpCommentary);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
@@ -1215,6 +1246,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudDropChance)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.grpCommentary.ResumeLayout(false);
+            this.grpCommentary.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1300,5 +1333,7 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblType2;
         private DarkCheckBox chkDropChanceIterative;
         private DarkCheckBox chkDropAmountRandom;
+        private DarkGroupBox grpCommentary;
+        private DarkTextBox txtCommentary;
     }
 }

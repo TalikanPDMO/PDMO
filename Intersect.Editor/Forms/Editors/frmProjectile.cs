@@ -115,6 +115,7 @@ namespace Intersect.Editor.Forms.Editors
             toolStripItemRelations.Text = Strings.ProjectileEditor.relations;
 
             grpProjectiles.Text = Strings.ProjectileEditor.projectiles;
+            grpCommentary.Text = Strings.ProjectileEditor.commentary;
 
             grpProperties.Text = Strings.ProjectileEditor.properties;
             lblName.Text = Strings.ProjectileEditor.name;
@@ -165,7 +166,9 @@ namespace Intersect.Editor.Forms.Editors
             if (mEditorItem != null)
             {
                 pnlContainer.Show();
+                grpCommentary.Show();
 
+                txtCommentary.Text = mEditorItem.Comment;
                 lstAnimations.SelectedIndex = 0;
 
                 txtName.Text = mEditorItem.Name;
@@ -210,6 +213,7 @@ namespace Intersect.Editor.Forms.Editors
             else
             {
                 pnlContainer.Hide();
+                grpCommentary.Hide();
             }
 
             UpdateToolStripItems();
@@ -273,31 +277,6 @@ namespace Intersect.Editor.Forms.Editors
                 }
             }
         }
-
-        /*private void UpdateUniqueAnimation(int index)
-        {
-            var projanimpos = mEditorItem.Animations[index].AnimationPosition;
-            cmbUniqueAnimation.Items.Clear();
-            cmbUniqueAnimation.Items.Add(Strings.General.none);
-            var selectedIndex = 0;
-            var i = 0;
-            for (var x = 0; x < ProjectileBase.SPAWN_LOCATIONS_WIDTH; x++)
-            {
-                for (var y = 0; y < ProjectileBase.SPAWN_LOCATIONS_HEIGHT; y++)
-                {
-                    if (mEditorItem.SpawnLocations[x, y].Directions.Contains(true))
-                    {
-                        cmbUniqueAnimation.Items.Add("[" + x + ", " + y + "]");
-                        if (projanimpos != null && projanimpos.Item1 == x && projanimpos.Item2 == y)
-                        {
-                            selectedIndex = i + 1;
-                        }
-                        i++;
-                    }
-                }
-            }
-            cmbUniqueAnimation.SelectedIndex = selectedIndex;
-        }*/
 
         private void UpdateAnimations(bool saveIndex = true)
         {
@@ -515,6 +494,11 @@ namespace Intersect.Editor.Forms.Editors
                 default:
                     return 0;
             }
+        }
+
+        private void txtCommentary_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Comment = txtCommentary.Text;
         }
 
         private void txtName_TextChanged(object sender, EventArgs e)

@@ -15,6 +15,8 @@ namespace Intersect.GameObjects.Crafting
 
         [NotMapped] public List<CraftIngredient> Ingredients = new List<CraftIngredient>();
 
+        public string Comment { get; set; } = "";
+
         [JsonConstructor]
         public CraftBase(Guid id) : base(id)
         {

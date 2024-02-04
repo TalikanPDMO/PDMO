@@ -44,6 +44,8 @@ namespace Intersect.GameObjects
 
         [NotMapped] public int[] ElementalTypes = new int[MAX_ELEMENTAL_TYPES];
 
+        public string Comment { get; set; } = "";
+
         [JsonConstructor]
         public ClassBase(Guid id) : base(id)
         {

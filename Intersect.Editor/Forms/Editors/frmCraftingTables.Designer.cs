@@ -64,17 +64,20 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
+            this.grpCommentary = new DarkUI.Controls.DarkGroupBox();
+            this.txtCommentary = new DarkUI.Controls.DarkTextBox();
             this.grpTables.SuspendLayout();
             this.pnlContainer.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpCrafts.SuspendLayout();
             this.toolStrip.SuspendLayout();
+            this.grpCommentary.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(262, 476);
+            this.btnCancel.Location = new System.Drawing.Point(262, 528);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(172, 27);
@@ -84,7 +87,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(87, 476);
+            this.btnSave.Location = new System.Drawing.Point(87, 528);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(169, 27);
@@ -102,7 +105,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTables.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpTables.Location = new System.Drawing.Point(12, 36);
             this.grpTables.Name = "grpTables";
-            this.grpTables.Size = new System.Drawing.Size(203, 434);
+            this.grpTables.Size = new System.Drawing.Size(203, 389);
             this.grpTables.TabIndex = 22;
             this.grpTables.TabStop = false;
             this.grpTables.Text = "Tables";
@@ -144,7 +147,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Location = new System.Drawing.Point(6, 42);
             this.lstGameObjects.Name = "lstGameObjects";
             this.lstGameObjects.SelectedImageIndex = 0;
-            this.lstGameObjects.Size = new System.Drawing.Size(191, 386);
+            this.lstGameObjects.Size = new System.Drawing.Size(191, 341);
             this.lstGameObjects.TabIndex = 23;
             // 
             // pnlContainer
@@ -153,7 +156,7 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Controls.Add(this.grpCrafts);
             this.pnlContainer.Location = new System.Drawing.Point(221, 36);
             this.pnlContainer.Name = "pnlContainer";
-            this.pnlContainer.Size = new System.Drawing.Size(265, 434);
+            this.pnlContainer.Size = new System.Drawing.Size(265, 486);
             this.pnlContainer.TabIndex = 31;
             this.pnlContainer.Visible = false;
             // 
@@ -248,14 +251,14 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCrafts.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpCrafts.Location = new System.Drawing.Point(3, 85);
             this.grpCrafts.Name = "grpCrafts";
-            this.grpCrafts.Size = new System.Drawing.Size(259, 346);
+            this.grpCrafts.Size = new System.Drawing.Size(259, 398);
             this.grpCrafts.TabIndex = 33;
             this.grpCrafts.TabStop = false;
             this.grpCrafts.Text = "Available Crafts";
             // 
             // btnRemoveCraftedItem
             // 
-            this.btnRemoveCraftedItem.Location = new System.Drawing.Point(23, 307);
+            this.btnRemoveCraftedItem.Location = new System.Drawing.Point(23, 368);
             this.btnRemoveCraftedItem.Name = "btnRemoveCraftedItem";
             this.btnRemoveCraftedItem.Padding = new System.Windows.Forms.Padding(5);
             this.btnRemoveCraftedItem.Size = new System.Drawing.Size(189, 23);
@@ -265,7 +268,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnCraftDown
             // 
-            this.btnCraftDown.Location = new System.Drawing.Point(232, 176);
+            this.btnCraftDown.Location = new System.Drawing.Point(232, 236);
             this.btnCraftDown.Name = "btnCraftDown";
             this.btnCraftDown.Padding = new System.Windows.Forms.Padding(5);
             this.btnCraftDown.Size = new System.Drawing.Size(22, 40);
@@ -285,7 +288,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnAddCraftedItem
             // 
-            this.btnAddCraftedItem.Location = new System.Drawing.Point(23, 281);
+            this.btnAddCraftedItem.Location = new System.Drawing.Point(23, 342);
             this.btnAddCraftedItem.Name = "btnAddCraftedItem";
             this.btnAddCraftedItem.Padding = new System.Windows.Forms.Padding(5);
             this.btnAddCraftedItem.Size = new System.Drawing.Size(189, 23);
@@ -306,7 +309,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbCrafts.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbCrafts.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbCrafts.FormattingEnabled = true;
-            this.cmbCrafts.Location = new System.Drawing.Point(7, 246);
+            this.cmbCrafts.Location = new System.Drawing.Point(7, 307);
             this.cmbCrafts.Name = "cmbCrafts";
             this.cmbCrafts.Size = new System.Drawing.Size(244, 21);
             this.cmbCrafts.TabIndex = 49;
@@ -316,7 +319,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblAddCraftedItem
             // 
             this.lblAddCraftedItem.AutoSize = true;
-            this.lblAddCraftedItem.Location = new System.Drawing.Point(6, 230);
+            this.lblAddCraftedItem.Location = new System.Drawing.Point(6, 291);
             this.lblAddCraftedItem.Name = "lblAddCraftedItem";
             this.lblAddCraftedItem.Size = new System.Drawing.Size(121, 13);
             this.lblAddCraftedItem.TabIndex = 48;
@@ -330,7 +333,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lstCrafts.FormattingEnabled = true;
             this.lstCrafts.Location = new System.Drawing.Point(6, 19);
             this.lstCrafts.Name = "lstCrafts";
-            this.lstCrafts.Size = new System.Drawing.Size(220, 197);
+            this.lstCrafts.Size = new System.Drawing.Size(220, 262);
             this.lstCrafts.TabIndex = 47;
             // 
             // toolStrip
@@ -454,14 +457,42 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
+            // grpCommentary
+            // 
+            this.grpCommentary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpCommentary.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpCommentary.Controls.Add(this.txtCommentary);
+            this.grpCommentary.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpCommentary.Location = new System.Drawing.Point(12, 427);
+            this.grpCommentary.Name = "grpCommentary";
+            this.grpCommentary.Size = new System.Drawing.Size(203, 95);
+            this.grpCommentary.TabIndex = 71;
+            this.grpCommentary.TabStop = false;
+            this.grpCommentary.Text = "Commentary";
+            this.grpCommentary.Visible = false;
+            // 
+            // txtCommentary
+            // 
+            this.txtCommentary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtCommentary.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCommentary.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtCommentary.Location = new System.Drawing.Point(3, 15);
+            this.txtCommentary.Multiline = true;
+            this.txtCommentary.Name = "txtCommentary";
+            this.txtCommentary.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtCommentary.Size = new System.Drawing.Size(197, 75);
+            this.txtCommentary.TabIndex = 61;
+            this.txtCommentary.TextChanged += new System.EventHandler(this.txtCommentary_TextChanged);
+            // 
             // FrmCraftingTables
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(498, 509);
+            this.ClientSize = new System.Drawing.Size(498, 561);
             this.ControlBox = false;
+            this.Controls.Add(this.grpCommentary);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.pnlContainer);
             this.Controls.Add(this.btnCancel);
@@ -485,6 +516,8 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCrafts.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.grpCommentary.ResumeLayout(false);
+            this.grpCommentary.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -523,5 +556,7 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblAddCraftedItem;
         private System.Windows.Forms.ListBox lstCrafts;
         private DarkButton btnRemoveCraftedItem;
+        private DarkGroupBox grpCommentary;
+        private DarkTextBox txtCommentary;
     }
 }

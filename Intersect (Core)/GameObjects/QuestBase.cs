@@ -84,6 +84,8 @@ namespace Intersect.GameObjects
 
         public bool Repeatable { get; set; }
 
+        public string Comment { get; set; } = "";
+
         //Requirements - Store with json
         [Column("Requirements")]
         [JsonIgnore]

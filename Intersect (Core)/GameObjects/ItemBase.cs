@@ -26,6 +26,7 @@ namespace Intersect.GameObjects
             .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((ItemBase)pair.Value)?.EditorName) ?? Deleted)
             .ToArray();
 
+        public string Comment { get; set; } = "";
 
         public string CannotUseMessage { get; set; } = "";
 

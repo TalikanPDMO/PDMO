@@ -77,7 +77,7 @@ namespace Intersect.Editor.Forms.Editors
             grpEditor.Text = Strings.VariableEditor.editor;
             lblName.Text = Strings.VariableEditor.name;
             grpValue.Text = Strings.VariableEditor.value;
-            grpDescription.Text = Strings.VariableEditor.description;
+            grpDescription.Text = Strings.VariableEditor.commentary;
             cmbBooleanValue.Items.Clear();
             cmbBooleanValue.Items.Add(Strings.VariableEditor.False);
             cmbBooleanValue.Items.Add(Strings.VariableEditor.True);

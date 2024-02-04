@@ -54,6 +54,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
 
             grpQuests.Text = Strings.QuestEditor.quests;
             grpGeneral.Text = Strings.QuestEditor.general;
+            grpCommentary.Text = Strings.QuestEditor.commentary;
             lblName.Text = Strings.QuestEditor.name;
 
             grpLogOptions.Text = Strings.QuestEditor.logoptions;
@@ -253,7 +254,9 @@ namespace Intersect.Editor.Forms.Editors.Quest
             if (mEditorItem != null)
             {
                 pnlContainer.Show();
+                grpCommentary.Show();
 
+                txtCommentary.Text = mEditorItem.Comment;
                 txtName.Text = mEditorItem.Name;
                 cmbFolder.Text = mEditorItem.Folder;
                 txtBeforeDesc.Text = mEditorItem.BeforeDescription;
@@ -319,9 +322,15 @@ namespace Intersect.Editor.Forms.Editors.Quest
             else
             {
                 pnlContainer.Hide();
+                grpCommentary.Hide();
             }
 
             UpdateToolStripItems();
+        }
+
+        private void txtCommentary_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Comment = txtCommentary.Text;
         }
 
         private void txtName_TextChanged(object sender, EventArgs e)

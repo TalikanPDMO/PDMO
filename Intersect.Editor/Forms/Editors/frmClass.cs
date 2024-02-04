@@ -150,6 +150,9 @@ namespace Intersect.Editor.Forms.Editors
             if (mEditorItem != null)
             {
                 pnlContainer.Show();
+                grpCommentary.Show();
+
+                txtCommentary.Text = mEditorItem.Comment;
                 txtName.Text = mEditorItem.Name;
                 txtDesc.Text = mEditorItem.Description;
                 nudAttack.Value = mEditorItem.BaseStat[(int) Stats.Attack];
@@ -278,6 +281,7 @@ namespace Intersect.Editor.Forms.Editors
             else
             {
                 pnlContainer.Hide();
+                grpCommentary.Hide();
             }
 
             UpdateToolStripItems();
@@ -329,6 +333,8 @@ namespace Intersect.Editor.Forms.Editors
             toolStripItemUndo.Text = Strings.ClassEditor.undo;
 
             grpClasses.Text = Strings.ClassEditor.classes;
+            grpCommentary.Text = Strings.ClassEditor.commentary;
+
 
             grpGeneral.Text = Strings.ClassEditor.general;
             lblName.Text = Strings.ClassEditor.name;
@@ -764,6 +770,10 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.Locked = chkLocked.Checked;
         }
 
+        private void txtCommentary_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Comment = txtCommentary.Text;
+        }
         private void UpdateIncreases()
         {
             if (rdoStaticIncrease.Checked)

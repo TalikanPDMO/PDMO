@@ -96,6 +96,8 @@ namespace Intersect.GameObjects
 
         public int Range { get; set; } = 1;
 
+        public string Comment { get; set; } = "";
+
         [Column("SpawnLocations")]
         [JsonIgnore]
         public string SpawnsJson

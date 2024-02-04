@@ -173,6 +173,7 @@ namespace Intersect.Editor.Forms.Editors
             toolStripItemRelations.Text = Strings.SpellEditor.relations;
 
             grpSpells.Text = Strings.SpellEditor.spells;
+            grpCommentary.Text = Strings.SpellEditor.commentary;
 
             grpGeneral.Text = Strings.SpellEditor.general;
             lblName.Text = Strings.SpellEditor.name;
@@ -332,7 +333,9 @@ namespace Intersect.Editor.Forms.Editors
             if (mEditorItem != null)
             {
                 pnlContainer.Show();
+                grpCommentary.Show();
 
+                txtCommentary.Text = mEditorItem.Comment;
                 txtName.Text = mEditorItem.Name;
                 txtEditorName.Text = mEditorItem.EditorName;
                 cmbFolder.Text = mEditorItem.Folder;
@@ -380,6 +383,7 @@ namespace Intersect.Editor.Forms.Editors
             else
             {
                 pnlContainer.Hide();
+                grpCommentary.Hide();
             }
 
             UpdateToolStripItems();
@@ -576,6 +580,10 @@ namespace Intersect.Editor.Forms.Editors
             }
         }
 
+        private void txtCommentary_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Comment = txtCommentary.Text;
+        }
         private void txtName_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.Name = txtName.Text;

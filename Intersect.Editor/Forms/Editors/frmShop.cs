@@ -133,6 +133,8 @@ namespace Intersect.Editor.Forms.Editors
             toolStripItemUndo.Text = Strings.ShopEditor.undo;
 
             grpGeneral.Text = Strings.ShopEditor.general;
+            grpCommentary.Text = Strings.ShopEditor.commentary;
+
             lblName.Text = Strings.ShopEditor.name;
             lblDefaultCurrency.Text = Strings.ShopEditor.defaultcurrency;
 
@@ -169,7 +171,9 @@ namespace Intersect.Editor.Forms.Editors
             if (mEditorItem != null)
             {
                 pnlContainer.Show();
+                grpCommentary.Show();
 
+                txtCommentary.Text = mEditorItem.Comment;
                 txtName.Text = mEditorItem.Name;
                 cmbFolder.Text = mEditorItem.Folder;
                 cmbDefaultCurrency.SelectedIndex = ItemBase.ListIndex(mEditorItem.DefaultCurrencyId);
@@ -196,6 +200,7 @@ namespace Intersect.Editor.Forms.Editors
             else
             {
                 pnlContainer.Hide();
+                grpCommentary.Hide();
             }
 
             UpdateToolStripItems();
@@ -229,6 +234,11 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.BuyingWhitelist = rdoBuyWhitelist.Checked;
             UpdateLists();
             UpdateWhitelist();
+        }
+
+        private void txtCommentary_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Comment = txtCommentary.Text;
         }
 
         private void txtName_TextChanged(object sender, EventArgs e)

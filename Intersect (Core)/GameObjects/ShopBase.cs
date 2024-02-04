@@ -63,6 +63,8 @@ namespace Intersect.GameObjects
 
         public string SellSound { get; set; } = null;
 
+        public string Comment { get; set; } = "";
+
         /// <inheritdoc />
         public string Folder { get; set; } = "";
 

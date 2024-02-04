@@ -94,6 +94,8 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
+            this.grpCommentary = new DarkUI.Controls.DarkGroupBox();
+            this.txtCommentary = new DarkUI.Controls.DarkTextBox();
             this.grpQuests.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpQuestReqs.SuspendLayout();
@@ -104,6 +106,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.pnlContainer.SuspendLayout();
             this.grpActions.SuspendLayout();
             this.toolStrip.SuspendLayout();
+            this.grpCommentary.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpQuests
@@ -116,7 +119,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpQuests.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpQuests.Location = new System.Drawing.Point(12, 34);
             this.grpQuests.Name = "grpQuests";
-            this.grpQuests.Size = new System.Drawing.Size(203, 482);
+            this.grpQuests.Size = new System.Drawing.Size(203, 420);
             this.grpQuests.TabIndex = 14;
             this.grpQuests.TabStop = false;
             this.grpQuests.Text = "Quests";
@@ -158,7 +161,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.lstGameObjects.Location = new System.Drawing.Point(6, 45);
             this.lstGameObjects.Name = "lstGameObjects";
             this.lstGameObjects.SelectedImageIndex = 0;
-            this.lstGameObjects.Size = new System.Drawing.Size(191, 431);
+            this.lstGameObjects.Size = new System.Drawing.Size(191, 369);
             this.lstGameObjects.TabIndex = 32;
             // 
             // grpGeneral
@@ -866,6 +869,33 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
+            // grpCommentary
+            // 
+            this.grpCommentary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpCommentary.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpCommentary.Controls.Add(this.txtCommentary);
+            this.grpCommentary.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpCommentary.Location = new System.Drawing.Point(12, 460);
+            this.grpCommentary.Name = "grpCommentary";
+            this.grpCommentary.Size = new System.Drawing.Size(203, 95);
+            this.grpCommentary.TabIndex = 71;
+            this.grpCommentary.TabStop = false;
+            this.grpCommentary.Text = "Commentary";
+            this.grpCommentary.Visible = false;
+            // 
+            // txtCommentary
+            // 
+            this.txtCommentary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtCommentary.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCommentary.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtCommentary.Location = new System.Drawing.Point(3, 15);
+            this.txtCommentary.Multiline = true;
+            this.txtCommentary.Name = "txtCommentary";
+            this.txtCommentary.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtCommentary.Size = new System.Drawing.Size(197, 75);
+            this.txtCommentary.TabIndex = 61;
+            this.txtCommentary.TextChanged += new System.EventHandler(this.txtCommentary_TextChanged);
+            // 
             // FrmQuest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -874,6 +904,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.ClientSize = new System.Drawing.Size(992, 561);
             this.ControlBox = false;
+            this.Controls.Add(this.grpCommentary);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
@@ -902,6 +933,8 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpActions.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.grpCommentary.ResumeLayout(false);
+            this.grpCommentary.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -970,5 +1003,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
         private Controls.GameObjectList lstGameObjects;
         private DarkButton btnEditLinks;
         private DarkButton btnEditAlternatives;
+        private DarkGroupBox grpCommentary;
+        private DarkTextBox txtCommentary;
     }
 }

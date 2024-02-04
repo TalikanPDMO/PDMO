@@ -37,6 +37,8 @@ namespace Intersect.GameObjects
         public string Description { get; set; } = "";
 
         public string EditorName { get; set; } = "";
+
+        public string Comment { get; set; } = "";
         public static string[] EditorFormatNames => Lookup.OrderBy(p => p.Value?.Name)
             .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((SpellBase)pair.Value)?.EditorName) ?? Deleted)
             .ToArray();

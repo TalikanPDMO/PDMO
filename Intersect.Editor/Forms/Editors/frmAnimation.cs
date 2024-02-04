@@ -156,6 +156,7 @@ namespace Intersect.Editor.Forms.Editors
             toolStripItemRelations.Text = Strings.AnimationEditor.relations;
 
             grpAnimations.Text = Strings.AnimationEditor.animations;
+            grpCommentary.Text = Strings.AnimationEditor.commentary;
 
             grpGeneral.Text = Strings.AnimationEditor.general;
             lblName.Text = Strings.AnimationEditor.name;
@@ -209,9 +210,10 @@ namespace Intersect.Editor.Forms.Editors
             if (mEditorItem != null)
             {
                 pnlContainer.Show();
+                grpCommentary.Show();
 
+                txtCommentary.Text = mEditorItem.Comment;
                 cmbFolder.Text = mEditorItem.Folder;
-
                 txtName.Text = mEditorItem.Name;
                 txtId.Text = mEditorItem.Id.ToString();
                 cmbSound.SelectedIndex = cmbSound.FindString(TextUtils.NullToNone(mEditorItem.Sound));
@@ -261,6 +263,7 @@ namespace Intersect.Editor.Forms.Editors
             else
             {
                 pnlContainer.Hide();
+                grpCommentary.Hide();
             }
 
             UpdateToolStripItems();
@@ -270,6 +273,11 @@ namespace Intersect.Editor.Forms.Editors
         {
             mEditorItem.Name = txtName.Text;
             lstGameObjects.UpdateText(txtName.Text);
+        }
+
+        private void txtCommentary_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Comment = txtCommentary.Text;
         }
 
         private void cmbSound_SelectedIndexChanged(object sender, EventArgs e)

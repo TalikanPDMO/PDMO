@@ -742,6 +742,10 @@
     <Compile Include="Migrations\Game\20240129141414_AddingMultipleEffectsToItems.designer.cs">
       <DependentUpon>20240129141414_AddingMultipleEffectsToItems.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20240204121726_AddingCommentToMainGameObjects.cs" />
+    <Compile Include="Migrations\Game\20240204121726_AddingCommentToMainGameObjects.designer.cs">
+      <DependentUpon>20240204121726_AddingCommentToMainGameObjects.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

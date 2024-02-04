@@ -182,6 +182,8 @@ namespace Intersect.Editor.Forms.Editors
 
             grpItems.Text = Strings.ItemEditor.items;
             grpGeneral.Text = Strings.ItemEditor.general;
+            grpCommentary.Text = Strings.ItemEditor.commentary;
+
             lblName.Text = Strings.ItemEditor.name;
             lblEditorName.Text = Strings.ItemEditor.editorname;
             lblType.Text = Strings.ItemEditor.type;
@@ -335,7 +337,9 @@ namespace Intersect.Editor.Forms.Editors
             if (mEditorItem != null)
             {
                 pnlContainer.Show();
+                grpCommentary.Show();
 
+                txtCommentary.Text = mEditorItem.Comment;
                 txtName.Text = mEditorItem.Name;
                 txtEditorName.Text = mEditorItem.EditorName;
                 cmbFolder.Text = mEditorItem.Folder;
@@ -491,6 +495,7 @@ namespace Intersect.Editor.Forms.Editors
             else
             {
                 pnlContainer.Hide();
+                grpCommentary.Hide();
             }
 
             UpdateToolStripItems();
@@ -581,6 +586,11 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbType_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshExtendedData();
+        }
+
+        private void txtCommentary_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Comment = txtCommentary.Text;
         }
 
         private void txtName_TextChanged(object sender, EventArgs e)

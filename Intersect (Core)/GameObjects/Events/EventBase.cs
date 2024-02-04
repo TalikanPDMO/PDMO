@@ -71,6 +71,7 @@ namespace Intersect.GameObjects.Events
         public int SpawnY { get; set; } = -1;
 
         public bool CommonEvent { get; set; }
+        public string Comment { get; set; } = "";
 
         public bool Global { get; set; }
 

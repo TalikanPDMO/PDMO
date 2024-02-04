@@ -123,6 +123,8 @@ namespace Intersect.GameObjects
 
         public int MaxRandomMove { get; set; } = 3;
 
+        public string Comment { get; set; } = "";
+
 
         //Conditions
         [Column("PlayerFriendConditions")]

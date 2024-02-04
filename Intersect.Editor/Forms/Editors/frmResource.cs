@@ -188,6 +188,7 @@ namespace Intersect.Editor.Forms.Editors
             toolStripItemUndo.Text = Strings.ResourceEditor.undo;
 
             grpResources.Text = Strings.ResourceEditor.resources;
+            grpCommentary.Text = Strings.ResourceEditor.commentary;
 
             grpGeneral.Text = Strings.ResourceEditor.general;
             lblName.Text = Strings.ResourceEditor.name;
@@ -255,7 +256,9 @@ namespace Intersect.Editor.Forms.Editors
             if (mEditorItem != null)
             {
                 pnlContainer.Show();
+                grpCommentary.Show();
 
+                txtCommentary.Text = mEditorItem.Comment;
                 txtName.Text = mEditorItem.Name;
                 cmbFolder.Text = mEditorItem.Folder;
                 cmbToolType.SelectedIndex = mEditorItem.Tool + 1;
@@ -293,6 +296,7 @@ namespace Intersect.Editor.Forms.Editors
             else
             {
                 pnlContainer.Hide();
+                grpCommentary.Hide();
             }
 
             UpdateToolStripItems();
@@ -515,6 +519,10 @@ namespace Intersect.Editor.Forms.Editors
             gfx = picEndResource.CreateGraphics();
             gfx.DrawImageUnscaled(mEndBitmap, new System.Drawing.Point(0, 0));
             gfx.Dispose();
+        }
+        private void txtCommentary_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Comment = txtCommentary.Text;
         }
 
         private void txtName_TextChanged(object sender, EventArgs e)

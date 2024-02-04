@@ -110,9 +110,13 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbEvent = new DarkUI.Controls.DarkComboBox();
             this.grpCombat = new DarkUI.Controls.DarkGroupBox();
             this.grpDamage = new DarkUI.Controls.DarkGroupBox();
+            this.cmbMpDamageStyle = new DarkUI.Controls.DarkComboBox();
             this.nudManaSteal = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblMpDamageStyle = new System.Windows.Forms.Label();
             this.lblManaSteal = new System.Windows.Forms.Label();
+            this.cmbHpDamageStyle = new DarkUI.Controls.DarkComboBox();
             this.nudHPSteal = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblHpDamageStyle = new System.Windows.Forms.Label();
             this.lblHPSteal = new System.Windows.Forms.Label();
             this.cmbCritEffectSpell = new DarkUI.Controls.DarkComboBox();
             this.lblCritEffectSpell = new System.Windows.Forms.Label();
@@ -210,10 +214,8 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
-            this.cmbMpDamageStyle = new DarkUI.Controls.DarkComboBox();
-            this.lblMpDamageStyle = new System.Windows.Forms.Label();
-            this.cmbHpDamageStyle = new DarkUI.Controls.DarkComboBox();
-            this.lblHpDamageStyle = new System.Windows.Forms.Label();
+            this.grpCommentary = new DarkUI.Controls.DarkGroupBox();
+            this.txtCommentary = new DarkUI.Controls.DarkTextBox();
             this.pnlContainer.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSpell)).BeginInit();
@@ -269,6 +271,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDashCollisions.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.grpSpells.SuspendLayout();
+            this.grpCommentary.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlContainer
@@ -1467,6 +1470,33 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDamage.TabStop = false;
             this.grpDamage.Text = "Damage";
             // 
+            // cmbMpDamageStyle
+            // 
+            this.cmbMpDamageStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbMpDamageStyle.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbMpDamageStyle.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbMpDamageStyle.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbMpDamageStyle.DrawDropdownHoverOutline = false;
+            this.cmbMpDamageStyle.DrawFocusRectangle = false;
+            this.cmbMpDamageStyle.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbMpDamageStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMpDamageStyle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbMpDamageStyle.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbMpDamageStyle.FormattingEnabled = true;
+            this.cmbMpDamageStyle.Items.AddRange(new object[] {
+            "Normal",
+            "CasterCurrent",
+            "CasterMax",
+            "TargetMax",
+            "TargetCurrent"});
+            this.cmbMpDamageStyle.Location = new System.Drawing.Point(5, 88);
+            this.cmbMpDamageStyle.Name = "cmbMpDamageStyle";
+            this.cmbMpDamageStyle.Size = new System.Drawing.Size(125, 21);
+            this.cmbMpDamageStyle.TabIndex = 77;
+            this.cmbMpDamageStyle.Text = "Normal";
+            this.cmbMpDamageStyle.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbMpDamageStyle.SelectedIndexChanged += new System.EventHandler(this.cmbMpDamageStyle_SelectedIndexChanged);
+            // 
             // nudManaSteal
             // 
             this.nudManaSteal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
@@ -1487,6 +1517,15 @@ namespace Intersect.Editor.Forms.Editors
             0});
             this.nudManaSteal.ValueChanged += new System.EventHandler(this.nudManaSteal_ValueChanged);
             // 
+            // lblMpDamageStyle
+            // 
+            this.lblMpDamageStyle.AutoSize = true;
+            this.lblMpDamageStyle.Location = new System.Drawing.Point(2, 72);
+            this.lblMpDamageStyle.Name = "lblMpDamageStyle";
+            this.lblMpDamageStyle.Size = new System.Drawing.Size(106, 13);
+            this.lblMpDamageStyle.TabIndex = 76;
+            this.lblMpDamageStyle.Text = "Mana Damage Style:";
+            // 
             // lblManaSteal
             // 
             this.lblManaSteal.AutoSize = true;
@@ -1495,6 +1534,33 @@ namespace Intersect.Editor.Forms.Editors
             this.lblManaSteal.Size = new System.Drawing.Size(51, 13);
             this.lblManaSteal.TabIndex = 68;
             this.lblManaSteal.Text = "Steal (%):";
+            // 
+            // cmbHpDamageStyle
+            // 
+            this.cmbHpDamageStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbHpDamageStyle.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbHpDamageStyle.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbHpDamageStyle.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbHpDamageStyle.DrawDropdownHoverOutline = false;
+            this.cmbHpDamageStyle.DrawFocusRectangle = false;
+            this.cmbHpDamageStyle.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbHpDamageStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbHpDamageStyle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbHpDamageStyle.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbHpDamageStyle.FormattingEnabled = true;
+            this.cmbHpDamageStyle.Items.AddRange(new object[] {
+            "Normal",
+            "CasterCurrent",
+            "CasterMax",
+            "TargetMax",
+            "TargetCurrent"});
+            this.cmbHpDamageStyle.Location = new System.Drawing.Point(5, 46);
+            this.cmbHpDamageStyle.Name = "cmbHpDamageStyle";
+            this.cmbHpDamageStyle.Size = new System.Drawing.Size(125, 21);
+            this.cmbHpDamageStyle.TabIndex = 75;
+            this.cmbHpDamageStyle.Text = "Normal";
+            this.cmbHpDamageStyle.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbHpDamageStyle.SelectedIndexChanged += new System.EventHandler(this.cmbHpDamageStyle_SelectedIndexChanged);
             // 
             // nudHPSteal
             // 
@@ -1515,6 +1581,15 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0});
             this.nudHPSteal.ValueChanged += new System.EventHandler(this.nudHPSteal_ValueChanged);
+            // 
+            // lblHpDamageStyle
+            // 
+            this.lblHpDamageStyle.AutoSize = true;
+            this.lblHpDamageStyle.Location = new System.Drawing.Point(2, 30);
+            this.lblHpDamageStyle.Name = "lblHpDamageStyle";
+            this.lblHpDamageStyle.Size = new System.Drawing.Size(94, 13);
+            this.lblHpDamageStyle.TabIndex = 74;
+            this.lblHpDamageStyle.Text = "HP Damage Style:";
             // 
             // lblHPSteal
             // 
@@ -2879,7 +2954,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpells.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpSpells.Location = new System.Drawing.Point(12, 40);
             this.grpSpells.Name = "grpSpells";
-            this.grpSpells.Size = new System.Drawing.Size(203, 673);
+            this.grpSpells.Size = new System.Drawing.Size(203, 612);
             this.grpSpells.TabIndex = 16;
             this.grpSpells.TabStop = false;
             this.grpSpells.Text = "Spells";
@@ -2921,80 +2996,35 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Location = new System.Drawing.Point(6, 43);
             this.lstGameObjects.Name = "lstGameObjects";
             this.lstGameObjects.SelectedImageIndex = 0;
-            this.lstGameObjects.Size = new System.Drawing.Size(191, 624);
+            this.lstGameObjects.Size = new System.Drawing.Size(191, 563);
             this.lstGameObjects.TabIndex = 32;
             // 
-            // cmbMpDamageStyle
+            // grpCommentary
             // 
-            this.cmbMpDamageStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbMpDamageStyle.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbMpDamageStyle.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbMpDamageStyle.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbMpDamageStyle.DrawDropdownHoverOutline = false;
-            this.cmbMpDamageStyle.DrawFocusRectangle = false;
-            this.cmbMpDamageStyle.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbMpDamageStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbMpDamageStyle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbMpDamageStyle.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbMpDamageStyle.FormattingEnabled = true;
-            this.cmbMpDamageStyle.Items.AddRange(new object[] {
-            "Normal",
-            "CasterCurrent",
-            "CasterMax",
-            "TargetMax",
-            "TargetCurrent"});
-            this.cmbMpDamageStyle.Location = new System.Drawing.Point(5, 88);
-            this.cmbMpDamageStyle.Name = "cmbMpDamageStyle";
-            this.cmbMpDamageStyle.Size = new System.Drawing.Size(125, 21);
-            this.cmbMpDamageStyle.TabIndex = 77;
-            this.cmbMpDamageStyle.Text = "Normal";
-            this.cmbMpDamageStyle.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbMpDamageStyle.SelectedIndexChanged += new System.EventHandler(this.cmbMpDamageStyle_SelectedIndexChanged);
+            this.grpCommentary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpCommentary.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpCommentary.Controls.Add(this.txtCommentary);
+            this.grpCommentary.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpCommentary.Location = new System.Drawing.Point(12, 658);
+            this.grpCommentary.Name = "grpCommentary";
+            this.grpCommentary.Size = new System.Drawing.Size(203, 95);
+            this.grpCommentary.TabIndex = 71;
+            this.grpCommentary.TabStop = false;
+            this.grpCommentary.Text = "Commentary";
+            this.grpCommentary.Visible = false;
             // 
-            // lblMpDamageStyle
+            // txtCommentary
             // 
-            this.lblMpDamageStyle.AutoSize = true;
-            this.lblMpDamageStyle.Location = new System.Drawing.Point(2, 72);
-            this.lblMpDamageStyle.Name = "lblMpDamageStyle";
-            this.lblMpDamageStyle.Size = new System.Drawing.Size(106, 13);
-            this.lblMpDamageStyle.TabIndex = 76;
-            this.lblMpDamageStyle.Text = "Mana Damage Style:";
-            // 
-            // cmbHpDamageStyle
-            // 
-            this.cmbHpDamageStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbHpDamageStyle.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbHpDamageStyle.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbHpDamageStyle.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbHpDamageStyle.DrawDropdownHoverOutline = false;
-            this.cmbHpDamageStyle.DrawFocusRectangle = false;
-            this.cmbHpDamageStyle.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbHpDamageStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbHpDamageStyle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbHpDamageStyle.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbHpDamageStyle.FormattingEnabled = true;
-            this.cmbHpDamageStyle.Items.AddRange(new object[] {
-            "Normal",
-            "CasterCurrent",
-            "CasterMax",
-            "TargetMax",
-            "TargetCurrent"});
-            this.cmbHpDamageStyle.Location = new System.Drawing.Point(5, 46);
-            this.cmbHpDamageStyle.Name = "cmbHpDamageStyle";
-            this.cmbHpDamageStyle.Size = new System.Drawing.Size(125, 21);
-            this.cmbHpDamageStyle.TabIndex = 75;
-            this.cmbHpDamageStyle.Text = "Normal";
-            this.cmbHpDamageStyle.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbHpDamageStyle.SelectedIndexChanged += new System.EventHandler(this.cmbHpDamageStyle_SelectedIndexChanged);
-            // 
-            // lblHpDamageStyle
-            // 
-            this.lblHpDamageStyle.AutoSize = true;
-            this.lblHpDamageStyle.Location = new System.Drawing.Point(2, 30);
-            this.lblHpDamageStyle.Name = "lblHpDamageStyle";
-            this.lblHpDamageStyle.Size = new System.Drawing.Size(94, 13);
-            this.lblHpDamageStyle.TabIndex = 74;
-            this.lblHpDamageStyle.Text = "HP Damage Style:";
+            this.txtCommentary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtCommentary.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCommentary.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtCommentary.Location = new System.Drawing.Point(3, 15);
+            this.txtCommentary.Multiline = true;
+            this.txtCommentary.Name = "txtCommentary";
+            this.txtCommentary.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtCommentary.Size = new System.Drawing.Size(197, 75);
+            this.txtCommentary.TabIndex = 61;
+            this.txtCommentary.TextChanged += new System.EventHandler(this.txtCommentary_TextChanged);
             // 
             // FrmSpell
             // 
@@ -3004,6 +3034,7 @@ namespace Intersect.Editor.Forms.Editors
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.ClientSize = new System.Drawing.Size(984, 761);
             this.ControlBox = false;
+            this.Controls.Add(this.grpCommentary);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.toolStrip);
@@ -3088,6 +3119,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.PerformLayout();
             this.grpSpells.ResumeLayout(false);
             this.grpSpells.PerformLayout();
+            this.grpCommentary.ResumeLayout(false);
+            this.grpCommentary.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -3276,5 +3309,7 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblMpDamageStyle;
         private DarkComboBox cmbHpDamageStyle;
         private System.Windows.Forms.Label lblHpDamageStyle;
+        private DarkGroupBox grpCommentary;
+        private DarkTextBox txtCommentary;
     }
 }

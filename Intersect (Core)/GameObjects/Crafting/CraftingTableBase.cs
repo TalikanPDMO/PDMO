@@ -14,6 +14,8 @@ namespace Intersect.GameObjects
 
         [NotMapped] public DbList<CraftBase> Crafts = new DbList<CraftBase>();
 
+        public string Comment { get; set; } = "";
+
         [JsonConstructor]
         public CraftingTableBase(Guid id) : base(id)
         {

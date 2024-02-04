@@ -2398,7 +2398,7 @@
     },
     "undo": "Undo Changes",
     "value": "Value:",
-    "description": "Description:",
+    "commentary": "Commentary",
     "textapiid": "API Id:"
   },
   "TaskEditor": {
@@ -2423,7 +2423,7 @@
       "2": "Kill NPC(s)"
     },
     "descriptions": {
-      "0": "Event Driven - {00}",
+      "0": "Event - {00}",
       "1": "Gather Items [{00} x{01}] - {02}",
       "2": "Kill Npc(s) [{00} x{01}] - {02}"
     }

@@ -58,7 +58,9 @@ namespace Intersect.Editor.Forms.Editors
             if (mEditorItem != null)
             {
                 pnlContainer.Show();
+                grpCommentary.Show();
 
+                txtCommentary.Text = mEditorItem.Comment;
                 txtName.Text = mEditorItem.Name;
 
                 cmbFolder.Text = mEditorItem.Folder;
@@ -74,11 +76,15 @@ namespace Intersect.Editor.Forms.Editors
             else
             {
                 pnlContainer.Hide();
+                grpCommentary.Hide();
             }
 
             UpdateToolStripItems();
         }
-
+        private void txtCommentary_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Comment = txtCommentary.Text;
+        }
         private void txtName_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.Name = txtName.Text;
@@ -209,6 +215,7 @@ namespace Intersect.Editor.Forms.Editors
 
             grpTables.Text = Strings.CraftingTableEditor.tables;
             grpCrafts.Text = Strings.CraftingTableEditor.crafts;
+            grpCommentary.Text = Strings.CraftingTableEditor.commentary;
 
             lblAddCraftedItem.Text = Strings.CraftingTableEditor.addcraftlabel;
             btnAddCraftedItem.Text = Strings.CraftingTableEditor.add;
