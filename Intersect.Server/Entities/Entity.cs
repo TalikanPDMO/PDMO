@@ -1317,6 +1317,11 @@ namespace Intersect.Server.Entities
             return 0;
         }
 
+        public virtual int GetWeaponManaDamage()
+        {
+            return 0;
+        }
+
         public virtual bool CanAttack(Entity entity, SpellBase spell)
         {
             return CastTime <= 0;
@@ -1588,7 +1593,7 @@ namespace Intersect.Server.Entities
             if (parentSpell == null)
             {
                 var damageHealth = parentItem.Damage;
-                var damageMana = 0;
+                var damageMana = parentItem.ManaDamage;
                 if (target !=null && target.IsImmuneToElementalType(parentItem.ElementalType))
                 {
                     PacketSender.SendActionMsg(target, Strings.Combat.immune, CustomColors.Combat.Immune);
@@ -1983,6 +1988,7 @@ namespace Intersect.Server.Entities
         public virtual void TryAttack(
             Entity target,
             int baseDamage,
+            int secondaryDamage,
             DamageType damageType,
             Stats scalingStat,
             int scaling,
@@ -2057,7 +2063,7 @@ namespace Intersect.Server.Entities
             }
             bool isCrit = false;
             var damageHealth = baseDamage;
-            var damageMana = 0;
+            var damageMana = secondaryDamage;
             if (weapon == null)
             {
                 if (target != null && target.IsImmuneToElementalType((int)ElementalType.None))
@@ -2409,7 +2415,7 @@ namespace Intersect.Server.Entities
             enemy.CombatTimer = Globals.Timing.Milliseconds + Options.CombatTime;
             CombatTimer = Globals.Timing.Milliseconds + Options.CombatTime;
 
-            //Check for lifesteal
+            //Check for lifesteal and/or manasteal
             if (GetType() == typeof(Player) && enemy.GetType() != typeof(Resource))
             {
                 var lifesteal = ((Player) this).GetLifeSteal() / 100;
@@ -2419,6 +2425,16 @@ namespace Intersect.Server.Entities
                     AddVital(Vitals.Health, (int) healthRecovered);
                     PacketSender.SendActionMsg(
                         this, Strings.Combat.addsymbol + (int) healthRecovered, CustomColors.Combat.Heal
+                    );
+                }
+
+                var manasteal = ((Player)this).GetManaSteal() / 100;
+                var manaRecovered = manasteal * secondaryDamage;
+                if (manaRecovered > 0) //Don't send any +0 msg's.
+                {
+                    AddVital(Vitals.Mana, (int)manaRecovered);
+                    PacketSender.SendActionMsg(
+                        this, Strings.Combat.addsymbol + (int)manaRecovered, CustomColors.Combat.AddMana
                     );
                 }
             }
@@ -3646,7 +3662,7 @@ namespace Intersect.Server.Entities
 
                 // Spawn the actual item!
                 var map = MapInstance.Get(MapId);
-                map?.SpawnItem(X, Y, item, quantity, lootOwner, sendUpdate);
+                map?.SpawnItem(X, Y, item, quantity, lootOwner, false, sendUpdate);
 
                 // Remove the item from inventory if a player.
                 var player = this as Player;

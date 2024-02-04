@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 
@@ -22,7 +23,7 @@ namespace Intersect.Client.Items
         {
         }
 
-        public MapItemInstance(int tileIndex, Guid uniqueId, Guid itemId, Guid? bagId, int quantity, int[] statbuffs) : base()
+        public MapItemInstance(int tileIndex, Guid uniqueId, Guid itemId, Guid? bagId, int quantity, string itemPropertiesJson) : base()
         {
             UniqueId = uniqueId;
             X = tileIndex % Options.MapWidth;
@@ -30,7 +31,7 @@ namespace Intersect.Client.Items
             ItemId = itemId;
             BagId = bagId;
             Quantity = quantity;
-            StatBuffs = statbuffs;
+            Properties = JsonConvert.DeserializeObject<ItemProperties>(itemPropertiesJson);
         }
 
     }

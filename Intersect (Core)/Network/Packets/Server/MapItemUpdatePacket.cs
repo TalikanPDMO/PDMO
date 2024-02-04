@@ -1,5 +1,6 @@
 ﻿using MessagePack;
 using System;
+using System.Collections.Generic;
 
 namespace Intersect.Network.Packets.Server
 {
@@ -20,7 +21,7 @@ namespace Intersect.Network.Packets.Server
         }
 
         //Item data implies item added or updated
-        public MapItemUpdatePacket(Guid mapId, int tileIndex, Guid uniqueId, Guid itemId, Guid? bagId, int quantity, int[] statbuffs)
+        public MapItemUpdatePacket(Guid mapId, int tileIndex, Guid uniqueId, Guid itemId, Guid? bagId, int quantity, string itemPropertiesJson)
         {
             MapId = mapId;
             TileIndex = tileIndex;
@@ -28,7 +29,7 @@ namespace Intersect.Network.Packets.Server
             ItemId = itemId;
             BagId = bagId;
             Quantity = quantity;
-            StatBuffs = statbuffs;
+            ItemPropertiesJson = itemPropertiesJson;
         }
 
         [Key(0)]
@@ -50,7 +51,7 @@ namespace Intersect.Network.Packets.Server
         public int Quantity { get; set; }
 
         [Key(6)]
-        public int[] StatBuffs { get; set; }
+        public string ItemPropertiesJson { get; set; }
 
     }
 

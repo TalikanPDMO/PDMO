@@ -245,7 +245,8 @@
     "damagetypes": {
       "0": "Physical",
       "1": "Magic",
-      "2": "True"
+      "2": "True",
+      "3": "Fixed"
     },
     "exp": "Experience",
     "stats": {
@@ -1487,9 +1488,15 @@
     "attackspeedvalue": "Value:",
     "bagpanel": "Bag:",
     "bagslots": "Bag Slots:",
-    "basedamage": "Base Damage:",
-    "bonusamount": "Effect Amount (%):",
-    "bonuseffect": "Bonus Effect:",
+    "basedamage": "HP Damage:",
+    "manadamage": "MP Damage:",
+    "bonusamount": "Effect Amount Range (%):",
+    "effects": "Extra Effects:",
+    "effectto": "to",
+    "effectsrange": "{00} : {01}% to {02}%",
+    "add": "Add",
+    "remove": "Remove",
+    "bonuseffect": "Effect:",
     "bonuseffects": {
       "0": "None",
       "1": "Cooldown Reduction",
@@ -1497,7 +1504,8 @@
       "3": "Tenacity",
       "4": "Luck",
       "5": "EXP",
-      "6": "Attack Speed"
+      "6": "Attack Speed",
+      "7": "Mana Steal"
     },
     "bonuses": "Stat Bonuses",
     "bonusrange": "Stat Bonus Range (+-):",
@@ -1560,12 +1568,12 @@
     "alpha": "Alpha:",
     "price": "Price:",
     "rarity": {
-      "0": "None",
-      "1": "Common",
-      "2": "Uncommon",
-      "3": "Rare",
-      "4": "Epic",
-      "5": "Legendary"
+      "0": "Obsolète",
+      "1": "Commun",
+      "2": "Super",
+      "3": "Ultra",
+      "4": "Fabuleux",
+      "5": "Legendaire"
     },
     "projectile": "Projectile:",
     "requirementsgroup": "Requirements",

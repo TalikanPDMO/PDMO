@@ -3,14 +3,16 @@ using System;
 using Intersect.Server.Database.GameData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Intersect.Server.Migrations.Game
 {
     [DbContext(typeof(GameContext))]
-    partial class GameContextModelSnapshot : ModelSnapshot
+    [Migration("20240128141635_AddingManaDamageToItems")]
+    partial class AddingManaDamageToItems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -259,9 +261,6 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<string>("EditorName");
 
-                    b.Property<string>("EffectsJson")
-                        .HasColumnName("Effects");
-
                     b.Property<int>("ElementalType");
 
                     b.Property<Guid>("EquipmentAnimationId")
@@ -336,6 +335,8 @@ namespace Intersect.Server.Migrations.Game
                         .HasColumnName("Spell");
 
                     b.Property<bool>("Stackable");
+
+                    b.Property<int>("StatGrowth");
 
                     b.Property<string>("StatsJson")
                         .HasColumnName("StatsGiven");
@@ -1024,6 +1025,22 @@ namespace Intersect.Server.Migrations.Game
                             b1.HasOne("Intersect.GameObjects.ItemBase")
                                 .WithOne("Consumable")
                                 .HasForeignKey("Intersect.GameObjects.ConsumableData", "ItemBaseId")
+                                .OnDelete(DeleteBehavior.Cascade);
+                        });
+
+                    b.OwnsOne("Intersect.GameObjects.EffectData", "Effect", b1 =>
+                        {
+                            b1.Property<Guid>("ItemBaseId");
+
+                            b1.Property<int>("Percentage");
+
+                            b1.Property<byte>("Type");
+
+                            b1.ToTable("Items");
+
+                            b1.HasOne("Intersect.GameObjects.ItemBase")
+                                .WithOne("Effect")
+                                .HasForeignKey("Intersect.GameObjects.EffectData", "ItemBaseId")
                                 .OnDelete(DeleteBehavior.Cascade);
                         });
                 });

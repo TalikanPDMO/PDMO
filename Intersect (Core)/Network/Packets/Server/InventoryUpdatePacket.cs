@@ -1,5 +1,7 @@
-﻿using MessagePack;
+﻿using Intersect.Enums;
+using MessagePack;
 using System;
+using System.Collections.Generic;
 
 namespace Intersect.Network.Packets.Server
 {
@@ -11,13 +13,13 @@ namespace Intersect.Network.Packets.Server
         {
         }
 
-        public InventoryUpdatePacket(int slot, Guid id, int quantity, Guid? bagId, int[] statBuffs)
+        public InventoryUpdatePacket(int slot, Guid id, int quantity, Guid? bagId, string itemPropertiesJson)
         {
             Slot = slot;
             ItemId = id;
             BagId = bagId;
             Quantity = quantity;
-            StatBuffs = statBuffs;
+            ItemPropertiesJson = itemPropertiesJson;
         }
 
         [Key(1)]
@@ -33,7 +35,7 @@ namespace Intersect.Network.Packets.Server
         public int Quantity { get; set; }
 
         [Key(5)]
-        public int[] StatBuffs { get; set; }
+        public string ItemPropertiesJson { get; set; }
 
     }
 

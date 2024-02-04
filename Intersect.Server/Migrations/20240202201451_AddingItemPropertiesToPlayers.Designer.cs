@@ -3,14 +3,16 @@ using System;
 using Intersect.Server.Database.PlayerData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Intersect.Server.Migrations
 {
     [DbContext(typeof(PlayerContext))]
-    partial class PlayerContextModelSnapshot : ModelSnapshot
+    [Migration("20240202201451_AddingItemPropertiesToPlayers")]
+    partial class AddingItemPropertiesToPlayers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -115,6 +117,9 @@ namespace Intersect.Server.Migrations
 
                     b.Property<Guid?>("BagId");
 
+                    b.Property<string>("EffectsJson")
+                        .HasColumnName("Effects");
+
                     b.Property<Guid>("ItemId");
 
                     b.Property<string>("ItemPropertiesJson")
@@ -125,6 +130,12 @@ namespace Intersect.Server.Migrations
                     b.Property<int>("Quantity");
 
                     b.Property<int>("Slot");
+
+                    b.Property<string>("StatBuffsJson")
+                        .HasColumnName("StatBuffs");
+
+                    b.Property<string>("VitalBuffsJson")
+                        .HasColumnName("VitalBuffs");
 
                     b.HasKey("Id");
 
@@ -142,6 +153,9 @@ namespace Intersect.Server.Migrations
 
                     b.Property<Guid?>("BagId");
 
+                    b.Property<string>("EffectsJson")
+                        .HasColumnName("Effects");
+
                     b.Property<Guid>("ItemId");
 
                     b.Property<string>("ItemPropertiesJson")
@@ -152,6 +166,12 @@ namespace Intersect.Server.Migrations
                     b.Property<int>("Quantity");
 
                     b.Property<int>("Slot");
+
+                    b.Property<string>("StatBuffsJson")
+                        .HasColumnName("StatBuffs");
+
+                    b.Property<string>("VitalBuffsJson")
+                        .HasColumnName("VitalBuffs");
 
                     b.HasKey("Id");
 
@@ -203,6 +223,9 @@ namespace Intersect.Server.Migrations
 
                     b.Property<Guid?>("BagId");
 
+                    b.Property<string>("EffectsJson")
+                        .HasColumnName("Effects");
+
                     b.Property<Guid>("GuildId");
 
                     b.Property<Guid>("ItemId");
@@ -213,6 +236,12 @@ namespace Intersect.Server.Migrations
                     b.Property<int>("Quantity");
 
                     b.Property<int>("Slot");
+
+                    b.Property<string>("StatBuffsJson")
+                        .HasColumnName("StatBuffs");
+
+                    b.Property<string>("VitalBuffsJson")
+                        .HasColumnName("VitalBuffs");
 
                     b.HasKey("Id");
 
@@ -238,6 +267,9 @@ namespace Intersect.Server.Migrations
 
                     b.Property<int>("Slot");
 
+                    b.Property<string>("StatBuffsJson")
+                        .HasColumnName("PreferredStatBuffs");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PlayerId");
@@ -252,6 +284,9 @@ namespace Intersect.Server.Migrations
 
                     b.Property<Guid?>("BagId");
 
+                    b.Property<string>("EffectsJson")
+                        .HasColumnName("Effects");
+
                     b.Property<Guid>("ItemId");
 
                     b.Property<string>("ItemPropertiesJson")
@@ -262,6 +297,12 @@ namespace Intersect.Server.Migrations
                     b.Property<int>("Quantity");
 
                     b.Property<int>("Slot");
+
+                    b.Property<string>("StatBuffsJson")
+                        .HasColumnName("StatBuffs");
+
+                    b.Property<string>("VitalBuffsJson")
+                        .HasColumnName("VitalBuffs");
 
                     b.HasKey("Id");
 

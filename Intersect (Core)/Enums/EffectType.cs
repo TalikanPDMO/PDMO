@@ -18,6 +18,8 @@
 
         AttackSpeed = 6,
 
+        Manasteal = 7
+
     }
 
 }

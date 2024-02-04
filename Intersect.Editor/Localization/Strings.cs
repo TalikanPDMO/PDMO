@@ -3493,11 +3493,23 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString bagslots = @"Bag Slots:";
 
-            public static LocalizedString basedamage = @"Base Damage:";
+            public static LocalizedString basedamage = @"HP Damage:";
 
-            public static LocalizedString bonusamount = @"Effect Amount (%):";
+            public static LocalizedString manadamage = @"MP Damage:";
+
+            public static LocalizedString bonusamount = @"Effect Amount Range (%):";
 
             public static LocalizedString bonuseffect = @"Bonus Effect:";
+
+            public static LocalizedString effects = @"Extra Effects:";
+
+            public static LocalizedString effectto = @"to";
+
+            public static LocalizedString effectsrange = @"{00} : {01}% to {02}%";
+
+            public static LocalizedString add = @"Add";
+
+            public static LocalizedString remove = @"Remove";
 
             public static Dictionary<int, LocalizedString> bonuseffects = new Dictionary<int, LocalizedString>
             {
@@ -3507,7 +3519,8 @@ Tick timer saved in server config.json.";
                 {3, @"Tenacity"},
                 {4, @"Luck"},
                 {5, @"EXP"},
-                {6, @"Attack Speed" }
+                {6, @"Attack Speed" },
+                {7, @"Mana Steal" }
             };
 
             public static LocalizedString bonuses = @"Stat Bonuses";

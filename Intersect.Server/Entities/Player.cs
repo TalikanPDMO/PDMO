@@ -948,9 +948,9 @@ namespace Intersect.Server.Entities
                     if (Items[Equipment[i]].ItemId != Guid.Empty)
                     {
                         var item = ItemBase.Get(Items[Equipment[i]].ItemId);
-                        if (item != null)
+                        if (item != null && Items[Equipment[i]].Properties != null)
                         {
-                            classVital += item.VitalsGiven[vital] + item.PercentageVitalsGiven[vital] * baseVital / 100;
+                            classVital += Items[Equipment[i]].Properties.Vitals[vital] + item.PercentageVitalsGiven[vital] * baseVital / 100;
                         }
                     }
                 }
@@ -1512,7 +1512,7 @@ namespace Intersect.Server.Entities
                     );
                 }
                 base.TryAttack(
-                    target, weapon.Damage, (DamageType) weapon.DamageType, (Stats) weapon.ScalingStat, weapon.Scaling,
+                    target, weapon.Damage, weapon.ManaDamage, (DamageType) weapon.DamageType, (Stats) weapon.ScalingStat, weapon.Scaling,
                     weapon.CritChance, weapon.CritMultiplier, null, null, weapon
                 );
             }
@@ -1527,13 +1527,13 @@ namespace Intersect.Server.Entities
                         );
                     }
                     base.TryAttack(
-                        target, classBase.Damage, (DamageType) classBase.DamageType, (Stats) classBase.ScalingStat,
+                        target, classBase.Damage, 0, (DamageType) classBase.DamageType, (Stats) classBase.ScalingStat,
                         classBase.Scaling, classBase.CritChance, classBase.CritMultiplier
                     );
                 }
                 else
                 {
-                    base.TryAttack(target, 1, DamageType.Physical, Stats.Attack, 100, 10, 1.5);
+                    base.TryAttack(target, 1, 0, DamageType.Physical, Stats.Attack, 100, 10, 1.5);
                 }
             }
         }
@@ -1687,9 +1687,9 @@ namespace Intersect.Server.Entities
                     if (item.ItemId != Guid.Empty)
                     {
                         var descriptor = ItemBase.Get(item.ItemId);
-                        if (descriptor != null)
+                        if (descriptor != null && item.Properties != null)
                         {
-                            flatStats += descriptor.StatsGiven[(int)statType] + item.StatBuffs[(int)statType];
+                            flatStats += item.Properties.Stats[(int)statType];
                             percentageStats += descriptor.PercentageStatsGiven[(int)statType];
                         }
                     }
@@ -2114,7 +2114,7 @@ namespace Intersect.Server.Entities
                     // Do we have any items to spawn to the map?
                     if (spawnAmount > 0)
                     {
-                        Map.SpawnItem(overflowTileX > -1 ? overflowTileX : X, overflowTileY > -1 ? overflowTileY : Y, item, spawnAmount, Id);
+                        Map.SpawnItem(overflowTileX > -1 ? overflowTileX : X, overflowTileY > -1 ? overflowTileY : Y, item, spawnAmount, Id, true);
                         return spawnAmount != item.Quantity;
                     }
 
@@ -2351,7 +2351,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            map.SpawnItem(X, Y, itemInSlot, itemDescriptor.IsStackable ? amount : 1, Id);
+            map.SpawnItem(X, Y, itemInSlot, itemDescriptor.IsStackable ? amount : 1, Id, true);
 
             itemInSlot.Quantity = Math.Max(0, itemInSlot.Quantity - amount);
 
@@ -2905,29 +2905,36 @@ namespace Intersect.Server.Entities
             return 0;
         }
 
+        public override int GetWeaponManaDamage()
+        {
+            if (Equipment[Options.WeaponIndex] > -1 && Equipment[Options.WeaponIndex] < Options.MaxInvItems)
+            {
+                if (Items[Equipment[Options.WeaponIndex]].ItemId != Guid.Empty)
+                {
+                    var item = ItemBase.Get(Items[Equipment[Options.WeaponIndex]].ItemId);
+                    if (item != null)
+                    {
+                        return item.ManaDamage;
+                    }
+                }
+            }
+
+            return 0;
+        }
+
         public decimal GetCooldownReduction()
         {
             var cooldown = 0;
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
-                if (Equipment[i] > -1)
+                if (Equipment[i] > -1 && Items[Equipment[i]].ItemId != Guid.Empty)
                 {
-                    if (Items[Equipment[i]].ItemId != Guid.Empty)
-                    {
-                        var item = ItemBase.Get(Items[Equipment[i]].ItemId);
-                        if (item != null)
-                        {
-                            if (item.Effect.Type == EffectType.CooldownReduction)
-                            {
-                                cooldown += item.Effect.Percentage;
-                            }
-                        }
-                    }
+                    // WARNING, item effects and itembase effects can be different if reworked
+                    cooldown += Items[Equipment[i]].GetEffectAmount(EffectType.CooldownReduction);
                 }
             }
-
-            return cooldown;
+            return Math.Max(0,cooldown);
         }
 
         public decimal GetLifeSteal()
@@ -2936,23 +2943,30 @@ namespace Intersect.Server.Entities
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
-                if (Equipment[i] > -1)
+                if (Equipment[i] > -1 && Items[Equipment[i]].ItemId != Guid.Empty)
                 {
-                    if (Items[Equipment[i]].ItemId != Guid.Empty)
-                    {
-                        var item = ItemBase.Get(Items[Equipment[i]].ItemId);
-                        if (item != null)
-                        {
-                            if (item.Effect.Type == EffectType.Lifesteal)
-                            {
-                                lifesteal += item.Effect.Percentage;
-                            }
-                        }
-                    }
+                    // WARNING, item effects and itembase effects can be different if reworked
+                    lifesteal += Items[Equipment[i]].GetEffectAmount(EffectType.Lifesteal);
                 }
             }
 
-            return lifesteal;
+            return Math.Max(0,lifesteal);
+        }
+
+        public decimal GetManaSteal()
+        {
+            var manasteal = 0;
+
+            for (var i = 0; i < Options.EquipmentSlots.Count; i++)
+            {
+                if (Equipment[i] > -1 && Items[Equipment[i]].ItemId != Guid.Empty)
+                {
+                    // WARNING, item effects and itembase effects can be different if reworked
+                    manasteal += Items[Equipment[i]].GetEffectAmount(EffectType.Manasteal);
+                }
+            }
+
+            return Math.Max(0, manasteal);
         }
 
         public decimal GetAttackSpeedBonus()
@@ -2961,19 +2975,10 @@ namespace Intersect.Server.Entities
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
-                if (Equipment[i] > -1)
+                if (Equipment[i] > -1 && Items[Equipment[i]].ItemId != Guid.Empty)
                 {
-                    if (Items[Equipment[i]].ItemId != Guid.Empty)
-                    {
-                        var item = ItemBase.Get(Items[Equipment[i]].ItemId);
-                        if (item != null)
-                        {
-                            if (item.Effect.Type == EffectType.AttackSpeed)
-                            {
-                                attackspeed += item.Effect.Percentage;
-                            }
-                        }
-                    }
+                    // WARNING, item effects and itembase effects can be different if reworked
+                    attackspeed += Items[Equipment[i]].GetEffectAmount(EffectType.AttackSpeed);
                 }
             }
             if (attackspeed > 50)
@@ -2981,7 +2986,7 @@ namespace Intersect.Server.Entities
                 //AttackSpeedBonus max is 50% of normal attack speed
                 attackspeed = 50;
             }
-            return attackspeed;
+            return Math.Max(0, attackspeed);
         }
         public double GetTenacity()
         {
@@ -2989,23 +2994,14 @@ namespace Intersect.Server.Entities
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
-                if (Equipment[i] > -1)
+                if (Equipment[i] > -1 && Items[Equipment[i]].ItemId != Guid.Empty)
                 {
-                    if (Items[Equipment[i]].ItemId != Guid.Empty)
-                    {
-                        var item = ItemBase.Get(Items[Equipment[i]].ItemId);
-                        if (item != null)
-                        {
-                            if (item.Effect.Type == EffectType.Tenacity)
-                            {
-                                tenacity += item.Effect.Percentage;
-                            }
-                        }
-                    }
+                    // WARNING, item effects and itembase effects can be different if reworked
+                    tenacity += Items[Equipment[i]].GetEffectAmount(EffectType.Tenacity);
                 }
             }
 
-            return tenacity;
+            return Math.Max(0, tenacity);
         }
 
         public double GetLuck()
@@ -3014,23 +3010,14 @@ namespace Intersect.Server.Entities
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
-                if (Equipment[i] > -1)
+                if (Equipment[i] > -1 && Items[Equipment[i]].ItemId != Guid.Empty)
                 {
-                    if (Items[Equipment[i]].ItemId != Guid.Empty)
-                    {
-                        var item = ItemBase.Get(Items[Equipment[i]].ItemId);
-                        if (item != null)
-                        {
-                            if (item.Effect.Type == EffectType.Luck)
-                            {
-                                luck += item.Effect.Percentage;
-                            }
-                        }
-                    }
+                    // WARNING, item effects and itembase effects can be different if reworked
+                    luck += Items[Equipment[i]].GetEffectAmount(EffectType.Luck);
                 }
             }
 
-            return luck;
+            return Math.Max(0, luck);
         }
 
         public int GetExpMultiplier(bool xpBoostNpc, bool xpBoostQuestEvent)
@@ -3039,21 +3026,13 @@ namespace Intersect.Server.Entities
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
-                if (Equipment[i] > -1)
+                if (Equipment[i] > -1 && Items[Equipment[i]].ItemId != Guid.Empty)
                 {
-                    if (Items[Equipment[i]].ItemId != Guid.Empty)
-                    {
-                        var item = ItemBase.Get(Items[Equipment[i]].ItemId);
-                        if (item != null)
-                        {
-                            if (item.Effect.Type == EffectType.EXP)
-                            {
-                                exp += item.Effect.Percentage;
-                            }
-                        }
-                    }
+                    // WARNING, item effects and itembase effects can be different if reworked
+                    exp += Items[Equipment[i]].GetEffectAmount(EffectType.EXP);
                 }
             }
+            exp = Math.Max(100, exp);
             if (xpBoostNpc)
             {
                 exp += GetExpBoostsNpcs();
@@ -4209,7 +4188,7 @@ namespace Intersect.Server.Entities
 
                 if (!TryGiveItem(offer))
                 {
-                    MapInstance.Get(MapId)?.SpawnItem(X, Y, offer, offer.Quantity, Id);
+                    MapInstance.Get(MapId)?.SpawnItem(X, Y, offer, offer.Quantity, Id, true);
                     PacketSender.SendChatMsg(this, Strings.Trading.itemsdropped, ChatMessageType.Inventory, CustomColors.Alerts.Error);
                 }
 
@@ -5159,7 +5138,7 @@ namespace Intersect.Server.Entities
         {
             Hotbar[index].ItemOrSpellId = Guid.Empty;
             Hotbar[index].BagId = Guid.Empty;
-            Hotbar[index].PreferredStatBuffs = new int[(int) Stats.StatCount];
+            Hotbar[index].ItemPropertiesId = null;
             if (type == 0) //Item
             {
                 var item = Items[slot];
@@ -5167,7 +5146,7 @@ namespace Intersect.Server.Entities
                 {
                     Hotbar[index].ItemOrSpellId = item.ItemId;
                     Hotbar[index].BagId = item.BagId ?? Guid.Empty;
-                    Hotbar[index].PreferredStatBuffs = item.StatBuffs;
+                    Hotbar[index].ItemPropertiesId = item.Properties?.Id;
                 }
             }
             else if (type == 1) //Spell
@@ -5187,8 +5166,8 @@ namespace Intersect.Server.Entities
         {
             Hotbar[index].ItemOrSpellId = Guid.Empty;
             Hotbar[index].BagId = Guid.Empty;
-            Hotbar[index].PreferredStatBuffs = new int[(int)Stats.StatCount];
-            
+            Hotbar[index].ItemPropertiesId = null;
+
             if (spell != null)
             {
                 Hotbar[index].ItemOrSpellId = spell.SpellId;
@@ -5199,15 +5178,15 @@ namespace Intersect.Server.Entities
         {
             var itemId = Hotbar[index].ItemOrSpellId;
             var bagId = Hotbar[index].BagId;
-            var stats = Hotbar[index].PreferredStatBuffs;
+            var itemPropertiesId = Hotbar[index].ItemPropertiesId;
 
             Hotbar[index].ItemOrSpellId = Hotbar[swapIndex].ItemOrSpellId;
             Hotbar[index].BagId = Hotbar[swapIndex].BagId;
-            Hotbar[index].PreferredStatBuffs = Hotbar[swapIndex].PreferredStatBuffs;
+            Hotbar[index].ItemPropertiesId = Hotbar[swapIndex].ItemPropertiesId;
 
             Hotbar[swapIndex].ItemOrSpellId = itemId;
             Hotbar[swapIndex].BagId = bagId;
-            Hotbar[swapIndex].PreferredStatBuffs = stats;
+            Hotbar[swapIndex].ItemPropertiesId = itemPropertiesId;
         }
 
         /// <summary>

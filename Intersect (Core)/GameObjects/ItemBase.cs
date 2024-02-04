@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
@@ -164,6 +165,8 @@ namespace Intersect.GameObjects
 
         public int Damage { get; set; }
 
+        public int ManaDamage { get; set; }
+
         public int DamageType { get; set; }
 
         public int ElementalType { get; set; } = 0;
@@ -177,8 +180,6 @@ namespace Intersect.GameObjects
         public int EquipmentSlot { get; set; }
 
         public bool TwoHanded { get; set; }
-
-        public EffectData Effect { get; set; }
 
         public int SlotCount { get; set; }
 
@@ -272,20 +273,18 @@ namespace Intersect.GameObjects
         /// </summary>
         public int MaxBankStack { get; set; } = 1000000;
 
-        public int StatGrowth { get; set; }
-
         public int Tool { get; set; } = -1;
 
         [Column("VitalsGiven")]
         [JsonIgnore]
         public string VitalsJson
         {
-            get => DatabaseUtils.SaveIntArray(VitalsGiven, (int) Vitals.VitalCount);
-            set => VitalsGiven = DatabaseUtils.LoadIntArray(value, (int) Vitals.VitalCount);
+            get => JsonConvert.SerializeObject(VitalsGiven);
+            set => VitalsGiven = JsonConvert.DeserializeObject<int[,]>(value);
         }
 
         [NotMapped]
-        public int[] VitalsGiven { get; set; }
+        public int[,] VitalsGiven { get; set; }
 
         [Column("VitalsRegen")]
         [JsonIgnore]
@@ -313,12 +312,12 @@ namespace Intersect.GameObjects
         [JsonIgnore]
         public string StatsJson
         {
-            get => DatabaseUtils.SaveIntArray(StatsGiven, (int) Stats.StatCount);
-            set => StatsGiven = DatabaseUtils.LoadIntArray(value, (int) Stats.StatCount);
+            get => JsonConvert.SerializeObject(StatsGiven);
+            set => StatsGiven = JsonConvert.DeserializeObject<int[,]>(value);
         }
 
         [NotMapped]
-        public int[] StatsGiven { get; set; }
+        public int[,] StatsGiven { get; set; }
 
         [Column("PercentageStatsGiven")]
         [JsonIgnore]
@@ -343,6 +342,20 @@ namespace Intersect.GameObjects
         public bool IsStackable => (ItemType == ItemTypes.Currency || Stackable) &&
                                    ItemType != ItemTypes.Equipment &&
                                    ItemType != ItemTypes.Bag;
+
+        //Effects
+        [NotMapped] public List<ExtraEffect> Effects = new List<ExtraEffect>();
+
+        [Column("Effects")]
+        [JsonIgnore]
+        public string EffectsJson
+        {
+            get => JsonConvert.SerializeObject(Effects, Formatting.None, new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
+            set => Effects = JsonConvert.DeserializeObject<List<ExtraEffect>>(value);
+        }
 
         /// <inheritdoc />
         public string Folder { get; set; } = "";
@@ -369,13 +382,12 @@ namespace Intersect.GameObjects
         {
             Name = "New Item";
             Speed = 10; // Set to 10 by default.
-            StatsGiven = new int[(int) Stats.StatCount];
+            StatsGiven = new int[(int) Stats.StatCount, 2];
             PercentageStatsGiven = new int[(int) Stats.StatCount];
-            VitalsGiven = new int[(int) Vitals.VitalCount];
+            VitalsGiven = new int[(int) Vitals.VitalCount, 2];
             VitalsRegen = new int[(int) Vitals.VitalCount];
             PercentageVitalsGiven = new int[(int) Vitals.VitalCount];
             Consumable = new ConsumableData();
-            Effect = new EffectData();
             Color = new Color(255, 255, 255, 255);
         }
 
@@ -393,7 +405,7 @@ namespace Intersect.GameObjects
 
     }
 
-    [Owned]
+    /*[Owned]
     public class EffectData
     {
 
@@ -401,6 +413,15 @@ namespace Intersect.GameObjects
 
         public int Percentage { get; set; }
 
+    }*/
+
+    public class ExtraEffect
+    {
+        public EffectType Type { get; set; }
+
+        public int Min { get; set; }
+
+        public int Max { get; set; }
     }
 
 }

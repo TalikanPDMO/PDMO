@@ -1003,11 +1003,17 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString bonuses = @"Stat Bonuses:";
 
-            public static LocalizedString damage = @"Base Damage: {00}";
+            public static LocalizedString damage = @"HP Damage: {00}";
+
+            public static LocalizedString manadamage = @"MP Damage: {00}";
 
             public static LocalizedString desc = @"{00}";
 
-            public static LocalizedString effect = @"Bonus Effect: {00}% {01}";
+            public static LocalizedString bonuseffects = @"Bonus Effects:";
+
+            public static LocalizedString effectrange = @"{00}% to {01}% {02}";
+
+            public static LocalizedString effect = @"{00}% {01}";
 
             public static Dictionary<int, LocalizedString> effects = new Dictionary<int, LocalizedString>
             {
@@ -1016,7 +1022,8 @@ namespace Intersect.Client.Localization
                 {2, @"Tenacity"},
                 {3, @"Luck"},
                 {4, @"Exp Increase"},
-                {5, @"%Attack Speed" }
+                {5, @"%Attack Speed" },
+                {6, @"Manasteal" }
             };
 
             public static Dictionary<int, LocalizedString> itemtypes = new Dictionary<int, LocalizedString>
@@ -1031,6 +1038,8 @@ namespace Intersect.Client.Localization
             };
 
             public static LocalizedString prereq = @"Prerequisites:";
+
+            public static LocalizedString rangevital = @"{00} to {01}";
 
             public static LocalizedString rangestat = @"{00} to {01}";
 

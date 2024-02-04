@@ -1,5 +1,7 @@
-﻿using MessagePack;
+﻿using Intersect.Enums;
+using MessagePack;
 using System;
+using System.Collections.Generic;
 
 namespace Intersect.Network.Packets.Server
 {
@@ -7,12 +9,12 @@ namespace Intersect.Network.Packets.Server
     public class BagUpdatePacket : InventoryUpdatePacket
     {
         //Parameterless Constructor for MessagePack
-        public BagUpdatePacket() : base(0, Guid.Empty, 0, null, new int[(int)Enums.Stats.StatCount])
+        public BagUpdatePacket() : base(0, Guid.Empty, 0, null, null)
         {
         }
 
-        public BagUpdatePacket(int slot, Guid id, int quantity, Guid? bagId, int[] statBuffs) : base(
-            slot, id, quantity, bagId, statBuffs
+        public BagUpdatePacket(int slot, Guid id, int quantity, Guid? bagId, string itemPropertiesJson) : base(
+            slot, id, quantity, bagId, itemPropertiesJson
         )
         {
         }
