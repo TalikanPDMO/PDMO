@@ -70,6 +70,7 @@ namespace Intersect.Editor.Forms.DockingElements
             mapStoredProperties.Fog = currentMap.Fog;
             mapStoredProperties.FogTransparency = currentMap.FogTransparency;
             mapStoredProperties.FogXSpeed = currentMap.FogXSpeed;
+            mapStoredProperties.FogYSpeed = currentMap.FogYSpeed;
             mapStoredProperties.ZoneType = currentMap.ZoneType;
             mapStoredProperties.Brightness = currentMap.Brightness;
             mapStoredProperties.IsIndoors = currentMap.IsIndoors;
@@ -101,6 +102,7 @@ namespace Intersect.Editor.Forms.DockingElements
                 currentMap.Fog = mapStoredProperties.Fog;
                 currentMap.FogTransparency = mapStoredProperties.FogTransparency;
                 currentMap.FogXSpeed = mapStoredProperties.FogXSpeed;
+                currentMap.FogYSpeed = mapStoredProperties.FogYSpeed;
                 currentMap.ZoneType = mapStoredProperties.ZoneType;
                 currentMap.Brightness = mapStoredProperties.Brightness;
                 currentMap.IsIndoors = mapStoredProperties.IsIndoors;
