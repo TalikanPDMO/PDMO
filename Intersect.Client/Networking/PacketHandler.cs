@@ -1147,8 +1147,7 @@ namespace Intersect.Client.Networking
             map.MapItems.Clear();
             foreach(var item in packet.Items)
             {
-                var mapItem = new MapItemInstance(item.TileIndex,item.Id, item.ItemId, item.BagId, item.Quantity,
-                    item.StatBuffs, item.VitalBuffs, item.Effects);
+                var mapItem = new MapItemInstance(item.TileIndex,item.Id, item.ItemId, item.BagId, item.Quantity,item.ItemPropertiesJson);
 
                 if (!map.MapItems.ContainsKey(mapItem.TileIndex))
                 {
@@ -1189,8 +1188,7 @@ namespace Intersect.Client.Networking
                 }
 
                 // Check if the item already exists, if it does replace it. Otherwise just add it.
-                var mapItem = new MapItemInstance(packet.TileIndex, packet.Id, packet.ItemId, packet.BagId, packet.Quantity,
-                    packet.StatBuffs, packet.VitalBuffs, packet.Effects);
+                var mapItem = new MapItemInstance(packet.TileIndex, packet.Id, packet.ItemId, packet.BagId, packet.Quantity, packet.ItemPropertiesJson);
                 if (map.MapItems[packet.TileIndex].Any(item => item.UniqueId == mapItem.UniqueId))
                 {
                     for (var index = 0; index < map.MapItems[packet.TileIndex].Count; index++)
@@ -1223,7 +1221,7 @@ namespace Intersect.Client.Networking
         {
             if (Globals.Me != null)
             {
-                Globals.Me.Inventory[packet.Slot].Load(packet.ItemId, packet.Quantity, packet.BagId, packet.StatBuffs, packet.VitalBuffs, packet.Effects);
+                Globals.Me.Inventory[packet.Slot].Load(packet.ItemId, packet.Quantity, packet.BagId, packet.ItemPropertiesJson);
                 Globals.Me.InventoryUpdatedDelegate?.Invoke();
             }
         }
@@ -1607,7 +1605,7 @@ namespace Intersect.Client.Networking
             if (packet.ItemId != Guid.Empty)
             {
                 Globals.Bank[slot] = new Item();
-                Globals.Bank[slot].Load(packet.ItemId, packet.Quantity, packet.BagId, packet.StatBuffs, packet.VitalBuffs, packet.Effects);
+                Globals.Bank[slot].Load(packet.ItemId, packet.Quantity, packet.BagId, packet.ItemPropertiesJson);
             }
             else
             {
@@ -1894,7 +1892,7 @@ namespace Intersect.Client.Networking
             else
             {
                 Globals.Trade[side, slot] = new Item();
-                Globals.Trade[side, slot].Load(packet.ItemId, packet.Quantity, packet.BagId, packet.StatBuffs, packet.VitalBuffs, packet.Effects);
+                Globals.Trade[side, slot].Load(packet.ItemId, packet.Quantity, packet.BagId, packet.ItemPropertiesJson);
             }
         }
 
@@ -1962,7 +1960,7 @@ namespace Intersect.Client.Networking
             else
             {
                 Globals.Bag[packet.Slot] = new Item();
-                Globals.Bag[packet.Slot].Load(packet.ItemId, packet.Quantity, packet.BagId, packet.StatBuffs, packet.VitalBuffs, packet.Effects);
+                Globals.Bag[packet.Slot].Load(packet.ItemId, packet.Quantity, packet.BagId, packet.ItemPropertiesJson);
             }
         }
 

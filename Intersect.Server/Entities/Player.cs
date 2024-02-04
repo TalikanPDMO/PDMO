@@ -948,9 +948,9 @@ namespace Intersect.Server.Entities
                     if (Items[Equipment[i]].ItemId != Guid.Empty)
                     {
                         var item = ItemBase.Get(Items[Equipment[i]].ItemId);
-                        if (item != null)
+                        if (item != null && Items[Equipment[i]].Properties != null)
                         {
-                            classVital += Items[Equipment[i]].VitalBuffs[vital] + item.PercentageVitalsGiven[vital] * baseVital / 100;
+                            classVital += Items[Equipment[i]].Properties.Vitals[vital] + item.PercentageVitalsGiven[vital] * baseVital / 100;
                         }
                     }
                 }
@@ -1687,9 +1687,9 @@ namespace Intersect.Server.Entities
                     if (item.ItemId != Guid.Empty)
                     {
                         var descriptor = ItemBase.Get(item.ItemId);
-                        if (descriptor != null)
+                        if (descriptor != null && item.Properties != null)
                         {
-                            flatStats += item.StatBuffs[(int)statType];
+                            flatStats += item.Properties.Stats[(int)statType];
                             percentageStats += descriptor.PercentageStatsGiven[(int)statType];
                         }
                     }
@@ -5138,7 +5138,7 @@ namespace Intersect.Server.Entities
         {
             Hotbar[index].ItemOrSpellId = Guid.Empty;
             Hotbar[index].BagId = Guid.Empty;
-            Hotbar[index].PreferredStatBuffs = new int[(int) Stats.StatCount];
+            Hotbar[index].ItemPropertiesId = null;
             if (type == 0) //Item
             {
                 var item = Items[slot];
@@ -5146,7 +5146,7 @@ namespace Intersect.Server.Entities
                 {
                     Hotbar[index].ItemOrSpellId = item.ItemId;
                     Hotbar[index].BagId = item.BagId ?? Guid.Empty;
-                    Hotbar[index].PreferredStatBuffs = item.StatBuffs;
+                    Hotbar[index].ItemPropertiesId = item.Properties?.Id;
                 }
             }
             else if (type == 1) //Spell
@@ -5166,8 +5166,8 @@ namespace Intersect.Server.Entities
         {
             Hotbar[index].ItemOrSpellId = Guid.Empty;
             Hotbar[index].BagId = Guid.Empty;
-            Hotbar[index].PreferredStatBuffs = new int[(int)Stats.StatCount];
-            
+            Hotbar[index].ItemPropertiesId = null;
+
             if (spell != null)
             {
                 Hotbar[index].ItemOrSpellId = spell.SpellId;
@@ -5178,15 +5178,15 @@ namespace Intersect.Server.Entities
         {
             var itemId = Hotbar[index].ItemOrSpellId;
             var bagId = Hotbar[index].BagId;
-            var stats = Hotbar[index].PreferredStatBuffs;
+            var itemPropertiesId = Hotbar[index].ItemPropertiesId;
 
             Hotbar[index].ItemOrSpellId = Hotbar[swapIndex].ItemOrSpellId;
             Hotbar[index].BagId = Hotbar[swapIndex].BagId;
-            Hotbar[index].PreferredStatBuffs = Hotbar[swapIndex].PreferredStatBuffs;
+            Hotbar[index].ItemPropertiesId = Hotbar[swapIndex].ItemPropertiesId;
 
             Hotbar[swapIndex].ItemOrSpellId = itemId;
             Hotbar[swapIndex].BagId = bagId;
-            Hotbar[swapIndex].PreferredStatBuffs = stats;
+            Hotbar[swapIndex].ItemPropertiesId = itemPropertiesId;
         }
 
         /// <summary>

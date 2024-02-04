@@ -21,7 +21,7 @@ namespace Intersect.Network.Packets.Server
         }
 
         //Item data implies item added or updated
-        public MapItemUpdatePacket(Guid mapId, int tileIndex, Guid uniqueId, Guid itemId, Guid? bagId, int quantity, int[] statbuffs, int[] vitalbuffs, List<int[]> effects)
+        public MapItemUpdatePacket(Guid mapId, int tileIndex, Guid uniqueId, Guid itemId, Guid? bagId, int quantity, string itemPropertiesJson)
         {
             MapId = mapId;
             TileIndex = tileIndex;
@@ -29,9 +29,7 @@ namespace Intersect.Network.Packets.Server
             ItemId = itemId;
             BagId = bagId;
             Quantity = quantity;
-            StatBuffs = statbuffs;
-            VitalBuffs = vitalbuffs;
-            Effects = effects;
+            ItemPropertiesJson = itemPropertiesJson;
         }
 
         [Key(0)]
@@ -53,13 +51,7 @@ namespace Intersect.Network.Packets.Server
         public int Quantity { get; set; }
 
         [Key(6)]
-        public int[] StatBuffs { get; set; }
-
-        [Key(7)]
-        public int[] VitalBuffs { get; set; }
-
-        [Key(8)]
-        public List<int[]> Effects { get; set; }
+        public string ItemPropertiesJson { get; set; }
 
     }
 

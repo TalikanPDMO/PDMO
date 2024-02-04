@@ -468,6 +468,7 @@
     <Compile Include="Database\PlayerData\Api\RefreshToken.cs" />
     <Compile Include="Database\PlayerData\Ban.cs" />
     <Compile Include="Database\PlayerData\IPlayerContext.cs" />
+    <Compile Include="Database\PlayerData\Migrations\GenerateItemPropertiesMigration.cs" />
     <Compile Include="Database\PlayerData\Players\Bag.cs" />
     <Compile Include="Database\PlayerData\Players\BagSlot.cs" />
     <Compile Include="Database\PlayerData\Players\GuildBankSlot.cs" />
@@ -557,13 +558,9 @@
     <Compile Include="Migrations\20220628115302_AddingStadiumWinsAndLossesToPlayers.designer.cs">
       <DependentUpon>20220628115302_AddingStadiumWinsAndLossesToPlayers.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\20240129142953_AddingMultipleEffectsToPlayerItems.cs" />
-    <Compile Include="Migrations\20240129142953_AddingMultipleEffectsToPlayerItems.designer.cs">
-      <DependentUpon>20240129142953_AddingMultipleEffectsToPlayerItems.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20240201133918_AddingVitalsToPlayerItems.cs" />
-    <Compile Include="Migrations\20240201133918_AddingVitalsToPlayerItems.designer.cs">
-      <DependentUpon>20240201133918_AddingVitalsToPlayerItems.cs</DependentUpon>
+    <Compile Include="Migrations\20240202201451_AddingItemPropertiesToPlayers.cs" />
+    <Compile Include="Migrations\20240202201451_AddingItemPropertiesToPlayers.designer.cs">
+      <DependentUpon>20240202201451_AddingItemPropertiesToPlayers.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
@@ -1028,9 +1025,9 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="assets\scripts\migrations\ItemEffectToListEffects_31012024.py" />
+    <Content Include="assets\scripts\migrations\FillPlayerItemsProperties_03022024.py" />
+    <Content Include="assets\scripts\migrations\ItemVitalsToVitalsRange_02022024.py" />
     <Content Include="assets\scripts\migrations\ItemStatsToStatsRange_01022024.py" />
-    <Content Include="assets\scripts\migrations\UpdatePlayerItemsEffects_31012024.py" />
-    <Content Include="assets\scripts\migrations\UpdatePlayerItemsStats_01022024.py" />
     <Content Include="Icon.ico" />
     <EmbeddedResource Include="$(NetworkHandshakePublicKey)" />
     <EmbeddedResource Include="$(NetworkHandshakePrivateKey)" />
@@ -1066,9 +1063,7 @@
       <Name>Intersect.Server.Framework</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Database\PlayerData\Migrations\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.3.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.VersionCheckAnalyzer.resources.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.3.0.0\analyzers\dotnet\Microsoft.CodeAnalysis.VersionCheckAnalyzer.dll" />

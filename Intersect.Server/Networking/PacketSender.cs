@@ -984,7 +984,7 @@ namespace Intersect.Server.Networking
                 if (item.VisibleToAll || item.Owner == player?.Id)
                 {
                     items.Add(new MapItemUpdatePacket(mapId, item.TileIndex, item.UniqueId, item.ItemId, item.BagId, item.Quantity,
-                        item.StatBuffs, item.VitalBuffs, item.Effects));
+                        item.ItemPropertiesJson));
                 }
             }
 
@@ -1067,13 +1067,13 @@ namespace Intersect.Server.Networking
                     if (player != null)
                     {
                         player.SendPacket(new MapItemUpdatePacket(mapId, itemRef.TileIndex, itemRef.UniqueId, itemRef.ItemId, itemRef.BagId, itemRef.Quantity,
-                            itemRef.StatBuffs, itemRef.VitalBuffs, itemRef.Effects));
+                            itemRef.ItemPropertiesJson));
                     }
                 }
                 else
                 {
                     SendDataToProximity(mapId, new MapItemUpdatePacket(mapId, itemRef.TileIndex, itemRef.UniqueId, itemRef.ItemId, itemRef.BagId, itemRef.Quantity,
-                        itemRef.StatBuffs, itemRef.VitalBuffs, itemRef.Effects));
+                        itemRef.ItemPropertiesJson));
                 }
             }
         }
@@ -1092,7 +1092,7 @@ namespace Intersect.Server.Networking
             {
                 invItems[i] = new InventoryUpdatePacket(
                     i, player.Items[i].ItemId, player.Items[i].Quantity, player.Items[i].BagId,
-                    player.Items[i].StatBuffs, player.Items[i].VitalBuffs, player.Items[i].Effects
+                    player.Items[i].ItemPropertiesJson
                 );
             }
 
@@ -1110,7 +1110,7 @@ namespace Intersect.Server.Networking
             player.SendPacket(
                 new InventoryUpdatePacket(
                     slot, player.Items[slot].ItemId, player.Items[slot].Quantity, player.Items[slot].BagId,
-                    player.Items[slot].StatBuffs, player.Items[slot].VitalBuffs, player.Items[slot].Effects
+                    player.Items[slot].ItemPropertiesJson
                 )
             );
         }
@@ -1914,13 +1914,13 @@ namespace Intersect.Server.Networking
                 player.SendPacket(
                     new TradeUpdatePacket(
                         trader.Id, slot, trader.Trading.Offer[slot].ItemId, trader.Trading.Offer[slot].Quantity,trader.Trading.Offer[slot].BagId,
-                        trader.Trading.Offer[slot].StatBuffs, trader.Trading.Offer[slot].VitalBuffs, trader.Trading.Offer[slot].Effects
+                        trader.Trading.Offer[slot].ItemPropertiesJson
                     )
                 );
             }
             else
             {
-                player.SendPacket(new TradeUpdatePacket(trader.Id, slot, Guid.Empty, 0, null, null, null, null));
+                player.SendPacket(new TradeUpdatePacket(trader.Id, slot, Guid.Empty, 0, null, null));
             }
         }
 
@@ -1963,11 +1963,11 @@ namespace Intersect.Server.Networking
         {
             if (item != null && item.ItemId != Guid.Empty && item.Quantity > 0)
             {
-                player.SendPacket(new BagUpdatePacket(slot, item.ItemId, item.Quantity, item.BagId, item.StatBuffs, item.VitalBuffs, item.Effects));
+                player.SendPacket(new BagUpdatePacket(slot, item.ItemId, item.Quantity, item.BagId, item.ItemPropertiesJson));
             }
             else
             {
-                player.SendPacket(new BagUpdatePacket(slot, Guid.Empty, 0, null, null, null, null));
+                player.SendPacket(new BagUpdatePacket(slot, Guid.Empty, 0, null, null));
             }
         }
 

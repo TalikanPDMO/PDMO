@@ -362,9 +362,9 @@ namespace Intersect.Client.Interface.Game.Character
                         Items[i]
                             .Update(
                                 Globals.Me.Inventory[Globals.Me.MyEquipment[i]].ItemId,
-                                Globals.Me.Inventory[Globals.Me.MyEquipment[i]].StatBuffs,
-                                Globals.Me.Inventory[Globals.Me.MyEquipment[i]].VitalBuffs,
-                                Globals.Me.Inventory[Globals.Me.MyEquipment[i]].Effects
+                                Globals.Me.Inventory[Globals.Me.MyEquipment[i]].Properties?.Stats,
+                                Globals.Me.Inventory[Globals.Me.MyEquipment[i]].Properties?.Vitals,
+                                Globals.Me.Inventory[Globals.Me.MyEquipment[i]].Properties?.Effects
                             );
                     }
                     else

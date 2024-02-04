@@ -337,8 +337,6 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<bool>("Stackable");
 
-                    b.Property<int>("StatGrowth");
-
                     b.Property<string>("StatsJson")
                         .HasColumnName("StatsGiven");
 

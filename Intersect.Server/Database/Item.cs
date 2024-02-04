@@ -47,35 +47,46 @@ namespace Intersect.Server.Database
                 return;
             }
 
+            Properties = new ItemProperties();
             for (var i = 0; i < (int) Stats.StatCount; i++)
             {
-                StatBuffs[i] = Randomization.Next(descriptor.StatsGiven[i, 0], descriptor.StatsGiven[i, 1] + 1);
+                Properties.Stats[i] = Randomization.Next(descriptor.StatsGiven[i, 0], descriptor.StatsGiven[i, 1] + 1);
             }
             for (var i = 0; i < (int)Vitals.VitalCount; i++)
             {
-                VitalBuffs[i] = Randomization.Next(descriptor.VitalsGiven[i, 0], descriptor.VitalsGiven[i, 1] + 1);
+                Properties.Vitals[i] = Randomization.Next(descriptor.VitalsGiven[i, 0], descriptor.VitalsGiven[i, 1] + 1);
             }
             foreach (var effect in descriptor.Effects)
             {
-                Effects.Add(new int[2] {(int)effect.Type, Randomization.Next(effect.Min, effect.Max + 1)});
+                Properties.Effects.Add(new int[2] {(int)effect.Type, Randomization.Next(effect.Min, effect.Max + 1)});
             }
         }
 
         public Item(Item item) : this(item.ItemId, item.Quantity, item.BagId, item.Bag)
         {
-            for (var i = 0; i < (int) Stats.StatCount; i++)
+            if (item.Properties == null)
             {
-                StatBuffs[i] = item.StatBuffs[i];
+                Properties = null;
             }
-            for (var i = 0; i < (int)Vitals.VitalCount; i++)
+            else
             {
-                VitalBuffs[i] = item.VitalBuffs[i];
+                Properties = new ItemProperties();
+                Properties.Id = item.Properties.Id;
+                for (var i = 0; i < (int)Stats.StatCount; i++)
+                {
+                    Properties.Stats[i] = item.Properties.Stats[i];
+                }
+                for (var i = 0; i < (int)Vitals.VitalCount; i++)
+                {
+                    Properties.Vitals[i] = item.Properties.Vitals[i];
+                }
+                Properties.Effects.Clear();
+                foreach (var effect in item.Properties.Effects)
+                {
+                    Properties.Effects.Add(new int[2] { effect[0], effect[1] });
+                }
             }
-            Effects.Clear();
-            foreach (var effect in item.Effects)
-            {
-                Effects.Add(new int[2] { effect[0], effect[1] });
-            }
+            
             DropChance = item.DropChance;
             DropAmountRandom = item.DropAmountRandom;
             DropChanceIterative = item.DropChanceIterative;
@@ -94,41 +105,14 @@ namespace Intersect.Server.Database
 
         public int Quantity { get; set; }
 
-        [Column("StatBuffs")]
+        [NotMapped] public ItemProperties Properties { get; set; } = null;
+
+        [Column("ItemProperties")]
         [JsonIgnore]
-        public string StatBuffsJson
+        public string ItemPropertiesJson
         {
-            get => DatabaseUtils.SaveIntArray(StatBuffs, (int) Stats.StatCount);
-            set => StatBuffs = DatabaseUtils.LoadIntArray(value, (int) Stats.StatCount);
-        }
-
-        [NotMapped]
-        public int[] StatBuffs { get; set; } = new int[(int) Stats.StatCount];
-
-        [Column("VitalBuffs")]
-        [JsonIgnore]
-        public string VitalBuffsJson
-        {
-            get => DatabaseUtils.SaveIntArray(VitalBuffs, (int)Vitals.VitalCount);
-            set => VitalBuffs = DatabaseUtils.LoadIntArray(value, (int)Vitals.VitalCount);
-        }
-
-        [NotMapped]
-        public int[] VitalBuffs { get; set; } = new int[(int)Vitals.VitalCount];
-
-
-        //Effects
-        [NotMapped] public List<int[]> Effects = new List<int[]>();
-
-        [Column("Effects")]
-        [JsonIgnore]
-        public string EffectsJson
-        {
-            get => JsonConvert.SerializeObject(Effects, Formatting.None, new JsonSerializerSettings()
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            });
-            set => Effects = JsonConvert.DeserializeObject<List<int[]>>(value);
+            get => Properties == null ? "" : JsonConvert.SerializeObject(Properties);
+            set =>  Properties = JsonConvert.DeserializeObject<ItemProperties>(value);
         }
 
         [JsonIgnore]
@@ -143,19 +127,29 @@ namespace Intersect.Server.Database
             Quantity = item.Quantity;
             BagId = item.BagId;
             Bag = item.Bag;
-            for (var i = 0; i < (int) Stats.StatCount; i++)
+            if (item.Properties != null)
             {
-                StatBuffs[i] = item.StatBuffs[i];
+                Properties = new ItemProperties();
+                Properties.Id = item.Properties.Id;
+                for (var i = 0; i < (int)Stats.StatCount; i++)
+                {
+                    Properties.Stats[i] = item.Properties.Stats[i];
+                }
+                for (var i = 0; i < (int)Vitals.VitalCount; i++)
+                {
+                    Properties.Vitals[i] = item.Properties.Vitals[i];
+                }
+                Properties.Effects.Clear();
+                foreach (var effect in item.Properties.Effects)
+                {
+                    Properties.Effects.Add(new int[2] { effect[0], effect[1] });
+                }
             }
-            for (var i = 0; i < (int)Vitals.VitalCount; i++)
+            else
             {
-                VitalBuffs[i] = item.VitalBuffs[i];
+                Properties = null;
             }
-            Effects.Clear();
-            foreach (var effect in item.Effects)
-            {
-                Effects.Add(new int[2] { effect[0], effect[1] });
-            }
+            
         }
 
         public string Data()
@@ -197,15 +191,28 @@ namespace Intersect.Server.Database
         {
             var amount = 0;
             int effectTypeIndex = (int)effectType;
-            foreach(var effect in Effects)
+            if (Properties != null)
             {
-                if (effect[0] == effectTypeIndex)
+                foreach (var effect in Properties.Effects)
                 {
-                    amount += effect[1];
+                    if (effect[0] == effectTypeIndex)
+                    {
+                        amount += effect[1];
+                    }
                 }
             }
             return amount;
         }
+
+    }
+
+    public class ItemProperties
+    {
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public int[] Stats { get; set; } = new int[(int)Enums.Stats.StatCount];
+        public int[] Vitals { get; set; } = new int[(int)Enums.Vitals.VitalCount];
+
+        public List<int[]> Effects = new List<int[]>();
 
     }
 

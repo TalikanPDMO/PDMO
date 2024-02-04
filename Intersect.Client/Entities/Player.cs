@@ -382,48 +382,44 @@ namespace Intersect.Client.Entities
 
             if (hotbarInstance.ItemOrSpellId != Guid.Empty)
             {
-                for (var i = 0; i < Inventory.Length; i++)
+                
+                if (hotbarInstance.ItemPropertiesId != null)
                 {
-                    var itm = Inventory[i];
-                    if (itm != null && itm.ItemId == hotbarInstance.ItemOrSpellId)
+                    // We search an item with a specific ItemProperties id, no bestMatch possible, only a correct index or -1
+                    return Array.FindIndex(Inventory, item =>
+                        item != null &&
+                        item.Properties?.Id == hotbarInstance.ItemPropertiesId &&
+                        item.ItemId == hotbarInstance.ItemOrSpellId);
+                }
+                else
+                {
+                    // Try to find the best match possible (legacy code)
+                    for (var i = 0; i < Inventory.Length; i++)
                     {
-                        bestMatch = i;
-                        var itemBase = ItemBase.Get(itm.ItemId);
-                        if (itemBase != null)
+                        var itm = Inventory[i];
+                        if (itm != null && itm.ItemId == hotbarInstance.ItemOrSpellId)
                         {
-                            if (itemBase.ItemType == ItemTypes.Bag)
+                            bestMatch = i;
+                            var itemBase = ItemBase.Get(itm.ItemId);
+                            if (itemBase != null)
                             {
-                                if (hotbarInstance.BagId == itm.BagId)
+                                if (itemBase.ItemType == ItemTypes.Bag)
                                 {
-                                    break;
-                                }
-                            }
-                            else if (itemBase.ItemType == ItemTypes.Equipment)
-                            {
-                                if (hotbarInstance.PreferredStatBuffs != null)
-                                {
-                                    var statMatch = true;
-                                    for (var s = 0; s < hotbarInstance.PreferredStatBuffs.Length; s++)
-                                    {
-                                        if (itm.StatBuffs[s] != hotbarInstance.PreferredStatBuffs[s])
-                                        {
-                                            statMatch = false;
-                                        }
-                                    }
-
-                                    if (statMatch)
+                                    if (hotbarInstance.BagId == itm.BagId)
                                     {
                                         break;
                                     }
                                 }
-                            }
-                            else
-                            {
-                                break;
+                                else
+                                {
+                                    break;
+                                }
                             }
                         }
                     }
                 }
+
+               
             }
 
             return bestMatch;
@@ -883,14 +879,14 @@ namespace Intersect.Client.Entities
         public void AddToHotbar(byte hotbarSlot, sbyte itemType, int itemSlot)
         {
             Hotbar[hotbarSlot].ItemOrSpellId = Guid.Empty;
-            Hotbar[hotbarSlot].PreferredStatBuffs = new int[(int) Stats.StatCount];
+            Hotbar[hotbarSlot].ItemPropertiesId = null;
             if (itemType == 0)
             {
                 var item = Inventory[itemSlot];
                 if (item != null)
                 {
                     Hotbar[hotbarSlot].ItemOrSpellId = item.ItemId;
-                    Hotbar[hotbarSlot].PreferredStatBuffs = item.StatBuffs;
+                    Hotbar[hotbarSlot].ItemPropertiesId = item.Properties?.Id;
                 }
             }
             else if (itemType == 1)
@@ -909,15 +905,15 @@ namespace Intersect.Client.Entities
         {
             var itemId = Hotbar[index].ItemOrSpellId;
             var bagId = Hotbar[index].BagId;
-            var stats = Hotbar[index].PreferredStatBuffs;
+            var itemPropertiesId = Hotbar[index].ItemPropertiesId;
 
             Hotbar[index].ItemOrSpellId = Hotbar[swapIndex].ItemOrSpellId;
             Hotbar[index].BagId = Hotbar[swapIndex].BagId;
-            Hotbar[index].PreferredStatBuffs = Hotbar[swapIndex].PreferredStatBuffs;
+            Hotbar[index].ItemPropertiesId = Hotbar[swapIndex].ItemPropertiesId;
 
             Hotbar[swapIndex].ItemOrSpellId = itemId;
             Hotbar[swapIndex].BagId = bagId;
-            Hotbar[swapIndex].PreferredStatBuffs = stats;
+            Hotbar[swapIndex].ItemPropertiesId = itemPropertiesId;
 
             PacketSender.SendHotbarSwap(index, swapIndex);
         }
@@ -2783,8 +2779,7 @@ namespace Intersect.Client.Entities
 
         public Guid ItemOrSpellId = Guid.Empty;
 
-        public int[] PreferredStatBuffs = new int[(int) Stats.StatCount];
-
+        public Guid? ItemPropertiesId { get; set; } = null;
         public void Load(string data)
         {
             JsonConvert.PopulateObject(data, this);

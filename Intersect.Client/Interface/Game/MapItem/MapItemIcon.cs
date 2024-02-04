@@ -86,7 +86,7 @@ namespace Intersect.Client.Interface.Game.Inventory
             }
             mDescWindow = new ItemDescWindow(
                 ItemBase.Get(MyItem.ItemId), MyItem.Quantity, mMapItemWindow.X,
-                mMapItemWindow.Y, MyItem.StatBuffs, MyItem.VitalBuffs, MyItem.Effects
+                mMapItemWindow.Y, MyItem.Properties, false
            );
         }
 

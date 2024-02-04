@@ -7,6 +7,7 @@ using Intersect.Client.Localization;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using System.Collections.Generic;
+using static Intersect.Client.Items.Item;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -21,9 +22,8 @@ namespace Intersect.Client.Interface.Game
             int amount,
             int x,
             int y,
-            int[] statBuffs,
-            int[] vitalBuffs,
-            List<int[]> effects,
+            ItemProperties itemProperties,
+            bool showRanges,
             string titleOverride = "",
             string valueLabel = "",
             bool centerHorizontally = false
@@ -43,7 +43,7 @@ namespace Intersect.Client.Interface.Game
                 {
                     expandedWindow = true;
                 }
-                else if (effects != null || item.Effects.Count > 0)
+                else if (itemProperties?.Effects != null || item.Effects.Count > 0)
                 {
                     expandedWindow = true;
                 }
@@ -174,11 +174,11 @@ namespace Intersect.Client.Interface.Game
                         itemStats.AddLineBreak();
                     }
                     var vitals = "";
-                    if (vitalBuffs != null)
+                    if (!showRanges && itemProperties != null)
                     {
                         for (var i = 0; i < (int)Vitals.VitalCount; i++)
                         {
-                            var flatStat = vitalBuffs[i];
+                            var flatStat = itemProperties.Vitals[i];
                             var bonus = flatStat.ToString();
 
                             if (item.PercentageVitalsGiven[i] > 0)
@@ -247,11 +247,11 @@ namespace Intersect.Client.Interface.Game
                             }
                         }
                     }
-                    if (statBuffs != null)
+                    if (!showRanges && itemProperties != null)
                     {
                         for (var i = 0; i < (int)Stats.StatCount; i++)
                         {
-                            var flatStat = statBuffs[i];
+                            var flatStat = itemProperties.Stats[i];
                             var bonus = flatStat.ToString();
 
                             if (item.PercentageStatsGiven[i] > 0)
@@ -325,10 +325,10 @@ namespace Intersect.Client.Interface.Game
 
                 if (item.ItemType == ItemTypes.Equipment)
                 {
-                    if (effects != null)
+                    if (!showRanges && itemProperties != null)
                     {
                         // Show actual effects of the player Item
-                        if (effects.Count > 0)
+                        if (itemProperties.Effects.Count > 0)
                         {
                             itemStats.AddLineBreak();
                             itemStats.AddText(
@@ -337,7 +337,7 @@ namespace Intersect.Client.Interface.Game
                                 itemDescText.Font
                             );
                         }
-                        foreach (var effect in effects)
+                        foreach (var effect in itemProperties.Effects)
                         {
                             if (effect[0] != (int)EffectType.None)
                             {
@@ -367,14 +367,26 @@ namespace Intersect.Client.Interface.Game
                             if (effect.Type != EffectType.None)
                             {
                                 itemStats.AddLineBreak();
-                                itemStats.AddText(
+                                if (effect.Min == effect.Max)
+                                {
+                                    itemStats.AddText(
+                                    Strings.ItemDesc.effect.ToString(
+                                            effect.Min.ToString("+#;-#;0"), Strings.ItemDesc.effects[(int)effect.Type - 1]
+                                        ), itemStats.RenderColor,
+                                        itemStatsText.CurAlignments.Count > 0 ? itemStatsText.CurAlignments[0] : Alignments.Left,
+                                        itemDescText.Font
+                                    );
+                                }
+                                else
+                                {
+                                    itemStats.AddText(
                                     Strings.ItemDesc.effectrange.ToString(
-                                        effect.Min.ToString("+#;-#;0"), effect.Max.ToString("+#;-#;0"), Strings.ItemDesc.effects[(int)effect.Type - 1]
-                                    ), itemStats.RenderColor,
-                                    itemStatsText.CurAlignments.Count > 0 ? itemStatsText.CurAlignments[0] : Alignments.Left,
-                                    itemDescText.Font
-                                );
-                                
+                                            effect.Min.ToString("+#;-#;0"), effect.Max.ToString("+#;-#;0"), Strings.ItemDesc.effects[(int)effect.Type - 1]
+                                        ), itemStats.RenderColor,
+                                        itemStatsText.CurAlignments.Count > 0 ? itemStatsText.CurAlignments[0] : Alignments.Left,
+                                        itemDescText.Font
+                                    );
+                                }
                             }
 
                         }

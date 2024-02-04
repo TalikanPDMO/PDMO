@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Newtonsoft.Json;
 
 namespace Intersect.Client.Items
 {
@@ -15,22 +16,16 @@ namespace Intersect.Client.Items
 
         public int Quantity;
 
-        public int[] StatBuffs = new int[(int) Stats.StatCount];
-
-        public int[] VitalBuffs = new int[(int)Vitals.VitalCount];
-
-        public List<int[]> Effects = new List<int[]>();
+        public ItemProperties Properties = new ItemProperties();
 
         public ItemBase Base => ItemBase.Get(ItemId);
 
-        public void Load(Guid id, int quantity, Guid? bagId, int[] statBuffs, int[] vitalBuffs, List<int[]> effects)
+        public void Load(Guid id, int quantity, Guid? bagId, string itemPropertiesJson)
         {
             ItemId = id;
             Quantity = quantity;
             BagId = bagId;
-            StatBuffs = statBuffs;
-            VitalBuffs = vitalBuffs;
-            Effects = effects;
+            Properties = JsonConvert.DeserializeObject<ItemProperties>(itemPropertiesJson);
         }
 
         public Item Clone()
@@ -41,22 +36,28 @@ namespace Intersect.Client.Items
                 Quantity = Quantity,
                 BagId = BagId
             };
-
-            for (var i = 0; i < (int) Stats.StatCount; i++)
+            if (Properties == null)
             {
-                newItem.StatBuffs[i] = StatBuffs[i];
+                newItem.Properties = null;
             }
-
-            for (var i = 0; i < (int)Vitals.VitalCount; i++)
+            else
             {
-                newItem.VitalBuffs[i] = VitalBuffs[i];
-            }
+                newItem.Properties.Id = Properties.Id;
+                for (var i = 0; i < (int)Stats.StatCount; i++)
+                {
+                    newItem.Properties.Stats[i] = Properties.Stats[i];
+                }
 
-            for (var i = 0; i < Effects.Count; i++)
-            {
-                newItem.Effects.Add(new int[2] { Effects[i][0], Effects[i][1] });
-            }
+                for (var i = 0; i < (int)Vitals.VitalCount; i++)
+                {
+                    newItem.Properties.Vitals[i] = Properties.Vitals[i];
+                }
 
+                for (var i = 0; i < Properties.Effects.Count; i++)
+                {
+                    newItem.Properties.Effects.Add(new int[2] { Properties.Effects[i][0], Properties.Effects[i][1] });
+                }
+            }
             return newItem;
         }
 
@@ -64,14 +65,27 @@ namespace Intersect.Client.Items
         {
             var amount = 0;
             int effectTypeIndex = (int)effectType;
-            foreach (var effect in Effects)
+            if (Properties != null && Properties.Effects != null)
             {
-                if (effect[0] == effectTypeIndex)
+                foreach (var effect in Properties.Effects)
                 {
-                    amount += effect[1];
+                    if (effect[0] == effectTypeIndex)
+                    {
+                        amount += effect[1];
+                    }
                 }
             }
             return amount;
+        }
+
+        public class ItemProperties
+        {
+            public Guid Id { get; set; }
+            public int[] Stats { get; set; } = new int[(int)Enums.Stats.StatCount];
+            public int[] Vitals { get; set; } = new int[(int)Enums.Vitals.VitalCount];
+
+            public List<int[]> Effects = new List<int[]>();
+
         }
 
     }

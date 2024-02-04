@@ -115,22 +115,16 @@ namespace Intersect.Server.Migrations
 
                     b.Property<Guid?>("BagId");
 
-                    b.Property<string>("EffectsJson")
-                        .HasColumnName("Effects");
-
                     b.Property<Guid>("ItemId");
+
+                    b.Property<string>("ItemPropertiesJson")
+                        .HasColumnName("ItemProperties");
 
                     b.Property<Guid>("ParentBagId");
 
                     b.Property<int>("Quantity");
 
                     b.Property<int>("Slot");
-
-                    b.Property<string>("StatBuffsJson")
-                        .HasColumnName("StatBuffs");
-
-                    b.Property<string>("VitalBuffsJson")
-                        .HasColumnName("VitalBuffs");
 
                     b.HasKey("Id");
 
@@ -148,22 +142,16 @@ namespace Intersect.Server.Migrations
 
                     b.Property<Guid?>("BagId");
 
-                    b.Property<string>("EffectsJson")
-                        .HasColumnName("Effects");
-
                     b.Property<Guid>("ItemId");
+
+                    b.Property<string>("ItemPropertiesJson")
+                        .HasColumnName("ItemProperties");
 
                     b.Property<Guid>("PlayerId");
 
                     b.Property<int>("Quantity");
 
                     b.Property<int>("Slot");
-
-                    b.Property<string>("StatBuffsJson")
-                        .HasColumnName("StatBuffs");
-
-                    b.Property<string>("VitalBuffsJson")
-                        .HasColumnName("VitalBuffs");
 
                     b.HasKey("Id");
 
@@ -215,22 +203,16 @@ namespace Intersect.Server.Migrations
 
                     b.Property<Guid?>("BagId");
 
-                    b.Property<string>("EffectsJson")
-                        .HasColumnName("Effects");
-
                     b.Property<Guid>("GuildId");
 
                     b.Property<Guid>("ItemId");
 
+                    b.Property<string>("ItemPropertiesJson")
+                        .HasColumnName("ItemProperties");
+
                     b.Property<int>("Quantity");
 
                     b.Property<int>("Slot");
-
-                    b.Property<string>("StatBuffsJson")
-                        .HasColumnName("StatBuffs");
-
-                    b.Property<string>("VitalBuffsJson")
-                        .HasColumnName("VitalBuffs");
 
                     b.HasKey("Id");
 
@@ -250,12 +232,11 @@ namespace Intersect.Server.Migrations
 
                     b.Property<Guid>("ItemOrSpellId");
 
+                    b.Property<Guid?>("ItemPropertiesId");
+
                     b.Property<Guid>("PlayerId");
 
                     b.Property<int>("Slot");
-
-                    b.Property<string>("StatBuffsJson")
-                        .HasColumnName("PreferredStatBuffs");
 
                     b.HasKey("Id");
 
@@ -271,22 +252,16 @@ namespace Intersect.Server.Migrations
 
                     b.Property<Guid?>("BagId");
 
-                    b.Property<string>("EffectsJson")
-                        .HasColumnName("Effects");
-
                     b.Property<Guid>("ItemId");
+
+                    b.Property<string>("ItemPropertiesJson")
+                        .HasColumnName("ItemProperties");
 
                     b.Property<Guid>("PlayerId");
 
                     b.Property<int>("Quantity");
 
                     b.Property<int>("Slot");
-
-                    b.Property<string>("StatBuffsJson")
-                        .HasColumnName("StatBuffs");
-
-                    b.Property<string>("VitalBuffsJson")
-                        .HasColumnName("VitalBuffs");
 
                     b.HasKey("Id");
 

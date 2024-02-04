@@ -13,15 +13,13 @@ namespace Intersect.Network.Packets.Server
         {
         }
 
-        public InventoryUpdatePacket(int slot, Guid id, int quantity, Guid? bagId, int[] statBuffs, int[] vitalBuffs, List<int[]> effects)
+        public InventoryUpdatePacket(int slot, Guid id, int quantity, Guid? bagId, string itemPropertiesJson)
         {
             Slot = slot;
             ItemId = id;
             BagId = bagId;
             Quantity = quantity;
-            StatBuffs = statBuffs;
-            VitalBuffs = vitalBuffs;
-            Effects = effects;
+            ItemPropertiesJson = itemPropertiesJson;
         }
 
         [Key(1)]
@@ -37,13 +35,7 @@ namespace Intersect.Network.Packets.Server
         public int Quantity { get; set; }
 
         [Key(5)]
-        public int[] StatBuffs { get; set; }
-
-        [Key(6)]
-        public int[] VitalBuffs { get; set; }
-
-        [Key(7)]
-        public List<int[]> Effects { get; set; }
+        public string ItemPropertiesJson { get; set; }
 
     }
 

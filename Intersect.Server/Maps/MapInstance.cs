@@ -380,8 +380,9 @@ namespace Intersect.Server.Maps
                     };
 
                     // If this is a piece of equipment, set up the stat buffs for it.
-                    if (itemDescriptor.ItemType == ItemTypes.Equipment && sameRanges)
+                    if (itemDescriptor.ItemType == ItemTypes.Equipment && sameRanges && item.Properties != null)
                     {
+                        mapItem.Properties.Id = item.Properties.Id;
                         mapItem.SetupStatBuffs(item);
                         mapItem.SetupVitalBuffs(item);
                         mapItem.SetupEffects(item);

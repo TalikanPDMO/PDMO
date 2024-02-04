@@ -46,13 +46,13 @@ namespace Intersect.Server.Entities
                     items.Add(
                         new BankUpdatePacket(
                             slot, mBank[slot].ItemId, mBank[slot].Quantity, mBank[slot].BagId,
-                            mBank[slot].StatBuffs, mBank[slot].VitalBuffs, mBank[slot].Effects
+                            mBank[slot].ItemPropertiesJson
                         )
                     );
                 }
                 else
                 {
-                    items.Add(new BankUpdatePacket(slot, Guid.Empty, 0, null, null, null, null));
+                    items.Add(new BankUpdatePacket(slot, Guid.Empty, 0, null, null));
                 }
             }
 
@@ -73,13 +73,13 @@ namespace Intersect.Server.Entities
                 mPlayer?.SendPacket(
                     new BankUpdatePacket(
                         slot, mBank[slot].ItemId, mBank[slot].Quantity, mBank[slot].BagId,
-                        mBank[slot].StatBuffs, mBank[slot].VitalBuffs, mBank[slot].Effects
+                        mBank[slot].ItemPropertiesJson
                     )
                 );
             }
             else
             {
-                mPlayer?.SendPacket(new BankUpdatePacket(slot, Guid.Empty, 0, null, null, null, null));
+                mPlayer?.SendPacket(new BankUpdatePacket(slot, Guid.Empty, 0, null, null));
             }
         }
 

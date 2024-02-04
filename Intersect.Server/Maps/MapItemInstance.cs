@@ -60,34 +60,34 @@ namespace Intersect.Server.Maps
         /// <param name="item">The item to take the Stat Buffs from and apply them to this MapItem.</param>
         public void SetupStatBuffs(Item item)
         {
-            if (StatBuffs != null && item.StatBuffs != null)
+            if (Properties.Stats != null && item.Properties.Stats != null)
             {
-                for (var i = 0; i < StatBuffs.Length; ++i)
+                for (var i = 0; i < Properties.Stats.Length; ++i)
                 {
-                    StatBuffs[i] = item.StatBuffs.Length > i ? item.StatBuffs[i] : 0;
+                    Properties.Stats[i] = item.Properties.Stats.Length > i ? item.Properties.Stats[i] : 0;
                 }
             }
         }
 
         public void SetupVitalBuffs(Item item)
         {
-            if (VitalBuffs != null && item.VitalBuffs != null)
+            if (Properties.Vitals != null && item.Properties.Vitals != null)
             {
-                for (var i = 0; i < VitalBuffs.Length; ++i)
+                for (var i = 0; i < Properties.Vitals.Length; ++i)
                 {
-                    VitalBuffs[i] = item.VitalBuffs.Length > i ? item.VitalBuffs[i] : 0;
+                    Properties.Vitals[i] = item.Properties.Vitals.Length > i ? item.Properties.Vitals[i] : 0;
                 }
             }
         }
 
         public void SetupEffects(Item item)
         {
-            if (Effects != null && item.Effects != null)
+            if (Properties.Effects != null && item.Properties.Effects != null)
             {
-                Effects.Clear();
-                foreach (var effect in item.Effects)
+                Properties.Effects.Clear();
+                foreach (var effect in item.Properties.Effects)
                 {
-                    Effects.Add(new int[2] { effect[0], effect[1] });
+                    Properties.Effects.Add(new int[2] { effect[0], effect[1] });
                 }
             }
         }

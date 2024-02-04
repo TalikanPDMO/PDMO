@@ -23,7 +23,7 @@ namespace Intersect.Client.Items
         {
         }
 
-        public MapItemInstance(int tileIndex, Guid uniqueId, Guid itemId, Guid? bagId, int quantity, int[] statbuffs, int[] vitalbuffs, List<int[]> effects) : base()
+        public MapItemInstance(int tileIndex, Guid uniqueId, Guid itemId, Guid? bagId, int quantity, string itemPropertiesJson) : base()
         {
             UniqueId = uniqueId;
             X = tileIndex % Options.MapWidth;
@@ -31,9 +31,7 @@ namespace Intersect.Client.Items
             ItemId = itemId;
             BagId = bagId;
             Quantity = quantity;
-            StatBuffs = statbuffs;
-            VitalBuffs = vitalbuffs;
-            Effects = effects;
+            Properties = JsonConvert.DeserializeObject<ItemProperties>(itemPropertiesJson);
         }
 
     }

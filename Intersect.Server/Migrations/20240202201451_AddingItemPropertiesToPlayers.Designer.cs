@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Intersect.Server.Migrations
 {
     [DbContext(typeof(PlayerContext))]
-    [Migration("20240201133918_AddingVitalsToPlayerItems")]
-    partial class AddingVitalsToPlayerItems
+    [Migration("20240202201451_AddingItemPropertiesToPlayers")]
+    partial class AddingItemPropertiesToPlayers
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -122,6 +122,9 @@ namespace Intersect.Server.Migrations
 
                     b.Property<Guid>("ItemId");
 
+                    b.Property<string>("ItemPropertiesJson")
+                        .HasColumnName("ItemProperties");
+
                     b.Property<Guid>("ParentBagId");
 
                     b.Property<int>("Quantity");
@@ -154,6 +157,9 @@ namespace Intersect.Server.Migrations
                         .HasColumnName("Effects");
 
                     b.Property<Guid>("ItemId");
+
+                    b.Property<string>("ItemPropertiesJson")
+                        .HasColumnName("ItemProperties");
 
                     b.Property<Guid>("PlayerId");
 
@@ -224,6 +230,9 @@ namespace Intersect.Server.Migrations
 
                     b.Property<Guid>("ItemId");
 
+                    b.Property<string>("ItemPropertiesJson")
+                        .HasColumnName("ItemProperties");
+
                     b.Property<int>("Quantity");
 
                     b.Property<int>("Slot");
@@ -252,6 +261,8 @@ namespace Intersect.Server.Migrations
 
                     b.Property<Guid>("ItemOrSpellId");
 
+                    b.Property<Guid?>("ItemPropertiesId");
+
                     b.Property<Guid>("PlayerId");
 
                     b.Property<int>("Slot");
@@ -277,6 +288,9 @@ namespace Intersect.Server.Migrations
                         .HasColumnName("Effects");
 
                     b.Property<Guid>("ItemId");
+
+                    b.Property<string>("ItemPropertiesJson")
+                        .HasColumnName("ItemProperties");
 
                     b.Property<Guid>("PlayerId");
 
