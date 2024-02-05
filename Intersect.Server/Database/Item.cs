@@ -50,15 +50,38 @@ namespace Intersect.Server.Database
             Properties = new ItemProperties();
             for (var i = 0; i < (int) Stats.StatCount; i++)
             {
-                Properties.Stats[i] = Randomization.Next(descriptor.StatsGiven[i, 0], descriptor.StatsGiven[i, 1] + 1);
+                if (descriptor.StatsGiven[i, 0] < descriptor.StatsGiven[i, 1])
+                {
+                    Properties.Stats[i] = Randomization.Next(descriptor.StatsGiven[i, 0], descriptor.StatsGiven[i, 1] + 1);
+                }
+                else
+                {
+                    Properties.Stats[i] = Randomization.Next(descriptor.StatsGiven[i, 1], descriptor.StatsGiven[i, 0] + 1);
+                }
+                
             }
             for (var i = 0; i < (int)Vitals.VitalCount; i++)
             {
-                Properties.Vitals[i] = Randomization.Next(descriptor.VitalsGiven[i, 0], descriptor.VitalsGiven[i, 1] + 1);
+                if(descriptor.VitalsGiven[i, 0] < descriptor.VitalsGiven[i, 1])
+                {
+                    Properties.Vitals[i] = Randomization.Next(descriptor.VitalsGiven[i, 0], descriptor.VitalsGiven[i, 1] + 1);
+                }
+                else
+                {
+                    Properties.Vitals[i] = Randomization.Next(descriptor.VitalsGiven[i, 1], descriptor.VitalsGiven[i, 0] + 1);
+                }
+                
             }
             foreach (var effect in descriptor.Effects)
             {
-                Properties.Effects.Add(new int[2] {(int)effect.Type, Randomization.Next(effect.Min, effect.Max + 1)});
+                if (effect.Min < effect.Max)
+                {
+                    Properties.Effects.Add(new int[2] { (int)effect.Type, Randomization.Next(effect.Min, effect.Max + 1) });
+                }
+                else
+                {
+                    Properties.Effects.Add(new int[2] { (int)effect.Type, Randomization.Next(effect.Max, effect.Min + 1) });
+                }
             }
         }
 

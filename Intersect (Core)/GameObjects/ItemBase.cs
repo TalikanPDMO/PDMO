@@ -406,16 +406,6 @@ namespace Intersect.GameObjects
 
     }
 
-    /*[Owned]
-    public class EffectData
-    {
-
-        public EffectType Type { get; set; }
-
-        public int Percentage { get; set; }
-
-    }*/
-
     public class ExtraEffect
     {
         public EffectType Type { get; set; }
