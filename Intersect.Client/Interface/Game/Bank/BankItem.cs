@@ -120,7 +120,7 @@ namespace Intersect.Client.Interface.Game.Bank
             {
                 mDescWindow = new ItemDescWindow(
                     Globals.Bank[mMySlot].Base, Globals.Bank[mMySlot].Quantity, mBankWindow.X, mBankWindow.Y,
-                    Globals.Bag[mMySlot].Properties, false
+                    Globals.Bank[mMySlot].Properties, false
                 );
             }
         }
