@@ -35,7 +35,7 @@ try:
 	gameCur.execute("ALTER TABLE Items " +
 					"DROP COLUMN Effect_Type")
 	gameCon.commit()
-	print("Columns deleted succesfully")
+	print("Columns deleted successfully")
 
 	print("Now deleting useless columns on player database  ...")
 	playerCur.execute("ALTER TABLE Player_Items DROP COLUMN StatBuffs")
@@ -44,7 +44,7 @@ try:
 	playerCur.execute("ALTER TABLE Bag_Items DROP COLUMN StatBuffs")
 	playerCur.execute("ALTER TABLE Player_Hotbar DROP COLUMN PreferredStatBuffs")
 	playerCon.commit()
-	print("Columns deleted succesfully")
+	print("Columns deleted successfully")
 except sqlite3.Error as error:
 	print("Error while deleting :")
 	print(error)

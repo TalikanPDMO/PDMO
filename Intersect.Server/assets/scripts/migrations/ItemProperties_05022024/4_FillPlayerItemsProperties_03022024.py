@@ -5,7 +5,6 @@ import sqlite3
 # This script look all the items in gamedata.db
 # Players with those items will now have a max roll of the items stats in their inventory, bank, bag, etc ...
 # Then, clean the useless data related to the format change
-# Finally, delete all useless columns related to the format change
 
 # /!\ LAUNCH AFTER RUNNING THE SERVER CONSOLE MIGRATION AND AFTER ALL THE OTHERS SCRIPTS ABOUT Effects, Stats, Vitals /!\
 
@@ -77,6 +76,17 @@ try:
 		playerCon.commit()
 		print(" DONE ")
 	print("Conversion of all Item Properties done successfully ...")
+	print("Now cleaning useless item properties data on player database  ...")
+	playerCur.execute(
+		"UPDATE Player_Items SET ItemProperties = '' WHERE Quantity = 0 OR hex(ItemId) = '00000000000000000000000000000000'")
+	playerCur.execute(
+		"UPDATE Player_Bank SET ItemProperties = ''  WHERE Quantity = 0 OR hex(ItemId) = '00000000000000000000000000000000'")
+	playerCur.execute(
+		"UPDATE Guild_Bank SET ItemProperties = '' WHERE Quantity = 0 OR hex(ItemId) = '00000000000000000000000000000000'")
+	playerCur.execute(
+		"UPDATE Bag_Items SET ItemProperties = ''  WHERE Quantity = 0 OR hex(ItemId) = '00000000000000000000000000000000'")
+	playerCon.commit()
+	print("Cleaning done successfully")
 except sqlite3.Error as error:
 	print("Error while processing :")
 	print(error)
