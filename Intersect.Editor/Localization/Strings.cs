@@ -4491,6 +4491,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString sprite = @"Sprite Modifier";
 
+            public static LocalizedString npcname = @"Npc Name:";
+
             public static LocalizedString red = @"Red:";
 
             public static LocalizedString green = @"Green:";

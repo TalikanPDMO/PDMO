@@ -1930,6 +1930,7 @@
     "phaseindex": "Phase Index: {00}",
     "name": "Name:",
     "sprite": "Sprite Modifier",
+    "npcname":  "Npc Name:",
     "red": "Red:",
     "green": "Green:",
     "blue": "Blue:",

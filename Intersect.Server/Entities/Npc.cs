@@ -2253,6 +2253,7 @@ namespace Intersect.Server.Entities
                     }
                 }
                 Sprite = Base.Sprite;
+                Name = Base.Name;
                 Color = Base.Color;
             }
             CurrentPhase = null;
@@ -2306,6 +2307,7 @@ namespace Intersect.Server.Entities
             {
                 Sprite = phase.Sprite;
                 Color = phase.Color;
+                Name = phase.NpcName;
             }
             if (phase.ElementalTypes != null)
             {

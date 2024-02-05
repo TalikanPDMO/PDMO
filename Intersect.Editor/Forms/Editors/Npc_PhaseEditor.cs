@@ -63,6 +63,7 @@ namespace Intersect.Editor.Forms.Editors
                 {
                     chkChangeSprite.Checked = true;
                     cmbSprite.SelectedIndex = cmbSprite.FindString(TextUtils.NullToNone(mMyPhase.Sprite));
+                    txtNpcName.Text = mMyPhase.NpcName ?? "";
                     nudRgbaR.Value = mMyPhase.Color?.R ?? 255;
                     nudRgbaG.Value = mMyPhase.Color?.G ?? 255;
                     nudRgbaB.Value = mMyPhase.Color?.B ?? 255;
@@ -72,11 +73,13 @@ namespace Intersect.Editor.Forms.Editors
                     nudRgbaG.Enabled = true;
                     nudRgbaB.Enabled = true;
                     nudRgbaA.Enabled = true;
+                    txtNpcName.Enabled = true;
                 }
                 else
                 {
                     chkChangeSprite.Checked = false;
                     cmbSprite.SelectedIndex = cmbSprite.FindString(TextUtils.NullToNone(mMyNpc.Sprite));
+                    txtNpcName.Text = mMyNpc.Name;
                     nudRgbaR.Value = mMyNpc.Color.R;
                     nudRgbaG.Value = mMyNpc.Color.G;
                     nudRgbaB.Value = mMyNpc.Color.B;
@@ -86,6 +89,7 @@ namespace Intersect.Editor.Forms.Editors
                     nudRgbaG.Enabled = false;
                     nudRgbaB.Enabled = false;
                     nudRgbaA.Enabled = false;
+                    txtNpcName.Enabled = false;
                 }
 
                 chkReplaceSpells.Checked = mMyPhase.ReplaceSpells;
@@ -256,6 +260,7 @@ namespace Intersect.Editor.Forms.Editors
             lblName.Text = Strings.NpcPhaseEditor.name;
 
             grpSprite.Text = Strings.NpcPhaseEditor.sprite;
+            lblNpcName.Text = Strings.NpcPhaseEditor.npcname;
             lblRed.Text = Strings.NpcPhaseEditor.red;
             lblGreen.Text = Strings.NpcPhaseEditor.green;
             lblBlue.Text = Strings.NpcPhaseEditor.blue;
@@ -399,6 +404,7 @@ namespace Intersect.Editor.Forms.Editors
             {
                 mMyPhase.Color = new Color();
                 mMyPhase.Sprite =  (cmbSprite.SelectedIndex == 0 ? "" : cmbSprite.Text);
+                mMyPhase.NpcName = txtNpcName.Text;
                 mMyPhase.Color.R = (byte)nudRgbaR.Value;
                 mMyPhase.Color.G = (byte)nudRgbaG.Value;
                 mMyPhase.Color.B = (byte)nudRgbaB.Value;
@@ -408,6 +414,7 @@ namespace Intersect.Editor.Forms.Editors
             {
                 mMyPhase.Sprite = null;
                 mMyPhase.Color = null;
+                mMyPhase.NpcName = null;
             }
             
             mMyPhase.BeginAnimation = (cmbBeginAnimation.SelectedIndex == 0 ? null :
@@ -706,6 +713,7 @@ namespace Intersect.Editor.Forms.Editors
                 nudRgbaB.Enabled = true;
                 nudRgbaA.Enabled = true;
                 cmbSprite.Enabled = true;
+                txtNpcName.Enabled = true;
             }
             else
             {
@@ -714,6 +722,7 @@ namespace Intersect.Editor.Forms.Editors
                 nudRgbaB.Enabled = false;
                 nudRgbaA.Enabled = false;
                 cmbSprite.Enabled = false;
+                txtNpcName.Enabled = false;
                 if (mMyNpc != null)
                 {
                     cmbSprite.SelectedIndex = cmbSprite.FindString(TextUtils.NullToNone(mMyNpc.Sprite));
@@ -721,6 +730,7 @@ namespace Intersect.Editor.Forms.Editors
                     nudRgbaG.Value = mMyNpc.Color.G;
                     nudRgbaB.Value = mMyNpc.Color.B;
                     nudRgbaA.Value = mMyNpc.Color.A;
+                    txtNpcName.Text = mMyNpc.Name;
                 }
             }
         }
