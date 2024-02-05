@@ -31,11 +31,6 @@ try:
 		gameCur.execute("UPDATE Items SET StatsGiven = ? WHERE Id = ?", [json.dumps(stats_given), item[0]])
 	gameCon.commit()
 	print("All the items were successfully updated")
-	print("Now deleting useless column StatGrowth ...")
-	gameCur.execute("ALTER TABLE Items " +
-					"DROP COLUMN StatGrowth")
-	gameCon.commit()
-	print("Column deleted successfully")
 except sqlite3.Error as error:
 	print("Error while processing :")
 	print(error)

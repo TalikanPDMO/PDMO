@@ -23,14 +23,6 @@ try:
 	gameCon.commit()
 
 	print("Items Extra effects converted sucessfully")
-	print("Now deleting useless columns Effect_Percentage and Effect_Type ...")
-
-	gameCur.execute("ALTER TABLE Items " +
-					"DROP COLUMN Effect_Percentage")
-	gameCur.execute("ALTER TABLE Items " +
-					"DROP COLUMN Effect_Type")
-	gameCon.commit()
-	print("Columns deleted succesfully")
 except sqlite3.Error as error:
 	print("Error while processing :")
 	print(error)
