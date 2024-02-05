@@ -1028,10 +1028,11 @@
     <None Include="FodyWeavers.xml">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="assets\scripts\migrations\ItemEffectToListEffects_31012024.py" />
-    <Content Include="assets\scripts\migrations\FillPlayerItemsProperties_03022024.py" />
-    <Content Include="assets\scripts\migrations\ItemVitalsToVitalsRange_02022024.py" />
-    <Content Include="assets\scripts\migrations\ItemStatsToStatsRange_01022024.py" />
+    <Content Include="assets\scripts\migrations\ItemProperties_05022024\3_ItemEffectToListEffects_31012024.py" />
+    <Content Include="assets\scripts\migrations\ItemProperties_05022024\4_FillPlayerItemsProperties_03022024.py" />
+    <Content Include="assets\scripts\migrations\ItemProperties_05022024\5_DropUselessColumns_05022024.py" />
+    <Content Include="assets\scripts\migrations\ItemProperties_05022024\2_ItemVitalsToVitalsRange_02022024.py" />
+    <Content Include="assets\scripts\migrations\ItemProperties_05022024\1_ItemStatsToStatsRange_01022024.py" />
     <Content Include="Icon.ico" />
     <EmbeddedResource Include="$(NetworkHandshakePublicKey)" />
     <EmbeddedResource Include="$(NetworkHandshakePrivateKey)" />
