@@ -21,7 +21,7 @@ try:
 					"WHERE Effect_Type > 0")
 	gameCon.commit()
 
-	print("Items Extra effects converted sucessfully")
+	print("Items Extra effects converted successfully")
 except sqlite3.Error as error:
 	print("Error while processing :")
 	print(error)

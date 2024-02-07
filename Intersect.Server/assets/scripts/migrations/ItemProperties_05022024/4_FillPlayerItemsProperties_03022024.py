@@ -37,17 +37,17 @@ try:
 			stats_base = json.loads(item[3])
 			item_properties["Stats"] = []
 			for s in stats_base:
-				item_properties["Stats"].append(s[1])
+				item_properties["Stats"].append(max(s[0], s[1]))
 
 			vitals_base = json.loads(item[4])
 			item_properties["Vitals"] = []
 			for v in vitals_base:
-				item_properties["Vitals"].append(v[1])
+				item_properties["Vitals"].append(max(v[0], v[1]))
 
 			effects_base = json.loads(item[5])
 			item_properties["Effects"] = []
 			for e in effects_base:
-				item_properties["Effects"].append([e["Type"], e["Max"]])
+				item_properties["Effects"].append([e["Type"], max(e["Min"], e["Max"])])
 
 			item_properties_json = json.dumps(item_properties)
 			playerCur.execute("UPDATE Player_Items SET ItemProperties = json_patch(ItemProperties, ?) WHERE ItemId = ?",
