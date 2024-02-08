@@ -242,7 +242,9 @@
 
         ShowPopup,
 
-        SetExpBoost
+        SetExpBoost,
+
+        PlayScreenEffect
     }
 
 }

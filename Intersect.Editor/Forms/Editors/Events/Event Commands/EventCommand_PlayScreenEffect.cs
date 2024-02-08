@@ -1,0 +1,176 @@
+﻿using System;
+using System.Windows.Forms;
+
+using Intersect.Editor.Content;
+using Intersect.Editor.Localization;
+using Intersect.Enums;
+using Intersect.GameObjects.Events.Commands;
+
+namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
+{
+
+    public partial class EventCommand_PlayScreenEffect : UserControl
+    {
+
+        private readonly FrmEvent mEventEditor;
+
+        private PlayScreenEffectCommand mMyCommand;
+
+        public EventCommand_PlayScreenEffect(PlayScreenEffectCommand refCommand, FrmEvent editor)
+        {
+            InitializeComponent();
+            mMyCommand = refCommand;
+            mEventEditor = editor;
+
+            InitLocalization();
+
+            cmbEffectType.SelectedIndex = (int)mMyCommand.EffectType;
+            nudOpacityStart.Value = mMyCommand.OpacityStart;
+            nudOpacityEnd.Value = mMyCommand.OpacityEnd;
+            nudOpacityDuration.Value = mMyCommand.OpacityDuration;
+            nudFrames.Value = mMyCommand.OpacityFrame;
+            nudAfterDuration.Value = mMyCommand.FinalDuration;
+            switch ((ScreenEffectType)cmbEffectType.SelectedIndex)
+            {
+                case ScreenEffectType.Color:
+                    break;
+
+                case ScreenEffectType.Picture:
+                    if (cmbPicture.Items.IndexOf(mMyCommand.Data) > -1)
+                    {
+                        cmbPicture.SelectedIndex = cmbPicture.Items.IndexOf(mMyCommand.Data);
+                    }
+                    else
+                    {
+                        if (cmbPicture.Items.Count > 0)
+                        {
+                            cmbPicture.SelectedIndex = 0;
+                        }
+                    }
+                    if (mMyCommand.Size > -1 && mMyCommand.Size < cmbSize.Items.Count)
+                    {
+                        cmbSize.SelectedIndex = mMyCommand.Size;
+                    }
+                    else
+                    {
+                        cmbSize.SelectedIndex = 0;
+                    }
+                    break;
+
+                case ScreenEffectType.Shake:
+                    break;
+            }
+
+            UpdateVisibleFields();
+        }
+
+        private void UpdateVisibleFields()
+        {
+            lblColor.Hide();
+            lblPicture.Hide();
+            cmbPicture.Hide();
+            cmbSize.Hide();
+            grpTransition.Hide();
+
+            switch ((ScreenEffectType)cmbEffectType.SelectedIndex)
+            {
+                case ScreenEffectType.Color:
+                    lblColor.Show();
+                    grpTransition.Show();
+                    break;
+
+                case ScreenEffectType.Picture:
+                    lblPicture.Show();
+                    cmbPicture.Show();
+                    cmbSize.Show();
+                    grpTransition.Show();
+                    break;
+
+                case ScreenEffectType.Shake:
+                    break;
+            }
+        }
+
+        private void InitLocalization()
+        {
+            grpPlayScreenEffect.Text = Strings.EventPlayScreenEffect.title;
+            btnSave.Text = Strings.EventPlayScreenEffect.okay;
+            btnCancel.Text = Strings.EventPlayScreenEffect.cancel;
+            lblEffectType.Text = Strings.EventPlayScreenEffect.effecttype;
+            cmbEffectType.Items.Clear();
+            for (var i = 0; i < Strings.EventPlayScreenEffect.screeneffecttypes.Count; i++)
+            {
+                cmbEffectType.Items.Add(Strings.EventPlayScreenEffect.screeneffecttypes[i]);
+            }
+            grpTransition.Text = Strings.EventPlayScreenEffect.transition;
+            lblColor.Text = Strings.EventPlayScreenEffect.color;
+            lblPicture.Text = Strings.EventPlayScreenEffect.picture;
+            cmbPicture.Items.Clear();
+            cmbPicture.Items.AddRange(
+                GameContentManager.GetSmartSortedTextureNames(GameContentManager.TextureType.Image)
+            );
+            lblSize.Text = Strings.EventPlayScreenEffect.size;
+            cmbSize.Items.Clear();
+            cmbSize.Items.Add(Strings.EventPlayScreenEffect.original);
+            cmbSize.Items.Add(Strings.EventPlayScreenEffect.fullscreen);
+            cmbSize.Items.Add(Strings.EventPlayScreenEffect.halfscreen);
+            cmbSize.Items.Add(Strings.EventPlayScreenEffect.stretchtofit);
+
+            lblOpacity.Text = Strings.EventPlayScreenEffect.opacitytransition;
+            lblOpacityDuration.Text = Strings.EventPlayScreenEffect.transitionduration;
+            lblFrames.Text = Strings.EventPlayScreenEffect.transitionframes;
+            lblAfterDuration.Text = Strings.EventPlayScreenEffect.aftertransitionduration;
+
+
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            mMyCommand.EffectType = (ScreenEffectType)cmbEffectType.SelectedIndex;
+            switch (mMyCommand.EffectType)
+            {
+                case ScreenEffectType.Color:
+                    mMyCommand.Data = "";
+                    mMyCommand.Size = cmbSize.SelectedIndex;
+                    mMyCommand.OpacityStart = (byte)nudOpacityStart.Value;
+                    mMyCommand.OpacityEnd = (byte)nudOpacityEnd.Value;
+                    mMyCommand.OpacityDuration = (int)nudOpacityDuration.Value;
+                    mMyCommand.OpacityFrame = (int)nudFrames.Value;
+                    mMyCommand.FinalDuration = (int)nudAfterDuration.Value;
+                    break;
+
+                case ScreenEffectType.Picture:
+                    mMyCommand.Data = cmbPicture.Text;
+                    mMyCommand.Size = cmbSize.SelectedIndex;
+                    mMyCommand.OpacityStart = (byte)nudOpacityStart.Value;
+                    mMyCommand.OpacityEnd = (byte)nudOpacityEnd.Value;
+                    mMyCommand.OpacityDuration = (int)nudOpacityDuration.Value;
+                    mMyCommand.OpacityFrame = (int)nudFrames.Value;
+                    mMyCommand.FinalDuration = (int)nudAfterDuration.Value;
+                    break;
+
+                case ScreenEffectType.Shake:
+                    mMyCommand.Data = "";
+                    mMyCommand.Size = 0;
+                    mMyCommand.OpacityStart = 0;
+                    mMyCommand.OpacityEnd = 0;
+                    mMyCommand.OpacityDuration = 0;
+                    mMyCommand.OpacityFrame = 0;
+                    mMyCommand.FinalDuration = 0;
+                    break;
+            }
+            mEventEditor.FinishCommandEdit();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            mEventEditor.CancelCommandEdit();
+        }
+
+        private void cmbEffectType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateVisibleFields();
+        }
+    }
+
+}

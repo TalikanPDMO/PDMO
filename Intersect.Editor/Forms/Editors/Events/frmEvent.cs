@@ -776,6 +776,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new ShowPictureCommand();
 
                     break;
+                case EventCommandType.PlayScreenEffect:
+                    tmpCommand = new PlayScreenEffectCommand();
+
+                    break;
                 case EventCommandType.HidePicture:
                     tmpCommand = new HidePictureCommmand();
 
@@ -1373,6 +1377,10 @@ namespace Intersect.Editor.Forms.Editors.Events
 
                     break;
                 case EventCommandType.HidePicture:
+                    break;
+                case EventCommandType.PlayScreenEffect:
+                    cmdWindow = new EventCommand_PlayScreenEffect((PlayScreenEffectCommand)command, this);
+
                     break;
                 case EventCommandType.Wait:
                     cmdWindow = new EventCommandWait((WaitCommand) command, this);

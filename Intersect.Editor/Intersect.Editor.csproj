@@ -133,6 +133,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_CreateGuild.Designer.cs">
       <DependentUpon>EventCommand_CreateGuild.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_PlayScreenEffect.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_PlayScreenEffect.Designer.cs">
+      <DependentUpon>EventCommand_PlayScreenEffect.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ShowPopup.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -730,6 +736,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_EndQuest.resx">
       <DependentUpon>EventCommand_EndQuest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_PlayScreenEffect.resx">
+      <DependentUpon>EventCommand_PlayScreenEffect.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_SetExpBoost.resx">
       <DependentUpon>EventCommand_SetExpBoost.cs</DependentUpon>

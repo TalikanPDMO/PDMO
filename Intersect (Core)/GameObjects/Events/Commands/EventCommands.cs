@@ -1199,4 +1199,23 @@ namespace Intersect.GameObjects.Events.Commands
 
         public bool IncludeAll { get; set; } = false;
     }
+
+    public class PlayScreenEffectCommand : EventCommand
+    {
+
+        public override EventCommandType Type { get; } = EventCommandType.PlayScreenEffect;
+
+        public ScreenEffectType EffectType { get; set; } = ScreenEffectType.Color;
+        public string Data { get; set; } = "";
+        public int Size { get; set; } = 0; //Original = 0, Full Screen, Half Screen, Stretch To Fit
+
+        public int OpacityDuration { get; set; } = 0;
+
+        public int FinalDuration { get; set; } = 0;
+
+        public int OpacityFrame { get; set; } = 0; // 0 = Auto, > 0 = Manual
+        public byte OpacityStart { get; set; } = 255;
+
+        public byte OpacityEnd { get; set; } = 255;
+    }
 }

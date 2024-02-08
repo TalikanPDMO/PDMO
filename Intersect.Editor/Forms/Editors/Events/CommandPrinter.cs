@@ -1181,6 +1181,11 @@ namespace Intersect.Editor.Forms.Editors.Events
             return Strings.EventCommandList.showpicture;
         }
 
+        private static string GetCommandText(PlayScreenEffectCommand command, MapInstance map)
+        {
+            return Strings.EventCommandList.playscreeneffect.ToString(Strings.EventPlayScreenEffect.screeneffecttypes[(int)command.EffectType]);
+        }
+
         private static string GetCommandText(ChangeNameCommand command, MapInstance map)
         {
             return Strings.EventCommandList.changename.ToString(PlayerVariableBase.GetName(command.VariableId));

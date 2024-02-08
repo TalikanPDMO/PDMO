@@ -1186,6 +1186,19 @@ namespace Intersect.Server.Entities.Events
             PacketSender.SendHidePicture(player);
         }
 
+        //Play ScreenEffect Command
+        private static void ProcessCommand(
+            PlayScreenEffectCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            PacketSender.SendPlayScreenEffect(player, command.EffectType, command.Data, command.Size,
+                command.OpacityStart, command.OpacityEnd, command.OpacityFrame, command.OpacityDuration, command.FinalDuration);
+        }
+
         //Wait Command
         private static void ProcessCommand(
             WaitCommand command,
