@@ -1530,6 +1530,13 @@ namespace Intersect.Client.Networking
             Globals.Picture = null;
         }
 
+        //PlayScreenEffectPacket
+        public void HandlePacket(IPacketSender packetSender, PlayScreenEffectPacket packet)
+        {
+            packet.ReceiveTime = Globals.System.GetTimeMs();
+            Globals.ScreenEffects.Add(new ScreenEffect(packet));
+        }
+
         //ShowPopupPacket
         public void HandlePacket(IPacketSender packetSender, ShowPopupPacket packet)
         {

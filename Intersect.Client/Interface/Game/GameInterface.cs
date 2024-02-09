@@ -128,6 +128,7 @@ namespace Intersect.Client.Interface.Game
             {
                 mPictureWindow = new PictureWindow(GameCanvas);
             }
+            ScreenEffect.GameCanvas = GameCanvas;
 
             if (mPopupWindow == null)
             {

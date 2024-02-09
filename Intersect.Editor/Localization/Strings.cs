@@ -1604,9 +1604,17 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString color = @"Color:";
 
+            public static LocalizedString selectcolor = @"Select Color";
+
             public static LocalizedString effecttype = @"ScreenEffect Type:";
 
-            public static LocalizedString transition = @"Transition:";
+            public static LocalizedString transition = @"Transition Parameters:";
+
+            public static LocalizedString shake = @"Shaking Parameters:";
+
+            public static LocalizedString duration = @"Duration (ms):";
+
+            public static LocalizedString intensity = @"Intensity (px):";
 
             public static LocalizedString opacitytransition = @"Opacity Transition:";
 
@@ -1620,8 +1628,8 @@ Tick timer saved in server config.json.";
 
             public static Dictionary<int, LocalizedString> screeneffecttypes = new Dictionary<int, LocalizedString>
             {
-                {0, @"Color"},
-                {1, @"Picture"},
+                {0, @"Color Transition"},
+                {1, @"Picture Transition"},
                 {2, @"Shake"}
             };
         }
@@ -2092,7 +2100,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString showpicture = @"Show Picture";
 
-            public static LocalizedString playscreeneffect = @"Play ScreenEffect: {00}";
+            public static LocalizedString playscreeneffect = @"Play ScreenEffect: {00} {01}";
 
             public static LocalizedString showtext = @"Show Text: {00}";
 

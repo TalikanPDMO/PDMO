@@ -7,6 +7,7 @@ using Intersect.Client.Framework.Database;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Input;
 using Intersect.Client.Framework.Sys;
+using Intersect.Client.Interface.Game;
 using Intersect.Client.Items;
 using Intersect.Client.Plugins.Interfaces;
 using Intersect.Enums;
@@ -152,6 +153,9 @@ namespace Intersect.Client.General
         //Event Show Popups
         public static List<ShowPopupPacket> Popups = new List<ShowPopupPacket>();
 
+        //Screen Effects
+        public static List<ScreenEffect> ScreenEffects = new List<ScreenEffect>();
+
         public static List<Guid> QuestOffers = new List<Guid>();
 
         public static Random Random = new Random();
@@ -186,7 +190,7 @@ namespace Intersect.Client.General
         {
             var coeffs = Options.Instance.PlayerOpts.SpeedFormulaCoeffs;
             CalculatedSpeeds = new float[size + 1];
-            for (var i=0; i<=size; i++)
+            for (var i = 0; i <= size; i++)
             {
                 if (i >= coeffs[8])
                 {
@@ -196,7 +200,7 @@ namespace Intersect.Client.General
                 {
                     CalculatedSpeeds[i] = Math.Max(100, coeffs[3] - coeffs[4] * (i - coeffs[5]));
                 }
-                else if (i>=coeffs[2])
+                else if (i >= coeffs[2])
                 {
                     CalculatedSpeeds[i] = Math.Max(100, coeffs[0] - coeffs[1] * (i - coeffs[2]));
                 }
@@ -206,7 +210,5 @@ namespace Intersect.Client.General
                 }
             }
         }
-
     }
-
 }

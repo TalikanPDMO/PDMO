@@ -1183,7 +1183,8 @@ namespace Intersect.Editor.Forms.Editors.Events
 
         private static string GetCommandText(PlayScreenEffectCommand command, MapInstance map)
         {
-            return Strings.EventCommandList.playscreeneffect.ToString(Strings.EventPlayScreenEffect.screeneffecttypes[(int)command.EffectType]);
+            return Strings.EventCommandList.playscreeneffect.ToString(
+                Strings.EventPlayScreenEffect.screeneffecttypes[(int)command.EffectType], command.Data);
         }
 
         private static string GetCommandText(ChangeNameCommand command, MapInstance map)

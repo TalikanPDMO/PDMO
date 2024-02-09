@@ -3,9 +3,9 @@ namespace Intersect.Enums
 
     public enum ScreenEffectType
     {
-        Color = 0,
+        ColorTransition = 0,
 
-        Picture,
+        PictureTransition,
 
         Shake
 

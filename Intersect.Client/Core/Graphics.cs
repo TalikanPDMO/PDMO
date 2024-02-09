@@ -454,7 +454,7 @@ namespace Intersect.Client.Core
             LightsDrawn = 0;
 
             UpdateView();
-
+            
             switch (Globals.GameState)
             {
                 case GameStates.Intro:
@@ -822,6 +822,7 @@ namespace Intersect.Client.Core
                             CurrentView.Top + CurrentView.Height - (restrictView.Top + restrictView.Height);
                     }
                 }
+                UpdateScreenEffects();
             }
             else
             {
@@ -829,6 +830,16 @@ namespace Intersect.Client.Core
             }
 
             Renderer.SetView(CurrentView);
+        }
+
+        public static void UpdateScreenEffects()
+        {
+            // Display screeneffect on top of everything and clean ended effects
+            foreach (var screenEffect in Globals.ScreenEffects)
+            {
+                screenEffect.Update();
+            }
+            Globals.ScreenEffects.RemoveAll(effect => effect.Step >= 3);
         }
 
         //Lighting
