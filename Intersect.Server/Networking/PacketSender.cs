@@ -1485,10 +1485,10 @@ namespace Intersect.Server.Networking
             player.SendPacket(new ShowPicturePacket(picture, size, clickable, hideTime, eventId));
         }
 
-        public static void SendPlayScreenEffect(Player player, ScreenEffectType effectType, string data, int size, 
-            byte opacityStart, byte opacityEnd, int opacityFrame, int opacityDuration, int finalDuration)
+        public static void SendPlayScreenEffect(Player player, ScreenEffectType effectType, string data, int size, bool overGUI,
+            byte[] opacities, int[] durations, int[] frames)
         {
-            player.SendPacket(new PlayScreenEffectPacket(effectType, data, size, opacityStart, opacityEnd, opacityFrame, opacityDuration, finalDuration));
+            player.SendPacket(new PlayScreenEffectPacket(effectType, data, size, overGUI, opacities, durations, frames));
         }
 
         //HidePicturePacket

@@ -1608,23 +1608,30 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString effecttype = @"ScreenEffect Type:";
 
+            public static LocalizedString overgui = @"Over GUI ?";
+
             public static LocalizedString transition = @"Transition Parameters:";
 
             public static LocalizedString shake = @"Shaking Parameters:";
 
             public static LocalizedString duration = @"Duration (ms):";
 
+            public static LocalizedString durations = @"Durations (ms):";
+
             public static LocalizedString intensity = @"Intensity (px):";
 
-            public static LocalizedString opacitytransition = @"Opacity Transition:";
+            public static LocalizedString beginning = @"Beginning:";
 
-            public static LocalizedString transitionduration = @"Transition Duration (ms):";
+            public static LocalizedString pending = @"Pending:";
 
-            public static LocalizedString transitionframes = @"Transition Frames:";
+            public static LocalizedString ending = @"Ending:";
 
-            public static LocalizedString autocalculate = @"(0 for autocalculate)";
+            public static LocalizedString frames = @"Frames:";
 
-            public static LocalizedString aftertransitionduration = @"AfterTransition Duration (ms):";
+            public static LocalizedString opacities = @"Opacities:";
+
+            public static LocalizedString autoframes = @"(0 for autoframes)";
+
 
             public static Dictionary<int, LocalizedString> screeneffecttypes = new Dictionary<int, LocalizedString>
             {

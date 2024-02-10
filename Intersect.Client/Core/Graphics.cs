@@ -839,7 +839,7 @@ namespace Intersect.Client.Core
             {
                 screenEffect.Update();
             }
-            Globals.ScreenEffects.RemoveAll(effect => effect.Step >= 3);
+            Globals.ScreenEffects.RemoveAll(effect => effect.State >= ScreenEffectState.StateCount);
         }
 
         //Lighting

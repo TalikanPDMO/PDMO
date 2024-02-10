@@ -361,6 +361,7 @@ namespace Intersect.Client.Interface.Game
                 PlayerBox?.SetEntity(Globals.Me);
             }
 
+
             mChatBox?.Update();
             GameMenu?.Update(mShouldUpdateQuestLog);
             mShouldUpdateQuestLog = false;

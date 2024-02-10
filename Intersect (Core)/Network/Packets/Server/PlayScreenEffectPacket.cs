@@ -12,17 +12,16 @@ namespace Intersect.Network.Packets.Server
         {
         }
 
-        public PlayScreenEffectPacket(ScreenEffectType effectType, string data, int size, byte opacityStart, byte opacityEnd,
-            int opacityFrame, int opacityDuration, int finalDuration)
+        public PlayScreenEffectPacket(ScreenEffectType effectType, string data, int size, bool overGUI,
+            byte[] opacities , int[] durations, int[] frames)
         {
             EffectType = effectType;
             Data = data;
             Size = size;
-            OpacityStart = opacityStart;
-            OpacityEnd = opacityEnd;
-            OpacityFrame = opacityFrame;
-            OpacityDuration = opacityDuration;
-            FinalDuration = finalDuration;
+            OverGUI = overGUI;
+            Opacities = opacities;
+            Durations = durations;
+            Frames = frames;
         }
 
         [Key(0)]
@@ -35,20 +34,16 @@ namespace Intersect.Network.Packets.Server
         public int Size { get; set; }
 
         [Key(3)]
-        public byte OpacityStart { get; set; }
+        public bool OverGUI { get; set; }
 
         [Key(4)]
-        public byte OpacityEnd { get; set; }
+        public byte[] Opacities { get; set; }
 
         [Key(5)]
-        public int OpacityFrame { get; set; }
+        public int[] Durations { get; set; }
 
         [Key(6)]
-        public int OpacityDuration { get; set; }
-
-        [Key(7)]
-        public int FinalDuration { get; set; }
-
+        public int[] Frames { get; set; }
 
     }
 
