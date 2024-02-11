@@ -7,6 +7,7 @@ using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
 using Intersect.Client.Networking;
 using Intersect.Enums;
+using Intersect.GameObjects;
 using Intersect.Network.Packets.Server;
 using System;
 using System.Collections.Generic;
@@ -21,32 +22,45 @@ namespace Intersect.Client.Interface.Game
         public static Canvas GameCanvas = null;
         private ImagePanel mImage = null;
 
+        public ScreenEffectBase Base;
+
         public ScreenEffect(PlayScreenEffectPacket packet)
         {
-            EffectType = packet.EffectType;
-            Data = packet.Data;
-            Size = packet.Size;
-            OverGUI = packet.OverGUI;
-            Opacities = packet.Opacities ?? new byte[(int)ScreenEffectState.StateCount];
-            Durations = packet.Durations ?? new int[(int)ScreenEffectState.StateCount];
-            Frames = packet.Frames ?? new int[(int)ScreenEffectState.StateCount - 1];
+            Base = new ScreenEffectBase();
+            Base.EffectType = packet.EffectType;
+            Base.Data = packet.Data;
+            Base.Size = packet.Size;
+            Base.OverGUI = packet.OverGUI;
+            Base.Opacities = packet.Opacities ?? new byte[(int)ScreenEffectState.StateCount];
+            Base.Durations = packet.Durations ?? new int[(int)ScreenEffectState.StateCount];
+            Base.Frames = packet.Frames ?? new int[(int)ScreenEffectState.StateCount - 1];
+            Start();
+        }
+        public ScreenEffect(ScreenEffectBase screenEffectBase)
+        {
+            Base = screenEffectBase;
+            if (Base.Opacities == null)
+            {
+                Base.Opacities = new byte[(int)ScreenEffectState.StateCount];
+            }
+            if (Base.Durations == null)
+            {
+                Base.Durations = new int[(int)ScreenEffectState.StateCount];
+            }
+            if (Base.Frames == null)
+            {
+                Base.Frames = new int[(int)ScreenEffectState.StateCount - 1];
+            }
             Start();
         }
 
         public ScreenEffect(ScreenEffectType effectType, string data, int[] durations)
         {
-            EffectType = effectType;
-            Data = data;
-            Durations = durations ?? new int[(int)ScreenEffectState.StateCount];
+            Base = new ScreenEffectBase();
+            Base.EffectType = effectType;
+            Base.Data = data;
+            Base.Durations = durations ?? new int[(int)ScreenEffectState.StateCount];
         }
-
-        public ScreenEffectType EffectType { get; set; } = ScreenEffectType.ColorTransition;
-        public string Data { get; set; } = "";
-        public int Size { get; set; } = 0; //Original = 0, Full Screen, Half Screen, Stretch To Fit or ShakeIntensity in pixels
-
-        public byte[] Opacities { get; set; }
-        public int[] Durations { get; set; }
-        public int[] Frames { get; set; }
 
         public float CurrentOpacity { get; set; } = 255;
         public float OpacityStep { get; set; }
@@ -63,16 +77,14 @@ namespace Intersect.Client.Interface.Game
 
         private int ShakeIterator = 0;
 
-        public bool OverGUI = true;
-
         public ScreenEffectState State { get; set; }
         public void Start()
         {
-            switch (EffectType)
+            switch (Base.EffectType)
             {
                 case ScreenEffectType.ColorTransition:
                     mImage = new ImagePanel(GameCanvas);
-                    ImageColor = Color.FromString(Data);
+                    ImageColor = Color.FromString(Base.Data);
                     mImage.Texture = Graphics.Renderer.GetWhiteTexture();
                     if (mImage.Texture != null)
                     {
@@ -82,7 +94,7 @@ namespace Intersect.Client.Interface.Game
                     break;
                 case ScreenEffectType.PictureTransition:
                     mImage = new ImagePanel(GameCanvas);
-                    mImage.Texture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Image, Data);
+                    mImage.Texture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Image, Base.Data);
                     if (mImage.Texture != null)
                     {
                         ProcessPictureSize(mImage);
@@ -93,11 +105,11 @@ namespace Intersect.Client.Interface.Game
                     ShakePos = new List<Point>();
                     FrameTime = 30;
                     ShakePos.Clear();
-                    ShakePos.Add(new Point(Size, 0));
-                    ShakePos.Add(new Point(-Size, -Size));
-                    ShakePos.Add(new Point(0, -Size));
+                    ShakePos.Add(new Point(Base.Size, 0));
+                    ShakePos.Add(new Point(-Base.Size, -Base.Size));
+                    ShakePos.Add(new Point(0, -Base.Size));
                     var startTime = Globals.System.GetTimeMs();
-                    NextStateTime = startTime + Durations[(int)ScreenEffectState.Pending];
+                    NextStateTime = startTime + Base.Durations[(int)ScreenEffectState.Pending];
                     NextUpdateTime = startTime + FrameTime;
                     State = ScreenEffectState.Pending;
                     break;
@@ -108,7 +120,7 @@ namespace Intersect.Client.Interface.Game
         {
             if (State < ScreenEffectState.StateCount && Globals.System.GetTimeMs() > NextUpdateTime)
             {
-                switch (EffectType)
+                switch (Base.EffectType)
                 {
                     case ScreenEffectType.ColorTransition:
                         UpdateImage();
@@ -148,15 +160,15 @@ namespace Intersect.Client.Interface.Game
                     if (Globals.System.GetTimeMs() > NextStateTime)
                     {
                         State = ScreenEffectState.Pending;
-                        if (Durations[(int)ScreenEffectState.Pending] == 0)
+                        if (Base.Durations[(int)ScreenEffectState.Pending] == 0)
                         {
                             UpdateImage(); //Duration is 0, go to next state
                         }
                         else
                         {
-                            NextStateTime += Durations[(int)ScreenEffectState.Pending];
+                            NextStateTime += Base.Durations[(int)ScreenEffectState.Pending];
                             NextUpdateTime = NextStateTime;
-                            mImage.RenderColor = Color.FromArgb(Opacities[(int)ScreenEffectState.Pending],
+                            mImage.RenderColor = Color.FromArgb(Base.Opacities[(int)ScreenEffectState.Pending],
                                 mImage.RenderColor.R, mImage.RenderColor.G, mImage.RenderColor.B);
                         }                     
                     }
@@ -170,15 +182,15 @@ namespace Intersect.Client.Interface.Game
                     break;
                 case ScreenEffectState.Pending: // NextUpdateTime is over, we need to transit to the finish of the
                     State = ScreenEffectState.End;
-                    if (Durations[(int)ScreenEffectState.End] == 0)
+                    if (Base.Durations[(int)ScreenEffectState.End] == 0)
                     {
                         UpdateImage(); //Duration is 0, go to next state
                     }
                     else
                     {
-                        SetupImageTransition(Opacities[(int)ScreenEffectState.Pending], Opacities[(int)ScreenEffectState.End],
-                            Frames[1], Durations[(int)ScreenEffectState.End]);
-                        NextStateTime += Durations[(int)ScreenEffectState.End];
+                        SetupImageTransition(Base.Opacities[(int)ScreenEffectState.Pending], Base.Opacities[(int)ScreenEffectState.End],
+                            Base.Frames[1], Base.Durations[(int)ScreenEffectState.End]);
+                        NextStateTime += Base.Durations[(int)ScreenEffectState.End];
                         NextUpdateTime += FrameTime; // Start the ending transition 
                     }
                     break;
@@ -209,16 +221,16 @@ namespace Intersect.Client.Interface.Game
 
         private void InitImageTransition()
         {
-            if (Durations[(int)ScreenEffectState.Begin] != 0)
+            if (Base.Durations[(int)ScreenEffectState.Begin] != 0)
             {
                 State = ScreenEffectState.Begin;
-                CurrentOpacity = Opacities[(int)ScreenEffectState.Begin];
-                SetupImageTransition(Opacities[(int)ScreenEffectState.Begin], Opacities[(int)ScreenEffectState.Pending],
-                    Frames[0], Durations[(int)ScreenEffectState.Begin]);
+                CurrentOpacity = Base.Opacities[(int)ScreenEffectState.Begin];
+                SetupImageTransition(Base.Opacities[(int)ScreenEffectState.Begin], Base.Opacities[(int)ScreenEffectState.Pending],
+                    Base.Frames[0], Base.Durations[(int)ScreenEffectState.Begin]);
                 var startTime = Globals.System.GetTimeMs();
-                NextStateTime = startTime + Durations[(int)ScreenEffectState.Begin];
+                NextStateTime = startTime + Base.Durations[(int)ScreenEffectState.Begin];
                 NextUpdateTime = startTime + FrameTime;
-                if (OverGUI)
+                if (Base.OverGUI)
                 {
                     mImage.BringToFront();
                 }
@@ -228,10 +240,10 @@ namespace Intersect.Client.Interface.Game
                 }
                 mImage.Show();
             }
-            else if (Durations[(int)ScreenEffectState.Pending] != 0)
+            else if (Base.Durations[(int)ScreenEffectState.Pending] != 0)
             {
                 State = ScreenEffectState.Pending;
-                CurrentOpacity = Opacities[(int)ScreenEffectState.Pending];
+                CurrentOpacity = Base.Opacities[(int)ScreenEffectState.Pending];
                 if (ImageColor != null)
                 {
                     mImage.RenderColor = Color.FromArgb((int)CurrentOpacity, ImageColor.R, ImageColor.G, ImageColor.B);
@@ -241,9 +253,9 @@ namespace Intersect.Client.Interface.Game
                     mImage.RenderColor = Color.FromArgb((int)CurrentOpacity, 255, 255, 255);
                 }
                 var startTime = Globals.System.GetTimeMs();
-                NextStateTime = startTime + Durations[(int)ScreenEffectState.Pending];
+                NextStateTime = startTime + Base.Durations[(int)ScreenEffectState.Pending];
                 NextUpdateTime = NextStateTime;
-                if (OverGUI)
+                if (Base.OverGUI)
                 {
                     mImage.BringToFront();
                 }
@@ -253,16 +265,16 @@ namespace Intersect.Client.Interface.Game
                 }
                 mImage.Show();
             }
-            else if(Durations[(int)ScreenEffectState.End] != 0)
+            else if(Base.Durations[(int)ScreenEffectState.End] != 0)
             {
                 State = ScreenEffectState.End;
-                CurrentOpacity = Opacities[(int)ScreenEffectState.Pending];
-                SetupImageTransition(Opacities[(int)ScreenEffectState.Pending], Opacities[(int)ScreenEffectState.End],
-                            Frames[1], Durations[(int)ScreenEffectState.End]);
+                CurrentOpacity = Base.Opacities[(int)ScreenEffectState.Pending];
+                SetupImageTransition(Base.Opacities[(int)ScreenEffectState.Pending], Base.Opacities[(int)ScreenEffectState.End],
+                            Base.Frames[1], Base.Durations[(int)ScreenEffectState.End]);
                 var startTime = Globals.System.GetTimeMs();
-                NextStateTime = startTime + Durations[(int)ScreenEffectState.End];
+                NextStateTime = startTime + Base.Durations[(int)ScreenEffectState.End];
                 NextUpdateTime = startTime + FrameTime;
-                if (OverGUI)
+                if (Base.OverGUI)
                 {
                     mImage.BringToFront();
                 }
@@ -307,9 +319,9 @@ namespace Intersect.Client.Interface.Game
             picture.SetSize(picture.Texture.GetWidth(), picture.Texture.GetHeight());
             Align.Center(picture);
 
-            if (Size != (int)PictureSize.Original) // Don't scale if you want to keep the original size.
+            if (Base.Size != (int)PictureSize.Original) // Don't scale if you want to keep the original size.
             {
-                if (Size == (int)PictureSize.StretchToFit)
+                if (Base.Size == (int)PictureSize.StretchToFit)
                 {
                     picture.SetSize(GameCanvas.Width, GameCanvas.Height);
                     Align.Center(picture);
@@ -319,7 +331,7 @@ namespace Intersect.Client.Interface.Game
                     var n = 1;
 
                     //If you want half fullscreen size set n to 2.
-                    if (Size == (int)PictureSize.HalfScreen)
+                    if (Base.Size == (int)PictureSize.HalfScreen)
                     {
                         n = 2;
                     }
@@ -354,9 +366,9 @@ namespace Intersect.Client.Interface.Game
             image.SetSize(Options.TileWidth, Options.TileHeight);
             Align.Center(image);
 
-            if (Size != (int)PictureSize.Original) // Don't scale if you want to keep the original size.
+            if (Base.Size != (int)PictureSize.Original) // Don't scale if you want to keep the original size.
             {
-                if (Size == (int)PictureSize.StretchToFit)
+                if (Base.Size == (int)PictureSize.StretchToFit)
                 {
                     image.SetSize(GameCanvas.Width, GameCanvas.Height);
                     Align.Center(image);
@@ -366,7 +378,7 @@ namespace Intersect.Client.Interface.Game
                     var n = 1;
 
                     //If you want half fullscreen size set n to 2.
-                    if (Size == (int)PictureSize.HalfScreen)
+                    if (Base.Size == (int)PictureSize.HalfScreen)
                     {
                         n = 2;
                     }

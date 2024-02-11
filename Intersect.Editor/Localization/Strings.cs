@@ -817,6 +817,66 @@ namespace Intersect.Editor.Localization
 
             public static LocalizedString upperverticalframes = @"Graphic Vertical Frames:";
 
+            public static LocalizedString screeneffectformat = @"{00} : {01}";
+
+            public static LocalizedString shakeformat = @"{00}px";
+
+            public static LocalizedString size = @"Size:";
+
+            public static LocalizedString original = @"Original";
+
+            public static LocalizedString fullscreen = @"Full Screen";
+
+            public static LocalizedString halfscreen = @"Half Screen";
+
+            public static LocalizedString stretchtofit = @"Stretch To Fit";
+
+            public static LocalizedString color = @"Color:";
+
+            public static LocalizedString selectcolor = @"Select Color";
+
+            public static LocalizedString effecttype = @"ScreenEffect Type:";
+
+            public static LocalizedString overgui = @"Over GUI ?";
+
+            public static LocalizedString transition = @"Transition Parameters:";
+
+            public static LocalizedString shake = @"Shaking Parameters:";
+
+            public static LocalizedString duration = @"Duration (ms):";
+
+            public static LocalizedString durations = @"Durations (ms):";
+
+            public static LocalizedString intensity = @"Intensity (px):";
+
+            public static LocalizedString beginning = @"Beginning:";
+
+            public static LocalizedString pending = @"Pending:";
+
+            public static LocalizedString ending = @"Ending:";
+
+            public static LocalizedString frames = @"Frames:";
+
+            public static LocalizedString opacities = @"Opacities:";
+
+            public static LocalizedString picture = @"Picture:";
+
+            public static LocalizedString screeneffects = @"ScreenEffects:";
+
+            public static LocalizedString add = @"Add";
+
+            public static LocalizedString remove = @"Remove";
+
+            public static LocalizedString autoframes = @"(0 for autoframes)";
+
+
+            public static Dictionary<int, LocalizedString> screeneffecttypes = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Color Transition"},
+                {1, @"Picture Transition"},
+                {2, @"Shake"}
+            };
+
         }
 
         public struct Attributes
@@ -1599,8 +1659,6 @@ Tick timer saved in server config.json.";
             public static LocalizedString halfscreen = @"Half Screen";
 
             public static LocalizedString stretchtofit = @"Stretch To Fit";
-
-            public static LocalizedString to = @"to";
 
             public static LocalizedString color = @"Color:";
 

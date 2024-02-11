@@ -1195,8 +1195,8 @@ namespace Intersect.Server.Entities.Events
             Stack<CommandInstance> callStack
         )
         {
-            PacketSender.SendPlayScreenEffect(player, command.EffectType, command.Data, command.Size, command.OverGUI,
-                command.Opacities, command.Durations, command.Frames);
+            PacketSender.SendPlayScreenEffect(player, command.ScreenEffect.EffectType, command.ScreenEffect.Data, command.ScreenEffect.Size, command.ScreenEffect.OverGUI,
+                command.ScreenEffect.Opacities, command.ScreenEffect.Durations, command.ScreenEffect.Frames);
         }
 
         //Wait Command

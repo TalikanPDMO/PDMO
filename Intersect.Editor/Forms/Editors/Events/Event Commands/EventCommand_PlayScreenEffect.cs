@@ -23,52 +23,52 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             mEventEditor = editor;
 
             InitLocalization();
-            cmbEffectType.SelectedIndex = (int)mMyCommand.EffectType;
+            cmbEffectType.SelectedIndex = (int)mMyCommand.ScreenEffect.EffectType;
 
-            if (mMyCommand.Opacities == null)
+            if (mMyCommand.ScreenEffect.Opacities == null)
             {
-                mMyCommand.Opacities = new byte[(int)ScreenEffectState.StateCount];
+                mMyCommand.ScreenEffect.Opacities = new byte[(int)ScreenEffectState.StateCount];
             }
-            if (mMyCommand.Durations == null)
+            if (mMyCommand.ScreenEffect.Durations == null)
             {
-                mMyCommand.Durations = new int[(int)ScreenEffectState.StateCount];
+                mMyCommand.ScreenEffect.Durations = new int[(int)ScreenEffectState.StateCount];
             }
-            if (mMyCommand.Frames == null)
+            if (mMyCommand.ScreenEffect.Frames == null)
             {
-                mMyCommand.Frames = new int[(int)ScreenEffectState.StateCount - 1];
+                mMyCommand.ScreenEffect.Frames = new int[(int)ScreenEffectState.StateCount - 1];
             }
-            chkOverGUI.Checked = mMyCommand.OverGUI;
+            chkOverGUI.Checked = mMyCommand.ScreenEffect.OverGUI;
             switch ((ScreenEffectType)cmbEffectType.SelectedIndex)
             {
                 case ScreenEffectType.ColorTransition:
-                    var color = Color.FromString(mMyCommand.Data, Color.Black);
+                    var color = Color.FromString(mMyCommand.ScreenEffect.Data, Color.Black);
                     pnlColor.BackColor = System.Drawing.Color.FromArgb(
                         color.A, color.R, color.G, color.B
                     );
                     colorDialog.Color = pnlColor.BackColor;
-                    if (mMyCommand.Size > -1 && mMyCommand.Size < cmbSize.Items.Count)
+                    if (mMyCommand.ScreenEffect.Size > -1 && mMyCommand.ScreenEffect.Size < cmbSize.Items.Count)
                     {
-                        cmbSize.SelectedIndex = mMyCommand.Size;
+                        cmbSize.SelectedIndex = mMyCommand.ScreenEffect.Size;
                     }
                     else
                     {
                         cmbSize.SelectedIndex = 0;
                     }
                     cmbPicture.SelectedIndex = 0;
-                    nudOpacityBegin.Value = mMyCommand.Opacities[(int)ScreenEffectState.Begin];
-                    nudOpacityPending.Value = mMyCommand.Opacities[(int)ScreenEffectState.Pending];
-                    nudOpacityEnd.Value = mMyCommand.Opacities[(int)ScreenEffectState.End];
-                    nudDurationBegin.Value = mMyCommand.Durations[(int)ScreenEffectState.Begin];
-                    nudDurationPending.Value = mMyCommand.Durations[(int)ScreenEffectState.Pending];
-                    nudDurationEnd.Value = mMyCommand.Durations[(int)ScreenEffectState.End];
-                    nudFramesBegin.Value = mMyCommand.Frames[0];
-                    nudFramesEnd.Value = mMyCommand.Frames[1];
+                    nudOpacityBegin.Value = mMyCommand.ScreenEffect.Opacities[(int)ScreenEffectState.Begin];
+                    nudOpacityPending.Value = mMyCommand.ScreenEffect.Opacities[(int)ScreenEffectState.Pending];
+                    nudOpacityEnd.Value = mMyCommand.ScreenEffect.Opacities[(int)ScreenEffectState.End];
+                    nudDurationBegin.Value = mMyCommand.ScreenEffect.Durations[(int)ScreenEffectState.Begin];
+                    nudDurationPending.Value = mMyCommand.ScreenEffect.Durations[(int)ScreenEffectState.Pending];
+                    nudDurationEnd.Value = mMyCommand.ScreenEffect.Durations[(int)ScreenEffectState.End];
+                    nudFramesBegin.Value = mMyCommand.ScreenEffect.Frames[0];
+                    nudFramesEnd.Value = mMyCommand.ScreenEffect.Frames[1];
                     break;
 
                 case ScreenEffectType.PictureTransition:
-                    if (mMyCommand.Data != null && cmbPicture.Items.IndexOf(mMyCommand.Data) > -1)
+                    if (mMyCommand.ScreenEffect.Data != null && cmbPicture.Items.IndexOf(mMyCommand.ScreenEffect.Data) > -1)
                     {
-                        cmbPicture.SelectedIndex = cmbPicture.Items.IndexOf(mMyCommand.Data);
+                        cmbPicture.SelectedIndex = cmbPicture.Items.IndexOf(mMyCommand.ScreenEffect.Data);
                     }
                     else
                     {
@@ -77,27 +77,27 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                             cmbPicture.SelectedIndex = 0;
                         }
                     }
-                    if (mMyCommand.Size > -1 && mMyCommand.Size < cmbSize.Items.Count)
+                    if (mMyCommand.ScreenEffect.Size > -1 && mMyCommand.ScreenEffect.Size < cmbSize.Items.Count)
                     {
-                        cmbSize.SelectedIndex = mMyCommand.Size;
+                        cmbSize.SelectedIndex = mMyCommand.ScreenEffect.Size;
                     }
                     else
                     {
                         cmbSize.SelectedIndex = 0;
                     }
-                    nudOpacityBegin.Value = mMyCommand.Opacities[(int)ScreenEffectState.Begin];
-                    nudOpacityPending.Value = mMyCommand.Opacities[(int)ScreenEffectState.Pending];
-                    nudOpacityEnd.Value = mMyCommand.Opacities[(int)ScreenEffectState.End];
-                    nudDurationBegin.Value = mMyCommand.Durations[(int)ScreenEffectState.Begin];
-                    nudDurationPending.Value = mMyCommand.Durations[(int)ScreenEffectState.Pending];
-                    nudDurationEnd.Value = mMyCommand.Durations[(int)ScreenEffectState.End];
-                    nudFramesBegin.Value = mMyCommand.Frames[0];
-                    nudFramesEnd.Value = mMyCommand.Frames[1];
+                    nudOpacityBegin.Value = mMyCommand.ScreenEffect.Opacities[(int)ScreenEffectState.Begin];
+                    nudOpacityPending.Value = mMyCommand.ScreenEffect.Opacities[(int)ScreenEffectState.Pending];
+                    nudOpacityEnd.Value = mMyCommand.ScreenEffect.Opacities[(int)ScreenEffectState.End];
+                    nudDurationBegin.Value = mMyCommand.ScreenEffect.Durations[(int)ScreenEffectState.Begin];
+                    nudDurationPending.Value = mMyCommand.ScreenEffect.Durations[(int)ScreenEffectState.Pending];
+                    nudDurationEnd.Value = mMyCommand.ScreenEffect.Durations[(int)ScreenEffectState.End];
+                    nudFramesBegin.Value = mMyCommand.ScreenEffect.Frames[0];
+                    nudFramesEnd.Value = mMyCommand.ScreenEffect.Frames[1];
                     break;
 
                 case ScreenEffectType.Shake:
-                    nudShakeDuration.Value = mMyCommand.Durations[(int)ScreenEffectState.Pending];
-                    nudIntensity.Value = mMyCommand.Size;
+                    nudShakeDuration.Value = mMyCommand.ScreenEffect.Durations[(int)ScreenEffectState.Pending];
+                    nudIntensity.Value = mMyCommand.ScreenEffect.Size;
                     cmbSize.SelectedIndex = 0;
                     cmbPicture.SelectedIndex = 0;
                     break;
@@ -186,61 +186,61 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            mMyCommand.EffectType = (ScreenEffectType)cmbEffectType.SelectedIndex;
-            mMyCommand.OverGUI = chkOverGUI.Checked;
-            switch (mMyCommand.EffectType)
+            mMyCommand.ScreenEffect.EffectType = (ScreenEffectType)cmbEffectType.SelectedIndex;
+            mMyCommand.ScreenEffect.OverGUI = chkOverGUI.Checked;
+            switch (mMyCommand.ScreenEffect.EffectType)
             {
                 case ScreenEffectType.ColorTransition:
                     var color = Color.FromArgb(colorDialog.Color.A, colorDialog.Color.R, colorDialog.Color.G, colorDialog.Color.B);
-                    mMyCommand.Data = Color.ToString(color);
-                    mMyCommand.Size = cmbSize.SelectedIndex;
-                    mMyCommand.Opacities[(int)ScreenEffectState.Begin] = (byte)nudOpacityBegin.Value;
-                    mMyCommand.Opacities[(int)ScreenEffectState.Pending] = (byte)nudOpacityPending.Value;
-                    mMyCommand.Opacities[(int)ScreenEffectState.End] = (byte)nudOpacityEnd.Value;
-                    mMyCommand.Durations[(int)ScreenEffectState.Begin] = (int)nudDurationBegin.Value;
-                    mMyCommand.Durations[(int)ScreenEffectState.Pending] = (int)nudDurationPending.Value;
-                    mMyCommand.Durations[(int)ScreenEffectState.End] = (int)nudDurationEnd.Value;
-                    mMyCommand.Frames[0] = (int)nudFramesBegin.Value;
-                    mMyCommand.Frames[1] = (int)nudFramesEnd.Value;
+                    mMyCommand.ScreenEffect.Data = Color.ToString(color);
+                    mMyCommand.ScreenEffect.Size = cmbSize.SelectedIndex;
+                    mMyCommand.ScreenEffect.Opacities[(int)ScreenEffectState.Begin] = (byte)nudOpacityBegin.Value;
+                    mMyCommand.ScreenEffect.Opacities[(int)ScreenEffectState.Pending] = (byte)nudOpacityPending.Value;
+                    mMyCommand.ScreenEffect.Opacities[(int)ScreenEffectState.End] = (byte)nudOpacityEnd.Value;
+                    mMyCommand.ScreenEffect.Durations[(int)ScreenEffectState.Begin] = (int)nudDurationBegin.Value;
+                    mMyCommand.ScreenEffect.Durations[(int)ScreenEffectState.Pending] = (int)nudDurationPending.Value;
+                    mMyCommand.ScreenEffect.Durations[(int)ScreenEffectState.End] = (int)nudDurationEnd.Value;
+                    mMyCommand.ScreenEffect.Frames[0] = (int)nudFramesBegin.Value;
+                    mMyCommand.ScreenEffect.Frames[1] = (int)nudFramesEnd.Value;
                     break;
 
                 case ScreenEffectType.PictureTransition:
-                    mMyCommand.Data = cmbPicture.Text;
-                    mMyCommand.Size = cmbSize.SelectedIndex;
-                    mMyCommand.Opacities[(int)ScreenEffectState.Begin] = (byte)nudOpacityBegin.Value;
-                    mMyCommand.Opacities[(int)ScreenEffectState.Pending] = (byte)nudOpacityPending.Value;
-                    mMyCommand.Opacities[(int)ScreenEffectState.End] = (byte)nudOpacityEnd.Value;
-                    mMyCommand.Durations[(int)ScreenEffectState.Begin] = (int)nudDurationBegin.Value;
-                    mMyCommand.Durations[(int)ScreenEffectState.Pending] = (int)nudDurationPending.Value;
-                    mMyCommand.Durations[(int)ScreenEffectState.End] = (int)nudDurationEnd.Value;
-                    mMyCommand.Frames[0] = (int)nudFramesBegin.Value;
-                    mMyCommand.Frames[1] = (int)nudFramesEnd.Value;
+                    mMyCommand.ScreenEffect.Data = cmbPicture.Text;
+                    mMyCommand.ScreenEffect.Size = cmbSize.SelectedIndex;
+                    mMyCommand.ScreenEffect.Opacities[(int)ScreenEffectState.Begin] = (byte)nudOpacityBegin.Value;
+                    mMyCommand.ScreenEffect.Opacities[(int)ScreenEffectState.Pending] = (byte)nudOpacityPending.Value;
+                    mMyCommand.ScreenEffect.Opacities[(int)ScreenEffectState.End] = (byte)nudOpacityEnd.Value;
+                    mMyCommand.ScreenEffect.Durations[(int)ScreenEffectState.Begin] = (int)nudDurationBegin.Value;
+                    mMyCommand.ScreenEffect.Durations[(int)ScreenEffectState.Pending] = (int)nudDurationPending.Value;
+                    mMyCommand.ScreenEffect.Durations[(int)ScreenEffectState.End] = (int)nudDurationEnd.Value;
+                    mMyCommand.ScreenEffect.Frames[0] = (int)nudFramesBegin.Value;
+                    mMyCommand.ScreenEffect.Frames[1] = (int)nudFramesEnd.Value;
                     break;
 
                 case ScreenEffectType.Shake:
-                    mMyCommand.Data = "";
-                    mMyCommand.Size = (int)nudIntensity.Value;
-                    mMyCommand.Opacities[(int)ScreenEffectState.Begin] = 0;
-                    mMyCommand.Opacities[(int)ScreenEffectState.Pending] =0;
-                    mMyCommand.Opacities[(int)ScreenEffectState.End] = 0;
-                    mMyCommand.Durations[(int)ScreenEffectState.Begin] = (int)nudShakeDuration.Value;
-                    mMyCommand.Durations[(int)ScreenEffectState.Pending] = (int)nudShakeDuration.Value;
-                    mMyCommand.Durations[(int)ScreenEffectState.End] = (int)nudShakeDuration.Value;
-                    mMyCommand.Frames[0] = 0;
-                    mMyCommand.Frames[1] = 0;
+                    mMyCommand.ScreenEffect.Data = "";
+                    mMyCommand.ScreenEffect.Size = (int)nudIntensity.Value;
+                    mMyCommand.ScreenEffect.Opacities[(int)ScreenEffectState.Begin] = 0;
+                    mMyCommand.ScreenEffect.Opacities[(int)ScreenEffectState.Pending] =0;
+                    mMyCommand.ScreenEffect.Opacities[(int)ScreenEffectState.End] = 0;
+                    mMyCommand.ScreenEffect.Durations[(int)ScreenEffectState.Begin] = (int)nudShakeDuration.Value;
+                    mMyCommand.ScreenEffect.Durations[(int)ScreenEffectState.Pending] = (int)nudShakeDuration.Value;
+                    mMyCommand.ScreenEffect.Durations[(int)ScreenEffectState.End] = (int)nudShakeDuration.Value;
+                    mMyCommand.ScreenEffect.Frames[0] = 0;
+                    mMyCommand.ScreenEffect.Frames[1] = 0;
                     break;
             }
-            if (Array.TrueForAll(mMyCommand.Opacities, item => item == 0))
+            if (Array.TrueForAll(mMyCommand.ScreenEffect.Opacities, item => item == 0))
             {
-                mMyCommand.Opacities = null;
+                mMyCommand.ScreenEffect.Opacities = null;
             }
-            if (Array.TrueForAll(mMyCommand.Durations, item => item == 0))
+            if (Array.TrueForAll(mMyCommand.ScreenEffect.Durations, item => item == 0))
             {
-                mMyCommand.Durations = null;
+                mMyCommand.ScreenEffect.Durations = null;
             }
-            if (Array.TrueForAll(mMyCommand.Frames, item => item == 0))
+            if (Array.TrueForAll(mMyCommand.ScreenEffect.Frames, item => item == 0))
             {
-                mMyCommand.Frames = null;
+                mMyCommand.ScreenEffect.Frames = null;
             }
             mEventEditor.FinishCommandEdit();
         }

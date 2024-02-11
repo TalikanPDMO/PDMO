@@ -101,6 +101,42 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.pnlContainer = new System.Windows.Forms.Panel();
+            this.grpScreenEffects = new DarkUI.Controls.DarkGroupBox();
+            this.lblInfoScreenEffects = new System.Windows.Forms.Label();
+            this.btnRemove = new DarkUI.Controls.DarkButton();
+            this.chkOverGUI = new DarkUI.Controls.DarkCheckBox();
+            this.btnAdd = new DarkUI.Controls.DarkButton();
+            this.cmbEffectType = new DarkUI.Controls.DarkComboBox();
+            this.lstScreenEffects = new System.Windows.Forms.ListBox();
+            this.lblEffectType = new System.Windows.Forms.Label();
+            this.grpShake = new DarkUI.Controls.DarkGroupBox();
+            this.lblIntensity = new System.Windows.Forms.Label();
+            this.nudIntensity = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudShakeDuration = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblShakeDuration = new System.Windows.Forms.Label();
+            this.grpTransition = new DarkUI.Controls.DarkGroupBox();
+            this.lblEnd = new System.Windows.Forms.Label();
+            this.lblPending = new System.Windows.Forms.Label();
+            this.lblBegin = new System.Windows.Forms.Label();
+            this.nudFramesEnd = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudDurationEnd = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudOpacityEnd = new DarkUI.Controls.DarkNumericUpDown();
+            this.btnSelectColor = new DarkUI.Controls.DarkButton();
+            this.pnlColor = new System.Windows.Forms.Panel();
+            this.lblColor = new System.Windows.Forms.Label();
+            this.lblSize = new System.Windows.Forms.Label();
+            this.lblAutoframes = new System.Windows.Forms.Label();
+            this.cmbSize = new DarkUI.Controls.DarkComboBox();
+            this.nudFramesBegin = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblDurations = new System.Windows.Forms.Label();
+            this.lblFrames = new System.Windows.Forms.Label();
+            this.nudDurationBegin = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudDurationPending = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblPicture = new System.Windows.Forms.Label();
+            this.cmbPicture = new DarkUI.Controls.DarkComboBox();
+            this.nudOpacityPending = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblOpacities = new System.Windows.Forms.Label();
+            this.nudOpacityBegin = new DarkUI.Controls.DarkNumericUpDown();
             this.toolStrip = new DarkUI.Controls.DarkToolStrip();
             this.toolStripItemNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -116,6 +152,7 @@ namespace Intersect.Editor.Forms.Editors
             this.tmrRender = new System.Windows.Forms.Timer(this.components);
             this.grpCommentary = new DarkUI.Controls.DarkGroupBox();
             this.txtCommentary = new DarkUI.Controls.DarkTextBox();
+            this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.grpAnimations.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpLower.SuspendLayout();
@@ -137,6 +174,19 @@ namespace Intersect.Editor.Forms.Editors
             this.grpUpperFrameOpts.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picUpperAnimation)).BeginInit();
             this.pnlContainer.SuspendLayout();
+            this.grpScreenEffects.SuspendLayout();
+            this.grpShake.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudIntensity)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudShakeDuration)).BeginInit();
+            this.grpTransition.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudFramesEnd)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDurationEnd)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudOpacityEnd)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudFramesBegin)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDurationBegin)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDurationPending)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudOpacityPending)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudOpacityBegin)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.grpCommentary.SuspendLayout();
             this.SuspendLayout();
@@ -397,7 +447,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpLower.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpLower.Location = new System.Drawing.Point(1, 84);
             this.grpLower.Name = "grpLower";
-            this.grpLower.Size = new System.Drawing.Size(484, 450);
+            this.grpLower.Size = new System.Drawing.Size(484, 425);
             this.grpLower.TabIndex = 19;
             this.grpLower.TabStop = false;
             this.grpLower.Text = "Lower Layer (Below Target)";
@@ -405,7 +455,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkRenderAbovePlayer
             // 
             this.chkRenderAbovePlayer.AutoSize = true;
-            this.chkRenderAbovePlayer.Location = new System.Drawing.Point(134, 424);
+            this.chkRenderAbovePlayer.Location = new System.Drawing.Point(342, 400);
             this.chkRenderAbovePlayer.Name = "chkRenderAbovePlayer";
             this.chkRenderAbovePlayer.Size = new System.Drawing.Size(127, 17);
             this.chkRenderAbovePlayer.TabIndex = 27;
@@ -415,7 +465,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkDisableLowerRotations
             // 
             this.chkDisableLowerRotations.AutoSize = true;
-            this.chkDisableLowerRotations.Location = new System.Drawing.Point(9, 424);
+            this.chkDisableLowerRotations.Location = new System.Drawing.Point(217, 400);
             this.chkDisableLowerRotations.Name = "chkDisableLowerRotations";
             this.chkDisableLowerRotations.Size = new System.Drawing.Size(109, 17);
             this.chkDisableLowerRotations.TabIndex = 26;
@@ -551,7 +601,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpLowerFrameOpts.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpLowerFrameOpts.Location = new System.Drawing.Point(213, 93);
             this.grpLowerFrameOpts.Name = "grpLowerFrameOpts";
-            this.grpLowerFrameOpts.Size = new System.Drawing.Size(265, 319);
+            this.grpLowerFrameOpts.Size = new System.Drawing.Size(265, 302);
             this.grpLowerFrameOpts.TabIndex = 20;
             this.grpLowerFrameOpts.TabStop = false;
             this.grpLowerFrameOpts.Text = "Frame Options";
@@ -568,7 +618,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // lightEditorLower
             // 
-            this.lightEditorLower.Location = new System.Drawing.Point(6, 28);
+            this.lightEditorLower.Location = new System.Drawing.Point(6, 27);
             this.lightEditorLower.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.lightEditorLower.Name = "lightEditorLower";
             this.lightEditorLower.Size = new System.Drawing.Size(253, 274);
@@ -729,7 +779,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpUpper.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpUpper.Location = new System.Drawing.Point(496, 84);
             this.grpUpper.Name = "grpUpper";
-            this.grpUpper.Size = new System.Drawing.Size(485, 450);
+            this.grpUpper.Size = new System.Drawing.Size(485, 425);
             this.grpUpper.TabIndex = 20;
             this.grpUpper.TabStop = false;
             this.grpUpper.Text = "Upper Layer (Above Target)";
@@ -737,7 +787,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkRenderBelowFringe
             // 
             this.chkRenderBelowFringe.AutoSize = true;
-            this.chkRenderBelowFringe.Location = new System.Drawing.Point(139, 424);
+            this.chkRenderBelowFringe.Location = new System.Drawing.Point(356, 400);
             this.chkRenderBelowFringe.Name = "chkRenderBelowFringe";
             this.chkRenderBelowFringe.Size = new System.Drawing.Size(125, 17);
             this.chkRenderBelowFringe.TabIndex = 31;
@@ -747,7 +797,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkDisableUpperRotations
             // 
             this.chkDisableUpperRotations.AutoSize = true;
-            this.chkDisableUpperRotations.Location = new System.Drawing.Point(6, 424);
+            this.chkDisableUpperRotations.Location = new System.Drawing.Point(223, 400);
             this.chkDisableUpperRotations.Name = "chkDisableUpperRotations";
             this.chkDisableUpperRotations.Size = new System.Drawing.Size(109, 17);
             this.chkDisableUpperRotations.TabIndex = 27;
@@ -929,7 +979,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpUpperFrameOpts.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpUpperFrameOpts.Location = new System.Drawing.Point(212, 93);
             this.grpUpperFrameOpts.Name = "grpUpperFrameOpts";
-            this.grpUpperFrameOpts.Size = new System.Drawing.Size(265, 319);
+            this.grpUpperFrameOpts.Size = new System.Drawing.Size(265, 302);
             this.grpUpperFrameOpts.TabIndex = 19;
             this.grpUpperFrameOpts.TabStop = false;
             this.grpUpperFrameOpts.Text = "Frame Options";
@@ -946,7 +996,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // lightEditorUpper
             // 
-            this.lightEditorUpper.Location = new System.Drawing.Point(6, 28);
+            this.lightEditorUpper.Location = new System.Drawing.Point(6, 27);
             this.lightEditorUpper.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.lightEditorUpper.Name = "lightEditorUpper";
             this.lightEditorUpper.Size = new System.Drawing.Size(253, 274);
@@ -1050,7 +1100,7 @@ namespace Intersect.Editor.Forms.Editors
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(1014, 574);
+            this.btnCancel.Location = new System.Drawing.Point(1014, 588);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(190, 27);
@@ -1060,7 +1110,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(818, 574);
+            this.btnSave.Location = new System.Drawing.Point(818, 588);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(190, 27);
@@ -1070,14 +1120,544 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // pnlContainer
             // 
+            this.pnlContainer.AutoScroll = true;
+            this.pnlContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.pnlContainer.Controls.Add(this.grpScreenEffects);
             this.pnlContainer.Controls.Add(this.grpUpper);
             this.pnlContainer.Controls.Add(this.grpGeneral);
             this.pnlContainer.Controls.Add(this.grpLower);
-            this.pnlContainer.Location = new System.Drawing.Point(216, 28);
+            this.pnlContainer.Location = new System.Drawing.Point(214, 28);
             this.pnlContainer.Name = "pnlContainer";
-            this.pnlContainer.Size = new System.Drawing.Size(988, 537);
+            this.pnlContainer.Size = new System.Drawing.Size(1005, 551);
             this.pnlContainer.TabIndex = 21;
             this.pnlContainer.Visible = false;
+            // 
+            // grpScreenEffects
+            // 
+            this.grpScreenEffects.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.grpScreenEffects.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpScreenEffects.Controls.Add(this.lblInfoScreenEffects);
+            this.grpScreenEffects.Controls.Add(this.btnRemove);
+            this.grpScreenEffects.Controls.Add(this.chkOverGUI);
+            this.grpScreenEffects.Controls.Add(this.btnAdd);
+            this.grpScreenEffects.Controls.Add(this.cmbEffectType);
+            this.grpScreenEffects.Controls.Add(this.lstScreenEffects);
+            this.grpScreenEffects.Controls.Add(this.lblEffectType);
+            this.grpScreenEffects.Controls.Add(this.grpShake);
+            this.grpScreenEffects.Controls.Add(this.grpTransition);
+            this.grpScreenEffects.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpScreenEffects.Location = new System.Drawing.Point(11, 511);
+            this.grpScreenEffects.Name = "grpScreenEffects";
+            this.grpScreenEffects.Size = new System.Drawing.Size(691, 205);
+            this.grpScreenEffects.TabIndex = 71;
+            this.grpScreenEffects.TabStop = false;
+            this.grpScreenEffects.Text = "ScreenEffects";
+            // 
+            // lblInfoScreenEffects
+            // 
+            this.lblInfoScreenEffects.AutoSize = true;
+            this.lblInfoScreenEffects.Location = new System.Drawing.Point(20, 20);
+            this.lblInfoScreenEffects.Name = "lblInfoScreenEffects";
+            this.lblInfoScreenEffects.Size = new System.Drawing.Size(243, 13);
+            this.lblInfoScreenEffects.TabIndex = 75;
+            this.lblInfoScreenEffects.Text = " Only take into account for animations on Players !";
+            // 
+            // btnRemove
+            // 
+            this.btnRemove.Location = new System.Drawing.Point(140, 156);
+            this.btnRemove.Name = "btnRemove";
+            this.btnRemove.Padding = new System.Windows.Forms.Padding(5);
+            this.btnRemove.Size = new System.Drawing.Size(70, 23);
+            this.btnRemove.TabIndex = 74;
+            this.btnRemove.Text = "Remove";
+            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
+            // 
+            // chkOverGUI
+            // 
+            this.chkOverGUI.AutoSize = true;
+            this.chkOverGUI.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkOverGUI.Location = new System.Drawing.Point(602, 14);
+            this.chkOverGUI.Name = "chkOverGUI";
+            this.chkOverGUI.Size = new System.Drawing.Size(80, 17);
+            this.chkOverGUI.TabIndex = 44;
+            this.chkOverGUI.Text = "Over GUI ?";
+            this.chkOverGUI.CheckedChanged += new System.EventHandler(this.chkOverGUI_CheckedChanged);
+            // 
+            // btnAdd
+            // 
+            this.btnAdd.Location = new System.Drawing.Point(48, 156);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Padding = new System.Windows.Forms.Padding(5);
+            this.btnAdd.Size = new System.Drawing.Size(70, 23);
+            this.btnAdd.TabIndex = 73;
+            this.btnAdd.Text = "Add";
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            // 
+            // cmbEffectType
+            // 
+            this.cmbEffectType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbEffectType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbEffectType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbEffectType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbEffectType.DrawDropdownHoverOutline = false;
+            this.cmbEffectType.DrawFocusRectangle = false;
+            this.cmbEffectType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbEffectType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbEffectType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbEffectType.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbEffectType.FormattingEnabled = true;
+            this.cmbEffectType.Location = new System.Drawing.Point(399, 13);
+            this.cmbEffectType.Name = "cmbEffectType";
+            this.cmbEffectType.Size = new System.Drawing.Size(190, 21);
+            this.cmbEffectType.TabIndex = 22;
+            this.cmbEffectType.Text = null;
+            this.cmbEffectType.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbEffectType.SelectedIndexChanged += new System.EventHandler(this.cmbEffectType_SelectedIndexChanged);
+            // 
+            // lstScreenEffects
+            // 
+            this.lstScreenEffects.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstScreenEffects.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstScreenEffects.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstScreenEffects.FormattingEnabled = true;
+            this.lstScreenEffects.Location = new System.Drawing.Point(17, 41);
+            this.lstScreenEffects.Name = "lstScreenEffects";
+            this.lstScreenEffects.Size = new System.Drawing.Size(253, 106);
+            this.lstScreenEffects.TabIndex = 72;
+            this.lstScreenEffects.SelectedIndexChanged += new System.EventHandler(this.lstScreenEffects_SelectedIndexChanged);
+            // 
+            // lblEffectType
+            // 
+            this.lblEffectType.AutoSize = true;
+            this.lblEffectType.Location = new System.Drawing.Point(300, 16);
+            this.lblEffectType.Name = "lblEffectType";
+            this.lblEffectType.Size = new System.Drawing.Size(99, 13);
+            this.lblEffectType.TabIndex = 21;
+            this.lblEffectType.Text = "ScreenEffect Type:";
+            // 
+            // grpShake
+            // 
+            this.grpShake.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.grpShake.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpShake.Controls.Add(this.lblIntensity);
+            this.grpShake.Controls.Add(this.nudIntensity);
+            this.grpShake.Controls.Add(this.nudShakeDuration);
+            this.grpShake.Controls.Add(this.lblShakeDuration);
+            this.grpShake.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpShake.Location = new System.Drawing.Point(299, 36);
+            this.grpShake.Name = "grpShake";
+            this.grpShake.Size = new System.Drawing.Size(377, 68);
+            this.grpShake.TabIndex = 43;
+            this.grpShake.TabStop = false;
+            this.grpShake.Text = "Shaking parameters:";
+            // 
+            // lblIntensity
+            // 
+            this.lblIntensity.AutoSize = true;
+            this.lblIntensity.Location = new System.Drawing.Point(211, 26);
+            this.lblIntensity.Name = "lblIntensity";
+            this.lblIntensity.Size = new System.Drawing.Size(69, 13);
+            this.lblIntensity.TabIndex = 37;
+            this.lblIntensity.Text = "Intensity (px):";
+            // 
+            // nudIntensity
+            // 
+            this.nudIntensity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudIntensity.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudIntensity.Location = new System.Drawing.Point(285, 24);
+            this.nudIntensity.Maximum = new decimal(new int[] {
+            999,
+            0,
+            0,
+            0});
+            this.nudIntensity.Name = "nudIntensity";
+            this.nudIntensity.Size = new System.Drawing.Size(45, 20);
+            this.nudIntensity.TabIndex = 38;
+            this.nudIntensity.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudIntensity.ValueChanged += new System.EventHandler(this.nudIntensity_ValueChanged);
+            // 
+            // nudShakeDuration
+            // 
+            this.nudShakeDuration.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudShakeDuration.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudShakeDuration.Location = new System.Drawing.Point(84, 24);
+            this.nudShakeDuration.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.nudShakeDuration.Name = "nudShakeDuration";
+            this.nudShakeDuration.Size = new System.Drawing.Size(98, 20);
+            this.nudShakeDuration.TabIndex = 36;
+            this.nudShakeDuration.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudShakeDuration.ValueChanged += new System.EventHandler(this.nudShakeDuration_ValueChanged);
+            // 
+            // lblShakeDuration
+            // 
+            this.lblShakeDuration.AutoSize = true;
+            this.lblShakeDuration.Location = new System.Drawing.Point(6, 26);
+            this.lblShakeDuration.Name = "lblShakeDuration";
+            this.lblShakeDuration.Size = new System.Drawing.Size(75, 13);
+            this.lblShakeDuration.TabIndex = 35;
+            this.lblShakeDuration.Text = " Duration (ms):";
+            // 
+            // grpTransition
+            // 
+            this.grpTransition.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.grpTransition.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTransition.Controls.Add(this.lblEnd);
+            this.grpTransition.Controls.Add(this.lblPending);
+            this.grpTransition.Controls.Add(this.lblBegin);
+            this.grpTransition.Controls.Add(this.nudFramesEnd);
+            this.grpTransition.Controls.Add(this.nudDurationEnd);
+            this.grpTransition.Controls.Add(this.nudOpacityEnd);
+            this.grpTransition.Controls.Add(this.btnSelectColor);
+            this.grpTransition.Controls.Add(this.pnlColor);
+            this.grpTransition.Controls.Add(this.lblColor);
+            this.grpTransition.Controls.Add(this.lblSize);
+            this.grpTransition.Controls.Add(this.lblAutoframes);
+            this.grpTransition.Controls.Add(this.cmbSize);
+            this.grpTransition.Controls.Add(this.nudFramesBegin);
+            this.grpTransition.Controls.Add(this.lblDurations);
+            this.grpTransition.Controls.Add(this.lblFrames);
+            this.grpTransition.Controls.Add(this.nudDurationBegin);
+            this.grpTransition.Controls.Add(this.nudDurationPending);
+            this.grpTransition.Controls.Add(this.lblPicture);
+            this.grpTransition.Controls.Add(this.cmbPicture);
+            this.grpTransition.Controls.Add(this.nudOpacityPending);
+            this.grpTransition.Controls.Add(this.lblOpacities);
+            this.grpTransition.Controls.Add(this.nudOpacityBegin);
+            this.grpTransition.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpTransition.Location = new System.Drawing.Point(299, 36);
+            this.grpTransition.Name = "grpTransition";
+            this.grpTransition.Size = new System.Drawing.Size(377, 163);
+            this.grpTransition.TabIndex = 41;
+            this.grpTransition.TabStop = false;
+            this.grpTransition.Text = "Transition parameters:";
+            // 
+            // lblEnd
+            // 
+            this.lblEnd.AutoSize = true;
+            this.lblEnd.Location = new System.Drawing.Point(281, 51);
+            this.lblEnd.Name = "lblEnd";
+            this.lblEnd.Size = new System.Drawing.Size(43, 13);
+            this.lblEnd.TabIndex = 48;
+            this.lblEnd.Text = "Ending:";
+            // 
+            // lblPending
+            // 
+            this.lblPending.AutoSize = true;
+            this.lblPending.Location = new System.Drawing.Point(189, 51);
+            this.lblPending.Name = "lblPending";
+            this.lblPending.Size = new System.Drawing.Size(49, 13);
+            this.lblPending.TabIndex = 47;
+            this.lblPending.Text = "Pending:";
+            // 
+            // lblBegin
+            // 
+            this.lblBegin.AutoSize = true;
+            this.lblBegin.Location = new System.Drawing.Point(94, 51);
+            this.lblBegin.Name = "lblBegin";
+            this.lblBegin.Size = new System.Drawing.Size(57, 13);
+            this.lblBegin.TabIndex = 46;
+            this.lblBegin.Text = "Beginning:";
+            // 
+            // nudFramesEnd
+            // 
+            this.nudFramesEnd.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudFramesEnd.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudFramesEnd.Location = new System.Drawing.Point(280, 134);
+            this.nudFramesEnd.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.nudFramesEnd.Name = "nudFramesEnd";
+            this.nudFramesEnd.Size = new System.Drawing.Size(45, 20);
+            this.nudFramesEnd.TabIndex = 45;
+            this.nudFramesEnd.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudFramesEnd.ValueChanged += new System.EventHandler(this.nudFramesEnd_ValueChanged);
+            // 
+            // nudDurationEnd
+            // 
+            this.nudDurationEnd.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudDurationEnd.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudDurationEnd.Location = new System.Drawing.Point(270, 104);
+            this.nudDurationEnd.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.nudDurationEnd.Name = "nudDurationEnd";
+            this.nudDurationEnd.Size = new System.Drawing.Size(70, 20);
+            this.nudDurationEnd.TabIndex = 43;
+            this.nudDurationEnd.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudDurationEnd.ValueChanged += new System.EventHandler(this.nudDurationEnd_ValueChanged);
+            // 
+            // nudOpacityEnd
+            // 
+            this.nudOpacityEnd.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudOpacityEnd.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudOpacityEnd.Location = new System.Drawing.Point(280, 74);
+            this.nudOpacityEnd.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudOpacityEnd.Name = "nudOpacityEnd";
+            this.nudOpacityEnd.Size = new System.Drawing.Size(45, 20);
+            this.nudOpacityEnd.TabIndex = 44;
+            this.nudOpacityEnd.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudOpacityEnd.ValueChanged += new System.EventHandler(this.nudOpacityEnd_ValueChanged);
+            // 
+            // btnSelectColor
+            // 
+            this.btnSelectColor.Location = new System.Drawing.Point(100, 21);
+            this.btnSelectColor.Name = "btnSelectColor";
+            this.btnSelectColor.Padding = new System.Windows.Forms.Padding(5);
+            this.btnSelectColor.Size = new System.Drawing.Size(90, 23);
+            this.btnSelectColor.TabIndex = 42;
+            this.btnSelectColor.Text = "Select Color";
+            this.btnSelectColor.Click += new System.EventHandler(this.btnSelectColor_Click);
+            // 
+            // pnlColor
+            // 
+            this.pnlColor.BackColor = System.Drawing.Color.White;
+            this.pnlColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlColor.Location = new System.Drawing.Point(49, 21);
+            this.pnlColor.Name = "pnlColor";
+            this.pnlColor.Size = new System.Drawing.Size(31, 22);
+            this.pnlColor.TabIndex = 41;
+            // 
+            // lblColor
+            // 
+            this.lblColor.AutoSize = true;
+            this.lblColor.Location = new System.Drawing.Point(6, 26);
+            this.lblColor.Name = "lblColor";
+            this.lblColor.Size = new System.Drawing.Size(34, 13);
+            this.lblColor.TabIndex = 40;
+            this.lblColor.Text = "Color:";
+            // 
+            // lblSize
+            // 
+            this.lblSize.AutoSize = true;
+            this.lblSize.Location = new System.Drawing.Point(235, 26);
+            this.lblSize.Name = "lblSize";
+            this.lblSize.Size = new System.Drawing.Size(30, 13);
+            this.lblSize.TabIndex = 23;
+            this.lblSize.Text = "Size:";
+            // 
+            // lblAutoframes
+            // 
+            this.lblAutoframes.AutoSize = true;
+            this.lblAutoframes.Location = new System.Drawing.Point(169, 136);
+            this.lblAutoframes.Name = "lblAutoframes";
+            this.lblAutoframes.Size = new System.Drawing.Size(89, 13);
+            this.lblAutoframes.TabIndex = 39;
+            this.lblAutoframes.Text = "(0 for autoframes)";
+            // 
+            // cmbSize
+            // 
+            this.cmbSize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbSize.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbSize.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbSize.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbSize.DrawDropdownHoverOutline = false;
+            this.cmbSize.DrawFocusRectangle = false;
+            this.cmbSize.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbSize.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbSize.FormattingEnabled = true;
+            this.cmbSize.Items.AddRange(new object[] {
+            "Original",
+            "Full Screen",
+            "Half Screen",
+            "Stretch To Fit"});
+            this.cmbSize.Location = new System.Drawing.Point(268, 22);
+            this.cmbSize.Name = "cmbSize";
+            this.cmbSize.Size = new System.Drawing.Size(100, 21);
+            this.cmbSize.TabIndex = 24;
+            this.cmbSize.Text = "Original";
+            this.cmbSize.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbSize.SelectedIndexChanged += new System.EventHandler(this.cmbSize_SelectedIndexChanged);
+            // 
+            // nudFramesBegin
+            // 
+            this.nudFramesBegin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudFramesBegin.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudFramesBegin.Location = new System.Drawing.Point(100, 134);
+            this.nudFramesBegin.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.nudFramesBegin.Name = "nudFramesBegin";
+            this.nudFramesBegin.Size = new System.Drawing.Size(45, 20);
+            this.nudFramesBegin.TabIndex = 38;
+            this.nudFramesBegin.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudFramesBegin.ValueChanged += new System.EventHandler(this.nudFramesBegin_ValueChanged);
+            // 
+            // lblDurations
+            // 
+            this.lblDurations.AutoSize = true;
+            this.lblDurations.Location = new System.Drawing.Point(6, 106);
+            this.lblDurations.Name = "lblDurations";
+            this.lblDurations.Size = new System.Drawing.Size(77, 13);
+            this.lblDurations.TabIndex = 26;
+            this.lblDurations.Text = "Durations (ms):";
+            // 
+            // lblFrames
+            // 
+            this.lblFrames.AutoSize = true;
+            this.lblFrames.Location = new System.Drawing.Point(6, 136);
+            this.lblFrames.Name = "lblFrames";
+            this.lblFrames.Size = new System.Drawing.Size(44, 13);
+            this.lblFrames.TabIndex = 37;
+            this.lblFrames.Text = "Frames:";
+            // 
+            // nudDurationBegin
+            // 
+            this.nudDurationBegin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudDurationBegin.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudDurationBegin.Location = new System.Drawing.Point(90, 104);
+            this.nudDurationBegin.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.nudDurationBegin.Name = "nudDurationBegin";
+            this.nudDurationBegin.Size = new System.Drawing.Size(70, 20);
+            this.nudDurationBegin.TabIndex = 27;
+            this.nudDurationBegin.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudDurationBegin.ValueChanged += new System.EventHandler(this.nudDurationBegin_ValueChanged);
+            // 
+            // nudDurationPending
+            // 
+            this.nudDurationPending.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudDurationPending.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudDurationPending.Location = new System.Drawing.Point(180, 104);
+            this.nudDurationPending.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.nudDurationPending.Name = "nudDurationPending";
+            this.nudDurationPending.Size = new System.Drawing.Size(70, 20);
+            this.nudDurationPending.TabIndex = 36;
+            this.nudDurationPending.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudDurationPending.ValueChanged += new System.EventHandler(this.nudDurationPending_ValueChanged);
+            // 
+            // lblPicture
+            // 
+            this.lblPicture.AutoSize = true;
+            this.lblPicture.Location = new System.Drawing.Point(4, 26);
+            this.lblPicture.Name = "lblPicture";
+            this.lblPicture.Size = new System.Drawing.Size(43, 13);
+            this.lblPicture.TabIndex = 29;
+            this.lblPicture.Text = "Picture:";
+            // 
+            // cmbPicture
+            // 
+            this.cmbPicture.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbPicture.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbPicture.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbPicture.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbPicture.DrawDropdownHoverOutline = false;
+            this.cmbPicture.DrawFocusRectangle = false;
+            this.cmbPicture.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbPicture.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbPicture.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbPicture.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbPicture.FormattingEnabled = true;
+            this.cmbPicture.Location = new System.Drawing.Point(49, 22);
+            this.cmbPicture.Name = "cmbPicture";
+            this.cmbPicture.Size = new System.Drawing.Size(180, 21);
+            this.cmbPicture.TabIndex = 30;
+            this.cmbPicture.Text = null;
+            this.cmbPicture.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbPicture.SelectedIndexChanged += new System.EventHandler(this.cmbPicture_SelectedIndexChanged);
+            // 
+            // nudOpacityPending
+            // 
+            this.nudOpacityPending.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudOpacityPending.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudOpacityPending.Location = new System.Drawing.Point(191, 74);
+            this.nudOpacityPending.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudOpacityPending.Name = "nudOpacityPending";
+            this.nudOpacityPending.Size = new System.Drawing.Size(45, 20);
+            this.nudOpacityPending.TabIndex = 34;
+            this.nudOpacityPending.Value = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudOpacityPending.ValueChanged += new System.EventHandler(this.nudOpacityPending_ValueChanged);
+            // 
+            // lblOpacities
+            // 
+            this.lblOpacities.AutoSize = true;
+            this.lblOpacities.Location = new System.Drawing.Point(6, 76);
+            this.lblOpacities.Name = "lblOpacities";
+            this.lblOpacities.Size = new System.Drawing.Size(54, 13);
+            this.lblOpacities.TabIndex = 31;
+            this.lblOpacities.Text = "Opacities:";
+            // 
+            // nudOpacityBegin
+            // 
+            this.nudOpacityBegin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudOpacityBegin.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudOpacityBegin.Location = new System.Drawing.Point(100, 74);
+            this.nudOpacityBegin.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudOpacityBegin.Name = "nudOpacityBegin";
+            this.nudOpacityBegin.Size = new System.Drawing.Size(45, 20);
+            this.nudOpacityBegin.TabIndex = 32;
+            this.nudOpacityBegin.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudOpacityBegin.ValueChanged += new System.EventHandler(this.nudOpacityBegin_ValueChanged);
             // 
             // toolStrip
             // 
@@ -1099,7 +1679,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
-            this.toolStrip.Size = new System.Drawing.Size(1210, 25);
+            this.toolStrip.Size = new System.Drawing.Size(1225, 25);
             this.toolStrip.TabIndex = 41;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -1252,7 +1832,7 @@ namespace Intersect.Editor.Forms.Editors
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(1210, 607);
+            this.ClientSize = new System.Drawing.Size(1225, 621);
             this.ControlBox = false;
             this.Controls.Add(this.grpCommentary);
             this.Controls.Add(this.toolStrip);
@@ -1296,6 +1876,22 @@ namespace Intersect.Editor.Forms.Editors
             this.grpUpperFrameOpts.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picUpperAnimation)).EndInit();
             this.pnlContainer.ResumeLayout(false);
+            this.grpScreenEffects.ResumeLayout(false);
+            this.grpScreenEffects.PerformLayout();
+            this.grpShake.ResumeLayout(false);
+            this.grpShake.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudIntensity)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudShakeDuration)).EndInit();
+            this.grpTransition.ResumeLayout(false);
+            this.grpTransition.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudFramesEnd)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDurationEnd)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudOpacityEnd)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudFramesBegin)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDurationBegin)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDurationPending)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudOpacityPending)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudOpacityBegin)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.grpCommentary.ResumeLayout(false);
@@ -1390,5 +1986,42 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblId;
         private DarkGroupBox grpCommentary;
         private DarkTextBox txtCommentary;
+        private DarkGroupBox grpScreenEffects;
+        private DarkCheckBox chkOverGUI;
+        private DarkComboBox cmbEffectType;
+        private System.Windows.Forms.Label lblEffectType;
+        private DarkGroupBox grpTransition;
+        private System.Windows.Forms.Label lblEnd;
+        private System.Windows.Forms.Label lblPending;
+        private System.Windows.Forms.Label lblBegin;
+        private DarkNumericUpDown nudFramesEnd;
+        private DarkNumericUpDown nudDurationEnd;
+        private DarkNumericUpDown nudOpacityEnd;
+        private DarkButton btnSelectColor;
+        public System.Windows.Forms.Panel pnlColor;
+        private System.Windows.Forms.Label lblColor;
+        private System.Windows.Forms.Label lblSize;
+        private System.Windows.Forms.Label lblAutoframes;
+        private DarkComboBox cmbSize;
+        private DarkNumericUpDown nudFramesBegin;
+        private System.Windows.Forms.Label lblDurations;
+        private System.Windows.Forms.Label lblFrames;
+        private DarkNumericUpDown nudDurationBegin;
+        private DarkNumericUpDown nudDurationPending;
+        private System.Windows.Forms.Label lblPicture;
+        private DarkComboBox cmbPicture;
+        private DarkNumericUpDown nudOpacityPending;
+        private System.Windows.Forms.Label lblOpacities;
+        private DarkNumericUpDown nudOpacityBegin;
+        private DarkGroupBox grpShake;
+        private System.Windows.Forms.Label lblIntensity;
+        private DarkNumericUpDown nudIntensity;
+        private DarkNumericUpDown nudShakeDuration;
+        private System.Windows.Forms.Label lblShakeDuration;
+        private DarkButton btnRemove;
+        private DarkButton btnAdd;
+        private System.Windows.Forms.ListBox lstScreenEffects;
+        private System.Windows.Forms.Label lblInfoScreenEffects;
+        private System.Windows.Forms.ColorDialog colorDialog;
     }
 }

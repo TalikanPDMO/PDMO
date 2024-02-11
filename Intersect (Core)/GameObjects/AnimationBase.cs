@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using Intersect.Models;
@@ -86,6 +87,21 @@ namespace Intersect.GameObjects
         public string Folder { get; set; } = "";
 
         public string Comment { get; set; } = "";
+
+        // ScreenEffects
+        [NotMapped] public List<ScreenEffectBase> ScreenEffects = new List<ScreenEffectBase>();
+
+        [Column("ScreenEffects")]
+        [JsonIgnore]
+        public string ScreenEffectsJson
+        {
+            get => JsonConvert.SerializeObject(ScreenEffects, Formatting.None, new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+            });
+            set => ScreenEffects = JsonConvert.DeserializeObject<List<ScreenEffectBase>>(value);
+        }
 
     }
 

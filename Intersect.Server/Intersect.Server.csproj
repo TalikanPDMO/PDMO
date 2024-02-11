@@ -746,6 +746,10 @@
     <Compile Include="Migrations\Game\20240204121726_AddingCommentToMainGameObjects.designer.cs">
       <DependentUpon>20240204121726_AddingCommentToMainGameObjects.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20240211111016_AddingScreenEffectsToAnimations.cs" />
+    <Compile Include="Migrations\Game\20240211111016_AddingScreenEffectsToAnimations.designer.cs">
+      <DependentUpon>20240211111016_AddingScreenEffectsToAnimations.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

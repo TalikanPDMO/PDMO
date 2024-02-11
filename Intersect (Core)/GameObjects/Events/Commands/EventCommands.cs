@@ -1205,13 +1205,7 @@ namespace Intersect.GameObjects.Events.Commands
 
         public override EventCommandType Type { get; } = EventCommandType.PlayScreenEffect;
 
-        public ScreenEffectType EffectType { get; set; } = ScreenEffectType.ColorTransition;
-        public string Data { get; set; } = "";
-        public int Size { get; set; } = 0; //Original = 0, Full Screen, Half Screen, Stretch To Fit
-        public byte[] Opacities { get; set; } = null;
-        public int[] Durations { get; set; } = null;
-        public int[] Frames { get; set; } = null;
-        public bool OverGUI { get; set; } = true;
+        public ScreenEffectBase ScreenEffect { get; set; } = new ScreenEffectBase();
 
     }
 }

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.grpPlayScreenEffect = new DarkUI.Controls.DarkGroupBox();
+            this.chkOverGUI = new DarkUI.Controls.DarkCheckBox();
             this.cmbEffectType = new DarkUI.Controls.DarkComboBox();
             this.lblEffectType = new System.Windows.Forms.Label();
             this.btnCancel = new DarkUI.Controls.DarkButton();
@@ -62,7 +63,6 @@
             this.nudShakeDuration = new DarkUI.Controls.DarkNumericUpDown();
             this.lblShakeDuration = new System.Windows.Forms.Label();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
-            this.chkOverGUI = new DarkUI.Controls.DarkCheckBox();
             this.grpPlayScreenEffect.SuspendLayout();
             this.grpTransition.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudFramesEnd)).BeginInit();
@@ -92,10 +92,20 @@
             this.grpPlayScreenEffect.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpPlayScreenEffect.Location = new System.Drawing.Point(3, 3);
             this.grpPlayScreenEffect.Name = "grpPlayScreenEffect";
-            this.grpPlayScreenEffect.Size = new System.Drawing.Size(390, 255);
+            this.grpPlayScreenEffect.Size = new System.Drawing.Size(390, 247);
             this.grpPlayScreenEffect.TabIndex = 18;
             this.grpPlayScreenEffect.TabStop = false;
             this.grpPlayScreenEffect.Text = "Play ScreenEffect:";
+            // 
+            // chkOverGUI
+            // 
+            this.chkOverGUI.AutoSize = true;
+            this.chkOverGUI.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkOverGUI.Location = new System.Drawing.Point(306, 24);
+            this.chkOverGUI.Name = "chkOverGUI";
+            this.chkOverGUI.Size = new System.Drawing.Size(80, 17);
+            this.chkOverGUI.TabIndex = 44;
+            this.chkOverGUI.Text = "Over GUI ?";
             // 
             // cmbEffectType
             // 
@@ -129,7 +139,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(168, 228);
+            this.btnCancel.Location = new System.Drawing.Point(168, 218);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -139,7 +149,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(7, 228);
+            this.btnSave.Location = new System.Drawing.Point(7, 218);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(75, 23);
@@ -176,7 +186,7 @@
             this.grpTransition.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpTransition.Location = new System.Drawing.Point(6, 49);
             this.grpTransition.Name = "grpTransition";
-            this.grpTransition.Size = new System.Drawing.Size(377, 173);
+            this.grpTransition.Size = new System.Drawing.Size(377, 163);
             this.grpTransition.TabIndex = 41;
             this.grpTransition.TabStop = false;
             this.grpTransition.Text = "Transition parameters:";
@@ -559,16 +569,6 @@
             this.lblShakeDuration.TabIndex = 35;
             this.lblShakeDuration.Text = " Duration (ms):";
             // 
-            // chkOverGUI
-            // 
-            this.chkOverGUI.AutoSize = true;
-            this.chkOverGUI.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkOverGUI.Location = new System.Drawing.Point(306, 24);
-            this.chkOverGUI.Name = "chkOverGUI";
-            this.chkOverGUI.Size = new System.Drawing.Size(80, 17);
-            this.chkOverGUI.TabIndex = 44;
-            this.chkOverGUI.Text = "Over GUI ?";
-            // 
             // EventCommand_PlayScreenEffect
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -577,7 +577,7 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpPlayScreenEffect);
             this.Name = "EventCommand_PlayScreenEffect";
-            this.Size = new System.Drawing.Size(396, 263);
+            this.Size = new System.Drawing.Size(396, 255);
             this.grpPlayScreenEffect.ResumeLayout(false);
             this.grpPlayScreenEffect.PerformLayout();
             this.grpTransition.ResumeLayout(false);

@@ -1436,6 +1436,15 @@ namespace Intersect.Client.Networking
                             }
 
                             Globals.Entities[entityId].Animations.Add(animInstance);
+
+                            if (entityId == Globals.Me.Id)
+                            {
+                                foreach(var screenEffectBase in animBase.ScreenEffects)
+                                {
+                                    Globals.ScreenEffects.Add(new ScreenEffect(screenEffectBase));
+
+                                }
+                            }
                         }
                     }
                 }
