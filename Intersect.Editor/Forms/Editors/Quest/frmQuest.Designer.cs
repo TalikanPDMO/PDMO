@@ -119,14 +119,14 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpQuests.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpQuests.Location = new System.Drawing.Point(12, 34);
             this.grpQuests.Name = "grpQuests";
-            this.grpQuests.Size = new System.Drawing.Size(203, 420);
+            this.grpQuests.Size = new System.Drawing.Size(240, 420);
             this.grpQuests.TabIndex = 14;
             this.grpQuests.TabStop = false;
             this.grpQuests.Text = "Quests";
             // 
             // btnClearSearch
             // 
-            this.btnClearSearch.Location = new System.Drawing.Point(179, 19);
+            this.btnClearSearch.Location = new System.Drawing.Point(210, 19);
             this.btnClearSearch.Name = "btnClearSearch";
             this.btnClearSearch.Padding = new System.Windows.Forms.Padding(5);
             this.btnClearSearch.Size = new System.Drawing.Size(18, 20);
@@ -141,7 +141,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.txtSearch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.txtSearch.Location = new System.Drawing.Point(6, 19);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(167, 20);
+            this.txtSearch.Size = new System.Drawing.Size(200, 20);
             this.txtSearch.TabIndex = 33;
             this.txtSearch.Text = "Search...";
             this.txtSearch.Click += new System.EventHandler(this.txtSearch_Click);
@@ -161,7 +161,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.lstGameObjects.Location = new System.Drawing.Point(6, 45);
             this.lstGameObjects.Name = "lstGameObjects";
             this.lstGameObjects.SelectedImageIndex = 0;
-            this.lstGameObjects.Size = new System.Drawing.Size(191, 369);
+            this.lstGameObjects.Size = new System.Drawing.Size(230, 369);
             this.lstGameObjects.TabIndex = 32;
             // 
             // grpGeneral
@@ -667,7 +667,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.pnlContainer.Controls.Add(this.grpLogOptions);
             this.pnlContainer.Controls.Add(this.grpQuestTasks);
             this.pnlContainer.Controls.Add(this.grpProgessionOptions);
-            this.pnlContainer.Location = new System.Drawing.Point(221, 34);
+            this.pnlContainer.Location = new System.Drawing.Point(260, 34);
             this.pnlContainer.Name = "pnlContainer";
             this.pnlContainer.Size = new System.Drawing.Size(765, 482);
             this.pnlContainer.TabIndex = 20;
@@ -767,7 +767,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
-            this.toolStrip.Size = new System.Drawing.Size(992, 25);
+            this.toolStrip.Size = new System.Drawing.Size(1034, 25);
             this.toolStrip.TabIndex = 40;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -877,7 +877,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpCommentary.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpCommentary.Location = new System.Drawing.Point(12, 460);
             this.grpCommentary.Name = "grpCommentary";
-            this.grpCommentary.Size = new System.Drawing.Size(203, 95);
+            this.grpCommentary.Size = new System.Drawing.Size(240, 95);
             this.grpCommentary.TabIndex = 71;
             this.grpCommentary.TabStop = false;
             this.grpCommentary.Text = "Commentary";
@@ -892,7 +892,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.txtCommentary.Multiline = true;
             this.txtCommentary.Name = "txtCommentary";
             this.txtCommentary.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtCommentary.Size = new System.Drawing.Size(197, 75);
+            this.txtCommentary.Size = new System.Drawing.Size(230, 75);
             this.txtCommentary.TabIndex = 61;
             this.txtCommentary.TextChanged += new System.EventHandler(this.txtCommentary_TextChanged);
             // 
@@ -902,7 +902,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(992, 561);
+            this.ClientSize = new System.Drawing.Size(1034, 561);
             this.ControlBox = false;
             this.Controls.Add(this.grpCommentary);
             this.Controls.Add(this.toolStrip);
