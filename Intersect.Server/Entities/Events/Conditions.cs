@@ -1027,6 +1027,21 @@ namespace Intersect.Server.Entities.Events
             return false;
         }
 
+        public static bool MeetsCondition(
+            PlayerElementalTypeIs condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase,
+            Npc npcEnemy)
+        {
+            if (player.ElementalTypes == null)
+            {
+                return false;
+            }
+            var conditionType = (ElementalType)condition.ElementalType;
+            return player.ElementalTypes[0] == conditionType || player.ElementalTypes[1] == conditionType;
+        }
+
         //Variable Comparison Processing
         public static bool CheckVariableComparison(
             VariableValue currentValue,

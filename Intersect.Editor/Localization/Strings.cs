@@ -411,7 +411,10 @@ namespace Intersect.Editor.Localization
             }
             return Strings.EventConditionDesc.inparty.ToString(pSize, pRole);
         }
-
+        public static string GetEventConditionalDesc(PlayerElementalTypeIs condition)
+        {
+            return Strings.EventConditionDesc.playerelementaltypeis.ToString(Strings.Combat.elementaltypes[condition.ElementalType]);
+        }
         public static string GetVariableComparisonString(VariableCompaison comparison)
         {
             return "";
@@ -2445,7 +2448,8 @@ Tick timer saved in server config.json.";
                 {21, @"Player fighting NPC on Phase..." },
                 {22, @"Player fighting NPC when Stats..." },
                 {23, @"Player fighting NPC with AttackType..." },
-                {24, @"In Party with Role..." }
+                {24, @"In Party with Role..." },
+                {25, @"Player ElementalType is..." }
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2664,6 +2668,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString partysize = @"Party Size:";
 
             public static LocalizedString partyrole = @"Party Role:";
+
+            public static LocalizedString elementaltypeis = @"Player Elemental Type is ... ";
         }
 
         public struct EventConditionDesc
@@ -2794,6 +2800,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString inparty = @"In Party with Size {00} {01}";
 
             public static LocalizedString partyrole = @"and Role is {00}";
+
+            public static LocalizedString playerelementaltypeis = @"Player ElementalType is {00}";
 
         }
 

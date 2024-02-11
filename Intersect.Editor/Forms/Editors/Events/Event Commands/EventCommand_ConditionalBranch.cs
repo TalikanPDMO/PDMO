@@ -373,7 +373,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 cmbPartyRole.Items.Add(Strings.EventConditional.partyroles[i]);
             }
 
-
+            // Player ElementalType is
+            grpElementalType.Text = Strings.EventConditional.elementaltypeis;
+            lblPlayerElementalType.Text = Strings.EventConditional.elementaltype;
+            cmbPlayerElementalType.Items.Clear();
+            for (var i = 0; i < Strings.Combat.elementaltypes.Count; i++)
+            {
+                cmbPlayerElementalType.Items.Add(Strings.Combat.elementaltypes[i]);
+            }
             // Save/Cancel buttons
             btnSave.Text = Strings.EventConditional.okay;
             btnCancel.Text = Strings.EventConditional.cancel;
@@ -574,6 +581,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     cmbPartyRole.SelectedIndex = 0;
 
                     break;
+                case ConditionTypes.PlayerElementalType:
+                    Condition = new PlayerElementalTypeIs();
+                    cmbPlayerElementalType.SelectedIndex = 0;
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -601,6 +613,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             grpFightingStats.Hide();
             grpFightingAttackType.Hide();
             grpInParty.Hide();
+            grpElementalType.Hide();
             switch (type)
             {
                 case ConditionTypes.VariableIs:
@@ -742,6 +755,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     break;
                 case ConditionTypes.InPartyWithRole:
                     grpInParty.Show();
+                    break;
+                case ConditionTypes.PlayerElementalType:
+                    grpElementalType.Show();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -1811,6 +1827,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbPartyRole.SelectedIndex = condition.Role;
         }
 
+        private void SetupFormValues(PlayerElementalTypeIs condition)
+        {
+            cmbPlayerElementalType.SelectedIndex = condition.ElementalType;
+        }
         #endregion
 
         #region "SaveFormValues"
@@ -2068,6 +2088,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             condition.Comparator = (VariableComparators)cmbPartyComparator.SelectedIndex;
             condition.Size = (int)nudPartySize.Value;
             condition.Role = cmbPartyRole.SelectedIndex;
+        }
+
+        private void SaveFormValues(PlayerElementalTypeIs condition)
+        {
+            condition.ElementalType = cmbPlayerElementalType.SelectedIndex;
         }
 
         public void SetupFromNpc()

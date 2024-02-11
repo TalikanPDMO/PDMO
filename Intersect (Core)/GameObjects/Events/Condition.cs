@@ -51,7 +51,9 @@ namespace Intersect.GameObjects.Events
 
         FightingNPCAttackType,
 
-        InPartyWithRole
+        InPartyWithRole,
+
+        PlayerElementalType
 
     }
 
@@ -376,6 +378,13 @@ namespace Intersect.GameObjects.Events
         public int Size { get; set; } = 1;
 
         public int Role { get; set; } = 0;
+    }
+
+    public class PlayerElementalTypeIs : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.PlayerElementalType;
+
+        public int ElementalType { get; set; } = 0;
     }
 
     public class VariableCompaison
