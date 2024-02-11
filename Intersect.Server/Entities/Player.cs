@@ -228,7 +228,7 @@ namespace Intersect.Server.Entities
 
         private long GetExperienceToNextLevel(int level)
         {
-            if (level >= Options.MaxLevel)
+            if (level >= Options.MaxLevel && !Power.IsAdmin)
             {
                 return -1;
             }
@@ -989,7 +989,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            Level = Math.Min(Options.MaxLevel, level);
+            Level =  Power.IsAdmin ? level : Math.Min(Options.MaxLevel, level);
             if (resetExperience)
             {
                 Exp = 0;
@@ -1004,7 +1004,7 @@ namespace Intersect.Server.Entities
         public void LevelUp(bool resetExperience = true, int levels = 1)
         {
             var messages = new List<string>();
-            if (Level < Options.MaxLevel)
+            if (Level < Options.MaxLevel || Power.IsAdmin)
             {
                 for (var i = 0; i < levels; i++)
                 {
