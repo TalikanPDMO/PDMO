@@ -268,6 +268,8 @@
     <Compile Include="Core\ServiceLifecycleStage.cs" />
     <Compile Include="Core\ServiceLifecycleFailureException.cs" />
     <Compile Include="CustomColors.cs" />
+    <Compile Include="Enums\ScreenEffectState.cs" />
+    <Compile Include="Enums\ScreenEffectType.cs" />
     <Compile Include="Enums\ChatboxTab.cs" />
     <Compile Include="Enums\ChatMessageType.cs" />
     <Compile Include="Enums\AttackType.cs" />
@@ -290,6 +292,7 @@
     <Compile Include="Factories\FactoryRegistry.cs" />
     <Compile Include="Factories\IFactory.cs" />
     <Compile Include="GameObjects\Events\VariableMod.cs" />
+    <Compile Include="GameObjects\ScreenEffectBase.cs" />
     <Compile Include="GameObjects\Switches and Variables\VariableValue.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IO\ConsoleContext.cs" />
@@ -418,6 +421,7 @@
     <Compile Include="Network\Packets\Server\AnnouncementPacket.cs" />
     <Compile Include="Network\Packets\Server\CancelCastPacket.cs" />
     <Compile Include="Network\Packets\Server\PlayAnimationPackets.cs" />
+    <Compile Include="Network\Packets\Server\PlayScreenEffectPacket.cs" />
     <Compile Include="Network\Packets\Server\ShowPopupPacket.cs" />
     <Compile Include="Network\Packets\SlotQuantityPacket.cs" />
     <Compile Include="Network\Packets\Client\SwapBankItemsPacket.cs" />

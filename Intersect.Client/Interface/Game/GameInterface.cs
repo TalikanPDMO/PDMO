@@ -128,6 +128,7 @@ namespace Intersect.Client.Interface.Game
             {
                 mPictureWindow = new PictureWindow(GameCanvas);
             }
+            ScreenEffect.GameCanvas = GameCanvas;
 
             if (mPopupWindow == null)
             {
@@ -359,6 +360,7 @@ namespace Intersect.Client.Interface.Game
             {
                 PlayerBox?.SetEntity(Globals.Me);
             }
+
 
             mChatBox?.Update();
             GameMenu?.Update(mShouldUpdateQuestLog);

@@ -1436,6 +1436,15 @@ namespace Intersect.Client.Networking
                             }
 
                             Globals.Entities[entityId].Animations.Add(animInstance);
+
+                            if (entityId == Globals.Me.Id)
+                            {
+                                foreach(var screenEffectBase in animBase.ScreenEffects)
+                                {
+                                    Globals.ScreenEffects.Add(new ScreenEffect(screenEffectBase));
+
+                                }
+                            }
                         }
                     }
                 }
@@ -1528,6 +1537,13 @@ namespace Intersect.Client.Networking
         {
             PacketSender.SendClosePicture(Globals.Picture?.EventId ?? Guid.Empty);
             Globals.Picture = null;
+        }
+
+        //PlayScreenEffectPacket
+        public void HandlePacket(IPacketSender packetSender, PlayScreenEffectPacket packet)
+        {
+            packet.ReceiveTime = Globals.System.GetTimeMs();
+            Globals.ScreenEffects.Add(new ScreenEffect(packet));
         }
 
         //ShowPopupPacket

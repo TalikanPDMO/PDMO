@@ -98,6 +98,21 @@ namespace Intersect.Editor.Forms.Editors
             //Send Changed items
             foreach (var item in mChanged)
             {
+                foreach(var screeneffect in item.ScreenEffects)
+                {
+                    if (Array.TrueForAll(screeneffect.Opacities, v => v == 0))
+                    {
+                        screeneffect.Opacities = null;
+                    }
+                    if (Array.TrueForAll(screeneffect.Durations, v => v == 0))
+                    {
+                        screeneffect.Durations = null;
+                    }
+                    if (Array.TrueForAll(screeneffect.Frames, v => v == 0))
+                    {
+                        screeneffect.Frames = null;
+                    }
+                }
                 PacketSender.SendSaveObject(item);
                 item.DeleteBackup();
             }
@@ -201,6 +216,44 @@ namespace Intersect.Editor.Forms.Editors
             txtSearch.Text = Strings.AnimationEditor.searchplaceholder;
             lblFolder.Text = Strings.AnimationEditor.folderlabel;
 
+            // Screen Effects
+            grpScreenEffects.Text = Strings.AnimationEditor.screeneffects;
+            lblEffectType.Text = Strings.AnimationEditor.effecttype;
+            cmbEffectType.Items.Clear();
+            for (var i = 0; i < Strings.AnimationEditor.screeneffecttypes.Count; i++)
+            {
+                cmbEffectType.Items.Add(Strings.AnimationEditor.screeneffecttypes[i]);
+            }
+            chkOverGUI.Text = Strings.AnimationEditor.overgui;
+            grpShake.Text = Strings.AnimationEditor.shake;
+            lblShakeDuration.Text = Strings.AnimationEditor.duration;
+            lblIntensity.Text = Strings.AnimationEditor.intensity;
+            grpTransition.Text = Strings.AnimationEditor.transition;
+            lblColor.Text = Strings.AnimationEditor.color;
+            btnSelectColor.Text = Strings.AnimationEditor.selectcolor;
+            lblPicture.Text = Strings.AnimationEditor.picture;
+            cmbPicture.Items.Clear();
+            cmbPicture.Items.AddRange(
+                GameContentManager.GetSmartSortedTextureNames(GameContentManager.TextureType.Image)
+            );
+            lblSize.Text = Strings.AnimationEditor.size;
+            cmbSize.Items.Clear();
+            cmbSize.Items.Add(Strings.AnimationEditor.original);
+            cmbSize.Items.Add(Strings.AnimationEditor.fullscreen);
+            cmbSize.Items.Add(Strings.AnimationEditor.halfscreen);
+            cmbSize.Items.Add(Strings.AnimationEditor.stretchtofit);
+
+            lblOpacities.Text = Strings.AnimationEditor.opacities;
+            lblDurations.Text = Strings.AnimationEditor.durations;
+            lblFrames.Text = Strings.AnimationEditor.frames;
+            lblBegin.Text = Strings.AnimationEditor.beginning;
+            lblPending.Text = Strings.AnimationEditor.pending;
+            lblEnd.Text = Strings.AnimationEditor.ending;
+            lblAutoframes.Text = Strings.AnimationEditor.autoframes;
+
+            btnAdd.Text = Strings.AnimationEditor.add;
+            btnRemove.Text = Strings.AnimationEditor.remove;
+
             btnSave.Text = Strings.AnimationEditor.save;
             btnCancel.Text = Strings.AnimationEditor.cancel;
         }
@@ -254,6 +307,39 @@ namespace Intersect.Editor.Forms.Editors
                 LoadUpperLight();
                 DrawUpperFrame();
 
+                lstScreenEffects.Items.Clear();
+                for (var i = 0; i < mEditorItem.ScreenEffects.Count; i++)
+                {
+                    if (mEditorItem.ScreenEffects[i].Opacities == null)
+                    {
+                        mEditorItem.ScreenEffects[i].Opacities = new byte[(int)ScreenEffectState.StateCount];
+                    }
+                    if (mEditorItem.ScreenEffects[i].Durations == null)
+                    {
+                        mEditorItem.ScreenEffects[i].Durations = new int[(int)ScreenEffectState.StateCount];
+                    }
+                    if (mEditorItem.ScreenEffects[i].Frames == null)
+                    {
+                        mEditorItem.ScreenEffects[i].Frames = new int[(int)ScreenEffectState.StateCount - 1];
+                    }
+                    var data = mEditorItem.ScreenEffects[i].EffectType == ScreenEffectType.Shake ?
+                        Strings.AnimationEditor.shakeformat.ToString(mEditorItem.ScreenEffects[i].Size):
+                        mEditorItem.ScreenEffects[i].Data;
+                    lstScreenEffects.Items.Add(Strings.AnimationEditor.screeneffectformat.ToString(
+                        Strings.AnimationEditor.screeneffecttypes[(int)mEditorItem.ScreenEffects[i].EffectType], data
+                    ));
+                }
+                if (lstScreenEffects.Items.Count > 0)
+                {
+                    lstScreenEffects.SelectedIndex = 0;
+                }
+                else
+                {
+                    cmbEffectType.SelectedIndex = 0;
+                    cmbSize.SelectedIndex = 0;
+                    chkOverGUI.Checked = true;
+                }
+
                 if (mChanged.IndexOf(mEditorItem) == -1)
                 {
                     mChanged.Add(mEditorItem);
@@ -267,6 +353,340 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             UpdateToolStripItems();
+        }
+
+        private void lstScreenEffects_Refresh()
+        {
+            var n = lstScreenEffects.SelectedIndex;
+            lstScreenEffects.Items.Clear();
+            for (var i = 0; i < mEditorItem.ScreenEffects.Count; i++)
+            {
+                var data = mEditorItem.ScreenEffects[i].EffectType == ScreenEffectType.Shake ?
+                                        Strings.AnimationEditor.shakeformat.ToString(mEditorItem.ScreenEffects[i].Size) :
+                                        mEditorItem.ScreenEffects[i].Data;
+                lstScreenEffects.Items.Add(Strings.AnimationEditor.screeneffectformat.ToString(
+                    Strings.AnimationEditor.screeneffecttypes[(int)mEditorItem.ScreenEffects[i].EffectType], data
+                ));
+            }
+            lstScreenEffects.SelectedIndex = n;
+        }
+
+        private void UpdateScreenEffect(ScreenEffectBase screeneffect)
+        {
+            switch (screeneffect.EffectType)
+            {
+                case ScreenEffectType.ColorTransition:
+                    var color = Color.FromArgb(colorDialog.Color.A, colorDialog.Color.R, colorDialog.Color.G, colorDialog.Color.B);
+                    screeneffect.Data = Color.ToString(color);
+                    screeneffect.Size = cmbSize.SelectedIndex;
+                    screeneffect.Opacities[(int)ScreenEffectState.Begin] = (byte)nudOpacityBegin.Value;
+                    screeneffect.Opacities[(int)ScreenEffectState.Pending] = (byte)nudOpacityPending.Value;
+                    screeneffect.Opacities[(int)ScreenEffectState.End] = (byte)nudOpacityEnd.Value;
+                    screeneffect.Durations[(int)ScreenEffectState.Begin] = (int)nudDurationBegin.Value;
+                    screeneffect.Durations[(int)ScreenEffectState.Pending] = (int)nudDurationPending.Value;
+                    screeneffect.Durations[(int)ScreenEffectState.End] = (int)nudDurationEnd.Value;
+                    screeneffect.Frames[0] = (int)nudFramesBegin.Value;
+                    screeneffect.Frames[1] = (int)nudFramesEnd.Value;
+                    break;
+
+                case ScreenEffectType.PictureTransition:
+                    screeneffect.Data = cmbPicture.Text;
+                    screeneffect.Size = cmbSize.SelectedIndex;
+                    screeneffect.Opacities[(int)ScreenEffectState.Begin] = (byte)nudOpacityBegin.Value;
+                    screeneffect.Opacities[(int)ScreenEffectState.Pending] = (byte)nudOpacityPending.Value;
+                    screeneffect.Opacities[(int)ScreenEffectState.End] = (byte)nudOpacityEnd.Value;
+                    screeneffect.Durations[(int)ScreenEffectState.Begin] = (int)nudDurationBegin.Value;
+                    screeneffect.Durations[(int)ScreenEffectState.Pending] = (int)nudDurationPending.Value;
+                    screeneffect.Durations[(int)ScreenEffectState.End] = (int)nudDurationEnd.Value;
+                    screeneffect.Frames[0] = (int)nudFramesBegin.Value;
+                    screeneffect.Frames[1] = (int)nudFramesEnd.Value;
+                    break;
+
+                case ScreenEffectType.Shake:
+                    screeneffect.Data = "";
+                    screeneffect.Size = (int)nudIntensity.Value;
+                    screeneffect.Opacities[(int)ScreenEffectState.Begin] = 0;
+                    screeneffect.Opacities[(int)ScreenEffectState.Pending] = 0;
+                    screeneffect.Opacities[(int)ScreenEffectState.End] = 0;
+                    screeneffect.Durations[(int)ScreenEffectState.Begin] = (int)nudShakeDuration.Value;
+                    screeneffect.Durations[(int)ScreenEffectState.Pending] = (int)nudShakeDuration.Value;
+                    screeneffect.Durations[(int)ScreenEffectState.End] = (int)nudShakeDuration.Value;
+                    screeneffect.Frames[0] = 0;
+                    screeneffect.Frames[1] = 0;
+                    break;
+            }
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            var screeneffect = new ScreenEffectBase();
+            screeneffect.EffectType = (ScreenEffectType)cmbEffectType.SelectedIndex;
+            screeneffect.OverGUI = chkOverGUI.Checked;
+            UpdateScreenEffect(screeneffect);
+            
+            mEditorItem.ScreenEffects.Add(screeneffect);
+            lstScreenEffects_Refresh();
+        }
+
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            if (lstScreenEffects.SelectedIndex > -1)
+            {
+                var i = lstScreenEffects.SelectedIndex;
+                lstScreenEffects.Items.RemoveAt(i);
+                mEditorItem.ScreenEffects.RemoveAt(i);
+            }
+        }
+
+        private void lstScreenEffects_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstScreenEffects.SelectedIndex > -1)
+            {
+                UpdateScreenEffectsFields(mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex]);
+            }
+        }
+
+        private void cmbEffectType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateScreenEffectsFields();
+            if (lstScreenEffects.SelectedIndex > -1 && lstScreenEffects.SelectedIndex < mEditorItem.ScreenEffects.Count)
+            {
+                mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex].EffectType = (ScreenEffectType)cmbEffectType.SelectedIndex;
+                UpdateScreenEffect(mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex]);
+            }
+            lstScreenEffects_Refresh();
+        }
+
+        private void UpdateScreenEffectsFields(ScreenEffectBase screeneffectValues = null)
+        {
+            lblColor.Hide();
+            pnlColor.Hide();
+            btnSelectColor.Hide();
+            lblPicture.Hide();
+            cmbPicture.Hide();
+            cmbSize.Hide();
+            grpTransition.Hide();
+            grpShake.Hide();
+
+            ScreenEffectType screenEffectType = screeneffectValues == null ? (ScreenEffectType)cmbEffectType.SelectedIndex : screeneffectValues.EffectType;
+
+            switch (screenEffectType)
+            {
+                case ScreenEffectType.ColorTransition:
+                    lblColor.Show();
+                    pnlColor.Show();
+                    btnSelectColor.Show();
+                    cmbSize.Show();
+                    grpTransition.Show();
+                    chkOverGUI.Enabled = true;
+                    if (screeneffectValues != null)
+                    {
+                        var color = Color.FromString(screeneffectValues.Data, Color.Black);
+                        pnlColor.BackColor = System.Drawing.Color.FromArgb(
+                            color.A, color.R, color.G, color.B
+                        );
+                        colorDialog.Color = pnlColor.BackColor;
+                        if (screeneffectValues.Size > -1 && screeneffectValues.Size < cmbSize.Items.Count)
+                        {
+                            cmbSize.SelectedIndex = screeneffectValues.Size;
+                        }
+                        else
+                        {
+                            cmbSize.SelectedIndex = 0;
+                        }
+                        cmbPicture.SelectedIndex = 0;
+                        nudOpacityBegin.Value = screeneffectValues.Opacities[(int)ScreenEffectState.Begin];
+                        nudOpacityPending.Value = screeneffectValues.Opacities[(int)ScreenEffectState.Pending];
+                        nudOpacityEnd.Value = screeneffectValues.Opacities[(int)ScreenEffectState.End];
+                        nudDurationBegin.Value = screeneffectValues.Durations[(int)ScreenEffectState.Begin];
+                        nudDurationPending.Value = screeneffectValues.Durations[(int)ScreenEffectState.Pending];
+                        nudDurationEnd.Value = screeneffectValues.Durations[(int)ScreenEffectState.End];
+                        nudFramesBegin.Value = screeneffectValues.Frames[0];
+                        nudFramesEnd.Value = screeneffectValues.Frames[1];
+                    }
+                    break;
+
+                case ScreenEffectType.PictureTransition:
+                    lblPicture.Show();
+                    cmbPicture.Show();
+                    cmbSize.Show();
+                    grpTransition.Show();
+                    chkOverGUI.Enabled = true;
+                    if (screeneffectValues != null)
+                    {
+                        if (screeneffectValues.Data != null && cmbPicture.Items.IndexOf(screeneffectValues.Data) > -1)
+                        {
+                            cmbPicture.SelectedIndex = cmbPicture.Items.IndexOf(screeneffectValues.Data);
+                        }
+                        else
+                        {
+                            if (cmbPicture.Items.Count > 0)
+                            {
+                                cmbPicture.SelectedIndex = 0;
+                            }
+                        }
+                        if (screeneffectValues.Size > -1 && screeneffectValues.Size < cmbSize.Items.Count)
+                        {
+                            cmbSize.SelectedIndex = screeneffectValues.Size;
+                        }
+                        else
+                        {
+                            cmbSize.SelectedIndex = 0;
+                        }
+                        nudOpacityBegin.Value = screeneffectValues.Opacities[(int)ScreenEffectState.Begin];
+                        nudOpacityPending.Value = screeneffectValues.Opacities[(int)ScreenEffectState.Pending];
+                        nudOpacityEnd.Value = screeneffectValues.Opacities[(int)ScreenEffectState.End];
+                        nudDurationBegin.Value = screeneffectValues.Durations[(int)ScreenEffectState.Begin];
+                        nudDurationPending.Value = screeneffectValues.Durations[(int)ScreenEffectState.Pending];
+                        nudDurationEnd.Value = screeneffectValues.Durations[(int)ScreenEffectState.End];
+                        nudFramesBegin.Value = screeneffectValues.Frames[0];
+                        nudFramesEnd.Value = screeneffectValues.Frames[1];
+                    }  
+                    break;
+
+                case ScreenEffectType.Shake:
+                    grpShake.Show();
+                    chkOverGUI.Checked = true;
+                    chkOverGUI.Enabled = false;
+                    if (screeneffectValues != null)
+                    {
+                        nudShakeDuration.Value = screeneffectValues.Durations[(int)ScreenEffectState.Pending];
+                        nudIntensity.Value = screeneffectValues.Size;
+                        cmbSize.SelectedIndex = 0;
+                        cmbPicture.SelectedIndex = 0;
+                    }      
+                    break;
+            }
+            if (screeneffectValues != null)
+            {
+                cmbEffectType.SelectedIndex = (int)screeneffectValues.EffectType;
+                chkOverGUI.Checked = screeneffectValues.OverGUI;
+            }
+        }
+
+        private void nudOpacityBegin_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstScreenEffects.SelectedIndex > -1 && lstScreenEffects.SelectedIndex < mEditorItem.ScreenEffects.Count)
+            {
+                mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex].Opacities[(int)ScreenEffectState.Begin] = (byte)nudOpacityBegin.Value;
+            }
+        }
+
+        private void nudOpacityPending_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstScreenEffects.SelectedIndex > -1 && lstScreenEffects.SelectedIndex < mEditorItem.ScreenEffects.Count)
+            {
+                mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex].Opacities[(int)ScreenEffectState.Pending] = (byte)nudOpacityPending.Value;
+            }
+        }
+
+        private void nudOpacityEnd_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstScreenEffects.SelectedIndex > -1 && lstScreenEffects.SelectedIndex < mEditorItem.ScreenEffects.Count)
+            {
+                mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex].Opacities[(int)ScreenEffectState.End] = (byte)nudOpacityEnd.Value;
+            }
+        }
+
+        private void nudDurationBegin_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstScreenEffects.SelectedIndex > -1 && lstScreenEffects.SelectedIndex < mEditorItem.ScreenEffects.Count)
+            {
+                mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex].Durations[(int)ScreenEffectState.Begin] = (int)nudDurationBegin.Value;
+            }
+        }
+
+        private void nudDurationPending_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstScreenEffects.SelectedIndex > -1 && lstScreenEffects.SelectedIndex < mEditorItem.ScreenEffects.Count)
+            {
+                mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex].Durations[(int)ScreenEffectState.Pending] = (int)nudDurationPending.Value;
+            }
+        }
+
+        private void nudDurationEnd_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstScreenEffects.SelectedIndex > -1 && lstScreenEffects.SelectedIndex < mEditorItem.ScreenEffects.Count)
+            {
+                mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex].Durations[(int)ScreenEffectState.End] = (int)nudDurationEnd.Value;
+            }
+        }
+
+        private void nudFramesBegin_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstScreenEffects.SelectedIndex > -1 && lstScreenEffects.SelectedIndex < mEditorItem.ScreenEffects.Count)
+            {
+                mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex].Frames[0] = (int)nudFramesBegin.Value;
+            }
+        }
+
+        private void nudFramesEnd_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstScreenEffects.SelectedIndex > -1 && lstScreenEffects.SelectedIndex < mEditorItem.ScreenEffects.Count)
+            {
+                mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex].Frames[1] = (int)nudFramesEnd.Value;
+            }
+        }
+
+        private void nudShakeDuration_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstScreenEffects.SelectedIndex > -1 && lstScreenEffects.SelectedIndex < mEditorItem.ScreenEffects.Count
+                && mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex].EffectType == ScreenEffectType.Shake)
+            {
+                mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex].Durations[(int)ScreenEffectState.Begin] = (int)nudShakeDuration.Value;
+                mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex].Durations[(int)ScreenEffectState.Pending] = (int)nudShakeDuration.Value;
+                mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex].Durations[(int)ScreenEffectState.End] = (int)nudShakeDuration.Value;
+            }
+        }
+
+        private void nudIntensity_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstScreenEffects.SelectedIndex > -1 && lstScreenEffects.SelectedIndex < mEditorItem.ScreenEffects.Count
+                && mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex].EffectType == ScreenEffectType.Shake)
+            {
+                mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex].Size = (int)nudIntensity.Value;
+            }
+        }
+
+        private void chkOverGUI_CheckedChanged(object sender, EventArgs e)
+        {
+            if (lstScreenEffects.SelectedIndex > -1 && lstScreenEffects.SelectedIndex < mEditorItem.ScreenEffects.Count)
+            {
+                mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex].OverGUI = chkOverGUI.Checked;
+            }
+        }
+
+        private void cmbSize_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstScreenEffects.SelectedIndex > -1 && lstScreenEffects.SelectedIndex < mEditorItem.ScreenEffects.Count
+                && mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex].EffectType != ScreenEffectType.Shake)
+            {
+                mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex].Size = cmbSize.SelectedIndex;
+            }
+        }
+
+        private void cmbPicture_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstScreenEffects.SelectedIndex > -1 && lstScreenEffects.SelectedIndex < mEditorItem.ScreenEffects.Count
+                && mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex].EffectType == ScreenEffectType.PictureTransition)
+            {
+                mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex].Data = cmbPicture.Text;
+            }
+            lstScreenEffects_Refresh();
+        }
+
+        private void btnSelectColor_Click(object sender, EventArgs e)
+        {
+            colorDialog.Color = System.Drawing.Color.White;
+            colorDialog.ShowDialog();
+            pnlColor.BackColor = colorDialog.Color;
+            if (lstScreenEffects.SelectedIndex > -1 && lstScreenEffects.SelectedIndex < mEditorItem.ScreenEffects.Count
+                && mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex].EffectType == ScreenEffectType.ColorTransition)
+            {
+                var color = Color.FromArgb(colorDialog.Color.A, colorDialog.Color.R, colorDialog.Color.G, colorDialog.Color.B);
+                mEditorItem.ScreenEffects[lstScreenEffects.SelectedIndex].Data = Color.ToString(color);
+            }
+            lstScreenEffects_Refresh();
         }
 
         private void txtName_TextChanged(object sender, EventArgs e)
@@ -694,7 +1114,10 @@ namespace Intersect.Editor.Forms.Editors
 
                 //Retrieve all spells using the animation 
                 var spellList = SpellBase.Lookup.Where(pair => ((SpellBase)pair.Value)?.CastAnimationId == mEditorItem.Id
-                    || ((SpellBase)pair.Value)?.HitAnimationId == mEditorItem.Id)
+                    || ((SpellBase)pair.Value)?.CastTargetAnimationId == mEditorItem.Id
+                    || ((SpellBase)pair.Value)?.HitAnimationId == mEditorItem.Id
+                    || ((SpellBase)pair.Value)?.ImpactAnimationId == mEditorItem.Id
+                    || ((SpellBase)pair.Value)?.TilesAnimationId == mEditorItem.Id)
                     .OrderBy(p => p.Value?.Name)
                     .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((SpellBase)pair.Value)?.EditorName) ?? SpellBase.Deleted)
                     .ToList();

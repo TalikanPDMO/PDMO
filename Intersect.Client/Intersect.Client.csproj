@@ -138,6 +138,7 @@
     <Compile Include="General\Globals.cs" />
     <Compile Include="Interface\Game\AnnouncementWindow.cs" />
     <Compile Include="Interface\Game\EntityPanel\ExpBoostsWindow.cs" />
+    <Compile Include="Interface\Game\ScreenEffect.cs" />
     <Compile Include="Interface\Game\PvpStadiumWindow.cs" />
     <Compile Include="Interface\Game\GuildWindow.cs" />
     <Compile Include="Interface\Game\MapItem\MapItemIcon.cs" />

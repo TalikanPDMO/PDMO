@@ -1199,4 +1199,13 @@ namespace Intersect.GameObjects.Events.Commands
 
         public bool IncludeAll { get; set; } = false;
     }
+
+    public class PlayScreenEffectCommand : EventCommand
+    {
+
+        public override EventCommandType Type { get; } = EventCommandType.PlayScreenEffect;
+
+        public ScreenEffectBase ScreenEffect { get; set; } = new ScreenEffectBase();
+
+    }
 }
