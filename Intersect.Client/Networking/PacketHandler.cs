@@ -203,6 +203,7 @@ namespace Intersect.Client.Networking
                 map.Load(packet.Data);
                 map.LoadTileData(packet.TileData);
                 map.AttributeData = packet.AttributeData;
+                map.MapRegionIdsData = packet.MapRegionsIdsData;
                 map.CreateMapSounds();
                 if (mapId == Globals.Me.CurrentMap)
                 {

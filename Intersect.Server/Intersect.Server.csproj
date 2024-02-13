@@ -750,6 +750,10 @@
     <Compile Include="Migrations\Game\20240211111016_AddingScreenEffectsToAnimations.designer.cs">
       <DependentUpon>20240211111016_AddingScreenEffectsToAnimations.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20240213135355_AddingMapRegions.cs" />
+    <Compile Include="Migrations\Game\20240213135355_AddingMapRegions.designer.cs">
+      <DependentUpon>20240213135355_AddingMapRegions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

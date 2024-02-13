@@ -2,6 +2,7 @@
 using Intersect.GameObjects.Crafting;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps.MapList;
+using Intersect.GameObjects.Maps.MapRegion;
 using Intersect.Server.Maps;
 
 using Microsoft.EntityFrameworkCore;
@@ -43,5 +44,7 @@ namespace Intersect.Server.Database.GameData
         DbSet<TilesetBase> Tilesets { get; set; }
 
         DbSet<TimeBase> Time { get; set; }
+
+        DbSet<MapRegionBase> MapRegions { get; set; }
     }
 }

@@ -78,6 +78,8 @@ namespace Intersect.Editor.Forms
 
         private FrmTime mTimeEditor;
 
+        private FrmMapRegion mMapRegionEditor;
+
         //General Editting Variables
         bool mTMouseDown;
 
@@ -187,6 +189,7 @@ namespace Intersect.Editor.Forms
             spellEditorToolStripMenuItem.Text = Strings.MainForm.spelleditor;
             variableEditorToolStripMenuItem.Text = Strings.MainForm.variableeditor;
             timeEditorToolStripMenuItem.Text = Strings.MainForm.timeeditor;
+            mapRegionEditorToolStripMenuItem.Text = Strings.MainForm.mapregioneditor;
 
             toolsToolStripMenuItem.Text = Strings.MainForm.tools;
 
@@ -553,6 +556,11 @@ namespace Intersect.Editor.Forms
             else if (Globals.CurrentLayer == LayerOptions.Npcs)
             {
                 Globals.CurrentTool = (int) EditingTool.Selection;
+            }
+            else if (Globals.CurrentLayer == LayerOptions.Regions)
+            {
+                toolStripBtnPen.Enabled = true;
+                toolStripBtnRect.Enabled = true;
             }
             else
             {
@@ -1222,6 +1230,11 @@ namespace Intersect.Editor.Forms
             PacketSender.SendOpenEditor(GameObjectType.Time);
         }
 
+        private void mapRegionEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PacketSender.SendOpenEditor(GameObjectType.MapRegion);
+        }
+
         private void layersToolStripMenuItem_DropDownOpened(object sender, EventArgs e)
         {
             foreach (var itm in ((ToolStripMenuItem)sender).DropDownItems)
@@ -1627,6 +1640,15 @@ namespace Intersect.Editor.Forms
                             mTimeEditor = new FrmTime();
                             mTimeEditor.InitEditor(TimeBase.GetTimeBase());
                             mTimeEditor.Show();
+                        }
+
+                        break;
+                    case GameObjectType.MapRegion:
+                        if (mMapRegionEditor == null || mMapRegionEditor.Visible == false)
+                        {
+                            mMapRegionEditor = new FrmMapRegion();
+                            mMapRegionEditor.InitEditor();
+                            mMapRegionEditor.Show();
                         }
 
                         break;

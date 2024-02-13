@@ -151,6 +151,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_UseSpell.Designer.cs">
       <DependentUpon>EventCommand_UseSpell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\frmMapRegion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\frmMapRegion.Designer.cs">
+      <DependentUpon>frmMapRegion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\frmRelations.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -760,6 +766,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_Variable.resx">
       <DependentUpon>EventCommand_Variable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\frmMapRegion.resx">
+      <DependentUpon>frmMapRegion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\frmRelations.resx">
       <DependentUpon>frmRelations.cs</DependentUpon>

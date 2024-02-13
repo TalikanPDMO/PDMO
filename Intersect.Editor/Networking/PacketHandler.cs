@@ -12,6 +12,7 @@ using Intersect.GameObjects.Crafting;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps;
 using Intersect.GameObjects.Maps.MapList;
+using Intersect.GameObjects.Maps.MapRegion;
 using Intersect.Logging;
 using Intersect.Network;
 using Intersect.Network.Packets.Server;
@@ -168,6 +169,7 @@ namespace Intersect.Editor.Networking
                 map.Load(packet.Data);
                 map.LoadTileData(packet.TileData);
                 map.AttributeData = packet.AttributeData;
+                map.MapRegionIdsData = packet.MapRegionsIdsData;
                 map.MapGridX = packet.GridX;
                 map.MapGridY = packet.GridY;
                 map.SaveStateAsUnchanged();
@@ -618,6 +620,20 @@ namespace Intersect.Editor.Networking
                     if (Globals.HasGameData && !packet.AnotherFollowing)
                     {
                         GameContentManager.LoadTilesets();
+                    }
+
+                    break;
+                case GameObjectType.MapRegion:
+                    if (deleted)
+                    {
+                        var cft = MapRegionBase.Get(id);
+                        cft.Delete();
+                    }
+                    else
+                    {
+                        var cft = new MapRegionBase(id);
+                        cft.Load(json);
+                        MapRegionBase.Lookup.Set(id, cft);
                     }
 
                     break;

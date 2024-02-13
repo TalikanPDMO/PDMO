@@ -17,6 +17,7 @@ using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps;
+using Intersect.GameObjects.Maps.MapRegion;
 using Intersect.Logging;
 
 using Microsoft.Xna.Framework.Graphics;
@@ -342,6 +343,14 @@ namespace Intersect.Editor.Forms.DockingElements
                         else if (Globals.CurrentLayer == LayerOptions.Npcs) //NPCS
                         {
                         }
+                        else if (Globals.CurrentLayer == LayerOptions.Regions) // Regions
+                        {
+                            Globals.MapLayersWindow.PlaceMapRegion(
+                                Globals.CurrentMap, Globals.CurTileX, Globals.CurTileY
+                            );
+
+                            mMapChanged = true;
+                        }
                         else
                         {
                             if (Globals.CurrentTileset == null)
@@ -458,6 +467,26 @@ namespace Intersect.Editor.Forms.DockingElements
                     }
                     else if (Globals.CurrentLayer == LayerOptions.Npcs)
                     {
+                    }
+                    else if (Globals.CurrentLayer == LayerOptions.Regions)
+                    {
+                        if (Globals.CurrentTool == (int)EditingTool.Pen)
+                        {
+                            if (Globals.MapLayersWindow.RemoveMapRegion(
+                                Globals.CurrentMap, Globals.CurTileX, Globals.CurTileY
+                            ))
+                            {
+                                mMapChanged = true;
+                            }
+                        }
+                        else if (Globals.CurrentTool == (int)EditingTool.Rectangle ||
+                                 Globals.CurrentTool == (int)EditingTool.Selection)
+                        {
+                            Globals.CurMapSelX = Globals.CurTileX;
+                            Globals.CurMapSelY = Globals.CurTileY;
+                            Globals.CurMapSelW = 0;
+                            Globals.CurMapSelH = 0;
+                        }
                     }
                     else
                     {
@@ -637,6 +666,10 @@ namespace Intersect.Editor.Forms.DockingElements
                                 Globals.CurrentMap.Spawns[Globals.MapLayersWindow.lstMapNpcs.SelectedIndex].Y = Globals.CurTileY;
                             }
                         }
+                        else if (Globals.CurrentLayer == LayerOptions.Regions)
+                        {
+                            Globals.MapLayersWindow.PlaceMapRegion(tmpMap, Globals.CurTileX, Globals.CurTileY);
+                        }
                         else
                         {
                             if (Globals.CurrentTileset == null)
@@ -729,6 +762,10 @@ namespace Intersect.Editor.Forms.DockingElements
                         if (Globals.CurrentLayer == LayerOptions.Attributes)
                         {
                             Globals.MapLayersWindow.RemoveAttribute(tmpMap, Globals.CurTileX, Globals.CurTileY);
+                        }
+                        else if (Globals.CurrentLayer == LayerOptions.Regions)
+                        {
+                            Globals.MapLayersWindow.RemoveMapRegion(tmpMap, Globals.CurTileX, Globals.CurTileY);
                         }
                         else if (Options.Instance.MapOpts.Layers.All.Contains(Globals.CurrentLayer))
                         {
@@ -845,6 +882,24 @@ namespace Intersect.Editor.Forms.DockingElements
                 }
                 else if (Globals.CurrentLayer == LayerOptions.Npcs)
                 {
+                }
+                else if (Globals.CurrentLayer == LayerOptions.Regions)
+                {
+                    for (var x = selX; x < selX + selW + 1; x++)
+                    {
+                        for (var y = selY; y < selY + selH + 1; y++)
+                        {
+                            if (Globals.MouseButton == 0)
+                            {
+                                Globals.MapLayersWindow.PlaceMapRegion(tmpMap, x, y);
+                            }
+                            else if (Globals.MouseButton == 1)
+                            {
+                                Globals.MapLayersWindow.RemoveMapRegion(tmpMap, x, y);
+                            }
+                        }
+                    }
+                    mMapChanged = true;
                 }
                 else
                 {
@@ -1209,7 +1264,10 @@ namespace Intersect.Editor.Forms.DockingElements
 
                     break;
                 }
-
+                    //Regions
+                case LayerOptions.Regions:
+                    //TODO
+                        break;
                 default:
                     break;
             }
@@ -1274,6 +1332,12 @@ namespace Intersect.Editor.Forms.DockingElements
                         if (Globals.CurrentLayer == LayerOptions.Attributes)
                         {
                             Globals.MapLayersWindow.PlaceAttribute(
+                                Globals.CurrentMap, Globals.CurTileX, Globals.CurTileY
+                            );
+                        }
+                        else if (Globals.CurrentLayer == LayerOptions.Regions)
+                        {
+                            Globals.MapLayersWindow.PlaceMapRegion(
                                 Globals.CurrentMap, Globals.CurTileX, Globals.CurTileY
                             );
                         }
@@ -1361,6 +1425,12 @@ namespace Intersect.Editor.Forms.DockingElements
                         if (Globals.CurrentLayer == LayerOptions.Attributes)
                         {
                             Globals.MapLayersWindow.RemoveAttribute(
+                                Globals.CurrentMap, Globals.CurTileX, Globals.CurTileY
+                            );
+                        }
+                        else if (Globals.CurrentLayer == LayerOptions.Regions)
+                        {
+                            Globals.MapLayersWindow.RemoveMapRegion(
                                 Globals.CurrentMap, Globals.CurTileX, Globals.CurTileY
                             );
                         }
@@ -1547,6 +1617,7 @@ namespace Intersect.Editor.Forms.DockingElements
                 CurrentMapState = Globals.CurrentMap.SaveInternal();
             }
         }
+
 
         private void SmartEraseTile(int x, int y, Tile target)
         {
@@ -1845,6 +1916,20 @@ namespace Intersect.Editor.Forms.DockingElements
                                 tmpMap.LocalEvents.Add(eventCopy.Id, eventCopy);
                             }
                         }
+
+                        //Regions
+                        if (Globals.SelectionType != (int)SelectionTypes.CurrentLayer ||
+                            Globals.CurrentLayer == LayerOptions.Regions)
+                        {
+                            if (Globals.SelectionSource.MapRegionIds[x0 - dragxoffset, y0 - dragyoffset] != null)
+                            {
+                                tmpMap.MapRegionIds[x0, y0] = Globals.SelectionSource.MapRegionIds[x0 - dragxoffset, y0 - dragyoffset];
+                            }
+                            else
+                            {
+                                tmpMap.MapRegionIds[x0, y0] = null;
+                            }
+                        }
                     }
                 }
             }
@@ -1970,6 +2055,16 @@ namespace Intersect.Editor.Forms.DockingElements
                             if (((MapInstance) tmpMap).FindEventAt(x0, y0) != null)
                             {
                                 tmpMap.LocalEvents.Remove(((MapInstance) tmpMap).FindEventAt(x0, y0).Id);
+                            }
+                        }
+
+                        //Regions
+                        if (Globals.SelectionType != (int)SelectionTypes.CurrentLayer ||
+                            Globals.CurrentLayer == LayerOptions.Regions)
+                        {
+                            if (tmpMap.MapRegionIds[x0, y0] != null)
+                            {
+                                tmpMap.MapRegionIds[x0, y0] = null;
                             }
                         }
                     }

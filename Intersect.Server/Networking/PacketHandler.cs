@@ -5,6 +5,7 @@ using Intersect.GameObjects.Crafting;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps;
 using Intersect.GameObjects.Maps.MapList;
+using Intersect.GameObjects.Maps.MapRegion;
 using Intersect.Logging;
 using Intersect.Models;
 using Intersect.Network;
@@ -3061,6 +3062,7 @@ namespace Intersect.Server.Networking
             }
 
             map.AttributeData = packet.AttributeData;
+            map.MapRegionIdsData = packet.MapRegionIdsData;
 
             DbInterface.SaveGameObject(map);
 
@@ -3737,6 +3739,10 @@ namespace Intersect.Server.Networking
 
                 case GameObjectType.Time:
                     break;
+                case GameObjectType.MapRegion:
+                    obj = MapRegionBase.Get(id);
+
+                    break;
 
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -3857,6 +3863,10 @@ namespace Intersect.Server.Networking
                 case GameObjectType.Time:
                     break;
 
+                case GameObjectType.MapRegion:
+                    obj = MapRegionBase.Get(id);
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

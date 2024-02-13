@@ -32,7 +32,7 @@ namespace Intersect.Editor.Networking
 
         public static void SendMap(MapInstance map)
         {
-            Network.SendPacket(new MapUpdatePacket(map.Id, map.JsonData, map.GenerateTileData(), map.AttributeData));
+            Network.SendPacket(new MapUpdatePacket(map.Id, map.JsonData, map.GenerateTileData(), map.AttributeData, map.MapRegionIdsData));
         }
 
         public static void SendCreateMap(int location, Guid currentMapId, MapListItem parent)

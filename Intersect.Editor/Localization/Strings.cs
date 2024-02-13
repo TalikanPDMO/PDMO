@@ -4069,6 +4069,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString timeeditor = @"Time Editor";
 
+            public static LocalizedString mapregioneditor = @"MapRegion Editor";
+
             public static LocalizedString title = @"Intersect Editor - {00}";
 
             public static LocalizedString tools = @"Tools";
@@ -4152,6 +4154,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString eventinstructions = @"Double click a tile on the map to create an event!";
 
+            public static LocalizedString regionsinstructions = @"Select a MapRegion:";
+
             public static LocalizedString events = @"Events";
 
             public static LocalizedString eventtextfont = @"arial_10.xnb";
@@ -4160,12 +4164,22 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString eventtextcolorborder = @"White";
 
+            public static LocalizedString regionstextfont = @"arial_14.xnb";
+
+            public static LocalizedString regionstextcolor = @"180,255,255,255";
+
+            public static LocalizedString regionstextbordercolor = @"Transparent";
+
+            public static LocalizedString regionstransparency = @"150";
+
             public static LocalizedString lightinstructions =
                 @"Lower the maps brightness and double click on a tile to create a light!";
 
             public static LocalizedString lights = @"Lights";
 
             public static LocalizedString npcs = @"Npcs";
+
+            public static LocalizedString regions = @"Regions";
 
             public static LocalizedString tiles = @"Tiles";
 
@@ -6048,6 +6062,81 @@ Negative values for time to flow backwards.";
             public static LocalizedString ServerVariable = @"Global Variable";
 
         }
+
+        public struct MapRegionEditor
+        {
+            public static LocalizedString commentary = @"Commentary";
+
+            public static LocalizedString cancel = @"Cancel";
+
+            public static LocalizedString copy = @"Copy MapRegion";
+
+            public static LocalizedString regions = @"Regions";
+
+            public static LocalizedString delete = @"Delete MapRegion";
+
+            public static LocalizedString New = @"New MapRegion";
+
+            public static LocalizedString deleteprompt =
+                @"Are you sure you want to delete this map region? This action cannot be reverted!";
+
+            public static LocalizedString deletetitle = @"Delete MapRegion";
+
+            public static LocalizedString folderlabel = @"Folder:";
+
+            public static LocalizedString foldertitle = @"Add Folder";
+
+            public static LocalizedString folderprompt = @"Enter a name for the folder you'd like to add:";
+
+            public static LocalizedString general = @"General";
+
+            public static LocalizedString name = @"Name:";
+
+            public static LocalizedString description = @"Description:";
+
+            public static LocalizedString editorparams = @"Editor Parameters";
+
+            public static LocalizedString editorname = @"Editor Name ID:";
+
+            public static LocalizedString editorcolor = @"Editor Color:";
+
+            public static LocalizedString selectcolor = @"Select Color";
+
+            public static LocalizedString rules = @"Rules:";
+
+            public static LocalizedString events = @"Events";
+
+            public static LocalizedString onenter = @"On Enter:";
+
+            public static LocalizedString onmove = @"On Move:";
+
+            public static LocalizedString onexit = @"On Exit:";
+
+
+            public static LocalizedString paste = @"Paste MapRegion";
+
+            public static LocalizedString save = @"Save";
+
+            public static LocalizedString searchplaceholder = @"Search...";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString sortalphabetically = @"Order Alphabetically";
+
+            public static LocalizedString time = @"Time (ms):";
+
+            public static LocalizedString title = @"MapRegion Editor";
+
+            public static LocalizedString undo = @"Undo Changes";
+
+            public static LocalizedString relations = @"View Relations";
+
+            public static LocalizedString undoprompt =
+                @"Are you sure you want to undo changes made to this map region? This action cannot be reverted!";
+
+            public static LocalizedString undotitle = @"Undo Changes";
+
+        }
+
 
     }
 

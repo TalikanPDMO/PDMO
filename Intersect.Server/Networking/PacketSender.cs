@@ -8,6 +8,7 @@ using Intersect.GameObjects;
 using Intersect.GameObjects.Crafting;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps.MapList;
+using Intersect.GameObjects.Maps.MapRegion;
 using Intersect.Logging;
 using Intersect.Models;
 using Intersect.Network;
@@ -159,7 +160,7 @@ namespace Intersect.Server.Networking
             else
             {
                 var mapPacket = new MapPacket(
-                    mapId, false, map.JsonData, map.TileData, map.AttributeData, map.Revision, map.MapGridX,
+                    mapId, false, map.JsonData, map.TileData, map.AttributeData, map.MapRegionIdsData, map.Revision, map.MapGridX,
                     map.MapGridY, new bool[4]
                 );
 
@@ -302,7 +303,7 @@ namespace Intersect.Server.Networking
             else
             {
                 packet = new MapPacket(
-                    mapId, false, map.JsonData, map.TileData, map.AttributeData, map.Revision, map.MapGridX,
+                    mapId, false, map.JsonData, map.TileData, map.AttributeData, map.MapRegionIdsData, map.Revision, map.MapGridX,
                     map.MapGridY
                 );
             }
@@ -1651,6 +1652,13 @@ namespace Intersect.Server.Networking
 
                     break;
                 case GameObjectType.Time:
+                    break;
+                case GameObjectType.MapRegion:
+                    foreach (var obj in MapRegionBase.Lookup)
+                    {
+                        SendGameObject(client, obj.Value, false, false, packetList);
+                    }
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);

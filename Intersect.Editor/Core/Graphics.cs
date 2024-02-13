@@ -13,6 +13,7 @@ using Intersect.Editor.Maps;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Maps;
+using Intersect.GameObjects.Maps.MapRegion;
 using Intersect.Logging;
 using Intersect.Utilities;
 
@@ -624,6 +625,30 @@ namespace Intersect.Editor.Core
                             else if (Globals.CurrentLayer == LayerOptions.Npcs)
                             {
                             }
+                            else if (Globals.CurrentLayer == LayerOptions.Regions)
+                            {
+                                if (Globals.CurrentTool == (int)EditingTool.Pen)
+                                {
+                                    Globals.MapLayersWindow.PlaceMapRegion(tmpMap, Globals.CurTileX, Globals.CurTileY);
+                                }
+                                else if (Globals.CurrentTool == (int)EditingTool.Rectangle)
+                                {
+                                    for (var x = selX; x < selX + selW + 1; x++)
+                                    {
+                                        for (var y = selY; y < selY + selH + 1; y++)
+                                        {
+                                            if (Globals.MouseButton == 0)
+                                            {
+                                                Globals.MapLayersWindow.PlaceMapRegion(tmpMap, x, y);
+                                            }
+                                            else if (Globals.MouseButton == 1)
+                                            {
+                                                Globals.MapLayersWindow.RemoveMapRegion(tmpMap, x, y);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                             else if (Globals.CurrentTileset != null)
                             {
                                 if (Globals.CurrentTool == (int) EditingTool.Pen)
@@ -992,6 +1017,49 @@ namespace Intersect.Editor.Core
                                         Globals.CurrentTileHeight
                                     ), System.Drawing.Color.White, null
                                 );
+                            }
+                        }
+                    }
+                }
+                else if (Globals.CurrentLayer == LayerOptions.Regions)
+                {
+                    var regionTex = GetWhiteTex();
+                    var font = GameContentManager.GetFont(Strings.MapLayers.regionstextfont);
+                    var textcolor = Array.ConvertAll(Strings.MapLayers.regionstextcolor.ToString().Split(','), int.Parse);
+                    var textcolorborder = System.Drawing.Color.FromName(Strings.MapLayers.regionstextbordercolor);
+                    var fontscale = Globals.CurrentTileWidth / 32;
+                    //Draw regions
+                    for (var x = 0; x < Options.MapWidth; x++)
+                    {
+                        for (var y = 0; y < Options.MapHeight; y++)
+                        {
+                            var mapRegion = MapRegionBase.Get(tmpMap.MapRegionIds[x, y] ?? Guid.Empty);
+                            if (mapRegion != null)
+                            {
+                                if (regionTex != null)
+                                {
+                                    DrawTexture(regionTex, new RectangleF(0, 0, 1, 1),
+                                        new RectangleF(
+                                            CurrentView.Left + x * Globals.CurrentTileWidth,
+                                            CurrentView.Top + y * Globals.CurrentTileHeight, Globals.CurrentTileWidth,
+                                            Globals.CurrentTileHeight
+                                        ),
+                                        System.Drawing.Color.FromArgb(
+                                            mapRegion.EditorColor[0], mapRegion.EditorColor[1], mapRegion.EditorColor[2], mapRegion.EditorColor[3]),
+                                        null
+                                    );
+                                    
+                                    if (mapRegion.EditorName.Length > 0)
+                                    {
+                                        var text = mapRegion.EditorName.Length > 2 ? mapRegion.EditorName.Substring(0, 2) : mapRegion.EditorName;
+                                        var measure = MeasureText(text, font, fontscale);
+                                        //Center verticaly and horizontaly on the correct Tile 
+                                        var xText = CurrentView.Left + x * Globals.CurrentTileWidth + (int)(Globals.CurrentTileWidth / 2.0) - ((int)(measure.X / 2.0));
+                                        var yText = CurrentView.Top + y * Globals.CurrentTileHeight + (int)(Globals.CurrentTileHeight / 2.0) - ((int)(measure.Y / 2.0));
+                                        var textColorEditor = System.Drawing.Color.FromArgb(textcolor[0], textcolor[1], textcolor[2], textcolor[3]);
+                                        DrawString(text, font, xText, yText, fontscale, textColorEditor, textcolorborder);
+                                    }
+                                }
                             }
                         }
                     }
@@ -2260,7 +2328,7 @@ namespace Intersect.Editor.Core
                 );
             }
 
-            sSpriteBatch.DrawString(font, text, new Vector2(x, y), ConvertColor(fontColor));
+            sSpriteBatch.DrawString(font, text, new Vector2(x, y), ConvertColor(fontColor), 0, Vector2.Zero, fontScale, SpriteEffects.None, 0);
         }
 
 
