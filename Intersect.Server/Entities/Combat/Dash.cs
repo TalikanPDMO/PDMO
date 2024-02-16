@@ -100,17 +100,19 @@ namespace Intersect.Server.Entities.Combat
             for (var i = 1; i <= range; i++)
             {
                 n = en.CanMove(Direction);
-                if (n == -5) //Check for out of bounds
+                if (n == -5 || n == -7) //Check for out of bounds or MapRegion
                 {
                     return;
-                } //Check for blocks
+                }
+                
 
-                if (n == -2 && blockPass == false)
+                if (n == -2 && blockPass == false)//Check for blocks
                 {
                     return;
-                } //Check for ZDimensionTiles
+                }
 
-                if (n == -3 && zdimensionPass == false)
+
+                if (n == -3 && zdimensionPass == false) //Check for ZDimensionTiles
                 {
                     return;
                 }

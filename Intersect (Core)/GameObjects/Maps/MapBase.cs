@@ -136,13 +136,13 @@ namespace Intersect.GameObjects.Maps
                             }
                             if (MapRegionIds != null)
                             {
-                                if (mapBase.MapRegionIds?[x, y] == null)
+                                if (mapBase?.MapRegionIds?[x, y] == null)
                                 {
                                     MapRegionIds[x, y] = null;
                                 }
                                 else
                                 {
-                                    MapRegionIds[x, y] = mapBase.MapRegionIds[x, y];
+                                    MapRegionIds[x, y] = mapBase?.MapRegionIds[x, y];
                                 }
                             }
 

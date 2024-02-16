@@ -390,6 +390,9 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("CommandsJson")
+                        .HasColumnName("MapRegionCommands");
+
                     b.Property<string>("Comment");
 
                     b.Property<string>("Description");
@@ -401,8 +404,14 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<Guid>("EnterEventId")
                         .HasColumnName("EnterEvent");
 
+                    b.Property<string>("EnterRequirementsJson")
+                        .HasColumnName("EnterRequirements");
+
                     b.Property<Guid>("ExitEventId")
                         .HasColumnName("ExitEvent");
+
+                    b.Property<string>("ExitRequirementsJson")
+                        .HasColumnName("ExitRequirements");
 
                     b.Property<string>("Folder");
 
@@ -410,9 +419,6 @@ namespace Intersect.Server.Migrations.Game
                         .HasColumnName("MoveEvent");
 
                     b.Property<string>("Name");
-
-                    b.Property<string>("RulesJson")
-                        .HasColumnName("MapRegionRules");
 
                     b.Property<long>("TimeCreated");
 

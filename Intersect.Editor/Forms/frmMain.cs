@@ -16,6 +16,7 @@ using Intersect.Editor.Classes.ContentManagement;
 using Intersect.Editor.Content;
 using Intersect.Editor.Forms.DockingElements;
 using Intersect.Editor.Forms.Editors;
+using Intersect.Editor.Forms.Editors.MapRegions;
 using Intersect.Editor.Forms.Editors.Quest;
 using Intersect.Editor.General;
 using Intersect.Editor.Localization;

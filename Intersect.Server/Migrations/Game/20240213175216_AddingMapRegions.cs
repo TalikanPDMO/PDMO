@@ -27,7 +27,9 @@ namespace Intersect.Server.Migrations.Game
                     EnterEvent = table.Column<Guid>(nullable: false),
                     MoveEvent = table.Column<Guid>(nullable: false),
                     ExitEvent = table.Column<Guid>(nullable: false),
-                    MapRegionRules = table.Column<string>(nullable: true)
+                    MapRegionCommands = table.Column<string>(nullable: true),
+                    EnterRequirements = table.Column<string>(nullable: true),
+                    ExitRequirements = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

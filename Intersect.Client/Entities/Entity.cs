@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 
 using Intersect.Client.Core;
+using Intersect.Client.Entities.Conditions;
 using Intersect.Client.Entities.Events;
 using Intersect.Client.Entities.Projectiles;
 using Intersect.Client.Framework.File_Management;
@@ -17,6 +18,7 @@ using Intersect.Client.Spells;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Maps;
+using Intersect.GameObjects.Maps.MapRegion;
 using Intersect.Logging;
 using Intersect.Network.Packets.Server;
 using Intersect.Utilities;
@@ -209,6 +211,7 @@ namespace Intersect.Client.Entities
         {
             Id = id;
             CurrentMap = Guid.Empty;
+            CurrentMapRegionId = null;
             if (id != Guid.Empty && !isEvent)
             {
                 for (var i = 0; i < Options.MaxInvItems; i++)
@@ -315,6 +318,8 @@ namespace Intersect.Client.Entities
 
         public virtual Guid CurrentMap { get; set; }
 
+        public Guid? CurrentMapRegionId { get; set; }
+
         public virtual EntityTypes GetEntityType()
         {
             return EntityTypes.GlobalEntity;
@@ -337,6 +342,7 @@ namespace Intersect.Client.Entities
             X = packet.X;
             Y = packet.Y;
             Z = packet.Z;
+            CurrentMapRegionId = MapInstance?.MapRegionIds[X, Y];
             Dir = packet.Dir;
             Passable = packet.Passable;
             HideName = packet.HideName;
@@ -2076,6 +2082,7 @@ namespace Intersect.Client.Entities
 
         //Movement
         /// <summary>
+        ///     Returns -7 if the tile is blocked by a MapRegion Rule
         ///     Returns -6 if the tile is blocked by a global (non-event) entity
         ///     Returns -5 if the tile is completely out of bounds.
         ///     Returns -4 if a tile is blocked because of a local event.
@@ -2286,6 +2293,19 @@ namespace Intersect.Client.Entities
                             {
                                 return -2;
                             }
+                        }
+                    }
+                    if (gameMap.MapRegionIds[tmpX, tmpY] != CurrentMapRegionId)
+                    {
+                        var mapRegion = MapRegionBase.Get(CurrentMapRegionId ?? Guid.Empty);
+                        if (mapRegion != null && !ClientConditions.MeetsConditionLists(mapRegion.ExitRequirements, this))
+                        {
+                            return -6;
+                        }
+                        mapRegion = MapRegionBase.Get(MapInstance?.MapRegionIds[tmpX, tmpY] ?? Guid.Empty);
+                        if (mapRegion != null && !ClientConditions.MeetsConditionLists(mapRegion.EnterRequirements, this))
+                        {
+                            return -6;
                         }
                     }
                 }

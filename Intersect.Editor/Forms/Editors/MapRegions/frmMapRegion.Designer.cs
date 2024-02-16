@@ -1,6 +1,6 @@
 ﻿using DarkUI.Controls;
 
-namespace Intersect.Editor.Forms.Editors
+namespace Intersect.Editor.Forms.Editors.MapRegions
 {
     partial class FrmMapRegion
     {
@@ -40,6 +40,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
             this.pnlContainer = new System.Windows.Forms.Panel();
             this.grpEditorParams = new DarkUI.Controls.DarkGroupBox();
+            this.btnSelectColor = new DarkUI.Controls.DarkButton();
             this.pnlColor = new System.Windows.Forms.Panel();
             this.lblEditorColor = new System.Windows.Forms.Label();
             this.lblEditorName = new System.Windows.Forms.Label();
@@ -83,7 +84,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCommentary = new DarkUI.Controls.DarkGroupBox();
             this.txtCommentary = new DarkUI.Controls.DarkTextBox();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
-            this.btnSelectColor = new DarkUI.Controls.DarkButton();
+            this.grpConditions = new DarkUI.Controls.DarkGroupBox();
+            this.btnEditEnterConditions = new DarkUI.Controls.DarkButton();
+            this.btnEditExitConditions = new DarkUI.Controls.DarkButton();
             this.grpCrafts.SuspendLayout();
             this.pnlContainer.SuspendLayout();
             this.grpEditorParams.SuspendLayout();
@@ -93,6 +96,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudQuantity)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.grpCommentary.SuspendLayout();
+            this.grpConditions.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnCancel
@@ -173,6 +177,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // pnlContainer
             // 
+            this.pnlContainer.Controls.Add(this.grpConditions);
             this.pnlContainer.Controls.Add(this.grpEditorParams);
             this.pnlContainer.Controls.Add(this.grpEvents);
             this.pnlContainer.Controls.Add(this.grpGeneral);
@@ -199,6 +204,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEditorParams.TabIndex = 52;
             this.grpEditorParams.TabStop = false;
             this.grpEditorParams.Text = "Editor Parameters";
+            // 
+            // btnSelectColor
+            // 
+            this.btnSelectColor.Location = new System.Drawing.Point(224, 16);
+            this.btnSelectColor.Name = "btnSelectColor";
+            this.btnSelectColor.Padding = new System.Windows.Forms.Padding(5);
+            this.btnSelectColor.Size = new System.Drawing.Size(90, 23);
+            this.btnSelectColor.TabIndex = 57;
+            this.btnSelectColor.Text = "Select Color";
+            this.btnSelectColor.Click += new System.EventHandler(this.btnSelectColor_Click);
             // 
             // pnlColor
             // 
@@ -462,9 +477,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpRules.Controls.Add(this.lstIngredients);
             this.grpRules.Controls.Add(this.lblQuantity);
             this.grpRules.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpRules.Location = new System.Drawing.Point(5, 215);
+            this.grpRules.Location = new System.Drawing.Point(5, 218);
             this.grpRules.Name = "grpRules";
-            this.grpRules.Size = new System.Drawing.Size(498, 267);
+            this.grpRules.Size = new System.Drawing.Size(574, 267);
             this.grpRules.TabIndex = 30;
             this.grpRules.TabStop = false;
             this.grpRules.Text = "Rules";
@@ -733,15 +748,39 @@ namespace Intersect.Editor.Forms.Editors
             this.txtCommentary.TabIndex = 61;
             this.txtCommentary.TextChanged += new System.EventHandler(this.txtCommentary_TextChanged);
             // 
-            // btnSelectColor
+            // grpConditions
             // 
-            this.btnSelectColor.Location = new System.Drawing.Point(224, 16);
-            this.btnSelectColor.Name = "btnSelectColor";
-            this.btnSelectColor.Padding = new System.Windows.Forms.Padding(5);
-            this.btnSelectColor.Size = new System.Drawing.Size(90, 23);
-            this.btnSelectColor.TabIndex = 57;
-            this.btnSelectColor.Text = "Select Color";
-            this.btnSelectColor.Click += new System.EventHandler(this.btnSelectColor_Click);
+            this.grpConditions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpConditions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpConditions.Controls.Add(this.btnEditExitConditions);
+            this.grpConditions.Controls.Add(this.btnEditEnterConditions);
+            this.grpConditions.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpConditions.Location = new System.Drawing.Point(5, 164);
+            this.grpConditions.Name = "grpConditions";
+            this.grpConditions.Size = new System.Drawing.Size(574, 51);
+            this.grpConditions.TabIndex = 58;
+            this.grpConditions.TabStop = false;
+            this.grpConditions.Text = "MapRegion Conditions";
+            // 
+            // btnEditEnterConditions
+            // 
+            this.btnEditEnterConditions.Location = new System.Drawing.Point(101, 20);
+            this.btnEditEnterConditions.Name = "btnEditEnterConditions";
+            this.btnEditEnterConditions.Padding = new System.Windows.Forms.Padding(5);
+            this.btnEditEnterConditions.Size = new System.Drawing.Size(175, 23);
+            this.btnEditEnterConditions.TabIndex = 1;
+            this.btnEditEnterConditions.Text = "Edit Enter Conditions (None)";
+            this.btnEditEnterConditions.Click += new System.EventHandler(this.btnEditEnterConditions_Click);
+            // 
+            // btnEditExitConditions
+            // 
+            this.btnEditExitConditions.Location = new System.Drawing.Point(341, 20);
+            this.btnEditExitConditions.Name = "btnEditExitConditions";
+            this.btnEditExitConditions.Padding = new System.Windows.Forms.Padding(5);
+            this.btnEditExitConditions.Size = new System.Drawing.Size(175, 23);
+            this.btnEditExitConditions.TabIndex = 2;
+            this.btnEditExitConditions.Text = "Edit Exit Conditions (None)";
+            this.btnEditExitConditions.Click += new System.EventHandler(this.btnEditExitConditions_Click);
             // 
             // FrmMapRegion
             // 
@@ -782,6 +821,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.PerformLayout();
             this.grpCommentary.ResumeLayout(false);
             this.grpCommentary.PerformLayout();
+            this.grpConditions.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -840,5 +880,8 @@ namespace Intersect.Editor.Forms.Editors
         public System.Windows.Forms.Panel pnlColor;
         private System.Windows.Forms.ColorDialog colorDialog;
         private DarkButton btnSelectColor;
+        private DarkGroupBox grpConditions;
+        private DarkButton btnEditExitConditions;
+        private DarkButton btnEditEnterConditions;
     }
 }

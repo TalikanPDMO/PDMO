@@ -23,7 +23,7 @@ using Intersect.Server.Database.Logging.Entities;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Database.PlayerData.Security;
 using Intersect.Server.Entities.Combat;
-using Intersect.Server.Entities.Events;
+using Intersect.Server.Entities.Conditions;
 using Intersect.Server.General;
 using Intersect.Server.Localization;
 using Intersect.Server.Maps;
@@ -1346,7 +1346,7 @@ namespace Intersect.Server.Entities
                 var descriptor = resource.Base;
 
                 //Check Dynamic Requirements
-                if (!Conditions.MeetsConditionLists(descriptor.HarvestingRequirements, this, null))
+                if (!ServerConditions.MeetsConditionLists(descriptor.HarvestingRequirements, this, null))
                 {
                     if (!string.IsNullOrWhiteSpace(descriptor.CannotHarvestMessage))
                     {
@@ -1476,7 +1476,7 @@ namespace Intersect.Server.Entities
                 var descriptor = resource.Base;
 
                 //Check Dynamic Requirements
-                if (!Conditions.MeetsConditionLists(descriptor.HarvestingRequirements, this, null))
+                if (!ServerConditions.MeetsConditionLists(descriptor.HarvestingRequirements, this, null))
                 {
                     if (!string.IsNullOrWhiteSpace(descriptor.CannotHarvestMessage))
                     {
@@ -1766,7 +1766,7 @@ namespace Intersect.Server.Entities
                 if (spellslot.SpellId != Guid.Empty)
                 {
                     var spell = SpellBase.Get(spellslot.SpellId);
-                    if (spell != null && Conditions.MeetsConditionLists(spell.CastingRequirements, this, null))
+                    if (spell != null && ServerConditions.MeetsConditionLists(spell.CastingRequirements, this, null))
                     {
                         continue;
                     }
@@ -1827,6 +1827,7 @@ namespace Intersect.Server.Entities
             Y = (int)newY;
             Z = zOverride;
             Dir = newDir;
+            MapRegionId = map.MapRegionIds[X, Y];
             var newSurroundingMaps = map.GetSurroundingMapIds(true);
             foreach (var evt in EventLookup)
             {
@@ -2421,7 +2422,7 @@ namespace Intersect.Server.Entities
                     }
                 }
 
-                if (!Conditions.MeetsConditionLists(itemBase.UsageRequirements, this, null))
+                if (!ServerConditions.MeetsConditionLists(itemBase.UsageRequirements, this, null))
                 {
                     if (!string.IsNullOrWhiteSpace(itemBase.CannotUseMessage))
                     {
@@ -4567,7 +4568,7 @@ namespace Intersect.Server.Entities
 
         public bool CanSpellCast(SpellBase spell, Entity target, bool checkVitalReqs)
         {
-            if (!Conditions.MeetsConditionLists(spell.CastingRequirements, this, null))
+            if (!ServerConditions.MeetsConditionLists(spell.CastingRequirements, this, null))
             {
                 if (!string.IsNullOrWhiteSpace(spell.CannotCastMessage))
                 {
@@ -5061,7 +5062,7 @@ namespace Intersect.Server.Entities
 
                 if (descriptor == default || 
                     descriptor.ItemType != ItemTypes.Equipment || 
-                    !Conditions.MeetsConditionLists(descriptor.UsageRequirements, this, null))
+                    !ServerConditions.MeetsConditionLists(descriptor.UsageRequirements, this, null))
                 {
                     Equipment[i] = -1;
                     updated = true;
@@ -5219,7 +5220,7 @@ namespace Intersect.Server.Entities
             }
 
             //So the quest isn't started or we can repeat it.. let's make sure that we meet requirements.
-            if (!Conditions.MeetsConditionLists(quest.Requirements, this, null, true, quest))
+            if (!ServerConditions.MeetsConditionLists(quest.Requirements, this, null, true, quest))
             {
                 return false;
             }
@@ -6289,7 +6290,7 @@ namespace Intersect.Server.Entities
                 //Try to Spawn a PageInstance.. if we can
                 for (var i = baseEvent.Pages.Count - 1; i >= 0; i--)
                 {
-                    if ((trigger == CommonEventTrigger.None || baseEvent.Pages[i].CommonTrigger == trigger) && Conditions.CanSpawnPage(baseEvent.Pages[i], this, null))
+                    if ((trigger == CommonEventTrigger.None || baseEvent.Pages[i].CommonTrigger == trigger) && ServerConditions.CanSpawnPage(baseEvent.Pages[i], this, null))
                     {
                         if ((trigger == CommonEventTrigger.OnMapEnter || trigger == CommonEventTrigger.OnMapLeave) && param != baseEvent.Pages[i].TriggerId.ToString())
                         {

@@ -8,17 +8,17 @@ using Newtonsoft.Json;
 namespace Intersect.GameObjects.Maps.MapRegion
 {
 
-    public abstract class MapRegionRule
+    public abstract class MapRegionCommand
     {
 
-        public abstract MapRegionRuleTypes Type { get; }
+        public abstract MapRegionCommandTypes Type { get; }
         public ConditionLists ConditionLists { get; set; } = new ConditionLists();
 
-        public MapRegionRule()
+        public MapRegionCommand()
         {
         }
 
-        public MapRegionRule(MapRegionRule copy)
+        public MapRegionCommand(MapRegionCommand copy)
         {
         }
 

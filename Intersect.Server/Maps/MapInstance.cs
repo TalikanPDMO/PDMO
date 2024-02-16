@@ -15,7 +15,7 @@ using Intersect.Network.Packets.Server;
 using Intersect.Server.Classes.Maps;
 using Intersect.Server.Database;
 using Intersect.Server.Entities;
-using Intersect.Server.Entities.Events;
+using Intersect.Server.Entities.Conditions;
 using Intersect.Server.General;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
@@ -588,6 +588,7 @@ namespace Intersect.Server.Maps
                     res.Y = spawn.Y;
                     res.Z = spawn.Z;
                     res.MapId = Id;
+                    res.MapRegionId = res.Map?.MapRegionIds[res.X, res.Y];
                     id = res.Id;
                     AddEntity(res);
                 }
@@ -766,6 +767,7 @@ namespace Intersect.Server.Maps
                     MapId = Id,
                     X = tileX,
                     Y = tileY,
+                    MapRegionId = MapRegionIds[tileX, tileY],
                     Dir = dir,
                     SpawnMap = this,
                     SpawnX = tileX,

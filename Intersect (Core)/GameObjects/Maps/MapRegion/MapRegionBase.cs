@@ -6,6 +6,7 @@ using System.Text;
 using Intersect.Collections;
 using Intersect.Compression;
 using Intersect.Enums;
+using Intersect.GameObjects.Conditions;
 using Intersect.GameObjects.Events;
 using Intersect.Models;
 using Intersect.Utilities;
@@ -77,17 +78,39 @@ namespace Intersect.GameObjects.Maps.MapRegion
         }
 
         // Rules
-        [NotMapped] public List<MapRegionRule> Rules = new List<MapRegionRule>();
+        [NotMapped] public List<MapRegionCommand> Commands = new List<MapRegionCommand>();
 
-        [Column("MapRegionRules")]
+        [Column("MapRegionCommands")]
         [JsonIgnore]
-        public string RulesJson
+        public string CommandsJson
         {
-            get => JsonConvert.SerializeObject(Rules, Formatting.None, new JsonSerializerSettings()
+            get => JsonConvert.SerializeObject(Commands, Formatting.None, new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore
             });
-            set => Rules = JsonConvert.DeserializeObject<List<MapRegionRule>>(value);
+            set => Commands = JsonConvert.DeserializeObject<List<MapRegionCommand>>(value);
+        }
+
+        // Enter Requirements
+        [NotMapped] public ConditionLists EnterRequirements = new ConditionLists();
+
+        [Column("EnterRequirements")]
+        [JsonIgnore]
+        public string EnterRequirementsJson
+        {
+            get => EnterRequirements.Data();
+            set => EnterRequirements.Load(value);
+        }
+
+        // Exit Requirements
+        [NotMapped] public ConditionLists ExitRequirements = new ConditionLists();
+
+        [Column("ExitRequirements")]
+        [JsonIgnore]
+        public string ExitRequirementsJson
+        {
+            get => ExitRequirements.Data();
+            set => ExitRequirements.Load(value);
         }
     }
 

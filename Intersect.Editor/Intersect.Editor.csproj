@@ -151,10 +151,16 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_UseSpell.Designer.cs">
       <DependentUpon>EventCommand_UseSpell.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Editors\frmMapRegion.cs">
+    <Compile Include="Forms\Editors\MapRegions\MapRegionCommand_Condition.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\MapRegions\MapRegionCommand_Condition.Designer.cs">
+      <DependentUpon>MapRegionCommand_Condition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\MapRegions\frmMapRegion.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Editors\frmMapRegion.Designer.cs">
+    <Compile Include="Forms\Editors\MapRegions\frmMapRegion.Designer.cs">
       <DependentUpon>frmMapRegion.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Editors\frmRelations.cs">
@@ -767,7 +773,10 @@
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_Variable.resx">
       <DependentUpon>EventCommand_Variable.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Editors\frmMapRegion.resx">
+    <EmbeddedResource Include="Forms\Editors\MapRegions\MapRegionCommand_Condition.resx">
+      <DependentUpon>MapRegionCommand_Condition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\MapRegions\frmMapRegion.resx">
       <DependentUpon>frmMapRegion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\frmRelations.resx">

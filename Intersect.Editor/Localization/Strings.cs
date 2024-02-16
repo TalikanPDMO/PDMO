@@ -60,9 +60,19 @@ namespace Intersect.Editor.Localization
             }
         }
 
+        public static string GetMapRegionConditionalDesc(HasItemCondition condition)
+        {
+            return Strings.MapRegionConditionDesc.hasitem.ToString(condition.Quantity, ItemBase.GetName(condition.ItemId));
+        }
+
         public static string GetEventConditionalDesc(IsItemEquippedCondition condition)
         {
             return Strings.EventConditionDesc.hasitemequipped.ToString(ItemBase.GetName(condition.ItemId));
+        }
+
+        public static string GetMapRegionConditionalDesc(IsItemEquippedCondition condition)
+        {
+            return Strings.MapRegionConditionDesc.hasitemequipped.ToString(ItemBase.GetName(condition.ItemId));
         }
 
         public static string GetEventConditionalDesc(ClassIsCondition condition)
@@ -70,9 +80,19 @@ namespace Intersect.Editor.Localization
             return Strings.EventConditionDesc.Class.ToString(ClassBase.GetName(condition.ClassId));
         }
 
+        public static string GetMapRegionConditionalDesc(ClassIsCondition condition)
+        {
+            return Strings.MapRegionConditionDesc.Class.ToString(ClassBase.GetName(condition.ClassId));
+        }
+
         public static string GetEventConditionalDesc(KnowsSpellCondition condition)
         {
             return Strings.EventConditionDesc.knowsspell.ToString(SpellBase.GetName(condition.SpellId));
+        }
+
+        public static string GetMapRegionConditionalDesc(KnowsSpellCondition condition)
+        {
+            return Strings.MapRegionConditionDesc.knowsspell.ToString(SpellBase.GetName(condition.SpellId));
         }
 
         public static string GetEventConditionalDesc(LevelOrStatCondition condition)
@@ -117,6 +137,50 @@ namespace Intersect.Editor.Localization
             }
 
             return Strings.EventConditionDesc.levelorstat.ToString(lvlorstat, pLvl);
+        }
+
+        public static string GetMapRegionConditionalDesc(LevelOrStatCondition condition)
+        {
+            var pLvl = "";
+            switch (condition.Comparator)
+            {
+                case VariableComparators.Equal:
+                    pLvl = Strings.MapRegionConditionDesc.equal.ToString(condition.Value);
+
+                    break;
+                case VariableComparators.GreaterOrEqual:
+                    pLvl = Strings.MapRegionConditionDesc.greaterequal.ToString(condition.Value);
+
+                    break;
+                case VariableComparators.LesserOrEqual:
+                    pLvl = Strings.MapRegionConditionDesc.lessthanequal.ToString(condition.Value);
+
+                    break;
+                case VariableComparators.Greater:
+                    pLvl = Strings.MapRegionConditionDesc.greater.ToString(condition.Value);
+
+                    break;
+                case VariableComparators.Less:
+                    pLvl = Strings.MapRegionConditionDesc.lessthan.ToString(condition.Value);
+
+                    break;
+                case VariableComparators.NotEqual:
+                    pLvl = Strings.MapRegionConditionDesc.notequal.ToString(condition.Value);
+
+                    break;
+            }
+
+            var lvlorstat = "";
+            if (condition.ComparingLevel)
+            {
+                lvlorstat = Strings.MapRegionConditionDesc.level;
+            }
+            else
+            {
+                lvlorstat = Strings.Combat.stats[(int)condition.Stat];
+            }
+
+            return Strings.MapRegionConditionDesc.levelorstat.ToString(lvlorstat, pLvl);
         }
 
         public static string GetEventConditionalDesc(SelfSwitchCondition condition)
@@ -179,6 +243,41 @@ namespace Intersect.Editor.Localization
             return Strings.EventConditionDesc.time.ToString(time1, time2);
         }
 
+        public static string GetMapRegionConditionalDesc(TimeBetweenCondition condition)
+        {
+            var timeRanges = new List<string>();
+            var time = new DateTime(2000, 1, 1, 0, 0, 0);
+            for (var i = 0; i < 1440; i += TimeBase.GetTimeBase().RangeInterval)
+            {
+                var addRange = time.ToString("h:mm:ss tt") + " to ";
+                time = time.AddMinutes(TimeBase.GetTimeBase().RangeInterval);
+                addRange += time.ToString("h:mm:ss tt");
+                timeRanges.Add(addRange);
+            }
+
+            var time1 = "";
+            var time2 = "";
+            if (condition.Ranges[0] > -1 && condition.Ranges[0] < timeRanges.Count)
+            {
+                time1 = timeRanges[condition.Ranges[0]];
+            }
+            else
+            {
+                time1 = Strings.MapRegionConditionDesc.timeinvalid;
+            }
+
+            if (condition.Ranges[1] > -1 && condition.Ranges[1] < timeRanges.Count)
+            {
+                time2 = timeRanges[condition.Ranges[1]];
+            }
+            else
+            {
+                time2 = Strings.MapRegionConditionDesc.timeinvalid;
+            }
+
+            return Strings.MapRegionConditionDesc.time.ToString(time1, time2);
+        }
+
         public static string GetEventConditionalDesc(CanStartQuestCondition condition)
         {
             return Strings.EventConditionDesc.startquest.ToString(QuestBase.GetName(condition.QuestId));
@@ -228,9 +327,58 @@ namespace Intersect.Editor.Localization
             return Strings.EventConditionDesc.questinprogress.ToString(QuestBase.GetName(condition.QuestId));
         }
 
+        public static string GetMapRegionConditionalDesc(QuestInProgressCondition condition)
+        {
+            var quest = QuestBase.Get(condition.QuestId);
+            if (quest != null)
+            {
+                QuestBase.QuestTask task = null;
+                foreach (var tsk in quest.Tasks)
+                {
+                    if (tsk.Id == condition.TaskId)
+                    {
+                        task = tsk;
+                    }
+                }
+
+                var taskName = task != null
+                    ? task.GetTaskString(Strings.TaskEditor.descriptions)
+                    : Strings.MapRegionConditionDesc.tasknotfound.ToString();
+
+                switch (condition.Progress)
+                {
+                    case QuestProgressState.BeforeTask:
+                        return Strings.MapRegionConditionDesc.questinprogress.ToString(
+                            QuestBase.GetName(condition.QuestId),
+                            Strings.MapRegionConditionDesc.beforetask.ToString(taskName)
+                        );
+                    case QuestProgressState.AfterTask:
+                        return Strings.MapRegionConditionDesc.questinprogress.ToString(
+                            QuestBase.GetName(condition.QuestId),
+                            Strings.MapRegionConditionDesc.aftertask.ToString(taskName)
+                        );
+                    case QuestProgressState.OnTask:
+                        return Strings.MapRegionConditionDesc.questinprogress.ToString(
+                            QuestBase.GetName(condition.QuestId), Strings.MapRegionConditionDesc.ontask.ToString(taskName)
+                        );
+                    default: //On Any task
+                        return Strings.MapRegionConditionDesc.questinprogress.ToString(
+                            QuestBase.GetName(condition.QuestId), Strings.MapRegionConditionDesc.onanytask
+                        );
+                }
+            }
+
+            return Strings.MapRegionConditionDesc.questinprogress.ToString(QuestBase.GetName(condition.QuestId));
+        }
+
         public static string GetEventConditionalDesc(QuestCompletedCondition condition)
         {
             return Strings.EventConditionDesc.questcompleted.ToString(QuestBase.GetName(condition.QuestId));
+        }
+
+        public static string GetMapRegionConditionalDesc(QuestCompletedCondition condition)
+        {
+            return Strings.MapRegionConditionDesc.questcompleted.ToString(QuestBase.GetName(condition.QuestId));
         }
 
         public static string GetEventConditionalDesc(NoNpcsOnMapCondition condition)
@@ -245,6 +393,13 @@ namespace Intersect.Editor.Localization
             );
         }
 
+        public static string GetMapRegionConditionalDesc(GenderIsCondition condition)
+        {
+            return Strings.MapRegionConditionDesc.gender.ToString(
+                condition.Gender == 0 ? Strings.MapRegionConditionDesc.male : Strings.MapRegionConditionDesc.female
+            );
+        }
+
         public static string GetEventConditionalDesc(MapIsCondition condition)
         {
             var map = Intersect.GameObjects.Maps.MapList.MapList.List.FindMap(condition.MapId);
@@ -256,9 +411,25 @@ namespace Intersect.Editor.Localization
             return Strings.EventConditionDesc.map.ToString(EventConditionDesc.mapnotfound);
         }
 
+        public static string GetMapRegionConditionalDesc(MapIsCondition condition)
+        {
+            var map = Intersect.GameObjects.Maps.MapList.MapList.List.FindMap(condition.MapId);
+            if (map != null)
+            {
+                return Strings.MapRegionConditionDesc.map.ToString(map.Name);
+            }
+
+            return Strings.MapRegionConditionDesc.map.ToString(MapRegionConditionDesc.mapnotfound);
+        }
+
         public static string GetEventConditionalDesc(InGuildWithRank condition)
         {
             return Strings.EventConditionDesc.guild.ToString(Intersect.Options.Instance.Guild.Ranks[Math.Max(0, Math.Min(Intersect.Options.Instance.Guild.Ranks.Length - 1, condition.Rank))].Title);
+        }
+
+        public static string GetMapRegionConditionalDesc(InGuildWithRank condition)
+        {
+            return Strings.MapRegionConditionDesc.guild.ToString(Intersect.Options.Instance.Guild.Ranks[Math.Max(0, Math.Min(Intersect.Options.Instance.Guild.Ranks.Length - 1, condition.Rank))].Title);
         }
 
         public static string GetEventConditionalDesc(HasFreeInventorySlots condition)
@@ -288,6 +459,12 @@ namespace Intersect.Editor.Localization
         {
             return Strings.EventConditionDesc.MapZoneTypeIs.ToString(Strings.MapProperties.zones[(int)condition.ZoneType]);
         }
+
+        public static string GetMapRegionConditionalDesc(MapZoneTypeIs condition)
+        {
+            return Strings.MapRegionConditionDesc.MapZoneTypeIs.ToString(Strings.MapProperties.zones[(int)condition.ZoneType]);
+        }
+
 
         public static string GetEventConditionalDesc(FightingNPCPhase condition)
         {
@@ -411,9 +588,69 @@ namespace Intersect.Editor.Localization
             }
             return Strings.EventConditionDesc.inparty.ToString(pSize, pRole);
         }
+
+        public static string GetMapRegionConditionalDesc(InPartyWithRole condition)
+        {
+            var pSize = "";
+            switch (condition.Comparator)
+            {
+                case VariableComparators.Equal:
+                    pSize = Strings.MapRegionConditionDesc.equal.ToString(condition.Size);
+
+                    break;
+                case VariableComparators.GreaterOrEqual:
+                    pSize = Strings.MapRegionConditionDesc.greaterequal.ToString(condition.Size);
+
+                    break;
+                case VariableComparators.LesserOrEqual:
+                    pSize = Strings.MapRegionConditionDesc.lessthanequal.ToString(condition.Size);
+
+                    break;
+                case VariableComparators.Greater:
+                    pSize = Strings.MapRegionConditionDesc.greater.ToString(condition.Size);
+
+                    break;
+                case VariableComparators.Less:
+                    pSize = Strings.MapRegionConditionDesc.lessthan.ToString(condition.Size);
+
+                    break;
+                case VariableComparators.NotEqual:
+                    pSize = Strings.MapRegionConditionDesc.notequal.ToString(condition.Size);
+
+                    break;
+            }
+            var pRole = "";
+            if (condition.Role > 0)
+            {
+                pRole = Strings.MapRegionConditionDesc.partyrole.ToString(Strings.MapRegionConditional.partyroles[condition.Role]);
+            }
+            return Strings.MapRegionConditionDesc.inparty.ToString(pSize, pRole);
+        }
         public static string GetEventConditionalDesc(PlayerElementalTypeIs condition)
         {
             return Strings.EventConditionDesc.playerelementaltypeis.ToString(Strings.Combat.elementaltypes[condition.ElementalType]);
+        }
+
+        public static string GetMapRegionConditionalDesc(PlayerElementalTypeIs condition)
+        {
+            return Strings.MapRegionConditionDesc.entityelementaltypeis.ToString(Strings.Combat.elementaltypes[condition.ElementalType]);
+        }
+
+        public static string GetMapRegionConditionalDesc(EntityTypeIs condition)
+        {
+            string entityTypes = "";
+            for (var i=0; i<(int)EntityTypes.EntityTypesCount; i++)
+            {
+                if (condition.Entities[i])
+                {
+                    entityTypes += Strings.MapRegionConditional.entitytypes[i] + " || ";
+                }
+            }
+            if (entityTypes.Length > 0)
+            {
+                entityTypes = entityTypes.Substring(0, entityTypes.Length - 4);
+            }
+            return Strings.MapRegionConditionDesc.entitytypeis.ToString(entityTypes);
         }
         public static string GetVariableComparisonString(VariableCompaison comparison)
         {
@@ -1517,6 +1754,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString instructionsnpcphase =
               @"Below are condition lists. If conditions are met on any of the lists when the npc is attacked by a player, then it will start the phase (mainly use 'Player is fighting NPC...')";
+            public static LocalizedString instructionsmapregion =
+              @"Below are condition lists. If conditions are met on any of the lists when the player enter/leave in the mapregion";
 
             public static LocalizedString listname = @"Desc:";
 
@@ -6112,6 +6351,13 @@ Negative values for time to flow backwards.";
 
             public static LocalizedString onexit = @"On Exit:";
 
+            public static LocalizedString conditions = @"Enter/Exit Conditions";
+
+            public static LocalizedString editenterconditions = @"Edit Enter Conditions ({00})";
+
+            public static LocalizedString editexitconditions = @"Edit Exit Conditions ({00})";
+
+            public static LocalizedString none = @"None";
 
             public static LocalizedString paste = @"Paste MapRegion";
 
@@ -6134,6 +6380,361 @@ Negative values for time to flow backwards.";
                 @"Are you sure you want to undo changes made to this map region? This action cannot be reverted!";
 
             public static LocalizedString undotitle = @"Undo Changes";
+
+        }
+
+        public struct MapRegionConditional
+        {
+
+            public static LocalizedString and = @"And";
+
+            public static LocalizedString booleanequal = @"Equal To";
+
+            public static LocalizedString booleannotequal = @"Not Equal To";
+
+            public static LocalizedString stringvariable = @"String Variable:";
+
+            public static LocalizedString stringtip = @"Text variables work here. Click here for a list!";
+
+            public static LocalizedString cancel = @"Cancel";
+
+            public static LocalizedString canstartquest = @"Can Start Quest";
+
+            public static LocalizedString Class = @"Class:";
+
+            public static LocalizedString classis = @"Player Class Is";
+
+            public static LocalizedString commoneventsonly = @"This condition works for Common Events activation only!";
+
+            public static LocalizedString comparator = @"Comparator:";
+
+            public static Dictionary<int, LocalizedString> stringcomparators = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Equal To"},
+                {1, @"Contains"}
+            };
+
+            public static Dictionary<int, LocalizedString> comparators = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Equal To"},
+                {1, @"Greater Than or Equal To"},
+                {2, @"Less Than or Equal To"},
+                {3, @"Greater Than"},
+                {4, @"Less Than"},
+                {5, @"Does Not Equal"}
+            };
+
+            public static Dictionary<int, LocalizedString> partyroles = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Any"},
+                {1, @"Member"},
+                {2, @"Leader"}
+            };
+
+            public static Dictionary<int, LocalizedString> conditions = new Dictionary<int, LocalizedString>
+            {
+                {26, @"Entity Type is..." },
+                {7, @"Entity Level or Stat is...."},
+                {25, @"Entity ElementalType is..." },
+                {5, @"Player Class is..."},
+                {6, @"Knows spell..."},
+                {16, @"Entity Map is..."},
+                {20, @"Map Zone Type is..." },
+                {4, @"Has item..."},
+                {17, @"Item Equipped is..."},
+                {18, @"Has X free Inventory slots..." },
+                {12, @"Quest In Progress...."},
+                {13, @"Quest Completed...."},
+                {15, @"Player Gender is..."},
+                {19, @"In Guild With At Least Rank..." },
+                {24, @"In Party with Role..." }
+            };
+
+            public static LocalizedString endrange = @"End Range:";
+
+            public static LocalizedString False = @"False";
+
+            public static LocalizedString female = @"Female";
+
+            public static LocalizedString gender = @"Gender:";
+
+            public static LocalizedString genderis = @"Player Gender Is...";
+
+            public static LocalizedString globalswitch = @"Global Switch";
+
+            public static LocalizedString globalvariable = @"Global Variable";
+
+            public static LocalizedString globalvariablevalue = @"Global Variable Value: ";
+
+            public static LocalizedString hasatleast = @"Has at least:";
+
+            public static LocalizedString hasitem = @"Has Item";
+
+            public static LocalizedString hasitemequipped = @"Has Equipped Item";
+
+            public static LocalizedString ignorestatbuffs = @"Ignore equipment & spell buffs.";
+
+            public static LocalizedString item = @"Item:";
+
+            public static LocalizedString knowsspell = @"Knows Spell";
+
+            public static LocalizedString level = @"Level";
+
+            public static LocalizedString levelorstat = @"Entity Level or Stat Is....";
+
+            public static LocalizedString levelstatitem = @"Level or Stat:";
+
+            public static LocalizedString levelstatvalue = @"Value:";
+
+            public static LocalizedString male = @"Male";
+
+            public static LocalizedString mapis = @"Map Is...";
+
+            public static LocalizedString negated = @"Negated";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString HasElse = @"Has Else";
+
+            public static LocalizedString numericvariable = @"Numeric Variable:";
+
+            public static LocalizedString okay = @"Ok";
+
+            public static LocalizedString playervariable = @"Player Variable";
+
+            public static LocalizedString playervariablevalue = @"Player Variable Value: ";
+
+            public static LocalizedString power = @"Power:";
+
+            public static LocalizedString power0 = @"Mod or Admin";
+
+            public static LocalizedString power1 = @"Admin";
+
+            public static LocalizedString poweris = @"Power Is";
+
+            public static Dictionary<int, LocalizedString> questcomparators = new Dictionary<int, LocalizedString>
+            {
+                {0, @"On Any Task"},
+                {1, @"Before Task..."},
+                {2, @"After Task..."},
+                {3, @"On Task..."},
+            };
+
+            public static LocalizedString questcompleted = @"Quest Completed";
+
+            public static LocalizedString questcompletedlabel = @"Quest:";
+
+            public static LocalizedString questinprogress = @"Quest In Progress";
+
+            public static LocalizedString questis = @"Is:";
+
+            public static LocalizedString questprogress = @"Quest:";
+
+            public static LocalizedString selectmap = @"Select Map";
+
+            public static LocalizedString selectvariable = @"Select Variable:";
+
+            public static LocalizedString selfswitch = @"Self Switch:";
+
+            public static Dictionary<int, LocalizedString> selfswitches = new Dictionary<int, LocalizedString>
+            {
+                {0, @"A"},
+                {1, @"B"},
+                {2, @"C"},
+                {3, @"D"},
+            };
+
+            public static LocalizedString selfswitchis = @"Self Switch Is";
+
+            public static LocalizedString spell = @"Spell:";
+
+            public static LocalizedString startquest = @"Quest:";
+
+            public static LocalizedString startrange = @"Start Range:";
+
+            public static LocalizedString switchis = @"Is";
+
+            public static LocalizedString task = @"Task:";
+
+            public static LocalizedString time = @"Time is between:";
+
+            public static LocalizedString title = @"Conditional";
+
+            public static LocalizedString to = @"to";
+
+            public static LocalizedString True = @"True";
+
+            public static LocalizedString type = @"Condition Type:";
+
+            public static LocalizedString value = @"Static Value:";
+
+            public static LocalizedString variable = @"Variable Is...";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString FreeInventorySlots = @"Has X free Inventory slots";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString AmountType = @"Amount Type";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString VariableLabel = @"Variable";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Manual = @"Manual";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString inguild = @"In Guild With At Least Rank...";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString rank = @"Rank:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString MapZoneTypeIs = @"Map Zone Type is:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString MapZoneTypeLabel = @"Zone Type:";
+
+            public static LocalizedString statsnpc = @"NPC:";
+
+            public static LocalizedString any = @"Any";
+
+            public static LocalizedString percent = @"%";
+
+            public static LocalizedString npchp = @"HP:";
+
+            public static LocalizedString npcmana = @"Mana:";
+
+            public static LocalizedString npcattack = @"Attack:";
+
+            public static LocalizedString npcmagic = @"Magic:";
+
+            public static LocalizedString npcdefense = @"Defense:";
+
+            public static LocalizedString npcmr = @"Magic Resist:";
+
+            public static LocalizedString npcspeed = @"Speed:";
+
+            public static LocalizedString fightingattacktype = @"Fighting npc with Attack Type:";
+
+            public static LocalizedString attacktypenpc = @"NPC:";
+
+            public static LocalizedString npcattacktype = @"Attack Type:";
+
+            public static LocalizedString isattacktype = @"Is:";
+
+            public static Dictionary<int, LocalizedString> attacktypes = new Dictionary<int, LocalizedString>
+            {
+                {0, @"BasicAttack"},
+                {1, @"Spell"},
+                {2, @"Projectile"},
+            };
+
+            public static LocalizedString dmgtype = @"Damage Type:";
+
+            public static LocalizedString elementaltype = @"Elemental Type:";
+
+            public static LocalizedString inparty = @"In Party with Role...";
+
+            public static LocalizedString partysize = @"Party Size:";
+
+            public static LocalizedString partyrole = @"Party Role:";
+
+            public static LocalizedString elementaltypeis = @"Entity Elemental Type is ... ";
+
+            public static Dictionary<int, LocalizedString> entitytypes = new Dictionary<int, LocalizedString>
+            {
+                {0, @"NPC"},
+                {1, @"Player"},
+                {2, @"Resource"},
+                {3, @"Projectile"},
+                {4, @"Event"}
+            };
+        }
+
+        public struct MapRegionConditionDesc
+        {
+            public static LocalizedString entitytypeis = @"Entity Type is: {00}";
+
+            public static LocalizedString aftertask = @", After Task: {00}";
+
+            public static LocalizedString beforetask = @", Before Task: {00}";
+
+            public static LocalizedString Class = @"Player's class is {00}";
+
+            public static LocalizedString contains = @"contains {00}";
+
+            public static LocalizedString equal = @"is equal to {00}";
+
+            public static LocalizedString False = @"False";
+
+            public static LocalizedString female = @"Female";
+
+            public static LocalizedString gender = @"Player's Gender is {00}";
+
+            public static LocalizedString globalvariable = @"Global Variable: {00} {01}";
+
+            public static LocalizedString globalvariablevalue = @"Global Variable: {00}'s Value";
+
+            public static LocalizedString greater = @"is greater than {00}";
+
+            public static LocalizedString greaterequal = @"is greater than or equal to {00}";
+
+            public static LocalizedString guild = @"Player is in Guild with at least rank: {00}";
+
+            public static LocalizedString hasitem = @"Player has at least {00} of Item {01}";
+
+            public static LocalizedString hasitemequipped = @"Player has Item {00} equipped";
+
+            public static LocalizedString knowsspell = @"Player knows Spell {00}";
+
+            public static LocalizedString lessthan = @"is less than {00}";
+
+            public static LocalizedString lessthanequal = @"is less than or equal to {00}";
+
+            public static LocalizedString level = @"Level";
+
+            public static LocalizedString levelorstat = @"{00} {01}";
+
+            public static LocalizedString male = @"Male";
+
+            public static LocalizedString map = @"Map is {00}";
+
+            public static LocalizedString mapnotfound = @"NOT FOUND";
+
+            public static LocalizedString negated = @"NOT [{00}]";
+
+            public static LocalizedString nonpcsonmap = @"No NPCs on the map";
+
+            public static LocalizedString notequal = @"does not equal {00}";
+
+            public static LocalizedString onanytask = @", On Any Task";
+
+            public static LocalizedString ontask = @", On Task: {00}";
+
+            public static LocalizedString questcompleted = @"Quest is Completed: {00}";
+
+            public static LocalizedString questinprogress = @"Quest In Progress: {00} {01}";
+
+            [JsonProperty]
+            public static LocalizedString HasFreeInventorySlots = @"Player has {00} free inventory slot(s)";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString MapZoneTypeIs = @"Map Zone Type is {00}";
+
+            public static LocalizedString startquest = @"Can Start Quest: {00}";
+
+            public static LocalizedString tasknotfound = @"Not Found";
+
+            public static LocalizedString time = @"Time is between {00} and {01}";
+
+            public static LocalizedString timeinvalid = @"invalid";
+
+            public static LocalizedString True = @"True";
+
+            public static LocalizedString inparty = @"In Party with Size {00} {01}";
+
+            public static LocalizedString partyrole = @"and Role is {00}";
+
+            public static LocalizedString entityelementaltypeis = @"Entity ElementalType is {00}";
 
         }
 

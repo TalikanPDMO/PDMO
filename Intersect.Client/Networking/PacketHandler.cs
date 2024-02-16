@@ -436,6 +436,7 @@ namespace Intersect.Client.Networking
 
             en.X = packet.X;
             en.Y = packet.Y;
+            en.CurrentMapRegionId = en.MapInstance?.MapRegionIds[en.X, en.Y];
             en.Dir = packet.Direction;
             en.Passable = packet.Passable;
             en.HideName = packet.HideName;
@@ -621,6 +622,7 @@ namespace Intersect.Client.Networking
                 en.CurrentMap = map;
                 en.X = x;
                 en.Y = y;
+                en.CurrentMapRegionId = en.MapInstance?.MapRegionIds[x, y];
                 //if (en is Player p)
                 //{
                 //    p.MoveDir = dir;

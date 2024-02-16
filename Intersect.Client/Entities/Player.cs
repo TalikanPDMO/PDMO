@@ -2115,6 +2115,7 @@ namespace Intersect.Client.Entities
                             X = (byte) tmpX;
                             Y = (byte) tmpY;
                         }
+                        CurrentMapRegionId = MapInstance?.MapRegionIds[X, Y];
 
                         TryToChangeDimension();
                         PacketSender.SendMove();

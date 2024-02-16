@@ -17,7 +17,7 @@ using Intersect.GameObjects.Maps.MapRegion;
 using Intersect.Models;
 using Intersect.Utilities;
 
-namespace Intersect.Editor.Forms.Editors
+namespace Intersect.Editor.Forms.Editors.MapRegions
 {
 
     public partial class FrmMapRegion : EditorForm
@@ -93,6 +93,25 @@ namespace Intersect.Editor.Forms.Editors
                 pnlColor.BackColor = System.Drawing.Color.FromArgb(
                     mEditorItem.EditorColor[0], mEditorItem.EditorColor[1], mEditorItem.EditorColor[2], mEditorItem.EditorColor[3]);
 
+
+                if (mEditorItem.EnterRequirements == null || mEditorItem.EnterRequirements.Count == 0)
+                {
+                    btnEditEnterConditions.Text = Strings.MapRegionEditor.editenterconditions.ToString(Strings.MapRegionEditor.none);
+                }
+                else
+                {
+                    btnEditEnterConditions.Text = Strings.MapRegionEditor.editenterconditions.ToString(mEditorItem.EnterRequirements.Count);
+                }
+
+                if (mEditorItem.ExitRequirements == null || mEditorItem.ExitRequirements.Count == 0)
+                {
+                    btnEditExitConditions.Text = Strings.MapRegionEditor.editexitconditions.ToString(Strings.MapRegionEditor.none);
+                }
+                else
+                {
+                    btnEditExitConditions.Text = Strings.MapRegionEditor.editexitconditions.ToString(mEditorItem.ExitRequirements.Count);
+                }
+
                 grpRules.Hide();
 
                 if (mChanged.IndexOf(mEditorItem) == -1)
@@ -141,6 +160,33 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.EditorColor[1] = colorDialog.Color.R;
             mEditorItem.EditorColor[2] = colorDialog.Color.G;
             mEditorItem.EditorColor[3] = colorDialog.Color.B;
+        }
+
+        private void btnEditEnterConditions_Click(object sender, EventArgs e)
+        {
+            var editForm = new FrmDynamicRequirements(mEditorItem.EnterRequirements, RequirementType.MapRegion);
+            editForm.ShowDialog();
+            if (mEditorItem.EnterRequirements == null || mEditorItem.EnterRequirements.Count == 0)
+            {
+                btnEditEnterConditions.Text = Strings.MapRegionEditor.editenterconditions.ToString(Strings.MapRegionEditor.none);
+            }
+            else
+            {
+                btnEditEnterConditions.Text = Strings.MapRegionEditor.editenterconditions.ToString(mEditorItem.EnterRequirements.Count);
+            }
+        }
+        private void btnEditExitConditions_Click(object sender, EventArgs e)
+        {
+            var editForm = new FrmDynamicRequirements(mEditorItem.ExitRequirements, RequirementType.MapRegion);
+            editForm.ShowDialog();
+            if (mEditorItem.ExitRequirements == null || mEditorItem.ExitRequirements.Count == 0)
+            {
+                btnEditExitConditions.Text = Strings.MapRegionEditor.editexitconditions.ToString(Strings.MapRegionEditor.none);
+            }
+            else
+            {
+                btnEditExitConditions.Text = Strings.MapRegionEditor.editexitconditions.ToString(mEditorItem.ExitRequirements.Count);
+            }
         }
 
         /*private void btnAdd_Click(object sender, EventArgs e)
@@ -428,6 +474,8 @@ namespace Intersect.Editor.Forms.Editors
             lblEventEnter.Text = Strings.MapRegionEditor.onenter;
             lblEventMove.Text = Strings.MapRegionEditor.onmove;
             lblEventExit.Text = Strings.MapRegionEditor.onexit;
+
+            grpConditions.Text = Strings.MapRegionEditor.conditions;
 
             grpRules.Text = Strings.MapRegionEditor.rules;
 

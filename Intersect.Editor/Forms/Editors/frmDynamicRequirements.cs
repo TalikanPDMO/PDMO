@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using Intersect.Editor.Forms.Editors.Events.Event_Commands;
+using Intersect.Editor.Forms.Editors.MapRegions;
 using Intersect.Editor.Localization;
 using Intersect.GameObjects.Conditions;
 using Intersect.GameObjects.Events;
@@ -35,7 +36,9 @@ namespace Intersect.Editor.Forms.Editors
 
         NpcCanBeProjectiled,
 
-        NpcPhase
+        NpcPhase,
+
+        MapRegion
 
     }
 
@@ -117,6 +120,10 @@ namespace Intersect.Editor.Forms.Editors
                     lblInstructions.Text = Strings.DynamicRequirements.instructionsnpcphase;
 
                     break;
+                case RequirementType.MapRegion:
+                    lblInstructions.Text = Strings.DynamicRequirements.instructionsmapregion;
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -155,18 +162,37 @@ namespace Intersect.Editor.Forms.Editors
             txtListName.Text = list.Name;
             for (var i = 0; i < list.Conditions.Count; i++)
             {
-                if (list.Conditions[i].Negated)
+                switch (mRequirementType)
                 {
-                    lstConditions.Items.Add(
-                        Strings.EventConditionDesc.negated.ToString(
-                            Strings.GetEventConditionalDesc((dynamic) list.Conditions[i])
-                        )
-                    );
-                }
-                else
-                {
-                    lstConditions.Items.Add(Strings.GetEventConditionalDesc((dynamic) list.Conditions[i]));
-                }
+                    case RequirementType.MapRegion:
+                        if (list.Conditions[i].Negated)
+                        {
+                            lstConditions.Items.Add(
+                                Strings.MapRegionConditionDesc.negated.ToString(
+                                    Strings.GetMapRegionConditionalDesc((dynamic)list.Conditions[i])
+                                )
+                            );
+                        }
+                        else
+                        {
+                            lstConditions.Items.Add(Strings.GetMapRegionConditionalDesc((dynamic)list.Conditions[i]));
+                        }
+                        break;
+                    default:
+                        if (list.Conditions[i].Negated)
+                        {
+                            lstConditions.Items.Add(
+                                Strings.EventConditionDesc.negated.ToString(
+                                    Strings.GetEventConditionalDesc((dynamic)list.Conditions[i])
+                                )
+                            );
+                        }
+                        else
+                        {
+                            lstConditions.Items.Add(Strings.GetEventConditionalDesc((dynamic)list.Conditions[i]));
+                        }
+                        break;
+                } 
             }
         }
 
@@ -215,7 +241,16 @@ namespace Intersect.Editor.Forms.Editors
 
         private void btnAddCondition_Click(object sender, EventArgs e)
         {
-            var condition = OpenConditionEditor(new VariableIsCondition());
+            Condition condition = null;
+            switch (mRequirementType)
+            {
+                case RequirementType.MapRegion:
+                    condition = OpenConditionEditor(new EntityTypeIs());
+                    break;
+                default:
+                    condition = OpenConditionEditor(new VariableIsCondition());
+                    break;
+            }
             if (condition != null)
             {
                 mEdittingList.Conditions.Add(condition);
@@ -225,7 +260,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private Condition OpenConditionEditor(Condition condition)
         {
-            var cmdWindow = new EventCommandConditionalBranch(condition, null, null, null);
+            UserControl cmdWindow = null;
             switch(mRequirementType)
             {
                 case RequirementType.NpcFriend:
@@ -235,7 +270,14 @@ namespace Intersect.Editor.Forms.Editors
                 case RequirementType.NpcCanBeSpelled:
                 case RequirementType.NpcCanBeProjectiled:
                 case RequirementType.NpcPhase:
-                    cmdWindow.SetupFromNpc();
+                    cmdWindow = new EventCommandConditionalBranch(condition, null, null, null);
+                    ((EventCommandConditionalBranch)cmdWindow).SetupFromNpc();
+                    break;
+                case RequirementType.MapRegion:
+                    cmdWindow = new MapRegionCommandCondition(condition);
+                    break;
+                default:
+                    cmdWindow = new EventCommandConditionalBranch(condition, null, null, null);
                     break;
             }
             var frm = new Form
@@ -253,12 +295,25 @@ namespace Intersect.Editor.Forms.Editors
             cmdWindow.BringToFront();
             frm.TopMost = true;
             frm.ShowDialog();
-            if (cmdWindow.Cancelled)
+            if (cmdWindow is EventCommandConditionalBranch eventCmd)
             {
-                return null;
-            }
+                if (eventCmd.Cancelled)
+                {
+                    return null;
+                }
 
-            return cmdWindow.Condition;
+                return eventCmd.Condition;
+            }
+            else if (cmdWindow is MapRegionCommandCondition mapregionCmd)
+            {
+                if (mapregionCmd.Cancelled)
+                {
+                    return null;
+                }
+
+                return mapregionCmd.Condition;
+            }
+            return null;
         }
 
         private void btnRemoveCondition_Click(object sender, EventArgs e)

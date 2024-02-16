@@ -293,7 +293,7 @@
     <Compile Include="Factories\FactoryRegistry.cs" />
     <Compile Include="Factories\IFactory.cs" />
     <Compile Include="GameObjects\Events\VariableMod.cs" />
-    <Compile Include="GameObjects\Maps\MapRegion\MapRegionRule.cs" />
+    <Compile Include="GameObjects\Maps\MapRegion\MapRegionCommand.cs" />
     <Compile Include="GameObjects\Maps\MapRegion\MapRegionBase.cs" />
     <Compile Include="GameObjects\ScreenEffectBase.cs" />
     <Compile Include="GameObjects\Switches and Variables\VariableValue.cs" />

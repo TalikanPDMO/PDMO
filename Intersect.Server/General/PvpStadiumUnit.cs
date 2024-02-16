@@ -386,6 +386,7 @@ namespace Intersect.Server.General
                             loser.MapId = loserUnit.InitialMapId;
                             loser.X = loserUnit.InitialMapX;
                             loser.Y = loserUnit.InitialMapY;
+                            loser.MapRegionId = loser.Map?.MapRegionIds[loser.X, loser.Y];
                         }
                         for (var v = 0; v < (int)Vitals.VitalCount; v++)
                         {

@@ -15,7 +15,7 @@ using Intersect.Network.Packets.Server;
 using Intersect.Server.Database;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Entities.Combat;
-using Intersect.Server.Entities.Events;
+using Intersect.Server.Entities.Conditions;
 using Intersect.Server.General;
 using Intersect.Server.Localization;
 using Intersect.Server.Maps;
@@ -28,6 +28,7 @@ using Newtonsoft.Json;
 //Ajoute par Moussmous
 using Intersect.Network;
 using Intersect.Models;
+using Intersect.GameObjects.Maps.MapRegion;
 
 namespace Intersect.Server.Entities
 {
@@ -81,6 +82,10 @@ namespace Intersect.Server.Entities
         [JsonIgnore]
         [NotMapped]
         public MapInstance Map => MapInstance.Get(MapId);
+
+        [JsonIgnore]
+        [NotMapped]
+        public Guid? MapRegionId = null;
 
         public int X { get; set; }
 
@@ -364,6 +369,7 @@ namespace Intersect.Server.Entities
         //Movement
         /// <summary>
         ///     Determines if this entity can move in the direction given.
+        ///     Returns -7 if the tile is blocked by a MapRegion Rule
         ///     Returns -5 if the tile is completely out of bounds.
         ///     Returns -3 if a tile is blocked because of a Z dimension tile
         ///     Returns -2 if a tile is blocked by a map attribute.
@@ -496,6 +502,20 @@ namespace Intersect.Server.Entities
                         }
                     }
                 }
+                if (mapInstance.MapRegionIds[tileX, tileY] != MapRegionId)
+                {
+                    var mapRegion = MapRegionBase.Get(MapRegionId ?? Guid.Empty);
+                    if (mapRegion != null && !ClientConditions.MeetsConditionLists(mapRegion.ExitRequirements, this))
+                    {
+                        return -6;
+                    }
+                    mapRegion = MapRegionBase.Get(mapInstance.MapRegionIds[tileX, tileY] ?? Guid.Empty);
+                    if (mapRegion != null && !ClientConditions.MeetsConditionLists(mapRegion.EnterRequirements, this))
+                    {
+                        return -6;
+                    }
+                }
+
             }
             else
             {
@@ -1023,6 +1043,7 @@ namespace Intersect.Server.Entities
                     Y = tile.GetY();
 
                     var currentMap = MapInstance.Get(tile.GetMapId());
+                    MapRegionId = currentMap?.MapRegionIds[X, Y];
                     if (MapId != tile.GetMapId())
                     {
                         var oldMap = MapInstance.Get(MapId);
@@ -1034,6 +1055,7 @@ namespace Intersect.Server.Entities
                         var newMaps = currentMap?.GetSurroundingMaps(true);
 
                         MapId = tile.GetMapId();
+
 
                         if (oldMaps != null)
                         {
