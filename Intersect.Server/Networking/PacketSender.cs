@@ -1427,7 +1427,8 @@ namespace Intersect.Server.Networking
             Guid mapId,
             byte x,
             byte y,
-            sbyte direction
+            sbyte direction,
+            Guid? mapRegionId = null
         )
         {
             var map = MapInstance.Get(mapId);
@@ -1435,11 +1436,11 @@ namespace Intersect.Server.Networking
             {
                 if (Options.Instance.Packets.BatchAnimationPackets)
                 {
-                    map.AddBatchedAnimation(new PlayAnimationPacket(animId, targetType, entityId, mapId, x, y, direction));
+                    map.AddBatchedAnimation(new PlayAnimationPacket(animId, targetType, entityId, mapId, x, y, direction, mapRegionId));
                 }
                 else
                 {
-                    SendDataToProximity(mapId, new PlayAnimationPacket(animId, targetType, entityId, mapId, x, y, direction), null, TransmissionMode.Any);
+                    SendDataToProximity(mapId, new PlayAnimationPacket(animId, targetType, entityId, mapId, x, y, direction, mapRegionId), null, TransmissionMode.Any);
                 }
             }
         }

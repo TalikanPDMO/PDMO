@@ -76,7 +76,7 @@ namespace Intersect.Server.Entities.Conditions
             X = eventIndex.X;
             Y = eventIndex.Y;
             Name = myEvent.Name;
-            MapRegionId = Map?.MapRegionIds[X, Y];
+            HandleMapRegionId(Map?.MapRegionIds[X, Y]);
             MovementType = MyPage.Movement.Type;
             MovementFreq = MyPage.Movement.Frequency;
             MovementSpeed = MyPage.Movement.Speed;
@@ -151,7 +151,7 @@ namespace Intersect.Server.Entities.Conditions
             MapId = mapId;
             X = globalClone.X;
             Y = globalClone.Y;
-            MapRegionId = Map?.MapRegionIds[X, Y];
+            HandleMapRegionId(Map?.MapRegionIds[X, Y]);
             Name = myEvent.Name;
             MovementType = globalClone.MovementType;
             MovementFreq = globalClone.MovementFreq;

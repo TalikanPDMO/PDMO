@@ -115,7 +115,7 @@ namespace Intersect.Server.Entities.Combat
             {
                 foreach (var status in en.CachedStatuses)
                 {
-                    if (spell.Combat.Friendly != status.Spell.Combat.Friendly)
+                    if (spell.Combat.Friendly != status.Spell.Combat.Friendly && status.Duration != -1)
                     {
                         status.RemoveStatus();
                     }
@@ -123,7 +123,7 @@ namespace Intersect.Server.Entities.Combat
 
                 foreach (var dot in en.CachedDots)
                 {
-                    if (spell.Combat.Friendly != dot.SpellBase.Combat.Friendly)
+                    if (spell.Combat.Friendly != dot.SpellBase.Combat.Friendly && !dot.IsInfinite)
                     {
                         dot.Expire();
                     }
@@ -147,9 +147,18 @@ namespace Intersect.Server.Entities.Combat
             var finalDuration = duration - (duration * (tenacity / 100f));
             if (en.Statuses.ContainsKey(spell))
             {
-                en.Statuses[spell].StartTime = Timing.Global.Milliseconds;
-                en.Statuses[spell].Duration = Timing.Global.Milliseconds + (long) finalDuration;
-                en.Statuses[spell].StartTime = StartTime;
+                
+                if (duration == -1)
+                {
+                    en.Statuses[spell].StartTime = 0;
+                    en.Statuses[spell].Duration = -1;
+                }
+                else
+                {
+                    en.Statuses[spell].StartTime = Timing.Global.Milliseconds;
+                    en.Statuses[spell].Duration = Timing.Global.Milliseconds + (long)finalDuration;
+                }
+                //en.Statuses[spell].StartTime = StartTime;
                 for (var b = 0; b < (int)Stats.StatCount; b++)
                 {
                     en.Statuses[spell].EffectiveStatBuffs[b] = EffectiveStatBuffs[b];
@@ -157,9 +166,17 @@ namespace Intersect.Server.Entities.Combat
                 en.CachedStatuses = en.Statuses.Values.ToArray();
             }
             else
-            { 
-                StartTime = Timing.Global.Milliseconds;
-                Duration = Timing.Global.Milliseconds + (long) finalDuration;
+            {   
+                if (duration == -1)
+                {
+                    StartTime = 0;
+                    Duration = -1;
+                }
+                else
+                {
+                    Duration = Timing.Global.Milliseconds + (long)finalDuration;
+                    StartTime = Timing.Global.Milliseconds;
+                }
                 en.Statuses.TryAdd(Spell, this);
                 en.CachedStatuses = en.Statuses.Values.ToArray();
             }
@@ -209,7 +226,7 @@ namespace Intersect.Server.Entities.Combat
 
         public void TryRemoveStatus()
         {
-            if (Duration <= Globals.Timing.Milliseconds) //Check the timer
+            if (Duration != -1 && Duration <= Globals.Timing.Milliseconds) //Check the timer for not infinite status (Duration -1)
             {
                 RemoveStatus();
             }

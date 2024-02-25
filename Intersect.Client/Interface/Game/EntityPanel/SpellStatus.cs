@@ -114,23 +114,30 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             {
                 var remaining = mStatus.RemainingMs();
                 var spell = SpellBase.Get(mStatus.SpellId);
-                var secondsRemaining = (float) remaining / 1000f;
-                if (secondsRemaining > 10f)
+                if (remaining == Status.REMAINING_INFINITE)
                 {
-                    mDurationLabel.Text =
-                        Strings.EntityBox.cooldown.ToString(((float) remaining / 1000f).ToString("N0"));
+                    mDurationLabel.Text = Strings.EntityBox.infinite;
                 }
                 else
                 {
-                    mDurationLabel.Text = Strings.EntityBox.cooldown.ToString(
-                        ((float) remaining / 1000f).ToString("N1").Replace(".", Strings.Numbers.dec)
-                    );
+                    var secondsRemaining = (float)remaining / 1000f;
+                    if (secondsRemaining > 10f)
+                    {
+                        mDurationLabel.Text =
+                            Strings.EntityBox.cooldown.ToString(((float)remaining / 1000f).ToString("N0"));
+                    }
+                    else
+                    {
+                        mDurationLabel.Text = Strings.EntityBox.cooldown.ToString(
+                            ((float)remaining / 1000f).ToString("N1").Replace(".", Strings.Numbers.dec)
+                        );
+                    }
                 }
 
                 if ((mTexLoaded != "" && spell == null ||
                      spell != null && mTexLoaded != spell.Icon ||
                      mCurrentSpellId != mStatus.SpellId) &&
-                    remaining > 0)
+                    (remaining > 0 || remaining == Status.REMAINING_INFINITE))
                 {
                     Container.Show();
                     if (spell != null)
@@ -165,7 +172,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                         mTexLoaded = "";
                     }
                 }
-                else if (remaining <= 0)
+                else if (remaining <= 0 && remaining != Status.REMAINING_INFINITE)
                 {
                     if (Pnl.Texture != null)
                     {

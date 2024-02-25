@@ -4,9 +4,9 @@ namespace Intersect.Enums
     public enum MapRegionCommandTypes
     {
 
-        Status,
+        ApplySpellEffects,
 
-        Damage,
+        PlayAnimation,
 
 
     }

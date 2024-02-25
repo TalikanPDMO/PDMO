@@ -588,7 +588,7 @@ namespace Intersect.Server.Maps
                     res.Y = spawn.Y;
                     res.Z = spawn.Z;
                     res.MapId = Id;
-                    res.MapRegionId = res.Map?.MapRegionIds[res.X, res.Y];
+                    res.HandleMapRegionId(res.Map?.MapRegionIds[res.X, res.Y]);
                     id = res.Id;
                     AddEntity(res);
                 }
@@ -767,13 +767,12 @@ namespace Intersect.Server.Maps
                     MapId = Id,
                     X = tileX,
                     Y = tileY,
-                    MapRegionId = MapRegionIds[tileX, tileY],
                     Dir = dir,
                     SpawnMap = this,
                     SpawnX = tileX,
                     SpawnY = tileY
                 };
-
+                npc.HandleMapRegionId(MapRegionIds[tileX, tileY]);
                 AddEntity(npc);
                 PacketSender.SendEntityDataToProximity(npc, null, true);
 

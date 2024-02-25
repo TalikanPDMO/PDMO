@@ -14,14 +14,20 @@ namespace Intersect.GameObjects.Maps.MapRegion
         public abstract MapRegionCommandTypes Type { get; }
         public ConditionLists ConditionLists { get; set; } = new ConditionLists();
 
-        public MapRegionCommand()
-        {
-        }
+    }
 
-        public MapRegionCommand(MapRegionCommand copy)
-        {
-        }
+    public class ApplySpellEffectsCommand : MapRegionCommand
+    {
+        public override MapRegionCommandTypes Type { get; } = MapRegionCommandTypes.ApplySpellEffects;
 
+        public Guid? SpellId { get; set; } = null;
+    }
+
+    public class PlayAnimationCommand : MapRegionCommand
+    {
+        public override MapRegionCommandTypes Type { get; } = MapRegionCommandTypes.PlayAnimation;
+
+        public Guid? AnimId { get; set; } = null;
     }
 
 }

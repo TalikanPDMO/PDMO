@@ -19,7 +19,7 @@ namespace Intersect.Editor.Localization
 
         public static string GetEventConditionalDesc(VariableIsCondition condition)
         {
-            var pVar = GetVariableComparisonString((dynamic) condition.Comparison);
+            var pVar = GetVariableComparisonString((dynamic)condition.Comparison);
 
             if (condition.VariableType == VariableTypes.PlayerVariable)
             {
@@ -133,7 +133,7 @@ namespace Intersect.Editor.Localization
             }
             else
             {
-                lvlorstat = Strings.Combat.stats[(int) condition.Stat];
+                lvlorstat = Strings.Combat.stats[(int)condition.Stat];
             }
 
             return Strings.EventConditionDesc.levelorstat.ToString(lvlorstat, pLvl);
@@ -483,7 +483,7 @@ namespace Intersect.Editor.Localization
                 npcname = TextUtils.FormatEditorName(npc.Name, npc.EditorName);
             }
             switch (condition.Progress)
-            {  
+            {
                 case NpcPhasesProgressState.OnAnyPhase:
                     return Strings.EventConditionDesc.fightingphase.ToString(npcname, Strings.EventConditionDesc.onanyphase);
                 case NpcPhasesProgressState.BeforePhase:
@@ -639,7 +639,7 @@ namespace Intersect.Editor.Localization
         public static string GetMapRegionConditionalDesc(EntityTypeIs condition)
         {
             string entityTypes = "";
-            for (var i=0; i<(int)EntityTypes.EntityTypesCount; i++)
+            for (var i = 0; i < (int)EntityTypes.EntityTypesCount; i++)
             {
                 if (condition.Entities[i])
                 {
@@ -799,12 +799,12 @@ namespace Intersect.Editor.Localization
 
                         if (fieldValue is LocalizedString)
                         {
-                            fieldInfo.SetValue(null, new LocalizedString((string) dict[fieldInfo.Name.ToLower()]));
+                            fieldInfo.SetValue(null, new LocalizedString((string)dict[fieldInfo.Name.ToLower()]));
                         }
                         else if (fieldValue is Dictionary<int, LocalizedString>)
                         {
-                            var existingDict = (Dictionary<int, LocalizedString>) fieldInfo.GetValue(null);
-                            var values = ((JObject) dict[fieldInfo.Name]).ToObject<Dictionary<int, string>>();
+                            var existingDict = (Dictionary<int, LocalizedString>)fieldInfo.GetValue(null);
+                            var values = ((JObject)dict[fieldInfo.Name]).ToObject<Dictionary<int, string>>();
                             var dic = values.ToDictionary<KeyValuePair<int, string>, int, LocalizedString>(
                                 val => val.Key, val => val.Value
                             );
@@ -816,8 +816,8 @@ namespace Intersect.Editor.Localization
                         }
                         else if (fieldValue is Dictionary<string, LocalizedString>)
                         {
-                            var existingDict = (Dictionary<string, LocalizedString>) fieldInfo.GetValue(null);
-                            var pairs = ((JObject) dict[fieldInfo.Name])?.ToObject<Dictionary<string, string>>() ??
+                            var existingDict = (Dictionary<string, LocalizedString>)fieldInfo.GetValue(null);
+                            var pairs = ((JObject)dict[fieldInfo.Name])?.ToObject<Dictionary<string, string>>() ??
                                         new Dictionary<string, string>();
 
                             foreach (var pair in pairs)
@@ -854,12 +854,12 @@ namespace Intersect.Editor.Localization
                 {
                     if (p1.GetValue(null).GetType() == typeof(LocalizedString))
                     {
-                        dict.Add(p1.Name.ToLower(), ((LocalizedString) p1.GetValue(null)).ToString());
+                        dict.Add(p1.Name.ToLower(), ((LocalizedString)p1.GetValue(null)).ToString());
                     }
                     else if (p1.GetValue(null).GetType() == typeof(Dictionary<int, LocalizedString>))
                     {
                         var dic = new Dictionary<int, string>();
-                        foreach (var val in (Dictionary<int, LocalizedString>) p1.GetValue(null))
+                        foreach (var val in (Dictionary<int, LocalizedString>)p1.GetValue(null))
                         {
                             dic.Add(val.Key, val.Value.ToString());
                         }
@@ -869,7 +869,7 @@ namespace Intersect.Editor.Localization
                     else if (p1.GetValue(null).GetType() == typeof(Dictionary<string, LocalizedString>))
                     {
                         var dic = new Dictionary<string, string>();
-                        foreach (var val in (Dictionary<string, LocalizedString>) p1.GetValue(null))
+                        foreach (var val in (Dictionary<string, LocalizedString>)p1.GetValue(null))
                         {
                             dic.Add(val.Key.ToLower(), val.Value.ToString());
                         }
@@ -1684,7 +1684,7 @@ Tick timer saved in server config.json.";
                 @"Are you sure you want to undo changes made to this craft? This action cannot be reverted!";
 
             public static LocalizedString undotitle = @"Undo Changes";
-            
+
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString commonevent = @"Common Event:";
 
@@ -2280,7 +2280,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString give = @"Give: Item {00}";
 
-            public static LocalizedString giveexp = @"Give Player {00} Experience"; 
+            public static LocalizedString giveexp = @"Give Player {00} Experience";
 
             public static LocalizedString setexpboost = @"Set Boost Experience '{00}' to {01}";
 
@@ -4833,7 +4833,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString swarmall = @"Swarm all kinds";
 
-            public static LocalizedString swarmonplayer= @"Swarm on Player";
+            public static LocalizedString swarmonplayer = @"Swarm on Player";
 
             public static LocalizedString swarmrange = @"Swarm Range:";
 
@@ -6122,7 +6122,7 @@ Negative values for time to flow backwards.";
             public static LocalizedString to = @"to";
 
         }
-        
+
         public struct Update
         {
 
@@ -6341,7 +6341,23 @@ Negative values for time to flow backwards.";
 
             public static LocalizedString selectcolor = @"Select Color";
 
-            public static LocalizedString rules = @"Rules:";
+            public static LocalizedString commands = @"MapRegion Commands";
+
+            public static LocalizedString editcommands = @"Double-click to edit a command";
+
+            public static LocalizedString newcommand = @"New Command:";
+
+            public static LocalizedString add = @"Add";
+
+            public static LocalizedString remove = @"Remove";
+
+            public static LocalizedString duplicate = @"Duplicate";
+
+            public static Dictionary<int, LocalizedString> commandtypes = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Apply Spell Effects"},
+                {1, @"Play Animation"}
+            };
 
             public static LocalizedString events = @"Events";
 
@@ -6356,6 +6372,10 @@ Negative values for time to flow backwards.";
             public static LocalizedString editenterconditions = @"Edit Enter Conditions ({00})";
 
             public static LocalizedString editexitconditions = @"Edit Exit Conditions ({00})";
+
+            public static LocalizedString cannotenter = @"Cannot Enter Message:";
+
+            public static LocalizedString cannotexit = @"Cannot Exit Message:";
 
             public static LocalizedString none = @"None";
 
@@ -6380,6 +6400,26 @@ Negative values for time to flow backwards.";
                 @"Are you sure you want to undo changes made to this map region? This action cannot be reverted!";
 
             public static LocalizedString undotitle = @"Undo Changes";
+
+            public static LocalizedString commandsitem = @"{00} (Conditions: {01}) [{02}]";
+
+            public static Dictionary<int, LocalizedString> commandstats = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Str:{00}"},
+                {1, @"Mag:{00}"},
+                {2, @"Def:{00}"},
+                {3, @"MR:{00}"},
+                {4, @"Spd:{00}"},
+            };
+            public static LocalizedString hotdot = @"HoT/DoT";
+
+            public static LocalizedString changestat = @"Change Stats";
+
+            public static LocalizedString effect = @"Effect: {00}";
+
+            public static LocalizedString unknown = @"Unknown";
+
+            public static LocalizedString screeneffect = @"{00} ScreenEffects";
 
         }
 
@@ -6738,7 +6778,39 @@ Negative values for time to flow backwards.";
 
         }
 
+        public struct MapRegionApplySpellEffects
+        {
+            public static LocalizedString title = @"Apply Spell Effects Command ";
 
+            public static LocalizedString instructions = @"Only take into account DoT/HoT, Stats Buffs and Extra Effects. %Chance are always 100% and Duration are infinite while inside the region (Tick Duration is needed if HoT/DoT)";
+
+            public static LocalizedString spell = @"Spell:";
+
+            public static LocalizedString editconditions = @"Edit Command Conditions ({00})";
+
+            public static LocalizedString none = @"None";
+
+            public static LocalizedString cancel = @"Cancel";
+
+            public static LocalizedString okay = @"Ok";
+
+        }
+
+        public struct MapRegionPlayAnimation
+        {
+            public static LocalizedString title = @"Play Animation Command ";
+
+            public static LocalizedString instructions = @"Animations are played on the entity infinitely while inside the region. ScreenEffects only for players and the Pending Duration is infinite while inside the region";
+
+            public static LocalizedString animation = @"Animation:";
+
+            public static LocalizedString none = @"None";
+
+            public static LocalizedString cancel = @"Cancel";
+
+            public static LocalizedString okay = @"Ok";
+
+            public static LocalizedString editconditions = @"Edit Command Conditions ({00})";
+        }
     }
-
 }

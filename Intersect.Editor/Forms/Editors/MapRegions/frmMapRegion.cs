@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -16,6 +17,7 @@ using Intersect.GameObjects.Maps;
 using Intersect.GameObjects.Maps.MapRegion;
 using Intersect.Models;
 using Intersect.Utilities;
+using Newtonsoft.Json;
 
 namespace Intersect.Editor.Forms.Editors.MapRegions
 {
@@ -102,6 +104,7 @@ namespace Intersect.Editor.Forms.Editors.MapRegions
                 {
                     btnEditEnterConditions.Text = Strings.MapRegionEditor.editenterconditions.ToString(mEditorItem.EnterRequirements.Count);
                 }
+                txtCannotEnter.Text = mEditorItem.CannotEnterMessage;
 
                 if (mEditorItem.ExitRequirements == null || mEditorItem.ExitRequirements.Count == 0)
                 {
@@ -111,8 +114,10 @@ namespace Intersect.Editor.Forms.Editors.MapRegions
                 {
                     btnEditExitConditions.Text = Strings.MapRegionEditor.editexitconditions.ToString(mEditorItem.ExitRequirements.Count);
                 }
+                txtCannotExit.Text = mEditorItem.CannotExitMessage;
 
-                grpRules.Hide();
+                cmbNewCommand.SelectedIndex = 0;
+                ListMapRegionCommands();
 
                 if (mChanged.IndexOf(mEditorItem) == -1)
                 {
@@ -148,6 +153,16 @@ namespace Intersect.Editor.Forms.Editors.MapRegions
         private void txtDesc_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.Description = txtDesc.Text;
+        }
+
+        private void txtCannotEnter_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.CannotEnterMessage = txtCannotEnter.Text;
+        }
+
+        private void txtCannotExit_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.CannotExitMessage = txtCannotExit.Text;
         }
 
         private void btnSelectColor_Click(object sender, EventArgs e)
@@ -188,23 +203,114 @@ namespace Intersect.Editor.Forms.Editors.MapRegions
                 btnEditExitConditions.Text = Strings.MapRegionEditor.editexitconditions.ToString(mEditorItem.ExitRequirements.Count);
             }
         }
-
-        /*private void btnAdd_Click(object sender, EventArgs e)
+        private bool OpenMapRegionCommandEditor(MapRegionCommand command, MapRegionCommandTypes cmdType)
         {
-            mEditorItem.Ingredients.Add(new CraftIngredient(Guid.Empty, 1));
-            lstIngredients.Items.Add(Strings.General.none);
-            lstIngredients.SelectedIndex = lstIngredients.Items.Count - 1;
-            cmbIngredient_SelectedIndexChanged(null, null);
+            MapRegionCommandControl cmdWindow = null;
+            var frm = new Form();
+            switch(cmdType)
+            {
+                case MapRegionCommandTypes.ApplySpellEffects:
+                    cmdWindow = new MapRegionCommandApplySpellEffects((ApplySpellEffectsCommand)command);
+                    frm.Text = Strings.MapRegionApplySpellEffects.title;
+                    break;
+                case MapRegionCommandTypes.PlayAnimation:
+                    cmdWindow = new MapRegionCommandPlayAnimation((PlayAnimationCommand)command);
+                    frm.Text = Strings.MapRegionPlayAnimation.title;
+                    break;
+            }
+            frm.Controls.Add(cmdWindow);
+            frm.Size = new Size(0, 0);
+            frm.AutoSize = true;
+            frm.ControlBox = false;
+            frm.FormBorderStyle = FormBorderStyle.FixedDialog;
+            frm.StartPosition = FormStartPosition.CenterParent;
+            frm.BackColor = cmdWindow.BackColor;
+            cmdWindow.BringToFront();
+            frm.ShowDialog();
+            if (!cmdWindow.Cancelled)
+            {
+                return true;
+            }
+
+            return false;
+        }
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            if (cmbNewCommand.SelectedIndex > -1)
+            {
+                MapRegionCommand newCommand = null;
+                switch ((MapRegionCommandTypes)cmbNewCommand.SelectedIndex)
+                {
+                    case MapRegionCommandTypes.ApplySpellEffects:
+                        newCommand = new ApplySpellEffectsCommand();
+                        break;
+                    case MapRegionCommandTypes.PlayAnimation:
+                        newCommand = new PlayAnimationCommand();
+                        break;
+                }
+                if (newCommand != null)
+                {
+                    if (OpenMapRegionCommandEditor(newCommand, newCommand.Type))
+                    {
+                        mEditorItem.Commands.Add(newCommand);
+                        ListMapRegionCommands();
+                    }
+                }
+            }
+        }
+
+        private void btnDuplicate_Click(object sender, EventArgs e)
+        {
+            if (lstCommands.SelectedIndex > -1 && mEditorItem.Commands.Count > lstCommands.SelectedIndex)
+            {
+                var command = mEditorItem.Commands[lstCommands.SelectedIndex];
+                var copydata = JsonConvert.SerializeObject(command);
+                switch(command.Type)
+                {
+                    case MapRegionCommandTypes.ApplySpellEffects:
+                        mEditorItem.Commands.Add(JsonConvert.DeserializeObject<ApplySpellEffectsCommand>(copydata));
+                        break;
+                    case MapRegionCommandTypes.PlayAnimation:
+                        mEditorItem.Commands.Add(JsonConvert.DeserializeObject<PlayAnimationCommand>(copydata));
+                        break;
+                }
+                ListMapRegionCommands();
+            }
+        }
+
+        private void lstCommands_DoubleClick(object sender, EventArgs e)
+        {
+            if (lstCommands.SelectedIndex > -1 && mEditorItem.Commands.Count > lstCommands.SelectedIndex)
+            {
+                if (OpenMapRegionCommandEditor(mEditorItem.Commands[lstCommands.SelectedIndex], mEditorItem.Commands[lstCommands.SelectedIndex].Type))
+                {
+                    ListMapRegionCommands();
+                }
+            }
+        }
+
+        private void ListMapRegionCommands()
+        {
+            lstCommands.Items.Clear();
+            foreach (var command in mEditorItem.Commands)
+            {
+                if (command != null)
+                {
+                    lstCommands.Items.Add(GetMapRegionCommandDescription(command));
+                }
+            }
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
         {
-            if (lstIngredients.Items.Count > 0)
+            if (lstCommands.SelectedIndex > -1 && mEditorItem.Commands.Count > lstCommands.SelectedIndex)
             {
-                mEditorItem.Ingredients.RemoveAt(lstIngredients.SelectedIndex);
-                UpdateEditor();
+                var i = lstCommands.SelectedIndex;
+                lstCommands.Items.RemoveAt(i);
+                mEditorItem.Commands.RemoveAt(i);
+                ListMapRegionCommands();
             }
-        }*/
+        }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
@@ -356,93 +462,6 @@ namespace Intersect.Editor.Forms.Editors.MapRegions
             }
         }
 
-        /*private void lstIngredients_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (updatingIngedients)
-            {
-                return;
-            }
-
-            if (lstIngredients.SelectedIndex > -1)
-            {
-                cmbIngredient.Show();
-                nudQuantity.Show();
-                lblQuantity.Show();
-                lblIngredient.Show();
-                cmbIngredient.SelectedIndex =
-                    ItemBase.ListIndex(mEditorItem.Ingredients[lstIngredients.SelectedIndex].ItemId) + 1;
-
-                nudQuantity.Value = mEditorItem.Ingredients[lstIngredients.SelectedIndex].Quantity;
-            }
-            else
-            {
-                cmbIngredient.Hide();
-                nudQuantity.Hide();
-                lblQuantity.Hide();
-                lblIngredient.Hide();
-            }
-        }
-
-        private void btnDupIngredient_Click(object sender, EventArgs e)
-        {
-            if (lstIngredients.SelectedIndex > -1)
-            {
-                mEditorItem.Ingredients.Insert(
-                    lstIngredients.SelectedIndex,
-                    new CraftIngredient(
-                        mEditorItem.Ingredients[lstIngredients.SelectedIndex].ItemId,
-                        mEditorItem.Ingredients[lstIngredients.SelectedIndex].Quantity
-                    )
-                );
-
-                UpdateEditor();
-            }
-        }
-
-        private void cmbResult_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            mEditorItem.ItemId = ItemBase.IdFromList(cmbResult.SelectedIndex - 1);
-            var itm = ItemBase.Get(mEditorItem.ItemId);
-            if (itm == null || !itm.IsStackable)
-            {
-                nudCraftQuantity.Value = 1;
-                mEditorItem.Quantity = 1;
-                nudCraftQuantity.Enabled = false;
-            }
-            else
-            {
-                nudCraftQuantity.Enabled = true;
-            }
-        }
-
-        private void cmbIngredient_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (lstIngredients.SelectedIndex > -1)
-            {
-                mEditorItem.Ingredients[lstIngredients.SelectedIndex].ItemId =
-                    ItemBase.IdFromList(cmbIngredient.SelectedIndex - 1);
-
-                updatingIngedients = true;
-                if (cmbIngredient.SelectedIndex > 0)
-                {
-                    lstIngredients.Items[lstIngredients.SelectedIndex] =
-                        Strings.MapRegionEditor.ingredientlistitem.ToString(
-                            ItemBase.GetName(mEditorItem.Ingredients[lstIngredients.SelectedIndex].ItemId),
-                            nudQuantity.Value
-                        );
-                }
-                else
-                {
-                    lstIngredients.Items[lstIngredients.SelectedIndex] =
-                        Strings.MapRegionEditor.ingredientlistitem.ToString(
-                            Strings.MapRegionEditor.ingredientnone, nudQuantity.Value
-                        );
-                }
-
-                updatingIngedients = false;
-            }
-        }*/
-
         private void frmMapRegion_Load(object sender, EventArgs e)
         {
             InitLocalization();
@@ -476,8 +495,20 @@ namespace Intersect.Editor.Forms.Editors.MapRegions
             lblEventExit.Text = Strings.MapRegionEditor.onexit;
 
             grpConditions.Text = Strings.MapRegionEditor.conditions;
+            lblCannotEnter.Text = Strings.MapRegionEditor.cannotenter;
+            lblCannotExit.Text = Strings.MapRegionEditor.cannotexit;
 
-            grpRules.Text = Strings.MapRegionEditor.rules;
+            grpCommands.Text = Strings.MapRegionEditor.commands;
+            lblEditCommand.Text = Strings.MapRegionEditor.editcommands;
+            lblNewCommand.Text = Strings.MapRegionEditor.newcommand;
+            btnAdd.Text = Strings.MapRegionEditor.add;
+            btnRemove.Text = Strings.MapRegionEditor.remove;
+            btnDuplicate.Text = Strings.MapRegionEditor.duplicate;
+            cmbNewCommand.Items.Clear();
+            for (var i = 0; i < Strings.MapRegionEditor.commandtypes.Count;i++)
+            {
+                cmbNewCommand.Items.Add(Strings.MapRegionEditor.commandtypes[i]);
+            }
 
             //Searching/Sorting
             btnAlphabetical.ToolTipText = Strings.MapRegionEditor.sortalphabetically;
@@ -486,6 +517,88 @@ namespace Intersect.Editor.Forms.Editors.MapRegions
 
             btnSave.Text = Strings.MapRegionEditor.save;
             btnCancel.Text = Strings.MapRegionEditor.cancel;
+        }
+
+        private string GetMapRegionCommandDescription(MapRegionCommand command)
+        {
+            var commandData = "Command Description";
+            switch (command.Type)
+            {
+                case MapRegionCommandTypes.ApplySpellEffects:
+                    var statuscommand = (ApplySpellEffectsCommand)command;
+                    var spell = SpellBase.Get(statuscommand.SpellId ?? Guid.Empty);
+                    if (spell != null)
+                    {
+                        commandData = TextUtils.FormatEditorName(spell.Name, spell.EditorName) + ": ";
+                        if (spell.Combat.HoTDoT)
+                        {
+                            commandData += Strings.MapRegionEditor.hotdot;
+                        }
+                        if (spell.Combat.StatDiff.Any(s => s != 0) || spell.Combat.PercentageStatDiff.Any(s => s != 0))
+                        {
+                            if (commandData.Length > 0)
+                            {
+                                commandData += " | ";
+                            }
+                            commandData += Strings.MapRegionEditor.changestat;
+                        }
+                        if (spell.Combat.Effect != StatusTypes.None)
+                        {
+                            if (commandData.Length > 0)
+                            {
+                                commandData += " | ";
+                            }
+                            commandData += Strings.MapRegionEditor.effect.ToString(Strings.SpellEditor.effects[(int)spell.Combat.Effect]);
+                        }
+                    }
+                    else
+                    {
+                        commandData = Strings.MapRegionEditor.unknown;
+                    }
+                    /*for (var i =0; i<(int)Stats.StatCount;i++)
+                    {
+                        var statString = "";
+                        if (statuscommand.StatDiff[i] != 0)
+                        {
+                            statString += statuscommand.StatDiff[i].ToString("+#;-#;0");
+                        }
+                        if (statuscommand.PercentageStatDiff[i] != 0)
+                        {
+                            statString += statuscommand.PercentageStatDiff[i].ToString("+#;-#;0") + "%";
+                        }
+                        if (statString.Length > 0)
+                        {
+                            commandData += Strings.MapRegionEditor.commandstats[i].ToString(statString) + " ";
+                        }
+                    }
+                    if (statuscommand.Effect != StatusTypes.None)
+                    {
+                        if (commandData.Length > 0)
+                        {
+                            commandData += "| ";
+                        }
+                        commandData += Strings.MapRegionEditor.effect.ToString(Strings.MapRegionApplyStatus.effects[(int)statuscommand.Effect]);
+                    }*/
+                    
+                    break;
+                case MapRegionCommandTypes.PlayAnimation:
+                    var animcommand = (PlayAnimationCommand)command;
+                    var anim = AnimationBase.Get(animcommand.AnimId ?? Guid.Empty);
+                    if (anim != null)
+                    {
+                        commandData = anim.Name + ": " + Strings.MapRegionEditor.screeneffect.ToString(anim.ScreenEffects.Count);
+                    }
+                    else
+                    {
+                        commandData = Strings.MapRegionEditor.unknown;
+                    }
+                    break;
+            }
+            return Strings.MapRegionEditor.commandsitem.ToString(
+                Strings.MapRegionEditor.commandtypes[(int)command.Type],
+                command.ConditionLists.Count,
+                commandData);
+
         }
         
         private void cmbEventEnter_SelectedIndexChanged(object sender, EventArgs e)
@@ -605,6 +718,7 @@ namespace Intersect.Editor.Forms.Editors.MapRegions
         }
 
         #endregion
+
     }
 
 }

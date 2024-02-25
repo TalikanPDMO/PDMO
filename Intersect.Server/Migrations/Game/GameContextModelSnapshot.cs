@@ -390,6 +390,10 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("CannotEnterMessage");
+
+                    b.Property<string>("CannotExitMessage");
+
                     b.Property<string>("CommandsJson")
                         .HasColumnName("MapRegionCommands");
 

@@ -71,6 +71,11 @@ namespace Intersect.Server.Entities
             Id = instanceId;
         }
 
+        public static Entity Neutral = new Entity(Guid.Empty)
+        {
+            Name = "Neutral"
+        };
+
         [Column(Order = 1), JsonProperty(Order = -2)]
         public string Name { get; set; }
 
@@ -507,12 +512,22 @@ namespace Intersect.Server.Entities
                     var mapRegion = MapRegionBase.Get(MapRegionId ?? Guid.Empty);
                     if (mapRegion != null && !ClientConditions.MeetsConditionLists(mapRegion.ExitRequirements, this))
                     {
-                        return -6;
+                        if (this is Player p && !string.IsNullOrWhiteSpace(mapRegion.CannotExitMessage))
+                        {
+                            // Should not really happens because it is also done on client side, but 
+                            PacketSender.SendChatMsg(p, mapRegion.CannotExitMessage, ChatMessageType.Error);
+                        }
+                        return -7;
                     }
                     mapRegion = MapRegionBase.Get(mapInstance.MapRegionIds[tileX, tileY] ?? Guid.Empty);
                     if (mapRegion != null && !ClientConditions.MeetsConditionLists(mapRegion.EnterRequirements, this))
                     {
-                        return -6;
+                        if (this is Player p && !string.IsNullOrWhiteSpace(mapRegion.CannotEnterMessage))
+                        {
+                            // Should not really happens because it is also done on client side, but 
+                            PacketSender.SendChatMsg(p, mapRegion.CannotEnterMessage, ChatMessageType.Error);
+                        }
+                        return -7;
                     }
                 }
 
@@ -1043,7 +1058,7 @@ namespace Intersect.Server.Entities
                     Y = tile.GetY();
 
                     var currentMap = MapInstance.Get(tile.GetMapId());
-                    MapRegionId = currentMap?.MapRegionIds[X, Y];
+                    HandleMapRegionId(currentMap?.MapRegionIds[X, Y]);
                     if (MapId != tile.GetMapId())
                     {
                         var oldMap = MapInstance.Get(MapId);
@@ -2553,7 +2568,6 @@ namespace Intersect.Server.Entities
                             PacketSender.SendAnimationToProximity(status.Spell.ImpactAnimationId, -1, Guid.Empty, enemy.MapId, (byte)enemy.X, (byte)enemy.Y, (sbyte)Directions.Up);
                         }
                         TryAttack(enemy, status.Spell, true);
-                        status.RemoveStatus();
                     }
                 }
             }
@@ -2846,8 +2860,31 @@ namespace Intersect.Server.Entities
 
                     break;
                 case SpellTypes.Warp:
-                    if (this is Player)
+                    if (this is Player player)
                     {
+                        var mapinstance = MapBase.Get(spellBase.Warp.MapId);
+                        if (mapinstance.MapRegionIds[spellBase.Warp.X, spellBase.Warp.Y] != MapRegionId)
+                        {
+                            var mapRegion = MapRegionBase.Get(MapRegionId ?? Guid.Empty);
+                            if (mapRegion != null && !ClientConditions.MeetsConditionLists(mapRegion.ExitRequirements, this))
+                            {
+                                if (!string.IsNullOrWhiteSpace(mapRegion.CannotExitMessage))
+                                {
+                                    PacketSender.SendChatMsg(player, mapRegion.CannotExitMessage, ChatMessageType.Error);
+                                }
+                                break; // Do not warp from a spell/item if we can't exit our MapRegion
+                            }
+                            mapRegion = MapRegionBase.Get(mapinstance.MapRegionIds[spellBase.Warp.X, spellBase.Warp.Y] ?? Guid.Empty);
+                            if (mapRegion != null && !ClientConditions.MeetsConditionLists(mapRegion.EnterRequirements, this))
+                            {
+                                if (!string.IsNullOrWhiteSpace(mapRegion.CannotEnterMessage))
+                                {
+                                    PacketSender.SendChatMsg(player, mapRegion.CannotEnterMessage, ChatMessageType.Error);
+                                }
+                                break;// Do not warp from a spell/item if we can't enter the target MapRegion
+                            }
+                        }
+
                         // Play the tile animation on our tile before tp
                         if (spellBase.TilesAnimation != null)
                         {
@@ -2870,15 +2907,35 @@ namespace Intersect.Server.Entities
                 case SpellTypes.WarpTo:
                     if (baseTarget != null)
                     {
-                        if (spellBase.TilesAnimation != null)
-                        {
-                            // Play the tile animation on our tile before tp
-                            PacketSender.SendAnimationToProximity(spellBase.TilesAnimationId, -1, Guid.Empty, MapId, (byte)X, (byte)Y, (sbyte)Directions.Up);
-                        }
-
                         int[] position = GetPositionNearTarget(baseTarget.MapId, baseTarget.X, baseTarget.Y);
                         if (position!= null)
                         {
+                            if (baseTarget.Map?.MapRegionIds[position[0], position[1]] != MapRegionId)
+                            {
+                                var mapRegion = MapRegionBase.Get(MapRegionId ?? Guid.Empty);
+                                if (mapRegion != null && !ClientConditions.MeetsConditionLists(mapRegion.ExitRequirements, this))
+                                {
+                                    if (this is Player p && !string.IsNullOrWhiteSpace(mapRegion.CannotExitMessage))
+                                    {
+                                        PacketSender.SendChatMsg(p, mapRegion.CannotExitMessage, ChatMessageType.Error);
+                                    }
+                                    break; // Do not warp from a spell/item if we can't exit our MapRegion
+                                }
+                                mapRegion = MapRegionBase.Get(baseTarget.Map?.MapRegionIds[position[0], position[1]] ?? Guid.Empty);
+                                if (mapRegion != null && !ClientConditions.MeetsConditionLists(mapRegion.EnterRequirements, this))
+                                {
+                                    if (this is Player p && !string.IsNullOrWhiteSpace(mapRegion.CannotEnterMessage))
+                                    {
+                                        PacketSender.SendChatMsg(p, mapRegion.CannotEnterMessage, ChatMessageType.Error);
+                                    }
+                                    break;// Do not warp from a spell/item if we can't enter the target MapRegion
+                                }
+                            }
+                            if (spellBase.TilesAnimation != null)
+                            {
+                                // Play the tile animation on our tile before tp
+                                PacketSender.SendAnimationToProximity(spellBase.TilesAnimationId, -1, Guid.Empty, MapId, (byte)X, (byte)Y, (sbyte)Directions.Up);
+                            }
                             Warp(baseTarget.MapId, (byte)position[0], (byte)position[1], (byte)Dir);
                         }
                         ChangeDir(DirToEnemy(baseTarget, true));
@@ -3546,11 +3603,20 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            DoT?.Clear();
-            CachedDots = new DoT[0];
-            Statuses?.Clear();
-            CachedStatuses = new Status[0];
-            Stat?.ToList().ForEach(stat => stat?.Reset());
+            //Reset DoT Statuses and Stats if not related to a mapregion
+            if (DoT != null)
+            {
+                var dotRemove = DoT.Where(d => !d.Value.IsInfinite).ToList(); ;
+                dotRemove.ForEach(d => DoT.TryRemove(d.Key, out var dot));
+                CachedDots = DoT.Values.ToArray();
+            }
+            if (Statuses != null)
+            {
+                var statusRemove = Statuses.Where(s => s.Value.Duration != -1).ToList(); ;
+                statusRemove.ForEach(s => Statuses.TryRemove(s.Key, out var status));
+                CachedStatuses = Statuses.Values.ToArray();
+            }
+            Stat?.ToList().ForEach(stat => stat?.ResetDurationBuffs());
 
             Dead = true;
         }
@@ -3725,6 +3791,49 @@ namespace Intersect.Server.Entities
             bool mapSave = false
         )
         {
+        }
+
+        public void HandleMapRegionId(Guid? regionId)
+        {
+            if (regionId != MapRegionId) // We change our current MapRegion, so Enter a new one and/or Exit the old one
+            {
+                var oldRegion = MapRegionBase.Get(MapRegionId ?? Guid.Empty);
+                var newRegion = MapRegionBase.Get(regionId ?? Guid.Empty);
+                if (oldRegion != null)
+                {
+                    if (this is Player p)
+                    {
+                        p.StartCommonEvent(oldRegion.ExitEvent);
+                    }
+                    MapRegionCommandProcessing.ResetMapRegionAllCommands(this);
+                }
+                if (newRegion != null)
+                {
+                    if (this is Player p)
+                    {
+                        p.StartCommonEvent(newRegion.EnterEvent);
+                    }
+                    foreach(var command in newRegion.Commands)
+                    {
+                        if (ClientConditions.MeetsConditionLists(command.ConditionLists, this))
+                        {
+                            MapRegionCommandProcessing.ProcessCommand(command, this, newRegion);
+                        }
+                    }
+                }
+                MapRegionId = regionId;
+            }
+            else
+            {
+                var region = MapRegionBase.Get(MapRegionId ?? Guid.Empty);
+                if (region != null)
+                {
+                    if (this is Player p)
+                    {
+                        p.StartCommonEvent(region.MoveEvent);
+                    }
+                }
+            }
         }
 
         public virtual EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null, bool isSpawn = false)

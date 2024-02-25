@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Intersect.Server.Migrations.Game
 {
     [DbContext(typeof(GameContext))]
-    [Migration("20240213175216_AddingMapRegions")]
+    [Migration("20240224154435_AddingMapRegions")]
     partial class AddingMapRegions
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -391,6 +391,10 @@ namespace Intersect.Server.Migrations.Game
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CannotEnterMessage");
+
+                    b.Property<string>("CannotExitMessage");
 
                     b.Property<string>("CommandsJson")
                         .HasColumnName("MapRegionCommands");

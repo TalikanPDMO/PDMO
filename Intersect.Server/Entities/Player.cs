@@ -778,11 +778,20 @@ namespace Intersect.Server.Entities
         //Spawning/Dying
         private void Respawn()
         {
-            //Remove any damage over time effects
-            DoT.Clear();
-            CachedDots = new DoT[0];
-            Statuses.Clear();
-            CachedStatuses = new Status[0];
+            //Reset DoT Statuses and Stats if not related to a mapregion
+            if (DoT != null)
+            {
+                var dotRemove = DoT.Where(d => !d.Value.IsInfinite).ToList(); ;
+                dotRemove.ForEach(d => DoT.TryRemove(d.Key, out var dot));
+                CachedDots = DoT.Values.ToArray();
+            }
+            if (Statuses != null)
+            {
+                var statusRemove = Statuses.Where(s => s.Value.Duration != -1).ToList(); ;
+                statusRemove.ForEach(s => Statuses.TryRemove(s.Key, out var status));
+                CachedStatuses = Statuses.Values.ToArray();
+            }
+            Stat?.ToList().ForEach(stat => stat?.ResetDurationBuffs());
 
             CombatTimer = 0;
             FightingNpcBaseIds.Clear();
@@ -1827,7 +1836,7 @@ namespace Intersect.Server.Entities
             Y = (int)newY;
             Z = zOverride;
             Dir = newDir;
-            MapRegionId = map.MapRegionIds[X, Y];
+            HandleMapRegionId(map.MapRegionIds[X, Y]);
             var newSurroundingMaps = map.GetSurroundingMapIds(true);
             foreach (var evt in EventLookup)
             {

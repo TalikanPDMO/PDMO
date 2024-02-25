@@ -1717,10 +1717,20 @@ namespace Intersect.Server.Entities
             // Reset our vitals and statusses when configured.
             if (resetVitals)
             {
-                Statuses.Clear();
-                CachedStatuses = Statuses.Values.ToArray();
-                DoT.Clear();
-                CachedDots = DoT.Values.ToArray();
+                //Reset DoT Statuses and Stats if not related to a mapregion
+                if (DoT != null)
+                {
+                    var dotRemove = DoT.Where(d => !d.Value.IsInfinite).ToList(); ;
+                    dotRemove.ForEach(d => DoT.TryRemove(d.Key, out var dot));
+                    CachedDots = DoT.Values.ToArray();
+                }
+                if (Statuses != null)
+                {
+                    var statusRemove = Statuses.Where(s => s.Value.Duration != -1).ToList(); ;
+                    statusRemove.ForEach(s => Statuses.TryRemove(s.Key, out var status));
+                    CachedStatuses = Statuses.Values.ToArray();
+                }
+                Stat?.ToList().ForEach(stat => stat?.ResetDurationBuffs());
                 for (var v = 0; v < (int)Vitals.VitalCount; v++)
                 {
                     RestoreVital((Vitals)v);
@@ -2081,7 +2091,7 @@ namespace Intersect.Server.Entities
             Y = (int)newY;
             Z = zOverride;
             Dir = newDir;
-            MapRegionId = map.MapRegionIds[X, Y];
+            HandleMapRegionId(map.MapRegionIds[X, Y]);
             if (newMapId != MapId)
             {
                 var oldMap = MapInstance.Get(MapId);

@@ -525,6 +525,7 @@
     <Compile Include="Maps\MapItemInstance.cs" />
     <Compile Include="Maps\MapItemSpawn.cs" />
     <Compile Include="Maps\MapNpcSpawn.cs" />
+    <Compile Include="Maps\MapRegionCommandProcessing.cs" />
     <Compile Include="Maps\MapResourceSpawn.cs" />
     <Compile Include="Maps\MapTileLoc.cs" />
     <Compile Include="Maps\MapTrapInstance.cs" />
@@ -752,9 +753,9 @@
     <Compile Include="Migrations\Game\20240211111016_AddingScreenEffectsToAnimations.designer.cs">
       <DependentUpon>20240211111016_AddingScreenEffectsToAnimations.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\Game\20240213175216_AddingMapRegions.cs" />
-    <Compile Include="Migrations\Game\20240213175216_AddingMapRegions.designer.cs">
-      <DependentUpon>20240213175216_AddingMapRegions.cs</DependentUpon>
+    <Compile Include="Migrations\Game\20240224154435_AddingMapRegions.cs" />
+    <Compile Include="Migrations\Game\20240224154435_AddingMapRegions.designer.cs">
+      <DependentUpon>20240224154435_AddingMapRegions.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

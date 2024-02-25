@@ -39,6 +39,13 @@ namespace Intersect.Editor.Forms.Editors.MapRegions
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
             this.pnlContainer = new System.Windows.Forms.Panel();
+            this.grpConditions = new DarkUI.Controls.DarkGroupBox();
+            this.lblCannotExit = new System.Windows.Forms.Label();
+            this.txtCannotExit = new DarkUI.Controls.DarkTextBox();
+            this.lblCannotEnter = new System.Windows.Forms.Label();
+            this.txtCannotEnter = new DarkUI.Controls.DarkTextBox();
+            this.btnEditExitConditions = new DarkUI.Controls.DarkButton();
+            this.btnEditEnterConditions = new DarkUI.Controls.DarkButton();
             this.grpEditorParams = new DarkUI.Controls.DarkGroupBox();
             this.btnSelectColor = new DarkUI.Controls.DarkButton();
             this.pnlColor = new System.Windows.Forms.Panel();
@@ -60,15 +67,14 @@ namespace Intersect.Editor.Forms.Editors.MapRegions
             this.txtDesc = new DarkUI.Controls.DarkTextBox();
             this.lblName = new System.Windows.Forms.Label();
             this.txtName = new DarkUI.Controls.DarkTextBox();
-            this.grpRules = new DarkUI.Controls.DarkGroupBox();
-            this.nudQuantity = new DarkUI.Controls.DarkNumericUpDown();
-            this.cmbIngredient = new DarkUI.Controls.DarkComboBox();
-            this.btnDupIngredient = new DarkUI.Controls.DarkButton();
+            this.grpCommands = new DarkUI.Controls.DarkGroupBox();
+            this.lblEditCommand = new System.Windows.Forms.Label();
+            this.cmbNewCommand = new DarkUI.Controls.DarkComboBox();
+            this.btnDuplicate = new DarkUI.Controls.DarkButton();
             this.btnRemove = new DarkUI.Controls.DarkButton();
             this.btnAdd = new DarkUI.Controls.DarkButton();
-            this.lblIngredient = new System.Windows.Forms.Label();
-            this.lstIngredients = new System.Windows.Forms.ListBox();
-            this.lblQuantity = new System.Windows.Forms.Label();
+            this.lblNewCommand = new System.Windows.Forms.Label();
+            this.lstCommands = new System.Windows.Forms.ListBox();
             this.toolStrip = new DarkUI.Controls.DarkToolStrip();
             this.toolStripItemNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -84,19 +90,15 @@ namespace Intersect.Editor.Forms.Editors.MapRegions
             this.grpCommentary = new DarkUI.Controls.DarkGroupBox();
             this.txtCommentary = new DarkUI.Controls.DarkTextBox();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
-            this.grpConditions = new DarkUI.Controls.DarkGroupBox();
-            this.btnEditEnterConditions = new DarkUI.Controls.DarkButton();
-            this.btnEditExitConditions = new DarkUI.Controls.DarkButton();
             this.grpCrafts.SuspendLayout();
             this.pnlContainer.SuspendLayout();
+            this.grpConditions.SuspendLayout();
             this.grpEditorParams.SuspendLayout();
             this.grpEvents.SuspendLayout();
             this.grpGeneral.SuspendLayout();
-            this.grpRules.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudQuantity)).BeginInit();
+            this.grpCommands.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.grpCommentary.SuspendLayout();
-            this.grpConditions.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnCancel
@@ -177,16 +179,97 @@ namespace Intersect.Editor.Forms.Editors.MapRegions
             // 
             // pnlContainer
             // 
+            this.pnlContainer.AutoScroll = true;
             this.pnlContainer.Controls.Add(this.grpConditions);
             this.pnlContainer.Controls.Add(this.grpEditorParams);
             this.pnlContainer.Controls.Add(this.grpEvents);
             this.pnlContainer.Controls.Add(this.grpGeneral);
-            this.pnlContainer.Controls.Add(this.grpRules);
+            this.pnlContainer.Controls.Add(this.grpCommands);
             this.pnlContainer.Location = new System.Drawing.Point(221, 36);
             this.pnlContainer.Name = "pnlContainer";
-            this.pnlContainer.Size = new System.Drawing.Size(586, 485);
+            this.pnlContainer.Size = new System.Drawing.Size(613, 485);
             this.pnlContainer.TabIndex = 31;
             this.pnlContainer.Visible = false;
+            // 
+            // grpConditions
+            // 
+            this.grpConditions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpConditions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpConditions.Controls.Add(this.lblCannotExit);
+            this.grpConditions.Controls.Add(this.txtCannotExit);
+            this.grpConditions.Controls.Add(this.lblCannotEnter);
+            this.grpConditions.Controls.Add(this.txtCannotEnter);
+            this.grpConditions.Controls.Add(this.btnEditExitConditions);
+            this.grpConditions.Controls.Add(this.btnEditEnterConditions);
+            this.grpConditions.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpConditions.Location = new System.Drawing.Point(5, 158);
+            this.grpConditions.Name = "grpConditions";
+            this.grpConditions.Size = new System.Drawing.Size(574, 124);
+            this.grpConditions.TabIndex = 58;
+            this.grpConditions.TabStop = false;
+            this.grpConditions.Text = "MapRegion Conditions";
+            // 
+            // lblCannotExit
+            // 
+            this.lblCannotExit.AutoSize = true;
+            this.lblCannotExit.Location = new System.Drawing.Point(314, 51);
+            this.lblCannotExit.Name = "lblCannotExit";
+            this.lblCannotExit.Size = new System.Drawing.Size(110, 13);
+            this.lblCannotExit.TabIndex = 58;
+            this.lblCannotExit.Text = "Cannot Exit Message:";
+            // 
+            // txtCannotExit
+            // 
+            this.txtCannotExit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtCannotExit.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCannotExit.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtCannotExit.Location = new System.Drawing.Point(315, 68);
+            this.txtCannotExit.Multiline = true;
+            this.txtCannotExit.Name = "txtCannotExit";
+            this.txtCannotExit.Size = new System.Drawing.Size(250, 50);
+            this.txtCannotExit.TabIndex = 57;
+            this.txtCannotExit.TextChanged += new System.EventHandler(this.txtCannotExit_TextChanged);
+            // 
+            // lblCannotEnter
+            // 
+            this.lblCannotEnter.AutoSize = true;
+            this.lblCannotEnter.Location = new System.Drawing.Point(9, 51);
+            this.lblCannotEnter.Name = "lblCannotEnter";
+            this.lblCannotEnter.Size = new System.Drawing.Size(118, 13);
+            this.lblCannotEnter.TabIndex = 56;
+            this.lblCannotEnter.Text = "Cannot Enter Message:";
+            // 
+            // txtCannotEnter
+            // 
+            this.txtCannotEnter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtCannotEnter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCannotEnter.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtCannotEnter.Location = new System.Drawing.Point(10, 68);
+            this.txtCannotEnter.Multiline = true;
+            this.txtCannotEnter.Name = "txtCannotEnter";
+            this.txtCannotEnter.Size = new System.Drawing.Size(250, 50);
+            this.txtCannotEnter.TabIndex = 55;
+            this.txtCannotEnter.TextChanged += new System.EventHandler(this.txtCannotEnter_TextChanged);
+            // 
+            // btnEditExitConditions
+            // 
+            this.btnEditExitConditions.Location = new System.Drawing.Point(354, 22);
+            this.btnEditExitConditions.Name = "btnEditExitConditions";
+            this.btnEditExitConditions.Padding = new System.Windows.Forms.Padding(5);
+            this.btnEditExitConditions.Size = new System.Drawing.Size(175, 23);
+            this.btnEditExitConditions.TabIndex = 2;
+            this.btnEditExitConditions.Text = "Edit Exit Conditions (None)";
+            this.btnEditExitConditions.Click += new System.EventHandler(this.btnEditExitConditions_Click);
+            // 
+            // btnEditEnterConditions
+            // 
+            this.btnEditEnterConditions.Location = new System.Drawing.Point(49, 22);
+            this.btnEditEnterConditions.Name = "btnEditEnterConditions";
+            this.btnEditEnterConditions.Padding = new System.Windows.Forms.Padding(5);
+            this.btnEditEnterConditions.Size = new System.Drawing.Size(175, 23);
+            this.btnEditEnterConditions.TabIndex = 1;
+            this.btnEditEnterConditions.Text = "Edit Enter Conditions (None)";
+            this.btnEditEnterConditions.Click += new System.EventHandler(this.btnEditEnterConditions_Click);
             // 
             // grpEditorParams
             // 
@@ -464,128 +547,105 @@ namespace Intersect.Editor.Forms.Editors.MapRegions
             this.txtName.TabIndex = 18;
             this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
             // 
-            // grpRules
+            // grpCommands
             // 
-            this.grpRules.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpRules.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpRules.Controls.Add(this.nudQuantity);
-            this.grpRules.Controls.Add(this.cmbIngredient);
-            this.grpRules.Controls.Add(this.btnDupIngredient);
-            this.grpRules.Controls.Add(this.btnRemove);
-            this.grpRules.Controls.Add(this.btnAdd);
-            this.grpRules.Controls.Add(this.lblIngredient);
-            this.grpRules.Controls.Add(this.lstIngredients);
-            this.grpRules.Controls.Add(this.lblQuantity);
-            this.grpRules.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpRules.Location = new System.Drawing.Point(5, 218);
-            this.grpRules.Name = "grpRules";
-            this.grpRules.Size = new System.Drawing.Size(574, 267);
-            this.grpRules.TabIndex = 30;
-            this.grpRules.TabStop = false;
-            this.grpRules.Text = "Rules";
+            this.grpCommands.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpCommands.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpCommands.Controls.Add(this.lblEditCommand);
+            this.grpCommands.Controls.Add(this.cmbNewCommand);
+            this.grpCommands.Controls.Add(this.btnDuplicate);
+            this.grpCommands.Controls.Add(this.btnRemove);
+            this.grpCommands.Controls.Add(this.btnAdd);
+            this.grpCommands.Controls.Add(this.lblNewCommand);
+            this.grpCommands.Controls.Add(this.lstCommands);
+            this.grpCommands.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpCommands.Location = new System.Drawing.Point(5, 285);
+            this.grpCommands.Name = "grpCommands";
+            this.grpCommands.Size = new System.Drawing.Size(574, 198);
+            this.grpCommands.TabIndex = 30;
+            this.grpCommands.TabStop = false;
+            this.grpCommands.Text = "MapRegion Commands:";
             // 
-            // nudQuantity
+            // lblEditCommand
             // 
-            this.nudQuantity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudQuantity.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudQuantity.Location = new System.Drawing.Point(12, 202);
-            this.nudQuantity.Maximum = new decimal(new int[] {
-            2147483647,
-            0,
-            0,
-            0});
-            this.nudQuantity.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudQuantity.Name = "nudQuantity";
-            this.nudQuantity.Size = new System.Drawing.Size(251, 20);
-            this.nudQuantity.TabIndex = 41;
-            this.nudQuantity.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            this.lblEditCommand.AutoSize = true;
+            this.lblEditCommand.Location = new System.Drawing.Point(13, 149);
+            this.lblEditCommand.Name = "lblEditCommand";
+            this.lblEditCommand.Size = new System.Drawing.Size(156, 13);
+            this.lblEditCommand.TabIndex = 41;
+            this.lblEditCommand.Text = "Double-click to edit a command";
             // 
-            // cmbIngredient
+            // cmbNewCommand
             // 
-            this.cmbIngredient.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbIngredient.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbIngredient.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbIngredient.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbIngredient.DrawDropdownHoverOutline = false;
-            this.cmbIngredient.DrawFocusRectangle = false;
-            this.cmbIngredient.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbIngredient.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbIngredient.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbIngredient.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbIngredient.FormattingEnabled = true;
-            this.cmbIngredient.Location = new System.Drawing.Point(13, 160);
-            this.cmbIngredient.Name = "cmbIngredient";
-            this.cmbIngredient.Size = new System.Drawing.Size(250, 21);
-            this.cmbIngredient.TabIndex = 40;
-            this.cmbIngredient.Text = null;
-            this.cmbIngredient.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbNewCommand.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbNewCommand.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbNewCommand.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbNewCommand.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbNewCommand.DrawDropdownHoverOutline = false;
+            this.cmbNewCommand.DrawFocusRectangle = false;
+            this.cmbNewCommand.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbNewCommand.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbNewCommand.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbNewCommand.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbNewCommand.FormattingEnabled = true;
+            this.cmbNewCommand.Location = new System.Drawing.Point(306, 144);
+            this.cmbNewCommand.Name = "cmbNewCommand";
+            this.cmbNewCommand.Size = new System.Drawing.Size(250, 21);
+            this.cmbNewCommand.TabIndex = 40;
+            this.cmbNewCommand.Text = null;
+            this.cmbNewCommand.TextPadding = new System.Windows.Forms.Padding(2);
             // 
-            // btnDupIngredient
+            // btnDuplicate
             // 
-            this.btnDupIngredient.Location = new System.Drawing.Point(188, 236);
-            this.btnDupIngredient.Name = "btnDupIngredient";
-            this.btnDupIngredient.Padding = new System.Windows.Forms.Padding(5);
-            this.btnDupIngredient.Size = new System.Drawing.Size(75, 23);
-            this.btnDupIngredient.TabIndex = 39;
-            this.btnDupIngredient.Text = "Duplicate";
+            this.btnDuplicate.Location = new System.Drawing.Point(98, 170);
+            this.btnDuplicate.Name = "btnDuplicate";
+            this.btnDuplicate.Padding = new System.Windows.Forms.Padding(5);
+            this.btnDuplicate.Size = new System.Drawing.Size(79, 23);
+            this.btnDuplicate.TabIndex = 39;
+            this.btnDuplicate.Text = "Duplicate";
+            this.btnDuplicate.Click += new System.EventHandler(this.btnDuplicate_Click);
             // 
             // btnRemove
             // 
-            this.btnRemove.Location = new System.Drawing.Point(97, 236);
+            this.btnRemove.Location = new System.Drawing.Point(13, 170);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Padding = new System.Windows.Forms.Padding(5);
             this.btnRemove.Size = new System.Drawing.Size(79, 23);
             this.btnRemove.TabIndex = 38;
             this.btnRemove.Text = "Remove";
+            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(12, 236);
+            this.btnAdd.Location = new System.Drawing.Point(383, 170);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Padding = new System.Windows.Forms.Padding(5);
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
             this.btnAdd.TabIndex = 37;
             this.btnAdd.Text = "Add";
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
-            // lblIngredient
+            // lblNewCommand
             // 
-            this.lblIngredient.AutoSize = true;
-            this.lblIngredient.Location = new System.Drawing.Point(9, 145);
-            this.lblIngredient.Name = "lblIngredient";
-            this.lblIngredient.Size = new System.Drawing.Size(30, 13);
-            this.lblIngredient.TabIndex = 31;
-            this.lblIngredient.Text = "Item:";
+            this.lblNewCommand.AutoSize = true;
+            this.lblNewCommand.Location = new System.Drawing.Point(222, 149);
+            this.lblNewCommand.Name = "lblNewCommand";
+            this.lblNewCommand.Size = new System.Drawing.Size(82, 13);
+            this.lblNewCommand.TabIndex = 31;
+            this.lblNewCommand.Text = "New Command:";
             // 
-            // lstIngredients
+            // lstCommands
             // 
-            this.lstIngredients.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.lstIngredients.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lstIngredients.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lstIngredients.ForeColor = System.Drawing.Color.Gainsboro;
-            this.lstIngredients.FormattingEnabled = true;
-            this.lstIngredients.Items.AddRange(new object[] {
-            "Ingredient: None x1"});
-            this.lstIngredients.Location = new System.Drawing.Point(13, 19);
-            this.lstIngredients.Name = "lstIngredients";
-            this.lstIngredients.Size = new System.Drawing.Size(380, 119);
-            this.lstIngredients.TabIndex = 29;
-            // 
-            // lblQuantity
-            // 
-            this.lblQuantity.AutoSize = true;
-            this.lblQuantity.Location = new System.Drawing.Point(10, 186);
-            this.lblQuantity.Name = "lblQuantity";
-            this.lblQuantity.Size = new System.Drawing.Size(49, 13);
-            this.lblQuantity.TabIndex = 28;
-            this.lblQuantity.Text = "Quantity:";
+            this.lstCommands.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstCommands.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstCommands.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstCommands.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstCommands.FormattingEnabled = true;
+            this.lstCommands.Location = new System.Drawing.Point(13, 19);
+            this.lstCommands.Name = "lstCommands";
+            this.lstCommands.Size = new System.Drawing.Size(543, 119);
+            this.lstCommands.TabIndex = 29;
+            this.lstCommands.DoubleClick += new System.EventHandler(this.lstCommands_DoubleClick);
             // 
             // toolStrip
             // 
@@ -607,7 +667,7 @@ namespace Intersect.Editor.Forms.Editors.MapRegions
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
-            this.toolStrip.Size = new System.Drawing.Size(812, 25);
+            this.toolStrip.Size = new System.Drawing.Size(846, 25);
             this.toolStrip.TabIndex = 43;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -748,47 +808,13 @@ namespace Intersect.Editor.Forms.Editors.MapRegions
             this.txtCommentary.TabIndex = 61;
             this.txtCommentary.TextChanged += new System.EventHandler(this.txtCommentary_TextChanged);
             // 
-            // grpConditions
-            // 
-            this.grpConditions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpConditions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpConditions.Controls.Add(this.btnEditExitConditions);
-            this.grpConditions.Controls.Add(this.btnEditEnterConditions);
-            this.grpConditions.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpConditions.Location = new System.Drawing.Point(5, 164);
-            this.grpConditions.Name = "grpConditions";
-            this.grpConditions.Size = new System.Drawing.Size(574, 51);
-            this.grpConditions.TabIndex = 58;
-            this.grpConditions.TabStop = false;
-            this.grpConditions.Text = "MapRegion Conditions";
-            // 
-            // btnEditEnterConditions
-            // 
-            this.btnEditEnterConditions.Location = new System.Drawing.Point(101, 20);
-            this.btnEditEnterConditions.Name = "btnEditEnterConditions";
-            this.btnEditEnterConditions.Padding = new System.Windows.Forms.Padding(5);
-            this.btnEditEnterConditions.Size = new System.Drawing.Size(175, 23);
-            this.btnEditEnterConditions.TabIndex = 1;
-            this.btnEditEnterConditions.Text = "Edit Enter Conditions (None)";
-            this.btnEditEnterConditions.Click += new System.EventHandler(this.btnEditEnterConditions_Click);
-            // 
-            // btnEditExitConditions
-            // 
-            this.btnEditExitConditions.Location = new System.Drawing.Point(341, 20);
-            this.btnEditExitConditions.Name = "btnEditExitConditions";
-            this.btnEditExitConditions.Padding = new System.Windows.Forms.Padding(5);
-            this.btnEditExitConditions.Size = new System.Drawing.Size(175, 23);
-            this.btnEditExitConditions.TabIndex = 2;
-            this.btnEditExitConditions.Text = "Edit Exit Conditions (None)";
-            this.btnEditExitConditions.Click += new System.EventHandler(this.btnEditExitConditions_Click);
-            // 
             // FrmMapRegion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(812, 561);
+            this.ClientSize = new System.Drawing.Size(846, 561);
             this.ControlBox = false;
             this.Controls.Add(this.grpCommentary);
             this.Controls.Add(this.toolStrip);
@@ -808,20 +834,20 @@ namespace Intersect.Editor.Forms.Editors.MapRegions
             this.grpCrafts.ResumeLayout(false);
             this.grpCrafts.PerformLayout();
             this.pnlContainer.ResumeLayout(false);
+            this.grpConditions.ResumeLayout(false);
+            this.grpConditions.PerformLayout();
             this.grpEditorParams.ResumeLayout(false);
             this.grpEditorParams.PerformLayout();
             this.grpEvents.ResumeLayout(false);
             this.grpEvents.PerformLayout();
             this.grpGeneral.ResumeLayout(false);
             this.grpGeneral.PerformLayout();
-            this.grpRules.ResumeLayout(false);
-            this.grpRules.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudQuantity)).EndInit();
+            this.grpCommands.ResumeLayout(false);
+            this.grpCommands.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.grpCommentary.ResumeLayout(false);
             this.grpCommentary.PerformLayout();
-            this.grpConditions.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -835,12 +861,11 @@ namespace Intersect.Editor.Forms.Editors.MapRegions
         private DarkGroupBox grpGeneral;
         private System.Windows.Forms.Label lblName;
         private DarkTextBox txtName;
-        private DarkGroupBox grpRules;
+        private DarkGroupBox grpCommands;
         private DarkButton btnRemove;
         private DarkButton btnAdd;
-        private System.Windows.Forms.Label lblIngredient;
-        private System.Windows.Forms.ListBox lstIngredients;
-        private System.Windows.Forms.Label lblQuantity;
+        private System.Windows.Forms.Label lblNewCommand;
+        private System.Windows.Forms.ListBox lstCommands;
         private DarkToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton toolStripItemNew;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
@@ -850,9 +875,8 @@ namespace Intersect.Editor.Forms.Editors.MapRegions
         public System.Windows.Forms.ToolStripButton toolStripItemPaste;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         public System.Windows.Forms.ToolStripButton toolStripItemUndo;
-        private DarkButton btnDupIngredient;
-        private DarkComboBox cmbIngredient;
-        private DarkNumericUpDown nudQuantity;
+        private DarkButton btnDuplicate;
+        private DarkComboBox cmbNewCommand;
         private DarkButton btnClearSearch;
         private DarkTextBox txtSearch;
         private System.Windows.Forms.ToolStripButton btnAlphabetical;
@@ -883,5 +907,10 @@ namespace Intersect.Editor.Forms.Editors.MapRegions
         private DarkGroupBox grpConditions;
         private DarkButton btnEditExitConditions;
         private DarkButton btnEditEnterConditions;
+        private System.Windows.Forms.Label lblEditCommand;
+        private System.Windows.Forms.Label lblCannotExit;
+        private DarkTextBox txtCannotExit;
+        private System.Windows.Forms.Label lblCannotEnter;
+        private DarkTextBox txtCannotEnter;
     }
 }

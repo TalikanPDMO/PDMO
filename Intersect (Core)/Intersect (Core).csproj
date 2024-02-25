@@ -268,7 +268,7 @@
     <Compile Include="Core\ServiceLifecycleStage.cs" />
     <Compile Include="Core\ServiceLifecycleFailureException.cs" />
     <Compile Include="CustomColors.cs" />
-    <Compile Include="Enums\MapRegionRuleTypes.cs" />
+    <Compile Include="Enums\MapRegionCommandTypes.cs" />
     <Compile Include="Enums\ScreenEffectState.cs" />
     <Compile Include="Enums\ScreenEffectType.cs" />
     <Compile Include="Enums\ChatboxTab.cs" />

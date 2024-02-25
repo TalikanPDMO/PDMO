@@ -8,7 +8,7 @@ namespace Intersect.Client.Entities
 
     public partial class Status
     {
-
+        public static int REMAINING_INFINITE = -11111;
         public string Data = "";
 
         public int[] Shield = new int[(int) Vitals.VitalCount];
@@ -44,11 +44,15 @@ namespace Intersect.Client.Entities
 
         public bool IsActive()
         {
-            return RemainingMs() > 0;
+            return TotalDuration == -1 || RemainingMs() > 0;
         }
 
         public long RemainingMs()
         {
+            if (TotalDuration == -1)
+            {
+                return REMAINING_INFINITE;
+            }
             var timeDiff = Globals.System.GetTimeMs() - TimeRecevied;
 
             return TimeRemaining - timeDiff;

@@ -11,6 +11,7 @@ using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
+using Intersect.Client.Interface.Game.Chat;
 using Intersect.Client.Items;
 using Intersect.Client.Localization;
 using Intersect.Client.Maps;
@@ -134,6 +135,8 @@ namespace Intersect.Client.Entities
         public int MoveDir = -1;
 
         public long MoveTimer;
+
+        public long LastMoveTimer;
 
         protected byte mRenderPriority = 1;
 
@@ -342,7 +345,7 @@ namespace Intersect.Client.Entities
             X = packet.X;
             Y = packet.Y;
             Z = packet.Z;
-            CurrentMapRegionId = MapInstance?.MapRegionIds[X, Y];
+            HandleMapRegionId(MapInstance?.MapRegionIds[X, Y]);
             Dir = packet.Dir;
             Passable = packet.Passable;
             HideName = packet.HideName;
@@ -2080,6 +2083,31 @@ namespace Intersect.Client.Entities
             }
         }
 
+        public void HandleMapRegionId(Guid? regionId)
+        {
+            if (regionId != CurrentMapRegionId)
+            {
+                Animations?.ForEach(anim =>
+                    {
+                        if (anim.MapRegionId != Guid.Empty && anim.MapRegionId != regionId)
+                        {
+                            anim.Dispose();
+                        }
+                    });
+                if (this is Player p && p == Globals.Me)
+                {
+                    Globals.ScreenEffects?.ForEach(effect =>
+                    {
+                        if (effect.MapRegionId != Guid.Empty && effect.MapRegionId != regionId)
+                        {
+                            effect.RegionLeave = true;
+                        }
+                    });
+                }
+                CurrentMapRegionId = regionId;
+            }
+        }
+
         //Movement
         /// <summary>
         ///     Returns -7 if the tile is blocked by a MapRegion Rule
@@ -2300,12 +2328,28 @@ namespace Intersect.Client.Entities
                         var mapRegion = MapRegionBase.Get(CurrentMapRegionId ?? Guid.Empty);
                         if (mapRegion != null && !ClientConditions.MeetsConditionLists(mapRegion.ExitRequirements, this))
                         {
-                            return -6;
-                        }
+                            if (this is Player p && !string.IsNullOrWhiteSpace(mapRegion.CannotExitMessage)
+                                && p.MapRegionErrorMessageTimer < Globals.System.GetTimeMs())
+                            {
+                                ChatboxMsg.AddMessage(
+                                    new ChatboxMsg(mapRegion.CannotExitMessage, CustomColors.Chat.PlayerMsg, ChatMessageType.Error)
+                                    );
+                                p.MapRegionErrorMessageTimer = Globals.System.GetTimeMs() + 1000;
+                            }
+                            return -7;
+                        }    
                         mapRegion = MapRegionBase.Get(MapInstance?.MapRegionIds[tmpX, tmpY] ?? Guid.Empty);
                         if (mapRegion != null && !ClientConditions.MeetsConditionLists(mapRegion.EnterRequirements, this))
                         {
-                            return -6;
+                            if (this is Player p && !string.IsNullOrWhiteSpace(mapRegion.CannotEnterMessage)
+                                && p.MapRegionErrorMessageTimer < Globals.System.GetTimeMs())
+                            {
+                                ChatboxMsg.AddMessage(
+                                    new ChatboxMsg( mapRegion.CannotEnterMessage, CustomColors.Chat.PlayerMsg, ChatMessageType.Error)
+                                    );
+                                p.MapRegionErrorMessageTimer = Globals.System.GetTimeMs() + 1000;
+                            }
+                            return -7;
                         }
                     }
                 }

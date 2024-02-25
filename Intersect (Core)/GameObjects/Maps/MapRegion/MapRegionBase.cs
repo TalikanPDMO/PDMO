@@ -17,13 +17,16 @@ namespace Intersect.GameObjects.Maps.MapRegion
 
     public class MapRegionBase : DatabaseObject<MapRegionBase>, IFolderable
     {
-        //[NotMapped] public ConditionLists Requirements = new ConditionLists();
         public string EditorName { get; set; } = "";
 
         public byte[] EditorColor { get; set; } = new byte[4] { 150, 0, 0, 0 };
         public string Folder { get; set; } = "";
         public string Description { get; set; } = "";
         public string Comment { get; set; } = "";
+
+        //Cached Commands Data
+        private string mCachedCommandsData = null;
+        private List<MapRegionCommand> mCommands = new List<MapRegionCommand>();
 
         public static string[] EditorFormatNames => Lookup.OrderBy(p => p.Value?.Name)
            .Select(pair => TextUtils.FormatEditorName(pair.Value?.Name, ((MapRegionBase)pair.Value)?.EditorName) ?? Deleted)
@@ -77,18 +80,41 @@ namespace Intersect.GameObjects.Maps.MapRegion
             set => ExitEventId = value?.Id ?? Guid.Empty;
         }
 
-        // Rules
-        [NotMapped] public List<MapRegionCommand> Commands = new List<MapRegionCommand>();
+        // Commands
+        [NotMapped]
+        public List<MapRegionCommand> Commands
+        {
+            get => mCommands;
+            set
+            {
+                mCommands = value;
+                mCachedCommandsData = JsonConvert.SerializeObject(
+                    Commands,
+                    new JsonSerializerSettings()
+                    {
+                        TypeNameHandling = TypeNameHandling.Auto,
+                        NullValueHandling = NullValueHandling.Ignore,
+                        DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+                        ObjectCreationHandling = ObjectCreationHandling.Replace
+                    }
+                );
+            }
+        }
 
         [Column("MapRegionCommands")]
         [JsonIgnore]
         public string CommandsJson
         {
-            get => JsonConvert.SerializeObject(Commands, Formatting.None, new JsonSerializerSettings()
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            });
-            set => Commands = JsonConvert.DeserializeObject<List<MapRegionCommand>>(value);
+            get => mCachedCommandsData;
+            protected set => Commands = JsonConvert.DeserializeObject<List<MapRegionCommand>>(
+                value,
+                new JsonSerializerSettings()
+                {
+                    TypeNameHandling = TypeNameHandling.Auto,
+                    DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+                    ObjectCreationHandling = ObjectCreationHandling.Replace
+                }
+            );
         }
 
         // Enter Requirements
@@ -102,6 +128,8 @@ namespace Intersect.GameObjects.Maps.MapRegion
             set => EnterRequirements.Load(value);
         }
 
+        public string CannotEnterMessage { get; set; } = "";
+
         // Exit Requirements
         [NotMapped] public ConditionLists ExitRequirements = new ConditionLists();
 
@@ -111,6 +139,39 @@ namespace Intersect.GameObjects.Maps.MapRegion
         {
             get => ExitRequirements.Data();
             set => ExitRequirements.Load(value);
+        }
+
+        [JsonIgnore]
+        [NotMapped]
+        public override string JsonData => JsonConvert.SerializeObject(
+            this, Formatting.Indented,
+            new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.Auto,
+                DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+                ObjectCreationHandling = ObjectCreationHandling.Replace
+            }
+        );
+
+        public string CannotExitMessage { get; set; } = "";
+
+        public override void Load(string json, bool keepCreationTime = false)
+        {
+            var oldTime = TimeCreated;
+            JsonConvert.PopulateObject(
+                json, this,
+                new JsonSerializerSettings()
+                {
+                    TypeNameHandling = TypeNameHandling.Auto,
+                    DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+                    ObjectCreationHandling = ObjectCreationHandling.Replace
+                }
+            );
+
+            if (keepCreationTime)
+            {
+                TimeCreated = oldTime;
+            }
         }
     }
 

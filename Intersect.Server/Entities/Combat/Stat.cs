@@ -72,7 +72,7 @@ namespace Intersect.Server.Entities.Combat
             var changed = false;
             foreach (var buff in mBuff)
             {
-                if (buff.Value.ExpireTime <= time)
+                if (buff.Value.ExpireTime != -1 && buff.Value.ExpireTime <= time)
                 {
                     changed |= mBuff.TryRemove(buff.Key, out Buff result);
                 }
@@ -98,10 +98,44 @@ namespace Intersect.Server.Entities.Combat
             mChanged = Value() != origVal;
         }
 
-        public void Reset()
+        public void ResetAll()
         {
             mBuff.Clear();
             mCachedBuffs = mBuff.Values.ToArray();
+        }
+
+        public void ResetDurationBuffs()
+        {
+            var changed = false;
+            foreach (var buff in mBuff)
+            {
+                if (buff.Value.ExpireTime != -1)
+                {
+                    changed |= mBuff.TryRemove(buff.Key, out Buff result);
+                }
+            }
+            if (changed)
+            {
+                mChanged = true;
+                mCachedBuffs = mBuff.Values.ToArray();
+            }
+        }
+
+        public void ResetInfiniteBuffs()
+        {
+            var changed = false;
+            foreach (var buff in mBuff)
+            {
+                if (buff.Value.ExpireTime == -1)
+                {
+                   changed |= mBuff.TryRemove(buff.Key, out Buff result);
+                }
+            }
+            if (changed)
+            {
+                mChanged = true;
+                mCachedBuffs = mBuff.Values.ToArray();
+            }
         }
 
     }

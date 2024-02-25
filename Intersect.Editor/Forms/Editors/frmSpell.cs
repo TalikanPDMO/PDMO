@@ -804,7 +804,7 @@ namespace Intersect.Editor.Forms.Editors
                 Dictionary<string, List<string>> dataDict = new Dictionary<string, List<string>>();
                 //Retrieve all npcs that could use the spell (classic or in phases)
                 var npcList = NpcBase.Lookup.Where(pair => (((NpcBase)pair.Value)?.Spells?.Contains(mEditorItem.Id) ?? false)
-                || (((NpcBase)pair.Value)?.NpcPhases?.Any(ph => ph?.Spells.Contains(mEditorItem.Id) ?? false) ?? false))
+                || (((NpcBase)pair.Value)?.NpcPhases?.Any(ph => ph?.Spells?.Contains(mEditorItem.Id) ?? false) ?? false))
                     .OrderBy(p => p.Value?.Name)
                     .Select(pair => String.Concat(TextUtils.FormatEditorName(pair.Value?.Name, ((NpcBase)pair.Value)?.EditorName) ?? NpcBase.Deleted,
                                 ((NpcBase)pair.Value)?.NpcPhases.Any(ph => ph?.Spells.Contains(mEditorItem.Id) ?? false) ?? false ? " (Phase) " : ""))

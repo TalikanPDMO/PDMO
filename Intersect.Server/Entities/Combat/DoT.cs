@@ -21,10 +21,12 @@ namespace Intersect.Server.Entities.Combat
 
         public SpellBase SpellBase;
 
-        public DoT(Entity attacker, Guid spellId, Entity target)
+        public bool IsInfinite = false;
+
+        public DoT(Entity attacker, Guid spellId, Entity target, bool isInfinite = false)
         {
             SpellBase = SpellBase.Get(spellId);
-
+            IsInfinite = isInfinite;
             Attacker = attacker;
             Target = target;
 
@@ -38,7 +40,7 @@ namespace Intersect.Server.Entities.Combat
             {
                 foreach (var status in Target.CachedStatuses)
                 {
-                    if (status.Type == StatusTypes.Cleanse)
+                    if (status.Type == StatusTypes.Cleanse && !IsInfinite)
                     {
                         return;
                     }
@@ -46,12 +48,12 @@ namespace Intersect.Server.Entities.Combat
             }
             
 
-            mInterval = Globals.Timing.Milliseconds + SpellBase.Combat.HotDotInterval;
-            Count = SpellBase.Combat.Duration / SpellBase.Combat.HotDotInterval - 1;
+            //mInterval = Globals.Timing.Milliseconds + SpellBase.Combat.HotDotInterval;
+            mInterval = 0;
+            Count = SpellBase.Combat.Duration / SpellBase.Combat.HotDotInterval;
             target.DoT.TryAdd(Id, this);
             target.CachedDots = target.DoT.Values.ToArray();
 
-            //Subtract 1 since the first tick always occurs when the spell is cast.
         }
 
         public Entity Target { get; }
@@ -72,7 +74,7 @@ namespace Intersect.Server.Entities.Combat
                 return false;
             }
 
-            if (SpellBase == null || Count > 0)
+            if (IsInfinite || SpellBase == null || Count > 0)
             {
                 return false;
             }

@@ -96,7 +96,7 @@ namespace Intersect.Client.Entities
                 en.CurrentMap = mEndMapId;
                 en.X = mEndX;
                 en.Y = mEndY;
-                en.CurrentMapRegionId = MapInstance.Get(mEndMapId)?.MapRegionIds[mEndX, mEndY];
+                en.HandleMapRegionId(MapInstance.Get(mEndMapId)?.MapRegionIds[mEndX, mEndY]);
             }
 
             return en.Dashing != null;
