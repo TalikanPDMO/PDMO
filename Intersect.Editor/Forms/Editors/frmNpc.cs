@@ -1391,9 +1391,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private void nudResetRadius_ValueChanged(object sender, EventArgs e)
         {
-            // Set to either default or higher.
-            nudResetRadius.Value = Math.Max(Options.Npc.ResetRadius, nudResetRadius.Value);
-            mEditorItem.ResetRadius = (int)nudResetRadius.Value;
+            mEditorItem.ResetRadius = Math.Max(Options.Npc.ResetRadius, (int)nudResetRadius.Value);
         }
 
         #region "Item List - Folders, Searching, Sorting, Etc"
