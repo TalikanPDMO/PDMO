@@ -18,7 +18,8 @@ namespace Intersect.Network.Packets.Server
             Guid mapId,
             int x,
             int y,
-            sbyte direction
+            sbyte direction,
+            Guid? mapRegionId
         )
         {
             AnimationId = animId;
@@ -28,6 +29,7 @@ namespace Intersect.Network.Packets.Server
             X = x;
             Y = y;
             Direction = direction;
+            MapRegionId = mapRegionId ?? Guid.Empty;
         }
 
         [Key(0)]
@@ -50,6 +52,9 @@ namespace Intersect.Network.Packets.Server
 
         [Key(6)]
         public sbyte Direction { get; set; }
+
+        [Key(7)]
+        public Guid MapRegionId { get; set; }
 
     }
 

@@ -10,7 +10,7 @@ using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 
-namespace Intersect.Server.Entities.Events
+namespace Intersect.Server.Entities.Conditions
 {
 
     public partial class Event
@@ -278,7 +278,7 @@ namespace Intersect.Server.Entities.Events
                 //Try to Spawn a PageInstance.. if we can
                 for (var i = BaseEvent.Pages.Count - 1; i >= 0; i--)
                 {
-                    if (Conditions.CanSpawnPage(BaseEvent.Pages[i], Player, this))
+                    if (ServerConditions.CanSpawnPage(BaseEvent.Pages[i], Player, this))
                     {
                         if (Global)
                         {

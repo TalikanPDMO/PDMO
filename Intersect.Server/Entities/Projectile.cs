@@ -72,6 +72,7 @@ namespace Intersect.Server.Entities
             base.X = X;
             base.Y = Y;
             Z = z;
+            HandleMapRegionId(Map?.MapRegionIds[X, Y]);
             SetMaxVital(Vitals.Health, 1);
             SetVital(Vitals.Health, 1);
             Dir = direction;

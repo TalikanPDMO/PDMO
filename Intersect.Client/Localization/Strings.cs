@@ -702,6 +702,8 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString cooldown = "{00}s";
 
+            public static LocalizedString infinite = "Inf.";
+
             public static LocalizedString exp = @"EXP:";
 
             public static LocalizedString expval = @"{00} / {01}";

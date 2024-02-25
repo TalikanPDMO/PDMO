@@ -34,6 +34,7 @@ namespace Intersect.Client.Entities
             CurrentMap = map.Id;
             X = x;
             Y = y;
+            CurrentMapRegionId = map?.MapRegionIds[x, y];
 
             //Determine Direction
             if (mAttribute.Direction == 0)

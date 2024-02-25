@@ -203,6 +203,7 @@ namespace Intersect.Client.Networking
                 map.Load(packet.Data);
                 map.LoadTileData(packet.TileData);
                 map.AttributeData = packet.AttributeData;
+                map.MapRegionIdsData = packet.MapRegionsIdsData;
                 map.CreateMapSounds();
                 if (mapId == Globals.Me.CurrentMap)
                 {
@@ -435,6 +436,7 @@ namespace Intersect.Client.Networking
 
             en.X = packet.X;
             en.Y = packet.Y;
+            en.HandleMapRegionId(en.MapInstance?.MapRegionIds[en.X, en.Y]);
             en.Dir = packet.Direction;
             en.Passable = packet.Passable;
             en.HideName = packet.HideName;
@@ -620,6 +622,7 @@ namespace Intersect.Client.Networking
                 en.CurrentMap = map;
                 en.X = x;
                 en.Y = y;
+                en.HandleMapRegionId(en.MapInstance?.MapRegionIds[x, y]);
                 //if (en is Player p)
                 //{
                 //    p.MoveDir = dir;
@@ -945,6 +948,11 @@ namespace Intersect.Client.Networking
             }
 
             en.Stat = packet.Stats;
+            if (en.IsMoving)
+            {
+                // Recalculte move timer in case speed stat was affected
+                en.MoveTimer = en.LastMoveTimer + (long)en.GetMovementTime();
+            }
         }
 
         //EntityDirectionPacket
@@ -1427,7 +1435,7 @@ namespace Intersect.Client.Networking
                         if (animBase != null)
                         {
                             var animInstance = new Animation(
-                                animBase, false, packet.Direction != -1, -1, Globals.Entities[entityId]
+                                animBase, packet.MapRegionId != Guid.Empty, packet.Direction != -1, -1, Globals.Entities[entityId], packet.MapRegionId
                             );
 
                             if (packet.Direction > -1)
@@ -1441,8 +1449,7 @@ namespace Intersect.Client.Networking
                             {
                                 foreach(var screenEffectBase in animBase.ScreenEffects)
                                 {
-                                    Globals.ScreenEffects.Add(new ScreenEffect(screenEffectBase));
-
+                                    Globals.ScreenEffects.Add(new ScreenEffect(screenEffectBase, packet.MapRegionId));
                                 }
                             }
                         }
@@ -1462,8 +1469,8 @@ namespace Intersect.Client.Networking
                             if (animBase != null)
                             {
                                 var animInstance = new Animation(
-                                    animBase, false, packet.Direction == -1, -1,
-                                    map.LocalEntities[entityId]
+                                    animBase, packet.MapRegionId != Guid.Empty, packet.Direction == -1, -1,
+                                    map.LocalEntities[entityId], packet.MapRegionId
                                 );
 
                                 if (packet.Direction > -1)

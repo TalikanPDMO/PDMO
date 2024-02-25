@@ -4,7 +4,7 @@ using System.Linq;
 
 using Intersect.GameObjects.Events.Commands;
 
-namespace Intersect.Server.Entities.Events
+namespace Intersect.Server.Entities.Conditions
 {
 
     public partial class CommandInstance

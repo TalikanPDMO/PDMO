@@ -488,8 +488,10 @@
     <Compile Include="Entities\Combat\Dash.cs" />
     <Compile Include="Entities\Combat\AttackInfo.cs" />
     <Compile Include="Entities\Combat\DoT.cs" />
-    <Compile Include="Entities\Events\ConditionHandlerRegistry.cs" />
-    <Compile Include="Entities\Events\Conditions.cs" />
+    <Compile Include="Entities\Conditions\ClientConditionHandlerRegistry.cs" />
+    <Compile Include="Entities\Conditions\ServerConditionHandlerRegistry.cs" />
+    <Compile Include="Entities\Conditions\ClientConditions.cs" />
+    <Compile Include="Entities\Conditions\ServerConditions.cs" />
     <Compile Include="Entities\Events\VariableCheckHandlerRegistry.cs" />
     <Compile Include="Entities\Label.cs" />
     <Compile Include="Entities\Player.Database.cs" />
@@ -523,6 +525,7 @@
     <Compile Include="Maps\MapItemInstance.cs" />
     <Compile Include="Maps\MapItemSpawn.cs" />
     <Compile Include="Maps\MapNpcSpawn.cs" />
+    <Compile Include="Maps\MapRegionCommandProcessing.cs" />
     <Compile Include="Maps\MapResourceSpawn.cs" />
     <Compile Include="Maps\MapTileLoc.cs" />
     <Compile Include="Maps\MapTrapInstance.cs" />
@@ -749,6 +752,10 @@
     <Compile Include="Migrations\Game\20240211111016_AddingScreenEffectsToAnimations.cs" />
     <Compile Include="Migrations\Game\20240211111016_AddingScreenEffectsToAnimations.designer.cs">
       <DependentUpon>20240211111016_AddingScreenEffectsToAnimations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20240224154435_AddingMapRegions.cs" />
+    <Compile Include="Migrations\Game\20240224154435_AddingMapRegions.designer.cs">
+      <DependentUpon>20240224154435_AddingMapRegions.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

@@ -8,6 +8,7 @@ using Intersect.GameObjects;
 using Intersect.GameObjects.Crafting;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps.MapList;
+using Intersect.GameObjects.Maps.MapRegion;
 using Intersect.Logging;
 using Intersect.Models;
 using Intersect.Network;
@@ -18,7 +19,7 @@ using Intersect.Server.Database.Logging.Entities;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Database.PlayerData.Security;
 using Intersect.Server.Entities;
-using Intersect.Server.Entities.Events;
+using Intersect.Server.Entities.Conditions;
 using Intersect.Server.General;
 using Intersect.Server.Localization;
 using Intersect.Server.Maps;
@@ -159,7 +160,7 @@ namespace Intersect.Server.Networking
             else
             {
                 var mapPacket = new MapPacket(
-                    mapId, false, map.JsonData, map.TileData, map.AttributeData, map.Revision, map.MapGridX,
+                    mapId, false, map.JsonData, map.TileData, map.AttributeData, map.MapRegionIdsData, map.Revision, map.MapGridX,
                     map.MapGridY, new bool[4]
                 );
 
@@ -302,7 +303,7 @@ namespace Intersect.Server.Networking
             else
             {
                 packet = new MapPacket(
-                    mapId, false, map.JsonData, map.TileData, map.AttributeData, map.Revision, map.MapGridX,
+                    mapId, false, map.JsonData, map.TileData, map.AttributeData, map.MapRegionIdsData, map.Revision, map.MapGridX,
                     map.MapGridY
                 );
             }
@@ -1426,7 +1427,8 @@ namespace Intersect.Server.Networking
             Guid mapId,
             byte x,
             byte y,
-            sbyte direction
+            sbyte direction,
+            Guid? mapRegionId = null
         )
         {
             var map = MapInstance.Get(mapId);
@@ -1434,11 +1436,11 @@ namespace Intersect.Server.Networking
             {
                 if (Options.Instance.Packets.BatchAnimationPackets)
                 {
-                    map.AddBatchedAnimation(new PlayAnimationPacket(animId, targetType, entityId, mapId, x, y, direction));
+                    map.AddBatchedAnimation(new PlayAnimationPacket(animId, targetType, entityId, mapId, x, y, direction, mapRegionId));
                 }
                 else
                 {
-                    SendDataToProximity(mapId, new PlayAnimationPacket(animId, targetType, entityId, mapId, x, y, direction), null, TransmissionMode.Any);
+                    SendDataToProximity(mapId, new PlayAnimationPacket(animId, targetType, entityId, mapId, x, y, direction, mapRegionId), null, TransmissionMode.Any);
                 }
             }
         }
@@ -1651,6 +1653,13 @@ namespace Intersect.Server.Networking
 
                     break;
                 case GameObjectType.Time:
+                    break;
+                case GameObjectType.MapRegion:
+                    foreach (var obj in MapRegionBase.Lookup)
+                    {
+                        SendGameObject(client, obj.Value, false, false, packetList);
+                    }
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);

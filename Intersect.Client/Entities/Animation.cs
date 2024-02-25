@@ -56,12 +56,15 @@ namespace Intersect.Client.Entities
 
         private int mZDimension = -1;
 
+        public Guid MapRegionId = Guid.Empty;
+
         public Animation(
             AnimationBase animBase,
             bool loopForever,
             bool autoRotate = false,
             int zDimension = -1,
-            Entity parent = null
+            Entity parent = null,
+            Guid? mapRegionId = null
         )
         {
             MyBase = animBase;
@@ -75,6 +78,7 @@ namespace Intersect.Client.Entities
                 InfiniteLoop = loopForever;
                 AutoRotate = autoRotate;
                 mZDimension = zDimension;
+                MapRegionId = mapRegionId ?? Guid.Empty;
                 mSound = Audio.AddMapSound(MyBase.Sound, 0, 0, Guid.Empty, loopForever, 0, 12, parent);
                 lock (Graphics.AnimationLock)
                 {

@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Intersect.Server.Entities.Events
+namespace Intersect.Server.Entities.Conditions
 {
     public static class VariableCheckHandlerRegistry
     {
@@ -26,7 +26,7 @@ namespace Intersect.Server.Entities.Events
 
             if (CheckVariableComparisonFunctions.Count == 0)
             {
-                var methods = typeof(Conditions).GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Static).Where(m => m.Name == "CheckVariableComparison");
+                var methods = typeof(ServerConditions).GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Static).Where(m => m.Name == "CheckVariableComparison");
                 foreach (var method in methods)
                 {
                     var conditionType = method.GetParameters()[1].ParameterType;

@@ -117,11 +117,12 @@ namespace Intersect.Editor.Maps
             Load(state.Metadata, import, false);
             LoadTileData(state.Tiles);
             AttributeData = state.Attributes;
+            MapRegionIdsData = state.MapRegionIds;
         }
 
         public MapSaveState SaveInternal()
         {
-            return new MapSaveState(JsonData, GenerateTileData(), AttributeData, LocalEventsJson);
+            return new MapSaveState(JsonData, GenerateTileData(), AttributeData, LocalEventsJson, MapRegionIdsData);
         }
 
         public byte[] GenerateTileData()
@@ -168,6 +169,11 @@ namespace Intersect.Editor.Maps
         public override byte[] GetAttributeData()
         {
             return LZ4.PickleString(JsonConvert.SerializeObject(Attributes, Formatting.None, mJsonSerializerSettings));
+        }
+
+        public override byte[] GetMapRegionIdsData()
+        {
+            return LZ4.PickleString(JsonConvert.SerializeObject(MapRegionIds, Formatting.None, mJsonSerializerSettings));
         }
 
         public void Update()

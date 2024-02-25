@@ -11,9 +11,14 @@ namespace Intersect.Config
     public class LayerOptions
     {
         public const string Attributes = nameof(Attributes);
+
         public const string Npcs = nameof(Npcs);
+
         public const string Lights = nameof(Lights);
+
         public const string Events = nameof(Events);
+
+        public const string Regions = nameof(Regions);
 
         [JsonProperty]
         public List<string> LowerLayers { get; private set; } = new List<string>() { "Ground", "Mask 1", "Mask 2" };
@@ -51,7 +56,7 @@ namespace Intersect.Config
             MiddleLayers = new List<string>(MiddleLayers.Distinct());
             UpperLayers = new List<string>(UpperLayers.Distinct());
 
-            var reservedLayers = new string[] { Attributes, Npcs, Lights, Events };
+            var reservedLayers = new string[] { Attributes, Npcs, Lights, Events, Regions };
             All.Clear();
             All.AddRange(LowerLayers);
             All.AddRange(MiddleLayers);

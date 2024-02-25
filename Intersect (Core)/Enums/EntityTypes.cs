@@ -14,6 +14,8 @@ namespace Intersect.Enums
 
         Event = 4,
 
+        EntityTypesCount
+
     }
 
 }

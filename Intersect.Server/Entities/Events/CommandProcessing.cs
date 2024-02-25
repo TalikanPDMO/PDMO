@@ -18,7 +18,7 @@ using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
 
-namespace Intersect.Server.Entities.Events
+namespace Intersect.Server.Entities.Conditions
 {
 
     public static partial class CommandProcessing
@@ -190,7 +190,7 @@ namespace Intersect.Server.Entities.Events
             Stack<CommandInstance> callStack
         )
         {
-            var success = Conditions.MeetsCondition(command.Condition, player, instance, null, null);
+            var success = ServerConditions.MeetsCondition(command.Condition, player, instance, null, null);
 
             List<EventCommand> newCommandList = null;
             if (success && stackInfo.Page.CommandLists.ContainsKey(command.BranchIds[0]))
@@ -280,7 +280,7 @@ namespace Intersect.Server.Entities.Events
             {
                 for (var i = 0; i < commonEvent.Pages.Count; i++)
                 {
-                    if (Conditions.CanSpawnPage(commonEvent.Pages[i], player, instance))
+                    if (ServerConditions.CanSpawnPage(commonEvent.Pages[i], player, instance))
                     {
                         var commonEventStack = new CommandInstance(commonEvent.Pages[i]);
                         callStack.Push(commonEventStack);

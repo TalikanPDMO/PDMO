@@ -12,6 +12,7 @@ using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Maps;
 using Intersect.GameObjects.Maps.MapList;
+using Intersect.GameObjects.Maps.MapRegion;
 using Intersect.Localization;
 using Intersect.Utilities;
 
@@ -33,7 +34,9 @@ namespace Intersect.Editor.Forms.DockingElements
 
         Events,
 
-        Npcs
+        Npcs,
+
+        Regions
 
     }
 
@@ -758,6 +761,22 @@ namespace Intersect.Editor.Forms.DockingElements
             return attribute;
         }
 
+        public Guid? PlaceMapRegion(MapBase mapDescriptor, int x, int y, Guid? guid = null)
+        {
+            if (guid == null)
+            {
+                guid = MapRegionBase.IdFromList(cmbMapRegion.SelectedIndex);
+                if (guid == Guid.Empty)
+                {
+                    guid = null;
+                }
+            }
+
+            mapDescriptor.MapRegionIds[x, y] = guid;
+
+            return guid;
+        }
+
         public bool RemoveAttribute(MapBase tmpMap, int x, int y)
         {
             if (tmpMap.Attributes[x, y] != null && tmpMap.Attributes[x, y].Type != MapAttributes.Walkable)
@@ -768,6 +787,28 @@ namespace Intersect.Editor.Forms.DockingElements
             }
 
             return false;
+        }
+
+        public bool RemoveMapRegion(MapBase tmpMap, int x, int y)
+        {
+            if (tmpMap.MapRegionIds[x, y] != null)
+            {
+                tmpMap.MapRegionIds[x, y] = null;
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private void RefreshMapRegionList()
+        {
+            cmbMapRegion.Items.Clear();
+            cmbMapRegion.Items.AddRange(MapRegionBase.EditorFormatNames);
+            if (cmbMapRegion.Items.Count > 0)
+            {
+                cmbMapRegion.SelectedIndex = 0;
+            }
         }
 
         public void RefreshNpcList()
@@ -1317,6 +1358,7 @@ namespace Intersect.Editor.Forms.DockingElements
             btnEventsHeader.Text = Strings.MapLayers.events;
             btnLightsHeader.Text = Strings.MapLayers.lights;
             btnNpcsHeader.Text = Strings.MapLayers.npcs;
+            btnRegionsHeader.Text = Strings.MapLayers.regions;
 
             //Tiles Panel
             lblLayer.Text = Strings.Tiles.layer;
@@ -1458,6 +1500,10 @@ namespace Intersect.Editor.Forms.DockingElements
             btnAddMapNpc.Text = Strings.NpcSpawns.add;
             btnRemoveMapNpc.Text = Strings.NpcSpawns.remove;
 
+
+            //Regions Tab
+            lblRegionsInstructions.Text = Strings.MapLayers.regionsinstructions;
+
             lblEventInstructions.Text = Strings.MapLayers.eventinstructions;
             lblLightInstructions.Text = Strings.MapLayers.lightinstructions;
         }
@@ -1513,11 +1559,13 @@ namespace Intersect.Editor.Forms.DockingElements
             btnLightsHeader.BackColor = System.Drawing.Color.FromArgb(45, 45, 48);
             btnEventsHeader.BackColor = System.Drawing.Color.FromArgb(45, 45, 48);
             btnNpcsHeader.BackColor = System.Drawing.Color.FromArgb(45, 45, 48);
+            btnRegionsHeader.BackColor = System.Drawing.Color.FromArgb(45, 45, 48);
             pnlTiles.Hide();
             pnlAttributes.Hide();
             pnlLights.Hide();
             pnlEvents.Hide();
             pnlNpcs.Hide();
+            pnlRegions.Hide();
 
             //Force Game Object Lists to Refresh
             rbAnimation_CheckedChanged(null, null);
@@ -1554,7 +1602,8 @@ namespace Intersect.Editor.Forms.DockingElements
 
         public void btnLightsHeader_Click(object sender, EventArgs e)
         {
-            if (Globals.CurrentLayer != LayerOptions.Lights && Globals.CurrentLayer != LayerOptions.Events && Globals.CurrentLayer != LayerOptions.Npcs)
+            if (Globals.CurrentLayer != LayerOptions.Lights && Globals.CurrentLayer != LayerOptions.Events && Globals.CurrentLayer != LayerOptions.Npcs
+                && Globals.CurrentLayer != LayerOptions.Regions)
             {
                 Globals.SavedTool = Globals.CurrentTool;
             }
@@ -1569,7 +1618,8 @@ namespace Intersect.Editor.Forms.DockingElements
 
         private void btnEventsHeader_Click(object sender, EventArgs e)
         {
-            if (Globals.CurrentLayer != LayerOptions.Lights && Globals.CurrentLayer != LayerOptions.Events && Globals.CurrentLayer != LayerOptions.Npcs)
+            if (Globals.CurrentLayer != LayerOptions.Lights && Globals.CurrentLayer != LayerOptions.Events && Globals.CurrentLayer != LayerOptions.Npcs
+                && Globals.CurrentLayer != LayerOptions.Regions)
             {
                 Globals.SavedTool = Globals.CurrentTool;
             }
@@ -1584,7 +1634,8 @@ namespace Intersect.Editor.Forms.DockingElements
 
         private void btnNpcsHeader_Click(object sender, EventArgs e)
         {
-            if (Globals.CurrentLayer != LayerOptions.Lights && Globals.CurrentLayer != LayerOptions.Events && Globals.CurrentLayer != LayerOptions.Npcs)
+            if (Globals.CurrentLayer != LayerOptions.Lights && Globals.CurrentLayer != LayerOptions.Events && Globals.CurrentLayer != LayerOptions.Npcs
+                && Globals.CurrentLayer != LayerOptions.Regions)
             {
                 Globals.SavedTool = Globals.CurrentTool;
             }
@@ -1596,6 +1647,23 @@ namespace Intersect.Editor.Forms.DockingElements
             btnNpcsHeader.BackColor = System.Drawing.Color.FromArgb(90, 90, 90);
             CurrentTab = LayerTabs.Npcs;
             pnlNpcs.Show();
+        }
+
+        private void btnRegionsHeader_Click(object sender, EventArgs e)
+        {
+            if (Globals.CurrentLayer != LayerOptions.Lights && Globals.CurrentLayer != LayerOptions.Events && Globals.CurrentLayer != LayerOptions.Npcs
+                && Globals.CurrentLayer != LayerOptions.Regions)
+            {
+                Globals.SavedTool = Globals.CurrentTool;
+            }
+
+            ChangeTab();
+            Globals.CurrentLayer = LayerOptions.Regions;
+            Core.Graphics.TilePreviewUpdated = true;
+            RefreshMapRegionList();
+            btnRegionsHeader.BackColor = System.Drawing.Color.FromArgb(90, 90, 90);
+            CurrentTab = LayerTabs.Regions;
+            pnlRegions.Show();
         }
 
         private void picMapLayer_MouseClick(object sender, MouseEventArgs e)

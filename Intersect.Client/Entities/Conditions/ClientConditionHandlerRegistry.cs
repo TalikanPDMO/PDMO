@@ -4,15 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Intersect.Server.Entities.Events
+namespace Intersect.Client.Entities.Conditions
 {
-    public static class ConditionHandlerRegistry
+    public static class ClientConditionHandlerRegistry
     {
-        private delegate bool HandleCondition(Condition condition, Player player, Event eventInstance, QuestBase questBase, Npc npcEnemy);
-        private delegate bool HandleConditionBool<TCondition>(TCondition condition, Player player, Event eventInstance, QuestBase questBase, Npc npcEnemy) where TCondition : Condition;
+        private delegate bool HandleCondition(Condition condition, Entity entity, QuestBase questBase);
+        private delegate bool HandleConditionBool<TCondition>(TCondition condition, Entity entity, QuestBase questBase) where TCondition : Condition;
         private static Dictionary<Type, HandleCondition> MeetsConditionFunctions = new Dictionary<Type, HandleCondition>();
         private static MethodInfo CreateWeaklyTypedDelegateForMethodInfoInfo;
         private static bool Initialized = false;
@@ -22,11 +20,11 @@ namespace Intersect.Server.Entities.Events
         public static void Init()
         {
             if (CreateWeaklyTypedDelegateForMethodInfoInfo == null)
-                CreateWeaklyTypedDelegateForMethodInfoInfo = typeof(ConditionHandlerRegistry).GetMethod(nameof(CreateWeaklyTypedDelegateForConditionMethodInfo), BindingFlags.Static | BindingFlags.NonPublic);
+                CreateWeaklyTypedDelegateForMethodInfoInfo = typeof(ClientConditionHandlerRegistry).GetMethod(nameof(CreateWeaklyTypedDelegateForConditionMethodInfo), BindingFlags.Static | BindingFlags.NonPublic);
 
             if (MeetsConditionFunctions.Count == 0)
             {
-                var methods = typeof(Conditions).GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Static).Where(m => m.Name == "MeetsCondition");
+                var methods = typeof(ClientConditions).GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Static).Where(m => m.Name == "MeetsCondition");
                 foreach (var method in methods)
                 {
                     var conditionType = method.GetParameters()[0].ParameterType;
@@ -40,7 +38,7 @@ namespace Intersect.Server.Entities.Events
             Initialized = true;
         }
 
-        public static bool CheckCondition(Condition condition, Player player, Event eventInstance, QuestBase questBase, Npc npcEnemy)
+        public static bool CheckCondition(Condition condition, Entity entity, QuestBase questBase)
         {
             if (!Initialized)
             {
@@ -53,7 +51,7 @@ namespace Intersect.Server.Entities.Events
                 }
             }
 
-            return MeetsConditionFunctions[condition.GetType()](condition, player, eventInstance, questBase, npcEnemy);
+            return MeetsConditionFunctions[condition.GetType()](condition, entity, questBase);
         }
 
 
@@ -68,8 +66,8 @@ namespace Intersect.Server.Entities.Events
                     Delegate.CreateDelegate(typeof(HandleConditionBool<TCondition>), target, methodInfo) as
                         HandleConditionBool<TCondition>;
 
-            return (Condition condition, Player player, Event eventInstance, QuestBase questBase, Npc npcEnemy) => stronglyTyped(
-                (TCondition)condition, player, eventInstance, questBase, npcEnemy
+            return (Condition condition, Entity entity, QuestBase questBase) => stronglyTyped(
+                (TCondition)condition, entity, questBase
             );
 
             throw new ArgumentException($"Unsupported condition handler return type '{methodInfo.ReturnType.FullName}'.");
@@ -77,4 +75,5 @@ namespace Intersect.Server.Entities.Events
 
 
     }
+
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Intersect.Enums;
 using Intersect.Logging;
 using Intersect.Server.Database;
-using Intersect.Server.Entities.Events;
+using Intersect.Server.Entities.Conditions;
 using Intersect.Server.Maps;
 
 namespace Intersect.Server.Entities.Pathfinding

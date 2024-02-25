@@ -151,6 +151,33 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_UseSpell.Designer.cs">
       <DependentUpon>EventCommand_UseSpell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\MapRegions\MapRegionCommand_PlayAnimation.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\MapRegions\MapRegionCommand_PlayAnimation.Designer.cs">
+      <DependentUpon>MapRegionCommand_PlayAnimation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\MapRegions\MapRegionCommand_ApplySpellEffects.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\MapRegions\MapRegionCommand_ApplySpellEffects.Designer.cs">
+      <DependentUpon>MapRegionCommand_ApplySpellEffects.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\MapRegions\MapRegionCommandControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\MapRegions\MapRegionCommand_Condition.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\MapRegions\MapRegionCommand_Condition.Designer.cs">
+      <DependentUpon>MapRegionCommand_Condition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\MapRegions\frmMapRegion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\MapRegions\frmMapRegion.Designer.cs">
+      <DependentUpon>frmMapRegion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\frmRelations.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -760,6 +787,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_Variable.resx">
       <DependentUpon>EventCommand_Variable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\MapRegions\MapRegionCommand_PlayAnimation.resx">
+      <DependentUpon>MapRegionCommand_PlayAnimation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\MapRegions\MapRegionCommand_ApplySpellEffects.resx">
+      <DependentUpon>MapRegionCommand_ApplySpellEffects.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\MapRegions\MapRegionCommand_Condition.resx">
+      <DependentUpon>MapRegionCommand_Condition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\MapRegions\frmMapRegion.resx">
+      <DependentUpon>frmMapRegion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\frmRelations.resx">
       <DependentUpon>frmRelations.cs</DependentUpon>

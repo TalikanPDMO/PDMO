@@ -385,6 +385,52 @@ namespace Intersect.Server.Migrations.Game
                     b.ToTable("MapFolders");
                 });
 
+            modelBuilder.Entity("Intersect.GameObjects.Maps.MapRegion.MapRegionBase", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CannotEnterMessage");
+
+                    b.Property<string>("CannotExitMessage");
+
+                    b.Property<string>("CommandsJson")
+                        .HasColumnName("MapRegionCommands");
+
+                    b.Property<string>("Comment");
+
+                    b.Property<string>("Description");
+
+                    b.Property<byte[]>("EditorColor");
+
+                    b.Property<string>("EditorName");
+
+                    b.Property<Guid>("EnterEventId")
+                        .HasColumnName("EnterEvent");
+
+                    b.Property<string>("EnterRequirementsJson")
+                        .HasColumnName("EnterRequirements");
+
+                    b.Property<Guid>("ExitEventId")
+                        .HasColumnName("ExitEvent");
+
+                    b.Property<string>("ExitRequirementsJson")
+                        .HasColumnName("ExitRequirements");
+
+                    b.Property<string>("Folder");
+
+                    b.Property<Guid>("MoveEventId")
+                        .HasColumnName("MoveEvent");
+
+                    b.Property<string>("Name");
+
+                    b.Property<long>("TimeCreated");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MapRegions");
+                });
+
             modelBuilder.Entity("Intersect.GameObjects.NpcBase", b =>
                 {
                     b.Property<Guid>("Id")
@@ -920,6 +966,9 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<string>("LightsJson")
                         .HasColumnName("Lights");
+
+                    b.Property<byte[]>("MapRegionIdsData")
+                        .HasColumnName("MapRegionIds");
 
                     b.Property<string>("Music");
 

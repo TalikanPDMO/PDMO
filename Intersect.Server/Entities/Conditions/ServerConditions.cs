@@ -12,9 +12,9 @@ using Intersect.Server.Entities;
 using Intersect.Server.General;
 using Intersect.Server.Maps;
 
-namespace Intersect.Server.Entities.Events
+namespace Intersect.Server.Entities.Conditions
 {
-    public static partial class Conditions
+    public static partial class ServerConditions
     {
         public static bool CanSpawnPage(EventPage page, Player player, Event activeInstance)
         {
@@ -97,7 +97,11 @@ namespace Intersect.Server.Entities.Events
             QuestBase questBase,
             Npc npcEnemy)
         {
-            var result = ConditionHandlerRegistry.CheckCondition(condition, player, eventInstance, questBase, npcEnemy);
+            if (!condition.IsServer)
+            {
+                return false;
+            }
+            var result = ServerConditionHandlerRegistry.CheckCondition(condition, player, eventInstance, questBase, npcEnemy);
             if (condition.Negated)
             {
                 result = !result;

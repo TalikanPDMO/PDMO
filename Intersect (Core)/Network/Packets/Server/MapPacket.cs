@@ -17,6 +17,7 @@ namespace Intersect.Network.Packets.Server
             string data = null,
             byte[] tileData = null,
             byte[] attributeData = null,
+            byte[] mapRegionIdsData = null,
             int revision = -1,
             int gridX = -1,
             int gridY = -1,
@@ -28,6 +29,7 @@ namespace Intersect.Network.Packets.Server
             Data = data;
             TileData = tileData;
             AttributeData = attributeData;
+            MapRegionsIdsData = mapRegionIdsData;
             Revision = revision;
             GridX = gridX;
             GridY = gridY;
@@ -50,21 +52,24 @@ namespace Intersect.Network.Packets.Server
         public byte[] AttributeData { get; set; }
 
         [Key(5)]
-        public int Revision { get; set; }
+        public byte[] MapRegionsIdsData { get; set; }
 
         [Key(6)]
-        public int GridX { get; set; }
+        public int Revision { get; set; }
 
         [Key(7)]
-        public int GridY { get; set; }
+        public int GridX { get; set; }
 
         [Key(8)]
-        public bool[] CameraHolds { get; set; }
+        public int GridY { get; set; }
 
         [Key(9)]
-        public MapEntitiesPacket MapEntities { get; set; }
+        public bool[] CameraHolds { get; set; }
 
         [Key(10)]
+        public MapEntitiesPacket MapEntities { get; set; }
+
+        [Key(11)]
         public MapItemsPacket MapItems { get; set; }
 
     }

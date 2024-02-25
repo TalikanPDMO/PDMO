@@ -10,7 +10,7 @@ using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
 
-namespace Intersect.Server.Entities.Events
+namespace Intersect.Server.Entities.Conditions
 {
 
     public partial class EventPageInstance : Entity
@@ -76,6 +76,7 @@ namespace Intersect.Server.Entities.Events
             X = eventIndex.X;
             Y = eventIndex.Y;
             Name = myEvent.Name;
+            HandleMapRegionId(Map?.MapRegionIds[X, Y]);
             MovementType = MyPage.Movement.Type;
             MovementFreq = MyPage.Movement.Frequency;
             MovementSpeed = MyPage.Movement.Speed;
@@ -150,6 +151,7 @@ namespace Intersect.Server.Entities.Events
             MapId = mapId;
             X = globalClone.X;
             Y = globalClone.Y;
+            HandleMapRegionId(Map?.MapRegionIds[X, Y]);
             Name = myEvent.Name;
             MovementType = globalClone.MovementType;
             MovementFreq = globalClone.MovementFreq;
@@ -876,7 +878,7 @@ namespace Intersect.Server.Entities.Events
         public bool ShouldDespawn(MapInstance map)
         {
             //Should despawn if conditions are not met OR an earlier page can spawn
-            if (!Conditions.MeetsConditionLists(MyPage.ConditionLists, MyEventIndex.Player, MyEventIndex))
+            if (!ServerConditions.MeetsConditionLists(MyPage.ConditionLists, MyEventIndex.Player, MyEventIndex))
             {
                 return true;
             }
@@ -888,7 +890,7 @@ namespace Intersect.Server.Entities.Events
 
             for (var i = 0; i < BaseEvent.Pages.Count; i++)
             {
-                if (i != mPageNum && Conditions.CanSpawnPage(BaseEvent.Pages[i], MyEventIndex.Player, MyEventIndex))
+                if (i != mPageNum && ServerConditions.CanSpawnPage(BaseEvent.Pages[i], MyEventIndex.Player, MyEventIndex))
                 {
                     if (i > mPageNum)
                     {

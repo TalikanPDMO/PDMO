@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Intersect.GameObjects;
 using Intersect.Server.Entities.Combat;
-using Intersect.Server.Entities.Events;
+using Intersect.Server.Entities.Conditions;
 using Intersect.Server.General;
 using Intersect.Server.Networking;
 

@@ -3,6 +3,7 @@ using Intersect.GameObjects;
 using Intersect.GameObjects.Crafting;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps;
+using Intersect.GameObjects.Maps.MapRegion;
 
 namespace Intersect.Enums
 {
@@ -58,7 +59,10 @@ namespace Intersect.Enums
         [GameObjectInfo(typeof(TilesetBase), "tilesets")]
         Tileset,
 
-        [GameObjectInfo(typeof(TimeBase), "")] Time
+        [GameObjectInfo(typeof(TimeBase), "")] Time,
+
+        [GameObjectInfo(typeof(MapRegionBase), "map_regions")]
+        MapRegion,
 
     }
 

@@ -18,6 +18,7 @@ using Intersect.GameObjects.Crafting;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps;
 using Intersect.GameObjects.Maps.MapList;
+using Intersect.GameObjects.Maps.MapRegion;
 using Intersect.Logging;
 using Intersect.Logging.Output;
 using Intersect.Models;
@@ -559,6 +560,9 @@ namespace Intersect.Server.Database
                     break;
                 case GameObjectType.Time:
                     break;
+                case GameObjectType.MapRegion:
+                    MapRegionBase.Lookup.Clear();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -691,6 +695,13 @@ namespace Intersect.Server.Database
                             break;
                         case GameObjectType.Time:
                             break;
+                        case GameObjectType.MapRegion:
+                            foreach (var psw in context.MapRegions)
+                            {
+                                MapRegionBase.Lookup.Set(psw.Id, psw);
+                            }
+
+                            break;
                         default:
                             throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
                     }
@@ -787,6 +798,10 @@ namespace Intersect.Server.Database
                     ((QuestBase) dbObj).EndEvent = (EventBase) AddGameObject(GameObjectType.Event);
                     ((QuestBase) dbObj).StartEvent.CommonEvent = false;
                     ((QuestBase) dbObj).EndEvent.CommonEvent = false;
+
+                    break;
+                case GameObjectType.MapRegion:
+                    dbObj = new MapRegionBase(predefinedid);
 
                     break;
 
@@ -902,6 +917,12 @@ namespace Intersect.Server.Database
                             break;
 
                         case GameObjectType.Time:
+                            break;
+
+                        case GameObjectType.MapRegion:
+                            context.MapRegions.Add((MapRegionBase)dbObj);
+                            MapRegionBase.Lookup.Set(dbObj.Id, dbObj);
+
                             break;
 
                         default:
@@ -1052,6 +1073,10 @@ namespace Intersect.Server.Database
                             break;
                         case GameObjectType.Time:
                             break;
+                        case GameObjectType.MapRegion:
+                            context.MapRegions.Remove((MapRegionBase)gameObject);
+
+                            break;
                     }
 
                     if (gameObject.Type.GetLookup().Values.Contains(gameObject))
@@ -1192,6 +1217,10 @@ namespace Intersect.Server.Database
 
                             break;
                         case GameObjectType.Time:
+                            break;
+                        case GameObjectType.MapRegion:
+                            context.MapRegions.Update((MapRegionBase)gameObject);
+
                             break;
                     }
 
@@ -1755,6 +1784,8 @@ namespace Intersect.Server.Database
                     MigrateDbSet(context.PlayerVariables, newGameContext.PlayerVariables);
                     MigrateDbSet(context.Tilesets, newGameContext.Tilesets);
                     MigrateDbSet(context.Time, newGameContext.Time);
+                    MigrateDbSet(context.MapRegions, newGameContext.MapRegions);
+
                     newGameContext.ChangeTracker.DetectChanges();
                     newGameContext.SaveChanges();
                     newGameContext.Dispose();

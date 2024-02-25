@@ -53,7 +53,9 @@ namespace Intersect.GameObjects.Events
 
         InPartyWithRole,
 
-        PlayerElementalType
+        PlayerElementalType,
+
+        EntityTypeIs
 
     }
 
@@ -68,6 +70,12 @@ namespace Intersect.GameObjects.Events
         /// Configures whether or not this condition does or does not have an else branch.
         /// </summary>
         public bool ElseEnabled { get; set; } = true;
+
+        //Default false to keep comptaibility of previous system
+        public virtual bool IsClient { get; set; } = false;
+
+        //Default true to keep comptaibility of previous system
+        public virtual bool IsServer { get; set; } = true;
 
     }
 
@@ -88,6 +96,8 @@ namespace Intersect.GameObjects.Events
     {
 
         public override ConditionTypes Type { get; } = ConditionTypes.HasItem;
+
+        public override bool IsClient { get; set; } = true;
 
         public Guid ItemId { get; set; }
 
@@ -114,6 +124,7 @@ namespace Intersect.GameObjects.Events
     {
 
         public override ConditionTypes Type { get; } = ConditionTypes.ClassIs;
+        public override bool IsClient { get; set; } = true;
 
         public Guid ClassId { get; set; }
 
@@ -124,6 +135,8 @@ namespace Intersect.GameObjects.Events
 
         public override ConditionTypes Type { get; } = ConditionTypes.KnowsSpell;
 
+        public override bool IsClient { get; set; } = true;
+
         public Guid SpellId { get; set; }
 
     }
@@ -132,6 +145,8 @@ namespace Intersect.GameObjects.Events
     {
 
         public override ConditionTypes Type { get; } = ConditionTypes.LevelOrStat;
+
+        public override bool IsClient { get; set; } = true;
 
         public bool ComparingLevel { get; set; }
 
@@ -170,6 +185,8 @@ namespace Intersect.GameObjects.Events
 
         public override ConditionTypes Type { get; } = ConditionTypes.TimeBetween;
 
+        public override bool IsClient { get; set; } = true;
+
         public int[] Ranges { get; set; } = new int[2];
 
     }
@@ -188,6 +205,8 @@ namespace Intersect.GameObjects.Events
 
         public override ConditionTypes Type { get; } = ConditionTypes.QuestInProgress;
 
+        public override bool IsClient { get; set; } = true;
+
         public Guid QuestId { get; set; }
 
         public QuestProgressState Progress { get; set; } = QuestProgressState.OnAnyTask;
@@ -200,6 +219,8 @@ namespace Intersect.GameObjects.Events
     {
 
         public override ConditionTypes Type { get; } = ConditionTypes.QuestCompleted;
+
+        public override bool IsClient { get; set; } = true;
 
         public Guid QuestId { get; set; }
 
@@ -217,6 +238,8 @@ namespace Intersect.GameObjects.Events
 
         public override ConditionTypes Type { get; } = ConditionTypes.GenderIs;
 
+        public override bool IsClient { get; set; } = true;
+
         public Gender Gender { get; set; } = Gender.Male;
 
     }
@@ -226,6 +249,8 @@ namespace Intersect.GameObjects.Events
 
         public override ConditionTypes Type { get; } = ConditionTypes.MapIs;
 
+        public override bool IsClient { get; set; } = true;
+
         public Guid MapId { get; set; }
 
     }
@@ -234,6 +259,8 @@ namespace Intersect.GameObjects.Events
     {
 
         public override ConditionTypes Type { get; } = ConditionTypes.IsItemEquipped;
+
+        public override bool IsClient { get; set; } = true;
 
         public Guid ItemId { get; set; }
 
@@ -281,6 +308,8 @@ namespace Intersect.GameObjects.Events
         /// </summary>
         public override ConditionTypes Type { get; } = ConditionTypes.InGuildWithRank;
 
+        public override bool IsClient { get; set; } = true;
+
         /// <summary>
         /// The guild rank the condition checks for as a minimum
         /// </summary>
@@ -296,6 +325,8 @@ namespace Intersect.GameObjects.Events
         /// Defines the type of condition.
         /// </summary>
         public override ConditionTypes Type { get; } = ConditionTypes.MapZoneTypeIs;
+
+        public override bool IsClient { get; set; } = true;
 
         /// <summary>
         /// Defines the map Zone Type to compare to.
@@ -373,6 +404,8 @@ namespace Intersect.GameObjects.Events
         /// </summary>
         public override ConditionTypes Type { get; } = ConditionTypes.InPartyWithRole;
 
+        public override bool IsClient { get; set; } = true;
+
         public VariableComparators Comparator { get; set; } = VariableComparators.Equal;
 
         public int Size { get; set; } = 1;
@@ -384,7 +417,20 @@ namespace Intersect.GameObjects.Events
     {
         public override ConditionTypes Type { get; } = ConditionTypes.PlayerElementalType;
 
+        public override bool IsClient { get; set; } = true;
+
         public int ElementalType { get; set; } = 0;
+    }
+
+    public class EntityTypeIs : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.EntityTypeIs;
+
+        public override bool IsClient { get; set; } = true;
+
+        public override bool IsServer { get; set; } = false;
+
+        public bool[] Entities { get; set; } = new bool[(int)EntityTypes.EntityTypesCount];
     }
 
     public class VariableCompaison

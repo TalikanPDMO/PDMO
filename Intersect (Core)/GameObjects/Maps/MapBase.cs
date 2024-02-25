@@ -6,6 +6,7 @@ using Intersect.Collections;
 using Intersect.Compression;
 using Intersect.Enums;
 using Intersect.GameObjects.Events;
+using Intersect.GameObjects.Maps.MapRegion;
 using Intersect.Models;
 
 using Newtonsoft.Json;
@@ -42,6 +43,13 @@ namespace Intersect.GameObjects.Maps
         //Cached Att Data
         private byte[] mCachedAttributeData = null;
 
+        //Map Regions Ids
+        private Guid?[,] mMapRegionIds = new Guid?[Options.MapWidth, Options.MapHeight];
+
+        //Cached Att Data
+        private byte[] mCachedMapRegionIdsData = null;
+
+
         //SyncLock
         [JsonIgnore] [NotMapped] protected object mMapLock = new object();
 
@@ -63,6 +71,7 @@ namespace Intersect.GameObjects.Maps
             }
 
             mCachedAttributeData = LZ4.PickleString(JsonConvert.SerializeObject(Attributes, Formatting.None, mJsonSerializerSettings));
+            mCachedMapRegionIdsData = LZ4.PickleString(JsonConvert.SerializeObject(MapRegionIds, Formatting.None, mJsonSerializerSettings));
         }
 
         //EF Constructor
@@ -114,19 +123,30 @@ namespace Intersect.GameObjects.Maps
                     {
                         for (var y = 0; y < Options.MapHeight; y++)
                         {
-                            if (Attributes == null)
+                            if (Attributes != null)
                             {
-                                continue;
+                                if (mapBase.Attributes?[x, y] == null)
+                                {
+                                    Attributes[x, y] = null;
+                                }
+                                else
+                                {
+                                    Attributes[x, y] = mapBase.Attributes[x, y].Clone();
+                                }
+                            }
+                            if (MapRegionIds != null)
+                            {
+                                if (mapBase?.MapRegionIds?[x, y] == null)
+                                {
+                                    MapRegionIds[x, y] = null;
+                                }
+                                else
+                                {
+                                    MapRegionIds[x, y] = mapBase?.MapRegionIds[x, y];
+                                }
                             }
 
-                            if (mapBase.Attributes?[x, y] == null)
-                            {
-                                Attributes[x, y] = null;
-                            }
-                            else
-                            {
-                                Attributes[x, y] = mapBase.Attributes[x, y].Clone();
-                            }
+
                         }
                     }
 
@@ -331,6 +351,32 @@ namespace Intersect.GameObjects.Maps
 
         public int WeatherIntensity { get; set; }
 
+        [Column("MapRegionIds")]
+        [JsonIgnore]
+        public byte[] MapRegionIdsData
+        {
+            get => GetMapRegionIdsData();
+            set
+            {
+                mMapRegionIds = value != null ? JsonConvert.DeserializeObject<Guid?[,]>(LZ4.UnPickleString(value), mJsonSerializerSettings) : mMapRegionIds;
+                mCachedMapRegionIdsData = value;
+            }
+        }
+
+        [NotMapped]
+        [JsonIgnore]
+        public Guid?[,] MapRegionIds
+        {
+            get => mMapRegionIds ?? (mMapRegionIds = new Guid?[Options.MapWidth, Options.MapHeight]);
+
+            set
+            {
+                mMapRegionIds = value;
+                mCachedMapRegionIdsData = LZ4.PickleString(JsonConvert.SerializeObject(mMapRegionIds, Formatting.None, mJsonSerializerSettings));
+            }
+        }
+
+
         [NotMapped]
         [JsonIgnore]
         public object MapLock => mMapLock;
@@ -343,6 +389,11 @@ namespace Intersect.GameObjects.Maps
         public virtual byte[] GetAttributeData()
         {
             return mCachedAttributeData;
+        }
+
+        public virtual byte[] GetMapRegionIdsData()
+        {
+            return mCachedMapRegionIdsData;
         }
 
         public class MapInstances : DatabaseObjectLookup

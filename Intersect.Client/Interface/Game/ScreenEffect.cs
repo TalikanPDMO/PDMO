@@ -24,6 +24,12 @@ namespace Intersect.Client.Interface.Game
 
         public ScreenEffectBase Base;
 
+        public Guid MapRegionId = Guid.Empty;
+
+        public bool WaitForRegion = false;
+
+        public bool RegionLeave = false;
+
         public ScreenEffect(PlayScreenEffectPacket packet)
         {
             Base = new ScreenEffectBase();
@@ -36,7 +42,7 @@ namespace Intersect.Client.Interface.Game
             Base.Frames = packet.Frames ?? new int[(int)ScreenEffectState.StateCount - 1];
             Start();
         }
-        public ScreenEffect(ScreenEffectBase screenEffectBase)
+        public ScreenEffect(ScreenEffectBase screenEffectBase, Guid mapRegionId)
         {
             Base = screenEffectBase;
             if (Base.Opacities == null)
@@ -51,6 +57,7 @@ namespace Intersect.Client.Interface.Game
             {
                 Base.Frames = new int[(int)ScreenEffectState.StateCount - 1];
             }
+            MapRegionId = mapRegionId;
             Start();
         }
 
@@ -109,7 +116,15 @@ namespace Intersect.Client.Interface.Game
                     ShakePos.Add(new Point(-Base.Size, -Base.Size));
                     ShakePos.Add(new Point(0, -Base.Size));
                     var startTime = Globals.System.GetTimeMs();
-                    NextStateTime = startTime + Base.Durations[(int)ScreenEffectState.Pending];
+                    if (MapRegionId != Guid.Empty)
+                    {
+                        NextStateTime = 0;
+                        WaitForRegion = true;
+                    }
+                    else
+                    {
+                        NextStateTime = startTime + Base.Durations[(int)ScreenEffectState.Pending];
+                    }
                     NextUpdateTime = startTime + FrameTime;
                     State = ScreenEffectState.Pending;
                     break;
@@ -120,6 +135,10 @@ namespace Intersect.Client.Interface.Game
         {
             if (State < ScreenEffectState.StateCount && Globals.System.GetTimeMs() > NextUpdateTime)
             {
+                if (WaitForRegion && RegionLeave)
+                {
+                    WaitForRegion = false;
+                }
                 switch (Base.EffectType)
                 {
                     case ScreenEffectType.ColorTransition:
@@ -136,7 +155,7 @@ namespace Intersect.Client.Interface.Game
         }
         private void UpdateShake()
         {
-            if (Globals.System.GetTimeMs() > NextStateTime)
+            if (!WaitForRegion && Globals.System.GetTimeMs() > NextStateTime)
             {
                 State = ScreenEffectState.StateCount;
             }
@@ -160,7 +179,23 @@ namespace Intersect.Client.Interface.Game
                     if (Globals.System.GetTimeMs() > NextStateTime)
                     {
                         State = ScreenEffectState.Pending;
-                        if (Base.Durations[(int)ScreenEffectState.Pending] == 0)
+                        if (MapRegionId != Guid.Empty)
+                        {
+                            if (RegionLeave)
+                            {
+                                WaitForRegion = false;
+                                UpdateImage();
+                            }
+                            else
+                            {
+                                WaitForRegion = true;
+                                mImage.RenderColor = Color.FromArgb(Base.Opacities[(int)ScreenEffectState.Pending],
+                                    mImage.RenderColor.R, mImage.RenderColor.G, mImage.RenderColor.B);
+                                NextStateTime = 0;
+                                NextUpdateTime = 0;
+                            }    
+                        }
+                        else if (Base.Durations[(int)ScreenEffectState.Pending] == 0)
                         {
                             UpdateImage(); //Duration is 0, go to next state
                         }
@@ -181,6 +216,11 @@ namespace Intersect.Client.Interface.Game
                     }
                     break;
                 case ScreenEffectState.Pending: // NextUpdateTime is over, we need to transit to the finish of the
+                    if (WaitForRegion)
+                    {
+                        // if we depend of a mapregion, block the state until we leave the region 
+                        return;
+                    }
                     State = ScreenEffectState.End;
                     if (Base.Durations[(int)ScreenEffectState.End] == 0)
                     {
@@ -240,7 +280,7 @@ namespace Intersect.Client.Interface.Game
                 }
                 mImage.Show();
             }
-            else if (Base.Durations[(int)ScreenEffectState.Pending] != 0)
+            else if (Base.Durations[(int)ScreenEffectState.Pending] != 0 || MapRegionId != Guid.Empty)
             {
                 State = ScreenEffectState.Pending;
                 CurrentOpacity = Base.Opacities[(int)ScreenEffectState.Pending];
@@ -252,9 +292,18 @@ namespace Intersect.Client.Interface.Game
                 {
                     mImage.RenderColor = Color.FromArgb((int)CurrentOpacity, 255, 255, 255);
                 }
-                var startTime = Globals.System.GetTimeMs();
-                NextStateTime = startTime + Base.Durations[(int)ScreenEffectState.Pending];
-                NextUpdateTime = NextStateTime;
+                if (MapRegionId != Guid.Empty)
+                {
+                    NextStateTime = 0;
+                    WaitForRegion = true;
+                    NextUpdateTime = 0;
+                }
+                else
+                {
+                    NextStateTime = Globals.System.GetTimeMs() + Base.Durations[(int)ScreenEffectState.Pending];
+                    NextUpdateTime = NextStateTime;
+                }
+                
                 if (Base.OverGUI)
                 {
                     mImage.BringToFront();

@@ -94,6 +94,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.lblLightInstructions = new System.Windows.Forms.Label();
             this.lblEventInstructions = new System.Windows.Forms.Label();
             this.grpNpcList = new DarkUI.Controls.DarkGroupBox();
+            this.btnRemoveInactive = new DarkUI.Controls.DarkButton();
             this.btnAddInactive = new DarkUI.Controls.DarkButton();
             this.nudInactiveSpawn = new DarkUI.Controls.DarkNumericUpDown();
             this.lblInactiveSpawns = new System.Windows.Forms.Label();
@@ -120,16 +121,9 @@ namespace Intersect.Editor.Forms.DockingElements
             this.btnEventsHeader = new DarkUI.Controls.DarkButton();
             this.btnNpcsHeader = new DarkUI.Controls.DarkButton();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.pnlNpcs = new System.Windows.Forms.Panel();
-            this.pnlTiles = new System.Windows.Forms.Panel();
-            this.cmbMapLayer = new DarkUI.Controls.DarkComboBox();
-            this.picLayer5 = new System.Windows.Forms.PictureBox();
-            this.picLayer4 = new System.Windows.Forms.PictureBox();
-            this.picLayer3 = new System.Windows.Forms.PictureBox();
-            this.picLayer2 = new System.Windows.Forms.PictureBox();
-            this.picLayer1 = new System.Windows.Forms.PictureBox();
-            this.pnlTilesetContainer = new Intersect.Editor.Forms.Controls.AutoDragPanel();
-            this.picTileset = new System.Windows.Forms.PictureBox();
+            this.pnlRegions = new System.Windows.Forms.Panel();
+            this.lblRegionsInstructions = new System.Windows.Forms.Label();
+            this.cmbMapRegion = new DarkUI.Controls.DarkComboBox();
             this.pnlEvents = new System.Windows.Forms.Panel();
             this.pnlLights = new System.Windows.Forms.Panel();
             this.lightEditor = new Intersect.Editor.Forms.Controls.LightEditorCtrl();
@@ -152,7 +146,17 @@ namespace Intersect.Editor.Forms.DockingElements
             this.cmbCritterAnimation = new DarkUI.Controls.DarkComboBox();
             this.lblCritterAnimation = new System.Windows.Forms.Label();
             this.rbCritter = new DarkUI.Controls.DarkRadioButton();
-            this.btnRemoveInactive = new DarkUI.Controls.DarkButton();
+            this.pnlNpcs = new System.Windows.Forms.Panel();
+            this.pnlTiles = new System.Windows.Forms.Panel();
+            this.cmbMapLayer = new DarkUI.Controls.DarkComboBox();
+            this.picLayer5 = new System.Windows.Forms.PictureBox();
+            this.picLayer4 = new System.Windows.Forms.PictureBox();
+            this.picLayer3 = new System.Windows.Forms.PictureBox();
+            this.picLayer2 = new System.Windows.Forms.PictureBox();
+            this.picLayer1 = new System.Windows.Forms.PictureBox();
+            this.pnlTilesetContainer = new Intersect.Editor.Forms.Controls.AutoDragPanel();
+            this.picTileset = new System.Windows.Forms.PictureBox();
+            this.btnRegionsHeader = new DarkUI.Controls.DarkButton();
             this.grpResource.SuspendLayout();
             this.grpZResource.SuspendLayout();
             this.grpItem.SuspendLayout();
@@ -174,6 +178,13 @@ namespace Intersect.Editor.Forms.DockingElements
             ((System.ComponentModel.ISupportInitialize)(this.nudMinLevel)).BeginInit();
             this.grpSpawnLoc.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.pnlRegions.SuspendLayout();
+            this.pnlEvents.SuspendLayout();
+            this.pnlLights.SuspendLayout();
+            this.pnlAttributes.SuspendLayout();
+            this.grpCritter.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCritterMoveFrequency)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCritterMoveSpeed)).BeginInit();
             this.pnlNpcs.SuspendLayout();
             this.pnlTiles.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer5)).BeginInit();
@@ -183,12 +194,6 @@ namespace Intersect.Editor.Forms.DockingElements
             ((System.ComponentModel.ISupportInitialize)(this.picLayer1)).BeginInit();
             this.pnlTilesetContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picTileset)).BeginInit();
-            this.pnlEvents.SuspendLayout();
-            this.pnlLights.SuspendLayout();
-            this.pnlAttributes.SuspendLayout();
-            this.grpCritter.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCritterMoveFrequency)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCritterMoveSpeed)).BeginInit();
             this.SuspendLayout();
             // 
             // lblLayer
@@ -1036,6 +1041,16 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpNpcList.TabStop = false;
             this.grpNpcList.Text = "Add/Remove Map NPCs";
             // 
+            // btnRemoveInactive
+            // 
+            this.btnRemoveInactive.Location = new System.Drawing.Point(198, 184);
+            this.btnRemoveInactive.Name = "btnRemoveInactive";
+            this.btnRemoveInactive.Padding = new System.Windows.Forms.Padding(5);
+            this.btnRemoveInactive.Size = new System.Drawing.Size(60, 20);
+            this.btnRemoveInactive.TabIndex = 74;
+            this.btnRemoveInactive.Text = "Remove";
+            this.btnRemoveInactive.Click += new System.EventHandler(this.btnRemoveInactiveSpawn_Click);
+            // 
             // btnAddInactive
             // 
             this.btnAddInactive.Location = new System.Drawing.Point(198, 161);
@@ -1388,141 +1403,56 @@ namespace Intersect.Editor.Forms.DockingElements
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.pnlNpcs);
-            this.panel1.Controls.Add(this.pnlTiles);
+            this.panel1.Controls.Add(this.pnlRegions);
             this.panel1.Controls.Add(this.pnlEvents);
             this.panel1.Controls.Add(this.pnlLights);
             this.panel1.Controls.Add(this.pnlAttributes);
+            this.panel1.Controls.Add(this.pnlNpcs);
+            this.panel1.Controls.Add(this.pnlTiles);
             this.panel1.Location = new System.Drawing.Point(8, 34);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(278, 492);
+            this.panel1.Size = new System.Drawing.Size(330, 492);
             this.panel1.TabIndex = 23;
             // 
-            // pnlNpcs
+            // pnlRegions
             // 
-            this.pnlNpcs.Controls.Add(this.grpNpcList);
-            this.pnlNpcs.Controls.Add(this.lstMapNpcs);
-            this.pnlNpcs.Controls.Add(this.grpSpawnLoc);
-            this.pnlNpcs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlNpcs.Location = new System.Drawing.Point(0, 0);
-            this.pnlNpcs.Name = "pnlNpcs";
-            this.pnlNpcs.Size = new System.Drawing.Size(276, 490);
-            this.pnlNpcs.TabIndex = 1;
+            this.pnlRegions.Controls.Add(this.lblRegionsInstructions);
+            this.pnlRegions.Controls.Add(this.cmbMapRegion);
+            this.pnlRegions.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlRegions.Location = new System.Drawing.Point(0, 0);
+            this.pnlRegions.Name = "pnlRegions";
+            this.pnlRegions.Size = new System.Drawing.Size(328, 490);
+            this.pnlRegions.TabIndex = 1;
             // 
-            // pnlTiles
+            // lblRegionsInstructions
             // 
-            this.pnlTiles.Controls.Add(this.cmbMapLayer);
-            this.pnlTiles.Controls.Add(this.picLayer5);
-            this.pnlTiles.Controls.Add(this.picLayer4);
-            this.pnlTiles.Controls.Add(this.picLayer3);
-            this.pnlTiles.Controls.Add(this.picLayer2);
-            this.pnlTiles.Controls.Add(this.picLayer1);
-            this.pnlTiles.Controls.Add(this.lblLayer);
-            this.pnlTiles.Controls.Add(this.cmbTilesets);
-            this.pnlTiles.Controls.Add(this.lblTileType);
-            this.pnlTiles.Controls.Add(this.cmbAutotile);
-            this.pnlTiles.Controls.Add(this.lblTileset);
-            this.pnlTiles.Controls.Add(this.pnlTilesetContainer);
-            this.pnlTiles.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlTiles.Location = new System.Drawing.Point(0, 0);
-            this.pnlTiles.Name = "pnlTiles";
-            this.pnlTiles.Size = new System.Drawing.Size(276, 490);
-            this.pnlTiles.TabIndex = 0;
+            this.lblRegionsInstructions.AutoSize = true;
+            this.lblRegionsInstructions.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lblRegionsInstructions.Location = new System.Drawing.Point(11, 21);
+            this.lblRegionsInstructions.Name = "lblRegionsInstructions";
+            this.lblRegionsInstructions.Size = new System.Drawing.Size(110, 13);
+            this.lblRegionsInstructions.TabIndex = 6;
+            this.lblRegionsInstructions.Text = "Select a MapRegion :";
             // 
-            // cmbMapLayer
+            // cmbMapRegion
             // 
-            this.cmbMapLayer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbMapLayer.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbMapLayer.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbMapLayer.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbMapLayer.DrawDropdownHoverOutline = false;
-            this.cmbMapLayer.DrawFocusRectangle = false;
-            this.cmbMapLayer.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbMapLayer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbMapLayer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbMapLayer.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbMapLayer.FormattingEnabled = true;
-            this.cmbMapLayer.Location = new System.Drawing.Point(84, 7);
-            this.cmbMapLayer.Name = "cmbMapLayer";
-            this.cmbMapLayer.Size = new System.Drawing.Size(178, 21);
-            this.cmbMapLayer.TabIndex = 29;
-            this.cmbMapLayer.Text = null;
-            this.cmbMapLayer.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbMapLayer.SelectedIndexChanged += new System.EventHandler(this.cmbMapLayer_SelectedIndexChanged);
-            // 
-            // picLayer5
-            // 
-            this.picLayer5.Location = new System.Drawing.Point(232, 2);
-            this.picLayer5.Name = "picLayer5";
-            this.picLayer5.Size = new System.Drawing.Size(30, 32);
-            this.picLayer5.TabIndex = 28;
-            this.picLayer5.TabStop = false;
-            this.picLayer5.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
-            this.picLayer5.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
-            // 
-            // picLayer4
-            // 
-            this.picLayer4.Location = new System.Drawing.Point(195, 2);
-            this.picLayer4.Name = "picLayer4";
-            this.picLayer4.Size = new System.Drawing.Size(30, 32);
-            this.picLayer4.TabIndex = 27;
-            this.picLayer4.TabStop = false;
-            this.picLayer4.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
-            this.picLayer4.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
-            // 
-            // picLayer3
-            // 
-            this.picLayer3.Location = new System.Drawing.Point(158, 2);
-            this.picLayer3.Name = "picLayer3";
-            this.picLayer3.Size = new System.Drawing.Size(30, 32);
-            this.picLayer3.TabIndex = 26;
-            this.picLayer3.TabStop = false;
-            this.picLayer3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
-            this.picLayer3.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
-            // 
-            // picLayer2
-            // 
-            this.picLayer2.Location = new System.Drawing.Point(121, 2);
-            this.picLayer2.Name = "picLayer2";
-            this.picLayer2.Size = new System.Drawing.Size(30, 32);
-            this.picLayer2.TabIndex = 25;
-            this.picLayer2.TabStop = false;
-            this.picLayer2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
-            this.picLayer2.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
-            // 
-            // picLayer1
-            // 
-            this.picLayer1.Location = new System.Drawing.Point(84, 2);
-            this.picLayer1.Name = "picLayer1";
-            this.picLayer1.Size = new System.Drawing.Size(30, 32);
-            this.picLayer1.TabIndex = 24;
-            this.picLayer1.TabStop = false;
-            this.picLayer1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
-            this.picLayer1.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
-            // 
-            // pnlTilesetContainer
-            // 
-            this.pnlTilesetContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlTilesetContainer.AutoScroll = true;
-            this.pnlTilesetContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.pnlTilesetContainer.Controls.Add(this.picTileset);
-            this.pnlTilesetContainer.Location = new System.Drawing.Point(9, 96);
-            this.pnlTilesetContainer.Name = "pnlTilesetContainer";
-            this.pnlTilesetContainer.Size = new System.Drawing.Size(264, 386);
-            this.pnlTilesetContainer.TabIndex = 19;
-            // 
-            // picTileset
-            // 
-            this.picTileset.Location = new System.Drawing.Point(0, 0);
-            this.picTileset.Name = "picTileset";
-            this.picTileset.Size = new System.Drawing.Size(167, 148);
-            this.picTileset.TabIndex = 2;
-            this.picTileset.TabStop = false;
-            this.picTileset.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picTileset_MouseDown);
-            this.picTileset.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picTileset_MouseMove);
-            this.picTileset.MouseUp += new System.Windows.Forms.MouseEventHandler(this.picTileset_MouseUp);
+            this.cmbMapRegion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbMapRegion.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbMapRegion.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbMapRegion.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbMapRegion.DrawDropdownHoverOutline = false;
+            this.cmbMapRegion.DrawFocusRectangle = false;
+            this.cmbMapRegion.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbMapRegion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMapRegion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbMapRegion.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbMapRegion.FormattingEnabled = true;
+            this.cmbMapRegion.Location = new System.Drawing.Point(13, 39);
+            this.cmbMapRegion.Name = "cmbMapRegion";
+            this.cmbMapRegion.Size = new System.Drawing.Size(294, 21);
+            this.cmbMapRegion.TabIndex = 5;
+            this.cmbMapRegion.Text = null;
+            this.cmbMapRegion.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // pnlEvents
             // 
@@ -1530,7 +1460,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.pnlEvents.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlEvents.Location = new System.Drawing.Point(0, 0);
             this.pnlEvents.Name = "pnlEvents";
-            this.pnlEvents.Size = new System.Drawing.Size(276, 490);
+            this.pnlEvents.Size = new System.Drawing.Size(328, 490);
             this.pnlEvents.TabIndex = 1;
             // 
             // pnlLights
@@ -1540,7 +1470,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.pnlLights.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlLights.Location = new System.Drawing.Point(0, 0);
             this.pnlLights.Name = "pnlLights";
-            this.pnlLights.Size = new System.Drawing.Size(276, 490);
+            this.pnlLights.Size = new System.Drawing.Size(328, 490);
             this.pnlLights.TabIndex = 1;
             // 
             // lightEditor
@@ -1577,7 +1507,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.pnlAttributes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlAttributes.Location = new System.Drawing.Point(0, 0);
             this.pnlAttributes.Name = "pnlAttributes";
-            this.pnlAttributes.Size = new System.Drawing.Size(276, 490);
+            this.pnlAttributes.Size = new System.Drawing.Size(328, 490);
             this.pnlAttributes.TabIndex = 1;
             // 
             // grpCritter
@@ -1837,15 +1767,141 @@ namespace Intersect.Editor.Forms.DockingElements
             this.rbCritter.Text = "Critter";
             this.rbCritter.CheckedChanged += new System.EventHandler(this.rbCritter_CheckedChanged);
             // 
-            // btnRemoveInactive
+            // pnlNpcs
             // 
-            this.btnRemoveInactive.Location = new System.Drawing.Point(198, 184);
-            this.btnRemoveInactive.Name = "btnRemoveInactive";
-            this.btnRemoveInactive.Padding = new System.Windows.Forms.Padding(5);
-            this.btnRemoveInactive.Size = new System.Drawing.Size(60, 20);
-            this.btnRemoveInactive.TabIndex = 74;
-            this.btnRemoveInactive.Text = "Remove";
-            this.btnRemoveInactive.Click += new System.EventHandler(this.btnRemoveInactiveSpawn_Click);
+            this.pnlNpcs.Controls.Add(this.grpNpcList);
+            this.pnlNpcs.Controls.Add(this.lstMapNpcs);
+            this.pnlNpcs.Controls.Add(this.grpSpawnLoc);
+            this.pnlNpcs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlNpcs.Location = new System.Drawing.Point(0, 0);
+            this.pnlNpcs.Name = "pnlNpcs";
+            this.pnlNpcs.Size = new System.Drawing.Size(328, 490);
+            this.pnlNpcs.TabIndex = 1;
+            // 
+            // pnlTiles
+            // 
+            this.pnlTiles.Controls.Add(this.cmbMapLayer);
+            this.pnlTiles.Controls.Add(this.picLayer5);
+            this.pnlTiles.Controls.Add(this.picLayer4);
+            this.pnlTiles.Controls.Add(this.picLayer3);
+            this.pnlTiles.Controls.Add(this.picLayer2);
+            this.pnlTiles.Controls.Add(this.picLayer1);
+            this.pnlTiles.Controls.Add(this.lblLayer);
+            this.pnlTiles.Controls.Add(this.cmbTilesets);
+            this.pnlTiles.Controls.Add(this.lblTileType);
+            this.pnlTiles.Controls.Add(this.cmbAutotile);
+            this.pnlTiles.Controls.Add(this.lblTileset);
+            this.pnlTiles.Controls.Add(this.pnlTilesetContainer);
+            this.pnlTiles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlTiles.Location = new System.Drawing.Point(0, 0);
+            this.pnlTiles.Name = "pnlTiles";
+            this.pnlTiles.Size = new System.Drawing.Size(328, 490);
+            this.pnlTiles.TabIndex = 0;
+            // 
+            // cmbMapLayer
+            // 
+            this.cmbMapLayer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbMapLayer.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbMapLayer.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbMapLayer.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbMapLayer.DrawDropdownHoverOutline = false;
+            this.cmbMapLayer.DrawFocusRectangle = false;
+            this.cmbMapLayer.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbMapLayer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMapLayer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbMapLayer.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbMapLayer.FormattingEnabled = true;
+            this.cmbMapLayer.Location = new System.Drawing.Point(84, 7);
+            this.cmbMapLayer.Name = "cmbMapLayer";
+            this.cmbMapLayer.Size = new System.Drawing.Size(178, 21);
+            this.cmbMapLayer.TabIndex = 29;
+            this.cmbMapLayer.Text = null;
+            this.cmbMapLayer.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbMapLayer.SelectedIndexChanged += new System.EventHandler(this.cmbMapLayer_SelectedIndexChanged);
+            // 
+            // picLayer5
+            // 
+            this.picLayer5.Location = new System.Drawing.Point(232, 2);
+            this.picLayer5.Name = "picLayer5";
+            this.picLayer5.Size = new System.Drawing.Size(30, 32);
+            this.picLayer5.TabIndex = 28;
+            this.picLayer5.TabStop = false;
+            this.picLayer5.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
+            this.picLayer5.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
+            // 
+            // picLayer4
+            // 
+            this.picLayer4.Location = new System.Drawing.Point(195, 2);
+            this.picLayer4.Name = "picLayer4";
+            this.picLayer4.Size = new System.Drawing.Size(30, 32);
+            this.picLayer4.TabIndex = 27;
+            this.picLayer4.TabStop = false;
+            this.picLayer4.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
+            this.picLayer4.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
+            // 
+            // picLayer3
+            // 
+            this.picLayer3.Location = new System.Drawing.Point(158, 2);
+            this.picLayer3.Name = "picLayer3";
+            this.picLayer3.Size = new System.Drawing.Size(30, 32);
+            this.picLayer3.TabIndex = 26;
+            this.picLayer3.TabStop = false;
+            this.picLayer3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
+            this.picLayer3.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
+            // 
+            // picLayer2
+            // 
+            this.picLayer2.Location = new System.Drawing.Point(121, 2);
+            this.picLayer2.Name = "picLayer2";
+            this.picLayer2.Size = new System.Drawing.Size(30, 32);
+            this.picLayer2.TabIndex = 25;
+            this.picLayer2.TabStop = false;
+            this.picLayer2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
+            this.picLayer2.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
+            // 
+            // picLayer1
+            // 
+            this.picLayer1.Location = new System.Drawing.Point(84, 2);
+            this.picLayer1.Name = "picLayer1";
+            this.picLayer1.Size = new System.Drawing.Size(30, 32);
+            this.picLayer1.TabIndex = 24;
+            this.picLayer1.TabStop = false;
+            this.picLayer1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
+            this.picLayer1.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
+            // 
+            // pnlTilesetContainer
+            // 
+            this.pnlTilesetContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlTilesetContainer.AutoScroll = true;
+            this.pnlTilesetContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.pnlTilesetContainer.Controls.Add(this.picTileset);
+            this.pnlTilesetContainer.Location = new System.Drawing.Point(9, 96);
+            this.pnlTilesetContainer.Name = "pnlTilesetContainer";
+            this.pnlTilesetContainer.Size = new System.Drawing.Size(316, 386);
+            this.pnlTilesetContainer.TabIndex = 19;
+            // 
+            // picTileset
+            // 
+            this.picTileset.Location = new System.Drawing.Point(0, 0);
+            this.picTileset.Name = "picTileset";
+            this.picTileset.Size = new System.Drawing.Size(167, 148);
+            this.picTileset.TabIndex = 2;
+            this.picTileset.TabStop = false;
+            this.picTileset.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picTileset_MouseDown);
+            this.picTileset.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picTileset_MouseMove);
+            this.picTileset.MouseUp += new System.Windows.Forms.MouseEventHandler(this.picTileset_MouseUp);
+            // 
+            // btnRegionsHeader
+            // 
+            this.btnRegionsHeader.Location = new System.Drawing.Point(258, 12);
+            this.btnRegionsHeader.Name = "btnRegionsHeader";
+            this.btnRegionsHeader.Padding = new System.Windows.Forms.Padding(5);
+            this.btnRegionsHeader.Size = new System.Drawing.Size(58, 23);
+            this.btnRegionsHeader.TabIndex = 24;
+            this.btnRegionsHeader.Text = "Regions";
+            this.btnRegionsHeader.Click += new System.EventHandler(this.btnRegionsHeader_Click);
             // 
             // FrmMapLayers
             // 
@@ -1853,10 +1909,11 @@ namespace Intersect.Editor.Forms.DockingElements
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(312, 529);
+            this.ClientSize = new System.Drawing.Size(378, 529);
             this.CloseButton = false;
             this.CloseButtonVisible = false;
             this.ControlBox = false;
+            this.Controls.Add(this.btnRegionsHeader);
             this.Controls.Add(this.btnAttributeHeader);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btnNpcsHeader);
@@ -1867,7 +1924,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.HideOnClose = true;
-            this.MinimumSize = new System.Drawing.Size(314, 250);
+            this.MinimumSize = new System.Drawing.Size(380, 250);
             this.Name = "FrmMapLayers";
             this.Text = "Map Layers";
             this.DockStateChanged += new System.EventHandler(this.frmMapLayers_DockStateChanged);
@@ -1904,6 +1961,17 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpSpawnLoc.ResumeLayout(false);
             this.grpSpawnLoc.PerformLayout();
             this.panel1.ResumeLayout(false);
+            this.pnlRegions.ResumeLayout(false);
+            this.pnlRegions.PerformLayout();
+            this.pnlEvents.ResumeLayout(false);
+            this.pnlEvents.PerformLayout();
+            this.pnlLights.ResumeLayout(false);
+            this.pnlAttributes.ResumeLayout(false);
+            this.pnlAttributes.PerformLayout();
+            this.grpCritter.ResumeLayout(false);
+            this.grpCritter.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCritterMoveFrequency)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCritterMoveSpeed)).EndInit();
             this.pnlNpcs.ResumeLayout(false);
             this.pnlTiles.ResumeLayout(false);
             this.pnlTiles.PerformLayout();
@@ -1914,15 +1982,6 @@ namespace Intersect.Editor.Forms.DockingElements
             ((System.ComponentModel.ISupportInitialize)(this.picLayer1)).EndInit();
             this.pnlTilesetContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picTileset)).EndInit();
-            this.pnlEvents.ResumeLayout(false);
-            this.pnlEvents.PerformLayout();
-            this.pnlLights.ResumeLayout(false);
-            this.pnlAttributes.ResumeLayout(false);
-            this.pnlAttributes.PerformLayout();
-            this.grpCritter.ResumeLayout(false);
-            this.grpCritter.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCritterMoveFrequency)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCritterMoveSpeed)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2049,5 +2108,9 @@ namespace Intersect.Editor.Forms.DockingElements
         private Label lblInactiveSpawns;
         public ListBox lstInactiveSpawns;
         private DarkButton btnRemoveInactive;
+        private DarkButton btnRegionsHeader;
+        private Panel pnlRegions;
+        private Label lblRegionsInstructions;
+        private DarkComboBox cmbMapRegion;
     }
 }

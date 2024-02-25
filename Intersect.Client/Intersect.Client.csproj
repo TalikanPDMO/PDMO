@@ -121,6 +121,8 @@
     <Compile Include="Entities\Critter.cs" />
     <Compile Include="Entities\Dash.cs" />
     <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Entities\Conditions\ClientConditionHandlerRegistry.cs" />
+    <Compile Include="Entities\Conditions\ClientConditions.cs" />
     <Compile Include="Entities\Events\Event.cs" />
     <Compile Include="Entities\Events\Dialog.cs" />
     <Compile Include="Entities\Events\Hold.cs" />

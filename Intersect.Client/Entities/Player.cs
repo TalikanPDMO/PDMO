@@ -131,8 +131,7 @@ namespace Intersect.Client.Entities
         /// </summary>
         public GuildMember[] GuildMembers = new GuildMember[0];
 
-        //Test for running anim
-        public static Guid RunningAnimId = Guid.Empty;
+        public long MapRegionErrorMessageTimer = 0;
 
         public Player(Guid id, PlayerEntityPacket packet) : base(id, packet)
         {
@@ -2115,10 +2114,12 @@ namespace Intersect.Client.Entities
                             X = (byte) tmpX;
                             Y = (byte) tmpY;
                         }
+                       HandleMapRegionId(MapInstance?.MapRegionIds[X, Y]);
 
                         TryToChangeDimension();
                         PacketSender.SendMove();
-                        MoveTimer = (Timing.Global.Ticks / TimeSpan.TicksPerMillisecond) + (long)GetMovementTime();
+                        LastMoveTimer = (Timing.Global.Ticks / TimeSpan.TicksPerMillisecond);
+                        MoveTimer = LastMoveTimer + (long)GetMovementTime();
                     }
                     else
                     {

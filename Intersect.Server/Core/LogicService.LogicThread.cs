@@ -18,7 +18,7 @@ using Newtonsoft.Json;
 using Intersect.Server.Networking;
 using Intersect.Server.Networking.Lidgren;
 using Intersect.Server.Database.PlayerData.Players;
-using Intersect.Server.Entities.Events;
+using Intersect.Server.Entities.Conditions;
 
 namespace Intersect.Server.Core
 {
