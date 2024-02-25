@@ -150,14 +150,6 @@ namespace Intersect.Editor.Forms.Editors
             nudCastDuration.Maximum = Int32.MaxValue;
             nudCooldownDuration.Maximum = Int32.MaxValue;
 
-            cmbCritEffectSpell.Items.Clear();
-            cmbCritEffectSpell.Items.Add(Strings.General.none);
-            cmbCritEffectSpell.Items.AddRange(SpellBase.EditorFormatNames);
-
-            cmbNextSpell.Items.Clear();
-            cmbNextSpell.Items.Add(Strings.General.none);
-            cmbNextSpell.Items.AddRange(SpellBase.EditorFormatNames);
-
             InitLocalization();
             UpdateEditor();
         }
@@ -372,6 +364,14 @@ namespace Intersect.Editor.Forms.Editors
                 nudMpCost.Value = mEditorItem.VitalCost[(int) Vitals.Mana];
 
                 txtCannotCast.Text = mEditorItem.CannotCastMessage;
+
+                cmbCritEffectSpell.Items.Clear();
+                cmbCritEffectSpell.Items.Add(Strings.General.none);
+                cmbCritEffectSpell.Items.AddRange(SpellBase.EditorFormatNames);
+
+                cmbNextSpell.Items.Clear();
+                cmbNextSpell.Items.Add(Strings.General.none);
+                cmbNextSpell.Items.AddRange(SpellBase.EditorFormatNames);
 
                 UpdateSpellTypePanels();
                 if (mChanged.IndexOf(mEditorItem) == -1)
