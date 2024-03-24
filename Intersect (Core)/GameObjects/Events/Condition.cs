@@ -75,6 +75,7 @@ namespace Intersect.GameObjects.Events
         public virtual bool IsClient { get; set; } = false;
 
         //Default true to keep comptaibility of previous system
+        [DefaultValue(true)]
         public virtual bool IsServer { get; set; } = true;
 
     }
