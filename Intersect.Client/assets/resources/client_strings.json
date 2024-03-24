@@ -809,7 +809,7 @@
     "onself": "(Sur soi)",
     "ontarget": "(Sur la cible)",
     "effectseparator": "----------",
-    "effectseparatorchance": "({00}% chance)",
+    "effectchance": " ({00}% de chance)",
     "effectlist": {
       "0": "",
       "1": "Inflige Silence",

@@ -265,7 +265,10 @@ namespace Intersect.Client.Interface.Game
                     if (currentSpell.Combat.Effect > 0)
                     {
                         var effect = Strings.SpellDesc.effectlist[(int)currentSpell.Combat.Effect];
-                        effect += " (" + currentSpell.Combat.EffectChance + "% chance)";
+                        if (currentSpell.Combat.EffectChance != 100)
+                        {
+                            effect += Strings.SpellDesc.effectchance.ToString(currentSpell.Combat.EffectChance);
+                        }
                         spellStats.AddText(
                             effect, spellStats.RenderColor,
                             spellStatsText.CurAlignments.Count > 0 ? spellStatsText.CurAlignments[0] : Alignments.Left,
@@ -367,7 +370,8 @@ namespace Intersect.Client.Interface.Game
                                     }
                                     if (strStat.Length != 0)
                                     {
-                                        var strChance = Strings.SpellDesc.statchance.ToString(currentSpell.Combat.StatDiffChance[i]);
+                                        var strChance = currentSpell.Combat.StatDiffChance[i] == 100 ? "" :
+                                            Strings.SpellDesc.statchance.ToString(currentSpell.Combat.StatDiffChance[i]);
                                         spellStats.AddText(
                                             Strings.SpellDesc.stats[i].ToString(strStat, strChance), spellStats.RenderColor,
                                             spellStatsText.CurAlignments.Count > 0 ? spellStatsText.CurAlignments[0] : Alignments.Left,
@@ -426,14 +430,22 @@ namespace Intersect.Client.Interface.Game
                 if (effectiveStatBuffs == null && currentSpell.Combat?.NextEffectSpellId != Guid.Empty)
                 {
                     // Display separator only if not an active buff and if there is a next spell
+                    var nextSpell = currentSpell.Combat.NextEffectSpell;
                     spellStats.AddText(Strings.SpellDesc.effectseparator, spellStats.RenderColor, Alignments.CenterH, spellStatsText.Font);
+                    var nextText = nextSpell.Name == spell.Name ? "" : nextSpell.Name;
+
                     if (currentSpell.Combat.NextEffectSpellChance != 100)
                     {
-                        spellStats.AddLineBreak();
-                        spellStats.AddText(Strings.SpellDesc.effectseparatorchance.ToString(currentSpell.Combat.NextEffectSpellChance), spellStats.RenderColor, Alignments.CenterH, spellStatsText.Font);
+                        nextText += Strings.SpellDesc.effectchance.ToString(currentSpell.Combat.NextEffectSpellChance);
                     }
+                    if (!string.IsNullOrEmpty(nextText))
+                    {
+                        spellStats.AddLineBreak();
+                        spellStats.AddText(nextText, spellStats.RenderColor, Alignments.CenterH, spellStatsText.Font);
+                    }
+                    
                     spellStats.AddLineBreak();
-                    currentSpell = currentSpell.Combat.NextEffectSpell;
+                    currentSpell = nextSpell;
                 }
                 else
                 {
