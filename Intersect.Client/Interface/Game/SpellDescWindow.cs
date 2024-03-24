@@ -18,7 +18,7 @@ namespace Intersect.Client.Interface.Game
         ImagePanel mDescWindow;
         public Button CloseButton;
 
-        public SpellDescWindow(Guid spellId, int x, int y, bool centerHorizontally = false, string sourceSpellName = "", bool[] effectiveStatBuffs = null)
+        public SpellDescWindow(Guid spellId, int x, int y, bool centerHorizontally = false, string sourceSpellName = "", bool[] effectiveStatBuffs = null, bool isMapRegion = false)
         {
             var spell = SpellBase.Get(spellId);
             if (spell == null)
@@ -307,7 +307,7 @@ namespace Intersect.Client.Interface.Game
                         spellStats.AddLineBreak();
                     }
 
-                    if (currentSpell.Combat.Duration > 0)
+                    if (currentSpell.Combat.Duration > 0 || isMapRegion)
                     {
                         if (effectiveStatBuffs != null)
                         {
@@ -379,28 +379,29 @@ namespace Intersect.Client.Interface.Game
                             }
                         }
 
-
-                        var duration = (float)currentSpell.Combat.Duration / 1000f;
-                        var strTarget = "";
-                        if (effectiveStatBuffs == null)
+                        if (!isMapRegion)
                         {
-                            // Need to display the target type when it's not an active buff
-                            if (currentSpell.Combat.TargetType == SpellTargetTypes.Self)
+                            var duration = (float)currentSpell.Combat.Duration / 1000f;
+                            var strTarget = "";
+                            if (effectiveStatBuffs == null)
                             {
-                                strTarget = " " + Strings.SpellDesc.onself;
+                                // Need to display the target type when it's not an active buff
+                                if (currentSpell.Combat.TargetType == SpellTargetTypes.Self)
+                                {
+                                    strTarget = " " + Strings.SpellDesc.onself;
+                                }
+                                else
+                                {
+                                    strTarget = " " + Strings.SpellDesc.ontarget;
+                                }
                             }
-                            else
-                            {
-                                strTarget = " " + Strings.SpellDesc.ontarget;
-                            }
+                            spellStats.AddText(
+                                Strings.SpellDesc.duration.ToString(duration) + strTarget, spellStats.RenderColor,
+                                spellStatsText.CurAlignments.Count > 0 ? spellStatsText.CurAlignments[0] : Alignments.Left,
+                                spellStatsText.Font
+                            );
+                            spellStats.AddLineBreak();
                         }
-
-                        spellStats.AddText(
-                            Strings.SpellDesc.duration.ToString(duration) + strTarget, spellStats.RenderColor,
-                            spellStatsText.CurAlignments.Count > 0 ? spellStatsText.CurAlignments[0] : Alignments.Left,
-                            spellStatsText.Font
-                        );
-                        spellStats.AddLineBreak();
                     }
                 }
                 else
